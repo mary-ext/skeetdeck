@@ -1,7 +1,7 @@
 import type { Agent } from '@externdefs/bluesky-client/agent';
-import type { DID, Records, RefOf, ResponseOf } from '~/api/atp-schema.ts';
-import type { QueryFunctionContext as QC } from '@tanstack/solid-query';
+import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
+import type { DID, Records, RefOf, ResponseOf } from '~/api/atp-schema.ts';
 import { assert } from '~/utils/misc.ts';
 
 import { multiagent } from '~/api/globals/agent.ts';

@@ -1,7 +1,7 @@
 import { Match, Show, Switch, createEffect, createSignal } from 'solid-js';
 
 import { Agent } from '@externdefs/bluesky-client/agent';
-import { createMutation, createQuery } from '@tanstack/solid-query';
+import { createMutation, createQuery } from '@pkg/solid-query';
 
 import type { DID } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';

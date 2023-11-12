@@ -23,7 +23,7 @@ export const getRepoId = (uri: string) => {
 };
 
 /**
- * `@tanstack/solid-query` puts the query data in a Solid.js' store, which
+ * Tanstack's Solid Query puts the query data in a Solid.js' store, which
  * prevents mutation, but we don't want it to be in a store to begin with, as
  * we're dealing with objects that has signals inside of it.
  */

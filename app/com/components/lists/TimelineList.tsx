@@ -1,6 +1,6 @@
 import { For, Match, Switch, createEffect } from 'solid-js';
 
-import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@tanstack/solid-query';
+import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@pkg/solid-query';
 
 import type { DID } from '~/api/atp-schema.ts';
 

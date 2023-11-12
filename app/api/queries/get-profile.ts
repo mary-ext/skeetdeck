@@ -1,6 +1,6 @@
-import type { DID } from '~/api/atp-schema.ts';
-import type { QueryFunctionContext as QC } from '@tanstack/solid-query';
+import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
+import type { DID } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 
 import { mergeProfile } from '~/api/stores/profiles.ts';

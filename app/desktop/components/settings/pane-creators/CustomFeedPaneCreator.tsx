@@ -1,6 +1,6 @@
 import { For, Match, Show, Switch, createSignal } from 'solid-js';
 
-import { createInfiniteQuery } from '@tanstack/solid-query';
+import { createInfiniteQuery } from '@pkg/solid-query';
 
 import { multiagent } from '~/api/globals/agent.ts';
 

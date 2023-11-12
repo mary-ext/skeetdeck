@@ -1,8 +1,8 @@
 import { createRenderEffect, lazy } from 'solid-js';
 import { render } from 'solid-js/web';
 
+import { QueryClientProvider } from '@pkg/solid-query';
 import { Router, useRoutes } from '@solidjs/router';
-import { QueryClientProvider } from '@tanstack/solid-query';
 
 import { ModalProvider } from '~/com/globals/modals.tsx';
 import { useMediaQuery } from '~/utils/media-query.ts';

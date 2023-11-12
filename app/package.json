@@ -10,8 +10,8 @@
 	},
 	"dependencies": {
 		"@externdefs/bluesky-client": "^0.3.2",
+		"@pkg/solid-query": "workspace:^",
 		"@solidjs/router": "^0.8.4",
-		"@tanstack/solid-query": "^5.7.2",
 		"@thisbeyond/solid-dnd": "^0.7.4",
 		"solid-js": "^1.8.5"
 	},

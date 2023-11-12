@@ -34,12 +34,12 @@ importers:
       '@externdefs/bluesky-client':
         specifier: ^0.3.2
         version: 0.3.2
+      '@pkg/solid-query':
+        specifier: workspace:^
+        version: link:../packages/solid-query
       '@solidjs/router':
         specifier: ^0.8.4
         version: 0.8.4(patch_hash=2juozfaksvcwbkonoaj2ws2ewm)(solid-js@1.8.5)
-      '@tanstack/solid-query':
-        specifier: ^5.7.2
-        version: 5.7.2(solid-js@1.8.5)
       '@thisbeyond/solid-dnd':
         specifier: ^0.7.4
         version: 0.7.4(solid-js@1.8.5)
@@ -99,25 +99,9 @@ importers:
 
   packages/solid-query:
     dependencies:
-      '@solid-primitives/event-listener':
-        specifier: ^2.3.0
-        version: 2.3.0(solid-js@1.8.5)
-    devDependencies:
-      solid-js:
-        specifier: ^1.8.5
-        version: 1.8.5(patch_hash=js47txoc5ulvjabjpeqdvac6ji)
-      vite:
-        specifier: ^4.5.0
-        version: 4.5.0(@types/node@20.8.10)(terser@5.24.0)
-      vite-plugin-solid:
-        specifier: ^2.7.2
-        version: 2.7.2(solid-js@1.8.5)(vite@4.5.0)
-
-  packages/sq:
-    dependencies:
-      '@solid-primitives/event-listener':
-        specifier: ^2.3.0
-        version: 2.3.0(solid-js@1.8.5)
+      '@tanstack/query-core':
+        specifier: ^5.8.2
+        version: 5.8.2
     devDependencies:
       solid-js:
         specifier: ^1.8.5
@@ -724,23 +708,6 @@ packages:
       fastq: 1.15.0
     dev: true
 
-  /@solid-primitives/event-listener@2.3.0(solid-js@1.8.5):
-    resolution: {integrity: sha512-0DS7DQZvCExWSpurVZC9/wjI8RmkhuOtWOy6Pp1Woq9ElMT9/bfjNpkwXsOwisLpcTqh9eUs17kp7jtpWcC20w==}
-    peerDependencies:
-      solid-js: ^1.6.12
-    dependencies:
-      '@solid-primitives/utils': 6.2.1(solid-js@1.8.5)
-      solid-js: 1.8.5(patch_hash=js47txoc5ulvjabjpeqdvac6ji)
-    dev: false
-
-  /@solid-primitives/utils@6.2.1(solid-js@1.8.5):
-    resolution: {integrity: sha512-TsecNzxiO5bLfzqb4OOuzfUmdOROcssuGqgh5rXMMaasoFZ3GoveUgdY1wcf17frMJM7kCNGNuK34EjErneZkg==}
-    peerDependencies:
-      solid-js: ^1.6.12
-    dependencies:
-      solid-js: 1.8.5(patch_hash=js47txoc5ulvjabjpeqdvac6ji)
-    dev: false
-
   /@solidjs/router@0.8.4(patch_hash=2juozfaksvcwbkonoaj2ws2ewm)(solid-js@1.8.5):
     resolution: {integrity: sha512-Gi/WVoVseGMKS1DBdT3pNAMgOzEOp6Q3dpgNd2mW9GUEnVocPmtyBjDvXwN6m7tjSGsqqfqJFXk7bm1hxabSRw==}
     peerDependencies:
@@ -750,17 +717,8 @@ packages:
     dev: false
     patched: true
 
-  /@tanstack/query-core@5.7.2:
-    resolution: {integrity: sha512-vPYoNCOI8W+jFLnyEAYQL7/qURE7XzVE/TvkmNSko8LU55jFshee342p4GNFOTsYFgJty7Da5bw4m2P3vaKWMw==}
-    dev: false
-
-  /@tanstack/solid-query@5.7.2(solid-js@1.8.5):
-    resolution: {integrity: sha512-fvd/SzFU6EZkr83tn+guhUr3YEROY6JtqMcJVL9uJxQkgD9iu5cSUO1xP0ynpg4V53VF3WM7JHPc+bQOTcvZ4A==}
-    peerDependencies:
-      solid-js: ^1.6.0
-    dependencies:
-      '@tanstack/query-core': 5.7.2
-      solid-js: 1.8.5(patch_hash=js47txoc5ulvjabjpeqdvac6ji)
+  /@tanstack/query-core@5.8.2:
+    resolution: {integrity: sha512-tBTmTbBLxFQPCeKY5AcXdkTLtbQyYzak5yQohw4EKwEmFCFRqnViXjX8jkUd2pQN60Lf4RE2sD5UkzWqOw1ebw==}
     dev: false
 
   /@thisbeyond/solid-dnd@0.7.4(solid-js@1.8.5):

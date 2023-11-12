@@ -1,10 +1,10 @@
-import type { DID, RefOf } from '~/api/atp-schema.ts';
-import type { QueryFunctionContext as QC } from '@tanstack/solid-query';
+import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
+import type { DID, RefOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 
-import { createThreadPage, type ThreadPage } from '../models/thread.ts';
-import { getPost, type SignalizedPost } from '../stores/posts.ts';
+import { createThreadPage, type ThreadPage } from '~/api/models/thread.ts';
+import { getPost, type SignalizedPost } from '~/api/stores/posts.ts';
 
 import _getDid from './_did.ts';
 

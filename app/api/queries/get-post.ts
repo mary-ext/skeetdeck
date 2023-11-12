@@ -1,11 +1,11 @@
-import type { DID, RefOf } from '~/api/atp-schema.ts';
-import type { QueryFunctionContext as QC } from '@tanstack/solid-query';
+import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
+import type { DID, RefOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 import { createBatchedFetch } from '~/api/utils/batch-fetch.ts';
+import { BSKY_POST_URL_RE, isAppUrl } from '~/api/utils/links.ts';
 
 import { mergePost } from '~/api/stores/posts.ts';
-import { BSKY_POST_URL_RE, isAppUrl } from '~/api/utils/links.ts';
 
 import _getDid from './_did.ts';
 

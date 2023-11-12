@@ -1,4 +1,4 @@
-import { QueryClient } from '@tanstack/solid-query';
+import { QueryClient } from '@pkg/solid-query';
 
 export const queryClient = new QueryClient({
 	defaultOptions: {

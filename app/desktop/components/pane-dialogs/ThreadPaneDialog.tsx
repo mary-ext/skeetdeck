@@ -1,6 +1,6 @@
 import { For, Match, Show, Switch, createMemo, onMount } from 'solid-js';
 
-import { createQuery } from '@tanstack/solid-query';
+import { createQuery } from '@pkg/solid-query';
 
 import type { DID } from '~/api/atp-schema.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
