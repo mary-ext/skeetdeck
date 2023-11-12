@@ -17,6 +17,7 @@ import iconButton from '~/com/primitives/icon-button.ts';
 import { usePaneContext, usePaneModalState } from '~/desktop/components/panes/PaneContext.tsx';
 
 import CloseIcon from '~/com/icons/baseline-close.tsx';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
 
 export interface ThreadPaneDialogProps {
 	/** Expected to be static */
@@ -32,7 +33,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 	const { actor, rkey } = props;
 
 	const { pane } = usePaneContext();
-	const { close } = usePaneModalState();
+	const modal = usePaneModalState();
 
 	const thread = createQuery(() => {
 		const key = getPostThreadKey(pane.uid, actor, rkey, MAX_DESCENDANTS + 1, MAX_ANCESTORS);
@@ -47,9 +48,11 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 	return (
 		<div class="flex h-full flex-col bg-background">
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
-				<button title="Close dialog" onClick={close} class={/* @once */ iconButton({ edge: 'left' })}>
-					<CloseIcon />
-				</button>
+				<Show when={modal.depth > 0}>
+					<button title="Close dialog" onClick={modal.close} class={/* @once */ iconButton({ edge: 'left' })}>
+						<ArrowLeftIcon />
+					</button>
+				</Show>
 
 				<div class="flex min-w-0 grow flex-col gap-0.5">
 					<p class="overflow-hidden text-ellipsis whitespace-nowrap break-all text-base font-bold leading-5">
@@ -57,7 +60,13 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 					</p>
 				</div>
 
-				<div class="contents empty:hidden"></div>
+				<button
+					title="Close all dialogs"
+					onClick={modal.reset}
+					class={/* @once */ iconButton({ edge: 'right' })}
+				>
+					<CloseIcon />
+				</button>
 			</div>
 
 			<div class="min-h-0 grow overflow-y-auto">

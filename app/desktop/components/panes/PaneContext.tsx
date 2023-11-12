@@ -21,8 +21,10 @@ interface PaneModalState {
 }
 
 export interface PaneModalContextObject {
-	id: number;
+	readonly id: number;
+	readonly depth: number;
 	close: () => void;
+	reset: () => void;
 }
 
 export const PaneModalContext = createContext<PaneModalContextObject>();
@@ -66,6 +68,10 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 		});
 
 		setModals(next);
+	};
+
+	const resetModals = () => {
+		setModals([]);
 	};
 
 	const navigate: LinkingContextObject['navigate'] = (to, alt) => {
@@ -132,6 +138,9 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 						{(modal, index) => {
 							const context: PaneModalContextObject = {
 								id: modal.id,
+								get depth() {
+									return index();
+								},
 								close: () => {
 									const next = modals().slice();
 									const index = next.indexOf(modal);
@@ -141,13 +150,14 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 										setModals(next);
 									}
 								},
+								reset: resetModals,
 							};
 
 							return (
 								<div
 									onClick={(ev) => {
 										if (ev.target === ev.currentTarget) {
-											context.close();
+											resetModals();
 										}
 									}}
 									class="absolute inset-0 z-10 overflow-hidden bg-black/50 pt-13 modal:flex dark:bg-hinted/50"
