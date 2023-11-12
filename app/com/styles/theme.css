@@ -1,0 +1,63 @@
+@layer base {
+	:root {
+		--background: 255 255 255; /* white */
+
+		--accent: 37 99 235; /* blue-600 */
+		--accent-dark: 30 64 175 /* blue-700 */;
+
+		--primary: 3 7 18; /* gray-950 */
+		--primary-fg: 243 244 246; /* gray-100 */
+
+		--secondary: 209 213 219; /* gray-300 */
+		--secondary-fg: 17 24 39; /* gray-900 */
+
+		--hinted: 243 244 246; /* gray-100 */
+		--hinted-fg: 17 24 39; /* gray-900 */
+
+		--muted: 243 244 246; /* gray-100 */
+		--muted-fg: 107 114 128; /* gray-500 */
+
+		--input: 229 231 235; /* gray-200 */
+		--divider: 209 213 219; /* gray-300 */
+	}
+
+	.is-dark {
+		color-scheme: dark;
+
+		--background: 0 0 0; /* black */
+
+		--accent: 59 130 246; /* blue-500 */
+
+		--primary: 249 250 251; /* gray-50 */
+		--primary-fg: 3 7 18; /* gray-950 */
+
+		--secondary: 55 65 81; /* gray-700 */
+		--secondary-fg: 249 250 251; /* gray-50 */
+
+		--hinted: 17 24 39; /* gray-900 */
+		--hinted-fg: 249 250 251; /* gray-50 */
+
+		--muted: 55 65 81; /* gray-900 */
+		--muted-fg: 156 163 175; /* gray-400 */
+
+		--input: 75 85 99; /* gray-600 */
+		--divider: 47 51 54;
+	}
+
+	body {
+		/* @apply overflow-y-scroll; */
+		@apply bg-background text-primary;
+	}
+
+	dialog {
+		@apply text-left text-base font-normal text-primary;
+	}
+
+	body:has(dialog[data-modal][open]) {
+		@apply overflow-hidden pr-[--sb-width];
+	}
+
+	::selection {
+		@apply bg-accent-dark text-white;
+	}
+}

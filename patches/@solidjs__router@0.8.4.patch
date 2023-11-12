@@ -1,0 +1,14 @@
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index c0870e8ea3e0abf8a2296a1cf8b241230e42429f..d17cbc516ae7913e102e869cfbf8052fb767c8ea 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -1,6 +1,6 @@
+-export * from "./components";
+-export * from "./integration";
+-export * from "./lifecycle";
++export * from "./components.js";
++export * from "./integration.js";
++export * from "./lifecycle.js";
+ export { useRouteData, useHref, useIsRouting, useLocation, useMatch, useNavigate, useParams, useResolvedPath, useSearchParams, useBeforeLeave, } from "./routing";
+ export { mergeSearchString as _mergeSearchString } from "./utils";
+ export type { Location, LocationChange, LocationChangeSignal, NavigateOptions, Navigator, OutputMatch, Params, RouteDataFunc, RouteDataFuncArgs, RouteDefinition, RouterIntegration, RouterOutput, RouterUtils, SetParams, BeforeLeaveEventArgs } from "./types";

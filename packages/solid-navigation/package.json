@@ -1,0 +1,27 @@
+{
+	"private": true,
+	"type": "module",
+	"name": "@pkg/solid-navigation",
+	"version": "0.1.0",
+	"exports": {
+		".": {
+			"default": "./lib/index.tsx"
+		}
+	},
+	"scripts": {
+		"dev": "vite",
+		"unused:build": "rm -r types/; vite build && tsc"
+	},
+	"peerDependencies": {
+		"solid-js": "^1.8.5"
+	},
+	"devDependencies": {
+		"@types/dom-navigation": "^1.0.2",
+		"solid-js": "^1.8.5",
+		"vite": "^4.5.0",
+		"vite-plugin-solid": "^2.7.2"
+	},
+	"dependencies": {
+		"@pkg/solid-freeze": "workspace:^"
+	}
+}

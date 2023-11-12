@@ -1,0 +1,52 @@
+diff --git a/build/dev.cjs b/build/dev.cjs
+index 86f7a10e07b3eec8ee0da4f220be5fe4bd9044a8..df9960a9f8dba73d93c10acea9597d75107b89dd 100644
+--- a/build/dev.cjs
++++ b/build/dev.cjs
+@@ -144,7 +144,7 @@ function createBaseQuery(options, Observer, queryClient) {
+         else if (!unsubscribe && !isRestoring())
+           unsubscribe = createClientSubscriber();
+         obs.updateResult();
+-        if (!state.isLoading && !isRestoring()) {
++        if (!options().suspense || (!state.isLoading && !isRestoring())) {
+           const query = obs.getCurrentQuery();
+           resolve(hydrateableObserverResult(query, state));
+         }
+diff --git a/build/dev.js b/build/dev.js
+index edeaf69feb9d258aa5d9c94e82aae225b50bbff9..b7b24c0472f52b2a250f2ba35869fde8da157cf4 100644
+--- a/build/dev.js
++++ b/build/dev.js
+@@ -143,7 +143,7 @@ function createBaseQuery(options, Observer, queryClient) {
+         else if (!unsubscribe && !isRestoring())
+           unsubscribe = createClientSubscriber();
+         obs.updateResult();
+-        if (!state.isLoading && !isRestoring()) {
++        if (!options().suspense || (!state.isLoading && !isRestoring())) {
+           const query = obs.getCurrentQuery();
+           resolve(hydrateableObserverResult(query, state));
+         }
+diff --git a/build/index.cjs b/build/index.cjs
+index 86f7a10e07b3eec8ee0da4f220be5fe4bd9044a8..df9960a9f8dba73d93c10acea9597d75107b89dd 100644
+--- a/build/index.cjs
++++ b/build/index.cjs
+@@ -144,7 +144,7 @@ function createBaseQuery(options, Observer, queryClient) {
+         else if (!unsubscribe && !isRestoring())
+           unsubscribe = createClientSubscriber();
+         obs.updateResult();
+-        if (!state.isLoading && !isRestoring()) {
++        if (!options().suspense || (!state.isLoading && !isRestoring())) {
+           const query = obs.getCurrentQuery();
+           resolve(hydrateableObserverResult(query, state));
+         }
+diff --git a/build/index.js b/build/index.js
+index edeaf69feb9d258aa5d9c94e82aae225b50bbff9..b7b24c0472f52b2a250f2ba35869fde8da157cf4 100644
+--- a/build/index.js
++++ b/build/index.js
+@@ -143,7 +143,7 @@ function createBaseQuery(options, Observer, queryClient) {
+         else if (!unsubscribe && !isRestoring())
+           unsubscribe = createClientSubscriber();
+         obs.updateResult();
+-        if (!state.isLoading && !isRestoring()) {
++        if (!options().suspense || (!state.isLoading && !isRestoring())) {
+           const query = obs.getCurrentQuery();
+           resolve(hydrateableObserverResult(query, state));
+         }

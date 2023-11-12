@@ -1,0 +1,7 @@
+@import '~/com/styles/theme.css';
+
+@config '../../tailwind-desktop.config.js';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

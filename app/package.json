@@ -1,0 +1,26 @@
+{
+	"private": true,
+	"type": "module",
+	"name": "app",
+	"scripts": {
+		"dev:desktop": "vite -c vite-desktop.config.ts",
+		"build:desktop": "vite build -c vite-desktop.config.ts",
+		"preview:desktop": "vite preview -c vite-desktop.config.ts",
+		"lint": "tsc"
+	},
+	"dependencies": {
+		"@externdefs/bluesky-client": "^0.3.2",
+		"@solidjs/router": "^0.8.4",
+		"@tanstack/solid-query": "^5.7.2",
+		"@thisbeyond/solid-dnd": "^0.7.4",
+		"solid-js": "^1.8.5"
+	},
+	"devDependencies": {
+		"@types/node": "^20.8.10",
+		"autoprefixer": "^10.4.16",
+		"postcss": "^8.4.31",
+		"terser": "^5.24.0",
+		"vite": "^4.5.0",
+		"vite-plugin-solid": "^2.7.2"
+	}
+}

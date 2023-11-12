@@ -1,0 +1,29 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"lib": ["DOM", "DOM.Iterable", "ESNext"],
+		"types": [],
+		"skipLibCheck": true,
+
+		"module": "Node16",
+		"moduleResolution": "Node16",
+		"allowImportingTsExtensions": true,
+		"resolveJsonModule": true,
+		"noEmit": true,
+		"jsx": "preserve",
+		"jsxImportSource": "solid-js",
+
+		"incremental": true,
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"verbatimModuleSyntax": true,
+
+		"paths": {
+			"~/*": ["./*"]
+		}
+	},
+	"include": ["api", "com", "desktop", "mobile", "utils"],
+	"references": [{ "path": "./tsconfig.node.json" }]
+}

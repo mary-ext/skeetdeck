@@ -1,0 +1,26 @@
+{
+	"private": true,
+	"type": "module",
+	"name": "@pkg/sq",
+	"version": "0.1.0",
+	"exports": {
+		".": {
+			"default": "./lib/index.ts"
+		}
+	},
+	"scripts": {
+		"dev": "vite",
+		"unused:build": "rm -r types/; vite build && tsc"
+	},
+	"peerDependencies": {
+		"solid-js": "^1.8.5"
+	},
+	"dependencies": {
+		"@solid-primitives/event-listener": "^2.3.0"
+	},
+	"devDependencies": {
+		"solid-js": "^1.8.5",
+		"vite": "^4.5.0",
+		"vite-plugin-solid": "^2.7.2"
+	}
+}
