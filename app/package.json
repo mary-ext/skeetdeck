@@ -9,7 +9,7 @@
 		"lint": "tsc"
 	},
 	"dependencies": {
-		"@externdefs/bluesky-client": "^0.3.2",
+		"@externdefs/bluesky-client": "^0.3.3",
 		"@pkg/solid-query": "workspace:^",
 		"@solidjs/router": "^0.8.4",
 		"@thisbeyond/solid-dnd": "^0.7.4",

@@ -1,12 +1,9 @@
-import { Match, Show, Switch, createEffect, createSignal } from 'solid-js';
+import { Match, Show, Switch, createEffect, createMemo, createSignal } from 'solid-js';
 
-import { Agent } from '@externdefs/bluesky-client/agent';
-import { createMutation, createQuery } from '@pkg/solid-query';
+import { createMutation } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
+import { retrievePdsEndpoint } from '~/api/did.ts';
 import { multiagent } from '~/api/globals/agent.ts';
-import { type DataServer, APPVIEW_URL } from '~/api/globals/defaults.ts';
-import { isDid } from '~/api/utils/misc.ts';
 
 import _getDid from '~/api/queries/_did.ts';
 import { getProfile, getProfileKey } from '~/api/queries/get-profile.ts';
@@ -16,8 +13,6 @@ import { queryClient } from '~/desktop/globals/query.ts';
 import { closeModal, useModalState } from '~/com/globals/modals.tsx';
 import { model } from '~/utils/input.ts';
 
-import CircularProgress from '~/com/components/CircularProgress.tsx';
-
 import button from '~/com/primitives/button.ts';
 import * as dialog from '~/com/primitives/dialog.ts';
 import input from '~/com/primitives/input.ts';
@@ -25,10 +20,14 @@ import input from '~/com/primitives/input.ts';
 const AddAccountDialog = () => {
 	const { disableBackdropClose } = useModalState();
 
-	const [service, _setService] = createSignal<DataServer>();
+	const [service, setService] = createSignal('');
 
 	const [identifier, setIdentifier] = createSignal('');
 	const [password, setPassword] = createSignal('');
+
+	const [advanced, setAdvanced] = createSignal(false);
+
+	const isEmail = createMemo(() => identifier().includes('@'));
 
 	const loginMutation = createMutation(() => ({
 		mutationKey: ['login'],
@@ -40,36 +39,13 @@ const AddAccountDialog = () => {
 
 			// we don't know which PDS they are on, so let's find it.
 			if (!$service) {
-				// 1. resolve the DID for the identifier
-				let did: DID;
-				if (isDid($identifier)) {
-					did = $identifier;
-				} else {
-					did = await queryClient.fetchQuery({
-						queryKey: ['appView/resolveHandle', $identifier],
-						queryFn: async (ctx) => {
-							const [, identifier] = ctx.queryKey;
-
-							const agent = new Agent({ serviceUri: APPVIEW_URL });
-							const response = await agent.rpc.get('com.atproto.identity.resolveHandle', {
-								signal: ctx.signal,
-								params: {
-									handle: identifier,
-								},
-							});
-
-							return response.data.did;
-						},
-						staleTime: Infinity,
-						gcTime: 60 * 1_000,
-					});
-				}
-
-				// 2. contact plc.directory to get their DID document
+				$service = await retrievePdsEndpoint(queryClient, $identifier);
+			} else {
+				$service = `https://${$service}`;
 			}
 
 			const uid = await multiagent.login({
-				service: $service.url,
+				service: $service,
 				identifier: $identifier,
 				password: $password,
 			});
@@ -79,7 +55,7 @@ const AddAccountDialog = () => {
 			queryClient.invalidateQueries({
 				predicate: (query) => {
 					const key = query.queryKey;
-					return key.length >= 2 && key[1] === uid;
+					return key.length >= 2 && key[1] === uid && !(key[0] as string).includes('/');
 				},
 			});
 
@@ -115,8 +91,8 @@ const AddAccountDialog = () => {
 				disabled={loginMutation.isPending}
 				class={/* @once */ dialog.body({ class: 'flex flex-col gap-4' })}
 			>
-				<div class="flex flex-col gap-2">
-					<label for="user" class="block text-sm font-medium leading-6 text-primary">
+				<div class="flex flex-col">
+					<label for="user" class="mb-2 block text-sm font-medium leading-6 text-primary">
 						Identifier
 					</label>
 					<input
@@ -124,10 +100,22 @@ const AddAccountDialog = () => {
 						type="text"
 						id="user"
 						required
-						pattern=".*\S+.*"
+						pattern=".*\\S+.*"
+						placeholder="you.bsky.social"
 						autocomplete="username"
+						onBlur={() => {
+							if (isEmail()) {
+								setAdvanced(true);
+							}
+						}}
 						class={/* @once */ input()}
 					/>
+
+					<Show when={advanced() && isEmail()}>
+						<p class="mt-3 text-xs text-muted-fg">
+							As you're trying to sign in via email, please specify the provider you're signing into.
+						</p>
+					</Show>
 				</div>
 
 				<div class="flex flex-col gap-2">
@@ -140,9 +128,27 @@ const AddAccountDialog = () => {
 						id="pwd"
 						required
 						autocomplete="password"
+						placeholder="Password"
 						class={/* @once */ input()}
 					/>
 				</div>
+
+				<Show when={advanced()}>
+					<div class="flex flex-col gap-2">
+						<label for="svc" class="block text-sm font-medium leading-6 text-primary">
+							Hosting provider
+						</label>
+						<input
+							ref={model(service, setService)}
+							type="string"
+							id="svc"
+							required={isEmail()}
+							pattern="([a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*(?:\\.[a-zA-Z]+))"
+							placeholder={isEmail() ? `example.social` : `Leave blank for automatic provider detection`}
+							class={/* @once */ input()}
+						/>
+					</div>
+				</Show>
 
 				<Switch>
 					<Match when={loginMutation.error} keyed>
@@ -156,10 +162,26 @@ const AddAccountDialog = () => {
 			</fieldset>
 
 			<fieldset disabled={loginMutation.isPending} class={/* @once */ dialog.actions()}>
+				<Show when={!advanced()}>
+					<button
+						type="button"
+						onClick={() => setAdvanced(true)}
+						class={/* @once */ button({ variant: 'ghost' })}
+					>
+						Advanced
+					</button>
+				</Show>
+
+				<div class="grow"></div>
+
 				<button type="button" onClick={closeModal} class={/* @once */ button({ variant: 'ghost' })}>
 					Cancel
 				</button>
-				<button type="submit" class={/* @once */ button({ variant: 'primary' })}>
+				<button
+					type="submit"
+					disabled={isEmail() && !advanced()}
+					class={/* @once */ button({ variant: 'primary' })}
+				>
 					Sign in
 				</button>
 			</fieldset>

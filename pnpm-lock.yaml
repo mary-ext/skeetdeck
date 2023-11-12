@@ -32,8 +32,8 @@ importers:
   app:
     dependencies:
       '@externdefs/bluesky-client':
-        specifier: ^0.3.2
-        version: 0.3.2
+        specifier: ^0.3.3
+        version: 0.3.3
       '@pkg/solid-query':
         specifier: workspace:^
         version: link:../packages/solid-query
@@ -646,8 +646,8 @@ packages:
     dev: true
     optional: true
 
-  /@externdefs/bluesky-client@0.3.2:
-    resolution: {integrity: sha512-dyBgDBcpWh7mEFMOoR9aMuF2zLK29cHUTMngaFGUUsccQSblGy0xhdEM2qOcKTQIoyJ6zzX++5zZ/RxMwFXsuw==}
+  /@externdefs/bluesky-client@0.3.3:
+    resolution: {integrity: sha512-IvdElS0BbaXjMbGcJq3J09V4efJKEyYtjo5Lju0aDsnT3D2KWOMokB+aEHbZcXn6cUhOPpBMoZfs1e7XCXg+FQ==}
     dev: false
 
   /@jridgewell/gen-mapping@0.3.3:
