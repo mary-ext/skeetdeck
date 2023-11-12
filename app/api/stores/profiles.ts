@@ -11,6 +11,10 @@ type ProfileDetailed = RefOf<'app.bsky.actor.defs#profileViewDetailed'>;
 
 export const profiles: Record<string, WeakRef<SignalizedProfile>> = {};
 
+const gc = new FinalizationRegistry<string>((id) => {
+	delete profiles[id];
+});
+
 /** @see BskyProfile */
 export interface SignalizedProfile {
 	_key?: number;
@@ -82,6 +86,8 @@ export const mergeProfile = (uid: DID, profile: Profile | ProfileBasic | Profile
 	if (!ref || !(val = ref.deref()!)) {
 		val = createSignalizedProfile(uid, profile, key);
 		profiles[id] = new WeakRef(val);
+
+		gc.register(val, id);
 	} else if (!key || val._key !== key) {
 		val._key = key;
 

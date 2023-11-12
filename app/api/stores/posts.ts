@@ -11,6 +11,10 @@ type PostRecord = Records['app.bsky.feed.post'];
 
 export const posts: Record<string, WeakRef<SignalizedPost>> = {};
 
+const gc = new FinalizationRegistry<string>((id) => {
+	delete posts[id];
+});
+
 /** @see BskyPost */
 export interface SignalizedPost {
 	_key?: number;
@@ -72,6 +76,8 @@ export const mergePost = (uid: DID, post: Post, key?: number) => {
 	if (!ref || !(val = ref.deref()!)) {
 		val = createSignalizedPost(uid, post, key);
 		posts[id] = new WeakRef(val);
+
+		gc.register(val, id);
 	} else if (!key || val._key !== key) {
 		val._key = key;
 
