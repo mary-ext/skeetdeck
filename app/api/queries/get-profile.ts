@@ -28,13 +28,17 @@ export const getProfile = async (ctx: QC<ReturnType<typeof getProfileKey>>) => {
 		const $accounts = multiagent.accounts;
 		const account = $accounts.find((acc) => acc.did === uid);
 
-		if (account && (!account.profile || account.profile.indexedAt !== data.indexedAt)) {
-			account.profile = {
-				displayName: data.displayName,
-				handle: data.handle,
-				avatar: data.avatar,
-				indexedAt: data.indexedAt,
-			};
+		if (account) {
+			const profile = account.profile;
+
+			if (!profile || profile.indexedAt !== data.indexedAt || profile.handle !== data.handle) {
+				account.profile = {
+					displayName: data.displayName,
+					handle: data.handle,
+					avatar: data.avatar,
+					indexedAt: data.indexedAt,
+				};
+			}
 		}
 	}
 
