@@ -1,17 +1,26 @@
 import { For, Match, Show, Switch, createMemo, onMount } from 'solid-js';
 
+import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 import { createQuery } from '@pkg/solid-query';
 
 import type { DID } from '~/api/atp-schema.ts';
-import { getInitialPostThread, getPostThread, getPostThreadKey } from '~/api/queries/get-post-thread.ts';
+import {
+	BlockedThreadError,
+	getInitialPostThread,
+	getPostThread,
+	getPostThreadKey,
+} from '~/api/queries/get-post-thread.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
+
+import button from '~/com/primitives/button.ts';
 
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { Link, LinkingType } from '~/com/components/Link.tsx';
 import PermalinkPost from '~/com/components/PermalinkPost.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 
+import EmbedRecordNotFound from '~/com/components/embeds/EmbedRecordNotFound.tsx';
 import Post from '~/com/components/items/Post.tsx';
 
 import { usePaneContext } from '~/desktop/components/panes/PaneContext.tsx';
@@ -53,6 +62,59 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 						<div class="grid h-13 place-items-center">
 							<CircularProgress />
 						</div>
+					</Match>
+
+					<Match when={thread.error} keyed>
+						{(err) => {
+							if (err instanceof XRPCError && err.error === 'NotFound') {
+								return (
+									<div class="p-3">
+										<EmbedRecordNotFound />
+									</div>
+								);
+							}
+
+							if (err instanceof BlockedThreadError) {
+								const viewer = err.view.author.viewer;
+
+								if (viewer?.blocking) {
+									return (
+										<div class="p-4">
+											<div class="mb-4 text-sm">
+												<p class="font-bold">This post is from a user you blocked</p>
+												<p class="text-muted-fg">You need to unblock the user to view the post.</p>
+											</div>
+
+											<Link
+												to={{ type: LinkingType.PROFILE, actor: actor }}
+												class={/* @once */ button({ variant: 'primary' })}
+											>
+												View profile
+											</Link>
+										</div>
+									);
+								}
+
+								return (
+									<div class="p-3">
+										<EmbedRecordNotFound />
+									</div>
+								);
+							}
+
+							return (
+								<div class="p-4">
+									<div class="mb-4 text-sm">
+										<p class="font-bold">Something went wrong</p>
+										<p class="text-muted-fg">{'' + err}</p>
+									</div>
+
+									<button onClick={() => thread.refetch()} class={/* @once */ button({ variant: 'primary' })}>
+										Try again
+									</button>
+								</div>
+							);
+						}}
 					</Match>
 
 					<Match when={thread.data}>
