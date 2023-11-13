@@ -25,6 +25,12 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 				<p class="overflow-hidden text-ellipsis whitespace-nowrap break-all text-base font-bold leading-5">
 					{props.title}
 				</p>
+
+				{props.subtitle && (
+					<p class="overflow-hidden text-ellipsis whitespace-nowrap text-xs text-muted-fg">
+						{props.subtitle}
+					</p>
+				)}
 			</div>
 
 			<button
