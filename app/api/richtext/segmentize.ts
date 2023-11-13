@@ -17,13 +17,13 @@ const createSegment = (text: string, facet?: Facet): RichTextSegment => {
 
 		for (let idx = 0, len = features.length; idx < len; idx++) {
 			const feature = features[idx];
-			const $type = feature.$type;
+			const type = feature.$type;
 
-			if ($type === 'app.bsky.richtext.facet#link') {
+			if (type === 'app.bsky.richtext.facet#link') {
 				link = feature;
-			} else if ($type === 'app.bsky.richtext.facet#mention') {
+			} else if (type === 'app.bsky.richtext.facet#mention') {
 				mention = feature;
-			} else if ($type === 'app.bsky.richtext.facet#tag') {
+			} else if (type === 'app.bsky.richtext.facet#tag') {
 				tag = feature;
 			}
 		}

@@ -56,7 +56,7 @@ export class Multiagent {
 	#agents: Record<DID, Promise<Agent>> = {};
 
 	constructor(name: string) {
-		const $store = createReactiveLocalStorage<MultiagentStorage>(name, (version, prev) => {
+		const store = createReactiveLocalStorage<MultiagentStorage>(name, (version, prev) => {
 			if (version === 0) {
 				return {
 					$version: 1,
@@ -68,7 +68,7 @@ export class Multiagent {
 			return prev;
 		});
 
-		this.store = $store;
+		this.store = store;
 	}
 
 	/**
