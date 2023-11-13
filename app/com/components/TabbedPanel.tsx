@@ -34,7 +34,7 @@ export const TabbedPanel = (props: TabbedPanelProps) => {
 		return prev;
 	}, []);
 
-	const rendered = createMemo((): TabbedPanelViewProps[] => {
+	const rendered = (): TabbedPanelViewProps[] => {
 		const $panels = panels.toArray() as unknown as TabbedPanelViewProps[];
 		const $selectedArray = selectedArray();
 
@@ -51,7 +51,7 @@ export const TabbedPanel = (props: TabbedPanelProps) => {
 		}
 
 		return array;
-	});
+	};
 
 	return (
 		<>
