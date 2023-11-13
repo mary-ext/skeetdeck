@@ -61,7 +61,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 				</div>
 
 				<button
-					title="Close all dialogs"
+					title={modal.depth > 0 ? 'Close all dialog' : 'Close dialog'}
 					onClick={modal.reset}
 					class={/* @once */ iconButton({ edge: 'right' })}
 				>
