@@ -3,21 +3,20 @@ import { For, Match, Show, Switch, createMemo, onMount } from 'solid-js';
 import { createQuery } from '@pkg/solid-query';
 
 import type { DID } from '~/api/atp-schema.ts';
-import type { SignalizedPost } from '~/api/stores/posts.ts';
 import { getInitialPostThread, getPostThread, getPostThreadKey } from '~/api/queries/get-post-thread.ts';
+import type { SignalizedPost } from '~/api/stores/posts.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
-import Post from '~/com/components/items/Post.tsx';
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { Link, LinkingType } from '~/com/components/Link.tsx';
 import PermalinkPost from '~/com/components/PermalinkPost.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
-import iconButton from '~/com/primitives/icon-button.ts';
 
-import { usePaneContext, usePaneModalState } from '~/desktop/components/panes/PaneContext.tsx';
+import Post from '~/com/components/items/Post.tsx';
 
-import CloseIcon from '~/com/icons/baseline-close.tsx';
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
+import { usePaneContext } from '~/desktop/components/panes/PaneContext.tsx';
+import PaneDialog from '~/desktop/components/panes/PaneDialog.tsx';
+import PaneDialogHeader from '~/desktop/components/panes/PaneDialogHeader.tsx';
 
 export interface ThreadPaneDialogProps {
 	/** Expected to be static */
@@ -33,7 +32,6 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 	const { actor, rkey } = props;
 
 	const { pane } = usePaneContext();
-	const modal = usePaneModalState();
 
 	const thread = createQuery(() => {
 		const key = getPostThreadKey(pane.uid, actor, rkey, MAX_DESCENDANTS + 1, MAX_ANCESTORS);
@@ -46,28 +44,8 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 	});
 
 	return (
-		<div class="flex h-full flex-col bg-background">
-			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
-				<Show when={modal.depth > 0}>
-					<button title="Close dialog" onClick={modal.close} class={/* @once */ iconButton({ edge: 'left' })}>
-						<ArrowLeftIcon />
-					</button>
-				</Show>
-
-				<div class="flex min-w-0 grow flex-col gap-0.5">
-					<p class="overflow-hidden text-ellipsis whitespace-nowrap break-all text-base font-bold leading-5">
-						Thread
-					</p>
-				</div>
-
-				<button
-					title={modal.depth > 0 ? 'Close all dialog' : 'Close dialog'}
-					onClick={modal.reset}
-					class={/* @once */ iconButton({ edge: 'right' })}
-				>
-					<CloseIcon />
-				</button>
-			</div>
+		<PaneDialog>
+			<PaneDialogHeader title="Thread" />
 
 			<div class="min-h-0 grow overflow-y-auto">
 				<Switch>
@@ -239,7 +217,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 					</Match>
 				</Switch>
 			</div>
-		</div>
+		</PaneDialog>
 	);
 };
 
