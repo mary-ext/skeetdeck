@@ -64,7 +64,7 @@ export const createPostId = (uid: DID, uri: string) => {
 	return uid + '|' + uri;
 };
 
-export const getPost = (uid: DID, uri: string) => {
+export const getCachedPost = (uid: DID, uri: string) => {
 	const id = createPostId(uid, uri);
 	const ref = posts[id];
 

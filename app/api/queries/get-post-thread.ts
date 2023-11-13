@@ -3,8 +3,8 @@ import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 import type { DID, RefOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 
-import { createThreadPage, type ThreadPage } from '~/api/models/thread.ts';
-import { getPost, type SignalizedPost } from '~/api/stores/posts.ts';
+import { type ThreadPage, createThreadPage } from '~/api/models/thread.ts';
+import { type SignalizedPost, getCachedPost } from '~/api/stores/posts.ts';
 
 import _getDid from './_did.ts';
 
@@ -48,7 +48,7 @@ export const getPostThread = async (ctx: QC<ReturnType<typeof getPostThreadKey>>
 export const getInitialPostThread = (key: ReturnType<typeof getPostThreadKey>): ThreadPage | undefined => {
 	const [, uid, actor, rkey] = key;
 
-	const post = getPost(uid, `at://${actor}/app.bsky.feed.post/${rkey}`);
+	const post = getCachedPost(uid, `at://${actor}/app.bsky.feed.post/${rkey}`);
 
 	if (post) {
 		const ancestors: SignalizedPost[] = [];
@@ -63,7 +63,7 @@ export const getInitialPostThread = (key: ReturnType<typeof getPostThreadKey>): 
 			}
 
 			const parentUri = reply.parent.uri;
-			const parent = getPost(uid, parentUri);
+			const parent = getCachedPost(uid, parentUri);
 
 			if (!parent) {
 				break;
