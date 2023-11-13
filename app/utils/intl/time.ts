@@ -6,18 +6,25 @@ const WEEK = DAY * 7;
 const MONTH = WEEK * 4;
 const YEAR = MONTH * 12;
 
-const absFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' });
+const absWithYearFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' });
+const absFormat = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric' });
 const absTimeFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeStyle: 'short' });
 
 const formatters: Record<string, Intl.NumberFormat> = {};
 
 export const formatReltime = (time: string | number, base = new Date()) => {
 	const date = new Date(time);
+
 	const num = date.getTime();
 	const delta = Math.abs(num - base.getTime());
 
 	if (delta > WEEK) {
-		return absFormat.format(date);
+		// if it's the same year, let's skip showing the year.
+		if (date.getFullYear() === base.getFullYear()) {
+			return absFormat.format(date);
+		}
+
+		return absWithYearFormat.format(date);
 	}
 
 	const [value, unit] = lookupReltime(delta);
@@ -33,7 +40,7 @@ export const formatReltime = (time: string | number, base = new Date()) => {
 
 export const formatAbsDate = (time: string | number) => {
 	const date = new Date(time);
-	return absFormat.format(date);
+	return absWithYearFormat.format(date);
 };
 
 export const formatAbsDateTime = (time: string | number) => {
