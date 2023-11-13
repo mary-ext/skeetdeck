@@ -66,11 +66,15 @@ const EmbedRecord = (props: EmbedRecordProps) => {
 							<Show when={author().avatar}>{(avatar) => <img src={avatar()} class="h-full w-full" />}</Show>
 						</div>
 
-						<span class="line-clamp-1 break-all font-bold text-primary group-hover:underline">
-							{author().displayName}
+						<span class="flex max-w-full gap-1 overflow-hidden text-ellipsis whitespace-nowrap text-left">
+							<bdi class="overflow-hidden text-ellipsis">
+								<span class="font-bold text-primary">{author().displayName || author().handle}</span>
+							</bdi>
+							<span class="block overflow-hidden text-ellipsis whitespace-nowrap">@{author().handle}</span>
 						</span>
-						<span class="ml-1 line-clamp-1 break-all">@{author().handle}</span>
+
 						<span class="px-1">·</span>
+
 						<span class="whitespace-nowrap">{formatReltime((val() as PostRecord).createdAt)}</span>
 					</div>
 
