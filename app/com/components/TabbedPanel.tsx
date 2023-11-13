@@ -58,11 +58,13 @@ export const TabbedPanel = (props: TabbedPanelProps) => {
 			<div class="box-content flex h-13 shrink-0 overflow-x-auto border-b border-divider">
 				<For each={panels.toArray() as unknown as TabbedPanelViewProps[]}>
 					{(panel) => (
-						<Show when={!panel.hidden}>
-							<Tab active={props.selected === panel.value} onClick={() => props.onChange(panel.value)}>
-								{panel.label}
-							</Tab>
-						</Show>
+						<>
+							{!panel.hidden && (
+								<Tab active={props.selected === panel.value} onClick={() => props.onChange(panel.value)}>
+									{panel.label}
+								</Tab>
+							)}
+						</>
 					)}
 				</For>
 			</div>
