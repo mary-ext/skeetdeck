@@ -12,7 +12,11 @@ type PostRecord = Records['app.bsky.feed.post'];
 export const posts: Record<string, WeakRef<SignalizedPost>> = {};
 
 const gc = new FinalizationRegistry<string>((id) => {
-	delete posts[id];
+	const ref = posts[id];
+
+	if (!ref || !ref.deref()) {
+		delete posts[id];
+	}
 });
 
 /** @see BskyPost */

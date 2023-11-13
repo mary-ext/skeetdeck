@@ -12,7 +12,11 @@ type ProfileDetailed = RefOf<'app.bsky.actor.defs#profileViewDetailed'>;
 export const profiles: Record<string, WeakRef<SignalizedProfile>> = {};
 
 const gc = new FinalizationRegistry<string>((id) => {
-	delete profiles[id];
+	const ref = profiles[id];
+
+	if (!ref || !ref.deref()) {
+		delete profiles[id];
+	}
 });
 
 /** @see BskyProfile */
