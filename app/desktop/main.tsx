@@ -4,14 +4,24 @@ import { render } from 'solid-js/web';
 import { QueryClientProvider } from '@pkg/solid-query';
 import { Router, useRoutes } from '@solidjs/router';
 
+import type { ModerationOpts } from '~/api/moderation/types.ts';
+
 import { ModalProvider } from '~/com/globals/modals.tsx';
 import { useMediaQuery } from '~/utils/media-query.ts';
 
 import { preferences } from '~/desktop/globals/settings.ts';
 import { queryClient } from '~/desktop/globals/query.ts';
 
-import '~/desktop/styles/tailwind.css';
 import { ModerationContext } from '~/com/components/moderation/ModerationContext.tsx';
+
+import '~/desktop/styles/tailwind.css';
+
+// `ModerationOpts` contains internal state properties, we don't want it
+// reflecting back to persisted storage, spreading it like this is fine and
+// shouldn't affect subproxies.
+const getModerationOptions = (): ModerationOpts => {
+	return { ...preferences.moderation };
+};
 
 const App = () => {
 	const Routes = useRoutes([
@@ -50,7 +60,7 @@ const App = () => {
 	return (
 		<Router>
 			<QueryClientProvider client={queryClient}>
-				<ModerationContext.Provider value={/* @once */ preferences.moderation}>
+				<ModerationContext.Provider value={/* @once */ getModerationOptions()}>
 					<Routes />
 					<ModalProvider desktop />
 				</ModerationContext.Provider>
