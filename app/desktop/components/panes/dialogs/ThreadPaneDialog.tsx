@@ -209,9 +209,10 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 									</For>
 
 									<div ref={focusRef} class="h-[calc(100%-0.75rem)] scroll-m-3">
-										<PermalinkPost post={data().post} />
-
-										<hr class="border-divider" />
+										<VirtualContainer>
+											<PermalinkPost post={data().post} />
+											<hr class="border-divider" />
+										</VirtualContainer>
 
 										<For each={data().descendants}>
 											{(slice) => {
