@@ -34,6 +34,9 @@ importers:
       '@externdefs/bluesky-client':
         specifier: ^0.3.3
         version: 0.3.3
+      '@pkg/solid-freeze':
+        specifier: workspace:^
+        version: link:../packages/solid-freeze
       '@pkg/solid-query':
         specifier: workspace:^
         version: link:../packages/solid-query

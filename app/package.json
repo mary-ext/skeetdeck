@@ -10,6 +10,7 @@
 	},
 	"dependencies": {
 		"@externdefs/bluesky-client": "^0.3.3",
+		"@pkg/solid-freeze": "workspace:^",
 		"@pkg/solid-query": "workspace:^",
 		"@solidjs/router": "^0.8.4",
 		"@thisbeyond/solid-dnd": "^0.7.4",
