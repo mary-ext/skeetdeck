@@ -4,6 +4,8 @@ import type { SignalizedPost } from '~/api/stores/posts.ts';
 
 import { type ModerationDecision, CauseLabel } from '~/api/moderation/action.ts';
 
+import { createPostModDecision } from './PostWarning.tsx';
+
 export interface PostEmbedWarningProps {
 	post: SignalizedPost;
 	children?: JSX.Element;
@@ -15,7 +17,7 @@ const PostEmbedWarning = (props: PostEmbedWarningProps) => {
 			when={(() => {
 				const post = props.post;
 
-				const maker = post.$moderation as () => ModerationDecision | null;
+				const maker = (post.$moderation ||= createPostModDecision(post)) as () => ModerationDecision | null;
 				const decision = maker();
 
 				if (decision) {

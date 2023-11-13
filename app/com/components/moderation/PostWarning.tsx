@@ -98,7 +98,7 @@ const PostWarning = (props: PostWarningProps) => {
 
 export default PostWarning;
 
-const createPostModDecision = (post: SignalizedPost) => {
+export const createPostModDecision = (post: SignalizedPost) => {
 	const opts = useModeration();
 
 	let prev: unknown[] = [];
