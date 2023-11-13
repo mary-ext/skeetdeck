@@ -6,8 +6,8 @@ const WEEK = DAY * 7;
 const MONTH = WEEK * 4;
 const YEAR = MONTH * 12;
 
-const absWithYearFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' });
-const absFormat = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric' });
+const absWithYearFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' });
+const absFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' });
 const absTimeFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeStyle: 'short' });
 
 const formatters: Record<string, Intl.NumberFormat> = {};
