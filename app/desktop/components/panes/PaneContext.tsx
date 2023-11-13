@@ -7,6 +7,7 @@ import NoSuspense from '~/com/components/NoSuspense.ts';
 
 import type { BasePaneConfig } from '~/desktop/globals/panes.ts';
 
+import ProfilePaneDialog from './dialogs/ProfilePaneDialog.tsx';
 import ThreadPaneDialog from './dialogs/ThreadPaneDialog.tsx';
 
 export type Sortable = ReturnType<typeof createSortable>;
@@ -77,12 +78,16 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 	const navigate: LinkingContextObject['navigate'] = (to, alt) => {
 		const type = to.type;
 
-		if (type === LinkingType.POST) {
-			if (alt) {
-				return;
-			}
+		if (alt) {
+			return;
+		}
 
-			return openModal(() => <ThreadPaneDialog actor={/* @once */ to.actor} rkey={/* @once */ to.rkey} />);
+		if (type === LinkingType.POST) {
+			return openModal(() => <ThreadPaneDialog {...to} />);
+		}
+
+		if (type === LinkingType.PROFILE) {
+			return openModal(() => <ProfilePaneDialog {...to} />);
 		}
 	};
 

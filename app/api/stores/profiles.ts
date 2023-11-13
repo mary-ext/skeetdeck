@@ -77,12 +77,19 @@ const createSignalizedProfile = (
 	});
 };
 
-export const createProfileId = (uid: DID, profile: Profile | ProfileBasic | ProfileDetailed) => {
-	return uid + '|' + profile.did;
+export const createProfileId = (uid: DID, actor: DID) => {
+	return uid + '|' + actor;
+};
+
+export const getCachedProfile = (uid: DID, actor: DID) => {
+	const id = createProfileId(uid, actor);
+	const ref = profiles[id];
+
+	return ref && ref.deref();
 };
 
 export const mergeProfile = (uid: DID, profile: Profile | ProfileBasic | ProfileDetailed, key?: number) => {
-	let id = createProfileId(uid, profile);
+	let id = createProfileId(uid, profile.did);
 
 	let ref: WeakRef<SignalizedProfile> | undefined = profiles[id];
 	let val: SignalizedProfile;

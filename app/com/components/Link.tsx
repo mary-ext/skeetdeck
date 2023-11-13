@@ -8,6 +8,8 @@ export enum LinkingType {
 	POST_REPOSTED_BY,
 	POST,
 	PROFILE_FEED,
+	PROFILE_FOLLOWERS,
+	PROFILE_FOLLOWS,
 	PROFILE_LIST,
 	PROFILE,
 	REPLY,
@@ -44,6 +46,16 @@ export interface ProfileFeedLinking {
 	rkey: string;
 }
 
+export interface ProfileFollowsLinking {
+	type: LinkingType.PROFILE_FOLLOWERS;
+	actor: DID;
+}
+
+export interface ProfileFollowersLinking {
+	type: LinkingType.PROFILE_FOLLOWS;
+	actor: DID;
+}
+
 export interface ProfileListLinking {
 	type: LinkingType.PROFILE_LIST;
 	actor: DID;
@@ -72,6 +84,8 @@ export type Linking =
 	| PostRepostedByLinking
 	| PostLinking
 	| ProfileFeedLinking
+	| ProfileFollowersLinking
+	| ProfileFollowsLinking
 	| ProfileListLinking
 	| ProfileLinking
 	| ReplyLinking

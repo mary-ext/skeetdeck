@@ -70,7 +70,7 @@ type TimelineResponse = ResponseOf<'app.bsky.feed.getTimeline'>;
 type Post = RefOf<'app.bsky.feed.defs#postView'>;
 
 // type PostRecord = Records['app.bsky.feed.post'];
-type LikeRecord = Records['app.bsky.feed.like'];
+// type LikeRecord = Records['app.bsky.feed.like'];
 
 //// Feed query
 // How many attempts it should try looking for more items before it gives up on empty pages.
@@ -269,31 +269,16 @@ const fetchPage = async (
 		return response.data;
 	} else if (type === 'profile') {
 		if (params.tab === 'likes') {
-			const uid = agent.session!.did;
-
-			const recordsResponse = await agent.rpc.get('com.atproto.repo.listRecords', {
+			const response = await agent.rpc.get('app.bsky.feed.getActorLikes', {
 				signal: signal,
 				params: {
-					repo: params.actor,
-					collection: 'app.bsky.feed.like',
+					actor: params.actor,
 					cursor: cursor,
 					limit: limit,
 				},
 			});
 
-			const recordsData = recordsResponse.data;
-			const recordsCursor = recordsData.cursor;
-
-			const queries = await Promise.allSettled(
-				recordsData.records.map((rec) => fetchPost([uid, (rec.value as LikeRecord).subject.uri])),
-			);
-
-			return {
-				cursor: recordsCursor,
-				feed: queries
-					.filter((result): result is PromiseFulfilledResult<Post> => result.status === 'fulfilled')
-					.map((result) => ({ post: result.value })),
-			};
+			return response.data;
 		} else {
 			const response = await agent.rpc.get('app.bsky.feed.getAuthorFeed', {
 				signal: signal,
