@@ -1,15 +1,15 @@
-import { Show } from 'solid-js';
+import { Show, type JSX } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
 import type { Records, UnionOf } from '~/api/atp-schema.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
-import { formatReltime } from '~/utils/intl/time.ts';
+import { Link, LinkingType } from '~/com/components/Link.tsx';
+import TimeAgo from '~/com/components/TimeAgo.tsx';
 
 import PostQuoteWarning from '~/com/components/moderation/PostQuoteWarning.tsx';
 
 import EmbedImage from './EmbedImage.tsx';
-import { Link, LinkingType } from '../Link.tsx';
 
 type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
 type PostRecord = Records['app.bsky.feed.post'];
@@ -75,7 +75,11 @@ const EmbedRecord = (props: EmbedRecordProps) => {
 
 						<span class="px-1">·</span>
 
-						<span class="whitespace-nowrap">{formatReltime((val() as PostRecord).createdAt)}</span>
+						<span class="whitespace-nowrap">
+							<TimeAgo value={(val() as PostRecord).createdAt}>
+								{(relative, _absolute) => relative as unknown as JSX.Element}
+							</TimeAgo>
+						</span>
 					</div>
 
 					<Show when={(val() as PostRecord).text}>

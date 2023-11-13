@@ -6,7 +6,6 @@ import type { SignalizedPost } from '~/api/stores/posts.ts';
 import type { SignalizedTimelineItem } from '~/api/models/timeline.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
-import { formatAbsDateTime, formatReltime } from '~/utils/intl/time.ts';
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
 
 import PostWarning from '~/com/components/moderation/PostWarning.tsx';
@@ -18,6 +17,9 @@ import {
 	useLinking,
 } from '~/com/components/Link.tsx';
 import RichTextRenderer from '~/com/components/RichTextRenderer.tsx';
+import TimeAgo from '~/com/components/TimeAgo.tsx';
+
+import Embed from '~/com/components/embeds/Embed.tsx';
 
 import FavoriteIcon from '~/com/icons/baseline-favorite.tsx';
 import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
@@ -26,7 +28,6 @@ import ShareIcon from '~/com/icons/baseline-share.tsx';
 import ChatBubbleOutlinedIcon from '~/com/icons/outline-chat-bubble.tsx';
 import FavoriteOutlinedIcon from '~/com/icons/outline-favorite.tsx';
 import PostEmbedWarning from '../moderation/PostEmbedWarning.tsx';
-import Embed from '../embeds/Embed.tsx';
 
 export interface PostProps {
 	post: SignalizedPost;
@@ -184,13 +185,13 @@ const Post = (props: PostProps) => {
 
 							<span class="px-1">·</span>
 
-							<Link
-								to={postPermalink()}
-								title={formatAbsDateTime(record().createdAt)}
-								class="whitespace-nowrap hover:underline"
-							>
-								{formatReltime(record().createdAt)}
-							</Link>
+							<TimeAgo value={record().createdAt}>
+								{(relative, absolute) => (
+									<Link to={postPermalink()} title={absolute()} class="whitespace-nowrap hover:underline">
+										{relative()}
+									</Link>
+								)}
+							</TimeAgo>
 						</div>
 
 						<Show when={interactive()}>
