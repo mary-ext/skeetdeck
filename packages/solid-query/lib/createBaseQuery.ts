@@ -47,9 +47,11 @@ export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryK
 		});
 	});
 
+	const initialDefaultedOptions = untrack(defaultedOptions);
+
 	const observer = new Observer<TQueryFnData, TError, TData, TQueryData, TQueryKey>(
 		client,
-		untrack(defaultedOptions),
+		initialDefaultedOptions,
 	);
 
 	createRenderEffect(
@@ -63,7 +65,7 @@ export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryK
 	);
 
 	const [state, setState] = createStore<QueryObserverResult<TData, TError>>(
-		observer.getOptimisticResult(defaultedOptions()),
+		observer.getOptimisticResult(initialDefaultedOptions),
 	);
 
 	createRenderEffect(() => {
