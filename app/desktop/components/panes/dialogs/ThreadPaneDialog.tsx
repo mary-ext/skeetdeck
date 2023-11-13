@@ -15,9 +15,9 @@ import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
 import button from '~/com/primitives/button.ts';
 
+import PermalinkPost from '~/com/components/views/PermalinkPost.tsx';
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { Link, LinkingType } from '~/com/components/Link.tsx';
-import PermalinkPost from '~/com/components/PermalinkPost.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 
 import EmbedRecordNotFound from '~/com/components/embeds/EmbedRecordNotFound.tsx';
