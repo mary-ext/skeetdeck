@@ -7,7 +7,7 @@ import NoSuspense from '~/com/components/NoSuspense.ts';
 
 import type { BasePaneConfig } from '~/desktop/globals/panes.ts';
 
-import ThreadPaneDialog from '../pane-dialogs/ThreadPaneDialog.tsx';
+import ThreadPaneDialog from './dialogs/ThreadPaneDialog.tsx';
 
 export type Sortable = ReturnType<typeof createSortable>;
 

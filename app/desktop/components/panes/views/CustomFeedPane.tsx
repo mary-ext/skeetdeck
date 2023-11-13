@@ -6,9 +6,9 @@ import TimelineList from '~/com/components/lists/TimelineList.tsx';
 
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
 
-import Pane from '~/desktop/components/panes/Pane.tsx';
-import PaneBody from '~/desktop/components/panes/PaneBody.tsx';
-import PaneHeader from '~/desktop/components/panes/PaneHeader.tsx';
+import Pane from '../Pane.tsx';
+import PaneBody from '../PaneBody.tsx';
+import PaneHeader from '../PaneHeader.tsx';
 
 export interface CustomFeedPaneProps {
 	/** Expected to be static */

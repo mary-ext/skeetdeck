@@ -1,8 +1,8 @@
 import { type PaneConfig, PaneType } from '~/desktop/globals/panes.ts';
 
-import CustomFeedPane from '../pane-views/CustomFeedPane.tsx';
-import CustomListPane from '../pane-views/CustomListPane.tsx';
-import HomePane from '../pane-views/HomePane.tsx';
+import CustomFeedPane from './views/CustomFeedPane.tsx';
+import CustomListPane from './views/CustomListPane.tsx';
+import HomePane from './views/HomePane.tsx';
 
 export interface PaneRouterProps {
 	pane: PaneConfig;

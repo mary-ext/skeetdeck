@@ -23,9 +23,9 @@ import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 import EmbedRecordNotFound from '~/com/components/embeds/EmbedRecordNotFound.tsx';
 import Post from '~/com/components/items/Post.tsx';
 
-import { usePaneContext } from '~/desktop/components/panes/PaneContext.tsx';
-import PaneDialog from '~/desktop/components/panes/PaneDialog.tsx';
-import PaneDialogHeader from '~/desktop/components/panes/PaneDialogHeader.tsx';
+import { usePaneContext } from '../PaneContext.tsx';
+import PaneDialog from '../PaneDialog.tsx';
+import PaneDialogHeader from '../PaneDialogHeader.tsx';
 
 export interface ThreadPaneDialogProps {
 	/** Expected to be static */
