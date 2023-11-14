@@ -16,7 +16,7 @@ import { PreferenceWarn } from '~/api/moderation/enums.ts';
 
 import { sequal } from '~/utils/dequal.ts';
 
-import { useModeration } from '~/com/components/moderation/ModerationContext.tsx';
+import { useSharedPreferences } from '../SharedPreferences.tsx';
 
 type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
 type PostRecord = Records['app.bsky.feed.post'];
@@ -85,7 +85,7 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 export default PostQuoteWarning;
 
 const createPostModDecision = (quote: EmbeddedPostRecord) => {
-	const opts = useModeration();
+	const { moderation: opts } = useSharedPreferences();
 
 	let prev: unknown[] = [];
 	let decision: ModerationDecision | null;

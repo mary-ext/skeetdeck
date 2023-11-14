@@ -6,13 +6,14 @@ import { Router, useRoutes } from '@solidjs/router';
 
 import type { ModerationOpts } from '~/api/moderation/types.ts';
 
-import { ModalProvider } from '~/com/globals/modals.tsx';
 import { useMediaQuery } from '~/utils/media-query.ts';
 
-import { preferences } from '~/desktop/globals/settings.ts';
-import { queryClient } from '~/desktop/globals/query.ts';
+import { ModalProvider } from '~/com/globals/modals.tsx';
 
-import { ModerationContext } from '~/com/components/moderation/ModerationContext.tsx';
+import { SharedPreferences } from '~/com/components/SharedPreferences.tsx';
+
+import { createSharedPreferencesObject, preferences } from '~/desktop/globals/settings.ts';
+import { queryClient } from '~/desktop/globals/query.ts';
 
 import '~/desktop/styles/tailwind.css';
 
@@ -60,10 +61,10 @@ const App = () => {
 	return (
 		<Router>
 			<QueryClientProvider client={queryClient}>
-				<ModerationContext.Provider value={/* @once */ getModerationOptions()}>
+				<SharedPreferences.Provider value={/* @once */ createSharedPreferencesObject()}>
 					<Routes />
 					<ModalProvider desktop />
-				</ModerationContext.Provider>
+				</SharedPreferences.Provider>
 			</QueryClientProvider>
 		</Router>
 	);

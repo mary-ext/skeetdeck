@@ -17,7 +17,7 @@ import { PreferenceWarn } from '~/api/moderation/enums.ts';
 
 import { sequal } from '~/utils/dequal.ts';
 
-import { useModeration } from '~/com/components/moderation/ModerationContext.tsx';
+import { useSharedPreferences } from '../SharedPreferences.tsx';
 
 export interface PostWarningProps {
 	post: SignalizedPost;
@@ -99,7 +99,7 @@ const PostWarning = (props: PostWarningProps) => {
 export default PostWarning;
 
 export const createPostModDecision = (post: SignalizedPost) => {
-	const opts = useModeration();
+	const { moderation: opts } = useSharedPreferences();
 
 	let prev: unknown[] = [];
 	let decision: ModerationDecision | null;

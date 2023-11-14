@@ -1,10 +1,13 @@
 import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults.ts';
 import { PreferenceWarn } from '~/api/moderation/enums.ts';
 import type { ModerationOpts } from '~/api/moderation/types.ts';
+import type { FilterPreferences, LanguagePreferences } from '~/api/types.ts';
 
 import { createReactiveLocalStorage } from '~/utils/storage.ts';
 
-import { PaneSize, type PaneConfig } from './panes.ts';
+import type { SharedPreferencesObject } from '~/com/components/SharedPreferences.tsx';
+
+import { type PaneConfig, PaneSize } from './panes.ts';
 
 export interface Deck {
 	readonly id: string;
@@ -27,16 +30,11 @@ export interface PreferencesSchema {
 		defaultPaneSize: PaneSize;
 	};
 	/** Content moderation */
-	moderation: {
-		/** Global filter preferences */
-		globals: ModerationOpts['globals'];
-		/** User-level filter preferences */
-		users: ModerationOpts['users'];
-		/** Labeler-level filter preferences */
-		labelers: ModerationOpts['labelers'];
-		/** Keyword filters */
-		keywords: ModerationOpts['keywords'];
-	};
+	moderation: Omit<ModerationOpts, '_filtersCache'>;
+	/** Filter configuration */
+	filters: FilterPreferences;
+	/** Language configuration */
+	language: LanguagePreferences;
 }
 
 const PREF_KEY = 'rantai_prefs';
@@ -72,8 +70,30 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 				},
 				keywords: [],
 			},
+			filters: {
+				hideReposts: [],
+				tempMutes: {},
+			},
+			language: {
+				languages: [],
+				useSystemLanguages: true,
+				allowUnspecified: true,
+				defaultPostLanguage: 'system',
+			},
 		};
 	}
 
 	return prev;
 });
+
+export const createSharedPreferencesObject = (): SharedPreferencesObject => {
+	return {
+		// ModerationOpts contains internal state properties, we don't want them
+		// to be reflected back into persisted storage.
+		moderation: {
+			...preferences.moderation,
+		},
+		filters: preferences.filters,
+		language: preferences.language,
+	};
+};
