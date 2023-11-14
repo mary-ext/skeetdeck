@@ -69,8 +69,8 @@ const PostWarning = (props: PostWarningProps) => {
 					source.t === CauseLabel
 						? `Content warning: ${source.l.val}`
 						: source.t === CauseMutedKeyword
-						? `Filtered: ${source.n}`
-						: `You've muted this user`;
+						  ? `Filtered: ${source.n}`
+						  : `You've muted this user`;
 
 				return (
 					<>

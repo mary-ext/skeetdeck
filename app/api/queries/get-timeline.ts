@@ -1,7 +1,7 @@
 import type { Agent } from '@externdefs/bluesky-client/agent';
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID, Records, RefOf, ResponseOf } from '~/api/atp-schema.ts';
+import type { DID, RefOf, ResponseOf } from '~/api/atp-schema.ts';
 import { assert } from '~/utils/misc.ts';
 
 import { multiagent } from '~/api/globals/agent.ts';
@@ -290,8 +290,8 @@ const fetchPage = async (
 						params.tab === 'media'
 							? 'posts_with_media'
 							: params.tab === 'replies'
-							? 'posts_with_replies'
-							: 'posts_no_replies',
+							  ? 'posts_with_replies'
+							  : 'posts_no_replies',
 				},
 			});
 
