@@ -31,6 +31,13 @@ export enum PaneSize {
 	LARGE = 'lg',
 }
 
+export enum SpecificPaneSize {
+	INHERIT = 'inherit',
+	SMALL = 'sm',
+	MEDIUM = 'md',
+	LARGE = 'lg',
+}
+
 export enum ProfilePaneTab {
 	POSTS = 'posts',
 	POSTS_WITH_REPLIES = 'posts_with_replies',
@@ -41,7 +48,7 @@ export enum ProfilePaneTab {
 export interface BasePaneConfig {
 	readonly type: PaneType;
 	readonly id: string;
-	size: PaneSize | null;
+	size: SpecificPaneSize;
 	uid: DID;
 }
 

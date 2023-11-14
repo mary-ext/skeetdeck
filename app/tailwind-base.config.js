@@ -14,6 +14,8 @@ export default {
 				13: '3.25rem',
 				17: '4.24rem',
 				30: '7.5rem',
+				84: '21rem',
+				120: '30rem',
 			},
 			borderWidth: {
 				3: '3px',

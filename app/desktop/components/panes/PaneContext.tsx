@@ -38,6 +38,7 @@ export interface PaneContextObject<T extends BasePaneConfig = BasePaneConfig> {
 	pane: T;
 	index: Accessor<number>;
 	sortable: Sortable;
+	deletePane(): void;
 	openModal(fn: PaneModalComponent, options?: PaneModalOptions): void;
 }
 
@@ -52,6 +53,8 @@ export interface PaneContextProviderProps {
 	pane: BasePaneConfig;
 	/** Expected to be static */
 	index: Accessor<number>;
+	/** Expected to be static */
+	onDelete: () => void;
 	children?: JSX.Element;
 }
 
@@ -97,6 +100,7 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 		pane: pane,
 		index: index,
 		sortable: sortable,
+		deletePane: props.onDelete,
 		openModal: openModal,
 	};
 

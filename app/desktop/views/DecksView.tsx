@@ -51,7 +51,13 @@ const DecksView = () => {
 						<SortableProvider ids={deck.panes.map((pane) => pane.id)}>
 							<For each={deck.panes}>
 								{(pane, idx) => (
-									<PaneContextProvider pane={pane} index={idx}>
+									<PaneContextProvider
+										pane={pane}
+										index={idx}
+										onDelete={() => {
+											deck.panes.splice(idx(), 1);
+										}}
+									>
 										<PaneRouter pane={pane} />
 									</PaneContextProvider>
 								)}

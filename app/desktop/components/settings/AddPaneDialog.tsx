@@ -1,4 +1,4 @@
-import { For, Match, Show, Switch, createSignal, type Component } from 'solid-js';
+import { type Component, For, Match, Show, Switch, createSignal } from 'solid-js';
 
 import type { DID } from '~/api/atp-schema.ts';
 import { getAccountHandle, multiagent, renderAccountHandle } from '~/api/globals/agent.ts';
@@ -8,7 +8,7 @@ import { closeModal } from '~/com/globals/modals.tsx';
 import { createDerivedSignal } from '~/utils/hooks.ts';
 import { model } from '~/utils/input.ts';
 
-import { type PaneConfig, PaneType, labelizePaneType } from '~/desktop/globals/panes.ts';
+import { type PaneConfig, PaneType, SpecificPaneSize, labelizePaneType } from '~/desktop/globals/panes.ts';
 import type { Deck } from '~/desktop/globals/settings.ts';
 
 import * as dialog from '~/com/primitives/dialog.ts';
@@ -55,7 +55,7 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 			const pane: PaneConfig = {
 				...partial,
 				id: getCurrentTid(),
-				size: null,
+				size: SpecificPaneSize.INHERIT,
 				uid: $user,
 			};
 
