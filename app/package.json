@@ -17,7 +17,7 @@
 		"solid-js": "^1.8.5"
 	},
 	"devDependencies": {
-		"@types/node": "^20.8.10",
+		"@types/node": "^20.9.0",
 		"autoprefixer": "^10.4.16",
 		"postcss": "^8.4.31",
 		"terser": "^5.24.0",
