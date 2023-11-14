@@ -1,4 +1,4 @@
-import { For, Match, Switch, createEffect } from 'solid-js';
+import { For, Match, Switch, createEffect, createMemo } from 'solid-js';
 
 import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@pkg/solid-query';
 
@@ -14,10 +14,12 @@ import {
 	getTimelineLatestKey,
 } from '~/api/queries/get-timeline.ts';
 
-import Post from '~/com/components/items/Post.tsx';
-import CircularProgress from '~/com/components/CircularProgress.tsx';
-import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
-import button from '~/com/primitives/button.ts';
+import Post from '../items/Post.tsx';
+import CircularProgress from '../CircularProgress.tsx';
+import { useSharedPreferences } from '../SharedPreferences.tsx';
+import { VirtualContainer } from '../VirtualContainer.tsx';
+
+import button from '../../primitives/button.ts';
 
 export interface TimelineListProps {
 	uid: DID;
@@ -32,6 +34,8 @@ const isTimelineStale = (
 };
 
 const TimelineList = (props: TimelineListProps) => {
+	const sharedPrefs = useSharedPreferences();
+
 	const queryClient = useQueryClient();
 
 	const timeline = createInfiniteQuery(() => ({
@@ -39,6 +43,9 @@ const TimelineList = (props: TimelineListProps) => {
 		queryFn: getTimeline,
 		getNextPageParam: (last) => last.cursor,
 		initialPageParam: undefined,
+		meta: {
+			timelineOpts: sharedPrefs,
+		},
 	}));
 
 	const latest = createQuery(() => {

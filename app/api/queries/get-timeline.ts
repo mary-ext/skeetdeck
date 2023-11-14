@@ -1,10 +1,20 @@
 import type { Agent } from '@externdefs/bluesky-client/agent';
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID, RefOf, ResponseOf } from '~/api/atp-schema.ts';
 import { assert } from '~/utils/misc.ts';
 
-import { multiagent } from '~/api/globals/agent.ts';
+import type { DID, Records, RefOf, ResponseOf } from '../atp-schema.ts';
+import { multiagent } from '../globals/agent.ts';
+import { systemLanguages } from '../globals/platform.ts';
+
+import {
+	type ModerationCause,
+	decideLabelModeration,
+	decideMutedKeywordModeration,
+	finalizeModeration,
+} from '../moderation/action.ts';
+import { PreferenceHide } from '../moderation/enums.ts';
+import type { ModerationOpts } from '../moderation/types.ts';
 
 import {
 	type PostFilter,
@@ -13,7 +23,9 @@ import {
 	type TimelineSlice,
 	createTimelineSlices,
 	createUnjoinedSlices,
-} from '~/api/models/timeline.ts';
+} from '../models/timeline.ts';
+
+import type { FilterPreferences, LanguagePreferences } from '../types.ts';
 
 import { fetchPost } from './get-post.ts';
 
@@ -69,8 +81,7 @@ type TimelineResponse = ResponseOf<'app.bsky.feed.getTimeline'>;
 
 type Post = RefOf<'app.bsky.feed.defs#postView'>;
 
-// type PostRecord = Records['app.bsky.feed.post'];
-// type LikeRecord = Records['app.bsky.feed.like'];
+type PostRecord = Records['app.bsky.feed.post'];
 
 //// Feed query
 // How many attempts it should try looking for more items before it gives up on empty pages.
@@ -110,6 +121,8 @@ export const getTimeline = async (
 	const pageParam = ctx.pageParam;
 	const signal = ctx.signal;
 
+	const timelineOpts = ctx.meta?.timelineOpts;
+
 	const type = params.type;
 
 	const agent = await multiagent.connect(uid);
@@ -133,27 +146,27 @@ export const getTimeline = async (
 	if (type === 'home') {
 		sliceFilter = createHomeSliceFilter(uid);
 		postFilter = combine([
-			// createHiddenRepostFilter(uid),
+			createHiddenRepostFilter(timelineOpts?.filters),
 			createDuplicatePostFilter(items),
-			// createLabelPostFilter(uid),
-			// createTempMutePostFilter(uid),
+			createLabelPostFilter(timelineOpts?.moderation),
+			createTempMutePostFilter(timelineOpts?.filters),
 		]);
 	} else if (type === 'feed' || type === 'list') {
-		// sliceFilter = createFeedSliceFilter();
-		// postFilter = combine([
-		// 	createDuplicatePostFilter(items),
-		// 	createLanguagePostFilter(uid),
-		// 	createLabelPostFilter(uid),
-		// 	createTempMutePostFilter(uid),
-		// ]);
+		sliceFilter = createFeedSliceFilter();
+		postFilter = combine([
+			createDuplicatePostFilter(items),
+			createLanguagePostFilter(timelineOpts?.language),
+			createLabelPostFilter(timelineOpts?.moderation),
+			createTempMutePostFilter(timelineOpts?.filters),
+		]);
 	} else if (type === 'profile') {
-		// postFilter = createLabelPostFilter(uid);
+		postFilter = createLabelPostFilter(timelineOpts?.moderation);
 
 		if (params.tab === 'likes' || params.tab === 'media') {
 			sliceFilter = null;
 		}
 	} else {
-		// postFilter = createLabelPostFilter(uid);
+		postFilter = createLabelPostFilter(timelineOpts?.moderation);
 	}
 
 	while (cursor !== null && count < limit) {
@@ -382,6 +395,146 @@ const createDuplicatePostFilter = (slices: TimelineSlice[]): PostFilter => {
 		}
 
 		return (map[uri] = true);
+	};
+};
+
+const createLabelPostFilter = (opts?: ModerationOpts): PostFilter | undefined => {
+	if (!opts) {
+		return;
+	}
+
+	return (item) => {
+		const post = item.post;
+		const labels = post.labels;
+
+		const accu: ModerationCause[] = [];
+		decideLabelModeration(accu, labels, post.author.did, opts);
+		decideMutedKeywordModeration(accu, (post.record as PostRecord).text, PreferenceHide, opts);
+
+		const decision = finalizeModeration(accu);
+
+		return !decision?.f;
+	};
+};
+
+const createLanguagePostFilter = (prefs?: LanguagePreferences): PostFilter | undefined => {
+	if (!prefs) {
+		return;
+	}
+
+	const allowUnspecified = prefs.allowUnspecified;
+	let languages = prefs.languages;
+
+	if (prefs.useSystemLanguages) {
+		languages = languages ? systemLanguages.concat(languages) : systemLanguages;
+	}
+
+	if (!languages || languages.length < 1) {
+		return;
+	}
+
+	return (item) => {
+		const record = item.post.record as PostRecord;
+		const langs = record.langs;
+
+		if (!record.text) {
+			return true;
+		}
+
+		if (!langs || langs.length < 1) {
+			return allowUnspecified;
+		}
+
+		return langs.some((code) => languages!.includes(code));
+	};
+};
+
+const createHiddenRepostFilter = (prefs?: FilterPreferences): PostFilter | undefined => {
+	if (!prefs) {
+		return;
+	}
+
+	const hidden = prefs.hideReposts;
+
+	if (hidden.length < 1) {
+		return;
+	}
+
+	return (item) => {
+		const reason = item.reason;
+
+		return !reason || reason.$type !== 'app.bsky.feed.defs#reasonRepost' || !hidden.includes(reason.by.did);
+	};
+};
+
+const createTempMutePostFilter = (prefs?: FilterPreferences): PostFilter | undefined => {
+	if (!prefs) {
+		return;
+	}
+
+	const now = Date.now();
+
+	const mutes = prefs.tempMutes;
+	let hasMutes = false;
+
+	// check if there are any outdated mutes before proceeding
+	for (const did in mutes) {
+		const date = mutes[did as DID];
+
+		if (date === undefined || now >= date) {
+			delete mutes[did as DID];
+		} else {
+			hasMutes = true;
+		}
+	}
+
+	if (!hasMutes) {
+		return;
+	}
+
+	return (item) => {
+		const reason = item.reason;
+
+		if (reason) {
+			const byDid = reason.by.did;
+
+			if (mutes![byDid] && now < mutes![byDid]!) {
+				return false;
+			}
+		}
+
+		const did = item.post.author.did;
+
+		if (mutes![did] && now < mutes![did]!) {
+			return false;
+		}
+
+		return true;
+	};
+};
+
+const createFeedSliceFilter = (): SliceFilter | undefined => {
+	return (slice) => {
+		const items = slice.items;
+		const first = items[0];
+
+		// skip any posts that are in reply to non-followed
+		if (first.reply) {
+			const root = first.reply.root;
+			const parent = first.reply.parent;
+
+			const rAuthor = root.author;
+			const pAuthor = parent.author;
+
+			const rViewer = rAuthor.viewer;
+			const pViewer = pAuthor.viewer;
+
+			if (rViewer.muted.peek() || pViewer.muted.peek()) {
+				return yankReposts(items);
+			}
+		}
+
+		return true;
 	};
 };
 
