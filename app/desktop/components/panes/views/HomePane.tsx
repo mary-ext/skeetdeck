@@ -6,17 +6,13 @@ import TimelineList from '~/com/components/lists/TimelineList.tsx';
 
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
 
-import Pane from '~/desktop/components/panes/Pane.tsx';
-import PaneBody from '~/desktop/components/panes/PaneBody.tsx';
-import PaneHeader from '~/desktop/components/panes/PaneHeader.tsx';
+import { usePaneContext } from '../PaneContext.tsx';
+import Pane from '../Pane.tsx';
+import PaneBody from '../PaneBody.tsx';
+import PaneHeader from '../PaneHeader.tsx';
 
-export interface HomePaneProps {
-	/** Expected to be static */
-	pane: HomePaneConfig;
-}
-
-const HomePane = (props: HomePaneProps) => {
-	const pane = props.pane;
+const HomePane = () => {
+	const { pane } = usePaneContext<HomePaneConfig>();
 
 	return (
 		<Pane>

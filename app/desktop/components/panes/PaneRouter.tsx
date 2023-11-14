@@ -13,11 +13,11 @@ const PaneRouter = (props: PaneRouterProps) => {
 
 	switch (pane.type) {
 		case PaneType.HOME:
-			return <HomePane pane={pane} />;
+			return <HomePane />;
 		case PaneType.CUSTOM_FEED:
-			return <CustomFeedPane pane={pane} />;
+			return <CustomFeedPane />;
 		case PaneType.CUSTOM_LIST:
-			return <CustomListPane pane={pane} />;
+			return <CustomListPane />;
 	}
 
 	return null;

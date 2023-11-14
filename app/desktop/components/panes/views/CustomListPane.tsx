@@ -6,17 +6,13 @@ import TimelineList from '~/com/components/lists/TimelineList.tsx';
 
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
 
+import { usePaneContext } from '../PaneContext.tsx';
 import Pane from '~/desktop/components/panes/Pane.tsx';
 import PaneBody from '~/desktop/components/panes/PaneBody.tsx';
 import PaneHeader from '~/desktop/components/panes/PaneHeader.tsx';
 
-export interface CustomListPaneProps {
-	/** Expected to be static */
-	pane: CustomListPaneConfig;
-}
-
-const CustomListPane = (props: CustomListPaneProps) => {
-	const pane = props.pane;
+const CustomListPane = () => {
+	const { pane } = usePaneContext<CustomListPaneConfig>();
 
 	return (
 		<Pane>

@@ -34,8 +34,8 @@ export const usePaneModalState = () => {
 	return useContext(PaneModalContext)!;
 };
 
-export interface PaneContextObject {
-	pane: BasePaneConfig;
+export interface PaneContextObject<T extends BasePaneConfig = BasePaneConfig> {
+	pane: T;
 	index: Accessor<number>;
 	sortable: Sortable;
 	openModal(fn: PaneModalComponent, options?: PaneModalOptions): void;
@@ -43,8 +43,8 @@ export interface PaneContextObject {
 
 export const PaneContext = createContext<PaneContextObject>();
 
-export const usePaneContext = () => {
-	return useContext(PaneContext)!;
+export const usePaneContext = <T extends BasePaneConfig = BasePaneConfig>() => {
+	return useContext(PaneContext) as PaneContextObject<T>;
 };
 
 export interface PaneContextProviderProps {

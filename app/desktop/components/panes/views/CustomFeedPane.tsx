@@ -6,17 +6,13 @@ import TimelineList from '~/com/components/lists/TimelineList.tsx';
 
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
 
+import { usePaneContext } from '../PaneContext.tsx';
 import Pane from '../Pane.tsx';
 import PaneBody from '../PaneBody.tsx';
 import PaneHeader from '../PaneHeader.tsx';
 
-export interface CustomFeedPaneProps {
-	/** Expected to be static */
-	pane: CustomFeedPaneConfig;
-}
-
-const CustomFeedPane = (props: CustomFeedPaneProps) => {
-	const pane = props.pane;
+const CustomFeedPane = () => {
+	const { pane } = usePaneContext<CustomFeedPaneConfig>();
 
 	return (
 		<Pane>
