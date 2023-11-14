@@ -42,7 +42,7 @@ const App = () => {
 	]);
 
 	createRenderEffect(() => {
-		const theme = preferences.theme;
+		const theme = preferences.ui.theme;
 
 		const cl = document.documentElement.classList;
 

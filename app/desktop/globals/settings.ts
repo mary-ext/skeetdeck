@@ -4,7 +4,7 @@ import type { ModerationOpts } from '~/api/moderation/types.ts';
 
 import { createReactiveLocalStorage } from '~/utils/storage.ts';
 
-import type { PaneConfig } from './panes.ts';
+import { PaneSize, type PaneConfig } from './panes.ts';
 
 export interface Deck {
 	readonly id: string;
@@ -17,10 +17,15 @@ export interface PreferencesSchema {
 	$version: 1;
 	/** Onboarding mode */
 	onboarding: boolean;
-	/** Application theme */
-	theme: 'auto' | 'dark' | 'light';
 	/** Deck configuration */
 	decks: Deck[];
+	/** UI configuration */
+	ui: {
+		/** Application theme */
+		theme: 'auto' | 'dark' | 'light';
+		/** Default pane size */
+		defaultPaneSize: PaneSize;
+	};
 	/** Content moderation */
 	moderation: {
 		/** Global filter preferences */
@@ -41,8 +46,11 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 		return {
 			$version: 1,
 			onboarding: true,
-			theme: 'auto',
 			decks: [],
+			ui: {
+				theme: 'auto',
+				defaultPaneSize: PaneSize.MEDIUM,
+			},
 			moderation: {
 				globals: {
 					groups: {
