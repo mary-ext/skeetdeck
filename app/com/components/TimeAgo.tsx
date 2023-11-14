@@ -7,10 +7,17 @@ export interface TimeAgoProps {
 	children: (relative: Accessor<string>, absolute: Accessor<string>) => JSX.Element;
 }
 
-const [tick, setTick] = createSignal(undefined, { equals: false });
+const [tick, _setTick] = createSignal(undefined, { equals: false });
+
+const tickForward = () => {
+	_setTick(undefined);
+};
+
+let _idle: number;
 
 setInterval(() => {
-	setTick(undefined);
+	cancelIdleCallback(_idle);
+	_idle = requestIdleCallback(tickForward);
 }, 60_000);
 
 const TimeAgo = (props: TimeAgoProps) => {
