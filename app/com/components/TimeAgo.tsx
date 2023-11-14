@@ -11,14 +11,10 @@ const [tick, _setTick] = createSignal(undefined, { equals: false });
 
 const tickForward = () => {
 	_setTick(undefined);
+	setTimeout(() => requestIdleCallback(tickForward), 60_000);
 };
 
-let _idle: number;
-
-setInterval(() => {
-	cancelIdleCallback(_idle);
-	_idle = requestIdleCallback(tickForward);
-}, 60_000);
+tickForward();
 
 const TimeAgo = (props: TimeAgoProps) => {
 	const [absolute, setAbsolute] = createSignal('');
