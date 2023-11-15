@@ -45,7 +45,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 	const { pane } = usePaneContext();
 
 	const thread = createQuery(() => {
-		const key = getPostThreadKey(pane.uid, actor, rkey, MAX_DESCENDANTS + 1, MAX_ANCESTORS);
+		const key = getPostThreadKey(pane.uid, actor, rkey, MAX_DESCENDANTS + 1, MAX_ANCESTORS + 1);
 
 		return {
 			queryKey: key,
