@@ -1,4 +1,4 @@
-import { type PaneConfig, PaneType } from '~/desktop/globals/panes.ts';
+import { type PaneConfig, PaneType } from '../../globals/panes.ts';
 
 import CustomFeedPane from './views/CustomFeedPane.tsx';
 import CustomListPane from './views/CustomListPane.tsx';

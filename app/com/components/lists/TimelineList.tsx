@@ -1,4 +1,4 @@
-import { For, Match, Switch, createEffect, createMemo } from 'solid-js';
+import { For, Match, Switch, createEffect } from 'solid-js';
 
 import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@pkg/solid-query';
 
@@ -14,12 +14,13 @@ import {
 	getTimelineLatestKey,
 } from '~/api/queries/get-timeline.ts';
 
-import Post from '../items/Post.tsx';
 import CircularProgress from '../CircularProgress.tsx';
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 import { VirtualContainer } from '../VirtualContainer.tsx';
 
 import button from '../../primitives/button.ts';
+
+import Post from '../items/Post.tsx';
 
 export interface TimelineListProps {
 	uid: DID;

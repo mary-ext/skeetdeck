@@ -1,10 +1,10 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID, RefOf } from '~/api/atp-schema.ts';
-import { multiagent } from '~/api/globals/agent.ts';
+import type { DID, RefOf } from '../atp-schema.ts';
+import { multiagent } from '../globals/agent.ts';
 
-import { type ThreadPage, createThreadPage } from '~/api/models/thread.ts';
-import { type SignalizedPost, getCachedPost } from '~/api/stores/posts.ts';
+import { type ThreadPage, createThreadPage } from '../models/thread.ts';
+import { type SignalizedPost, getCachedPost } from '../stores/posts.ts';
 
 import _getDid from './_did.ts';
 

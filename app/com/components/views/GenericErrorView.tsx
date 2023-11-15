@@ -1,4 +1,4 @@
-import button from '~/com/primitives/button.ts';
+import button from '../../primitives/button.ts';
 
 export interface GenericErrorViewProps {
 	error: unknown;

@@ -8,7 +8,7 @@ import { multiagent } from '~/api/globals/agent.ts';
 import _getDid from '~/api/queries/_did.ts';
 import { getProfile, getProfileKey } from '~/api/queries/get-profile.ts';
 
-import { queryClient } from '~/desktop/globals/query.ts';
+import { queryClient } from '../../globals/query.ts';
 
 import { closeModal, useModalState } from '~/com/globals/modals.tsx';
 import { model } from '~/utils/input.ts';

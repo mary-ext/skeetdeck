@@ -4,15 +4,15 @@ import { A, Outlet } from '@solidjs/router';
 
 import { openModal } from '~/com/globals/modals.tsx';
 
-import { preferences } from '~/desktop/globals/settings.ts';
+import { preferences } from '../globals/settings.ts';
 
 import interactive from '~/com/primitives/interactive.ts';
 
 import AddIcon from '~/com/icons/baseline-add.tsx';
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
 
-import SettingsDialog from '~/desktop/components/settings/SettingsDialog.tsx';
-import AddDeckDialog from '~/desktop/components/settings/AddDeckDialog.tsx';
+import SettingsDialog from '../components/settings/SettingsDialog.tsx';
+import AddDeckDialog from '../components/settings/AddDeckDialog.tsx';
 
 const menuIconButton = interactive({ class: 'h-11 text-lg' });
 

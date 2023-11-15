@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'solid-js';
 
-import CheckIcon from '~/com/icons/baseline-check.tsx';
+import CheckIcon from '../../icons/baseline-check.tsx';
 
 const Radio = (props: ComponentProps<'input'>) => {
 	return (

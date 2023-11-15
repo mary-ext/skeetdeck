@@ -4,10 +4,10 @@ import { Dynamic } from 'solid-js/web';
 import type { Records, UnionOf } from '~/api/atp-schema.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
-import { Link, LinkingType } from '~/com/components/Link.tsx';
-import TimeAgo from '~/com/components/TimeAgo.tsx';
+import PostQuoteWarning from '../moderation/PostQuoteWarning.tsx';
 
-import PostQuoteWarning from '~/com/components/moderation/PostQuoteWarning.tsx';
+import { Link, LinkingType } from '../Link.tsx';
+import TimeAgo from '../TimeAgo.tsx';
 
 import EmbedImage from './EmbedImage.tsx';
 

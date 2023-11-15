@@ -1,7 +1,7 @@
 import { type JSX, createMemo } from 'solid-js';
 
-import { PaneSize, SpecificPaneSize } from '~/desktop/globals/panes.ts';
-import { preferences } from '~/desktop/globals/settings.ts';
+import { PaneSize, SpecificPaneSize } from '../../globals/panes.ts';
+import { preferences } from '../../globals/settings.ts';
 
 import { usePaneContext } from './PaneContext.tsx';
 

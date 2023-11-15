@@ -1,10 +1,9 @@
 import { Match, Switch } from 'solid-js';
 
-import type { DID, UnionOf } from '@externdefs/bluesky-client/atp-schema';
-
+import type { DID, UnionOf } from '~/api/atp-schema.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
-import { Link, LinkingType } from '~/com/components/Link.tsx';
+import { Link, LinkingType } from '../Link.tsx';
 
 import EmbedRecordNotFound from './EmbedRecordNotFound.tsx';
 

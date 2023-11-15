@@ -4,7 +4,7 @@ import { createInfiniteQuery } from '@pkg/solid-query';
 
 import { multiagent } from '~/api/globals/agent.ts';
 
-import { type CustomFeedPaneConfig, PaneType } from '~/desktop/globals/panes.ts';
+import { type CustomFeedPaneConfig, PaneType } from '../../../globals/panes.ts';
 
 import * as dialog from '~/com/primitives/dialog.ts';
 import input from '~/com/primitives/input.ts';

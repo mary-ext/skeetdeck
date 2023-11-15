@@ -1,6 +1,6 @@
 import { Match, Switch } from 'solid-js';
 
-import { preferences } from '~/desktop/globals/settings.ts';
+import { preferences } from '../globals/settings.ts';
 
 import button from '~/com/primitives/button.ts';
 

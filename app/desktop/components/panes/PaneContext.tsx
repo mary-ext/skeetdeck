@@ -3,9 +3,8 @@ import { type Accessor, type JSX, createContext, useContext, createSignal, For }
 import { createSortable, transformStyle } from '@thisbeyond/solid-dnd';
 
 import { type LinkingContextObject, LinkingContext, LinkingType } from '~/com/components/Link.tsx';
-import NoSuspense from '~/com/components/NoSuspense.ts';
 
-import type { BasePaneConfig } from '~/desktop/globals/panes.ts';
+import type { BasePaneConfig } from '../../globals/panes.ts';
 
 import ProfilePaneDialog from './dialogs/ProfilePaneDialog.tsx';
 import ThreadPaneDialog from './dialogs/ThreadPaneDialog.tsx';

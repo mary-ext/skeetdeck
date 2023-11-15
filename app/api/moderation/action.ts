@@ -1,4 +1,4 @@
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '../atp-schema.ts';
 
 import type { Label, LabelDefinition, ModerationOpts } from './types.ts';
 import {

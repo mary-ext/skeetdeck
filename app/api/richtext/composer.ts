@@ -1,7 +1,7 @@
 import type { DID } from '@externdefs/bluesky-client/atp-schema';
 import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 
-import { multiagent } from '~/api/globals/agent.ts';
+import { multiagent } from '../globals/agent.ts';
 
 import { graphemeLen } from './intl.ts';
 import { toShortUrl } from './renderer.ts';

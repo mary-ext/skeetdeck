@@ -4,11 +4,11 @@ import type { DID } from '~/api/atp-schema.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
-import button from '~/com/primitives/button.ts';
+import button from '../../primitives/button.ts';
 
-import { Link, LinkingType } from '~/com/components/Link.tsx';
+import { Link, LinkingType } from '../Link.tsx';
 
-import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
+import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
 
 export interface ProfileHeaderProps {
 	uid: DID;

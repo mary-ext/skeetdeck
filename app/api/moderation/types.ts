@@ -1,4 +1,4 @@
-import type { DID, RefOf } from '~/api/atp-schema.ts';
+import type { DID, RefOf } from '../atp-schema.ts';
 
 import type { KeywordPreference } from './enums.ts';
 

@@ -1,4 +1,4 @@
-import type { RefOf, UnionOf } from '@externdefs/bluesky-client/atp-schema';
+import type { RefOf, UnionOf } from '../atp-schema.ts';
 
 export type Facet = RefOf<'app.bsky.richtext.facet'>;
 export type LinkFeature = UnionOf<'app.bsky.richtext.facet#link'>;

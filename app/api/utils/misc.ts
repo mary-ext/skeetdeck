@@ -1,5 +1,6 @@
 import { $PROXY } from 'solid-js';
-import type { DID } from '~/api/atp-schema.ts';
+
+import type { DID } from '../atp-schema.ts';
 
 export const isDid = (value: string): value is DID => {
 	return value.startsWith('did:');

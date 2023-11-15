@@ -1,8 +1,8 @@
 import { getUniqueId } from '~/utils/misc.ts';
 
-import { SpecificPaneSize } from '~/desktop/globals/panes.ts';
-
 import Radio from '~/com/components/inputs/Radio.tsx';
+
+import { SpecificPaneSize } from '../../../globals/panes.ts';
 
 import { usePaneContext } from '../PaneContext.tsx';
 

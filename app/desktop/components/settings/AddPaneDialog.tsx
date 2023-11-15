@@ -8,8 +8,8 @@ import { closeModal } from '~/com/globals/modals.tsx';
 import { createDerivedSignal } from '~/utils/hooks.ts';
 import { model } from '~/utils/input.ts';
 
-import { type PaneConfig, PaneType, SpecificPaneSize, labelizePaneType } from '~/desktop/globals/panes.ts';
-import type { Deck } from '~/desktop/globals/settings.ts';
+import { type PaneConfig, PaneType, SpecificPaneSize, labelizePaneType } from '../../globals/panes.ts';
+import type { Deck } from '../../globals/settings.ts';
 
 import * as dialog from '~/com/primitives/dialog.ts';
 import iconButton from '~/com/primitives/icon-button.ts';

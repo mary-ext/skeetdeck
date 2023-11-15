@@ -1,4 +1,4 @@
-import type { CustomFeedPaneConfig } from '~/desktop/globals/panes.ts';
+import type { CustomFeedPaneConfig } from '../../../globals/panes.ts';
 
 import iconButton from '~/com/primitives/icon-button.ts';
 

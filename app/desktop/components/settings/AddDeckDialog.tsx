@@ -2,7 +2,7 @@ import { createSignal } from 'solid-js';
 
 import { useNavigate } from '@solidjs/router';
 
-import { preferences } from '~/desktop/globals/settings.ts';
+import { preferences } from '../../globals/settings.ts';
 
 import { getCurrentTid } from '~/api/utils/tid.ts';
 

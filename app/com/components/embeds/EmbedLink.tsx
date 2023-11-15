@@ -3,7 +3,7 @@ import { Dynamic } from 'solid-js/web';
 
 import type { RefOf } from '~/api/atp-schema.ts';
 
-import BlobImage from '~/com/components/BlobImage.tsx';
+import BlobImage from '../BlobImage.tsx';
 
 type EmbeddedLink = RefOf<'app.bsky.embed.external#viewExternal'>;
 

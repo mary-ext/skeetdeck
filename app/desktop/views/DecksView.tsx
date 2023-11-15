@@ -3,12 +3,12 @@ import { For, Show } from 'solid-js';
 import { Navigate, useParams } from '@solidjs/router';
 import { DragDropProvider, DragDropSensors, SortableProvider } from '@thisbeyond/solid-dnd';
 
-import { preferences } from '~/desktop/globals/settings.ts';
-import { ConstrainYDragAxis } from '~/desktop/utils/dnd.ts';
+import { preferences } from '../globals/settings.ts';
+import { ConstrainYDragAxis } from '../utils/dnd.ts';
 
-import { PaneContextProvider } from '~/desktop/components/panes/PaneContext.tsx';
-import PaneRouter from '~/desktop/components/panes/PaneRouter.tsx';
-import AddPaneDialog from '~/desktop/components/settings/AddPaneDialog.tsx';
+import { PaneContextProvider } from '../components/panes/PaneContext.tsx';
+import PaneRouter from '../components/panes/PaneRouter.tsx';
+import AddPaneDialog from '../components/settings/AddPaneDialog.tsx';
 
 import AddIcon from '~/com/icons/baseline-add.tsx';
 import EditIcon from '~/com/icons/baseline-edit.tsx';

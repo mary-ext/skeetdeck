@@ -8,26 +8,20 @@ import { getRecordId } from '~/api/utils/misc.ts';
 
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
 
-import PostWarning from '~/com/components/moderation/PostWarning.tsx';
-import {
-	type PostLinking,
-	type ProfileLinking,
-	Link,
-	LinkingType,
-	useLinking,
-} from '~/com/components/Link.tsx';
-import RichTextRenderer from '~/com/components/RichTextRenderer.tsx';
-import TimeAgo from '~/com/components/TimeAgo.tsx';
+import { type PostLinking, type ProfileLinking, Link, LinkingType, useLinking } from '../Link.tsx';
+import RichTextRenderer from '../RichTextRenderer.tsx';
+import TimeAgo from '../TimeAgo.tsx';
 
-import Embed from '~/com/components/embeds/Embed.tsx';
-
-import FavoriteIcon from '~/com/icons/baseline-favorite.tsx';
-import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
-import RepeatIcon from '~/com/icons/baseline-repeat.tsx';
-import ShareIcon from '~/com/icons/baseline-share.tsx';
-import ChatBubbleOutlinedIcon from '~/com/icons/outline-chat-bubble.tsx';
-import FavoriteOutlinedIcon from '~/com/icons/outline-favorite.tsx';
+import PostWarning from '../moderation/PostWarning.tsx';
 import PostEmbedWarning from '../moderation/PostEmbedWarning.tsx';
+import Embed from '../embeds/Embed.tsx';
+
+import FavoriteIcon from '../../icons/baseline-favorite.tsx';
+import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
+import RepeatIcon from '../../icons/baseline-repeat.tsx';
+import ShareIcon from '../../icons/baseline-share.tsx';
+import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble.tsx';
+import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
 
 export interface PostProps {
 	post: SignalizedPost;

@@ -4,7 +4,7 @@ import type { UnionOf } from '~/api/atp-schema.ts';
 import { ListPurposeLabels } from '~/api/display.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
-import { Link, LinkingType } from '~/com/components/Link.tsx';
+import { Link, LinkingType } from '../Link.tsx';
 
 type EmbeddedList = UnionOf<'app.bsky.graph.defs#listView'>;
 

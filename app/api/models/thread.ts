@@ -1,6 +1,6 @@
-import type { DID, RefOf, UnionOf } from '~/api/atp-schema.ts';
-
 import { Stack } from '~/utils/stack.ts';
+
+import type { DID, RefOf, UnionOf } from '../atp-schema.ts';
 
 import { type SignalizedPost, mergePost } from '../stores/posts.ts';
 

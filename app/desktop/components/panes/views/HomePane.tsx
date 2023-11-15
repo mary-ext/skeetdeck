@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js';
 
-import { type HomePaneConfig } from '~/desktop/globals/panes.ts';
+import { type HomePaneConfig } from '../../../globals/panes.ts';
 
 import iconButton from '~/com/primitives/icon-button.ts';
 

@@ -1,10 +1,10 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
-import { multiagent } from '~/api/globals/agent.ts';
-import { isDid } from '~/api/utils/misc.ts';
+import type { DID } from '../atp-schema.ts';
+import { multiagent } from '../globals/agent.ts';
+import { isDid } from '../utils/misc.ts';
 
-import { type SignalizedProfile, getCachedProfile, mergeProfile } from '~/api/stores/profiles.ts';
+import { type SignalizedProfile, getCachedProfile, mergeProfile } from '../stores/profiles.ts';
 
 export const getProfileKey = (uid: DID, actor: string) => {
 	return ['getProfile', uid, actor] as const;

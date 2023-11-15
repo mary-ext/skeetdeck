@@ -4,10 +4,9 @@ import { createInfiniteQuery } from '@pkg/solid-query';
 
 import { multiagent } from '~/api/globals/agent.ts';
 
-import { type CustomFeedPaneConfig, PaneType, CustomListPaneConfig } from '~/desktop/globals/panes.ts';
+import { type CustomListPaneConfig, PaneType } from '../../../globals/panes.ts';
 
 import * as dialog from '~/com/primitives/dialog.ts';
-import input from '~/com/primitives/input.ts';
 
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';

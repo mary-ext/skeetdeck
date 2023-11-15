@@ -5,16 +5,17 @@ import { getRecordId } from '~/api/utils/misc.ts';
 
 import { formatAbsDateTime } from '~/utils/intl/time.ts';
 
-import PostEmbedWarning from '~/com/components/moderation/PostEmbedWarning.tsx';
-import Embed from '~/com/components/embeds/Embed.tsx';
-import { Link, LinkingType } from '~/com/components/Link.tsx';
+import { Link, LinkingType } from '../Link.tsx';
 
-import ChatBubbleOutlinedIcon from '~/com/icons/outline-chat-bubble.tsx';
-import FavoriteIcon from '~/com/icons/baseline-favorite.tsx';
-import FavoriteOutlinedIcon from '~/com/icons/outline-favorite.tsx';
-import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
-import RepeatIcon from '~/com/icons/baseline-repeat.tsx';
-import ShareIcon from '~/com/icons/baseline-share.tsx';
+import PostEmbedWarning from '../moderation/PostEmbedWarning.tsx';
+import Embed from '../embeds/Embed.tsx';
+
+import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble.tsx';
+import FavoriteIcon from '../../icons/baseline-favorite.tsx';
+import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
+import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
+import RepeatIcon from '../../icons/baseline-repeat.tsx';
+import ShareIcon from '../../icons/baseline-share.tsx';
 
 export interface PermalinkPostProps {
 	post: SignalizedPost;
