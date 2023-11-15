@@ -2,7 +2,6 @@ import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
 import type { DID } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
-import { isDid } from '../utils/misc.ts';
 
 import { type SignalizedProfile, getCachedProfile, mergeProfile } from '../stores/profiles.ts';
 
@@ -48,11 +47,7 @@ export const getProfile = async (ctx: QC<ReturnType<typeof getProfileKey>>) => {
 export const getInitialProfile = (key: ReturnType<typeof getProfileKey>): SignalizedProfile | undefined => {
 	const [, uid, actor] = key;
 
-	if (isDid(actor)) {
-		const profile = getCachedProfile(uid, actor);
+	const profile = getCachedProfile(uid, actor as DID);
 
-		return profile;
-	}
-
-	return;
+	return profile;
 };
