@@ -6,7 +6,7 @@ import { openModal } from '~/com/globals/modals.tsx';
 
 import { preferences } from '../globals/settings.ts';
 
-import interactive from '~/com/primitives/interactive.ts';
+import { Interactive } from '~/com/primitives/interactive.ts';
 
 import AddIcon from '~/com/icons/baseline-add.tsx';
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
@@ -14,7 +14,7 @@ import SettingsIcon from '~/com/icons/baseline-settings.tsx';
 import SettingsDialog from '../components/settings/SettingsDialog.tsx';
 import AddDeckDialog from '../components/settings/AddDeckDialog.tsx';
 
-const menuIconButton = interactive({ class: 'h-11 text-lg' });
+const menuIconButton = Interactive({ class: 'h-11 text-lg' });
 
 const DashboardLayout = () => {
 	return (
@@ -29,7 +29,7 @@ const DashboardLayout = () => {
 							href={/* @once */ `/decks/${deck.id}`}
 							replace
 							class={
-								/* @once */ interactive({ class: 'group relative grid h-11 place-items-center text-lg' })
+								/* @once */ Interactive({ class: 'group relative grid h-11 place-items-center text-lg' })
 							}
 							activeClass="is-active"
 						>

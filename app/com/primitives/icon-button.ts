@@ -5,7 +5,7 @@ export interface IconButtonProps {
 	edge?: 'left' | 'right';
 }
 
-const iconButton = (props: IconButtonProps = {}) => {
+export const IconButton = (props: IconButtonProps = {}) => {
 	const { class: className, size = 'md', color = 'primary', edge } = props;
 
 	let cn = `grid place-items-center shrink-0 rounded-full text-muted-fg hover:bg-secondary`;
@@ -32,5 +32,3 @@ const iconButton = (props: IconButtonProps = {}) => {
 		return cn;
 	}
 };
-
-export default iconButton;

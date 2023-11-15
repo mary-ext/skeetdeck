@@ -2,7 +2,7 @@ import { Match, Switch } from 'solid-js';
 
 import { preferences } from '../globals/settings.ts';
 
-import button from '~/com/primitives/button.ts';
+import { Button } from '~/com/primitives/button.ts';
 
 const IndexPage = () => {
 	return (
@@ -21,7 +21,7 @@ const IndexPage = () => {
 							</p>
 
 							<div class="mt-8 flex justify-center">
-								<button class={/* @once */ button({ variant: 'primary' })}>Add account</button>
+								<button class={/* @once */ Button({ variant: 'primary' })}>Add account</button>
 							</div>
 						</div>
 

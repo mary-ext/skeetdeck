@@ -6,9 +6,9 @@ import { multiagent } from '~/api/globals/agent.ts';
 
 import { type CustomFeedPaneConfig, PaneType } from '../../../globals/panes.ts';
 
-import * as dialog from '~/com/primitives/dialog.ts';
-import input from '~/com/primitives/input.ts';
-import interactive from '~/com/primitives/interactive.ts';
+import { DialogBody } from '~/com/primitives/dialog.ts';
+import { Input } from '~/com/primitives/input.ts';
+import { Interactive } from '~/com/primitives/interactive.ts';
 
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
@@ -17,11 +17,11 @@ import SearchIcon from '~/com/icons/baseline-search.tsx';
 
 import type { PaneCreatorProps } from './types.ts';
 
-const feedItem = interactive({
+const feedItem = Interactive({
 	class: 'flex w-full cursor-pointer flex-col gap-3 px-4 py-3 text-left text-sm',
 });
 
-const showMoreBtn = interactive({
+const showMoreBtn = Interactive({
 	class: 'flex h-13 w-full items-center justify-center text-sm text-accent disabled:pointer-events-none',
 });
 
@@ -51,14 +51,14 @@ const CustomFeedPaneCreator = (props: PaneCreatorProps) => {
 	}));
 
 	return (
-		<div class={/* @once */ dialog.body({ padded: false, scrollable: true })}>
+		<div class={/* @once */ DialogBody({ padded: false, scrollable: true })}>
 			<div class="flex gap-4 p-4">
 				<div class="relative grow">
 					<div class="pointer-events-none absolute inset-y-0 ml-px grid place-items-center px-2">
 						<SearchIcon class="text-lg text-muted-fg" />
 					</div>
 					<input
-						class={/* @once */ input({ class: 'pl-8' })}
+						class={/* @once */ Input({ class: 'pl-8' })}
 						placeholder="Search..."
 						onKeyDown={(ev) => {
 							if (ev.key === 'Enter') {

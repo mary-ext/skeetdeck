@@ -2,7 +2,7 @@ interface InputProps {
 	class?: string;
 }
 
-const input = (props: InputProps = {}) => {
+export const Input = (props: InputProps = {}) => {
 	const { class: className } = props;
 
 	let cn =
@@ -14,5 +14,3 @@ const input = (props: InputProps = {}) => {
 		return cn;
 	}
 };
-
-export default input;

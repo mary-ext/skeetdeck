@@ -13,9 +13,9 @@ import { queryClient } from '../../globals/query.ts';
 import { closeModal, useModalState } from '~/com/globals/modals.tsx';
 import { model } from '~/utils/input.ts';
 
-import button from '~/com/primitives/button.ts';
-import * as dialog from '~/com/primitives/dialog.ts';
-import input from '~/com/primitives/input.ts';
+import { Button } from '~/com/primitives/button.ts';
+import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
+import { Input } from '~/com/primitives/input.ts';
 
 const AddAccountDialog = () => {
 	const { disableBackdropClose } = useModalState();
@@ -82,14 +82,14 @@ const AddAccountDialog = () => {
 	});
 
 	return (
-		<form onSubmit={handleSubmit} class={/* @once */ dialog.root()}>
-			<div class={/* @once */ dialog.header()}>
-				<h1 class={/* @once */ dialog.title()}>Add new account</h1>
+		<form onSubmit={handleSubmit} class={/* @once */ DialogRoot()}>
+			<div class={/* @once */ DialogHeader()}>
+				<h1 class={/* @once */ DialogTitle()}>Add new account</h1>
 			</div>
 
 			<fieldset
 				disabled={loginMutation.isPending}
-				class={/* @once */ dialog.body({ class: 'flex flex-col gap-4' })}
+				class={/* @once */ DialogBody({ class: 'flex flex-col gap-4' })}
 			>
 				<div class="flex flex-col">
 					<label for="user" class="mb-2 block text-sm font-medium leading-6 text-primary">
@@ -108,7 +108,7 @@ const AddAccountDialog = () => {
 								setAdvanced(true);
 							}
 						}}
-						class={/* @once */ input()}
+						class={/* @once */ Input()}
 					/>
 
 					<Show when={advanced() && isEmail()}>
@@ -129,7 +129,7 @@ const AddAccountDialog = () => {
 						required
 						autocomplete="password"
 						placeholder="Password"
-						class={/* @once */ input()}
+						class={/* @once */ Input()}
 					/>
 				</div>
 
@@ -145,7 +145,7 @@ const AddAccountDialog = () => {
 							required={isEmail()}
 							pattern="([a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*(?:\\.[a-zA-Z]+))"
 							placeholder={isEmail() ? `example.social` : `Leave blank for automatic provider detection`}
-							class={/* @once */ input()}
+							class={/* @once */ Input()}
 						/>
 					</div>
 				</Show>
@@ -161,12 +161,12 @@ const AddAccountDialog = () => {
 				</Switch>
 			</fieldset>
 
-			<fieldset disabled={loginMutation.isPending} class={/* @once */ dialog.actions()}>
+			<fieldset disabled={loginMutation.isPending} class={/* @once */ DialogActions()}>
 				<Show when={!advanced()}>
 					<button
 						type="button"
 						onClick={() => setAdvanced(true)}
-						class={/* @once */ button({ variant: 'ghost' })}
+						class={/* @once */ Button({ variant: 'ghost' })}
 					>
 						Advanced
 					</button>
@@ -174,13 +174,13 @@ const AddAccountDialog = () => {
 
 				<div class="grow"></div>
 
-				<button type="button" onClick={closeModal} class={/* @once */ button({ variant: 'ghost' })}>
+				<button type="button" onClick={closeModal} class={/* @once */ Button({ variant: 'ghost' })}>
 					Cancel
 				</button>
 				<button
 					type="submit"
 					disabled={isEmail() && !advanced()}
-					class={/* @once */ button({ variant: 'primary' })}
+					class={/* @once */ Button({ variant: 'primary' })}
 				>
 					Sign in
 				</button>

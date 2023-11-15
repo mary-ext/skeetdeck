@@ -3,6 +3,8 @@ import { For, Show } from 'solid-js';
 import { Navigate, useParams } from '@solidjs/router';
 import { DragDropProvider, DragDropSensors, SortableProvider } from '@thisbeyond/solid-dnd';
 
+import { openModal } from '~/com/globals/modals.tsx';
+
 import { preferences } from '../globals/settings.ts';
 import { ConstrainYDragAxis } from '../utils/dnd.ts';
 
@@ -13,9 +15,8 @@ import AddPaneDialog from '../components/settings/AddPaneDialog.tsx';
 import AddIcon from '~/com/icons/baseline-add.tsx';
 import EditIcon from '~/com/icons/baseline-edit.tsx';
 
-import button from '~/com/primitives/button.ts';
-import iconButton from '~/com/primitives/icon-button.ts';
-import { openModal } from '~/com/globals/modals.tsx';
+import { Button } from '~/com/primitives/button.ts';
+import { IconButton } from '~/com/primitives/icon-button.ts';
 
 const DecksView = () => {
 	const params = useParams<{ deck: string }>();
@@ -72,7 +73,7 @@ const DecksView = () => {
 								onClick={() => {
 									openModal(() => <AddPaneDialog deck={deck} />);
 								}}
-								class={/* @once */ button({ variant: 'primary' })}
+								class={/* @once */ Button({ variant: 'primary' })}
 							>
 								<AddIcon class="-ml-1.5 mr-2 text-lg" />
 								<span>Add column</span>
@@ -81,7 +82,7 @@ const DecksView = () => {
 					</div>
 
 					<div class="-mr-1 ml-auto bg-background/20 p-2">
-						<button class={/* @once */ iconButton()}>
+						<button class={/* @once */ IconButton()}>
 							<EditIcon />
 						</button>
 					</div>

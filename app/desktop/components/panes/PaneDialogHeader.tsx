@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 
-import iconButton from '~/com/primitives/icon-button.ts';
+import { IconButton } from '~/com/primitives/icon-button.ts';
 
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
 import CloseIcon from '~/com/icons/baseline-close.tsx';
@@ -22,7 +22,7 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 				<button
 					title="Go back to previous dialog"
 					onClick={modal.close}
-					class={/* @once */ iconButton({ edge: 'left' })}
+					class={/* @once */ IconButton({ edge: 'left' })}
 				>
 					<ArrowLeftIcon />
 				</button>
@@ -42,7 +42,7 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 
 			{props.children}
 
-			<button title="Close dialog" onClick={modal.reset} class={/* @once */ iconButton({ edge: 'right' })}>
+			<button title="Close dialog" onClick={modal.reset} class={/* @once */ IconButton({ edge: 'right' })}>
 				<CloseIcon />
 			</button>
 		</div>

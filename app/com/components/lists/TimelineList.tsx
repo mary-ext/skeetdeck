@@ -18,7 +18,7 @@ import CircularProgress from '../CircularProgress.tsx';
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 import { VirtualContainer } from '../VirtualContainer.tsx';
 
-import button from '../../primitives/button.ts';
+import { Button } from '../../primitives/button.ts';
 
 import Post from '../items/Post.tsx';
 
@@ -169,7 +169,7 @@ const TimelineList = (props: TimelineListProps) => {
 										timeline.fetchNextPage();
 									}
 								}}
-								class={/* @once */ button({ variant: 'primary' })}
+								class={/* @once */ Button({ variant: 'primary' })}
 							>
 								Reload
 							</button>

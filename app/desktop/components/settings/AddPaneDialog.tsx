@@ -8,12 +8,18 @@ import { closeModal } from '~/com/globals/modals.tsx';
 import { createDerivedSignal } from '~/utils/hooks.ts';
 import { model } from '~/utils/input.ts';
 
-import { type PaneConfig, PaneType, SpecificPaneSize, labelizePaneType } from '../../globals/panes.ts';
-import type { Deck } from '../../globals/settings.ts';
+import {
+	type DeckConfig,
+	type PaneConfig,
+	PaneType,
+	SpecificPaneSize,
+	labelizePaneType,
+} from '../../globals/panes.ts';
 
-import * as dialog from '~/com/primitives/dialog.ts';
-import iconButton from '~/com/primitives/icon-button.ts';
-import select from '~/com/primitives/select.ts';
+import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
+import { IconButton } from '~/com/primitives/icon-button.ts';
+import { Interactive } from '~/com/primitives/interactive.ts';
+import { Select } from '~/com/primitives/select.ts';
 
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
 import CloseIcon from '~/com/icons/baseline-close.tsx';
@@ -26,11 +32,10 @@ import PoundIcon from '~/com/icons/baseline-pound.tsx';
 import type { AddFn, PaneCreatorProps } from './pane-creators/types.ts';
 import CustomFeedPaneCreator from './pane-creators/CustomFeedPaneCreator.tsx';
 import CustomListPaneCreator from './pane-creators/CustomListPaneCreator.tsx';
-import interactive from '~/com/primitives/interactive.ts';
 
 export interface AddPaneDialogProps {
 	/** Expected to be static */
-	deck: Deck;
+	deck: DeckConfig;
 }
 
 // @ts-expect-error
@@ -39,7 +44,7 @@ const components: Record<PaneType, Component<PaneCreatorProps>> = {
 	[PaneType.CUSTOM_LIST]: CustomListPaneCreator,
 };
 
-const columnItem = interactive({ class: 'flex items-center gap-4 p-4 text-sm' });
+const columnItem = Interactive({ class: 'flex items-center gap-4 p-4 text-sm' });
 
 const AddPaneDialog = (props: AddPaneDialogProps) => {
 	const deck = props.deck;
@@ -73,15 +78,15 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 	};
 
 	return (
-		<div class={/* @once */ dialog.root({ size: 'md', fullHeight: true })}>
-			<div class={/* @once */ dialog.header({ divider: true })}>
+		<div class={/* @once */ DialogRoot({ size: 'md', fullHeight: true })}>
+			<div class={/* @once */ DialogHeader({ divider: true })}>
 				<Show when={type() !== undefined}>
-					<button onClick={() => setType(undefined)} class={/* @once */ iconButton({ edge: 'left' })}>
+					<button onClick={() => setType(undefined)} class={/* @once */ IconButton({ edge: 'left' })}>
 						<ArrowLeftIcon />
 					</button>
 				</Show>
 
-				<Show when={type()} fallback={<h1 class={/* @once */ dialog.title()}>Add a new column</h1>}>
+				<Show when={type()} fallback={<h1 class={/* @once */ DialogTitle()}>Add a new column</h1>}>
 					{(type) => (
 						<div class="flex min-w-0 grow flex-col gap-0.5">
 							<p class="text-base font-bold leading-5">Add a {labelizePaneType(type())} column</p>
@@ -92,21 +97,21 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 					)}
 				</Show>
 
-				<button onClick={closeModal} class={/* @once */ iconButton({ edge: 'right' })}>
+				<button onClick={closeModal} class={/* @once */ IconButton({ edge: 'right' })}>
 					<CloseIcon />
 				</button>
 			</div>
 
 			<Switch>
 				<Match when={type() === undefined}>
-					<div class={/* @once */ dialog.body({ padded: false })}>
+					<div class={/* @once */ DialogBody({ padded: false })}>
 						<div class="flex items-center justify-between gap-4 p-4">
 							<p class="text-base font-bold leading-5">Choose one</p>
 
 							<select
 								ref={model(() => user() || '', setUser)}
 								disabled={multiagent.accounts.length < 2}
-								class={/* @once */ select()}
+								class={/* @once */ Select()}
 							>
 								<For each={multiagent.accounts}>
 									{(account) => <option value={account.did}>@{renderAccountHandle(account)}</option>}

@@ -1,4 +1,4 @@
-import button from '../../primitives/button.ts';
+import { Button } from '../../primitives/button.ts';
 
 export interface GenericErrorViewProps {
 	error: unknown;
@@ -13,7 +13,7 @@ const GenericErrorView = (props: GenericErrorViewProps) => {
 				<p class="text-muted-fg">{'' + props.error}</p>
 			</div>
 
-			<button onClick={props.onRetry} class={/* @once */ button({ variant: 'primary' })}>
+			<button onClick={props.onRetry} class={/* @once */ Button({ variant: 'primary' })}>
 				Try again
 			</button>
 		</div>

@@ -2,7 +2,7 @@ export interface InteractiveProps {
 	class?: string;
 }
 
-const interactive = (props: InteractiveProps) => {
+export const Interactive = (props: InteractiveProps) => {
 	const { class: className } = props;
 
 	let cn = `outline-2 -outline-offset-2 outline-primary hover:bg-hinted focus-visible:outline`;
@@ -13,5 +13,3 @@ const interactive = (props: InteractiveProps) => {
 
 	return cn;
 };
-
-export default interactive;

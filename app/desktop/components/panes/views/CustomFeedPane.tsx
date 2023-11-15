@@ -2,7 +2,7 @@ import { createSignal } from 'solid-js';
 
 import type { CustomFeedPaneConfig } from '../../../globals/panes.ts';
 
-import iconButton from '~/com/primitives/icon-button.ts';
+import { IconButton } from '~/com/primitives/icon-button.ts';
 
 import TimelineList from '~/com/components/lists/TimelineList.tsx';
 
@@ -28,7 +28,7 @@ const CustomFeedPane = () => {
 				<PaneHeader title={pane.feed.name} subtitle="Feed">
 					<button
 						onClick={() => setIsSettingsOpen(!isSettingsOpen())}
-						class={/* @once */ iconButton({ edge: 'right', color: 'muted' })}
+						class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
 					>
 						<SettingsIcon class="place-self-center" />
 					</button>

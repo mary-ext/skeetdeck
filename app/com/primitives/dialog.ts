@@ -3,7 +3,7 @@ export interface DialogRootProps {
 	fullHeight?: boolean;
 }
 
-export const root = (props: DialogRootProps = {}) => {
+export const DialogRoot = (props: DialogRootProps = {}) => {
 	const { size = 'md', fullHeight } = props;
 
 	let cn = `flex max-h-full w-full flex-col overflow-hidden rounded-lg bg-background`;
@@ -29,7 +29,7 @@ export interface DialogHeaderProps {
 	divider?: boolean;
 }
 
-export const header = (props: DialogHeaderProps = {}) => {
+export const DialogHeader = (props: DialogHeaderProps = {}) => {
 	const { divider } = props;
 
 	let cn = `flex h-13 shrink-0 items-center gap-2 px-4`;
@@ -43,7 +43,7 @@ export const header = (props: DialogHeaderProps = {}) => {
 
 export interface DialogTitleProps {}
 
-export const title = (_props: DialogTitleProps = {}) => {
+export const DialogTitle = (_props: DialogTitleProps = {}) => {
 	let cn = `grow text-base font-bold`;
 
 	return cn;
@@ -55,7 +55,7 @@ export interface DialogBodyProps {
 	scrollable?: boolean;
 }
 
-export const body = (props: DialogBodyProps = {}) => {
+export const DialogBody = (props: DialogBodyProps = {}) => {
 	const { class: className, padded = true, scrollable = false } = props;
 
 	let cn = `grow shrink`;
@@ -79,7 +79,7 @@ export const body = (props: DialogBodyProps = {}) => {
 
 export interface DialogActionsProps {}
 
-export const actions = (_props: DialogActionsProps = {}) => {
+export const DialogActions = (_props: DialogActionsProps = {}) => {
 	let cn = `flex shrink-0 items-center justify-end gap-2 p-4`;
 
 	return cn;

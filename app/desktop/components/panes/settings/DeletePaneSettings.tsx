@@ -1,4 +1,4 @@
-import interactive from '~/com/primitives/interactive.ts';
+import { Interactive } from '~/com/primitives/interactive.ts';
 
 import DeleteIcon from '~/com/icons/baseline-delete.tsx';
 
@@ -11,7 +11,7 @@ const DeletePaneSettings = () => {
 		<button
 			onClick={deletePane}
 			class={
-				/* @once */ interactive({
+				/* @once */ Interactive({
 					class: 'flex items-center gap-4 border-b border-divider p-4 text-red-500',
 				})
 			}

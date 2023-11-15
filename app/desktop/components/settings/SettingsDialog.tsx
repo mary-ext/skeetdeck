@@ -4,8 +4,8 @@ import { multiagent } from '~/api/globals/agent.js';
 
 import { closeModal, openModal } from '~/com/globals/modals.tsx';
 
-import * as dialog from '~/com/primitives/dialog.ts';
-import iconButton from '~/com/primitives/icon-button.ts';
+import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
+import { IconButton } from '~/com/primitives/icon-button.ts';
 
 import CloseIcon from '~/com/icons/baseline-close.tsx';
 import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
@@ -27,16 +27,16 @@ const SettingsDialog = () => {
 	};
 
 	return (
-		<div class={/* @once */ dialog.root({ size: 'lg', fullHeight: true })}>
-			<div class={/* @once */ dialog.header({ divider: true })}>
-				<h1 class={/* @once */ dialog.title()}>Application settings</h1>
+		<div class={/* @once */ DialogRoot({ size: 'lg', fullHeight: true })}>
+			<div class={/* @once */ DialogHeader({ divider: true })}>
+				<h1 class={/* @once */ DialogTitle()}>Application settings</h1>
 
-				<button onClick={closeModal} class={/* @once */ iconButton({ edge: 'right' })}>
+				<button onClick={closeModal} class={/* @once */ IconButton({ edge: 'right' })}>
 					<CloseIcon />
 				</button>
 			</div>
 
-			<div class={/* @once */ dialog.body({ padded: false })}>
+			<div class={/* @once */ DialogBody({ padded: false })}>
 				<div class="flex flex-col border-b border-divider pb-2">
 					<div class="flex items-center justify-between gap-4 p-4">
 						<p class="text-base font-bold leading-5">Accounts</p>
@@ -77,7 +77,7 @@ const SettingsDialog = () => {
 									</Show>
 
 									<div>
-										<button class={/* @once */ iconButton({ edge: 'right', color: 'muted' })}>
+										<button class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}>
 											<MoreHorizIcon />
 										</button>
 									</div>

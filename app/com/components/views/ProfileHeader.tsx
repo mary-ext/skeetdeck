@@ -4,7 +4,7 @@ import type { DID } from '~/api/atp-schema.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
-import button from '../../primitives/button.ts';
+import { Button } from '../../primitives/button.ts';
 
 import { Link, LinkingType } from '../Link.tsx';
 
@@ -51,7 +51,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 					<div class="grow" />
 
 					<Show when={profile().did !== uid()}>
-						<button title="Actions" onClick={() => {}} class={/* @once */ button({ variant: 'outline' })}>
+						<button title="Actions" onClick={() => {}} class={/* @once */ Button({ variant: 'outline' })}>
 							<MoreHorizIcon class="-mx-1.5 text-base" />
 						</button>
 
@@ -60,7 +60,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 								const isFollowing = () => profile().viewer.following.value;
 
 								return (
-									<button class={/* @once */ button({ variant: isFollowing() ? 'outline' : 'primary' })}>
+									<button class={/* @once */ Button({ variant: isFollowing() ? 'outline' : 'primary' })}>
 										{isFollowing() ? 'Unfollow' : 'Follow'}
 									</button>
 								);

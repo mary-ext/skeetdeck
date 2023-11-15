@@ -9,9 +9,9 @@ import { getCurrentTid } from '~/api/utils/tid.ts';
 import { closeModal } from '~/com/globals/modals.tsx';
 import { model } from '~/utils/input.ts';
 
-import button from '~/com/primitives/button.ts';
-import * as dialog from '~/com/primitives/dialog.ts';
-import input from '~/com/primitives/input.ts';
+import { Button } from '~/com/primitives/button.ts';
+import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
+import { Input } from '~/com/primitives/input.ts';
 
 const AddDeckDialog = () => {
 	const [name, setName] = createSignal('');
@@ -35,26 +35,26 @@ const AddDeckDialog = () => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} class={/* @once */ dialog.root({ size: 'sm' })}>
-			<div class={/* @once */ dialog.header()}>
-				<h1 class={/* @once */ dialog.title()}>Add new deck</h1>
+		<form onSubmit={handleSubmit} class={/* @once */ DialogRoot({ size: 'sm' })}>
+			<div class={/* @once */ DialogHeader()}>
+				<h1 class={/* @once */ DialogTitle()}>Add new deck</h1>
 			</div>
 
-			<div class={/* @once */ dialog.body({ class: 'flex flex-col gap-4' })}>
+			<div class={/* @once */ DialogBody({ class: 'flex flex-col gap-4' })}>
 				<div class="flex flex-col gap-2">
 					<label for="name" class="block text-sm font-medium leading-6 text-primary">
 						Name
 					</label>
-					<input ref={model(name, setName)} type="text" id="name" required class={/* @once */ input()} />
+					<input ref={model(name, setName)} type="text" id="name" required class={/* @once */ Input()} />
 				</div>
 			</div>
 
-			<div class={/* @once */ dialog.actions()}>
-				<button type="button" onClick={closeModal} class={/* @once */ button({ variant: 'ghost' })}>
+			<div class={/* @once */ DialogActions()}>
+				<button type="button" onClick={closeModal} class={/* @once */ Button({ variant: 'ghost' })}>
 					Cancel
 				</button>
 
-				<button type="submit" class={/* @once */ button({ variant: 'primary' })}>
+				<button type="submit" class={/* @once */ Button({ variant: 'primary' })}>
 					Add
 				</button>
 			</div>

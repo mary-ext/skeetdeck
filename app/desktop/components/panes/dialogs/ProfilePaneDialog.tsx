@@ -12,7 +12,7 @@ import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 import TimelineList from '~/com/components/lists/TimelineList.tsx';
 import ProfileHeader from '~/com/components/views/ProfileHeader.tsx';
 
-import iconButton from '~/com/primitives/icon-button.ts';
+import { IconButton } from '~/com/primitives/icon-button.ts';
 
 import SquareShapeAddIcon from '~/com/icons/baseline-square-shape-add.tsx';
 
@@ -97,7 +97,7 @@ const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 
 								modal.close();
 							}}
-							class={/* @once */ iconButton()}
+							class={/* @once */ IconButton()}
 						>
 							<SquareShapeAddIcon />
 						</button>

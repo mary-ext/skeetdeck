@@ -6,7 +6,7 @@ import { multiagent } from '~/api/globals/agent.ts';
 
 import { type CustomListPaneConfig, PaneType } from '../../../globals/panes.ts';
 
-import * as dialog from '~/com/primitives/dialog.ts';
+import { DialogBody } from '~/com/primitives/dialog.ts';
 
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
@@ -37,7 +37,7 @@ const CustomListPaneCreator = (props: PaneCreatorProps) => {
 	}));
 
 	return (
-		<div class={/* @once */ dialog.body({ padded: false, scrollable: true })}>
+		<div class={/* @once */ DialogBody({ padded: false, scrollable: true })}>
 			<div>
 				<For each={lists.data?.pages.flatMap((page) => page.lists)}>
 					{(list) => (

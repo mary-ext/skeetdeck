@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 
-import button from '~/com/primitives/button.ts';
+import { Button } from '~/com/primitives/button.ts';
 
 export interface PaneAsideProps {
 	children?: JSX.Element;
@@ -15,7 +15,7 @@ const PaneAside = (props: PaneAsideProps) => {
 
 				<button
 					onClick={props.onClose}
-					class={/* @once */ button({ variant: 'primary', size: 'xs', class: '-mr-2' })}
+					class={/* @once */ Button({ variant: 'primary', size: 'xs', class: '-mr-2' })}
 				>
 					Done
 				</button>

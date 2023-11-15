@@ -13,7 +13,7 @@ import {
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
-import button from '~/com/primitives/button.ts';
+import { Button } from '~/com/primitives/button.ts';
 
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { Link, LinkingType } from '~/com/components/Link.tsx';
@@ -89,7 +89,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 
 											<Link
 												to={{ type: LinkingType.PROFILE, actor: actor }}
-												class={/* @once */ button({ variant: 'primary' })}
+												class={/* @once */ Button({ variant: 'primary' })}
 											>
 												View profile
 											</Link>

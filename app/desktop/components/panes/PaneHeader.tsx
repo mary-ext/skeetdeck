@@ -4,7 +4,7 @@ import { multiagent } from '~/api/globals/agent.ts';
 
 import DragIndicatorIcon from '~/com/icons/baseline-drag-indicator.tsx';
 
-import iconButton from '~/com/primitives/icon-button.ts';
+import { IconButton } from '~/com/primitives/icon-button.ts';
 
 import { usePaneContext } from './PaneContext.tsx';
 
@@ -36,7 +36,7 @@ const PaneHeader = (props: PaneHeaderProps) => {
 			<button
 				{...sortable.dragActivators}
 				title="Click and drag to reorder this column"
-				class={/* @once */ iconButton({ edge: 'left', color: 'muted', class: 'cursor-grab' })}
+				class={/* @once */ IconButton({ edge: 'left', color: 'muted', class: 'cursor-grab' })}
 			>
 				<DragIndicatorIcon />
 			</button>
