@@ -7,21 +7,14 @@ import { createReactiveLocalStorage } from '~/utils/storage.ts';
 
 import type { SharedPreferencesObject } from '~/com/components/SharedPreferences.tsx';
 
-import { type PaneConfig, PaneSize } from './panes.ts';
-
-export interface Deck {
-	readonly id: string;
-	name: string;
-	emoji: string;
-	panes: PaneConfig[];
-}
+import { type DeckConfig, PaneSize } from './panes.ts';
 
 export interface PreferencesSchema {
 	$version: 1;
 	/** Onboarding mode */
 	onboarding: boolean;
 	/** Deck configuration */
-	decks: Deck[];
+	decks: DeckConfig[];
 	/** UI configuration */
 	ui: {
 		/** Application theme */

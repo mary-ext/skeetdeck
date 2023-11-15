@@ -4,7 +4,7 @@ import { createSortable, transformStyle } from '@thisbeyond/solid-dnd';
 
 import { type LinkingContextObject, LinkingContext, LinkingType } from '~/com/components/Link.tsx';
 
-import type { BasePaneConfig } from '../../globals/panes.ts';
+import type { BasePaneConfig, DeckConfig } from '../../globals/panes.ts';
 
 import ProfilePaneDialog from './dialogs/ProfilePaneDialog.tsx';
 import ThreadPaneDialog from './dialogs/ThreadPaneDialog.tsx';
@@ -34,6 +34,7 @@ export const usePaneModalState = () => {
 };
 
 export interface PaneContextObject<T extends BasePaneConfig = BasePaneConfig> {
+	deck: DeckConfig;
 	pane: T;
 	index: Accessor<number>;
 	sortable: Sortable;
@@ -49,6 +50,8 @@ export const usePaneContext = <T extends BasePaneConfig = BasePaneConfig>() => {
 
 export interface PaneContextProviderProps {
 	/** Expected to be static */
+	deck: DeckConfig;
+	/** Expected to be static */
 	pane: BasePaneConfig;
 	/** Expected to be static */
 	index: Accessor<number>;
@@ -60,7 +63,7 @@ export interface PaneContextProviderProps {
 export const PaneContextProvider = (props: PaneContextProviderProps) => {
 	let _id = 0;
 
-	const { pane, index } = props;
+	const { deck, pane, index } = props;
 
 	const [modals, setModals] = createSignal<PaneModalState[]>([]);
 
@@ -96,6 +99,7 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 	const sortable = createSortable(pane.id);
 
 	const paneContext: PaneContextObject = {
+		deck: deck,
 		pane: pane,
 		index: index,
 		sortable: sortable,

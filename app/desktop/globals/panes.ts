@@ -92,3 +92,10 @@ export type PaneConfig =
 	| ProfilePaneConfig
 	| CustomFeedPaneConfig
 	| CustomListPaneConfig;
+
+export interface DeckConfig {
+	readonly id: string;
+	name: string;
+	emoji: string;
+	panes: PaneConfig[];
+}

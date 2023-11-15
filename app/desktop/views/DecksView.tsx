@@ -52,6 +52,7 @@ const DecksView = () => {
 							<For each={deck.panes}>
 								{(pane, idx) => (
 									<PaneContextProvider
+										deck={deck}
 										pane={pane}
 										index={idx}
 										onDelete={() => {
