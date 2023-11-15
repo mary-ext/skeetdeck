@@ -73,7 +73,7 @@ const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 						const [tab, setTab] = createSignal(ProfileTab.POSTS);
 
 						return (
-							<div class="min-h-0 grow overflow-y-auto">
+							<div class="flex min-h-0 grow flex-col overflow-y-auto">
 								<VirtualContainer>
 									<ProfileHeader uid={pane.uid} profile={data} />
 								</VirtualContainer>
