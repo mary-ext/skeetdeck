@@ -1,23 +1,31 @@
+import type { Component } from 'solid-js';
+
 import { type PaneConfig, PaneType } from '../../globals/panes.ts';
 
 import CustomFeedPane from './views/CustomFeedPane.tsx';
 import CustomListPane from './views/CustomListPane.tsx';
 import HomePane from './views/HomePane.tsx';
+import ProfilePane from './views/ProfilePane.tsx';
 
 export interface PaneRouterProps {
 	pane: PaneConfig;
 }
 
+// @ts-expect-error - simply because we don't have all of them implemented yet
+const components: Record<PaneType, Component> = {
+	[PaneType.CUSTOM_FEED]: CustomFeedPane,
+	[PaneType.CUSTOM_LIST]: CustomListPane,
+	[PaneType.HOME]: HomePane,
+	[PaneType.PROFILE]: ProfilePane,
+};
+
 const PaneRouter = (props: PaneRouterProps) => {
 	const pane = props.pane;
 
-	switch (pane.type) {
-		case PaneType.HOME:
-			return <HomePane />;
-		case PaneType.CUSTOM_FEED:
-			return <CustomFeedPane />;
-		case PaneType.CUSTOM_LIST:
-			return <CustomListPane />;
+	const Component = components[pane.type];
+
+	if (Component) {
+		return <Component />;
 	}
 
 	return null;

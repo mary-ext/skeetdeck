@@ -7,7 +7,8 @@ import { createReactiveLocalStorage } from '~/utils/storage.ts';
 
 import type { SharedPreferencesObject } from '~/com/components/SharedPreferences.tsx';
 
-import { type DeckConfig, PaneSize } from './panes.ts';
+import { type DeckConfig, type PaneConfig, PaneSize, SpecificPaneSize } from './panes.ts';
+import { getCurrentTid } from '~/api/utils/tid.ts';
 
 export interface PreferencesSchema {
 	$version: 1;
@@ -89,4 +90,23 @@ export const createSharedPreferencesObject = (): SharedPreferencesObject => {
 		filters: preferences.filters,
 		language: preferences.language,
 	};
+};
+
+export const addPane = <T extends PaneConfig>(
+	deck: DeckConfig,
+	partial: Omit<T, 'id' | 'size'>,
+	index?: number,
+) => {
+	// @ts-expect-error
+	const pane: PaneConfig = {
+		...partial,
+		id: getCurrentTid(),
+		size: SpecificPaneSize.INHERIT,
+	};
+
+	if (index !== undefined) {
+		deck.panes.splice(index, 0, pane);
+	} else {
+		deck.panes.push(pane);
+	}
 };

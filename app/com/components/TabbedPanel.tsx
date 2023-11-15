@@ -6,7 +6,7 @@ import Tab from './Tab.tsx';
 
 export interface TabbedPanelViewProps {
 	label: string;
-	value: number;
+	value: string | number;
 	hidden?: boolean;
 	children?: JSX.Element;
 }
@@ -15,16 +15,17 @@ export const TabbedPanelView = (props: TabbedPanelViewProps) => {
 	return props as unknown as JSX.Element;
 };
 
-export interface TabbedPanelProps {
-	selected: number;
-	onChange: (next: number) => void;
+export interface TabbedPanelProps<T extends string | number> {
+	dense?: boolean;
+	selected: T;
+	onChange: (next: T) => void;
 	children: JSX.Element;
 }
 
-export const TabbedPanel = (props: TabbedPanelProps) => {
+export const TabbedPanel = <T extends string | number>(props: TabbedPanelProps<T>) => {
 	const panels = children(() => props.children);
 
-	const selectedArray = createMemo<number[]>((prev) => {
+	const selectedArray = createMemo<T[]>((prev) => {
 		const $selected = props.selected;
 
 		if (!prev.includes($selected)) {
@@ -43,7 +44,7 @@ export const TabbedPanel = (props: TabbedPanelProps) => {
 		for (let idx = 0, len = $panels.length; idx < len; idx++) {
 			const panel = $panels[idx];
 
-			if (panel.hidden || !$selectedArray.includes(panel.value)) {
+			if (panel.hidden || !$selectedArray.includes(panel.value as T)) {
 				continue;
 			}
 
@@ -55,12 +56,15 @@ export const TabbedPanel = (props: TabbedPanelProps) => {
 
 	return (
 		<>
-			<div class="box-content flex h-13 shrink-0 overflow-x-auto border-b border-divider">
+			<div
+				class="box-content flex shrink-0 overflow-x-auto border-b border-divider"
+				classList={{ [`h-13`]: !props.dense, [`h-10`]: props.dense }}
+			>
 				<For each={panels.toArray() as unknown as TabbedPanelViewProps[]}>
 					{(panel) => (
 						<>
 							{!panel.hidden && (
-								<Tab active={props.selected === panel.value} onClick={() => props.onChange(panel.value)}>
+								<Tab active={props.selected === panel.value} onClick={() => props.onChange(panel.value as T)}>
 									{panel.label}
 								</Tab>
 							)}

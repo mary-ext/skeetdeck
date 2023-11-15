@@ -12,7 +12,14 @@ import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 import TimelineList from '~/com/components/lists/TimelineList.tsx';
 import ProfileHeader from '~/com/components/views/ProfileHeader.tsx';
 
-import { usePaneContext } from '../PaneContext.tsx';
+import iconButton from '~/com/primitives/icon-button.ts';
+
+import SquareShapeAddIcon from '~/com/icons/baseline-square-shape-add.tsx';
+
+import { type ProfilePaneConfig, PaneType, ProfilePaneTab } from '../../../globals/panes.ts';
+import { addPane } from '../../../globals/settings.ts';
+
+import { usePaneContext, usePaneModalState } from '../PaneContext.tsx';
 import PaneDialog from '../PaneDialog.tsx';
 import PaneDialogHeader from '../PaneDialogHeader.tsx';
 
@@ -31,7 +38,8 @@ const enum ProfileTab {
 const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 	const { actor } = props;
 
-	const { pane } = usePaneContext();
+	const { deck, pane, index } = usePaneContext();
+	const modal = usePaneModalState();
 
 	const profile = createQuery(() => {
 		const key = getProfileKey(pane.uid, actor);
@@ -65,7 +73,37 @@ const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 
 					return;
 				})()}
-			/>
+			>
+				{profile.data && (
+					<>
+						<button
+							title="Add as column"
+							onClick={() => {
+								const data = profile.data!;
+
+								addPane<ProfilePaneConfig>(
+									deck,
+									{
+										type: PaneType.PROFILE,
+										uid: pane.uid,
+										profile: {
+											did: data.did,
+											handle: data.handle.value,
+										},
+										tab: ProfilePaneTab.POSTS,
+									},
+									index() + 1,
+								);
+
+								modal.close();
+							}}
+							class={/* @once */ iconButton()}
+						>
+							<SquareShapeAddIcon />
+						</button>
+					</>
+				)}
+			</PaneDialogHeader>
 
 			<Switch>
 				<Match when={profile.data} keyed>

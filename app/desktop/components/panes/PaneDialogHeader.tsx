@@ -1,3 +1,5 @@
+import type { JSX } from 'solid-js';
+
 import iconButton from '~/com/primitives/icon-button.ts';
 
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
@@ -8,6 +10,7 @@ import { usePaneModalState } from './PaneContext.tsx';
 export interface PaneDialogHeaderProps {
 	title: string;
 	subtitle?: string;
+	children?: JSX.Element;
 }
 
 const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
@@ -36,6 +39,8 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 					</p>
 				)}
 			</div>
+
+			{props.children}
 
 			<button title="Close dialog" onClick={modal.reset} class={/* @once */ iconButton({ edge: 'right' })}>
 				<CloseIcon />
