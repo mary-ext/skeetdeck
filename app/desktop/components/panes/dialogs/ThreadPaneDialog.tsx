@@ -66,7 +66,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 						</div>
 					</Match>
 
-					<Match when={thread.error || new Error('foo')} keyed>
+					<Match when={thread.error} keyed>
 						{(err) => {
 							if (err instanceof XRPCError && err.error === 'NotFound') {
 								return (
