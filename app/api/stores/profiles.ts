@@ -1,8 +1,7 @@
-import type { DID, RefOf } from '~/api/atp-schema.ts';
-
 import { EQUALS_DEQUAL } from '~/utils/dequal.ts';
 import { type Signal, signal } from '~/utils/signals.ts';
 
+import type { DID, RefOf } from '../atp-schema.ts';
 import { markRaw } from '../utils/misc.ts';
 
 type Profile = RefOf<'app.bsky.actor.defs#profileView'>;
