@@ -15,10 +15,12 @@ import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
 import button from '~/com/primitives/button.ts';
 
-import PermalinkPost from '~/com/components/views/PermalinkPost.tsx';
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { Link, LinkingType } from '~/com/components/Link.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
+
+import GenericErrorView from '~/com/components/views/GenericErrorView.tsx';
+import PermalinkPost from '~/com/components/views/PermalinkPost.tsx';
 
 import EmbedRecordNotFound from '~/com/components/embeds/EmbedRecordNotFound.tsx';
 import Post from '~/com/components/items/Post.tsx';
@@ -64,7 +66,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 						</div>
 					</Match>
 
-					<Match when={thread.error} keyed>
+					<Match when={thread.error || new Error('foo')} keyed>
 						{(err) => {
 							if (err instanceof XRPCError && err.error === 'NotFound') {
 								return (
@@ -102,18 +104,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 								);
 							}
 
-							return (
-								<div class="p-4">
-									<div class="mb-4 text-sm">
-										<p class="font-bold">Something went wrong</p>
-										<p class="text-muted-fg">{'' + err}</p>
-									</div>
-
-									<button onClick={() => thread.refetch()} class={/* @once */ button({ variant: 'primary' })}>
-										Try again
-									</button>
-								</div>
-							);
+							return <GenericErrorView error={err} onRetry={() => thread.refetch()} />;
 						}}
 					</Match>
 
