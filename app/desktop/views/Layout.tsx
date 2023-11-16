@@ -8,8 +8,8 @@ import { preferences } from '../globals/settings.ts';
 
 import { Interactive } from '~/com/primitives/interactive.ts';
 
-import AddIcon from '~/com/icons/baseline-add.tsx';
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
+import TableLargeAddIcon from '~/com/icons/baseline-table-large-add.tsx';
 
 import SettingsDialog from '../components/settings/SettingsDialog.tsx';
 import AddDeckDialog from '../components/settings/AddDeckDialog.tsx';
@@ -21,6 +21,16 @@ const DashboardLayout = () => {
 		<div class="flex h-screen w-screen overflow-hidden">
 			<div class="flex w-14 shrink-0 flex-col border-r border-divider">
 				<p class="py-3 text-center text-xs font-medium text-muted-fg">Decks</p>
+
+				<button
+					title="Add new deck"
+					onClick={() => {
+						openModal(() => <AddDeckDialog />);
+					}}
+					class={menuIconButton}
+				>
+					<TableLargeAddIcon class="mx-auto" />
+				</button>
 
 				<For each={preferences.decks}>
 					{(deck) => (
@@ -39,17 +49,7 @@ const DashboardLayout = () => {
 					)}
 				</For>
 
-				<button
-					title="Add new deck"
-					onClick={() => {
-						openModal(() => <AddDeckDialog />);
-					}}
-					class={menuIconButton}
-				>
-					<AddIcon class="mx-auto" />
-				</button>
-
-				<div class="grow"></div>
+				<div class="grow border-b border-divider"></div>
 
 				<button
 					title="Open application settings"
