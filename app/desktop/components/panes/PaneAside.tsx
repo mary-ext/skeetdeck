@@ -21,7 +21,7 @@ const PaneAside = (props: PaneAsideProps) => {
 				</button>
 			</div>
 
-			<div class="min-h-0 grow overflow-y-auto">{props.children}</div>
+			<div class="flex min-h-0 grow flex-col overflow-y-auto">{props.children}</div>
 		</div>
 	);
 };
