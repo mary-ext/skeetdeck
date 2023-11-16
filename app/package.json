@@ -10,10 +10,13 @@
 	},
 	"dependencies": {
 		"@externdefs/bluesky-client": "^0.3.3",
+		"@floating-ui/dom": "^1.5.3",
+		"@floating-ui/utils": "^0.1.6",
 		"@pkg/solid-freeze": "workspace:^",
 		"@pkg/solid-query": "workspace:^",
 		"@solidjs/router": "^0.8.4",
 		"@thisbeyond/solid-dnd": "^0.7.4",
+		"solid-floating-ui": "^0.2.1",
 		"solid-js": "^1.8.5"
 	},
 	"devDependencies": {

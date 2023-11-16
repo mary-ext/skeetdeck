@@ -9,6 +9,7 @@ import { getRecordId } from '~/api/utils/misc.ts';
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
 
 import { type PostLinking, type ProfileLinking, Link, LinkingType, useLinking } from '../Link.tsx';
+import { Menu } from '../Menu.tsx';
 import RichTextRenderer from '../RichTextRenderer.tsx';
 import TimeAgo from '../TimeAgo.tsx';
 
@@ -190,9 +191,15 @@ const Post = (props: PostProps) => {
 
 						<Show when={interactive()}>
 							<div class="shrink-0">
-								<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary">
-									<MoreHorizIcon />
-								</button>
+								<Menu
+									button={
+										<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary">
+											<MoreHorizIcon />
+										</button>
+									}
+								>
+									<div class="px-4 py-2">is it working now</div>
+								</Menu>
 							</div>
 						</Show>
 					</div>

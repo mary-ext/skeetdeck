@@ -50,6 +50,9 @@ export default {
 			animation: {
 				indeterminate: 'indeterminate 1s linear infinite',
 			},
+			boxShadow: {
+				menu: 'rgba(var(--primary) / 0.2) 0px 0px 15px, rgba(var(--primary) / 0.15) 0px 0px 3px 1px',
+			},
 		},
 		colors: {
 			accent: {

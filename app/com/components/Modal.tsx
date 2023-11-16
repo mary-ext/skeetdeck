@@ -2,6 +2,7 @@ import { type ComponentProps, Show, onCleanup, onMount } from 'solid-js';
 
 export interface ModalProps extends Pick<ComponentProps<'svg'>, 'children'> {
 	desktop?: boolean;
+	disableOverlay?: boolean;
 	open?: boolean;
 	onClose?: () => void;
 }
@@ -69,10 +70,12 @@ const Modal = (props: ModalProps) => {
 						onClose();
 					}
 				}}
-				class="m-0 h-full max-h-none w-full max-w-none justify-center overflow-y-auto bg-black/50 modal:flex dark:bg-hinted/50"
+				class="m-0 h-full max-h-none w-full max-w-none justify-center overflow-y-auto backdrop:bg-transparent modal:flex"
 				classList={{
 					[`items-center p-6`]: props.desktop,
 					[`items-end sm:items-center sm:p-6`]: !props.desktop,
+					[`bg-black/50 dark:bg-hinted/50`]: !props.disableOverlay,
+					[`bg-transparent`]: props.disableOverlay,
 				}}
 				data-modal
 			>
@@ -84,7 +87,7 @@ const Modal = (props: ModalProps) => {
 
 export default Modal;
 
-const getScrollbarSize = (document: Document) => {
+export const getScrollbarSize = (document: Document) => {
 	const documentWidth = document.documentElement.clientWidth;
 	return Math.abs(window.innerWidth - documentWidth);
 };
