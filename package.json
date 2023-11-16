@@ -11,7 +11,8 @@
 	"pnpm": {
 		"patchedDependencies": {
 			"@solidjs/router@0.8.4": "patches/@solidjs__router@0.8.4.patch",
-			"solid-js@1.8.5": "patches/solid-js@1.8.5.patch"
+			"solid-js@1.8.5": "patches/solid-js@1.8.5.patch",
+			"solid-textarea-autosize@0.0.5": "patches/solid-textarea-autosize@0.0.5.patch"
 		}
 	}
 }

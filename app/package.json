@@ -17,7 +17,8 @@
 		"@solidjs/router": "^0.8.4",
 		"@thisbeyond/solid-dnd": "^0.7.4",
 		"solid-floating-ui": "^0.2.1",
-		"solid-js": "^1.8.5"
+		"solid-js": "^1.8.5",
+		"solid-textarea-autosize": "^0.0.5"
 	},
 	"devDependencies": {
 		"@types/node": "^20.9.0",

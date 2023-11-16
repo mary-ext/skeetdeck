@@ -11,6 +11,9 @@ patchedDependencies:
   solid-js@1.8.5:
     hash: js47txoc5ulvjabjpeqdvac6ji
     path: patches/solid-js@1.8.5.patch
+  solid-textarea-autosize@0.0.5:
+    hash: xoixqosplh7bmfbnvr4hschede
+    path: patches/solid-textarea-autosize@0.0.5.patch
 
 importers:
 
@@ -58,6 +61,9 @@ importers:
       solid-js:
         specifier: ^1.8.5
         version: 1.8.5(patch_hash=js47txoc5ulvjabjpeqdvac6ji)
+      solid-textarea-autosize:
+        specifier: ^0.0.5
+        version: 0.0.5(patch_hash=xoixqosplh7bmfbnvr4hschede)(solid-js@1.8.5)
     devDependencies:
       '@types/node':
         specifier: ^20.9.0
@@ -1899,6 +1905,15 @@ packages:
       '@babel/types': 7.23.0
       solid-js: 1.8.5(patch_hash=js47txoc5ulvjabjpeqdvac6ji)
     dev: true
+
+  /solid-textarea-autosize@0.0.5(patch_hash=xoixqosplh7bmfbnvr4hschede)(solid-js@1.8.5):
+    resolution: {integrity: sha512-le/X+VLr4G3PEE/gZuKBDNqh5e9OoNiIYIN0fSebAuOABxJIY/Eh/9rjDEMB8DbPdeD/wHIVk4Wd9zBvFFIt1A==}
+    peerDependencies:
+      solid-js: '>=1.0.0'
+    dependencies:
+      solid-js: 1.8.5(patch_hash=js47txoc5ulvjabjpeqdvac6ji)
+    dev: false
+    patched: true
 
   /source-map-js@1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
