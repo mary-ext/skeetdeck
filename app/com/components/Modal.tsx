@@ -18,7 +18,7 @@ const Modal = (props: ModalProps) => {
 					onMount(() => {
 						// handle accidental opening of modals when the parent container has a
 						// display: none set on it, this shall be dev only.
-						if ((import.meta as any).env.DEV) {
+						if (import.meta.env.DEV) {
 							const style = getComputedStyle(node.parentElement!);
 
 							if (style.display === 'none') {

@@ -24,6 +24,6 @@
 			"~/*": ["./*"]
 		}
 	},
-	"include": ["api", "com", "desktop", "mobile", "utils"],
+	"include": ["api", "com", "desktop", "mobile", "utils", "env.d.ts"],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }
