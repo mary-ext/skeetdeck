@@ -2,7 +2,7 @@ import { Button } from '../../primitives/button.ts';
 
 export interface GenericErrorViewProps {
 	error: unknown;
-	onRetry: () => void;
+	onRetry?: () => void;
 }
 
 const GenericErrorView = (props: GenericErrorViewProps) => {

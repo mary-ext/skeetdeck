@@ -32,6 +32,7 @@ import PoundIcon from '~/com/icons/baseline-pound.tsx';
 import type { AddFn, PaneCreatorProps } from './pane-creators/types.ts';
 import CustomFeedPaneCreator from './pane-creators/CustomFeedPaneCreator.tsx';
 import CustomListPaneCreator from './pane-creators/CustomListPaneCreator.tsx';
+import ProfilePaneCreator from './pane-creators/ProfilePaneCreator.tsx';
 
 export interface AddPaneDialogProps {
 	/** Expected to be static */
@@ -42,6 +43,7 @@ export interface AddPaneDialogProps {
 const components: Record<PaneType, Component<PaneCreatorProps>> = {
 	[PaneType.CUSTOM_FEED]: CustomFeedPaneCreator,
 	[PaneType.CUSTOM_LIST]: CustomListPaneCreator,
+	[PaneType.PROFILE]: ProfilePaneCreator,
 };
 
 const columnItem = Interactive({ class: 'flex items-center gap-4 p-4 text-sm' });
@@ -135,13 +137,10 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 								<span>Feeds</span>
 							</button>
 
-							{/* <button
-								onClick={() => setType(PaneType.PROFILE)}
-								class={columnItem}
-							>
+							<button onClick={() => setType(PaneType.PROFILE)} class={columnItem}>
 								<PersonOutlinedIcon class="text-xl" />
 								<span>Profiles</span>
-							</button> */}
+							</button>
 
 							{/* <button
 								onClick={() => add({ type: PaneType.NOTIFICATIONS })}

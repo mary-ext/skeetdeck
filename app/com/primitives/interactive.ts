@@ -5,7 +5,7 @@ export interface InteractiveProps {
 export const Interactive = (props: InteractiveProps) => {
 	const { class: className } = props;
 
-	let cn = `outline-2 -outline-offset-2 outline-primary hover:bg-hinted focus-visible:outline`;
+	let cn = `outline-2 -outline-offset-2 outline-primary hover:bg-hinted focus-visible:outline disabled:pointer-events-none`;
 
 	if (className) {
 		return `${cn} ${className}`;
