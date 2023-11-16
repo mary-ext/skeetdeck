@@ -1,16 +1,24 @@
 import { type JSX, createSignal } from 'solid-js';
 
-import { autoUpdate, flip, type Middleware } from '@floating-ui/dom';
-import { getSide } from '@floating-ui/utils';
+import { type Middleware, autoUpdate, flip } from '@floating-ui/dom';
+import { type Placement, getSide } from '@floating-ui/utils';
 import { useFloating } from 'solid-floating-ui';
 
 import { assert } from '~/utils/misc.ts';
 
 import Modal from './Modal.tsx';
 
+export interface MenuContext {
+	close: () => void;
+}
+
 export interface MenuProps {
+	/** Expected to be static */
+	placement?: Placement;
+	/** Expected to be static */
+	middleware?: Middleware[];
 	button: JSX.Element;
-	children: JSX.Element;
+	children: (context: MenuContext) => JSX.Element;
 }
 
 const offset: Middleware = {
@@ -40,7 +48,7 @@ export const Menu = (props: MenuProps) => {
 
 		anchor = $button;
 
-		$button.addEventListener('click', (ev) => {
+		$button.addEventListener('click', () => {
 			setIsOpen(true);
 		});
 
@@ -56,11 +64,15 @@ export const Menu = (props: MenuProps) => {
 					const [floating, setFloating] = createSignal<HTMLElement>();
 
 					const position = useFloating(() => anchor, floating, {
-						placement: 'bottom-end',
+						placement: props.placement ?? 'bottom-end',
 						strategy: 'absolute',
-						middleware: [flip(), offset],
+						middleware: props.middleware ?? [flip(), offset],
 						whileElementsMounted: autoUpdate,
 					});
+
+					const context: MenuContext = {
+						close: () => setIsOpen(false),
+					};
 
 					return (
 						<div
@@ -72,7 +84,7 @@ export const Menu = (props: MenuProps) => {
 								left: `${position.x ?? 0}px`,
 							}}
 						>
-							{props.children}
+							{props.children(context)}
 						</div>
 					);
 				})()}

@@ -198,7 +198,7 @@ const Post = (props: PostProps) => {
 										</button>
 									}
 								>
-									<div class="px-4 py-2">is it working now</div>
+									{() => <div class="px-4 py-2">is it working now</div>}
 								</Menu>
 							</div>
 						</Show>
