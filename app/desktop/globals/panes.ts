@@ -6,6 +6,7 @@ export enum PaneType {
 	PROFILE = 'profile',
 	CUSTOM_FEED = 'custom_feed',
 	CUSTOM_LIST = 'custom_list',
+	SEARCH = 'search',
 }
 
 export const labelizePaneType = (type: PaneType) => {
@@ -87,12 +88,19 @@ export interface CustomListPaneConfig extends BasePaneConfig {
 	};
 }
 
+export interface SearchPaneConfig extends BasePaneConfig {
+	readonly type: PaneType.SEARCH;
+	title: string | null;
+	query: string;
+}
+
 export type PaneConfig =
 	| HomePaneConfig
 	| NotificationsPaneConfig
 	| ProfilePaneConfig
 	| CustomFeedPaneConfig
-	| CustomListPaneConfig;
+	| CustomListPaneConfig
+	| SearchPaneConfig;
 
 export interface DeckConfig {
 	readonly id: string;

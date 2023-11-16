@@ -198,7 +198,11 @@ const Post = (props: PostProps) => {
 										</button>
 									}
 								>
-									{() => <div class="px-4 py-2">is it working now</div>}
+									{({ close, menuProps }) => (
+										<div {...menuProps} class="shadow-menu w-72 rounded-lg bg-background">
+											<div class="px-4 py-2">is it working now</div>
+										</div>
+									)}
 								</Menu>
 							</div>
 						</Show>

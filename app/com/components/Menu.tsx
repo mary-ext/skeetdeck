@@ -8,8 +8,14 @@ import { assert } from '~/utils/misc.ts';
 
 import Modal from './Modal.tsx';
 
+export interface MenuContentProps {
+	ref: (el: HTMLElement) => void;
+	style: JSX.CSSProperties;
+}
+
 export interface MenuContext {
 	close: () => void;
+	menuProps: MenuContentProps;
 }
 
 export interface MenuProps {
@@ -71,22 +77,20 @@ export const Menu = (props: MenuProps) => {
 					});
 
 					const context: MenuContext = {
+						menuProps: {
+							ref: setFloating,
+							get style() {
+								return {
+									position: position.strategy,
+									top: `${position.y ?? 0}px`,
+									left: `${position.x ?? 0}px`,
+								};
+							},
+						},
 						close: () => setIsOpen(false),
 					};
 
-					return (
-						<div
-							ref={setFloating}
-							class="shadow-menu w-72 rounded-lg bg-background"
-							style={{
-								position: position.strategy,
-								top: `${position.y ?? 0}px`,
-								left: `${position.x ?? 0}px`,
-							}}
-						>
-							{props.children(context)}
-						</div>
-					);
+					return (() => props.children(context)) as unknown as JSX.Element;
 				})()}
 			</Modal>
 		);
