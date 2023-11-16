@@ -25,10 +25,10 @@ export type ResponseOf<K extends keyof Queries | keyof Procedures> = K extends k
 		? Queries[K]['response']
 		: unknown
 	: K extends keyof Procedures
-	? Procedures[K] extends { response: any }
-		? Procedures[K]['response']
-		: unknown
-	: never;
+	  ? Procedures[K] extends { response: any }
+			? Procedures[K]['response']
+			: unknown
+	  : never;
 
 export type RefOf<K extends keyof Objects> = Objects[K];
 export type UnionOf<K extends keyof Objects> = Objects[K] & { $type: K };
@@ -1591,6 +1591,7 @@ export interface Objects {
 		invites?: RefOf<'com.atproto.server.defs#inviteCode'>[];
 		invitesDisabled?: boolean;
 		inviteNote?: string;
+		emailConfirmedAt?: string;
 	};
 	'com.atproto.admin.defs#accountView': {
 		did: DID;
@@ -1600,6 +1601,7 @@ export interface Objects {
 		invitedBy?: RefOf<'com.atproto.server.defs#inviteCode'>;
 		invites?: RefOf<'com.atproto.server.defs#inviteCode'>[];
 		invitesDisabled?: boolean;
+		emailConfirmedAt?: string;
 		inviteNote?: string;
 	};
 	'com.atproto.admin.defs#repoViewNotFound': {
