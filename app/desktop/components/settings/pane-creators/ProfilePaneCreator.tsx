@@ -8,12 +8,11 @@ import { searchProfiles, searchProfilesKey } from '~/api/queries/search-profiles
 import { PaneType, ProfilePaneTab, type ProfilePaneConfig } from '~/desktop/globals/panes.ts';
 
 import { DialogBody } from '~/com/primitives/dialog.ts';
-import { Input } from '~/com/primitives/input.ts';
+
+import SearchInput from '~/com/components/inputs/SearchInput.tsx';
 
 import type { ProfileItemProps } from '~/com/components/items/ProfileItem.tsx';
 import ProfileList from '~/com/components/lists/ProfileList.tsx';
-
-import SearchIcon from '~/com/icons/baseline-search.tsx';
 
 import type { PaneCreatorProps } from './types.ts';
 
@@ -39,20 +38,13 @@ const ProfilePaneCreator = (props: PaneCreatorProps) => {
 	return (
 		<div class={/* @once */ DialogBody({ padded: false, scrollable: true })}>
 			<div class="flex gap-4 p-4">
-				<div class="relative grow">
-					<div class="pointer-events-none absolute inset-y-0 ml-px grid place-items-center px-2">
-						<SearchIcon class="text-lg text-muted-fg" />
-					</div>
-					<input
-						class={/* @once */ Input({ class: 'pl-8' })}
-						placeholder="Search..."
-						onKeyDown={(ev) => {
-							if (ev.key === 'Enter') {
-								setSearch(ev.currentTarget.value.trim());
-							}
-						}}
-					/>
-				</div>
+				<SearchInput
+					onKeyDown={(ev) => {
+						if (ev.key === 'Enter') {
+							setSearch(ev.currentTarget.value.trim());
+						}
+					}}
+				/>
 			</div>
 
 			<Switch>
