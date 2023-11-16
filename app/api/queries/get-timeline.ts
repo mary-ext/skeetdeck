@@ -1,9 +1,9 @@
-import type { Agent } from '@externdefs/bluesky-client/agent';
+import { Agent } from '@externdefs/bluesky-client/agent';
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
 import { assert } from '~/utils/misc.ts';
 
-import type { DID, Records, ResponseOf } from '../atp-schema.ts';
+import type { DID, Records, RefOf, ResponseOf } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
 import { systemLanguages } from '../globals/platform.ts';
 
@@ -26,6 +26,12 @@ import {
 } from '../models/timeline.ts';
 
 import type { FilterPreferences, LanguagePreferences } from '../types.ts';
+
+import { fetchPost } from './get-post.ts';
+
+const PALOMAR_SERVICE = 'https://palomar.bsky.social';
+
+type Post = RefOf<'app.bsky.feed.defs#postView'>;
 
 export interface HomeTimelineParams {
 	type: 'home';
@@ -75,7 +81,7 @@ export interface TimelineLatestResult {
 	cid: string | undefined;
 }
 
-type TimelineResponse = ResponseOf<'app.bsky.feed.getTimeline'>;
+type TimelineResponse = ResponseOf<'app.bsky.feed.getTimeline'> & { cid?: string };
 
 type PostRecord = Records['app.bsky.feed.post'];
 
@@ -180,7 +186,7 @@ export const getTimeline = async (
 
 		count += countPosts(result);
 
-		cid ||= feed.length > 0 ? feed[0].post.cid : undefined;
+		cid ||= timeline.cid || (feed.length > 0 ? feed[0].post.cid : undefined);
 
 		if (empty >= MAX_EMPTY) {
 			break;
@@ -208,6 +214,22 @@ export const getTimelineLatestKey = (uid: DID, params: TimelineParams) => {
 };
 export const getTimelineLatest = async (ctx: QC<ReturnType<typeof getTimelineLatestKey>>) => {
 	const [, uid, params] = ctx.queryKey;
+
+	// Short-circuit search timeline so that we don't go through the hydration
+	if (params.type === 'search') {
+		const agent = new Agent({ serviceUri: PALOMAR_SERVICE });
+
+		const response = await agent.rpc.get('app.bsky.unspecced.searchPostsSkeleton', {
+			params: {
+				q: params.query,
+				limit: 1,
+			},
+		});
+
+		const skeletons = response.data.posts;
+
+		return { cid: skeletons.length > 0 ? skeletons[0].uri : undefined };
+	}
 
 	const agent = await multiagent.connect(uid);
 
@@ -291,8 +313,9 @@ const fetchPage = async (
 			return response.data;
 		}
 	} else if (type === 'search') {
-		const response = await agent.rpc.get('app.bsky.feed.searchPosts', {
-			signal: signal,
+		const palomar = new Agent({ serviceUri: PALOMAR_SERVICE });
+
+		const skeleton = await palomar.rpc.get('app.bsky.unspecced.searchPostsSkeleton', {
 			params: {
 				q: params.query,
 				cursor: cursor,
@@ -300,11 +323,18 @@ const fetchPage = async (
 			},
 		});
 
-		const data = response.data;
+		const data = skeleton.data;
+		const skeletons = data.posts;
+
+		const uid = agent.session!.did;
+		const promises = await Promise.allSettled(skeletons.map((post) => fetchPost([uid, post.uri])));
 
 		return {
+			cid: skeletons.length > 0 ? skeletons[0].uri : undefined,
 			cursor: data.cursor,
-			feed: data.posts.map((post) => ({ post: post })),
+			feed: promises
+				.filter((x): x is PromiseFulfilledResult<Post> => x.status === 'fulfilled')
+				.map((x) => ({ post: x.value })),
 		};
 	} else {
 		assert(false, `Unknown type: ${type}`);
