@@ -23,7 +23,6 @@ const Modal = (props: ModalProps) => {
 
 							if (style.display === 'none') {
 								console.error('A dialog is being opened while its parent container is hidden');
-								node.close();
 								return;
 							}
 						}
