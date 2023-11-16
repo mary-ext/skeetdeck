@@ -14,7 +14,7 @@ import ProfileHeader from '~/com/components/views/ProfileHeader.tsx';
 
 import { IconButton } from '~/com/primitives/icon-button.ts';
 
-import SquareShapeAddIcon from '~/com/icons/baseline-square-shape-add.tsx';
+import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add.tsx';
 
 import { type ProfilePaneConfig, PaneType, ProfilePaneTab } from '../../../globals/panes.ts';
 import { addPane } from '../../../globals/settings.ts';
@@ -100,7 +100,7 @@ const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 							}}
 							class={/* @once */ IconButton()}
 						>
-							<SquareShapeAddIcon />
+							<TableColumnRightAddIcon />
 						</button>
 					</>
 				)}
