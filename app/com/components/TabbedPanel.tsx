@@ -17,6 +17,7 @@ export const TabbedPanelView = (props: TabbedPanelViewProps) => {
 
 export interface TabbedPanelProps<T extends string | number> {
 	dense?: boolean;
+	hideTabs?: boolean;
 	selected: T;
 	onChange: (next: T) => void;
 	children: JSX.Element;
@@ -56,22 +57,27 @@ export const TabbedPanel = <T extends string | number>(props: TabbedPanelProps<T
 
 	return (
 		<>
-			<div
-				class="box-content flex shrink-0 overflow-x-auto border-b border-divider"
-				classList={{ [`h-13`]: !props.dense, [`h-10`]: props.dense }}
-			>
-				<For each={panels.toArray() as unknown as TabbedPanelViewProps[]}>
-					{(panel) => (
-						<>
-							{!panel.hidden && (
-								<Tab active={props.selected === panel.value} onClick={() => props.onChange(panel.value as T)}>
-									{panel.label}
-								</Tab>
-							)}
-						</>
-					)}
-				</For>
-			</div>
+			{!props.hideTabs && (
+				<div
+					class="box-content flex shrink-0 overflow-x-auto border-b border-divider"
+					classList={{ [`h-13`]: !props.dense, [`h-10`]: props.dense }}
+				>
+					<For each={panels.toArray() as unknown as TabbedPanelViewProps[]}>
+						{(panel) => (
+							<>
+								{!panel.hidden && (
+									<Tab
+										active={props.selected === panel.value}
+										onClick={() => props.onChange(panel.value as T)}
+									>
+										{panel.label}
+									</Tab>
+								)}
+							</>
+						)}
+					</For>
+				</div>
+			)}
 
 			<For each={rendered()}>
 				{(panel) => <Freeze freeze={props.selected !== panel.value}>{panel.children}</Freeze>}

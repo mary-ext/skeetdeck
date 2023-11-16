@@ -91,6 +91,7 @@ const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 											handle: data.handle.value,
 										},
 										tab: ProfilePaneTab.POSTS,
+										tabVisible: true,
 									},
 									index() + 1,
 								);

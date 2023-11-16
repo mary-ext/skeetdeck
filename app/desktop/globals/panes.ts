@@ -68,6 +68,7 @@ export interface ProfilePaneConfig extends BasePaneConfig {
 		// name?: string;
 	};
 	tab: ProfilePaneTab;
+	tabVisible: boolean;
 }
 
 export interface CustomFeedPaneConfig extends BasePaneConfig {

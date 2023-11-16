@@ -37,7 +37,12 @@ const ProfilePane = () => {
 				</PaneHeader>
 
 				<PaneBody>
-					<TabbedPanel dense selected={pane.tab} onChange={(next) => (pane.tab = next)}>
+					<TabbedPanel
+						selected={pane.tab}
+						onChange={(next) => (pane.tab = next)}
+						dense
+						hideTabs={!pane.tabVisible}
+					>
 						<TabbedPanelView label="Posts" value={ProfilePaneTab.POSTS}>
 							<TimelineList
 								uid={pane.uid}
