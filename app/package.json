@@ -9,7 +9,7 @@
 		"lint": "tsc"
 	},
 	"dependencies": {
-		"@externdefs/bluesky-client": "^0.3.3",
+		"@externdefs/bluesky-client": "workspace:*",
 		"@floating-ui/dom": "^1.5.3",
 		"@floating-ui/utils": "^0.1.6",
 		"@pkg/solid-freeze": "workspace:^",

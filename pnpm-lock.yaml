@@ -32,7 +32,7 @@ importers:
   app:
     dependencies:
       '@externdefs/bluesky-client':
-        specifier: ^0.3.3
+        specifier: workspace:*
         version: link:../packages/bluesky-client
       '@floating-ui/dom':
         specifier: ^1.5.3
