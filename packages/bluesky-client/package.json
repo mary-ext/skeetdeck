@@ -1,0 +1,53 @@
+{
+	"type": "module",
+	"name": "@externdefs/bluesky-client",
+	"description": "Lightweight API client for Bluesky/AT Protocol",
+	"version": "0.3.3",
+	"author": "externdefs",
+	"license": "MIT",
+	"repository": {
+		"url": "https://github.com/mary-ext/bluesky-client"
+	},
+	"files": [
+		"dist",
+		"!dist/tsconfig.tsbuildinfo"
+	],
+	"sideEffects": false,
+	"exports": {
+		"./agent": {
+			"types": "./dist/agent.d.ts",
+			"import": "./dist/agent.js"
+		},
+		"./atp-schema": {
+			"types": "./dist/atp-schema.d.ts"
+		},
+		"./events": {
+			"types": "./dist/events.d.ts",
+			"import": "./dist/events.js"
+		},
+		"./jwt": {
+			"types": "./dist/jwt.d.ts",
+			"import": "./dist/jwt.js"
+		},
+		"./xrpc-utils": {
+			"types": "./dist/xrpc-utils.d.ts",
+			"import": "./dist/xrpc-utils.js"
+		},
+		"./xrpc": {
+			"types": "./dist/xrpc.d.ts",
+			"import": "./dist/xrpc.js"
+		}
+	},
+	"scripts": {
+		"build:lib": "node ./scripts/mkdist.js",
+		"build:schema": "node ./scripts/generate-atp-schema.js",
+		"prepublishOnly": "npm run build:schema && tsc && npm run build:lib",
+		"fmt": "prettier --cache --write ."
+	},
+	"devDependencies": {
+		"@tiptap/core": "^2.1.11",
+		"fast-glob": "^3.3.1",
+		"graphemer": "^1.4.0",
+		"mkdist": "^1.3.0"
+	}
+}

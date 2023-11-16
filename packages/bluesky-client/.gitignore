@@ -1,0 +1,15 @@
+node_modules/
+
+dist/
+types/
+
+.npm-*.log
+.pnpm-*.log
+.yarn-*.log
+npm-*.log
+pnpm-*.log
+yarn-*.log
+
+*.local
+
+tsconfig.tsbuildinfo
