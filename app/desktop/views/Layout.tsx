@@ -16,6 +16,7 @@ import { Interactive } from '~/com/primitives/interactive.ts';
 import { Menu } from '~/com/components/Menu.tsx';
 import SearchInput from '~/com/components/inputs/SearchInput.tsx';
 
+import FeatherIcon from '~/com/icons/baseline-feather.tsx';
 import SearchIcon from '~/com/icons/baseline-search.tsx';
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
 import TableLargeAddIcon from '~/com/icons/baseline-table-large-add.tsx';
@@ -23,7 +24,7 @@ import TableLargeAddIcon from '~/com/icons/baseline-table-large-add.tsx';
 import SettingsDialog from '../components/settings/SettingsDialog.tsx';
 import AddDeckDialog from '../components/settings/AddDeckDialog.tsx';
 
-const menuIconButton = Interactive({ class: 'h-11 text-lg' });
+const menuIconButton = Interactive({ class: `h-11 shrink-0 text-lg` });
 
 const DashboardLayout = () => {
 	const params = useParams();
@@ -33,6 +34,10 @@ const DashboardLayout = () => {
 		<div class="flex h-screen w-screen overflow-hidden">
 			<div class="flex w-14 shrink-0 flex-col border-r border-divider">
 				<Show when={multiagent.active}>
+					<button title="Post..." class={menuIconButton}>
+						<FeatherIcon class="mx-auto" />
+					</button>
+
 					<Menu
 						button={
 							<button title="Search..." class={menuIconButton}>
@@ -92,34 +97,36 @@ const DashboardLayout = () => {
 
 				<p class="py-3 text-center text-xs font-medium text-muted-fg">Decks</p>
 
-				<button
-					title="Add new deck"
-					onClick={() => {
-						openModal(() => <AddDeckDialog />);
-					}}
-					class={menuIconButton}
-				>
-					<TableLargeAddIcon class="mx-auto" />
-				</button>
+				<div class="flex min-h-0 grow flex-col overflow-y-auto border-b border-divider scrollbar-hide">
+					<button
+						title="Add new deck"
+						onClick={() => {
+							openModal(() => <AddDeckDialog />);
+						}}
+						class={menuIconButton}
+					>
+						<TableLargeAddIcon class="mx-auto" />
+					</button>
 
-				<For each={preferences.decks}>
-					{(deck) => (
-						<A
-							title={deck.name}
-							href={/* @once */ `/decks/${deck.id}`}
-							replace
-							class={
-								/* @once */ Interactive({ class: 'group relative grid h-11 place-items-center text-lg' })
-							}
-							activeClass="is-active"
-						>
-							<div class="pointer-events-none absolute inset-0 hidden border-l-3 border-accent group-[.is-active]:block"></div>
-							<span>{deck.emoji}</span>
-						</A>
-					)}
-				</For>
-
-				<div class="grow border-b border-divider"></div>
+					<For each={preferences.decks}>
+						{(deck) => (
+							<A
+								title={deck.name}
+								href={/* @once */ `/decks/${deck.id}`}
+								replace
+								class={
+									/* @once */ Interactive({
+										class: 'group relative grid h-11 shrink-0 place-items-center text-lg',
+									})
+								}
+								activeClass="is-active"
+							>
+								<div class="pointer-events-none absolute inset-0 hidden border-l-3 border-accent group-[.is-active]:block"></div>
+								<span>{deck.emoji}</span>
+							</A>
+						)}
+					</For>
+				</div>
 
 				<button
 					title="Open application settings"
