@@ -220,6 +220,7 @@ export const getTimelineLatest = async (ctx: QC<ReturnType<typeof getTimelineLat
 		const agent = new Agent({ serviceUri: PALOMAR_SERVICE });
 
 		const response = await agent.rpc.get('app.bsky.unspecced.searchPostsSkeleton', {
+			signal: ctx.signal,
 			params: {
 				q: params.query,
 				limit: 1,
@@ -316,6 +317,7 @@ const fetchPage = async (
 		const palomar = new Agent({ serviceUri: PALOMAR_SERVICE });
 
 		const skeleton = await palomar.rpc.get('app.bsky.unspecced.searchPostsSkeleton', {
+			signal: signal,
 			params: {
 				q: params.query,
 				cursor: cursor,
@@ -328,6 +330,8 @@ const fetchPage = async (
 
 		const uid = agent.session!.did;
 		const promises = await Promise.allSettled(skeletons.map((post) => fetchPost([uid, post.uri])));
+
+		signal?.throwIfAborted();
 
 		return {
 			cid: skeletons.length > 0 ? skeletons[0].uri : undefined,
