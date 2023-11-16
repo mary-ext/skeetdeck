@@ -53,6 +53,7 @@ export const getPost = async (ctx: QC<ReturnType<typeof getPostKey>>) => {
 	}
 
 	const post = await fetchPost([uid, resolvedUri]);
+	ctx.signal.throwIfAborted();
 
 	return mergePost(uid, post);
 };
