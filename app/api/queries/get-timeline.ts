@@ -3,7 +3,7 @@ import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
 import { assert } from '~/utils/misc.ts';
 
-import type { DID, Records, RefOf, ResponseOf } from '../atp-schema.ts';
+import type { DID, Records, ResponseOf } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
 import { systemLanguages } from '../globals/platform.ts';
 
@@ -26,8 +26,6 @@ import {
 } from '../models/timeline.ts';
 
 import type { FilterPreferences, LanguagePreferences } from '../types.ts';
-
-import { fetchPost } from './get-post.ts';
 
 export interface HomeTimelineParams {
 	type: 'home';
@@ -78,8 +76,6 @@ export interface TimelineLatestResult {
 }
 
 type TimelineResponse = ResponseOf<'app.bsky.feed.getTimeline'>;
-
-type Post = RefOf<'app.bsky.feed.defs#postView'>;
 
 type PostRecord = Records['app.bsky.feed.post'];
 
@@ -222,22 +218,6 @@ export const getTimelineLatest = async (ctx: QC<ReturnType<typeof getTimelineLat
 };
 
 //// Raw fetch
-type SearchResult = PostSearchView[];
-
-interface PostSearchView {
-	tid: string;
-	cid: string;
-	user: {
-		did: DID;
-		handle: string;
-	};
-	post: {
-		createdAt: number;
-		text: string;
-		user: string;
-	};
-}
-
 const fetchPage = async (
 	agent: Agent,
 	params: TimelineParams,
@@ -311,33 +291,20 @@ const fetchPage = async (
 			return response.data;
 		}
 	} else if (type === 'search') {
-		const offset = cursor ? +cursor : 0;
-		const searchUri =
-			`https://search.bsky.social/search/posts` +
-			`?count=${limit}` +
-			`&offset=${offset}` +
-			`&q=${encodeURIComponent(params.query)}`;
+		const response = await agent.rpc.get('app.bsky.feed.searchPosts', {
+			signal: signal,
+			params: {
+				q: params.query,
+				cursor: cursor,
+				limit: limit,
+			},
+		});
 
-		const searchResponse = await fetch(searchUri, { signal: signal });
-
-		if (!searchResponse.ok) {
-			throw new Error(`Response error ${searchResponse.status}`);
-		}
-
-		const searchResults = (await searchResponse.json()) as SearchResult;
-
-		const uid = agent.session!.did;
-		const queries = await Promise.allSettled(
-			searchResults.map((view) => fetchPost([uid, `at://${view.user.did}/${view.tid}`])),
-		);
-
-		const posts = queries
-			.filter((result): result is PromiseFulfilledResult<Post> => result.status === 'fulfilled')
-			.map((result) => ({ post: result.value }));
+		const data = response.data;
 
 		return {
-			cursor: '' + (offset + searchResults.length),
-			feed: posts,
+			cursor: data.cursor,
+			feed: data.posts.map((post) => ({ post: post })),
 		};
 	} else {
 		assert(false, `Unknown type: ${type}`);
