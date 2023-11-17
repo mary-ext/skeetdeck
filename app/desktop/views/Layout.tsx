@@ -48,7 +48,7 @@ const DashboardLayout = () => {
 						middleware={[offset({ crossAxis: 8, mainAxis: -18 - 13 })]}
 					>
 						{({ close, menuProps }) => (
-							<div {...menuProps} class="shadow-menu w-96 rounded-lg bg-background">
+							<div {...menuProps} class="w-96 rounded-lg bg-background shadow-menu">
 								<div class="p-4">
 									<SearchInput
 										onKeyDown={(ev) => {

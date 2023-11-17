@@ -199,7 +199,7 @@ const Post = (props: PostProps) => {
 									}
 								>
 									{({ close, menuProps }) => (
-										<div {...menuProps} class="shadow-menu w-72 rounded-lg bg-background">
+										<div {...menuProps} class="w-72 rounded-lg bg-background shadow-menu">
 											<div class="px-4 py-2">is it working now</div>
 										</div>
 									)}
