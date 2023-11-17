@@ -3,8 +3,6 @@ import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 import type { DID } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
 
-import { mergeProfile } from '../stores/profiles.ts';
-
 // @todo: should this be committed to global store?
 // perhaps it would be better off not to.
 
@@ -25,7 +23,6 @@ export const searchProfilesTypeahead = async (ctx: QC<ReturnType<typeof searchPr
 	});
 
 	const data = response.data;
-	const profiles = data.actors;
 
-	return profiles.map((profile) => mergeProfile(uid, profile));
+	return data.actors;
 };

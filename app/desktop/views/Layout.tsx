@@ -8,19 +8,19 @@ import { getCurrentTid } from '~/api/utils/tid.ts';
 
 import { openModal } from '~/com/globals/modals.tsx';
 
-import { type SearchPaneConfig, PaneType } from '../globals/panes.ts';
+import { type ProfilePaneConfig, type SearchPaneConfig, PaneType, ProfilePaneTab } from '../globals/panes.ts';
 import { addPane, preferences } from '../globals/settings.ts';
 
 import { Interactive } from '~/com/primitives/interactive.ts';
 
 import { Menu } from '~/com/components/Menu.tsx';
-import SearchInput from '~/com/components/inputs/SearchInput.tsx';
 
 import FeatherIcon from '~/com/icons/baseline-feather.tsx';
 import SearchIcon from '~/com/icons/baseline-search.tsx';
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
 import TableLargeAddIcon from '~/com/icons/baseline-table-large-add.tsx';
 
+import { SearchFlyout, SuggestionType } from '../components/flyouts/SearchFlyout.tsx';
 import SettingsDialog from '../components/settings/SettingsDialog.tsx';
 import AddDeckDialog from '../components/settings/AddDeckDialog.tsx';
 
@@ -34,29 +34,28 @@ const DashboardLayout = () => {
 		<div class="flex h-screen w-screen overflow-hidden">
 			<div class="flex w-14 shrink-0 flex-col border-r border-divider">
 				<Show when={multiagent.active}>
-					<button title="Post..." class={menuIconButton}>
-						<FeatherIcon class="mx-auto" />
-					</button>
-
-					<Menu
-						button={
-							<button title="Search..." class={menuIconButton}>
-								<SearchIcon class="mx-auto" />
+					{(uid) => (
+						<>
+							<button title="Post..." class={menuIconButton}>
+								<FeatherIcon class="mx-auto" />
 							</button>
-						}
-						placement="bottom-start"
-						middleware={[offset({ crossAxis: 8, mainAxis: -18 - 13 })]}
-					>
-						{({ close, menuProps }) => (
-							<div {...menuProps} class="w-96 rounded-lg bg-background shadow-menu">
-								<div class="p-4">
-									<SearchInput
-										onKeyDown={(ev) => {
-											if (ev.key === 'Enter') {
-												const $deck = params.deck;
-												const $uid = multiagent.active!;
 
-												const value = ev.currentTarget.value.trim();
+							<Menu
+								button={
+									<button title="Search..." class={menuIconButton}>
+										<SearchIcon class="mx-auto" />
+									</button>
+								}
+								placement="bottom-start"
+								middleware={[offset({ crossAxis: 8, mainAxis: -18 - 13 })]}
+							>
+								{({ close, menuProps }) => (
+									<div {...menuProps}>
+										<SearchFlyout
+											uid={uid()}
+											onAccept={(item) => {
+												const $deck = params.deck;
+												const $uid = uid();
 
 												let deck = preferences.decks.find((deck) => deck.id === $deck);
 
@@ -72,27 +71,36 @@ const DashboardLayout = () => {
 													navigate(`/decks/${deck.id}`);
 												}
 
-												if (value) {
-													close();
-
+												if (item.type === SuggestionType.SEARCH_POSTS) {
 													addPane<SearchPaneConfig>(deck, {
 														type: PaneType.SEARCH,
-														query: value,
+														query: item.query,
 														title: null,
 														uid: $uid,
 													});
+												} else if (item.type === SuggestionType.PROFILE) {
+													addPane<ProfilePaneConfig>(deck, {
+														type: PaneType.PROFILE,
+														profile: {
+															did: item.profile.did,
+															handle: item.profile.handle,
+														},
+														tab: ProfilePaneTab.POSTS,
+														tabVisible: true,
+														uid: $uid,
+													});
 												}
-											}
-										}}
-									/>
-								</div>
 
-								<p class="p-4 pt-0 text-sm text-muted-fg">Start searching...</p>
-							</div>
-						)}
-					</Menu>
+												close();
+											}}
+										/>
+									</div>
+								)}
+							</Menu>
 
-					<hr class="border-divider" />
+							<hr class="border-divider" />
+						</>
+					)}
 				</Show>
 
 				<p class="py-3 text-center text-xs font-medium text-muted-fg">Decks</p>
