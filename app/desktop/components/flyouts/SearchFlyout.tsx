@@ -1,4 +1,4 @@
-import { For, createMemo, createSignal, type JSX, Show } from 'solid-js';
+import { type JSX, For, createMemo, createSignal } from 'solid-js';
 
 import { createQuery, keepPreviousData } from '@pkg/solid-query';
 
