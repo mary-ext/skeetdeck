@@ -149,6 +149,7 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 
 					return (
 						<button
+							onClick={() => props.onAccept(item)}
 							onPointerOver={() => setSelection(index())}
 							class="cursor-pointer text-left text-sm"
 							classList={{ [`bg-hinted`]: index() === selection() }}
