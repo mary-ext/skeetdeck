@@ -1,0 +1,19 @@
+{
+	"private": true,
+	"type": "module",
+	"name": "@pkg/emoji-db",
+	"version": "0.1.0",
+	"exports": {
+		".": {
+			"default": "./lib/Database.js",
+			"types": "./types/database.d.ts"
+		}
+	},
+	"scripts": {
+		"dev": "vite",
+		"unused:build": "rm -r types/; vite build && tsc"
+	},
+	"devDependencies": {
+		"vite": "^4.5.0"
+	}
+}
