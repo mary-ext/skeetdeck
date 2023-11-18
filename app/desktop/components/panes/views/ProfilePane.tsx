@@ -2,10 +2,10 @@ import { createSignal } from 'solid-js';
 
 import { ProfilePaneTab, type ProfilePaneConfig } from '../../../globals/panes.ts';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
-
-import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel.tsx';
 import TimelineList from '~/com/components/lists/TimelineList.tsx';
+import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel.tsx';
+
+import { IconButton } from '~/com/primitives/icon-button.ts';
 
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
 
