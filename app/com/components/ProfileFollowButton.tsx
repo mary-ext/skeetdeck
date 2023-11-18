@@ -1,11 +1,8 @@
-import type { DID } from '~/api/atp-schema.ts';
-
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
 import { Button } from '../primitives/button.ts';
 
 export interface ProfileFollowButtonProps {
-	uid: DID;
 	profile: SignalizedProfile;
 }
 

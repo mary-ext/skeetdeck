@@ -1,6 +1,5 @@
 import { For, Match, Switch } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
 import CircularProgress from '../CircularProgress.tsx';
@@ -10,7 +9,6 @@ import GenericErrorView from '../views/GenericErrorView.tsx';
 import { type ProfileItemAccessory, type ProfileItemProps, ProfileItem } from '../items/ProfileItem.tsx';
 
 export interface ProfileListProps {
-	uid: DID;
 	profiles?: SignalizedProfile[];
 	/** Expected to be static */
 	asideAccessory?: ProfileItemAccessory;
@@ -33,7 +31,7 @@ const ProfileList = (props: ProfileListProps) => {
 			<For each={props.profiles}>
 				{(profile) => (
 					<VirtualContainer estimateHeight={112}>
-						<ProfileItem uid={props.uid} profile={profile} aside={aside} onClick={props.onItemClick} />
+						<ProfileItem profile={profile} aside={aside} onClick={props.onItemClick} />
 					</VirtualContainer>
 				)}
 			</For>

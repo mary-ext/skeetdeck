@@ -1,6 +1,5 @@
 import { type JSX, Show } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
 import { INTERACTION_TAGS, isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
@@ -8,11 +7,10 @@ import { INTERACTION_TAGS, isElementAltClicked, isElementClicked } from '~/utils
 import ProfileFollowButton from '../ProfileFollowButton.tsx';
 
 export interface ProfileItemAccessory {
-	render: (item: SignalizedProfile, uid: DID) => JSX.Element;
+	render: (item: SignalizedProfile) => JSX.Element;
 }
 
 export interface ProfileItemProps {
-	uid: DID;
 	profile: SignalizedProfile;
 	aside?: ProfileItemAccessory;
 	footer?: ProfileItemAccessory;
@@ -21,7 +19,6 @@ export interface ProfileItemProps {
 }
 
 export const ProfileItem = (props: ProfileItemProps) => {
-	const uid = () => props.uid;
 	const profile = () => props.profile;
 	const aside = props.aside;
 	const footer = props.footer;
@@ -62,14 +59,14 @@ export const ProfileItem = (props: ProfileItemProps) => {
 						</span>
 					</span>
 
-					<div class="empty:hidden">{aside?.render(profile(), uid())}</div>
+					<div class="empty:hidden">{aside?.render(profile())}</div>
 				</div>
 
 				<Show when={profile().description.value}>
 					{(desc) => <div class="line-clamp-3 break-words text-sm">{desc()}</div>}
 				</Show>
 
-				{footer?.render(profile(), uid())}
+				{footer?.render(profile())}
 			</div>
 		</div>
 	);
@@ -78,9 +75,9 @@ export const ProfileItem = (props: ProfileItemProps) => {
 export default ProfileItem;
 
 export const ProfileFollowAccessory: ProfileItemAccessory = {
-	render: (profile, uid) => {
-		if (profile.did !== uid) {
-			return <ProfileFollowButton uid={uid} profile={profile} />;
+	render: (profile) => {
+		if (profile.did !== profile.uid) {
+			return <ProfileFollowButton profile={profile} />;
 		}
 
 		return null;

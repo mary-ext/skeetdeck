@@ -11,12 +11,10 @@ import { Link, LinkingType } from '../Link.tsx';
 import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
 
 export interface ProfileHeaderProps {
-	uid: DID;
 	profile: SignalizedProfile;
 }
 
 const ProfileHeader = (props: ProfileHeaderProps) => {
-	const uid = () => props.uid;
 	const profile = () => props.profile;
 
 	return (
@@ -50,7 +48,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 
 					<div class="grow" />
 
-					<Show when={profile().did !== uid()}>
+					<Show when={profile().did !== profile().uid}>
 						<button title="Actions" onClick={() => {}} class={/* @once */ Button({ variant: 'outline' })}>
 							<MoreHorizIcon class="-mx-1.5 text-base" />
 						</button>
