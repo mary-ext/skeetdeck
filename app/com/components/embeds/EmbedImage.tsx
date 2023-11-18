@@ -116,11 +116,11 @@ const EmbedImage = (props: EmbedImageProps) => {
 					<div class="flex aspect-video gap-0.5">
 						<div class="flex grow basis-0 flex-col gap-0.5">
 							{render_(0, RenderMode.MULTIPLE)}
-							{render_(1, RenderMode.MULTIPLE)}
+							{render_(2, RenderMode.MULTIPLE)}
 						</div>
 
 						<div class="flex grow basis-0 flex-col gap-0.5">
-							{render_(2, RenderMode.MULTIPLE)}
+							{render_(1, RenderMode.MULTIPLE)}
 							{render_(3, RenderMode.MULTIPLE)}
 						</div>
 					</div>
