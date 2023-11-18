@@ -114,7 +114,7 @@ const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 						return (
 							<div class="flex min-h-0 grow flex-col overflow-y-auto">
 								<VirtualContainer>
-									<ProfileHeader uid={pane.uid} profile={data} />
+									<ProfileHeader profile={data} />
 								</VirtualContainer>
 
 								<TabbedPanel selected={tab()} onChange={setTab}>
