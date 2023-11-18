@@ -19,6 +19,8 @@ const gc = new FinalizationRegistry<string>((id) => {
 /** @see BskyList */
 export interface SignalizedList {
 	_key?: number;
+	uid: DID;
+
 	uri: List['uri'];
 	cid: Signal<List['cid']>;
 	creator: SignalizedProfile;
@@ -36,6 +38,8 @@ export interface SignalizedList {
 const createSignalizedList = (uid: DID, list: List, key?: number): SignalizedList => {
 	return markRaw({
 		_key: key,
+		uid: uid,
+
 		uri: list.uri,
 		cid: signal(list.cid),
 		creator: mergeProfile(uid, list.creator, key),

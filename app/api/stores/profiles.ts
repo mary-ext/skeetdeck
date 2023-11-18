@@ -21,6 +21,8 @@ const gc = new FinalizationRegistry<string>((id) => {
 /** @see BskyProfile */
 export interface SignalizedProfile {
 	_key?: number;
+	uid: DID;
+
 	did: ProfileDetailed['did'];
 	handle: Signal<ProfileDetailed['handle']>;
 	displayName: Signal<ProfileDetailed['displayName']>;
@@ -45,7 +47,7 @@ export interface SignalizedProfile {
 }
 
 const createSignalizedProfile = (
-	_uid: DID,
+	uid: DID,
 	profile: Profile | ProfileBasic | ProfileDetailed,
 	key?: number,
 ): SignalizedProfile => {
@@ -54,6 +56,8 @@ const createSignalizedProfile = (
 
 	return markRaw({
 		_key: key,
+		uid: uid,
+
 		did: profile.did,
 		handle: signal(profile.handle),
 		displayName: signal(profile.displayName),

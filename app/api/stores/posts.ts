@@ -22,6 +22,8 @@ const gc = new FinalizationRegistry<string>((id) => {
 /** @see BskyPost */
 export interface SignalizedPost {
 	_key?: number;
+	uid: DID;
+
 	uri: Post['uri'];
 	cid: Signal<Post['cid']>;
 	author: SignalizedProfile;
@@ -43,6 +45,8 @@ export interface SignalizedPost {
 const createSignalizedPost = (uid: DID, post: Post, key?: number): SignalizedPost => {
 	return markRaw({
 		_key: key,
+		uid: uid,
+
 		uri: post.uri,
 		cid: signal(post.cid),
 		author: mergeProfile(uid, post.author, key),
