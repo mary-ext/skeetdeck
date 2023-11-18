@@ -37,3 +37,10 @@ export const markRaw = <T extends object>(value: T): T => {
 
 	return value;
 };
+
+export const getCurrentDate = () => {
+	const date = new Date();
+	date.setMilliseconds(0);
+
+	return date.toISOString();
+};

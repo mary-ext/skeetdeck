@@ -1,10 +1,13 @@
-import { Match, Show, Switch, createEffect, type Accessor } from 'solid-js';
+import { type Accessor, Match, Show, Switch, createEffect } from 'solid-js';
 
 import type { DID } from '~/api/atp-schema.ts';
 
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 import type { SignalizedTimelineItem } from '~/api/models/timeline.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
+
+import { updatePostLike } from '~/api/mutations/like-post.ts';
+import { updatePostRepost } from '~/api/mutations/repost-post.ts';
 
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
 
@@ -226,14 +229,37 @@ const Post = (props: PostProps) => {
 								class="flex grow basis-0 items-end gap-0.5"
 								classList={{ 'text-green-600': !!post().viewer.repost.value }}
 							>
-								<button class="-my-1.5 -ml-2 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary">
-									<RepeatIcon />
-								</button>
+								<Menu
+									button={
+										<button class="-my-1.5 -ml-2 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary">
+											<RepeatIcon />
+										</button>
+									}
+								>
+									{({ close, menuProps }) => (
+										<div
+											{...menuProps}
+											class="flex w-72 flex-col overflow-hidden rounded-lg bg-background shadow-menu"
+										>
+											<button
+												onClick={() => {
+													close();
+													updatePostRepost(post(), !post().viewer.repost.value);
+												}}
+												class="flex cursor-pointer items-center gap-4 px-4 py-3 text-left text-sm outline-2 -outline-offset-2 outline-primary hover:bg-hinted focus-visible:outline disabled:pointer-events-none disabled:opacity-50"
+											>
+												<RepeatIcon class="text-lg" />
+												<span>{post().viewer.repost.value ? 'Undo repost' : 'Repost'}</span>
+											</button>
+										</div>
+									)}
+								</Menu>
 
 								<span class="text-[0.8125rem]">{post().repostCount.value}</span>
 							</div>
 
 							<div
+								onClick={() => updatePostLike(post(), !post().viewer.like.value)}
 								class="group flex grow basis-0 items-end gap-0.5"
 								classList={{ 'is-active text-red-600': !!post().viewer.like.value }}
 							>
