@@ -115,7 +115,7 @@ export class Multiagent {
 
 			batch(() => {
 				const $accounts = this.accounts!;
-				const existing = $accounts.find((acc) => acc.did);
+				const existing = $accounts.find((acc) => acc.did === did);
 
 				this.active = did;
 
