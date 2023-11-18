@@ -1,3 +1,7 @@
+import { Show } from 'solid-js';
+
+import { multiagent } from '~/api/globals/agent.ts';
+
 import { getUniqueId } from '~/utils/misc.ts';
 
 import { SpecificPaneSize } from '../../../globals/panes.ts';
@@ -6,6 +10,7 @@ import Radio from '~/com/components/inputs/Radio.tsx';
 import { Interactive } from '~/com/primitives/interactive.ts';
 
 import DeleteIcon from '~/com/icons/baseline-delete.tsx';
+import SyncAltIcon from '~/com/icons/baseline-sync-alt.tsx';
 
 import { usePaneContext } from '../PaneContext.tsx';
 
@@ -57,6 +62,15 @@ const GenericPaneSettings = () => {
 					</label>
 				</div>
 			</div>
+
+			<Show when={multiagent.accounts.length > 1}>
+				<button
+					class={/* @once */ Interactive({ class: 'flex items-center gap-4 border-b border-divider p-4' })}
+				>
+					<SyncAltIcon class="text-lg" />
+					<span class="text-sm">Switch accounts</span>
+				</button>
+			</Show>
 
 			<button
 				onClick={deletePane}
