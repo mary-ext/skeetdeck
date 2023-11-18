@@ -6,16 +6,12 @@ import type { Facet, RichTextSegment } from '~/api/richtext/types.ts';
 
 import { type Linking, LinkingType, useLinking } from './Link.tsx';
 
-export interface RichTextItem {
-	$richtext?: unknown;
-}
-
 export interface RichTextReturn {
 	t: string;
 	f: Facet[] | undefined;
 }
 
-export interface RichTextRendererProps<T extends RichTextItem> {
+export interface RichTextRendererProps<T extends object> {
 	item: T;
 	/** Expected to be static */
 	get: (item: T) => RichTextReturn;
@@ -26,13 +22,19 @@ interface RichTextUiSegment {
 	to: Linking | undefined;
 }
 
-const RichTextRenderer = <T extends RichTextItem>(props: RichTextRendererProps<T>) => {
+const richtexts = new WeakMap<WeakKey, () => RichTextUiSegment[]>();
+
+const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => {
 	const linking = useLinking();
 	const get = props.get;
 
 	const segments = () => {
 		const item = props.item;
-		const segmenter = (item.$richtext ||= createSegmenter(item, get)) as () => RichTextUiSegment[];
+
+		let segmenter = richtexts.get(item);
+		if (!segmenter) {
+			richtexts.set(item, (segmenter = createSegmenter(item, get)));
+		}
 
 		return segmenter();
 	};
@@ -65,7 +67,7 @@ const RichTextRenderer = <T extends RichTextItem>(props: RichTextRendererProps<T
 
 export default RichTextRenderer;
 
-const createSegmenter = <T extends RichTextItem>(item: T, get: (item: T) => RichTextReturn) => {
+const createSegmenter = <T extends object>(item: T, get: (item: T) => RichTextReturn) => {
 	let _text: string;
 	let _facets: Facet[] | undefined;
 

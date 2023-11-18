@@ -37,7 +37,6 @@ export interface SignalizedPost {
 	};
 
 	$truncated?: boolean;
-	$richtext?: unknown;
 	$moderation?: unknown;
 }
 

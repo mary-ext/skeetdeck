@@ -31,8 +31,6 @@ export interface SignalizedList {
 		muted: Signal<NonNullable<List['viewer']>['muted']>;
 		blocked: Signal<NonNullable<List['viewer']>['blocked']>;
 	};
-
-	$richtext?: unknown;
 }
 
 const createSignalizedList = (uid: DID, list: List, key?: number): SignalizedList => {
