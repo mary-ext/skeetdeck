@@ -14,8 +14,7 @@ import PaneAside from '../PaneAside.tsx';
 import PaneBody from '../PaneBody.tsx';
 import PaneHeader from '../PaneHeader.tsx';
 
-import DeletePaneSettings from '../settings/DeletePaneSettings.tsx';
-import PaneSizeSettings from '../settings/PaneSizeSettings.tsx';
+import GenericPaneSettings from '../settings/GenericPaneSettings.tsx';
 import SearchPaneSettings from '../settings/SearchPaneSettings.tsx';
 
 const SearchPane = () => {
@@ -43,8 +42,7 @@ const SearchPane = () => {
 			{isSettingsOpen() && (
 				<PaneAside onClose={() => setIsSettingsOpen(false)}>
 					<SearchPaneSettings />
-					<PaneSizeSettings />
-					<DeletePaneSettings />
+					<GenericPaneSettings />
 				</PaneAside>
 			)}
 		</>

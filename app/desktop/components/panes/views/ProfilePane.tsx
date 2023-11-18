@@ -15,8 +15,7 @@ import PaneAside from '../PaneAside.tsx';
 import PaneBody from '../PaneBody.tsx';
 import PaneHeader from '../PaneHeader.tsx';
 
-import DeletePaneSettings from '../settings/DeletePaneSettings.tsx';
-import PaneSizeSettings from '../settings/PaneSizeSettings.tsx';
+import GenericPaneSettings from '../settings/GenericPaneSettings.tsx';
 import ProfilePaneTabSettings from '../settings/ProfilePaneTabSettings.tsx';
 
 const ProfilePane = () => {
@@ -78,8 +77,7 @@ const ProfilePane = () => {
 			{isSettingsOpen() && (
 				<PaneAside onClose={() => setIsSettingsOpen(false)}>
 					<ProfilePaneTabSettings />
-					<PaneSizeSettings />
-					<DeletePaneSettings />
+					<GenericPaneSettings />
 				</PaneAside>
 			)}
 		</>
