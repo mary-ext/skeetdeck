@@ -4,8 +4,11 @@ import { multiagent } from '~/api/globals/agent.ts';
 
 import { getUniqueId } from '~/utils/misc.ts';
 
+import { openModal } from '~/com/globals/modals.tsx';
+
 import { SpecificPaneSize } from '../../../globals/panes.ts';
 
+import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
 import Radio from '~/com/components/inputs/Radio.tsx';
 import { Interactive } from '~/com/primitives/interactive.ts';
 
@@ -73,7 +76,16 @@ const GenericPaneSettings = () => {
 			</Show>
 
 			<button
-				onClick={deletePane}
+				onClick={() => {
+					openModal(() => (
+						<ConfirmDialog
+							title="Delete column?"
+							body="This can't be undone, the column will be deleted from this deck."
+							confirmation="Delete"
+							onConfirm={deletePane}
+						/>
+					));
+				}}
 				class={
 					/* @once */ Interactive({
 						class: 'flex items-center gap-4 border-b border-divider p-4 text-red-500',
