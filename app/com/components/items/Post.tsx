@@ -7,7 +7,6 @@ import type { SignalizedTimelineItem } from '~/api/models/timeline.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
 import { updatePostLike } from '~/api/mutations/like-post.ts';
-import { updatePostRepost } from '~/api/mutations/repost-post.ts';
 
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
 
@@ -26,6 +25,8 @@ import RepeatIcon from '../../icons/baseline-repeat.tsx';
 import ShareIcon from '../../icons/baseline-share.tsx';
 import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble.tsx';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
+
+import RepostAction from './posts/RepostAction.tsx';
 
 export interface PostProps {
 	post: SignalizedPost;
@@ -233,32 +234,11 @@ const Post = (props: PostProps) => {
 								class="flex grow basis-0 items-end gap-0.5"
 								classList={{ 'text-green-600': !!post().viewer.repost.value }}
 							>
-								<Flyout
-									button={
-										<button class="-my-1.5 -ml-2 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary">
-											<RepeatIcon />
-										</button>
-									}
-									placement="bottom"
-								>
-									{({ close, menuProps }) => (
-										<div
-											{...menuProps}
-											class="flex flex-col overflow-hidden rounded-lg bg-background shadow-menu"
-										>
-											<button
-												onClick={() => {
-													close();
-													updatePostRepost(post(), !post().viewer.repost.value);
-												}}
-												class="flex cursor-pointer items-center gap-4 px-4 py-3 text-left text-sm outline-2 -outline-offset-2 outline-primary hover:bg-hinted focus-visible:outline disabled:pointer-events-none disabled:opacity-50"
-											>
-												<RepeatIcon class="text-lg" />
-												<span>{post().viewer.repost.value ? 'Undo repost' : 'Repost'}</span>
-											</button>
-										</div>
-									)}
-								</Flyout>
+								<RepostAction post={post()}>
+									<button class="-my-1.5 -ml-2 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary">
+										<RepeatIcon />
+									</button>
+								</RepostAction>
 
 								<span class="text-[0.8125rem]">{post().repostCount.value}</span>
 							</div>
