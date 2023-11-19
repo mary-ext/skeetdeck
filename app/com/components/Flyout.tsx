@@ -18,7 +18,7 @@ export interface MenuContext {
 	menuProps: MenuContentProps;
 }
 
-export interface MenuProps {
+export interface FlyoutProps {
 	/** Expected to be static */
 	placement?: Placement;
 	/** Expected to be static */
@@ -43,7 +43,7 @@ const offset: Middleware = {
 	},
 };
 
-export const Menu = (props: MenuProps) => {
+export const Flyout = (props: FlyoutProps) => {
 	const [isOpen, setIsOpen] = createSignal(false);
 
 	let anchor: HTMLElement;

@@ -13,7 +13,7 @@ import { addPane, preferences } from '../globals/settings.ts';
 
 import { Interactive } from '~/com/primitives/interactive.ts';
 
-import { Menu } from '~/com/components/Menu.tsx';
+import { Flyout } from '~/com/components/Flyout.tsx';
 
 import FeatherIcon from '~/com/icons/baseline-feather.tsx';
 import SearchIcon from '~/com/icons/baseline-search.tsx';
@@ -40,7 +40,7 @@ const DashboardLayout = () => {
 								<FeatherIcon class="mx-auto" />
 							</button>
 
-							<Menu
+							<Flyout
 								button={
 									<button title="Search..." class={menuIconButton}>
 										<SearchIcon class="mx-auto" />
@@ -96,7 +96,7 @@ const DashboardLayout = () => {
 										/>
 									</div>
 								)}
-							</Menu>
+							</Flyout>
 
 							<hr class="border-divider" />
 						</>

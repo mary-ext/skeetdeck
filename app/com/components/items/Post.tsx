@@ -12,7 +12,7 @@ import { updatePostRepost } from '~/api/mutations/repost-post.ts';
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
 
 import { type PostLinking, type ProfileLinking, Link, LinkingType, useLinking } from '../Link.tsx';
-import { Menu } from '../Menu.tsx';
+import { Flyout } from '../Flyout.tsx';
 import RichTextRenderer from '../RichTextRenderer.tsx';
 import TimeAgo from '../TimeAgo.tsx';
 
@@ -194,7 +194,7 @@ const Post = (props: PostProps) => {
 
 						<Show when={interactive()}>
 							<div class="shrink-0">
-								<Menu
+								<Flyout
 									button={
 										<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary">
 											<MoreHorizIcon />
@@ -203,11 +203,14 @@ const Post = (props: PostProps) => {
 									placement="bottom-end"
 								>
 									{({ close, menuProps }) => (
-										<div {...menuProps} class="w-72 rounded-lg bg-background shadow-menu">
+										<div
+											{...menuProps}
+											class="flex flex-col overflow-hidden rounded-lg bg-background shadow-menu"
+										>
 											<div class="px-4 py-2">is it working now</div>
 										</div>
 									)}
-								</Menu>
+								</Flyout>
 							</div>
 						</Show>
 					</div>
@@ -230,7 +233,7 @@ const Post = (props: PostProps) => {
 								class="flex grow basis-0 items-end gap-0.5"
 								classList={{ 'text-green-600': !!post().viewer.repost.value }}
 							>
-								<Menu
+								<Flyout
 									button={
 										<button class="-my-1.5 -ml-2 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary">
 											<RepeatIcon />
@@ -241,7 +244,7 @@ const Post = (props: PostProps) => {
 									{({ close, menuProps }) => (
 										<div
 											{...menuProps}
-											class="flex w-72 flex-col overflow-hidden rounded-lg bg-background shadow-menu"
+											class="flex flex-col overflow-hidden rounded-lg bg-background shadow-menu"
 										>
 											<button
 												onClick={() => {
@@ -255,7 +258,7 @@ const Post = (props: PostProps) => {
 											</button>
 										</div>
 									)}
-								</Menu>
+								</Flyout>
 
 								<span class="text-[0.8125rem]">{post().repostCount.value}</span>
 							</div>
