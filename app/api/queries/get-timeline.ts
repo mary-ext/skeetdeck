@@ -72,8 +72,8 @@ export interface TimelinePageCursor {
 }
 
 export interface TimelinePage {
-	cursor?: TimelinePageCursor;
-	cid?: string;
+	cursor: TimelinePageCursor | undefined;
+	cid: string | undefined;
 	slices: TimelineSlice[];
 }
 
