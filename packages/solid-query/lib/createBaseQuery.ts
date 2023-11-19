@@ -1,6 +1,6 @@
 import { type QueryKey, type QueryObserver, type QueryObserverResult } from '@tanstack/query-core';
 
-import { type Accessor, createMemo, mergeProps, on, onCleanup, untrack, createRenderEffect } from 'solid-js';
+import { type Accessor, createMemo, createRenderEffect, mergeProps, on, onCleanup, untrack } from 'solid-js';
 import { createStore, reconcile } from 'solid-js/store';
 import { isServer } from 'solid-js/web';
 
@@ -54,6 +54,10 @@ export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryK
 		initialDefaultedOptions,
 	);
 
+	const [state, setState] = createStore<QueryObserverResult<TData, TError>>(
+		observer.getOptimisticResult(initialDefaultedOptions),
+	);
+
 	createRenderEffect(
 		on(
 			defaultedOptions,
@@ -62,10 +66,6 @@ export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryK
 			},
 			{ defer: true },
 		),
-	);
-
-	const [state, setState] = createStore<QueryObserverResult<TData, TError>>(
-		observer.getOptimisticResult(initialDefaultedOptions),
 	);
 
 	createRenderEffect(() => {
