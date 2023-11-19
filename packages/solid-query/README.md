@@ -3,5 +3,5 @@
 A fork of `@tanstack/solid-query`
 
 - Removes `createResource` usage, thereby removing any Suspense support.
-
-That's literally it.
+- Removes `throwOnError` functionality, perhaps it'll come back later.
+- General clean up around the codebase, removing the apparent smell.
