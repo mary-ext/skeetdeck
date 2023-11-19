@@ -94,7 +94,7 @@ export const createSharedPreferencesObject = (): SharedPreferencesObject => {
 
 export const addPane = <T extends PaneConfig>(
 	deck: DeckConfig,
-	partial: Omit<T, 'id' | 'size'>,
+	partial: Omit<T, 'id' | 'size' | 'title'>,
 	index?: number,
 ) => {
 	// @ts-expect-error
@@ -102,6 +102,7 @@ export const addPane = <T extends PaneConfig>(
 		...partial,
 		id: getCurrentTid(),
 		size: SpecificPaneSize.INHERIT,
+		title: null,
 	};
 
 	if (index !== undefined) {

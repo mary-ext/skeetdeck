@@ -9,7 +9,9 @@ import { openModal } from '~/com/globals/modals.tsx';
 import { SpecificPaneSize } from '../../../globals/panes.ts';
 
 import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
+import Checkbox from '~/com/components/inputs/Checkbox.tsx';
 import Radio from '~/com/components/inputs/Radio.tsx';
+import { Input } from '~/com/primitives/input.ts';
 import { Interactive } from '~/com/primitives/interactive.ts';
 
 import DeleteIcon from '~/com/icons/baseline-delete.tsx';
@@ -64,6 +66,40 @@ const GenericPaneSettings = () => {
 						/>
 					</label>
 				</div>
+			</div>
+
+			<div class="border-b border-divider">
+				<label class="flex items-center justify-between gap-4 p-4">
+					<span class="text-sm">Rename column</span>
+					<Checkbox
+						checked={pane.title !== null}
+						onChange={(ev) => {
+							pane.title = !ev.currentTarget.checked ? null : '';
+						}}
+					/>
+				</label>
+
+				<Show when={pane.title !== null}>
+					<div class="p-4 pt-0">
+						<input
+							class={/* @once */ Input()}
+							value={pane.title!}
+							onKeyDown={(ev) => {
+								if (ev.key === 'Enter') {
+									const value = ev.currentTarget.value.trim();
+
+									if (value) {
+										pane.title = value;
+									} else {
+										ev.currentTarget.value = pane.title!;
+									}
+
+									ev.preventDefault();
+								}
+							}}
+						/>
+					</div>
+				</Show>
 			</div>
 
 			<Show when={multiagent.accounts.length > 1}>

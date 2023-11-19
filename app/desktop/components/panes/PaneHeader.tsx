@@ -43,7 +43,7 @@ const PaneHeader = (props: PaneHeaderProps) => {
 
 			<div class="flex min-w-0 grow flex-col gap-0.5">
 				<p class="overflow-hidden text-ellipsis whitespace-nowrap break-all text-base font-bold leading-5">
-					{props.title}
+					{pane.title || props.title}
 				</p>
 				<p class="overflow-hidden text-ellipsis whitespace-nowrap text-xs text-muted-fg">
 					{props.subtitle && (

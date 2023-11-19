@@ -63,6 +63,7 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 				...partial,
 				id: getCurrentTid(),
 				size: SpecificPaneSize.INHERIT,
+				title: null,
 				uid: $user,
 			};
 

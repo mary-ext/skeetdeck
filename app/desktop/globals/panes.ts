@@ -49,6 +49,7 @@ export enum ProfilePaneTab {
 export interface BasePaneConfig {
 	readonly type: PaneType;
 	readonly id: string;
+	title: string | null;
 	size: SpecificPaneSize;
 	uid: DID;
 }
@@ -90,7 +91,6 @@ export interface CustomListPaneConfig extends BasePaneConfig {
 
 export interface SearchPaneConfig extends BasePaneConfig {
 	readonly type: PaneType.SEARCH;
-	title: string | null;
 	query: string;
 }
 
