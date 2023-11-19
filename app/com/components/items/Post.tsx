@@ -200,6 +200,7 @@ const Post = (props: PostProps) => {
 											<MoreHorizIcon />
 										</button>
 									}
+									placement="bottom-end"
 								>
 									{({ close, menuProps }) => (
 										<div {...menuProps} class="w-72 rounded-lg bg-background shadow-menu">
@@ -235,6 +236,7 @@ const Post = (props: PostProps) => {
 											<RepeatIcon />
 										</button>
 									}
+									placement="bottom"
 								>
 									{({ close, menuProps }) => (
 										<div
