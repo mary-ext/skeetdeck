@@ -60,6 +60,7 @@ export interface HomePaneConfig extends BasePaneConfig {
 
 export interface NotificationsPaneConfig extends BasePaneConfig {
 	readonly type: PaneType.NOTIFICATIONS;
+	mask: number;
 }
 
 export interface ProfilePaneConfig extends BasePaneConfig {

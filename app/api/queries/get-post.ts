@@ -5,7 +5,7 @@ import { multiagent } from '../globals/agent.ts';
 import { createBatchedFetch } from '../utils/batch-fetch.ts';
 import { BSKY_POST_URL_RE, isAppUrl } from '../utils/links.ts';
 
-import { mergePost } from '../stores/posts.ts';
+import { getCachedPost, mergePost, type SignalizedPost } from '../stores/posts.ts';
 
 import _getDid from './_did.ts';
 
@@ -56,4 +56,12 @@ export const getPost = async (ctx: QC<ReturnType<typeof getPostKey>>) => {
 	ctx.signal.throwIfAborted();
 
 	return mergePost(uid, post);
+};
+
+export const getInitialPost = (key: ReturnType<typeof getPostKey>): SignalizedPost | undefined => {
+	const [, uid, uri] = key;
+
+	const post = getCachedPost(uid, uri);
+
+	return post;
 };

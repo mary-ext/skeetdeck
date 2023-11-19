@@ -4,12 +4,17 @@ import type { DID } from '~/api/atp-schema.ts';
 import { getAccountHandle, multiagent, renderAccountHandle } from '~/api/globals/agent.ts';
 import { getCurrentTid } from '~/api/utils/tid.ts';
 
-import { closeModal } from '~/com/globals/modals.tsx';
+import { FILTER_ALL } from '~/api/queries/get-notifications.ts';
+
 import { createDerivedSignal } from '~/utils/hooks.ts';
 import { model } from '~/utils/input.ts';
 
+import { closeModal } from '~/com/globals/modals.tsx';
+
 import {
 	type DeckConfig,
+	type HomePaneConfig,
+	type NotificationsPaneConfig,
 	type PaneConfig,
 	PaneType,
 	SpecificPaneSize,
@@ -123,7 +128,7 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 						</div>
 
 						<div class="flex flex-col">
-							<button onClick={() => add({ type: PaneType.HOME })} class={columnItem}>
+							<button onClick={() => add<HomePaneConfig>({ type: PaneType.HOME })} class={columnItem}>
 								<HomeOutlinedIcon class="text-xl" />
 								<span>Home timeline</span>
 							</button>
@@ -143,13 +148,15 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 								<span>Profiles</span>
 							</button>
 
-							{/* <button
-								onClick={() => add({ type: PaneType.NOTIFICATIONS })}
+							<button
+								onClick={() =>
+									add<NotificationsPaneConfig>({ type: PaneType.NOTIFICATIONS, mask: FILTER_ALL })
+								}
 								class={columnItem}
 							>
 								<NotificationsOutlinedIcon class="text-xl" />
 								<span>Notifications</span>
-							</button> */}
+							</button>
 						</div>
 					</div>
 				</Match>

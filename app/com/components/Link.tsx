@@ -94,6 +94,7 @@ export type Linking =
 export interface LinkingProps {
 	to: Linking;
 	ref?: HTMLElement | ((el: HTMLElement) => void);
+	dir?: 'ltr' | 'rtl' | 'auto';
 	class?: string;
 	title?: string;
 	children?: JSX.Element;
