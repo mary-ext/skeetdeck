@@ -86,14 +86,14 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 
 			<div class="flex flex-wrap gap-4 py-4 text-sm">
 				<Link
-					to={/* @once  */ { type: LinkingType.POST_LIKED_BY, actor: author().did, rkey: rkey() }}
+					to={{ type: LinkingType.POST_LIKED_BY, actor: author().did, rkey: rkey() }}
 					class="hover:underline"
 				>
 					<span class="font-bold">{post().repostCount.value}</span> <span class="text-muted-fg">Reposts</span>
 				</Link>
 
 				<Link
-					to={/* @once */ { type: LinkingType.POST_REPOSTED_BY, actor: author().did, rkey: rkey() }}
+					to={{ type: LinkingType.POST_REPOSTED_BY, actor: author().did, rkey: rkey() }}
 					class="hover:underline"
 				>
 					<span class="font-bold">{post().likeCount.value}</span> <span class="text-muted-fg">Likes</span>
@@ -104,7 +104,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 
 			<div class="flex h-13 items-center justify-around text-muted-fg">
 				<Link
-					to={/* @once */ { type: LinkingType.REPLY, actor: author().did, rkey: rkey() }}
+					to={{ type: LinkingType.REPLY, actor: author().did, rkey: rkey() }}
 					class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary"
 				>
 					<ChatBubbleOutlinedIcon />
