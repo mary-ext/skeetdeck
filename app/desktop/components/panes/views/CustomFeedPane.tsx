@@ -40,7 +40,7 @@ const CustomFeedPane = () => {
 			</Pane>
 
 			{isSettingsOpen() && (
-				<PaneAside>
+				<PaneAside onClose={() => setIsSettingsOpen(false)}>
 					<GenericPaneSettings />
 				</PaneAside>
 			)}
