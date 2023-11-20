@@ -1,25 +1,31 @@
-import { type JSX, Switch, Match, For } from 'solid-js';
+import { type JSX, Switch, Match, createSignal } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
 import type { DID } from '~/api/atp-schema.ts';
 import type {
+	FollowNotification,
 	FollowNotificationSlice,
+	LikeNotification,
 	LikeNotificationSlice,
 	NotificationSlice,
+	RepostNotification,
 	RepostNotificationSlice,
 } from '~/api/models/notifications.ts';
 import { getInitialPost, getPost, getPostKey } from '~/api/queries/get-post.ts';
 
+import { Interactive } from '~/com/primitives/interactive.ts';
+
 import { Link, LinkingType } from '../Link.tsx';
 import CircularProgress from '../CircularProgress.tsx';
+import { VirtualContainer } from '../VirtualContainer.tsx';
 
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
 import FavoriteIcon from '../../icons/baseline-favorite.tsx';
 import PersonIcon from '../../icons/baseline-person.tsx';
 import RepeatIcon from '../../icons/baseline-repeat.tsx';
 
 import Post from './Post.tsx';
-import { VirtualContainer } from '../VirtualContainer.tsx';
 
 export interface NotificationProps {
 	uid: DID;
@@ -32,8 +38,8 @@ const MAX_NAMES = 2;
 // How many names to show after truncation
 const MAX_NAMES_AFTER_TRUNCATION = 1;
 
-// How many avatars to show
-const MAX_AVATARS = 6;
+// How many avatars to show before considering truncation
+const MAX_AVATARS = 5;
 
 const ICON_MAP = {
 	follow: { component: PersonIcon, class: 'text-accent' },
@@ -110,29 +116,18 @@ const Notification = (props: NotificationProps) => {
 
 					const { component: IconComponent, class: iconClassname } = ICON_MAP[type];
 
-					const avatars = items.slice(0, MAX_AVATARS).map((item) => {
-						const { did, avatar, displayName, handle } = item.author;
-
-						return (
-							<Link
-								to={{ type: LinkingType.PROFILE, actor: did }}
-								title={displayName ? `${displayName} (@${handle})` : `@${handle}`}
-								class="h-7.5 w-7.5 shrink-0 overflow-hidden rounded-full bg-muted-fg hover:opacity-80"
-							>
-								{avatar && <img src={avatar} class="h-full w-full" />}
-							</Link>
-						);
-					});
-
+					const avatars = renderAvatars(items);
 					const text = renderText(data);
 
 					return (
-						<div class={`flex gap-3 border-b border-divider px-4 py-3` + (!read ? ` bg-accent/20` : ``)}>
+						<div class="relative flex gap-3 border-b border-divider px-4 py-3">
+							{!read && <div class="absolute bottom-0 left-0 top-0 w-1 bg-accent/60"></div>}
+
 							<div class="flex w-10 shrink-0 flex-col items-end gap-3">
 								<IconComponent class={iconClassname + ` text-2xl`} />
 							</div>
 							<div class="flex min-w-0 grow flex-col gap-3">
-								<div class="flex gap-2 overflow-hidden">{avatars}</div>
+								{avatars}
 								<div class="overflow-hidden break-words text-sm">{text}</div>
 							</div>
 
@@ -146,6 +141,98 @@ const Notification = (props: NotificationProps) => {
 };
 
 export default Notification;
+
+const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNotification)[]) => {
+	if (items.length === 1) {
+		const item = items[0];
+		const { did, avatar, displayName, handle } = item.author;
+
+		return (
+			<div class="flex gap-2 overflow-hidden">
+				<Link
+					to={{ type: LinkingType.PROFILE, actor: did }}
+					title={displayName ? `${displayName} (@${handle})` : `@${handle}`}
+					class="h-7.5 w-7.5 shrink-0 overflow-hidden rounded-full bg-muted-fg hover:opacity-80"
+				>
+					{avatar && <img src={avatar} class="h-full w-full" />}
+				</Link>
+			</div>
+		);
+	}
+
+	{
+		const [show, setShow] = createSignal(false);
+
+		return (
+			<div class="flex flex-col gap-3">
+				<button
+					title={!show() ? `Show list of ${items.length} users` : `Hide users`}
+					onClick={() => setShow(!show())}
+					class={
+						/* @once */ Interactive({
+							class: `-m-1 flex items-center gap-2 self-baseline overflow-hidden rounded p-1`,
+						})
+					}
+				>
+					{(() => {
+						if (!show()) {
+							const avatars = items.slice(0, MAX_AVATARS).map((item) => {
+								const avatar = item.author.avatar;
+
+								return (
+									<div class="h-7.5 w-7.5 shrink-0 overflow-hidden rounded-full bg-muted-fg">
+										{avatar && <img src={avatar} class="h-full w-full" />}
+									</div>
+								);
+							});
+
+							return [avatars, <ChevronRightIcon class="mr-1 rotate-90 text-xl" />];
+						}
+
+						return (
+							<div class="flex h-7.5 items-center gap-2">
+								<ChevronRightIcon class="-rotate-90 text-xl" />
+								<span class="pr-1 text-sm">Hide</span>
+							</div>
+						);
+					})()}
+				</button>
+
+				{(() => {
+					if (!show()) {
+						return null;
+					}
+
+					return items.map((item) => {
+						const { did, avatar, displayName, handle } = item.author;
+
+						return (
+							<Link
+								to={{ type: LinkingType.PROFILE, actor: did }}
+								class={
+									/* @once */ Interactive({
+										class: `-m-1 flex min-w-0 items-center rounded p-1 text-left text-sm`,
+									})
+								}
+							>
+								<div class="h-7.5 w-7.5 shrink-0 overflow-hidden rounded-full bg-muted-fg">
+									{avatar && <img src={avatar} class="h-full w-full" />}
+								</div>
+
+								<span class="ml-2 overflow-hidden overflow-ellipsis whitespace-nowrap font-bold text-primary">
+									{displayName}
+								</span>
+								<span class="ml-1 overflow-hidden overflow-ellipsis whitespace-nowrap text-muted-fg">
+									@{handle}
+								</span>
+							</Link>
+						);
+					});
+				})()}
+			</div>
+		);
+	}
+};
 
 const renderText = (data: FollowNotificationSlice | LikeNotificationSlice | RepostNotificationSlice) => {
 	const items = data.items;
