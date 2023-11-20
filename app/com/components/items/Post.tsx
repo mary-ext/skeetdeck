@@ -215,39 +215,51 @@ const Post = (props: PostProps) => {
 
 					<Show when={interactive()}>
 						<div class="mt-3 flex text-muted-fg">
-							<div class="flex grow basis-0 items-end gap-0.5">
+							<div class="min-w-0 grow basis-0">
 								<Link
 									to={{ type: LinkingType.REPLY, actor: author().did, rkey: getRecordId(post().uri) }}
-									class="-my-1.5 -ml-2 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary"
+									class="group flex max-w-full items-end gap-0.5"
 								>
-									<ChatBubbleOutlinedIcon />
+									<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary">
+										<ChatBubbleOutlinedIcon />
+									</div>
+									<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
+										{post().replyCount.value}
+									</span>
 								</Link>
-								<span class="text-[0.8125rem]">{post().replyCount.value}</span>
 							</div>
 
-							<div
-								class="flex grow basis-0 items-end gap-0.5"
-								classList={{ 'text-green-600': !!post().viewer.repost.value }}
-							>
+							<div class="min-w-0 grow basis-0">
 								<RepostAction post={post()}>
-									<button class="-my-1.5 -ml-2 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary">
-										<RepeatIcon />
+									<button
+										class="group flex max-w-full grow basis-0 items-end gap-0.5"
+										classList={{ 'text-green-600': !!post().viewer.repost.value }}
+									>
+										<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary">
+											<RepeatIcon />
+										</div>
+
+										<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
+											{post().repostCount.value}
+										</span>
 									</button>
 								</RepostAction>
-
-								<span class="text-[0.8125rem]">{post().repostCount.value}</span>
 							</div>
 
-							<div
-								onClick={() => updatePostLike(post(), !post().viewer.like.value)}
-								class="group flex grow basis-0 items-end gap-0.5"
-								classList={{ 'is-active text-red-600': !!post().viewer.like.value }}
-							>
-								<button class="-my-1.5 -ml-2 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary">
-									<FavoriteOutlinedIcon class="group-[.is-active]:hidden" />
-									<FavoriteIcon class="hidden group-[.is-active]:block" />
+							<div class="min-w-0 grow basis-0">
+								<button
+									onClick={() => updatePostLike(post(), !post().viewer.like.value)}
+									class="group flex max-w-full grow basis-0 items-end gap-0.5"
+									classList={{ 'is-active text-red-600': !!post().viewer.like.value }}
+								>
+									<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary">
+										<FavoriteOutlinedIcon class="group-[.is-active]:hidden" />
+										<FavoriteIcon class="hidden group-[.is-active]:block" />
+									</div>
+									<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
+										{post().likeCount.value}
+									</span>
 								</button>
-								<span class="text-[0.8125rem]">{post().likeCount.value}</span>
 							</div>
 
 							<div class="shrink-0">
