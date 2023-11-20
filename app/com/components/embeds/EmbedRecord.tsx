@@ -9,6 +9,8 @@ import PostQuoteWarning from '../moderation/PostQuoteWarning.tsx';
 import { Link, LinkingType } from '../Link.tsx';
 import TimeAgo from '../TimeAgo.tsx';
 
+import DefaultAvatar from '../../assets/default-avatar.svg';
+
 import EmbedImage from './EmbedImage.tsx';
 
 type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
@@ -63,7 +65,7 @@ const EmbedRecord = (props: EmbedRecordProps) => {
 				>
 					<div class="mx-3 mt-3 flex text-sm text-muted-fg">
 						<div class="mr-1 h-5 w-5 shrink-0 overflow-hidden rounded-full bg-muted-fg">
-							<Show when={author().avatar}>{(avatar) => <img src={avatar()} class="h-full w-full" />}</Show>
+							<img src={author().avatar || DefaultAvatar} class="h-full w-full" />
 						</div>
 
 						<span class="flex max-w-full gap-1 overflow-hidden text-ellipsis whitespace-nowrap text-left">

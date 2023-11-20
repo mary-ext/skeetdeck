@@ -10,6 +10,8 @@ import { Link, LinkingType } from '../Link.tsx';
 
 import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
 
+import DefaultAvatar from '../../assets/default-avatar.svg';
+
 export interface ProfileHeaderProps {
 	profile: SignalizedProfile;
 }
@@ -33,7 +35,9 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 						when={profile().avatar.value}
 						keyed
 						fallback={
-							<div class="-mt-11 h-20 w-20 shrink-0 overflow-hidden rounded-full bg-muted-fg outline-2 outline-background outline"></div>
+							<div class="-mt-11 h-20 w-20 shrink-0 overflow-hidden rounded-full bg-muted-fg outline-2 outline-background outline">
+								<img src={DefaultAvatar} class="h-full w-full" />
+							</div>
 						}
 					>
 						{(avatar) => (

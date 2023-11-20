@@ -26,6 +26,8 @@ import ShareIcon from '../../icons/baseline-share.tsx';
 import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble.tsx';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
 
+import DefaultAvatar from '../../assets/default-avatar.svg';
+
 import RepostAction from './posts/RepostAction.tsx';
 
 export interface PostProps {
@@ -162,9 +164,7 @@ const Post = (props: PostProps) => {
 						to={authorPermalink()}
 						class="h-10 w-10 overflow-hidden rounded-full bg-muted-fg hover:opacity-80"
 					>
-						<Show when={author().avatar.value}>
-							{(avatar) => <img src={avatar()} class="h-full w-full" />}
-						</Show>
+						<img src={author().avatar.value || DefaultAvatar} class="h-full w-full" />
 					</Link>
 
 					<Show when={props.next}>

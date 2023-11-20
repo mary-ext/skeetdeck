@@ -20,13 +20,15 @@ import { Link, LinkingType } from '../Link.tsx';
 import CircularProgress from '../CircularProgress.tsx';
 import { VirtualContainer } from '../VirtualContainer.tsx';
 
-import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
+import ChevronRightIcon from '../../icons/baseline-chevron-right.tsx';
 import FavoriteIcon from '../../icons/baseline-favorite.tsx';
 import PersonIcon from '../../icons/baseline-person.tsx';
 import RepeatIcon from '../../icons/baseline-repeat.tsx';
 
 import EmbedRecord from '../embeds/EmbedRecord.tsx';
 import Post from './Post.tsx';
+
+import DefaultAvatar from '../../assets/default-avatar.svg';
 
 export interface NotificationProps {
 	uid: DID;
@@ -156,7 +158,7 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 					title={displayName ? `${displayName} (@${handle})` : `@${handle}`}
 					class="h-7.5 w-7.5 shrink-0 overflow-hidden rounded-full bg-muted-fg hover:opacity-80"
 				>
-					{avatar && <img src={avatar} class="h-full w-full" />}
+					<img src={avatar || DefaultAvatar} class="h-full w-full" />
 				</Link>
 			</div>
 		);
@@ -184,7 +186,7 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 
 								return (
 									<div class="h-7.5 w-7.5 shrink-0 overflow-hidden rounded-full bg-muted-fg">
-										{avatar && <img src={avatar} class="h-full w-full" />}
+										<img src={avatar || DefaultAvatar} class="h-full w-full" />
 									</div>
 								);
 							});
@@ -223,7 +225,7 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 								}
 							>
 								<div class="h-7.5 w-7.5 shrink-0 overflow-hidden rounded-full bg-muted-fg">
-									{avatar && <img src={avatar} class="h-full w-full" />}
+									<img src={avatar || DefaultAvatar} class="h-full w-full" />
 								</div>
 
 								<span class="ml-2 overflow-hidden overflow-ellipsis whitespace-nowrap font-bold text-primary">

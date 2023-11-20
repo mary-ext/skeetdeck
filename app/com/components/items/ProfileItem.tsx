@@ -6,6 +6,8 @@ import { INTERACTION_TAGS, isElementAltClicked, isElementClicked } from '~/utils
 
 import ProfileFollowButton from '../ProfileFollowButton.tsx';
 
+import DefaultAvatar from '../../assets/default-avatar.svg';
+
 export interface ProfileItemAccessory {
 	render: (item: SignalizedProfile) => JSX.Element;
 }
@@ -43,7 +45,7 @@ export const ProfileItem = (props: ProfileItemProps) => {
 			class="flex gap-3 px-4 py-3 hover:bg-hinted"
 		>
 			<div class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-muted-fg">
-				<Show when={profile().avatar.value}>{(avatar) => <img src={avatar()} class="h-full w-full" />}</Show>
+				<img src={profile().avatar.value || DefaultAvatar} class="h-full w-full" />
 			</div>
 
 			<div class="flex min-w-0 grow flex-col gap-1">

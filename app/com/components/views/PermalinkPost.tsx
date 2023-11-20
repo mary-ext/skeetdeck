@@ -17,6 +17,8 @@ import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
 import RepeatIcon from '../../icons/baseline-repeat.tsx';
 import ShareIcon from '../../icons/baseline-share.tsx';
 
+import DefaultAvatar from '../../assets/default-avatar.svg';
+
 export interface PermalinkPostProps {
 	post: SignalizedPost;
 }
@@ -39,9 +41,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 					class="group pointer-events-none inline-flex max-w-full items-start overflow-hidden text-left"
 				>
 					<div class="pointer-events-auto z-2 mr-3 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-muted-fg">
-						<Show when={author().avatar.value}>
-							{(avatar) => <img src={avatar()} class="h-full w-full" />}
-						</Show>
+						<img src={author().avatar.value || DefaultAvatar} class="h-full w-full" />
 					</div>
 
 					<span class="pointer-events-auto block max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
