@@ -36,6 +36,7 @@ import PaneBody from '../PaneBody.tsx';
 import PaneHeader from '../PaneHeader.tsx';
 
 import GenericPaneSettings from '../settings/GenericPaneSettings.tsx';
+import NotificationsPaneSettings from '../settings/NotificationsPaneSettings.tsx';
 
 const isNotificationsStale = (
 	timelineData: InfiniteData<NotificationsPage> | undefined,
@@ -176,7 +177,7 @@ const NotificationsPane = () => {
 							</div>
 						</Match>
 
-						<Match when={isNotificationsStale(notifications.data, latest.data)}>
+						<Match when={!notifications.isLoading && isNotificationsStale(notifications.data, latest.data)}>
 							<button
 								onClick={refetchNotifications}
 								class="grid h-13 shrink-0 place-items-center border-b border-divider text-sm text-accent hover:bg-hinted"
@@ -244,6 +245,7 @@ const NotificationsPane = () => {
 
 			{isSettingsOpen() && (
 				<PaneAside onClose={() => setIsSettingsOpen(false)}>
+					<NotificationsPaneSettings />
 					<GenericPaneSettings />
 				</PaneAside>
 			)}
