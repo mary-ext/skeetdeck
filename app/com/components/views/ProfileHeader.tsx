@@ -1,20 +1,18 @@
 import { Match, Show, Switch } from 'solid-js';
 
 import type { DID } from '~/api/atp-schema.ts';
-import { updateProfileFollow } from '~/api/mutations/follow-profile.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
-import { openModal } from '~/com/globals/modals.tsx';
-
 import { Button } from '../../primitives/button.ts';
 
-import ConfirmDialog from '../dialogs/ConfirmDialog.tsx';
 import { Link, LinkingType } from '../Link.tsx';
 
 import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
 
 import DefaultAvatar from '../../assets/default-avatar.svg';
+
+import ProfileFollowButton from '../ProfileFollowButton.tsx';
 
 export interface ProfileHeaderProps {
 	profile: SignalizedProfile;
@@ -62,33 +60,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 						</button>
 
 						<Show when={!profile().viewer.blocking.value && !profile().viewer.blockedBy.value}>
-							{(_value) => {
-								const isFollowing = () => profile().viewer.following.value;
-
-								return (
-									<button
-										onClick={() => {
-											const $profile = profile();
-
-											if (isFollowing()) {
-												openModal(() => (
-													<ConfirmDialog
-														title={`Unfollow @${$profile.handle.value}?`}
-														body={`Their posts will no longer show up in your home timeline`}
-														confirmation={`Unfollow`}
-														onConfirm={() => updateProfileFollow($profile, false)}
-													/>
-												));
-											} else {
-												updateProfileFollow($profile, true);
-											}
-										}}
-										class={/* @once */ Button({ variant: isFollowing() ? 'outline' : 'primary' })}
-									>
-										{isFollowing() ? 'Unfollow' : 'Follow'}
-									</button>
-								);
-							}}
+							<ProfileFollowButton profile={profile()} />
 						</Show>
 					</Show>
 				</div>
