@@ -1,4 +1,4 @@
-import { For, Show } from 'solid-js';
+import { For, Show, Suspense } from 'solid-js';
 
 import { Navigate, useParams } from '@solidjs/router';
 import { DragDropProvider, DragDropSensors, SortableProvider } from '@thisbeyond/solid-dnd';
@@ -9,6 +9,7 @@ import { preferences } from '../globals/settings.ts';
 import { ConstrainYDragAxis } from '../utils/dnd.ts';
 
 import { PaneContextProvider } from '../components/panes/PaneContext.tsx';
+import PaneFallback from '../components/panes/PaneFallback.tsx';
 import PaneRouter from '../components/panes/PaneRouter.tsx';
 import AddPaneDialog from '../components/settings/AddPaneDialog.tsx';
 
@@ -60,7 +61,9 @@ const DecksView = () => {
 											deck.panes.splice(idx(), 1);
 										}}
 									>
-										<PaneRouter pane={pane} />
+										<Suspense fallback={<PaneFallback />}>
+											<PaneRouter pane={pane} />
+										</Suspense>
 									</PaneContextProvider>
 								)}
 							</For>

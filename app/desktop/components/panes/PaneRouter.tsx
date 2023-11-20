@@ -1,25 +1,18 @@
-import type { Component } from 'solid-js';
+import { type Component, lazy } from 'solid-js';
 
 import { type PaneConfig, PaneType } from '../../globals/panes.ts';
-
-import CustomFeedPane from './views/CustomFeedPane.tsx';
-import CustomListPane from './views/CustomListPane.tsx';
-import HomePane from './views/HomePane.tsx';
-import NotificationsPane from './views/NotificationsPane.tsx';
-import ProfilePane from './views/ProfilePane.tsx';
-import SearchPane from './views/SearchPane.tsx';
 
 export interface PaneRouterProps {
 	pane: PaneConfig;
 }
 
 const components: Record<PaneType, Component> = {
-	[PaneType.CUSTOM_FEED]: CustomFeedPane,
-	[PaneType.CUSTOM_LIST]: CustomListPane,
-	[PaneType.HOME]: HomePane,
-	[PaneType.NOTIFICATIONS]: NotificationsPane,
-	[PaneType.PROFILE]: ProfilePane,
-	[PaneType.SEARCH]: SearchPane,
+	[PaneType.CUSTOM_FEED]: lazy(() => import('./views/CustomFeedPane.tsx')),
+	[PaneType.CUSTOM_LIST]: lazy(() => import('./views/CustomListPane.tsx')),
+	[PaneType.HOME]: lazy(() => import('./views/HomePane.tsx')),
+	[PaneType.NOTIFICATIONS]: lazy(() => import('./views/NotificationsPane.tsx')),
+	[PaneType.PROFILE]: lazy(() => import('./views/ProfilePane.tsx')),
+	[PaneType.SEARCH]: lazy(() => import('./views/SearchPane.tsx')),
 };
 
 const PaneRouter = (props: PaneRouterProps) => {

@@ -1,13 +1,23 @@
-import { type Accessor, type JSX, createContext, useContext, createSignal, For } from 'solid-js';
+import {
+	type Accessor,
+	type JSX,
+	For,
+	Suspense,
+	createContext,
+	createSignal,
+	lazy,
+	useContext,
+} from 'solid-js';
 
 import { createSortable, transformStyle } from '@thisbeyond/solid-dnd';
 
+import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { type LinkingContextObject, LinkingContext, LinkingType } from '~/com/components/Link.tsx';
 
 import type { BasePaneConfig, DeckConfig } from '../../globals/panes.ts';
 
-import ProfilePaneDialog from './dialogs/ProfilePaneDialog.tsx';
-import ThreadPaneDialog from './dialogs/ThreadPaneDialog.tsx';
+const ProfilePaneDialog = lazy(() => import('./dialogs/ProfilePaneDialog.tsx'));
+const ThreadPaneDialog = lazy(() => import('./dialogs/ThreadPaneDialog.tsx'));
 
 export type Sortable = ReturnType<typeof createSortable>;
 
@@ -172,10 +182,20 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 											resetModals();
 										}
 									}}
-									class="absolute inset-0 z-10 overflow-hidden bg-black/50 pt-13 modal:flex dark:bg-hinted/50"
+									class="absolute inset-0 z-10 flex flex-col overflow-hidden bg-black/50 pt-13 dark:bg-hinted/50"
 									prop:inert={sortable.isActiveDraggable || modals().length - 1 !== index()}
 								>
-									<PaneModalContext.Provider value={context}>{modal.render()}</PaneModalContext.Provider>
+									<PaneModalContext.Provider value={context}>
+										<Suspense
+											fallback={
+												<div class="pointer-events-none grid grow place-items-center">
+													<CircularProgress />
+												</div>
+											}
+										>
+											{modal.render()}
+										</Suspense>
+									</PaneModalContext.Provider>
 								</div>
 							);
 						}}
