@@ -54,11 +54,11 @@ const EmbedImage = (props: EmbedImageProps) => {
 		let ratio: string | undefined;
 
 		if (mode === RenderMode.MULTIPLE) {
-			cn = `relative min-h-0 grow basis-0`;
+			cn = `relative min-h-0 grow basis-0 overflow-hidden`;
 		} else if (mode === RenderMode.STANDALONE) {
-			cn = `relative aspect-video`;
+			cn = `relative aspect-video overflow-hidden`;
 		} else if (mode === RenderMode.STANDALONE_RATIO) {
-			cn = `min-h-16 min-w-16 relative max-h-80 max-w-full`;
+			cn = `relative max-h-80 min-h-16 min-w-16 max-w-full overflow-hidden`;
 			ratio = `${aspectRatio!.width}/${aspectRatio!.height}`;
 		}
 
