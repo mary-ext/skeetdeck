@@ -193,8 +193,8 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 
 							return [
 								avatars,
-								remaining > 0 && <span class="-mr-1 ml-1 text-xs font-bold">+{remaining}</span>,
-								<ChevronRightIcon class="mr-1 rotate-90 text-xl" />,
+								remaining > 0 && <span class="-mr-1 ml-1 text-xs font-bold text-muted-fg">+{remaining}</span>,
+								<ChevronRightIcon class="mr-1 rotate-90 text-xl text-muted-fg" />,
 							];
 						}
 
