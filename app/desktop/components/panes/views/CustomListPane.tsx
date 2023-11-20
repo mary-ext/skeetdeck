@@ -26,6 +26,7 @@ const CustomListPane = () => {
 			<Pane>
 				<PaneHeader title={pane.list.name} subtitle="User list">
 					<button
+						title="Column settings"
 						onClick={() => setIsSettingsOpen(!isSettingsOpen())}
 						class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
 					>

@@ -26,6 +26,7 @@ const HomePane = () => {
 			<Pane>
 				<PaneHeader title="Home">
 					<button
+						title="Column settings"
 						onClick={() => setIsSettingsOpen(!isSettingsOpen())}
 						class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
 					>

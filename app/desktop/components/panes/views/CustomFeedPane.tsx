@@ -26,6 +26,7 @@ const CustomFeedPane = () => {
 			<Pane>
 				<PaneHeader title={pane.feed.name} subtitle="Feed">
 					<button
+						title="Column settings"
 						onClick={() => setIsSettingsOpen(!isSettingsOpen())}
 						class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
 					>

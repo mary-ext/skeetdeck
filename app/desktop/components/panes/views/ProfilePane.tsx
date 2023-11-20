@@ -28,6 +28,7 @@ const ProfilePane = () => {
 			<Pane>
 				<PaneHeader title={'@' + pane.profile.handle} subtitle="Profile">
 					<button
+						title="Column settings"
 						onClick={() => setIsSettingsOpen(!isSettingsOpen())}
 						class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
 					>

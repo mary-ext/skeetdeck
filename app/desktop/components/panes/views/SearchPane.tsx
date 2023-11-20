@@ -27,6 +27,7 @@ const SearchPane = () => {
 			<Pane>
 				<PaneHeader title={pane.query} subtitle="Search">
 					<button
+						title="Column settings"
 						onClick={() => setIsSettingsOpen(!isSettingsOpen())}
 						class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
 					>
