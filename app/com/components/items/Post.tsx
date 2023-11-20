@@ -11,7 +11,6 @@ import { updatePostLike } from '~/api/mutations/like-post.ts';
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
 
 import { type PostLinking, type ProfileLinking, Link, LinkingType, useLinking } from '../Link.tsx';
-import { Flyout } from '../Flyout.tsx';
 import RichTextRenderer from '../RichTextRenderer.tsx';
 import TimeAgo from '../TimeAgo.tsx';
 
@@ -28,6 +27,7 @@ import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
 
 import DefaultAvatar from '../../assets/default-avatar.svg';
 
+import PostOverflowAction from './posts/PostOverflowAction.tsx';
 import RepostAction from './posts/RepostAction.tsx';
 
 export interface PostProps {
@@ -202,23 +202,11 @@ const Post = (props: PostProps) => {
 
 						<Show when={interactive()}>
 							<div class="shrink-0">
-								<Flyout
-									button={
-										<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary">
-											<MoreHorizIcon />
-										</button>
-									}
-									placement="bottom-end"
-								>
-									{({ close, menuProps }) => (
-										<div
-											{...menuProps}
-											class="flex flex-col overflow-hidden rounded-lg bg-background shadow-menu"
-										>
-											<div class="px-4 py-2">is it working now</div>
-										</div>
-									)}
-								</Flyout>
+								<PostOverflowAction post={post()}>
+									<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary">
+										<MoreHorizIcon />
+									</button>
+								</PostOverflowAction>
 							</div>
 						</Show>
 					</div>
