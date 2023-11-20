@@ -162,6 +162,7 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 
 	{
 		const [show, setShow] = createSignal(false);
+		const remaining = items.length - MAX_AVATARS;
 
 		return (
 			<div class="flex flex-col gap-3">
@@ -186,7 +187,11 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 								);
 							});
 
-							return [avatars, <ChevronRightIcon class="mr-1 rotate-90 text-xl" />];
+							return [
+								avatars,
+								remaining > 0 && <span class="-mr-1 ml-1 text-xs font-bold">+{remaining}</span>,
+								<ChevronRightIcon class="mr-1 rotate-90 text-xl" />,
+							];
 						}
 
 						return (
