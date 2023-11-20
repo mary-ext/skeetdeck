@@ -83,7 +83,7 @@ const Notification = (props: NotificationProps) => {
 							<Match when={post.data}>
 								{(post) => {
 									return (
-										<VirtualContainer estimateHeight={98.8}>
+										<VirtualContainer estimateHeight={118.3}>
 											<Post interactive post={post()} highlight={!data.read} />
 										</VirtualContainer>
 									);
@@ -91,7 +91,7 @@ const Notification = (props: NotificationProps) => {
 							</Match>
 
 							<Match when>
-								<div class="grid place-items-center border-b border-divider p-3">
+								<div class="grid place-items-center border-b border-divider p-3" style="height: 118.3px">
 									<CircularProgress />
 								</div>
 							</Match>
@@ -348,7 +348,7 @@ const renderAccessory = (
 				</Match>
 
 				<Match when>
-					<div class="grid place-items-center rounded-md border border-divider p-3">
+					<div class="grid place-items-center rounded-md border border-divider p-3" style="height: 69.6px">
 						<CircularProgress />
 					</div>
 				</Match>
