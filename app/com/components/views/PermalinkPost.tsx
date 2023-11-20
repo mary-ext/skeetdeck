@@ -1,5 +1,6 @@
 import { Show } from 'solid-js';
 
+import { updatePostLike } from '~/api/mutations/like-post.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
@@ -20,6 +21,9 @@ import RepeatIcon from '../../icons/baseline-repeat.tsx';
 import ShareIcon from '../../icons/baseline-share.tsx';
 
 import DefaultAvatar from '../../assets/default-avatar.svg';
+
+import PostOverflowAction from '../items/posts/PostOverflowAction.tsx';
+import RepostAction from '../items/posts/RepostAction.tsx';
 
 export interface PermalinkPostProps {
 	post: SignalizedPost;
@@ -59,12 +63,11 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 				</Link>
 
 				<div class="flex shrink-0 grow justify-end">
-					<button
-						onClick={() => {}}
-						class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary"
-					>
-						<MoreHorizIcon />
-					</button>
+					<PostOverflowAction post={post()}>
+						<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary">
+							<MoreHorizIcon />
+						</button>
+					</PostOverflowAction>
 				</div>
 			</div>
 
@@ -120,20 +123,21 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 					<ChatBubbleOutlinedIcon />
 				</Link>
 
-				<button
-					class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary"
-					classList={{
-						'text-green-600': !!post().viewer.repost.value,
-					}}
-					onClick={() => {}}
-				>
-					<RepeatIcon />
-				</button>
+				<RepostAction post={post()}>
+					<button
+						class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary"
+						classList={{
+							'text-green-600': !!post().viewer.repost.value,
+						}}
+					>
+						<RepeatIcon />
+					</button>
+				</RepostAction>
 
 				<button
+					onClick={() => updatePostLike(post(), !post().viewer.like.value)}
 					class="group flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary"
 					classList={{ 'is-active text-red-600': !!post().viewer.like.value }}
-					onClick={() => {}}
 				>
 					<FavoriteOutlinedIcon class="group-[.is-active]:hidden" />
 					<FavoriteIcon class="hidden group-[.is-active]:block" />
