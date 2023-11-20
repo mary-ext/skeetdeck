@@ -2,7 +2,7 @@ import { type JSX, createContext, useContext } from 'solid-js';
 
 import type { DID } from '~/api/atp-schema.ts';
 
-export enum LinkingType {
+export const enum LinkingType {
 	EXTERNAL,
 	POST_LIKED_BY,
 	POST_REPOSTED_BY,

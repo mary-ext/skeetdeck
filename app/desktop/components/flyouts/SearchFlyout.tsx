@@ -14,7 +14,7 @@ import { model } from '~/utils/input.ts';
 
 import SearchInput from '~/com/components/inputs/SearchInput.tsx';
 
-export enum SuggestionType {
+export const enum SuggestionType {
 	SEARCH_POSTS,
 	PROFILE,
 }

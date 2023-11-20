@@ -1,6 +1,6 @@
 import type { DID } from '~/api/atp-schema.ts';
 
-export enum PaneType {
+export const enum PaneType {
 	HOME = 'home',
 	NOTIFICATIONS = 'notifications',
 	PROFILE = 'profile',
@@ -26,20 +26,20 @@ export const labelizePaneType = (type: PaneType) => {
 	}
 };
 
-export enum PaneSize {
+export const enum PaneSize {
 	SMALL = 'sm',
 	MEDIUM = 'md',
 	LARGE = 'lg',
 }
 
-export enum SpecificPaneSize {
+export const enum SpecificPaneSize {
 	INHERIT = 'inherit',
 	SMALL = 'sm',
 	MEDIUM = 'md',
 	LARGE = 'lg',
 }
 
-export enum ProfilePaneTab {
+export const enum ProfilePaneTab {
 	POSTS = 'posts',
 	POSTS_WITH_REPLIES = 'posts_with_replies',
 	MEDIA = 'media',

@@ -11,7 +11,7 @@ import { decodeJwt } from '@externdefs/bluesky-client/jwt';
 
 import { createReactiveLocalStorage } from '~/utils/storage.ts';
 
-export enum MultiagentState {
+export const enum MultiagentState {
 	PRISTINE,
 	UNAUTHORIZED,
 	PENDING,
