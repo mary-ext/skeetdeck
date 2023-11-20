@@ -28,7 +28,7 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 				</button>
 			)}
 
-			<div class="mx-2 flex min-w-0 grow flex-col gap-0.5">
+			<div class="mr-2 flex min-w-0 grow flex-col gap-0.5">
 				<p class="overflow-hidden text-ellipsis whitespace-nowrap break-all text-base font-bold leading-5">
 					{props.title}
 				</p>
