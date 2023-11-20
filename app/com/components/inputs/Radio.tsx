@@ -1,7 +1,5 @@
 import type { ComponentProps } from 'solid-js';
 
-import CheckIcon from '../../icons/baseline-check.tsx';
-
 const Radio = (props: ComponentProps<'input'>) => {
 	return (
 		<label class="relative inline-flex h-5 w-5 cursor-pointer text-xl">
@@ -11,7 +9,7 @@ const Radio = (props: ComponentProps<'input'>) => {
 
 			<div class="z-10 h-5 w-5 rounded-full border-2 border-secondary peer-checked:hidden"></div>
 			<div class="z-10 hidden h-5 w-5 place-items-center rounded-full bg-accent peer-checked:grid">
-				<CheckIcon class="stroke-white stroke-1 text-sm" />
+				<div class="h-2 w-2 rounded-full bg-white"></div>
 			</div>
 		</label>
 	);
