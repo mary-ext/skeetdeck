@@ -30,7 +30,7 @@ const PaneHeader = (props: PaneHeaderProps) => {
 
 	return (
 		<div
-			class="flex h-13 shrink-0 items-center border-b border-divider px-4"
+			class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4"
 			classList={{ [`bg-hinted`]: sortable.isActiveDraggable }}
 		>
 			<button
@@ -41,7 +41,7 @@ const PaneHeader = (props: PaneHeaderProps) => {
 				<DragIndicatorIcon />
 			</button>
 
-			<div class="mx-2 flex min-w-0 grow flex-col gap-0.5">
+			<div class="flex min-w-0 grow flex-col gap-0.5">
 				<p class="overflow-hidden text-ellipsis whitespace-nowrap break-all text-base font-bold leading-5">
 					{pane.title || props.title}
 				</p>
@@ -57,7 +57,7 @@ const PaneHeader = (props: PaneHeaderProps) => {
 				</p>
 			</div>
 
-			<div class="contents empty:hidden">{props.children}</div>
+			<div class="flex empty:hidden">{props.children}</div>
 		</div>
 	);
 };
