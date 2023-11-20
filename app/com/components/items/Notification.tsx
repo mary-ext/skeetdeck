@@ -1,4 +1,4 @@
-import { type JSX, Switch, Match, createSignal } from 'solid-js';
+import { type Accessor, type JSX, Match, Switch, createSignal } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
@@ -25,6 +25,7 @@ import FavoriteIcon from '../../icons/baseline-favorite.tsx';
 import PersonIcon from '../../icons/baseline-person.tsx';
 import RepeatIcon from '../../icons/baseline-repeat.tsx';
 
+import EmbedRecord from '../embeds/EmbedRecord.tsx';
 import Post from './Post.tsx';
 
 export interface NotificationProps {
@@ -118,6 +119,7 @@ const Notification = (props: NotificationProps) => {
 
 					const avatars = renderAvatars(items);
 					const text = renderText(data);
+					const accessory = renderAccessory(() => props.uid, data);
 
 					return (
 						<div class="relative flex gap-3 border-b border-divider px-4 py-3">
@@ -129,9 +131,9 @@ const Notification = (props: NotificationProps) => {
 							<div class="flex min-w-0 grow flex-col gap-3">
 								{avatars}
 								<div class="overflow-hidden break-words text-sm">{text}</div>
-							</div>
 
-							{/* @todo: accessory */}
+								{accessory}
+							</div>
 						</div>
 					);
 				}}
@@ -284,4 +286,73 @@ const renderText = (data: FollowNotificationSlice | LikeNotificationSlice | Repo
 	}
 
 	return nodes;
+};
+
+const renderAccessory = (
+	uid: Accessor<DID>,
+	data: FollowNotificationSlice | LikeNotificationSlice | RepostNotificationSlice,
+) => {
+	const type = data.type;
+
+	if (type === 'like' || type === 'repost') {
+		const uri = data.items[0].record.subject.uri;
+
+		const post = createQuery(() => {
+			const key = getPostKey(uid(), uri);
+
+			return {
+				queryKey: key,
+				queryFn: getPost,
+				initialDataUpdatedAt: 0,
+				initialData: getInitialPost(key),
+			};
+		});
+
+		return (
+			<Switch>
+				<Match when={post.data}>
+					{(data) => {
+						const author = () => data().author;
+						const record = () => data().record.value;
+
+						return (
+							// nice
+							<VirtualContainer estimateHeight={69.6} class="flex flex-col">
+								<EmbedRecord
+									record={{
+										$type: 'app.bsky.embed.record#viewRecord',
+										uri: data().uri,
+										// @ts-expect-error
+										cid: null,
+										// @ts-expect-error
+										indexedAt: null,
+										author: {
+											did: author().did,
+											avatar: author().avatar.value,
+											handle: author().handle.value,
+											displayName: author().displayName.value,
+										},
+										embeds: data().embed.value ? [data().embed.value!] : [],
+										value: {
+											createdAt: record().createdAt,
+											text: record().text,
+										},
+									}}
+									interactive
+								/>
+							</VirtualContainer>
+						);
+					}}
+				</Match>
+
+				<Match when>
+					<div class="grid place-items-center rounded-md border border-divider p-3">
+						<CircularProgress />
+					</div>
+				</Match>
+			</Switch>
+		);
+	}
+
+	return null;
 };
