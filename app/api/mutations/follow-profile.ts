@@ -57,7 +57,10 @@ export const updateProfileFollow = (profile: SignalizedProfile, follow: boolean)
 	}
 
 	const promise = mutate(follow);
-	profile.viewer.following.value = follow ? 'pending' : undefined;
+	const followingUri = profile.viewer.following;
+
+	profile.followersCount.value += followingUri.value ? -1 : 1;
+	followingUri.value = follow ? 'pending' : undefined;
 
 	return promise;
 };
