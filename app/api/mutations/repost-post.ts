@@ -60,6 +60,7 @@ export const updatePostRepost = (post: SignalizedPost, repost: boolean) => {
 	}
 
 	const promise = mutate(repost);
+	const repostUri = post.viewer.repost;
 
 	if (post.viewer.repost.value) {
 		post.repostCount.value--;
@@ -67,7 +68,8 @@ export const updatePostRepost = (post: SignalizedPost, repost: boolean) => {
 		post.repostCount.value++;
 	}
 
-	post.viewer.repost.value = repost ? 'pending' : undefined;
+	post.repostCount.value += repostUri.value ? -1 : 1;
+	repostUri.value = repost ? 'pending' : undefined;
 
 	return promise;
 };
