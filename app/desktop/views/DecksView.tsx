@@ -1,4 +1,4 @@
-import { For, Show, Suspense } from 'solid-js';
+import { For, Show, Suspense, lazy } from 'solid-js';
 
 import { Navigate, useParams } from '@solidjs/router';
 import { DragDropProvider, DragDropSensors, SortableProvider } from '@thisbeyond/solid-dnd';
@@ -11,13 +11,14 @@ import { ConstrainYDragAxis } from '../utils/dnd.ts';
 import { PaneContextProvider } from '../components/panes/PaneContext.tsx';
 import PaneFallback from '../components/panes/PaneFallback.tsx';
 import PaneRouter from '../components/panes/PaneRouter.tsx';
-import AddPaneDialog from '../components/settings/AddPaneDialog.tsx';
 
 import AddIcon from '~/com/icons/baseline-add.tsx';
 import EditIcon from '~/com/icons/baseline-edit.tsx';
 
 import { Button } from '~/com/primitives/button.ts';
 import { IconButton } from '~/com/primitives/icon-button.ts';
+
+const AddPaneDialog = lazy(() => import('../components/settings/AddPaneDialog.tsx'));
 
 const DecksView = () => {
 	const params = useParams<{ deck: string }>();
