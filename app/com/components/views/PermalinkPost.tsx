@@ -7,6 +7,7 @@ import { formatCompact } from '~/utils/intl/number.ts';
 import { formatAbsDateTime } from '~/utils/intl/time.ts';
 
 import { Link, LinkingType } from '../Link.tsx';
+import RichTextRenderer from '../RichTextRenderer.tsx';
 
 import PostEmbedWarning from '../moderation/PostEmbedWarning.tsx';
 import Embed from '../embeds/Embed.tsx';
@@ -68,7 +69,13 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 			</div>
 
 			<div class="mt-3 overflow-hidden whitespace-pre-wrap break-words text-base empty:hidden">
-				{record().text}
+				<RichTextRenderer
+					item={post()}
+					get={(item) => {
+						const record = item.record.value;
+						return { t: record.text, f: record.facets };
+					}}
+				/>
 			</div>
 
 			<Show when={post().embed.value}>
