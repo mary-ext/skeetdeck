@@ -268,7 +268,7 @@ const renderText = (data: FollowNotificationSlice | LikeNotificationSlice | Repo
 			<Link
 				to={{ type: LinkingType.PROFILE, actor: author.did }}
 				dir="auto"
-				class="inline-block overflow-hidden align-top font-bold hover:underline"
+				class="inline-block overflow-hidden text-left align-top font-bold hover:underline"
 			>
 				{author.displayName?.trim() || `@${author.handle}`}
 			</Link>,
