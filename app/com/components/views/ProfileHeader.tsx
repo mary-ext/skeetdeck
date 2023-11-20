@@ -4,6 +4,8 @@ import type { DID } from '~/api/atp-schema.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
+import { formatCompact } from '~/utils/intl/number.ts';
+
 import { Button } from '../../primitives/button.ts';
 
 import { Link, LinkingType } from '../Link.tsx';
@@ -86,12 +88,12 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 
 				<div class="flex flex-wrap gap-4 text-sm">
 					<Link to={{ type: LinkingType.PROFILE_FOLLOWS, actor: profile().did }} class="hover:underline">
-						<span class="font-bold">{profile().followsCount.value}</span>{' '}
+						<span class="font-bold">{formatCompact(profile().followsCount.value)}</span>{' '}
 						<span class="text-muted-fg">Follows</span>
 					</Link>
 
 					<Link to={{ type: LinkingType.PROFILE_FOLLOWERS, actor: profile().did }} class="hover:underline">
-						<span class="font-bold">{profile().followersCount.value}</span>{' '}
+						<span class="font-bold">{formatCompact(profile().followersCount.value)}</span>{' '}
 						<span class="text-muted-fg">Followers</span>
 					</Link>
 				</div>

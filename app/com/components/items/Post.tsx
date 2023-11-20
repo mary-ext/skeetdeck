@@ -8,6 +8,7 @@ import { getRecordId } from '~/api/utils/misc.ts';
 
 import { updatePostLike } from '~/api/mutations/like-post.ts';
 
+import { formatCompact } from '~/utils/intl/number.ts';
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
 
 import { type PostLinking, type ProfileLinking, Link, LinkingType, useLinking } from '../Link.tsx';
@@ -224,7 +225,7 @@ const Post = (props: PostProps) => {
 										<ChatBubbleOutlinedIcon />
 									</div>
 									<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
-										{post().replyCount.value}
+										{formatCompact(post().replyCount.value)}
 									</span>
 								</Link>
 							</div>
@@ -240,7 +241,7 @@ const Post = (props: PostProps) => {
 										</div>
 
 										<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
-											{post().repostCount.value}
+											{formatCompact(post().repostCount.value)}
 										</span>
 									</button>
 								</RepostAction>
@@ -257,7 +258,7 @@ const Post = (props: PostProps) => {
 										<FavoriteIcon class="hidden group-[.is-active]:block" />
 									</div>
 									<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
-										{post().likeCount.value}
+										{formatCompact(post().likeCount.value)}
 									</span>
 								</button>
 							</div>

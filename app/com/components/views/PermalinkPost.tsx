@@ -3,6 +3,7 @@ import { Show } from 'solid-js';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
+import { formatCompact } from '~/utils/intl/number.ts';
 import { formatAbsDateTime } from '~/utils/intl/time.ts';
 
 import { Link, LinkingType } from '../Link.tsx';
@@ -89,14 +90,16 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 					to={{ type: LinkingType.POST_LIKED_BY, actor: author().did, rkey: rkey() }}
 					class="hover:underline"
 				>
-					<span class="font-bold">{post().repostCount.value}</span> <span class="text-muted-fg">Reposts</span>
+					<span class="font-bold">{formatCompact(post().repostCount.value)}</span>{' '}
+					<span class="text-muted-fg">Reposts</span>
 				</Link>
 
 				<Link
 					to={{ type: LinkingType.POST_REPOSTED_BY, actor: author().did, rkey: rkey() }}
 					class="hover:underline"
 				>
-					<span class="font-bold">{post().likeCount.value}</span> <span class="text-muted-fg">Likes</span>
+					<span class="font-bold">{formatCompact(post().likeCount.value)}</span>{' '}
+					<span class="text-muted-fg">Likes</span>
 				</Link>
 			</div>
 

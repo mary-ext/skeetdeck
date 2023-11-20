@@ -5,6 +5,8 @@ import { createQuery } from '@pkg/solid-query';
 import type { DID } from '~/api/atp-schema.ts';
 import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile.ts';
 
+import { formatCompact } from '~/utils/intl/number.ts';
+
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
@@ -68,7 +70,7 @@ const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 					const $profile = profile.data;
 
 					if ($profile) {
-						return `${$profile.postsCount.value} posts`;
+						return `${formatCompact($profile.postsCount.value)} posts`;
 					}
 
 					return;
