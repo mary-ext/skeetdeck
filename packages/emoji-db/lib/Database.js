@@ -11,8 +11,6 @@ import {
 	getEmojiByUnicode,
 	get,
 	set,
-	getTopFavoriteEmoji,
-	incrementFavoriteEmojiCount,
 } from './idb-interface.js';
 import { DEFAULT_SOURCE_URL, DEFAULT_LOCALE, KEY_PREFERRED_SKINTONE, STORE_KEYVALUE } from './constants.js';
 
@@ -122,16 +120,6 @@ export default class Database {
 	async setPreferredSkinTone(skinTone) {
 		await this.ready();
 		return set(this.#db, STORE_KEYVALUE, KEY_PREFERRED_SKINTONE, skinTone);
-	}
-
-	async incrementFavoriteEmojiCount(unicodeOrName) {
-		await this.ready();
-		return incrementFavoriteEmojiCount(this.#db, unicodeOrName);
-	}
-
-	async getTopFavoriteEmoji(limit) {
-		await this.ready();
-		return (await getTopFavoriteEmoji(this.#db, limit)).map(cleanEmoji);
 	}
 
 	async close() {

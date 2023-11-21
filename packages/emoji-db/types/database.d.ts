@@ -97,18 +97,6 @@ export default class Database {
 	 */
 	setPreferredSkinTone(skinTone: SkinTone): Promise<void>;
 	/**
-	 * Increment the favorite count for an emoji by one. The unicode string must be non-empty. It should
-	 * correspond to the base (non-skin-tone) unicode string from the emoji object.
-	 *
-	 * @param unicode - unicode of a native emoji
-	 */
-	incrementFavoriteEmojiCount(unicode: string): Promise<void>;
-	/**
-	 * Get the top favorite emoji in descending order. If there are no favorite emoji yet, returns an empty array.
-	 * @param limit - maximum number of results to return
-	 */
-	getTopFavoriteEmoji(limit: number): Promise<Emoji[]>;
-	/**
 	 * Closes the underlying IndexedDB connection. The Database is not usable after that (or any other Databases
 	 * with the same locale).
 	 *

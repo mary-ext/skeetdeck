@@ -6,7 +6,6 @@ import { transformEmojiData } from './utils/transformEmojiData.js';
 import { transact } from './idb-lifecycle.js';
 import { commit, getAllIDB, getIDB } from './idb-util.js';
 import {
-	INDEX_COUNT,
 	INDEX_GROUP_AND_ORDER,
 	INDEX_SKIN_UNICODE,
 	INDEX_TOKENS,
@@ -15,7 +14,6 @@ import {
 	MODE_READONLY,
 	MODE_READWRITE,
 	STORE_EMOJI,
-	STORE_FAVORITES,
 	STORE_KEYVALUE,
 } from './constants.js';
 
@@ -204,56 +202,4 @@ export const set = (db, storeName, key, value) => {
 		store.put(value, key);
 		commit(txn);
 	});
-};
-
-export const incrementFavoriteEmojiCount = (db, unicode) => {
-	return transact(db, STORE_FAVORITES, MODE_READWRITE, (store, txn) =>
-		getIDB(store, unicode, (result) => {
-			store.put((result || 0) + 1, unicode);
-			commit(txn);
-		}),
-	);
-};
-
-export const getTopFavoriteEmoji = (db, limit) => {
-	if (limit === 0) {
-		return [];
-	}
-	return transact(
-		db,
-		[STORE_FAVORITES, STORE_EMOJI],
-		MODE_READONLY,
-		([favoritesStore, emojiStore], txn, cb) => {
-			const results = [];
-			favoritesStore.index(INDEX_COUNT).openCursor(undefined, 'prev').onsuccess = (e) => {
-				const cursor = e.target.result;
-				if (!cursor) {
-					// no more results
-					return cb(results);
-				}
-
-				const addResult = (result) => {
-					results.push(result);
-
-					if (results.length === limit) {
-						return cb(results); // done, reached the limit
-					}
-
-					cursor.continue();
-				};
-
-				const unicode = cursor.primaryKey;
-
-				// This could be done in parallel (i.e. make the cursor and the get()s parallelized),
-				// but my testing suggests it's not actually faster.
-				getIDB(emojiStore, unicode, (emoji) => {
-					if (emoji) {
-						return addResult(emoji);
-					}
-					// emoji not found somehow, ignore
-					cursor.continue();
-				});
-			};
-		},
-	);
 };
