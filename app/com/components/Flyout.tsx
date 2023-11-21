@@ -27,7 +27,7 @@ export interface FlyoutProps {
 	children: (context: MenuContext) => JSX.Element;
 }
 
-const offset: Middleware = {
+export const offset: Middleware = {
 	name: 'offset',
 	fn(state) {
 		const reference = state.rects.reference;
@@ -61,42 +61,36 @@ export const Flyout = (props: FlyoutProps) => {
 		return $button;
 	};
 
-	let modal: JSX.Element;
+	const modal = (
+		<Modal open={isOpen()} onClose={() => setIsOpen(false)} disableOverlay desktop>
+			{(() => {
+				const [floating, setFloating] = createSignal<HTMLElement>();
 
-	if (import.meta.env.VITE_APP_MODE === 'desktop') {
-		modal = (
-			<Modal open={isOpen()} onClose={() => setIsOpen(false)} disableOverlay desktop>
-				{(() => {
-					const [floating, setFloating] = createSignal<HTMLElement>();
+				const position = useFloating(() => anchor, floating, {
+					placement: props.placement ?? 'bottom-end',
+					strategy: 'absolute',
+					middleware: props.middleware ?? [flip(), offset],
+					whileElementsMounted: autoUpdate,
+				});
 
-					const position = useFloating(() => anchor, floating, {
-						placement: props.placement ?? 'bottom-end',
-						strategy: 'absolute',
-						middleware: props.middleware ?? [flip(), offset],
-						whileElementsMounted: autoUpdate,
-					});
-
-					const context: MenuContext = {
-						menuProps: {
-							ref: setFloating,
-							get style() {
-								return {
-									position: position.strategy,
-									top: `${position.y ?? 0}px`,
-									left: `${position.x ?? 0}px`,
-								};
-							},
+				const context: MenuContext = {
+					menuProps: {
+						ref: setFloating,
+						get style() {
+							return {
+								position: position.strategy,
+								top: `${position.y ?? 0}px`,
+								left: `${position.x ?? 0}px`,
+							};
 						},
-						close: () => setIsOpen(false),
-					};
+					},
+					close: () => setIsOpen(false),
+				};
 
-					return (() => props.children(context)) as unknown as JSX.Element;
-				})()}
-			</Modal>
-		);
-	} else {
-		// @todo: implement mobile scenario
-	}
+				return (() => props.children(context)) as unknown as JSX.Element;
+			})()}
+		</Modal>
+	);
 
 	return [render, modal] as unknown as JSX.Element;
 };
