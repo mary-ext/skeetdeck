@@ -12,6 +12,7 @@
 		"@externdefs/bluesky-client": "workspace:*",
 		"@floating-ui/dom": "^1.5.3",
 		"@floating-ui/utils": "^0.1.6",
+		"@pkg/emoji-db": "workspace:^",
 		"@pkg/solid-freeze": "workspace:^",
 		"@pkg/solid-query": "workspace:^",
 		"@solidjs/router": "^0.8.4",

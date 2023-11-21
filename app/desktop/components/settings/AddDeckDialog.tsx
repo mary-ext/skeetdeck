@@ -9,24 +9,32 @@ import { getCurrentTid } from '~/api/utils/tid.ts';
 import { closeModal } from '~/com/globals/modals.tsx';
 import { model } from '~/utils/input.ts';
 
+import EmojiFlyout from '~/com/components/emojis/EmojiFlyout.tsx';
+
 import { Button } from '~/com/primitives/button.ts';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
 import { Input } from '~/com/primitives/input.ts';
 
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
+
 const AddDeckDialog = () => {
-	const [name, setName] = createSignal('');
 	const navigate = useNavigate();
+
+	const [name, setName] = createSignal('');
+	const [emoji, setEmoji] = createSignal('⭐');
 
 	const handleSubmit = (ev: SubmitEvent) => {
 		const tid = getCurrentTid();
+
 		const $name = name();
+		const $emoji = emoji();
 
 		ev.preventDefault();
 
 		preferences.decks.push({
 			id: tid,
 			name: $name,
-			emoji: '⭐',
+			emoji: $emoji,
 			panes: [],
 		});
 
@@ -40,12 +48,30 @@ const AddDeckDialog = () => {
 				<h1 class={/* @once */ DialogTitle()}>Add new deck</h1>
 			</div>
 
-			<div class={/* @once */ DialogBody({ class: 'flex flex-col gap-4' })}>
+			<div class={/* @once */ DialogBody({ class: 'flex flex-col gap-4', scrollable: true })}>
 				<div class="flex flex-col gap-2">
 					<label for="name" class="block text-sm font-medium leading-6 text-primary">
 						Name
 					</label>
 					<input ref={model(name, setName)} type="text" id="name" required class={/* @once */ Input()} />
+				</div>
+
+				<div class="flex flex-col gap-2">
+					<label class="block text-sm font-medium leading-6 text-primary">Emoji</label>
+
+					<div class="flex min-w-0 flex-wrap items-center gap-4 pb-0.5">
+						<EmojiFlyout onPick={(emoji) => setEmoji(emoji.picked)}>
+							<button
+								type="button"
+								class="flex h-9 items-center gap-2 self-start rounded border border-input px-3 py-2 outline-2 -outline-offset-1 outline-accent outline-none focus:outline disabled:opacity-50"
+							>
+								<span class="text-lg">{emoji()}</span>
+								<ChevronRightIcon class="-mr-2 rotate-90 text-base text-muted-fg" />
+							</button>
+						</EmojiFlyout>
+
+						<span class="text-sm text-muted-fg">Choose an emoji for your deck</span>
+					</div>
 				</div>
 			</div>
 

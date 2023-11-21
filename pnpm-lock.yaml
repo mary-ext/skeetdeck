@@ -43,6 +43,9 @@ importers:
       '@floating-ui/utils':
         specifier: ^0.1.6
         version: 0.1.6
+      '@pkg/emoji-db':
+        specifier: workspace:^
+        version: link:../packages/emoji-db
       '@pkg/solid-freeze':
         specifier: workspace:^
         version: link:../packages/solid-freeze
