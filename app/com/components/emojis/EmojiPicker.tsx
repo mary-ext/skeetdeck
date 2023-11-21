@@ -1,4 +1,4 @@
-import { Suspense, createResource, createSignal, onMount, useTransition } from 'solid-js';
+import { Suspense, createEffect, createResource, createSignal, onMount, useTransition } from 'solid-js';
 
 import { SkinTone, type Emoji } from '@pkg/emoji-db';
 
@@ -35,6 +35,8 @@ export interface EmojiPickerProps {
 }
 
 const EmojiPicker = (props: EmojiPickerProps) => {
+	let scrollRef: HTMLDivElement | undefined;
+
 	const database = getEmojiDb();
 
 	const [search, setSearch] = createSignal('');
@@ -66,6 +68,14 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 
 	onMount(() => {
 		database.getPreferredSkinTone().then(setTone);
+	});
+
+	createEffect(() => {
+		emojis();
+
+		if (scrollRef) {
+			scrollRef.scrollTop = 0;
+		}
 	});
 
 	return (
@@ -150,7 +160,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 			</div>
 
 			<Suspense fallback={<div class="h-64"></div>}>
-				<div tabindex={-1} class="h-64 overflow-y-auto p-2">
+				<div ref={scrollRef} tabindex={-1} class="h-64 overflow-y-auto p-2">
 					<div class="grid grid-cols-6">
 						{(() => {
 							const children = emojis()?.map((emoji) => {
