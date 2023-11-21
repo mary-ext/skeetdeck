@@ -224,14 +224,14 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 									})
 								}
 							>
-								<div class="h-7.5 w-7.5 shrink-0 overflow-hidden rounded-full bg-muted-fg">
+								<div class="mr-2 h-7.5 w-7.5 shrink-0 overflow-hidden rounded-full bg-muted-fg">
 									<img src={avatar || DefaultAvatar} class="h-full w-full" />
 								</div>
 
-								<span class="ml-2 overflow-hidden overflow-ellipsis whitespace-nowrap font-bold text-primary">
+								<span class="mr-1 overflow-hidden overflow-ellipsis whitespace-nowrap font-bold text-primary empty:hidden">
 									{displayName}
 								</span>
-								<span class="ml-1 overflow-hidden overflow-ellipsis whitespace-nowrap text-muted-fg">
+								<span class="overflow-hidden overflow-ellipsis whitespace-nowrap text-muted-fg">
 									@{handle}
 								</span>
 							</Link>
