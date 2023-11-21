@@ -17,7 +17,7 @@ export const FILTER_REPOSTS = 1 << 5;
 export const FILTER_ALL =
 	FILTER_FOLLOWS | FILTER_LIKES | FILTER_MENTIONS | FILTER_QUOTES | FILTER_REPLIES | FILTER_REPOSTS;
 
-const reasons: Record<string, number> = {
+export const REASONS: Record<string, number> = {
 	follow: FILTER_FOLLOWS,
 	like: FILTER_LIKES,
 	mention: FILTER_MENTIONS,
@@ -41,13 +41,13 @@ export interface NotificationsPage {
 // 2 is the minimum, 1st attempt will always fail because it's empty.
 const MAX_ATTEMPTS = 3;
 
-export const getNotificationsKey = (uid: DID, mask = FILTER_ALL, limit: number = 25) => {
-	return ['getNotifications', uid, mask, limit] as const;
+export const getNotificationsKey = (uid: DID, limit: number = 25) => {
+	return ['getNotifications', uid, limit] as const;
 };
 export const getNotifications = async (
 	ctx: QC<ReturnType<typeof getNotificationsKey>, string | null | undefined>,
 ) => {
-	const [, uid, mask, limit] = ctx.queryKey;
+	const [, uid, limit] = ctx.queryKey;
 
 	const agent = await multiagent.connect(uid);
 
@@ -79,13 +79,8 @@ export const getNotifications = async (
 		const data = response.data;
 		const notifications = data.notifications;
 
-		const filtered = notifications.filter((notif) => {
-			const flag = reasons[notif.reason];
-			return flag !== undefined && (flag & mask) !== 0;
-		});
-
 		cursor = data.cursor || null;
-		items = items.concat(filtered);
+		items = items.concat(notifications);
 		cid ||= notifications.length > 0 ? notifications[0].cid : undefined;
 		date ||= notifications.length > 0 ? notifications[0].indexedAt : undefined;
 	}

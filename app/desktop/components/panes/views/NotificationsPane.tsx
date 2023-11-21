@@ -14,6 +14,7 @@ import { updateNotificationsSeen } from '~/api/mutations/update-notifications-se
 import {
 	type NotificationsLatestResult,
 	type NotificationsPage,
+	REASONS,
 	getNotifications,
 	getNotificationsKey,
 	getNotificationsLatest,
@@ -56,7 +57,7 @@ const NotificationsPane = () => {
 
 	const notifications = createInfiniteQuery(() => {
 		return {
-			queryKey: getNotificationsKey(pane.uid, pane.mask),
+			queryKey: getNotificationsKey(pane.uid),
 			queryFn: getNotifications,
 			initialPageParam: undefined,
 			getNextPageParam: (last) => last.cursor,
@@ -181,7 +182,18 @@ const NotificationsPane = () => {
 					</Switch>
 
 					<div>
-						<For each={notifications.data?.pages.flatMap((page) => page.slices)}>
+						<For
+							each={(() => {
+								const mask = pane.mask;
+
+								return notifications.data?.pages
+									.flatMap((page) => page.slices)
+									.filter((slice) => {
+										const flag = REASONS[slice.type];
+										return flag !== undefined && (flag & mask) !== 0;
+									});
+							})()}
+						>
 							{(slice) => {
 								return <Notification uid={pane.uid} data={slice} />;
 							}}
