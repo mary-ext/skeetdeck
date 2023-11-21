@@ -8,6 +8,8 @@ import {
 	createMutation,
 } from '@pkg/solid-query';
 
+import { resetInfiniteData } from '~/api/utils/query.ts';
+
 import { updateNotificationsSeen } from '~/api/mutations/update-notifications-seen.ts';
 import {
 	type NotificationsLatestResult,
@@ -83,21 +85,7 @@ const NotificationsPane = () => {
 	});
 
 	const refetchNotifications = () => {
-		const $notifications = notifications.data;
-
-		if ($notifications && $notifications.pages.length > 1) {
-			queryClient.setQueryData<InfiniteData<unknown>>(getNotificationsKey(pane.uid), (data) => {
-				if (data) {
-					return {
-						pages: data.pages.slice(0, 1),
-						pageParams: data.pageParams.slice(0, 1),
-					};
-				}
-
-				return data;
-			});
-		}
-
+		resetInfiniteData(queryClient, getNotificationsKey(pane.uid));
 		notifications.refetch();
 	};
 

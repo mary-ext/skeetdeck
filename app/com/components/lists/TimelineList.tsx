@@ -3,6 +3,7 @@ import { For, Match, Switch, createEffect } from 'solid-js';
 import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@pkg/solid-query';
 
 import type { DID } from '~/api/atp-schema.ts';
+import { resetInfiniteData } from '~/api/utils/query.ts';
 
 import {
 	type TimelineLatestResult,
@@ -99,24 +100,7 @@ const TimelineList = (props: TimelineListProps) => {
 				<Match when={isTimelineStale(timeline.data, latest.data)}>
 					<button
 						onClick={() => {
-							const $timeline = timeline.data;
-
-							if ($timeline && $timeline.pages.length > 1) {
-								queryClient.setQueryData<InfiniteData<unknown>>(
-									getTimelineKey(props.uid, props.params),
-									(data) => {
-										if (data) {
-											return {
-												pages: data.pages.slice(0, 1),
-												pageParams: data.pageParams.slice(0, 1),
-											};
-										}
-
-										return data;
-									},
-								);
-							}
-
+							resetInfiniteData(queryClient, getTimelineKey(props.uid, props.params));
 							timeline.refetch();
 						}}
 						class="grid h-13 shrink-0 place-items-center border-b border-divider text-sm text-accent hover:bg-hinted"
