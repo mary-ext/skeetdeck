@@ -8,7 +8,7 @@ export type SearchInputProps = ComponentProps<'input'>;
 
 const SearchInput = (props: SearchInputProps) => {
 	return (
-		<div class="relative grow">
+		<div class="relative h-max grow">
 			<div class="pointer-events-none absolute inset-y-0 ml-px grid place-items-center px-2">
 				<SearchIcon class="text-lg text-muted-fg" />
 			</div>
