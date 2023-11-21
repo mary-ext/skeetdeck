@@ -97,9 +97,7 @@ export default class Database {
 
 	async getEmojiBySearchQuery(query) {
 		await this.ready();
-		const emojis = uniqEmoji(await getEmojiBySearchQuery(this.#db, query)).map(cleanEmoji);
-
-		return emojis;
+		return uniqEmoji(await getEmojiBySearchQuery(this.#db, query)).map(cleanEmoji);
 	}
 
 	async getEmojiByShortcode(shortcode) {
@@ -119,7 +117,7 @@ export default class Database {
 
 	async setPreferredSkinTone(skinTone) {
 		await this.ready();
-		return set(this.#db, STORE_KEYVALUE, KEY_PREFERRED_SKINTONE, skinTone);
+		await set(this.#db, STORE_KEYVALUE, KEY_PREFERRED_SKINTONE, skinTone);
 	}
 
 	async close() {
