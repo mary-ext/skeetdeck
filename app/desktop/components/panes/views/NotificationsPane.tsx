@@ -142,7 +142,12 @@ const NotificationsPane = () => {
 					<button
 						title="Mark notifications as read"
 						onClick={() => read.mutate()}
-						disabled={read.isPending || notifications.isFetching || !notifications.data?.pages[0].date}
+						disabled={
+							read.isPending ||
+							notifications.isLoading ||
+							notifications.isRefetching ||
+							!notifications.data?.pages[0].date
+						}
 						class={/* @once */ IconButton({ color: 'muted' })}
 					>
 						<CheckAllIcon />
