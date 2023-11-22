@@ -33,51 +33,14 @@ const emojiVersions: [emoji: string, version: number][] = [
 	['😃', 0.6],
 ];
 
-// Unfortunately, this code doesn't handle compound emojis, which is necessary
-// for checking if the system actually supports Unicode 12.1 and 13.1, so let's
-// pretend that if Unicode 12 is supported, 12.1 is supported as well.
-const getTextFeature = (text: string, color: string) => {
-	const canvas = document.createElement('canvas');
-	canvas.width = canvas.height = 1;
-
-	const ctx = canvas.getContext('2d')!;
-	ctx.textBaseline = 'top';
-	ctx.font = `100px ${FONT_FAMILY}`;
-	ctx.fillStyle = color;
-	ctx.scale(0.01, 0.01);
-	ctx.fillText(text, 0, 0);
-
-	return ctx.getImageData(0, 0, 1, 1).data;
-};
-
-const compareFeatures = (feature1: Uint8ClampedArray, feature2: Uint8ClampedArray) => {
-	const feature1Str = [...feature1].join(',');
-	const feature2Str = [...feature2].join(',');
-
-	// This is RGBA, so for 0,0,0, we are checking that the first RGB is not all zeroes.
-	// Most of the time when unsupported this is 0,0,0,0, but on Chrome on Mac it is
-	// 0,0,0,61 - there is a transparency here.
-	return feature1Str === feature2Str && !feature1Str.startsWith('0,0,0,');
-};
-
-const isEmojiSupported = (text: string) => {
-	const feature1 = getTextFeature(text, '#000');
-	const feature2 = getTextFeature(text, '#fff');
-	return feature1 && feature2 && compareFeatures(feature1, feature2);
-};
-
 let promise: Promise<number>;
 export const detectEmojiSupportLevel = (): Promise<number> => {
 	return (promise ||= new Promise((resolve) => {
 		scheduleIdleTask(() => {
-			try {
-				for (const [emoji, version] of emojiVersions) {
-					if (isEmojiSupported(emoji)) {
-						return resolve(version);
-					}
+			for (const [emoji, version] of emojiVersions) {
+				if (isEmojiSupportedUncached(emoji)) {
+					return resolve(version);
 				}
-			} catch {
-				// ignore canvas errors
 			}
 
 			// In case of an error, be generous and just assume all emoji are supported (e.g. for canvas errors
@@ -85,4 +48,93 @@ export const detectEmojiSupportLevel = (): Promise<number> => {
 			resolve(emojiVersions[0][1]);
 		});
 	}));
+};
+
+const supportedEmojis = new Map<string, boolean>();
+
+export const isEmojiSupported = (emoji: string) => {
+	let cached = supportedEmojis.get(emoji);
+
+	if (cached === undefined) {
+		supportedEmojis.set(emoji, (cached = isEmojiSupportedUncached(emoji)));
+		console.log(`is ${emoji} supported?`, cached);
+	}
+
+	return cached;
+};
+
+export const hasZwj = (emoji: string) => {
+	return emoji.includes('\u200d');
+};
+
+// Taken from https://gitlab.com/gitlab-org/gitlab-foss/-/blob/3c9a2dd62025043448c9ea9a6df86422874ee4be/app/assets/javascripts/emoji/support/unicode_support_map.js
+// Licensed under MIT license
+let ctx: CanvasRenderingContext2D | null | undefined;
+
+// We use 16px because mobile Safari (iOS 9.3) doesn't properly scale emojis :/
+// See 32px, https://i.imgur.com/htY6Zym.png
+// See 16px, https://i.imgur.com/FPPsIF8.png
+const FONT_SIZE = 16;
+
+const CANVAS_WIDTH = 2 * FONT_SIZE;
+const CANVAS_HEIGHT = FONT_SIZE;
+
+const isPixelValid = (data: Uint8ClampedArray, pixelOffset: number) => {
+	// `4 *` because RGBA
+	const indexOffset = 4 * pixelOffset;
+
+	const hasColor = data[indexOffset + 0] || data[indexOffset + 1] || data[indexOffset + 2];
+	const isVisible = data[indexOffset + 3];
+
+	if (hasColor && isVisible) {
+		return true;
+	}
+
+	return false;
+};
+
+export const isEmojiSupportedUncached = (emoji: string) => {
+	if (ctx === undefined) {
+		try {
+			ctx = document.createElement('canvas').getContext('2d')!;
+
+			ctx.canvas.width = CANVAS_WIDTH;
+			ctx.canvas.height = CANVAS_HEIGHT;
+
+			ctx.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
+			ctx.textBaseline = 'middle';
+
+			ctx.fillStyle = '#000000';
+		} catch {}
+	}
+
+	// If canvas is blocked, we'll take tofu boxes over filtering everything out
+	if (ctx == null) {
+		return true;
+	}
+
+	ctx.clearRect(0, 0, CANVAS_WIDTH * 2, CANVAS_HEIGHT);
+	ctx.fillText(emoji, 0, FONT_SIZE / 2);
+
+	const data = ctx.getImageData(0, FONT_SIZE / 2, 2 * FONT_SIZE, 1).data;
+
+	let validEmoji = false;
+
+	// Sample along the vertical-middle for a couple of characters
+	for (let pixel = 0; pixel < 64; pixel += 1) {
+		const isLookingAtFirstChar = pixel < FONT_SIZE;
+		const isLookingAtSecondChar = pixel >= FONT_SIZE + FONT_SIZE / 2;
+
+		// Check for the emoji somewhere along the row
+		if (isLookingAtFirstChar && isPixelValid(data, pixel)) {
+			validEmoji = true;
+
+			// Check to see that nothing is rendered next to the first character
+			// to ensure that the ZWJ sequence rendered as one piece
+		} else if (isLookingAtSecondChar && isPixelValid(data, pixel)) {
+			return false;
+		}
+	}
+
+	return validEmoji;
 };

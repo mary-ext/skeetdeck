@@ -2,7 +2,7 @@ import Database, { type Emoji, type EmojiSkin, type SkinTone } from '@pkg/emoji-
 
 import { mapDefined } from '~/utils/misc.ts';
 
-// import { hasZwj, isEmojiSupported } from './support.ts';
+import { hasZwj, isEmojiSupported } from './support.ts';
 
 let db: Database;
 export const getEmojiDb = () => {
@@ -37,10 +37,7 @@ export interface PickedEmoji extends SummarizedEmoji {
 }
 
 export const summarizeEmoji = (emoji: Emoji, emojiSupportLevel: number): SummarizedEmoji | undefined => {
-	// See notes on isEmojiSupported
-	if (
-		emoji.version <= emojiSupportLevel /* && (!hasZwj(emoji.unicode) || isEmojiSupported(emoji.unicode)) */
-	) {
+	if (emoji.version <= emojiSupportLevel && (!hasZwj(emoji.unicode) || isEmojiSupported(emoji.unicode))) {
 		return {
 			unicode: emoji.unicode,
 			name: emoji.name,
