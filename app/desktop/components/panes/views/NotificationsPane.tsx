@@ -193,6 +193,15 @@ const NotificationsPane = () => {
 										return flag !== undefined && (flag & mask) !== 0;
 									});
 							})()}
+							fallback={(() => {
+								if (!notifications.isLoading) {
+									return (
+										<div class="border-b border-divider p-4">
+											<p class="text-center text-sm text-muted-fg">Nothing here but crickets...</p>
+										</div>
+									);
+								}
+							})()}
 						>
 							{(slice) => {
 								return <Notification uid={pane.uid} data={slice} />;
