@@ -2,12 +2,7 @@
 
 import { scheduleIdleTask } from '~/utils/idle.ts';
 
-// It's important to list Twemoji Mozilla before everything else, because Mozilla bundles their
-// own font on some platforms (notably Windows and Linux as of this writing). Typically, Mozilla
-// updates faster than the underlying OS, and we don't want to render older emoji in one font and
-// newer emoji in another font:
-// https://github.com/nolanlawson/emoji-picker-element/pull/268#issuecomment-1073347283
-const FONT_FAMILY = '"Twemoji Mozilla", "Noto Color Emoji", sans-serif';
+const FONT_FAMILY = '"Noto Color Emoji", "Twemoji Mozilla", sans-serif';
 
 // Find one good representative emoji from each version to test by checking its color.
 // Ideally it should have color in the center. For some inspiration, see:

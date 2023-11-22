@@ -86,7 +86,7 @@ export default {
 			green: colors.green,
 		},
 		fontFamily: {
-			sans: `"Roboto", ui-sans-serif, sans-serif, "Twemoji Mozilla", "Noto Color Emoji"`,
+			sans: `"Roboto", ui-sans-serif, sans-serif, "Noto Color Emoji", "Twemoji Mozilla"`,
 			mono: `"JetBrains Mono NL", ui-monospace, monospace`,
 		},
 	},
