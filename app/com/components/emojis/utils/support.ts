@@ -47,84 +47,145 @@ const emojiVersions: [emoji: string, version: number][] = [
 // for checking if the system actually supports Unicode 12.1 and 13.1, so let's
 // pretend that if Unicode 12 is supported, 12.1 is supported as well.
 
-let ctx: CanvasRenderingContext2D | null | undefined;
+// let ctx: CanvasRenderingContext2D | null | undefined;
 
-export const isEmojiSupportedUncached = (emoji: string): boolean => {
-	if (ctx === undefined) {
-		try {
-			ctx = document.createElement('canvas').getContext('2d')!;
-		} catch {}
+// export const isEmojiSupportedUncached = (emoji: string): boolean => {
+// 	if (ctx === undefined) {
+// 		try {
+// 			ctx = document.createElement('canvas').getContext('2d')!;
+// 		} catch {}
 
-		// Set the canvas up for reuse
-		if (ctx) {
-			ctx.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
-			ctx.textBaseline = 'top';
-			ctx.canvas.width = CANVAS_WIDTH * 2;
-			ctx.canvas.height = CANVAS_HEIGHT;
+// 		// Set the canvas up for reuse
+// 		if (ctx) {
+// 			ctx.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
+// 			ctx.textBaseline = 'top';
+// 			ctx.canvas.width = CANVAS_WIDTH * 2;
+// 			ctx.canvas.height = CANVAS_HEIGHT;
+// 		}
+// 	}
+
+// 	// If canvas is blocked, we'll take tofu boxes over filtering everything out
+// 	if (ctx == null) {
+// 		return true;
+// 	}
+
+// 	ctx.clearRect(0, 0, CANVAS_WIDTH * 2, CANVAS_HEIGHT);
+
+// 	// Draw in red on the left
+// 	ctx.fillStyle = '#FF0000';
+// 	ctx.fillText(emoji, 0, 22);
+
+// 	// Draw in blue on right
+// 	ctx.fillStyle = '#0000FF';
+// 	ctx.fillText(emoji, CANVAS_WIDTH, 22);
+
+// 	const a = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT).data;
+// 	const count = a.length;
+// 	let i = 0;
+
+// 	// Search the first visible pixel
+// 	for (; i < count && !a[i + 3]; i += 4);
+
+// 	// No visible pixel
+// 	if (i >= count) {
+// 		return false;
+// 	}
+
+// 	// Emoji has immutable color, so we check the color of the emoji in two different colors
+// 	// the result show be the same.
+// 	const x = CANVAS_WIDTH + ((i / 4) % CANVAS_WIDTH);
+// 	const y = Math.floor(i / 4 / CANVAS_WIDTH);
+// 	const b = ctx.getImageData(x, y, 1, 1).data;
+
+// 	if (a[i] !== b[0] || a[i + 2] !== b[2]) {
+// 		return false;
+// 	}
+
+// 	// Some emojis are a contraction of different ones, so if it's not
+// 	// supported, it will show multiple characters
+// 	if (ctx.measureText(emoji).width >= CANVAS_WIDTH) {
+// 		return false;
+// 	}
+
+// 	// Supported
+// 	return true;
+// };
+
+// const supportedEmojis = new Map<string, boolean>();
+
+// export const isEmojiSupported = (emoji: string): boolean => {
+// 	let cached = supportedEmojis.get(emoji);
+
+// 	if (cached === undefined) {
+// 		supportedEmojis.set(emoji, (cached = isEmojiSupportedUncached(emoji)));
+// 	}
+
+// 	return cached;
+// };
+
+// export const hasZwj = (emoji: string): boolean => {
+// 	return emoji.includes('\u200d');
+// };
+
+export const findEmojiSupportLevel = () => {
+	const isEmojiSupported = (emoji: string): boolean => {
+		ctx.clearRect(0, 0, CANVAS_WIDTH * 2, CANVAS_HEIGHT);
+
+		// Draw in red on the left
+		ctx.fillStyle = '#FF0000';
+		ctx.fillText(emoji, 0, 22);
+
+		// Draw in blue on right
+		ctx.fillStyle = '#0000FF';
+		ctx.fillText(emoji, CANVAS_WIDTH, 22);
+
+		const a = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT).data;
+		const count = a.length;
+		let i = 0;
+
+		// Search the first visible pixel
+		for (; i < count && !a[i + 3]; i += 4);
+
+		// No visible pixel
+		if (i >= count) {
+			return false;
+		}
+
+		// Emoji has immutable color, so we check the color of the emoji in two different colors
+		// the result show be the same.
+		const x = CANVAS_WIDTH + ((i / 4) % CANVAS_WIDTH);
+		const y = Math.floor(i / 4 / CANVAS_WIDTH);
+		const b = ctx.getImageData(x, y, 1, 1).data;
+
+		if (a[i] !== b[0] || a[i + 2] !== b[2]) {
+			return false;
+		}
+
+		// Some emojis are a contraction of different ones, so if it's not
+		// supported, it will show multiple characters
+		if (ctx.measureText(emoji).width >= CANVAS_WIDTH) {
+			return false;
+		}
+
+		// Supported
+		return true;
+	};
+
+	const ctx = document.createElement('canvas').getContext('2d')!;
+
+	// Set the canvas up for reuse
+	ctx.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
+	ctx.textBaseline = 'top';
+	ctx.canvas.width = CANVAS_WIDTH * 2;
+	ctx.canvas.height = CANVAS_HEIGHT;
+
+	for (const [emoji, version] of emojiVersions) {
+		if (isEmojiSupported(emoji)) {
+			return version;
 		}
 	}
 
-	// If canvas is blocked, we'll take tofu boxes over filtering everything out
-	if (ctx == null) {
-		return true;
-	}
-
-	ctx.clearRect(0, 0, CANVAS_WIDTH * 2, CANVAS_HEIGHT);
-
-	// Draw in red on the left
-	ctx.fillStyle = '#FF0000';
-	ctx.fillText(emoji, 0, 22);
-
-	// Draw in blue on right
-	ctx.fillStyle = '#0000FF';
-	ctx.fillText(emoji, CANVAS_WIDTH, 22);
-
-	const a = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT).data;
-	const count = a.length;
-	let i = 0;
-
-	// Search the first visible pixel
-	for (; i < count && !a[i + 3]; i += 4);
-
-	// No visible pixel
-	if (i >= count) {
-		return false;
-	}
-
-	// Emoji has immutable color, so we check the color of the emoji in two different colors
-	// the result show be the same.
-	const x = CANVAS_WIDTH + ((i / 4) % CANVAS_WIDTH);
-	const y = Math.floor(i / 4 / CANVAS_WIDTH);
-	const b = ctx.getImageData(x, y, 1, 1).data;
-
-	if (a[i] !== b[0] || a[i + 2] !== b[2]) {
-		return false;
-	}
-
-	// Some emojis are a contraction of different ones, so if it's not
-	// supported, it will show multiple characters
-	if (ctx.measureText(emoji).width >= CANVAS_WIDTH) {
-		return false;
-	}
-
-	// Supported
-	return true;
-};
-
-const supportedEmojis = new Map<string, boolean>();
-
-export const isEmojiSupported = (emoji: string): boolean => {
-	let cached = supportedEmojis.get(emoji);
-
-	if (cached === undefined) {
-		supportedEmojis.set(emoji, (cached = isEmojiSupportedUncached(emoji)));
-	}
-
-	return cached;
-};
-
-export const hasZwj = (emoji: string): boolean => {
-	return emoji.includes('\u200d');
+	throw new Error(`Emojis not supported?`);
 };
 
 let promise: Promise<number>;
@@ -132,13 +193,7 @@ export const detectEmojiSupportLevel = (): Promise<number> => {
 	return (promise ||= new Promise((resolve) => {
 		scheduleIdleTask(() => {
 			try {
-				for (const [emoji, version] of emojiVersions) {
-					// We don't need to cache these emojis because we'll be filtering
-					// them out in the UI
-					if (isEmojiSupportedUncached(emoji)) {
-						return resolve(version);
-					}
-				}
+				resolve(findEmojiSupportLevel());
 			} catch {
 				// ignore canvas errors
 			}
