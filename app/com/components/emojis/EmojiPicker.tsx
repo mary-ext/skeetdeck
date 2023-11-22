@@ -150,7 +150,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 							<span>{emoji}</span>
 
 							{(() => {
-								if (group() === id && search.length < 2) {
+								if (group() === id && search().length < 2) {
 									return <div class="absolute inset-x-0 -bottom-1 h-1 rounded bg-accent"></div>;
 								}
 							})()}
