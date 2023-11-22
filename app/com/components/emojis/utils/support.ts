@@ -57,7 +57,6 @@ export const isEmojiSupported = (emoji: string) => {
 
 	if (cached === undefined) {
 		supportedEmojis.set(emoji, (cached = isEmojiSupportedUncached(emoji)));
-		console.log(`is ${emoji} supported?`, cached);
 	}
 
 	return cached;
@@ -96,7 +95,7 @@ const isPixelValid = (data: Uint8ClampedArray, pixelOffset: number) => {
 export const isEmojiSupportedUncached = (emoji: string) => {
 	if (ctx === undefined) {
 		try {
-			ctx = document.createElement('canvas').getContext('2d')!;
+			ctx = document.createElement('canvas').getContext('2d', { willReadFrequently: true })!;
 
 			ctx.canvas.width = CANVAS_WIDTH;
 			ctx.canvas.height = CANVAS_HEIGHT;
