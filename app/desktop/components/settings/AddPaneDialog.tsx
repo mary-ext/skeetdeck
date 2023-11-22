@@ -88,11 +88,21 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 	return (
 		<div class={/* @once */ DialogRoot({ size: 'md', fullHeight: true })}>
 			<div class={/* @once */ DialogHeader({ divider: true })}>
-				<Show when={type() !== undefined}>
-					<button onClick={() => setType(undefined)} class={/* @once */ IconButton({ edge: 'left' })}>
-						<ArrowLeftIcon />
-					</button>
-				</Show>
+				{(() => {
+					if (type() === undefined) {
+						return (
+							<button onClick={closeModal} class={/* @once */ IconButton({ edge: 'left' })}>
+								<CloseIcon />
+							</button>
+						);
+					} else {
+						return (
+							<button onClick={() => setType(undefined)} class={/* @once */ IconButton({ edge: 'left' })}>
+								<ArrowLeftIcon />
+							</button>
+						);
+					}
+				})()}
 
 				<Show when={type()} fallback={<h1 class={/* @once */ DialogTitle()}>Add a new column</h1>}>
 					{(type) => (
@@ -104,10 +114,6 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 						</div>
 					)}
 				</Show>
-
-				<button onClick={closeModal} class={/* @once */ IconButton({ edge: 'right' })}>
-					<CloseIcon />
-				</button>
 			</div>
 
 			<Switch>
