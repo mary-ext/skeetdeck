@@ -85,6 +85,7 @@ const EditDeckDialog = (props: EditDeckDialogProps) => {
 				<hr class="mt-auto border-divider" />
 
 				<button
+					type="button"
 					onClick={() => {
 						openModal(() => (
 							<ConfirmDialog
