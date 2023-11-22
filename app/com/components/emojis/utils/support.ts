@@ -40,6 +40,13 @@ const emojiVersions: [emoji: string, version: number][] = [
 	['😃', 0.6],
 ];
 
+// Taken from https://github.com/koala-interactive/is-emoji-supported
+// Licensed under MIT license
+
+// Unfortunately, this code doesn't handle compound emojis, which is necessary
+// for checking if the system actually supports Unicode 12.1 and 13.1, so let's
+// pretend that if Unicode 12 is supported, 12.1 is supported as well.
+
 let ctx: CanvasRenderingContext2D | null | undefined;
 
 export const isEmojiSupportedUncached = (emoji: string): boolean => {

@@ -37,7 +37,10 @@ export interface PickedEmoji extends SummarizedEmoji {
 }
 
 export const summarizeEmoji = (emoji: Emoji, emojiSupportLevel: number): SummarizedEmoji | undefined => {
-	if (emoji.version <= emojiSupportLevel && (!hasZwj(emoji.unicode) || isEmojiSupported(emoji.unicode))) {
+	// See notes on isEmojiSupported
+	if (
+		emoji.version <= emojiSupportLevel /* && (!hasZwj(emoji.unicode) || isEmojiSupported(emoji.unicode)) */
+	) {
 		return {
 			unicode: emoji.unicode,
 			name: emoji.name,
