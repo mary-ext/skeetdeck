@@ -29,11 +29,11 @@ const SettingsDialog = () => {
 	return (
 		<div class={/* @once */ DialogRoot({ size: 'lg', fullHeight: true })}>
 			<div class={/* @once */ DialogHeader({ divider: true })}>
-				<h1 class={/* @once */ DialogTitle()}>Application settings</h1>
-
-				<button onClick={closeModal} class={/* @once */ IconButton({ edge: 'right' })}>
+				<button onClick={closeModal} class={/* @once */ IconButton({ edge: 'left' })}>
 					<CloseIcon />
 				</button>
+
+				<h1 class={/* @once */ DialogTitle()}>Application settings</h1>
 			</div>
 
 			<div class={/* @once */ DialogBody({ padded: false })}>
