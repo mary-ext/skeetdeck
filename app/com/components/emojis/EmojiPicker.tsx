@@ -117,7 +117,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 							{SKINTONE_EMOJIS.map((emoji, index) => (
 								<button
 									type="button"
-									title={SKINTONE_LABELS[index]}
+									title={/* @once */ SKINTONE_LABELS[index]}
 									onClick={() => {
 										close();
 										setTone(index);
@@ -167,7 +167,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 								return (
 									<button
 										type="button"
-										title={emoji.annotation}
+										title={/* @once */ emoji.annotation}
 										onClick={(ev) => {
 											const isShiftHeld = props.multiple && ev.shiftKey;
 											props.onPick({ ...emoji, picked: renderEmoji(emoji) }, !isShiftHeld);
