@@ -7,9 +7,7 @@ import { scheduleIdleTask } from '~/utils/idle.ts';
 // updates faster than the underlying OS, and we don't want to render older emoji in one font and
 // newer emoji in another font:
 // https://github.com/nolanlawson/emoji-picker-element/pull/268#issuecomment-1073347283
-const FONT_FAMILY =
-	'"Twemoji Mozilla","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol",' +
-	'"Noto Color Emoji","EmojiOne Color","Android Emoji",sans-serif';
+const FONT_FAMILY = '"Twemoji Mozilla", "Noto Color Emoji", sans-serif';
 
 const CANVAS_HEIGHT = 25;
 const CANVAS_WIDTH = 20;
