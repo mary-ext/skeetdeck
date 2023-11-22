@@ -105,6 +105,10 @@ export const isEmojiSupportedUncached = (emoji: string) => {
 			ctx.textBaseline = 'middle';
 
 			ctx.fillStyle = '#000000';
+
+			scheduleIdleTask(() => {
+				ctx = undefined;
+			});
 		} catch {}
 	}
 
