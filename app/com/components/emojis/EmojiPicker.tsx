@@ -26,7 +26,7 @@ const SKINTONE_EMOJIS = ['👏', '👏🏻', '👏🏼', '👏🏽', '👏🏾',
 const SKINTONE_LABELS = ['Default', 'Light', 'Medium-light', 'Medium', 'Medium-dark', 'Dark'];
 
 const skinBtn = Interactive({ class: `h-9 w-9 rounded text-xl` });
-const emojiBtn = Interactive({ class: `h-12 w-12 rounded text-3xl` });
+const emojiBtn = Interactive({ class: `h-12 w-12 overflow-hidden rounded text-3xl` });
 const categoryBtn = Interactive({ class: `relative h-9 w-9 rounded text-xl` });
 
 export interface EmojiPickerProps {
