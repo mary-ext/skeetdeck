@@ -1,6 +1,6 @@
 import { type JSX, Suspense, lazy } from 'solid-js';
 
-import { flip } from '@floating-ui/dom';
+import { autoPlacement } from '@floating-ui/dom';
 
 import CircularProgress from '../CircularProgress.tsx';
 import { Flyout } from '../Flyout.tsx';
@@ -17,7 +17,7 @@ export interface EmojiFlyoutProps {
 
 const EmojiFlyout = (props: EmojiFlyoutProps) => {
 	return (
-		<Flyout button={props.children} middleware={[flip()]} placement="bottom-start">
+		<Flyout button={props.children} middleware={[autoPlacement()]} placement="bottom-start">
 			{({ close, menuProps }) => (
 				<div {...menuProps} class="overflow-hidden rounded-lg bg-background shadow-menu">
 					<Suspense
