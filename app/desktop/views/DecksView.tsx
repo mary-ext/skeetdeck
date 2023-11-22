@@ -18,6 +18,8 @@ import EditIcon from '~/com/icons/baseline-edit.tsx';
 import { Button } from '~/com/primitives/button.ts';
 import { IconButton } from '~/com/primitives/icon-button.ts';
 
+import EditDeckDialog from '../components/settings/EditDeckDialog.tsx';
+
 const AddPaneDialog = lazy(() => import('../components/settings/AddPaneDialog.tsx'));
 
 const DecksView = () => {
@@ -87,7 +89,23 @@ const DecksView = () => {
 					</div>
 
 					<div class="-mr-1 ml-auto bg-background/20 p-2">
-						<button class={/* @once */ IconButton()}>
+						<button
+							onClick={() => {
+								openModal(() => (
+									<EditDeckDialog
+										deck={deck}
+										onRemove={() => {
+											const index = preferences.decks.indexOf(deck);
+
+											if (index !== -1) {
+												preferences.decks.splice(index, 1);
+											}
+										}}
+									/>
+								));
+							}}
+							class={/* @once */ IconButton()}
+						>
 							<EditIcon />
 						</button>
 					</div>
