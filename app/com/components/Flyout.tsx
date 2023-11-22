@@ -62,8 +62,12 @@ export const Flyout = (props: FlyoutProps) => {
 	};
 
 	const modal = (
-		<Modal open={isOpen()} onClose={() => setIsOpen(false)} disableOverlay desktop>
-			{(() => {
+		<Modal
+			open={isOpen()}
+			onClose={() => setIsOpen(false)}
+			disableOverlay
+			desktop
+			children={(() => {
 				const [floating, setFloating] = createSignal<HTMLElement>();
 
 				const position = useFloating(() => anchor, floating, {
@@ -89,7 +93,7 @@ export const Flyout = (props: FlyoutProps) => {
 
 				return (() => props.children(context)) as unknown as JSX.Element;
 			})()}
-		</Modal>
+		/>
 	);
 
 	return [render, modal] as unknown as JSX.Element;
