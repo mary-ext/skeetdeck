@@ -18,15 +18,29 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 
 	return (
 		<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
-			{modal.depth > 0 && (
-				<button
-					title="Go back to previous dialog"
-					onClick={modal.close}
-					class={/* @once */ IconButton({ edge: 'left' })}
-				>
-					<ArrowLeftIcon />
-				</button>
-			)}
+			{(() => {
+				if (modal.depth > 0) {
+					return (
+						<button
+							title="Go back to previous dialog"
+							onClick={modal.close}
+							class={/* @once */ IconButton({ edge: 'left' })}
+						>
+							<ArrowLeftIcon />
+						</button>
+					);
+				} else {
+					return (
+						<button
+							title="Close dialog"
+							onClick={modal.close}
+							class={/* @once */ IconButton({ edge: 'left' })}
+						>
+							<CloseIcon />
+						</button>
+					);
+				}
+			})()}
 
 			<div class="flex min-w-0 grow flex-col gap-0.5">
 				<p class="overflow-hidden text-ellipsis whitespace-nowrap break-all text-base font-bold leading-5">
@@ -40,13 +54,7 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 				)}
 			</div>
 
-			<div class="flex">
-				{props.children}
-
-				<button title="Close dialog" onClick={modal.reset} class={/* @once */ IconButton({ edge: 'right' })}>
-					<CloseIcon />
-				</button>
-			</div>
+			<div class="flex empty:hidden">{props.children}</div>
 		</div>
 	);
 };

@@ -100,7 +100,7 @@ const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 
 								modal.close();
 							}}
-							class={/* @once */ IconButton()}
+							class={/* @once */ IconButton({ edge: 'right' })}
 						>
 							<TableColumnRightAddIcon />
 						</button>
