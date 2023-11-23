@@ -4,7 +4,7 @@ import type { DID, RefOf, UnionOf } from '../atp-schema.ts';
 
 import { type SignalizedPost, mergePost } from '../stores/posts.ts';
 
-// type Post = RefOf<'app.bsky.feed.defs#postView'>;
+type Post = RefOf<'app.bsky.feed.defs#postView'>;
 type Thread = RefOf<'app.bsky.feed.defs#threadViewPost'>;
 
 type BlockedPost = UnionOf<'app.bsky.feed.defs#blockedPost'>;
@@ -18,6 +18,34 @@ const TypeSortOrder = {
 	[TypeNotFound]: 0,
 	[TypeBlocked]: 1,
 	[TypePost]: 2,
+};
+
+const enum PostSortOrder {
+	MUTED = 0,
+	NORMAL = 1,
+	FOLLOWING = 2,
+	YOU = 3,
+	SAME_AUTHOR = 4,
+}
+
+const calculatePostScore = (uid: DID, child: Post, parent: Post) => {
+	if (child.author.viewer!.muted) {
+		return PostSortOrder.MUTED;
+	}
+
+	if (parent.author.did === child.author.did) {
+		return PostSortOrder.SAME_AUTHOR;
+	}
+
+	if (child.author.did === uid) {
+		return PostSortOrder.YOU;
+	}
+
+	if (child.author.viewer!.following) {
+		return PostSortOrder.FOLLOWING;
+	}
+
+	return PostSortOrder.NORMAL;
 };
 
 export interface ThreadSlice {
@@ -62,20 +90,23 @@ export const createThreadPage = (uid: DID, data: Thread): ThreadPage => {
 			continue;
 		}
 
+		const post = thread.post;
+		const scores: Record<string, number> = {};
+
 		// const replies = thread.replies;
 		const replies = thread.replies.slice().sort((a, b) => {
 			const aType = a.$type;
 			const bType = b.$type;
 
-			// if (aType === TypePost && bType === TypePost) {
-			// 	const aIndex = a.post.indexedAt;
-			// 	const bIndex = b.post.indexedAt;
+			if (aType === TypePost && bType === TypePost) {
+				const aPost = a.post;
+				const bPost = b.post;
 
-			// 	const aScore = (scores[aIndex] ??= new Date(aIndex).getTime());
-			// 	const bScore = (scores[bIndex] ??= new Date(bIndex).getTime());
+				const aScore = (scores[aPost.cid] ??= calculatePostScore(uid, aPost, post));
+				const bScore = (scores[bPost.cid] ??= calculatePostScore(uid, bPost, post));
 
-			// 	return bScore - aScore;
-			// }
+				return bScore - aScore;
+			}
 
 			return TypeSortOrder[bType] - TypeSortOrder[aType];
 		});
