@@ -162,6 +162,7 @@ const Post = (props: PostProps) => {
 			<div class="flex gap-3">
 				<div class="flex shrink-0 flex-col items-center">
 					<Link
+						tabindex={-1}
 						to={authorPermalink()}
 						class="h-10 w-10 overflow-hidden rounded-full bg-muted-fg hover:opacity-80"
 					>

@@ -93,6 +93,7 @@ export type Linking =
 
 export interface LinkingProps {
 	to: Linking;
+	tabindex?: string | number;
 	ref?: HTMLElement | ((el: HTMLElement) => void);
 	dir?: 'ltr' | 'rtl' | 'auto';
 	class?: string;
