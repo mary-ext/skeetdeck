@@ -22,7 +22,7 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 		const decision = maker();
 
 		if (decision) {
-			if (decision.b) {
+			if (decision.b || decision.m) {
 				return decision;
 			}
 		}
@@ -31,8 +31,8 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 	const render = () => {
 		const $decision = decision();
 
-		if (!$decision) {
-			return props.children?.(null);
+		if (!$decision || !$decision.b) {
+			return props.children?.($decision || null);
 		}
 
 		const [show, setShow] = createSignal(false);
