@@ -1,4 +1,4 @@
-import { Show, createMemo } from 'solid-js';
+import { type Accessor, createMemo } from 'solid-js';
 
 import type { RefOf } from '~/api/atp-schema.ts';
 import { getCollectionId } from '~/api/utils/misc.ts';
@@ -24,7 +24,7 @@ export interface EmbedProps {
 }
 
 const Embed = (props: EmbedProps) => {
-	const val = createMemo(() => {
+	const embeds = createMemo(() => {
 		const embed = props.embed;
 		const type = embed.$type;
 
@@ -58,41 +58,48 @@ const Embed = (props: EmbedProps) => {
 
 	return (
 		<div class="mt-3 flex flex-col gap-3">
-			<Show when={val().link}>{(link) => <EmbedLink link={link()} interactive />}</Show>
+			{(() => {
+				const { images, link, record } = embeds();
 
-			<Show when={val().images}>{(images) => <EmbedImage images={images()} interactive />}</Show>
-
-			<Show when={val().record} keyed>
-				{(record) => {
-					const type = record.$type;
-
-					if (getCollectionId(record.uri) === 'app.bsky.feed.post') {
-						if (type === 'app.bsky.embed.record#viewNotFound') {
-							return <EmbedRecordNotFound />;
-						}
-
-						if (type === 'app.bsky.embed.record#viewBlocked') {
-							return <EmbedRecordBlocked record={record} />;
-						}
-
-						if (type === 'app.bsky.embed.record#viewRecord') {
-							return <EmbedRecord record={record} large={props.large} interactive />;
-						}
-					}
-
-					if (type === 'app.bsky.feed.defs#generatorView') {
-						return <EmbedFeed feed={record} />;
-					}
-
-					if (type === 'app.bsky.graph.defs#listView') {
-						return <EmbedList list={record} />;
-					}
-
-					return <></>;
-				}}
-			</Show>
+				return [
+					link && <EmbedLink link={link} interactive />,
+					images && <EmbedImage images={images} interactive />,
+					record && renderRecord(record, () => props.large),
+				];
+			})()}
 		</div>
 	);
 };
 
 export default Embed;
+
+const renderRecord = (
+	record: RefOf<'app.bsky.embed.record#view'>['record'],
+	large: Accessor<boolean | undefined>,
+) => {
+	const type = record.$type;
+
+	if (getCollectionId(record.uri) === 'app.bsky.feed.post') {
+		if (type === 'app.bsky.embed.record#viewNotFound') {
+			return <EmbedRecordNotFound />;
+		}
+
+		if (type === 'app.bsky.embed.record#viewBlocked') {
+			return <EmbedRecordBlocked record={record} />;
+		}
+
+		if (type === 'app.bsky.embed.record#viewRecord') {
+			return <EmbedRecord record={record} large={large()} interactive />;
+		}
+	}
+
+	if (type === 'app.bsky.feed.defs#generatorView') {
+		return <EmbedFeed feed={record} />;
+	}
+
+	if (type === 'app.bsky.graph.defs#listView') {
+		return <EmbedList list={record} />;
+	}
+
+	return null;
+};
