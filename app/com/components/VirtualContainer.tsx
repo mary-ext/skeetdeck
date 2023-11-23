@@ -1,4 +1,4 @@
-import { type JSX, Show, createSignal } from 'solid-js';
+import { type JSX, createSignal } from 'solid-js';
 
 import { scheduleIdleTask } from '~/utils/idle.ts';
 import { getRectFromEntry, scrollObserver } from '~/utils/intersection-observer.ts';
@@ -50,7 +50,11 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 			style={{ height: shouldHide() ? `${height || cachedHeight()}px` : undefined }}
 			prop:$onintersect={handleIntersect}
 		>
-			<Show when={!shouldHide()}>{props.children}</Show>
+			{(() => {
+				if (!shouldHide()) {
+					return props.children;
+				}
+			})()}
 		</article>
 	);
 };
