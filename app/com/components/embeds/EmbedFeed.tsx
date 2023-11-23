@@ -1,5 +1,3 @@
-import { Show } from 'solid-js';
-
 import type { UnionOf } from '~/api/atp-schema.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
@@ -21,7 +19,13 @@ const EmbedFeed = (props: EmbedFeedProps) => {
 		>
 			<div class="flex items-center gap-3">
 				<div class="h-9 w-9 overflow-hidden rounded-md bg-muted-fg">
-					<Show when={feed().avatar}>{(avatar) => <img src={avatar()} class="h-full w-full" />}</Show>
+					{(() => {
+						const avatar = feed().avatar;
+
+						if (avatar) {
+							return <img src={avatar} class="h-full w-full" />;
+						}
+					})()}
 				</div>
 
 				<div>

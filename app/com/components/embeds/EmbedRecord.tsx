@@ -1,4 +1,4 @@
-import { Show, type JSX } from 'solid-js';
+import { type JSX } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
 import type { Records, UnionOf } from '~/api/atp-schema.ts';
@@ -25,7 +25,6 @@ export interface EmbedRecordProps {
 
 const EmbedRecord = (props: EmbedRecordProps) => {
 	const record = () => props.record;
-	const large = () => props.large;
 	const interactive = () => props.interactive;
 
 	const author = () => record().author;
@@ -84,27 +83,33 @@ const EmbedRecord = (props: EmbedRecordProps) => {
 						</span>
 					</div>
 
-					<Show when={(val() as PostRecord).text}>
-						<div class="flex items-start">
-							<Show when={!large() && images()}>
-								<div class="mb-3 ml-3 mt-2 grow basis-0">
-									<EmbedImage images={images()!} blur={/* @once */ mod?.m} />
+					{(() => {
+						const $large = props.large;
+						const $text = (val() as PostRecord).text;
+						const $images = images();
+
+						const showLargeImage = $images && ($large || !$text);
+
+						return [
+							$text && (
+								<div class="flex items-start">
+									{$images && !$large && (
+										<div class="mb-3 ml-3 mt-2 grow basis-0">
+											<EmbedImage images={$images} blur={/* @once */ mod?.m} />
+										</div>
+									)}
+
+									<div class="mx-3 mb-3 mt-1 line-clamp-6 min-w-0 grow-4 basis-0 whitespace-pre-wrap break-words text-sm empty:hidden">
+										{$text}
+									</div>
 								</div>
-							</Show>
-
-							<div class="mx-3 mb-3 mt-1 line-clamp-6 min-w-0 grow-4 basis-0 whitespace-pre-wrap break-words text-sm empty:hidden">
-								{(val() as PostRecord).text}
-							</div>
-						</div>
-					</Show>
-
-					<Show when={(large() || !(val() as PostRecord).text) && images()}>
-						<Show when={!(val() as PostRecord).text}>
-							<div class="mt-3" />
-						</Show>
-
-						<EmbedImage images={images()!} blur={/* @once */ mod?.m} borderless />
-					</Show>
+							),
+							showLargeImage && [
+								!$text && <div class="mt-3"></div>,
+								<EmbedImage images={$images} blur={/* @once */ mod?.m} borderless />,
+							],
+						];
+					})()}
 				</Dynamic>
 			)}
 		</PostQuoteWarning>

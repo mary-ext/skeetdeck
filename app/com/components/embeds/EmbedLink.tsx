@@ -1,4 +1,3 @@
-import { Show } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
 import type { RefOf } from '~/api/atp-schema.ts';
@@ -38,14 +37,18 @@ const EmbedLink = (props: EmbedLinkProps) => {
 			class="flex overflow-hidden rounded-md border border-divider"
 			classList={{ 'hover:bg-secondary': interactive() }}
 		>
-			<Show when={link().thumb} keyed>
-				{(thumb) => (
-					<BlobImage
-						src={thumb}
-						class="aspect-square w-[86px] shrink-0 border-r border-divider object-cover"
-					/>
-				)}
-			</Show>
+			{(() => {
+				const thumb = link().thumb;
+
+				if (thumb) {
+					return (
+						<BlobImage
+							src={thumb}
+							class="aspect-square w-[86px] shrink-0 border-r border-divider object-cover"
+						/>
+					);
+				}
+			})()}
 
 			<div class="flex min-w-0 flex-col justify-center gap-0.5 p-3 text-sm">
 				<p class="text-muted-fg">{getDomain(link().uri)}</p>

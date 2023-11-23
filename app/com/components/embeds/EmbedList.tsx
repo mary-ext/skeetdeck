@@ -27,7 +27,13 @@ const EmbedList = (props: EmbedListProps) => {
 		>
 			<div class="flex items-center gap-3">
 				<div class="h-9 w-9 overflow-hidden rounded-md bg-muted-fg">
-					<Show when={list().avatar}>{(avatar) => <img src={avatar()} class="h-full w-full" />}</Show>
+					{(() => {
+						const avatar = list().avatar;
+
+						if (avatar) {
+							return <img src={avatar} class="h-full w-full" />;
+						}
+					})()}
 				</div>
 
 				<div>
