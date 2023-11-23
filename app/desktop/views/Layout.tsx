@@ -24,7 +24,9 @@ import { SearchFlyout, SuggestionType } from '../components/flyouts/SearchFlyout
 import SettingsDialog from '../components/settings/SettingsDialog.tsx';
 import AddDeckDialog from '../components/settings/AddDeckDialog.tsx';
 
-const menuIconButton = Interactive({ class: `h-11 shrink-0 text-lg` });
+const menuIconButton = Interactive({
+	class: `h-11 shrink-0 text-lg disabled:pointer-events-none disabled:opacity-50`,
+});
 
 const DashboardLayout = () => {
 	const params = useParams();
@@ -75,7 +77,6 @@ const DashboardLayout = () => {
 													addPane<SearchPaneConfig>(deck, {
 														type: PaneType.SEARCH,
 														query: item.query,
-														title: null,
 														uid: $uid,
 													});
 												} else if (item.type === SuggestionType.PROFILE) {
@@ -108,6 +109,7 @@ const DashboardLayout = () => {
 				<div class="flex min-h-0 grow flex-col overflow-y-auto border-b border-divider scrollbar-hide">
 					<button
 						title="Add new deck"
+						disabled={preferences.onboarding}
 						onClick={() => {
 							openModal(() => <AddDeckDialog />);
 						}}
@@ -138,6 +140,7 @@ const DashboardLayout = () => {
 
 				<button
 					title="Open application settings"
+					disabled={preferences.onboarding}
 					onClick={() => {
 						openModal(() => <SettingsDialog />);
 					}}
