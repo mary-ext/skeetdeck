@@ -1,23 +1,21 @@
 // https://github.com/nolanlawson/emoji-picker-element/blob/497681f21119c5cc675fd59a1684b1a0d392215e/src/picker/utils/emojiSupport.js#L6
 
 import { scheduleIdleTask } from '~/utils/idle.ts';
+import { assert } from '~/utils/misc.ts';
 
+// This should match the fonts set in `tailwind-base.config.js`
 const FONT_FAMILY = '"Noto Color Emoji", "Twemoji Mozilla", sans-serif';
 
-// Find one good representative emoji from each version to test by checking its color.
-// Ideally it should have color in the center. For some inspiration, see:
+// Find a good representative emoji from each version to test
 // https://about.gitlab.com/blog/2018/05/30/journey-in-native-unicode-emoji/
 //
-// Note that for certain versions (12.1, 13.1), there is no point in testing them explicitly, because
-// all the emoji from this version are compound-emoji from previous versions. So they would pass a color
-// test, even in browsers that display them as double emoji. (E.g. "face in clouds" might render as
-// "face without mouth" plus "fog".) These emoji can only be filtered using the width test,
-// which happens in checkZwjSupport
+// Note that compound emojis have to be tested individually as some fonts might
+// not support them fully, and can be problematic on how it's displaying them.
 const emojiVersions: [emoji: string, version: number][] = [
 	['🫨', 15],
 	['🫠', 14],
-	['🥲', 13.1], // smiling face with tear, technically from v13 but see note above
-	['🥻', 12.1], // sari, technically from v12 but see note above
+	['🥲', 13.1],
+	['🥻', 12.1],
 	['🥰', 11],
 	['🤩', 5],
 	['👱‍♀️', 4],
@@ -38,9 +36,9 @@ export const detectEmojiSupportLevel = (): Promise<number> => {
 				}
 			}
 
-			// In case of an error, be generous and just assume all emoji are supported (e.g. for canvas errors
-			// due to anti-fingerprinting add-ons). Better to show some gray boxes than nothing at all.
-			resolve(emojiVersions[0][1]);
+			// Ideally we shouldn't be here at all, if a canvas error happens it should
+			// be returning the first one in the array.
+			assert(false, `Unexpected code path`);
 		});
 	}));
 };
