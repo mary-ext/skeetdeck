@@ -54,7 +54,7 @@ const App = () => {
 			<QueryClientProvider client={queryClient}>
 				<SharedPreferences.Provider value={/* @once */ createSharedPreferencesObject()}>
 					<Routes />
-					<ModalProvider desktop />
+					<ModalProvider />
 				</SharedPreferences.Provider>
 			</QueryClientProvider>
 		</Router>

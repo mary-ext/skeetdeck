@@ -68,11 +68,9 @@ export const useModalState = () => {
 	return useContext(StateContext)!;
 };
 
-export interface ModalProviderProps {
-	desktop?: boolean;
-}
+export interface ModalProviderProps {}
 
-export const ModalProvider = (props: ModalProviderProps) => {
+export const ModalProvider = (_props: ModalProviderProps) => {
 	return (
 		<For each={modals()}>
 			{(modal) => {
@@ -83,11 +81,7 @@ export const ModalProvider = (props: ModalProviderProps) => {
 				};
 
 				return (
-					<Modal
-						open
-						desktop={props.desktop}
-						onClose={() => modal.disableBackdropClose.value || closeModal()}
-					>
+					<Modal open onClose={() => modal.disableBackdropClose.value || closeModal()}>
 						<StateContext.Provider value={context}>
 							<Suspense
 								fallback={

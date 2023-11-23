@@ -65,8 +65,6 @@ export const Flyout = (props: FlyoutProps) => {
 		<Modal
 			open={isOpen()}
 			onClose={() => setIsOpen(false)}
-			disableOverlay
-			desktop
 			children={(() => {
 				const [floating, setFloating] = createSignal<HTMLElement>();
 

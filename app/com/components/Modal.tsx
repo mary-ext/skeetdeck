@@ -1,13 +1,12 @@
 import { type ComponentProps, Show, onCleanup, onMount } from 'solid-js';
 
 export interface ModalProps extends Pick<ComponentProps<'svg'>, 'children'> {
-	desktop?: boolean;
-	disableOverlay?: boolean;
 	open?: boolean;
 	onClose?: () => void;
 }
 
 let checked = false;
+
 
 const Modal = (props: ModalProps) => {
 	let focused: Element | null | undefined;
@@ -70,13 +69,7 @@ const Modal = (props: ModalProps) => {
 						onClose();
 					}
 				}}
-				class="m-0 h-full max-h-none w-full max-w-none justify-center overflow-y-auto backdrop:bg-transparent modal:flex"
-				classList={{
-					[`items-center p-6`]: props.desktop,
-					[`items-end sm:items-center sm:p-6`]: !props.desktop,
-					[`bg-black/50 dark:bg-hinted/50`]: !props.disableOverlay,
-					[`bg-transparent`]: props.disableOverlay,
-				}}
+				class="m-0 h-full max-h-none w-full max-w-none overflow-hidden bg-transparent backdrop:bg-transparent"
 				data-modal
 			>
 				{props.children}

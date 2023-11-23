@@ -13,6 +13,8 @@ import { queryClient } from '../../globals/query.ts';
 import { closeModal, useModalState } from '~/com/globals/modals.tsx';
 import { model } from '~/utils/input.ts';
 
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
+
 import { Button } from '~/com/primitives/button.ts';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
 import { Input } from '~/com/primitives/input.ts';
@@ -82,110 +84,112 @@ const AddAccountDialog = () => {
 	});
 
 	return (
-		<form onSubmit={handleSubmit} class={/* @once */ DialogRoot()}>
-			<div class={/* @once */ DialogHeader()}>
-				<h1 class={/* @once */ DialogTitle()}>Add new account</h1>
-			</div>
-
-			<fieldset
-				disabled={loginMutation.isPending}
-				class={/* @once */ DialogBody({ class: 'flex flex-col gap-4' })}
-			>
-				<div class="flex flex-col">
-					<label for="user" class="mb-2 block text-sm font-medium leading-6 text-primary">
-						Identifier
-					</label>
-					<input
-						ref={model(identifier, setIdentifier)}
-						type="text"
-						id="user"
-						required
-						pattern=".*\\S+.*"
-						placeholder="you.bsky.social"
-						autocomplete="username"
-						onBlur={() => {
-							if (isEmail()) {
-								setAdvanced(true);
-							}
-						}}
-						class={/* @once */ Input()}
-					/>
-
-					<Show when={advanced() && isEmail()}>
-						<p class="mt-3 text-xs text-muted-fg">
-							As you're trying to sign in via email, please specify the provider you're signing into.
-						</p>
-					</Show>
+		<DialogOverlay>
+			<form onSubmit={handleSubmit} class={/* @once */ DialogRoot()}>
+				<div class={/* @once */ DialogHeader()}>
+					<h1 class={/* @once */ DialogTitle()}>Add new account</h1>
 				</div>
 
-				<div class="flex flex-col gap-2">
-					<label for="pwd" class="block text-sm font-medium leading-6 text-primary">
-						Password
-					</label>
-					<input
-						ref={model(password, setPassword)}
-						type="password"
-						id="pwd"
-						required
-						autocomplete="password"
-						placeholder="Password"
-						class={/* @once */ Input()}
-					/>
-				</div>
-
-				<Show when={advanced()}>
-					<div class="flex flex-col gap-2">
-						<label for="svc" class="block text-sm font-medium leading-6 text-primary">
-							Hosting provider
+				<fieldset
+					disabled={loginMutation.isPending}
+					class={/* @once */ DialogBody({ class: 'flex flex-col gap-4' })}
+				>
+					<div class="flex flex-col">
+						<label for="user" class="mb-2 block text-sm font-medium leading-6 text-primary">
+							Identifier
 						</label>
 						<input
-							ref={model(service, setService)}
-							type="string"
-							id="svc"
-							required={isEmail()}
-							pattern="([a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*(?:\\.[a-zA-Z]+))"
-							placeholder={isEmail() ? `example.social` : `Leave blank for automatic provider detection`}
+							ref={model(identifier, setIdentifier)}
+							type="text"
+							id="user"
+							required
+							pattern=".*\\S+.*"
+							placeholder="you.bsky.social"
+							autocomplete="username"
+							onBlur={() => {
+								if (isEmail()) {
+									setAdvanced(true);
+								}
+							}}
+							class={/* @once */ Input()}
+						/>
+
+						<Show when={advanced() && isEmail()}>
+							<p class="mt-3 text-xs text-muted-fg">
+								As you're trying to sign in via email, please specify the provider you're signing into.
+							</p>
+						</Show>
+					</div>
+
+					<div class="flex flex-col gap-2">
+						<label for="pwd" class="block text-sm font-medium leading-6 text-primary">
+							Password
+						</label>
+						<input
+							ref={model(password, setPassword)}
+							type="password"
+							id="pwd"
+							required
+							autocomplete="password"
+							placeholder="Password"
 							class={/* @once */ Input()}
 						/>
 					</div>
-				</Show>
 
-				<Switch>
-					<Match when={loginMutation.error} keyed>
-						{(error: any) => (
-							<p class="text-sm leading-6 text-red-600">
-								{error.cause ? error.cause.message : error.message || '' + error}
-							</p>
-						)}
-					</Match>
-				</Switch>
-			</fieldset>
+					<Show when={advanced()}>
+						<div class="flex flex-col gap-2">
+							<label for="svc" class="block text-sm font-medium leading-6 text-primary">
+								Hosting provider
+							</label>
+							<input
+								ref={model(service, setService)}
+								type="string"
+								id="svc"
+								required={isEmail()}
+								pattern="([a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*(?:\\.[a-zA-Z]+))"
+								placeholder={isEmail() ? `example.social` : `Leave blank for automatic provider detection`}
+								class={/* @once */ Input()}
+							/>
+						</div>
+					</Show>
 
-			<fieldset disabled={loginMutation.isPending} class={/* @once */ DialogActions()}>
-				<Show when={!advanced()}>
-					<button
-						type="button"
-						onClick={() => setAdvanced(true)}
-						class={/* @once */ Button({ variant: 'ghost' })}
-					>
-						Advanced
+					<Switch>
+						<Match when={loginMutation.error} keyed>
+							{(error: any) => (
+								<p class="text-sm leading-6 text-red-600">
+									{error.cause ? error.cause.message : error.message || '' + error}
+								</p>
+							)}
+						</Match>
+					</Switch>
+				</fieldset>
+
+				<fieldset disabled={loginMutation.isPending} class={/* @once */ DialogActions()}>
+					<Show when={!advanced()}>
+						<button
+							type="button"
+							onClick={() => setAdvanced(true)}
+							class={/* @once */ Button({ variant: 'ghost' })}
+						>
+							Advanced
+						</button>
+					</Show>
+
+					<div class="grow"></div>
+
+					<button type="button" onClick={closeModal} class={/* @once */ Button({ variant: 'ghost' })}>
+						Cancel
 					</button>
-				</Show>
-
-				<div class="grow"></div>
-
-				<button type="button" onClick={closeModal} class={/* @once */ Button({ variant: 'ghost' })}>
-					Cancel
-				</button>
-				<button
-					type="submit"
-					disabled={isEmail() && !advanced()}
-					class={/* @once */ Button({ variant: 'primary' })}
-				>
-					Sign in
-				</button>
-			</fieldset>
-		</form>
+					<button
+						type="submit"
+						disabled={isEmail() && !advanced()}
+						class={/* @once */ Button({ variant: 'primary' })}
+					>
+						Sign in
+					</button>
+				</fieldset>
+			</form>
+		</DialogOverlay>
 	);
 };
 

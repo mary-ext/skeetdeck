@@ -9,6 +9,7 @@ import { getCurrentTid } from '~/api/utils/tid.ts';
 import { closeModal } from '~/com/globals/modals.tsx';
 import { model } from '~/utils/input.ts';
 
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
 import EmojiFlyout from '~/com/components/emojis/EmojiFlyout.tsx';
 
 import { Button } from '~/com/primitives/button.ts';
@@ -43,48 +44,50 @@ const AddDeckDialog = () => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} class={/* @once */ DialogRoot({ size: 'sm' })}>
-			<div class={/* @once */ DialogHeader()}>
-				<h1 class={/* @once */ DialogTitle()}>Add new deck</h1>
-			</div>
-
-			<div class={/* @once */ DialogBody({ class: 'flex flex-col gap-4', scrollable: true })}>
-				<div class="flex flex-col gap-2">
-					<label for="name" class="block text-sm font-medium leading-6 text-primary">
-						Name
-					</label>
-					<input ref={model(name, setName)} type="text" id="name" required class={/* @once */ Input()} />
+		<DialogOverlay>
+			<form onSubmit={handleSubmit} class={/* @once */ DialogRoot({ size: 'sm' })}>
+				<div class={/* @once */ DialogHeader()}>
+					<h1 class={/* @once */ DialogTitle()}>Add new deck</h1>
 				</div>
 
-				<div class="flex flex-col gap-2">
-					<label class="block text-sm font-medium leading-6 text-primary">Emoji</label>
+				<div class={/* @once */ DialogBody({ class: 'flex flex-col gap-4', scrollable: true })}>
+					<div class="flex flex-col gap-2">
+						<label for="name" class="block text-sm font-medium leading-6 text-primary">
+							Name
+						</label>
+						<input ref={model(name, setName)} type="text" id="name" required class={/* @once */ Input()} />
+					</div>
 
-					<div class="flex min-w-0 flex-wrap items-center gap-4 pb-0.5">
-						<EmojiFlyout onPick={(emoji) => setEmoji(emoji.picked)}>
-							<button
-								type="button"
-								class="flex h-9 items-center gap-2 self-start rounded border border-input px-3 py-2 outline-2 -outline-offset-1 outline-accent outline-none focus:outline disabled:opacity-50"
-							>
-								<span class="text-lg">{emoji()}</span>
-								<ChevronRightIcon class="-mr-2 rotate-90 text-base text-muted-fg" />
-							</button>
-						</EmojiFlyout>
+					<div class="flex flex-col gap-2">
+						<label class="block text-sm font-medium leading-6 text-primary">Emoji</label>
 
-						<span class="text-sm text-muted-fg">Choose an emoji for your deck</span>
+						<div class="flex min-w-0 flex-wrap items-center gap-4 pb-0.5">
+							<EmojiFlyout onPick={(emoji) => setEmoji(emoji.picked)}>
+								<button
+									type="button"
+									class="flex h-9 items-center gap-2 self-start rounded border border-input px-3 py-2 outline-2 -outline-offset-1 outline-accent outline-none focus:outline disabled:opacity-50"
+								>
+									<span class="text-lg">{emoji()}</span>
+									<ChevronRightIcon class="-mr-2 rotate-90 text-base text-muted-fg" />
+								</button>
+							</EmojiFlyout>
+
+							<span class="text-sm text-muted-fg">Choose an emoji for your deck</span>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<div class={/* @once */ DialogActions()}>
-				<button type="button" onClick={closeModal} class={/* @once */ Button({ variant: 'ghost' })}>
-					Cancel
-				</button>
+				<div class={/* @once */ DialogActions()}>
+					<button type="button" onClick={closeModal} class={/* @once */ Button({ variant: 'ghost' })}>
+						Cancel
+					</button>
 
-				<button type="submit" class={/* @once */ Button({ variant: 'primary' })}>
-					Add
-				</button>
-			</div>
-		</form>
+					<button type="submit" class={/* @once */ Button({ variant: 'primary' })}>
+						Add
+					</button>
+				</div>
+			</form>
+		</DialogOverlay>
 	);
 };
 
