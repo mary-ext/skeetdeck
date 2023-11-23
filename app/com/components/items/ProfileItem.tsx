@@ -64,9 +64,10 @@ export const ProfileItem = (props: ProfileItemProps) => {
 					<div class="empty:hidden">{aside?.render(profile())}</div>
 				</div>
 
-				<Show when={profile().description.value}>
-					{(desc) => <div class="line-clamp-3 break-words text-sm">{desc()}</div>}
-				</Show>
+				{(() => {
+					const description = profile().description.value;
+					return <div class="line-clamp-3 break-words text-sm">{description}</div>;
+				})()}
 
 				{footer?.render(profile())}
 			</div>

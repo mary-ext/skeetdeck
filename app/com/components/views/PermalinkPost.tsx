@@ -1,5 +1,3 @@
-import { Show } from 'solid-js';
-
 import { updatePostLike } from '~/api/mutations/like-post.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
@@ -81,13 +79,11 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 				/>
 			</div>
 
-			<Show when={post().embed.value}>
-				{(embed) => (
-					<PostEmbedWarning post={post()}>
-						<Embed embed={embed()} large />
-					</PostEmbedWarning>
-				)}
-			</Show>
+			{post().embed.value && (
+				<PostEmbedWarning post={post()}>
+					<Embed embed={post().embed.value!} large />
+				</PostEmbedWarning>
+			)}
 
 			<div class="my-3">
 				<span class="text-sm text-muted-fg">{formatAbsDateTime(record().createdAt)}</span>
