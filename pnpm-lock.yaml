@@ -52,6 +52,9 @@ importers:
       '@pkg/solid-query':
         specifier: workspace:^
         version: link:../packages/solid-query
+      '@pkg/solid-use-gesture':
+        specifier: workspace:^
+        version: link:../packages/solid-use-gesture
       '@solidjs/router':
         specifier: ^0.8.4
         version: 0.8.4(patch_hash=2juozfaksvcwbkonoaj2ws2ewm)(solid-js@1.8.6)

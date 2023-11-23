@@ -9,4 +9,4 @@ export { createGestureMixin } from './createGestureMixin.ts';
 
 export * from '@use-gesture/core/utils';
 export * from '@use-gesture/core/actions';
-export * from '@use-gesture/core/types';
+export type * from '@use-gesture/core/types';
