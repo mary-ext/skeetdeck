@@ -1,6 +1,10 @@
-import { Match, Switch } from 'solid-js';
+import { Match, Switch, lazy } from 'solid-js';
 
 import type { RefOf } from '~/api/atp-schema.ts';
+
+import { openModal } from '~/com/globals/modals.tsx';
+
+const LazyImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
 
 type EmbeddedImage = RefOf<'app.bsky.embed.images#viewImage'>;
 
@@ -69,7 +73,7 @@ const EmbedImage = (props: EmbedImageProps) => {
 					alt={alt}
 					onClick={() => {
 						if (interactive) {
-							// openModal
+							openModal(() => <LazyImageViewerDialog images={images()} active={index} />, { padded: false });
 						}
 					}}
 					onLoad={() => {

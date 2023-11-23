@@ -15,6 +15,7 @@
 		"@pkg/emoji-db": "workspace:^",
 		"@pkg/solid-freeze": "workspace:^",
 		"@pkg/solid-query": "workspace:^",
+		"@pkg/solid-use-gesture": "workspace:^",
 		"@solidjs/router": "^0.8.4",
 		"@thisbeyond/solid-dnd": "^0.7.5",
 		"solid-floating-ui": "^0.2.1",
