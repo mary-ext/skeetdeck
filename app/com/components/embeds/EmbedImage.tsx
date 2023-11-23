@@ -1,4 +1,4 @@
-import { Match, Switch, lazy } from 'solid-js';
+import { lazy } from 'solid-js';
 
 import type { RefOf } from '~/api/atp-schema.ts';
 
@@ -33,7 +33,7 @@ const EmbedImage = (props: EmbedImageProps) => {
 		return interactive ? $images.length === 1 && !!$images[0].aspectRatio : false;
 	};
 
-	const render_ = (index: number, mode: RenderMode) => {
+	const render = (index: number, mode: RenderMode) => {
 		const image = images()[index];
 
 		const alt = image.alt;
@@ -73,7 +73,7 @@ const EmbedImage = (props: EmbedImageProps) => {
 					alt={alt}
 					onClick={() => {
 						if (interactive) {
-							openModal(() => <LazyImageViewerDialog images={images()} active={index} />, { padded: false });
+							openModal(() => <LazyImageViewerDialog images={images()} active={index} />);
 						}
 					}}
 					onLoad={() => {
@@ -115,43 +115,61 @@ const EmbedImage = (props: EmbedImageProps) => {
 				'max-w-full self-baseline': hasStandaloneImage(),
 			}}
 		>
-			<Switch>
-				<Match when={images().length >= 4}>
-					<div class="flex aspect-video gap-0.5">
-						<div class="flex grow basis-0 flex-col gap-0.5">
-							{render_(0, RenderMode.MULTIPLE)}
-							{render_(2, RenderMode.MULTIPLE)}
+			{(() => {
+				const images = props.images;
+
+				if (images.length >= 4) {
+					return (
+						<div class="flex aspect-video gap-0.5">
+							<div class="flex grow basis-0 flex-col gap-0.5">
+								{/* @once */ render(0, RenderMode.MULTIPLE)}
+								{/* @once */ render(2, RenderMode.MULTIPLE)}
+							</div>
+
+							<div class="flex grow basis-0 flex-col gap-0.5">
+								{/* @once */ render(1, RenderMode.MULTIPLE)}
+								{/* @once */ render(3, RenderMode.MULTIPLE)}
+							</div>
 						</div>
+					);
+				}
 
-						<div class="flex grow basis-0 flex-col gap-0.5">
-							{render_(1, RenderMode.MULTIPLE)}
-							{render_(3, RenderMode.MULTIPLE)}
+				if (images.length >= 3) {
+					return (
+						<div class="flex aspect-video gap-0.5">
+							<div class="flex grow basis-0 flex-col gap-0.5">
+								{/* @once */ render(0, RenderMode.MULTIPLE)}
+								{/* @once */ render(1, RenderMode.MULTIPLE)}
+							</div>
+
+							<div class="flex grow basis-0 flex-col gap-0.5">
+								{/* @once */ render(2, RenderMode.MULTIPLE)}
+							</div>
 						</div>
-					</div>
-				</Match>
+					);
+				}
 
-				<Match when={images().length >= 3}>
-					<div class="flex aspect-video gap-0.5">
-						<div class="flex grow basis-0 flex-col gap-0.5">
-							{render_(0, RenderMode.MULTIPLE)}
-							{render_(1, RenderMode.MULTIPLE)}
+				if (images.length >= 2) {
+					return (
+						<div class="flex aspect-video gap-0.5">
+							<div class="flex grow basis-0 flex-col gap-0.5">
+								{/* @once */ render(0, RenderMode.MULTIPLE)}
+							</div>
+							<div class="flex grow basis-0 flex-col gap-0.5">
+								{/* @once */ render(1, RenderMode.MULTIPLE)}
+							</div>
 						</div>
+					);
+				}
 
-						<div class="flex grow basis-0 flex-col gap-0.5">{render_(2, RenderMode.MULTIPLE)}</div>
-					</div>
-				</Match>
+				if (hasStandaloneImage()) {
+					return render(0, RenderMode.STANDALONE_RATIO);
+				}
 
-				<Match when={images().length >= 2}>
-					<div class="flex aspect-video gap-0.5">
-						<div class="flex grow basis-0 flex-col gap-0.5">{render_(0, RenderMode.MULTIPLE)}</div>
-						<div class="flex grow basis-0 flex-col gap-0.5">{render_(1, RenderMode.MULTIPLE)}</div>
-					</div>
-				</Match>
-
-				<Match when={hasStandaloneImage()}>{render_(0, RenderMode.STANDALONE_RATIO)}</Match>
-
-				<Match when={images().length === 1}>{render_(0, RenderMode.STANDALONE)}</Match>
-			</Switch>
+				if (images.length === 1) {
+					return render(0, RenderMode.STANDALONE);
+				}
+			})()}
 		</div>
 	);
 };
