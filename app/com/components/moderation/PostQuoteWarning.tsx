@@ -1,25 +1,13 @@
 import { type JSX, Show, createSignal } from 'solid-js';
 
-import type { Records, UnionOf } from '~/api/atp-schema.ts';
+import type { UnionOf } from '~/api/atp-schema.ts';
 
-import {
-	type ModerationCause,
-	type ModerationDecision,
-	CauseLabel,
-	CauseMutedKeyword,
-	decideLabelModeration,
-	decideMutedKeywordModeration,
-	decideMutedPermanentModeration,
-	finalizeModeration,
-} from '~/api/moderation/action.ts';
-import { PreferenceWarn } from '~/api/moderation/enums.ts';
-
-import { sequal } from '~/utils/dequal.ts';
+import { type ModerationDecision, CauseLabel, CauseMutedKeyword } from '~/api/moderation/action.ts';
+import { getQuoteModMaker } from '~/api/moderation/decisions/quote.ts';
 
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 
 type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
-type PostRecord = Records['app.bsky.feed.post'];
 
 export interface PostQuoteWarningProps {
 	quote: EmbeddedPostRecord;
@@ -32,9 +20,7 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 			when={(() => {
 				const quote = props.quote;
 
-				const maker = ((quote as any).$moderation ||=
-					createPostModDecision(quote)) as () => ModerationDecision | null;
-
+				const maker = getQuoteModMaker(quote, useSharedPreferences().moderation);
 				const decision = maker();
 
 				if (decision) {
@@ -83,34 +69,3 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 };
 
 export default PostQuoteWarning;
-
-const createPostModDecision = (quote: EmbeddedPostRecord) => {
-	const { moderation: opts } = useSharedPreferences();
-
-	let prev: unknown[] = [];
-	let decision: ModerationDecision | null;
-
-	return (): ModerationDecision | null => {
-		const labels = quote.labels;
-		const text = (quote.value as PostRecord).text;
-
-		const authorDid = quote.author.did;
-		const isMuted = quote.author.viewer?.muted;
-
-		const next = [labels, text, isMuted];
-
-		if (!sequal(prev, next)) {
-			const accu: ModerationCause[] = [];
-
-			decideLabelModeration(accu, labels, authorDid, opts);
-			decideMutedPermanentModeration(accu, isMuted);
-			// decideMutedTemporaryModeration(accu, isProfileTemporarilyMuted(uid, authorDid));
-			decideMutedKeywordModeration(accu, text, PreferenceWarn, opts);
-
-			prev = next;
-			decision = finalizeModeration(accu);
-		}
-
-		return decision;
-	};
-};
