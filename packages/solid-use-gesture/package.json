@@ -1,0 +1,26 @@
+{
+	"private": true,
+	"type": "module",
+	"name": "@pkg/solid-use-gesture",
+	"version": "0.1.0",
+	"exports": {
+		".": {
+			"default": "./lib/index.tsx"
+		}
+	},
+	"scripts": {
+		"dev": "vite",
+		"unused:build": "rm -r types/; vite build && tsc"
+	},
+	"peerDependencies": {
+		"solid-js": "^1.8.5"
+	},
+	"dependencies": {
+		"@use-gesture/core": "^10.3.0"
+	},
+	"devDependencies": {
+		"solid-js": "^1.8.6",
+		"vite": "^5.0.2",
+		"vite-plugin-solid": "^2.7.2"
+	}
+}

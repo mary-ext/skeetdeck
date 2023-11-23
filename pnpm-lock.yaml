@@ -155,6 +155,22 @@ importers:
         specifier: ^2.7.2
         version: 2.7.2(solid-js@1.8.6)(vite@5.0.2)
 
+  packages/solid-use-gesture:
+    dependencies:
+      '@use-gesture/core':
+        specifier: ^10.3.0
+        version: 10.3.0
+    devDependencies:
+      solid-js:
+        specifier: ^1.8.6
+        version: 1.8.6(patch_hash=f5qnzwo3cikk5uqd2gnigzqrxi)
+      vite:
+        specifier: ^5.0.2
+        version: 5.0.2(@types/node@20.9.4)(terser@5.24.0)
+      vite-plugin-solid:
+        specifier: ^2.7.2
+        version: 2.7.2(solid-js@1.8.6)(vite@5.0.2)
+
 packages:
 
   /@alloc/quick-lru@5.2.0:
@@ -930,6 +946,10 @@ packages:
     dependencies:
       undici-types: 5.26.5
     dev: true
+
+  /@use-gesture/core@10.3.0:
+    resolution: {integrity: sha512-rh+6MND31zfHcy9VU3dOZCqGY511lvGcfyJenN4cWZe0u1BH6brBpBddLVXhF2r4BMqWbvxfsbL7D287thJU2A==}
+    dev: false
 
   /acorn@8.11.2:
     resolution: {integrity: sha512-nc0Axzp/0FILLEVsm4fNwLCwMttvhEI263QtVPQcbpfZZ3ts0hLsZGOpE6czNlid7CJ9MlyH8reXkpsf3YUY4w==}
