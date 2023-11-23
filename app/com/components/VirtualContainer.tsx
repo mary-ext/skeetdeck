@@ -11,9 +11,9 @@ export interface VirtualContainerProps {
 
 export const VirtualContainer = (props: VirtualContainerProps) => {
 	let entry: IntersectionObserverEntry | undefined;
-	let height: number | undefined;
+	let height: number | undefined = props.estimateHeight;
 
-	const estimateHeight = props.estimateHeight;
+	const estimateHeight = height;
 
 	const [intersecting, setIntersecting] = createSignal(false);
 	const [cachedHeight, setCachedHeight] = createSignal(estimateHeight);
@@ -41,8 +41,10 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 
 	const measure = (node: HTMLElement) => scrollObserver.observe(node);
 
-	const hasCachedHeight = createMemo(() => cachedHeight() !== undefined);
-	const shouldHide = () => !intersecting() && hasCachedHeight();
+	const hasHeightCached =
+		estimateHeight === undefined ? createMemo(() => cachedHeight() !== undefined) : () => true;
+
+	const shouldHide = () => !intersecting() && hasHeightCached();
 
 	return (
 		<article
