@@ -1,4 +1,4 @@
-import { type JSX, Show, createSignal } from 'solid-js';
+import { type JSX, createMemo, createSignal } from 'solid-js';
 
 import type { UnionOf } from '~/api/atp-schema.ts';
 
@@ -15,57 +15,61 @@ export interface PostQuoteWarningProps {
 }
 
 const PostQuoteWarning = (props: PostQuoteWarningProps) => {
-	return (
-		<Show
-			when={(() => {
-				const quote = props.quote;
+	const decision = createMemo(() => {
+		const quote = props.quote;
 
-				const maker = getQuoteModMaker(quote, useSharedPreferences().moderation);
-				const decision = maker();
+		const maker = getQuoteModMaker(quote, useSharedPreferences().moderation);
+		const decision = maker();
 
-				if (decision) {
-					if (decision.b) {
-						return decision;
-					}
+		if (decision) {
+			if (decision.b) {
+				return decision;
+			}
+		}
+	});
+
+	const render = () => {
+		const $decision = decision();
+
+		if (!$decision) {
+			return props.children?.(null);
+		}
+
+		const [show, setShow] = createSignal(false);
+
+		const source = $decision.s;
+
+		const title =
+			source.t === CauseLabel
+				? `Content warning: ${source.l.val}`
+				: source.t === CauseMutedKeyword
+				  ? `Filtered: ${source.n}`
+				  : `You've muted this user`;
+
+		return [
+			<div
+				class="mt-3 flex items-stretch justify-between gap-3 overflow-hidden rounded-md border border-divider"
+				classList={{ 'mb-3': show() }}
+			>
+				<p class="m-3 text-sm text-muted-fg">{title}</p>
+
+				<button
+					onClick={() => setShow(!show())}
+					class="px-4 text-sm font-medium hover:bg-secondary hover:text-hinted-fg"
+				>
+					{show() ? 'Hide' : 'Show'}
+				</button>
+			</div>,
+
+			() => {
+				if (show()) {
+					return props.children?.($decision);
 				}
-			})()}
-			fallback={props.children?.(null)}
-			keyed
-		>
-			{(decision) => {
-				const [show, setShow] = createSignal(false);
+			},
+		];
+	};
 
-				const source = decision.s;
-
-				const title =
-					source.t === CauseLabel
-						? `Content warning: ${source.l.val}`
-						: source.t === CauseMutedKeyword
-						  ? `Filtered: ${source.n}`
-						  : `You've muted this user`;
-
-				return (
-					<>
-						<div
-							class="mt-3 flex items-stretch justify-between gap-3 overflow-hidden rounded-md border border-divider"
-							classList={{ 'mb-3': show() }}
-						>
-							<p class="m-3 text-sm text-muted-fg">{title}</p>
-
-							<button
-								onClick={() => setShow(!show())}
-								class="px-4 text-sm font-medium hover:bg-secondary hover:text-hinted-fg"
-							>
-								{show() ? 'Hide' : 'Show'}
-							</button>
-						</div>
-
-						<Show when={show()}>{props.children?.(decision)}</Show>
-					</>
-				);
-			}}
-		</Show>
-	);
+	return render as unknown as JSX.Element;
 };
 
 export default PostQuoteWarning;

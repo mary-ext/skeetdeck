@@ -1,4 +1,4 @@
-import { Show, type JSX, createSignal } from 'solid-js';
+import { type JSX, createMemo, createSignal } from 'solid-js';
 
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 
@@ -13,48 +13,52 @@ export interface PostEmbedWarningProps {
 }
 
 const PostEmbedWarning = (props: PostEmbedWarningProps) => {
-	return (
-		<Show
-			when={(() => {
-				const post = props.post;
+	const decision = createMemo(() => {
+		const post = props.post;
 
-				const maker = getPostModMaker(post, useSharedPreferences().moderation);
-				const decision = maker();
+		const maker = getPostModMaker(post, useSharedPreferences().moderation);
+		const decision = maker();
 
-				if (decision) {
-					if (decision.m) {
-						return decision;
-					}
+		if (decision) {
+			if (decision.m) {
+				return decision;
+			}
+		}
+	});
+
+	const render = () => {
+		const $decision = decision();
+
+		if (!$decision) {
+			return props.children;
+		}
+
+		const [show, setShow] = createSignal(false);
+
+		const source = $decision.s;
+		const title = `Media warning${source.t === CauseLabel ? `: ${source.l.val}` : ''}`;
+
+		return [
+			<div class="mt-3 flex items-stretch justify-between gap-3 overflow-hidden rounded-md border border-divider">
+				<p class="m-3 text-sm text-muted-fg">{title}</p>
+
+				<button
+					onClick={() => setShow(!show())}
+					class="px-4 text-sm font-medium hover:bg-secondary hover:text-hinted-fg"
+				>
+					{show() ? 'Hide' : 'Show'}
+				</button>
+			</div>,
+
+			() => {
+				if (show()) {
+					return props.children;
 				}
-			})()}
-			fallback={props.children}
-			keyed
-		>
-			{(decision) => {
-				const [show, setShow] = createSignal(false);
+			},
+		];
+	};
 
-				const source = decision.s;
-				const title = `Media warning${source.t === CauseLabel ? `: ${source.l.val}` : ''}`;
-
-				return (
-					<>
-						<div class="mt-3 flex items-stretch justify-between gap-3 overflow-hidden rounded-md border border-divider">
-							<p class="m-3 text-sm text-muted-fg">{title}</p>
-
-							<button
-								onClick={() => setShow(!show())}
-								class="px-4 text-sm font-medium hover:bg-secondary hover:text-hinted-fg"
-							>
-								{show() ? 'Hide' : 'Show'}
-							</button>
-						</div>
-
-						<Show when={show()}>{props.children}</Show>
-					</>
-				);
-			}}
-		</Show>
-	);
+	return render as unknown as JSX.Element;
 };
 
 export default PostEmbedWarning;
