@@ -42,7 +42,7 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 	const measure = (node: HTMLElement) => scrollObserver.observe(node);
 
 	const hasHeightCached =
-		estimateHeight === undefined ? createMemo(() => cachedHeight() !== undefined) : () => true;
+		estimateHeight === undefined ? createMemo(() => (height ?? cachedHeight()) !== undefined) : () => true;
 
 	const shouldHide = () => !intersecting() && hasHeightCached();
 
@@ -50,7 +50,7 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 		<article
 			ref={measure}
 			class={props.class}
-			style={{ height: shouldHide() ? `${height || cachedHeight()}px` : undefined }}
+			style={{ height: shouldHide() ? `${height ?? cachedHeight()}px` : undefined }}
 			prop:$onintersect={handleIntersect}
 		>
 			{(() => {
