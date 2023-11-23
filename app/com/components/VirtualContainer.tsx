@@ -1,4 +1,4 @@
-import { type JSX, createSignal } from 'solid-js';
+import { type JSX, createSignal, createMemo } from 'solid-js';
 
 import { scheduleIdleTask } from '~/utils/idle.ts';
 import { getRectFromEntry, scrollObserver } from '~/utils/intersection-observer.ts';
@@ -41,7 +41,8 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 
 	const measure = (node: HTMLElement) => scrollObserver.observe(node);
 
-	const shouldHide = () => !intersecting() && cachedHeight();
+	const hasCachedHeight = createMemo(() => cachedHeight() !== undefined);
+	const shouldHide = () => !intersecting() && hasCachedHeight();
 
 	return (
 		<article
