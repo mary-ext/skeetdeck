@@ -3,19 +3,8 @@ import { type JSX, Show, createSignal } from 'solid-js';
 import type { DID } from '~/api/atp-schema.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 
-import {
-	type ModerationCause,
-	type ModerationDecision,
-	CauseLabel,
-	CauseMutedKeyword,
-	decideLabelModeration,
-	decideMutedKeywordModeration,
-	decideMutedPermanentModeration,
-	finalizeModeration,
-} from '~/api/moderation/action.ts';
-import { PreferenceWarn } from '~/api/moderation/enums.ts';
-
-import { sequal } from '~/utils/dequal.ts';
+import { CauseLabel, CauseMutedKeyword } from '~/api/moderation/action.ts';
+import { getPostModMaker } from '~/api/moderation/decisions/post.ts';
 
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 
@@ -34,7 +23,7 @@ const PostWarning = (props: PostWarningProps) => {
 				const permalink = props.permalink;
 				const timelineDid = props.timelineDid;
 
-				const maker = (post.$moderation ||= createPostModDecision(post)) as () => ModerationDecision | null;
+				const maker = getPostModMaker(post, useSharedPreferences().moderation);
 				const decision = maker();
 
 				if (decision) {
@@ -97,34 +86,3 @@ const PostWarning = (props: PostWarningProps) => {
 };
 
 export default PostWarning;
-
-export const createPostModDecision = (post: SignalizedPost) => {
-	const { moderation: opts } = useSharedPreferences();
-
-	let prev: unknown[] = [];
-	let decision: ModerationDecision | null;
-
-	return (): ModerationDecision | null => {
-		const labels = post.labels.value;
-		const text = post.record.value.text;
-
-		const authorDid = post.author.did;
-		const isMuted = post.author.viewer.muted.value;
-
-		const next = [labels, text, isMuted];
-
-		if (!sequal(prev, next)) {
-			const accu: ModerationCause[] = [];
-
-			decideLabelModeration(accu, labels, authorDid, opts);
-			decideMutedPermanentModeration(accu, isMuted);
-			// decideMutedTemporaryModeration(accu, isProfileTemporarilyMuted(uid, authorDid));
-			decideMutedKeywordModeration(accu, text, PreferenceWarn, opts);
-
-			prev = next;
-			decision = finalizeModeration(accu);
-		}
-
-		return decision;
-	};
-};

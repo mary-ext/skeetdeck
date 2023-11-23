@@ -2,9 +2,10 @@ import { Show, type JSX, createSignal } from 'solid-js';
 
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 
-import { type ModerationDecision, CauseLabel } from '~/api/moderation/action.ts';
+import { CauseLabel } from '~/api/moderation/action.ts';
+import { getPostModMaker } from '~/api/moderation/decisions/post.ts';
 
-import { createPostModDecision } from './PostWarning.tsx';
+import { useSharedPreferences } from '../SharedPreferences.tsx';
 
 export interface PostEmbedWarningProps {
 	post: SignalizedPost;
@@ -17,7 +18,7 @@ const PostEmbedWarning = (props: PostEmbedWarningProps) => {
 			when={(() => {
 				const post = props.post;
 
-				const maker = (post.$moderation ||= createPostModDecision(post)) as () => ModerationDecision | null;
+				const maker = getPostModMaker(post, useSharedPreferences().moderation);
 				const decision = maker();
 
 				if (decision) {
