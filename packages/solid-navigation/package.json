@@ -17,8 +17,8 @@
 	},
 	"devDependencies": {
 		"@types/dom-navigation": "^1.0.3",
-		"solid-js": "^1.8.5",
-		"vite": "^5.0.0",
+		"solid-js": "^1.8.6",
+		"vite": "^5.0.2",
 		"vite-plugin-solid": "^2.7.2"
 	},
 	"dependencies": {

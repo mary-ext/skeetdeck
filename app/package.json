@@ -18,15 +18,15 @@
 		"@solidjs/router": "^0.8.4",
 		"@thisbeyond/solid-dnd": "^0.7.4",
 		"solid-floating-ui": "^0.2.1",
-		"solid-js": "^1.8.5",
+		"solid-js": "^1.8.6",
 		"solid-textarea-autosize": "^0.0.5"
 	},
 	"devDependencies": {
-		"@types/node": "^20.9.1",
+		"@types/node": "^20.9.4",
 		"autoprefixer": "^10.4.16",
 		"postcss": "^8.4.31",
 		"terser": "^5.24.0",
-		"vite": "^5.0.0",
+		"vite": "^5.0.2",
 		"vite-plugin-solid": "^2.7.2"
 	}
 }
