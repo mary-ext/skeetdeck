@@ -1,4 +1,4 @@
-import { type Accessor, Match, Show, Switch, createEffect } from 'solid-js';
+import { type Accessor, createEffect } from 'solid-js';
 
 import type { DID } from '~/api/atp-schema.ts';
 
@@ -46,10 +46,6 @@ const Post = (props: PostProps) => {
 	const linking = useLinking();
 
 	const post = () => props.post;
-	const parent = () => props.parent;
-	const interactive = () => props.interactive;
-	const reason = () => props.reason;
-	const prev = () => props.prev;
 
 	const author = () => post().author;
 	const record = () => post().record.value;
@@ -73,14 +69,14 @@ const Post = (props: PostProps) => {
 
 	return (
 		<div
-			tabindex={interactive() ? 0 : undefined}
+			tabindex={props.interactive ? 0 : undefined}
 			onClick={handleClick}
 			onAuxClick={handleClick}
 			onKeyDown={handleClick}
 			class="relative border-divider px-4 outline-2 -outline-offset-2 outline-primary focus-visible:outline"
 			classList={{
 				'border-b': !props.next,
-				'hover:bg-hinted': interactive(),
+				'hover:bg-hinted': props.interactive,
 			}}
 		>
 			{(() => {
@@ -92,71 +88,79 @@ const Post = (props: PostProps) => {
 			})()}
 
 			<div class="flex flex-col gap-1 pt-3">
-				<Show
-					when={(() => {
-						const $reason = reason();
+				{(() => {
+					const reason = props.reason;
 
-						if ($reason && $reason.$type === 'app.bsky.feed.defs#reasonRepost') {
-							return $reason;
-						}
-					})()}
-					keyed
-				>
-					{(reason) => (
-						<div class="-mt-1 mb-1 flex items-center gap-3 text-[0.8125rem] text-muted-fg">
-							<div class="flex w-10 shrink-0 justify-end">
-								<RepeatIcon />
-							</div>
-							<div class="min-w-0">
-								<Link
-									to={{ type: LinkingType.PROFILE, actor: reason.by.did }}
-									class="flex font-medium hover:underline"
-								>
-									<span dir="auto" class="line-clamp-1 break-words">
-										{/* @once */ reason.by.displayName || reason.by.handle}
-									</span>
-									<span class="whitespace-pre"> Reposted</span>
-								</Link>
-							</div>
-						</div>
-					)}
-				</Show>
-
-				<Switch>
-					<Match when={!prev() && parent()} keyed>
-						{(parent) => (
+					if (reason) {
+						return (
 							<div class="-mt-1 mb-1 flex items-center gap-3 text-[0.8125rem] text-muted-fg">
 								<div class="flex w-10 shrink-0 justify-end">
-									<ChatBubbleOutlinedIcon />
+									<RepeatIcon />
 								</div>
 								<div class="min-w-0">
 									<Link
-										to={{ type: LinkingType.POST, actor: parent.author.did, rkey: getRecordId(parent.uri) }}
+										to={{ type: LinkingType.PROFILE, actor: reason.by.did }}
 										class="flex font-medium hover:underline"
 									>
-										<span class="whitespace-pre">Replying to </span>
 										<span dir="auto" class="line-clamp-1 break-words">
-											{parent.author.displayName.value || parent.author.handle.value}
+											{/* @once */ reason.by.displayName || reason.by.handle}
 										</span>
+										<span class="whitespace-pre"> Reposted</span>
 									</Link>
 								</div>
 							</div>
-						)}
-					</Match>
+						);
+					}
+				})()}
 
-					<Match when={!prev() && post().record.value.reply}>
-						<div class="-mt-1 mb-1 flex items-center gap-3 text-[0.8125rem] text-muted-fg">
-							<div class="flex w-10 shrink-0 justify-end">
-								<ChatBubbleOutlinedIcon />
-							</div>
-							<div class="min-w-0">
-								<Link to={postPermalink()} class="flex font-medium hover:underline">
-									Show full thread
-								</Link>
-							</div>
-						</div>
-					</Match>
-				</Switch>
+				{(() => {
+					const prev = props.prev;
+					const parent = props.parent;
+
+					if (!prev) {
+						if (parent) {
+							return (
+								<div class="-mt-1 mb-1 flex items-center gap-3 text-[0.8125rem] text-muted-fg">
+									<div class="flex w-10 shrink-0 justify-end">
+										<ChatBubbleOutlinedIcon />
+									</div>
+									<div class="min-w-0">
+										<Link
+											to={
+												/* @once */ {
+													type: LinkingType.POST,
+													actor: parent.author.did,
+													rkey: getRecordId(parent.uri),
+												}
+											}
+											class="flex font-medium hover:underline"
+										>
+											<span class="whitespace-pre">Replying to </span>
+											<span dir="auto" class="line-clamp-1 break-words">
+												{parent.author.displayName.value || parent.author.handle.value}
+											</span>
+										</Link>
+									</div>
+								</div>
+							);
+						}
+
+						if (post().record.value.reply) {
+							return (
+								<div class="-mt-1 mb-1 flex items-center gap-3 text-[0.8125rem] text-muted-fg">
+									<div class="flex w-10 shrink-0 justify-end">
+										<ChatBubbleOutlinedIcon />
+									</div>
+									<div class="min-w-0">
+										<Link to={postPermalink()} class="flex font-medium hover:underline">
+											Show full thread
+										</Link>
+									</div>
+								</div>
+							);
+						}
+					}
+				})()}
 			</div>
 
 			<div class="flex gap-3">
@@ -169,9 +173,11 @@ const Post = (props: PostProps) => {
 						<img src={author().avatar.value || DefaultAvatar} class="h-full w-full" />
 					</Link>
 
-					<Show when={props.next}>
-						<div class="mt-3 grow border-l-2 border-divider" />
-					</Show>
+					{(() => {
+						if (props.next) {
+							return <div class="mt-3 grow border-l-2 border-divider" />;
+						}
+					})()}
 				</div>
 
 				<div class="min-w-0 grow pb-3">
@@ -202,75 +208,83 @@ const Post = (props: PostProps) => {
 							</TimeAgo>
 						</div>
 
-						<Show when={interactive()}>
-							<div class="shrink-0">
-								<PostOverflowAction post={post()}>
-									<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary">
-										<MoreHorizIcon />
-									</button>
-								</PostOverflowAction>
-							</div>
-						</Show>
+						{(() => {
+							if (props.interactive) {
+								return (
+									<div class="shrink-0">
+										<PostOverflowAction post={post()}>
+											<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary">
+												<MoreHorizIcon />
+											</button>
+										</PostOverflowAction>
+									</div>
+								);
+							}
+						})()}
 					</div>
 
 					<PostContent post={post} postPermalink={postPermalink} timelineDid={() => props.timelineDid} />
 
-					<Show when={interactive()}>
-						<div class="mt-3 flex text-muted-fg">
-							<div class="min-w-0 grow basis-0">
-								<Link
-									to={{ type: LinkingType.REPLY, actor: author().did, rkey: getRecordId(post().uri) }}
-									class="group flex max-w-full items-end gap-0.5"
-								>
-									<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary">
-										<ChatBubbleOutlinedIcon />
+					{(() => {
+						if (props.interactive) {
+							return (
+								<div class="mt-3 flex text-muted-fg">
+									<div class="min-w-0 grow basis-0">
+										<Link
+											to={{ type: LinkingType.REPLY, actor: author().did, rkey: getRecordId(post().uri) }}
+											class="group flex max-w-full items-end gap-0.5"
+										>
+											<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary">
+												<ChatBubbleOutlinedIcon />
+											</div>
+											<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
+												{formatCompact(post().replyCount.value)}
+											</span>
+										</Link>
 									</div>
-									<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
-										{formatCompact(post().replyCount.value)}
-									</span>
-								</Link>
-							</div>
 
-							<div class="min-w-0 grow basis-0">
-								<RepostAction post={post()}>
-									<button
-										class="group flex max-w-full grow basis-0 items-end gap-0.5"
-										classList={{ 'text-green-600': !!post().viewer.repost.value }}
-									>
-										<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary">
-											<RepeatIcon />
-										</div>
+									<div class="min-w-0 grow basis-0">
+										<RepostAction post={post()}>
+											<button
+												class="group flex max-w-full grow basis-0 items-end gap-0.5"
+												classList={{ 'text-green-600': !!post().viewer.repost.value }}
+											>
+												<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary">
+													<RepeatIcon />
+												</div>
 
-										<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
-											{formatCompact(post().repostCount.value)}
-										</span>
-									</button>
-								</RepostAction>
-							</div>
-
-							<div class="min-w-0 grow basis-0">
-								<button
-									onClick={() => updatePostLike(post(), !post().viewer.like.value)}
-									class="group flex max-w-full grow basis-0 items-end gap-0.5"
-									classList={{ 'is-active text-red-600': !!post().viewer.like.value }}
-								>
-									<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary">
-										<FavoriteOutlinedIcon class="group-[.is-active]:hidden" />
-										<FavoriteIcon class="hidden group-[.is-active]:block" />
+												<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
+													{formatCompact(post().repostCount.value)}
+												</span>
+											</button>
+										</RepostAction>
 									</div>
-									<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
-										{formatCompact(post().likeCount.value)}
-									</span>
-								</button>
-							</div>
 
-							<div class="shrink-0">
-								<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary">
-									<ShareIcon />
-								</button>
-							</div>
-						</div>
-					</Show>
+									<div class="min-w-0 grow basis-0">
+										<button
+											onClick={() => updatePostLike(post(), !post().viewer.like.value)}
+											class="group flex max-w-full grow basis-0 items-end gap-0.5"
+											classList={{ 'is-active text-red-600': !!post().viewer.like.value }}
+										>
+											<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary">
+												<FavoriteOutlinedIcon class="group-[.is-active]:hidden" />
+												<FavoriteIcon class="hidden group-[.is-active]:block" />
+											</div>
+											<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
+												{formatCompact(post().likeCount.value)}
+											</span>
+										</button>
+									</div>
+
+									<div class="shrink-0">
+										<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary">
+											<ShareIcon />
+										</button>
+									</div>
+								</div>
+							);
+						}
+					})()}
 				</div>
 			</div>
 		</div>
@@ -321,13 +335,11 @@ const PostContent = ({ post, postPermalink, timelineDid }: PostContentProps) => 
 				Show more
 			</Link>
 
-			<Show when={post().embed.value}>
-				{(embed) => (
-					<PostEmbedWarning post={post()}>
-						<Embed embed={embed()} />
-					</PostEmbedWarning>
-				)}
-			</Show>
+			{post().embed.value && (
+				<PostEmbedWarning post={post()}>
+					<Embed embed={post().embed.value!} />
+				</PostEmbedWarning>
+			)}
 		</PostWarning>
 	);
 };
