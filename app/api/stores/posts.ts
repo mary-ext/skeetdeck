@@ -39,7 +39,6 @@ export interface SignalizedPost {
 	};
 
 	$truncated?: boolean;
-	$moderation?: unknown;
 }
 
 const createSignalizedPost = (uid: DID, post: Post, key?: number): SignalizedPost => {
