@@ -37,11 +37,12 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 				}
 
 				const nextHeight = getRectFromEntry(nextEntry!).height;
+				const truncatedHeight = Math.trunc(nextHeight * 100) / 100;
 
-				if (nextHeight !== height) {
+				if (truncatedHeight !== height) {
 					batch(() => {
-						height = nextHeight;
-						setCachedHeight(nextHeight);
+						height = truncatedHeight;
+						setCachedHeight(truncatedHeight);
 						setIntersecting(next);
 					});
 				} else {
