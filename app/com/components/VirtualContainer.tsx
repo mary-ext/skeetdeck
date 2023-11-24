@@ -13,10 +13,8 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 	let entry: IntersectionObserverEntry | undefined;
 	let height: number | undefined = props.estimateHeight;
 
-	const estimateHeight = height;
-
 	const [intersecting, setIntersecting] = createSignal(false);
-	const [cachedHeight, setCachedHeight] = createSignal(estimateHeight);
+	const [cachedHeight, setCachedHeight] = createSignal(height);
 
 	const calculateHeight = () => {
 		const next = getRectFromEntry(entry!).height;
@@ -42,15 +40,14 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 	const measure = (node: HTMLElement) => scrollObserver.observe(node);
 
 	const hasHeightCached =
-		estimateHeight === undefined ? createMemo(() => (height ?? cachedHeight()) !== undefined) : () => true;
-
+		height === undefined ? createMemo(() => (height ?? cachedHeight()) !== undefined) : () => true;
 	const shouldHide = () => !intersecting() && hasHeightCached();
 
 	return (
 		<article
 			ref={measure}
 			class={props.class}
-			style={{ height: shouldHide() ? `${height ?? cachedHeight()}px` : undefined }}
+			style={{ height: shouldHide() ? `${cachedHeight()}px` : undefined }}
 			prop:$onintersect={handleIntersect}
 		>
 			{(() => {
