@@ -88,6 +88,7 @@ export interface CustomListPaneConfig extends BasePaneConfig {
 		uri: string;
 		name: string;
 	};
+	infoVisible: boolean;
 }
 
 export interface SearchPaneConfig extends BasePaneConfig {

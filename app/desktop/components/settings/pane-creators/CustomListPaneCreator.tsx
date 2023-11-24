@@ -47,6 +47,7 @@ const CustomListPaneCreator = (props: PaneCreatorProps) => {
 									props.onAdd<CustomListPaneConfig>({
 										type: PaneType.CUSTOM_LIST,
 										list: { uri: list.uri, name: list.name },
+										infoVisible: true,
 									});
 								}}
 								class="flex w-full gap-3 px-4 py-3 text-left hover:bg-hinted"
