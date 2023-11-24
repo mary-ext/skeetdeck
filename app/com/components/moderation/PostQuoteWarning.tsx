@@ -37,34 +37,37 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 
 		const [show, setShow] = createSignal(false);
 
-		const source = $decision.s;
-
-		const title =
-			source.t === CauseLabel
-				? `Content warning: ${source.l.val}`
-				: source.t === CauseMutedKeyword
-				  ? `Filtered: ${source.n}`
-				  : `You've muted this user`;
-
+		// this needs to be in an array, else Solid.js thinks it can be unwrapped
+		// by the insertion effect handling `render`
 		return [
-			<div
-				class="mt-3 flex items-stretch justify-between gap-3 overflow-hidden rounded-md border border-divider"
-				classList={{ 'mb-3': show() }}
-			>
-				<p class="m-3 text-sm text-muted-fg">{title}</p>
-
-				<button
-					onClick={() => setShow(!show())}
-					class="px-4 text-sm font-medium hover:bg-secondary hover:text-hinted-fg"
-				>
-					{show() ? 'Hide' : 'Show'}
-				</button>
-			</div>,
-
 			() => {
-				if (show()) {
+				const $show = show();
+
+				if ($show) {
 					return props.children?.($decision);
 				}
+
+				const source = $decision.s;
+
+				const title =
+					source.t === CauseLabel
+						? `Content warning: ${source.l.val}`
+						: source.t === CauseMutedKeyword
+						  ? `Filtered: ${source.n}`
+						  : `You've muted this user`;
+
+				return (
+					<div class="flex items-stretch justify-between gap-3 overflow-hidden rounded-md border border-divider">
+						<p class="m-3 text-sm text-muted-fg">{title}</p>
+
+						<button
+							onClick={() => setShow(true)}
+							class="px-4 text-sm font-medium hover:bg-secondary hover:text-hinted-fg"
+						>
+							Show
+						</button>
+					</div>
+				);
 			},
 		];
 	};
