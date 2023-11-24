@@ -173,7 +173,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 													actor: getRepoId(item().uri) as DID,
 													rkey: getRecordId(item().uri),
 												}}
-												class="flex h-10 w-full items-center gap-3 px-4 hover:bg-hinted"
+												class="flex h-10 w-full items-center gap-3 px-4 hover:bg-secondary/10"
 											>
 												<div class="flex h-full w-10 justify-center">
 													<div class="mt-3 border-l-2 border-dashed border-divider" />
@@ -238,7 +238,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 																	actor: getRepoId(items[len - 1].uri) as DID,
 																	rkey: getRecordId(items[len - 1].uri),
 																}}
-																class="flex h-10 w-full items-center gap-3 border-b border-divider px-4 hover:bg-hinted"
+																class="flex h-10 w-full items-center gap-3 border-b border-divider px-4 hover:bg-secondary/10"
 															>
 																<div class="flex h-full w-10 justify-center">
 																	<div class="mb-3 border-l-2 border-dashed border-divider" />

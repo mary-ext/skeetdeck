@@ -25,7 +25,7 @@ const RepostAction = (props: RepostActionProps) => {
 								close();
 								updatePostRepost(post, !post.viewer.repost.value);
 							}}
-							class="flex cursor-pointer items-center gap-4 px-4 py-3 text-left text-sm outline-2 -outline-offset-2 outline-primary hover:bg-hinted focus-visible:outline disabled:pointer-events-none disabled:opacity-50"
+							class="flex cursor-pointer items-center gap-4 px-4 py-3 text-left text-sm outline-2 -outline-offset-2 outline-primary hover:bg-secondary/10 focus-visible:outline disabled:pointer-events-none disabled:opacity-50"
 						>
 							<RepeatIcon class="text-lg" />
 							<span>{post.viewer.repost.value ? 'Undo repost' : 'Repost'}</span>

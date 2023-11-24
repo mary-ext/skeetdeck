@@ -1,47 +1,43 @@
 @layer base {
 	:root {
 		--background: 255 255 255; /* white */
+		--background-dark: 212 212 216; /* zinc-300 */
 
 		--accent: 37 99 235; /* blue-600 */
 		--accent-dark: 30 64 175 /* blue-700 */;
 
-		--primary: 3 7 18; /* gray-950 */
-		--primary-fg: 243 244 246; /* gray-100 */
+		--primary: 9 9 11; /* zinc-950 */
+		--primary-fg: 244 244 245; /* zinc-100 */
 
-		--secondary: 209 213 219; /* gray-300 */
-		--secondary-fg: 17 24 39; /* gray-900 */
+		--secondary: 161 161 170; /* zinc-400 */
+		--secondary-fg: 24 24 27; /* zinc-900 */
 
-		--hinted: 243 244 246; /* gray-100 */
-		--hinted-fg: 17 24 39; /* gray-900 */
+		--muted: 244 244 245; /* zinc-100 */
+		--muted-fg: 113 113 122; /* zinc-500 */
 
-		--muted: 243 244 246; /* gray-100 */
-		--muted-fg: 107 114 128; /* gray-500 */
-
-		--input: 229 231 235; /* gray-200 */
-		--divider: 209 213 219; /* gray-300 */
+		--input: 161 161 170; /* zinc-500 */
+		--divider: 212 212 216; /* zinc-300 */
 	}
 
 	.is-dark {
 		color-scheme: dark;
 
 		--background: 0 0 0; /* black */
+		--background-dark: 39 39 42; /* zinc-800 */
 
 		--accent: 59 130 246; /* blue-500 */
 
-		--primary: 249 250 251; /* gray-50 */
-		--primary-fg: 3 7 18; /* gray-950 */
+		--primary: 250 250 250; /* zinc-50 */
+		--primary-fg: 9 9 11; /* zinc-950 */
 
-		--secondary: 55 65 81; /* gray-700 */
-		--secondary-fg: 249 250 251; /* gray-50 */
+		--secondary: 82 82 91; /* zinc-600 */
+		--secondary-fg: 250 250 250; /* zinc-50 */
 
-		--hinted: 17 24 39; /* gray-900 */
-		--hinted-fg: 249 250 251; /* gray-50 */
+		--muted: 39 39 42; /* zinc-800 */
+		--muted-fg: 161 161 170; /* zinc-400 */
 
-		--muted: 55 65 81; /* gray-900 */
-		--muted-fg: 156 163 175; /* gray-400 */
-
-		--input: 75 85 99; /* gray-600 */
-		--divider: 47 51 54;
+		--input: 82 82 91; /* zinc-600 */
+		--divider: 51 51 56 /* zinc-750 */;
 	}
 
 	body {

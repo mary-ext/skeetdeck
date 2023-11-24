@@ -30,7 +30,7 @@ const EmbedRecordBlocked = (props: EmbedRecordBlockedProps) => {
 								rkey: getRecordId(record.uri),
 							}
 						}
-						class="flex items-center whitespace-nowrap px-4 text-sm font-medium hover:bg-secondary hover:text-hinted-fg"
+						class="flex items-center whitespace-nowrap px-4 text-sm font-medium hover:bg-secondary/30 hover:text-secondary-fg"
 					>
 						View
 					</Link>

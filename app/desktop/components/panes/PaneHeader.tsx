@@ -31,7 +31,7 @@ const PaneHeader = (props: PaneHeaderProps) => {
 	return (
 		<div
 			class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4"
-			classList={{ [`bg-hinted`]: sortable.isActiveDraggable }}
+			classList={{ [`bg-secondary/30`]: sortable.isActiveDraggable }}
 		>
 			<button
 				{...sortable.dragActivators}

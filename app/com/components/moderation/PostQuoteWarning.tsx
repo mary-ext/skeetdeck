@@ -62,7 +62,7 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 
 						<button
 							onClick={() => setShow(true)}
-							class="px-4 text-sm font-medium hover:bg-secondary hover:text-hinted-fg"
+							class="px-4 text-sm font-medium hover:bg-secondary/30 hover:text-secondary-fg"
 						>
 							Show
 						</button>

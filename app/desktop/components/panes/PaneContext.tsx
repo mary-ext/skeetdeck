@@ -182,7 +182,7 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 											resetModals();
 										}
 									}}
-									class="absolute inset-0 z-10 flex flex-col overflow-hidden bg-black/50 pt-13 dark:bg-hinted/50"
+									class="absolute inset-0 z-10 flex flex-col overflow-hidden bg-black/50 pt-13 dark:bg-muted/50"
 									prop:inert={sortable.isActiveDraggable || modals().length - 1 !== index()}
 								>
 									<PaneModalContext.Provider value={context}>

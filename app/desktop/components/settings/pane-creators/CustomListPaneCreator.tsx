@@ -8,6 +8,7 @@ import { multiagent } from '~/api/globals/agent.ts';
 import { type CustomListPaneConfig, PaneType } from '../../../globals/panes.ts';
 
 import { DialogBody } from '~/com/primitives/dialog.ts';
+import { Interactive, loadMoreBtn } from '~/com/primitives/interactive.ts';
 
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
@@ -15,6 +16,8 @@ import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 import type { PaneCreatorProps } from './types.ts';
 
 type List = RefOf<'app.bsky.graph.defs#listView'>;
+
+const listItem = Interactive({ variant: 'muted', class: `flex w-full gap-3 px-4 py-3 text-left` });
 
 const CustomListPaneCreator = (props: PaneCreatorProps) => {
 	const lists = createInfiniteQuery(() => ({
@@ -82,7 +85,7 @@ const CustomListPaneCreator = (props: PaneCreatorProps) => {
 										infoVisible: true,
 									});
 								}}
-								class="flex w-full gap-3 px-4 py-3 text-left hover:bg-hinted"
+								class={listItem}
 							>
 								<div class="mt-0.5 h-9 w-9 shrink-0 overflow-hidden rounded-md bg-muted-fg">
 									<Show when={list.avatar}>{(avatar) => <img src={avatar()} class="h-full w-full" />}</Show>
@@ -112,10 +115,7 @@ const CustomListPaneCreator = (props: PaneCreatorProps) => {
 				</Match>
 
 				<Match when={lists.hasNextPage}>
-					<button
-						onClick={() => lists.fetchNextPage()}
-						class="flex h-13 w-full items-center justify-center text-sm text-accent hover:bg-hinted disabled:pointer-events-none"
-					>
+					<button onClick={() => lists.fetchNextPage()} class={loadMoreBtn}>
 						Show more
 					</button>
 				</Match>

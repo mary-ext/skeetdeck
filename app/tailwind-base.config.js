@@ -59,7 +59,10 @@ export default {
 				DEFAULT: 'rgb(var(--accent))',
 				dark: 'rgb(var(--accent-dark))',
 			},
-			background: 'rgb(var(--background))',
+			background: {
+				DEFAULT: 'rgb(var(--background))',
+				dark: 'rgb(var(--background-dark))',
+			},
 			primary: {
 				DEFAULT: 'rgb(var(--primary))',
 				fg: 'rgb(var(--primary-fg))',
@@ -67,10 +70,6 @@ export default {
 			secondary: {
 				DEFAULT: 'rgb(var(--secondary))',
 				fg: 'rgb(var(--secondary-fg))',
-			},
-			hinted: {
-				DEFAULT: 'rgb(var(--hinted))',
-				fg: 'rgb(var(--hinted-fg))',
 			},
 			muted: {
 				DEFAULT: 'rgb(var(--muted))',

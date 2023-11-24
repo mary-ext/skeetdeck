@@ -62,7 +62,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 
 				<div class="flex shrink-0 grow justify-end">
 					<PostOverflowAction post={post()}>
-						<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary">
+						<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary/40">
 							<MoreHorizIcon />
 						</button>
 					</PostOverflowAction>
@@ -114,14 +114,14 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 			<div class="flex h-13 items-center justify-around text-muted-fg">
 				<Link
 					to={{ type: LinkingType.REPLY, actor: author().did, rkey: rkey() }}
-					class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary"
+					class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40"
 				>
 					<ChatBubbleOutlinedIcon />
 				</Link>
 
 				<RepostAction post={post()}>
 					<button
-						class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary"
+						class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40"
 						classList={{
 							'text-green-600': !!post().viewer.repost.value,
 						}}
@@ -132,7 +132,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 
 				<button
 					onClick={() => updatePostLike(post(), !post().viewer.like.value)}
-					class="group flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary"
+					class="group flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40"
 					classList={{ 'is-active text-red-600': !!post().viewer.like.value }}
 				>
 					<FavoriteOutlinedIcon class="group-[.is-active]:hidden" />
@@ -140,7 +140,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 				</button>
 
 				<button
-					class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary"
+					class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40"
 					onClick={() => {}}
 				>
 					<ShareIcon />

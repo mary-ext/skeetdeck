@@ -28,6 +28,7 @@ import CircularProgress from '~/com/components/CircularProgress.tsx';
 
 import { Button } from '~/com/primitives/button.ts';
 import { IconButton } from '~/com/primitives/icon-button.ts';
+import { loadMoreBtn, loadNewBtn } from '~/com/primitives/interactive.ts';
 
 import CheckAllIcon from '~/com/icons/baseline-check-all.tsx';
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
@@ -172,10 +173,7 @@ const NotificationsPane = () => {
 						</Match>
 
 						<Match when={!notifications.isLoading && isNotificationsStale(notifications.data, latest.data)}>
-							<button
-								onClick={refetchNotifications}
-								class="grid h-13 shrink-0 place-items-center border-b border-divider text-sm text-accent hover:bg-hinted"
-							>
+							<button onClick={refetchNotifications} class={loadNewBtn}>
 								Show new notifications
 							</button>
 						</Match>
@@ -242,7 +240,7 @@ const NotificationsPane = () => {
 							<button
 								disabled={notifications.isRefetching}
 								onClick={() => notifications.fetchNextPage()}
-								class="grid h-13 shrink-0 place-items-center text-sm text-accent hover:bg-hinted disabled:pointer-events-none"
+								class={loadMoreBtn}
 							>
 								Show more notifications
 							</button>

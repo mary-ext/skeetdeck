@@ -20,6 +20,7 @@ import { useSharedPreferences } from '../SharedPreferences.tsx';
 import { VirtualContainer } from '../VirtualContainer.tsx';
 
 import { Button } from '../../primitives/button.ts';
+import { loadMoreBtn, loadNewBtn } from '../../primitives/interactive.ts';
 
 import Post from '../items/Post.tsx';
 
@@ -103,7 +104,7 @@ const TimelineList = (props: TimelineListProps) => {
 							resetInfiniteData(queryClient, getTimelineKey(props.uid, props.params));
 							timeline.refetch();
 						}}
-						class="grid h-13 shrink-0 place-items-center border-b border-divider text-sm text-accent hover:bg-hinted"
+						class={loadNewBtn}
 					>
 						Show new posts
 					</button>
@@ -165,7 +166,7 @@ const TimelineList = (props: TimelineListProps) => {
 					<button
 						disabled={timeline.isRefetching}
 						onClick={() => timeline.fetchNextPage()}
-						class="grid h-13 shrink-0 place-items-center text-sm text-accent hover:bg-hinted disabled:pointer-events-none"
+						class={loadMoreBtn}
 					>
 						Show more posts
 					</button>

@@ -65,7 +65,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 									<button
 										title="Previous image"
 										onClick={() => setActive(active() - 1)}
-										class="fixed left-2.5 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black text-base hover:bg-secondary"
+										class="fixed left-2.5 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black text-base text-white hover:bg-secondary/40"
 									>
 										<ArrowLeftIcon />
 									</button>
@@ -78,7 +78,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 									<button
 										title="Next image"
 										onClick={() => setActive(active() + 1)}
-										class="fixed right-2.5 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black text-base hover:bg-secondary"
+										class="fixed right-2.5 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black text-base text-white hover:bg-secondary/40"
 									>
 										<ArrowLeftIcon class="rotate-180" />
 									</button>
@@ -94,7 +94,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 				onClick={() => {
 					closeModal();
 				}}
-				class="fixed left-2.5 top-2.5 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-black text-base hover:bg-secondary"
+				class="fixed left-2.5 top-2.5 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-black text-base text-white hover:bg-secondary/40"
 			>
 				<CloseIcon />
 			</button>
@@ -408,7 +408,7 @@ const ImageCarousel = (props: ImageCarouselProps) => {
 	return (
 		<div
 			ref={view}
-			class="relative flex h-full w-full touch-none overflow-hidden bg-black/75 p-6"
+			class="relative flex h-full w-full touch-none overflow-hidden bg-black/75"
 			style={{ cursor: dragging() ? 'grabbing' : 'grab' }}
 		>
 			<div
@@ -429,7 +429,7 @@ const ImageCarousel = (props: ImageCarouselProps) => {
 						setLoading(($loading) => $loading + 1);
 
 						return (
-							<div class="flex h-full w-full shrink-0 items-center justify-center">
+							<div class="flex h-full w-full shrink-0 items-center justify-center p-6">
 								<img
 									src={image.fullsize}
 									alt={image.alt}

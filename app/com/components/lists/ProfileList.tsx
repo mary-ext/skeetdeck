@@ -2,6 +2,8 @@ import { For, Match, Switch } from 'solid-js';
 
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
+import { loadMoreBtn } from '../../primitives/interactive.ts';
+
 import CircularProgress from '../CircularProgress.tsx';
 import { VirtualContainer } from '../VirtualContainer.tsx';
 import GenericErrorView from '../views/GenericErrorView.tsx';
@@ -48,10 +50,7 @@ const ProfileList = (props: ProfileListProps) => {
 				</Match>
 
 				<Match when={props.hasMore}>
-					<button
-						onClick={props.onLoadMore}
-						class="grid h-13 w-full place-items-center text-sm text-accent hover:bg-hinted"
-					>
+					<button onClick={props.onLoadMore} class={loadMoreBtn}>
 						Show more profiles
 					</button>
 				</Match>

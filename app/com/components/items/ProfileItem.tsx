@@ -42,7 +42,7 @@ export const ProfileItem = (props: ProfileItemProps) => {
 			onKeyDown={onClick && handleClick}
 			role="button"
 			tabindex={0}
-			class="flex gap-3 px-4 py-3 hover:bg-hinted"
+			class="flex gap-3 px-4 py-3 hover:bg-secondary/10"
 		>
 			<div class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-muted-fg">
 				<img src={profile().avatar.value || DefaultAvatar} class="h-full w-full" />

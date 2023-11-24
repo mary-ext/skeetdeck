@@ -60,7 +60,7 @@ const EmbedRecord = (props: EmbedRecordProps) => {
 							: undefined
 					}
 					class="overflow-hidden rounded-md border border-divider text-left"
-					classList={{ 'cursor-pointer hover:bg-secondary': interactive() }}
+					classList={{ 'cursor-pointer hover:bg-secondary/10': interactive() }}
 				>
 					<div class="mx-3 mt-3 flex text-sm text-muted-fg">
 						<div class="mr-1 h-5 w-5 shrink-0 overflow-hidden rounded-full bg-muted-fg">

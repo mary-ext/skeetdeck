@@ -7,7 +7,6 @@ export interface ModalProps extends Pick<ComponentProps<'svg'>, 'children'> {
 
 let checked = false;
 
-
 const Modal = (props: ModalProps) => {
 	let focused: Element | null | undefined;
 

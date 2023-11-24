@@ -76,7 +76,7 @@ const Post = (props: PostProps) => {
 			class="relative border-divider px-4 outline-2 -outline-offset-2 outline-primary focus-visible:outline"
 			classList={{
 				'border-b': !props.next,
-				'hover:bg-hinted': props.interactive,
+				'hover:bg-secondary/10': props.interactive,
 			}}
 		>
 			{(() => {
@@ -213,7 +213,7 @@ const Post = (props: PostProps) => {
 								return (
 									<div class="shrink-0">
 										<PostOverflowAction post={post()}>
-											<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary">
+											<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary/40">
 												<MoreHorizIcon />
 											</button>
 										</PostOverflowAction>
@@ -234,7 +234,7 @@ const Post = (props: PostProps) => {
 											to={{ type: LinkingType.REPLY, actor: author().did, rkey: getRecordId(post().uri) }}
 											class="group flex max-w-full items-end gap-0.5"
 										>
-											<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary">
+											<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40">
 												<ChatBubbleOutlinedIcon />
 											</div>
 											<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
@@ -249,7 +249,7 @@ const Post = (props: PostProps) => {
 												class="group flex max-w-full grow basis-0 items-end gap-0.5"
 												classList={{ 'text-green-600': !!post().viewer.repost.value }}
 											>
-												<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary">
+												<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40">
 													<RepeatIcon />
 												</div>
 
@@ -266,7 +266,7 @@ const Post = (props: PostProps) => {
 											class="group flex max-w-full grow basis-0 items-end gap-0.5"
 											classList={{ 'is-active text-red-600': !!post().viewer.like.value }}
 										>
-											<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary">
+											<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40">
 												<FavoriteOutlinedIcon class="group-[.is-active]:hidden" />
 												<FavoriteIcon class="hidden group-[.is-active]:block" />
 											</div>
@@ -277,7 +277,7 @@ const Post = (props: PostProps) => {
 									</div>
 
 									<div class="shrink-0">
-										<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary">
+										<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary/40">
 											<ShareIcon />
 										</button>
 									</div>

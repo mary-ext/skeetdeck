@@ -104,7 +104,12 @@ const GenericPaneSettings = () => {
 
 			<Show when={multiagent.accounts.length > 1}>
 				<button
-					class={/* @once */ Interactive({ class: 'flex items-center gap-4 border-b border-divider p-4' })}
+					class={
+						/* @once */ Interactive({
+							variant: 'muted',
+							class: 'flex items-center gap-4 border-b border-divider p-4',
+						})
+					}
 				>
 					<SyncAltIcon class="text-lg" />
 					<span class="text-sm">Switch accounts</span>
@@ -124,6 +129,7 @@ const GenericPaneSettings = () => {
 				}}
 				class={
 					/* @once */ Interactive({
+						variant: 'muted',
 						class: 'flex items-center gap-4 border-b border-divider p-4 text-red-500',
 					})
 				}

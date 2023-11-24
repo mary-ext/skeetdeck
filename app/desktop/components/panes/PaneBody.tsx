@@ -33,17 +33,21 @@ const PaneBody = (props: PaneBodyProps) => {
 
 	return (
 		<div class="min-h-0 grow">
-			<Show when={props.isScrolled}>
-				<div class="pointer-events-none absolute inset-x-0 top-13 z-10 grid place-items-center pt-4">
-					<button
-						onClick={() => (ref!.scrollTop = 0)}
-						class="pointer-events-auto flex items-center gap-2 rounded-full bg-accent px-4 py-1 text-[0.8125rem] font-medium leading-5 text-white shadow-md shadow-primary hover:bg-accent-dark dark:shadow-background"
-					>
-						<ArrowLeftIcon class="rotate-90 stroke-white stroke-1 text-base" />
-						<span>Auto-refresh paused</span>
-					</button>
-				</div>
-			</Show>
+			{(() => {
+				if (props.isScrolled) {
+					return (
+						<div class="pointer-events-none absolute inset-x-0 top-13 z-10 grid place-items-center pt-4">
+							<button
+								onClick={() => (ref!.scrollTop = 0)}
+								class="pointer-events-auto flex items-center gap-2 rounded-full bg-accent px-4 py-1 text-[0.8125rem] font-medium leading-5 text-white shadow-md shadow-primary hover:bg-accent-dark dark:shadow-background"
+							>
+								<ArrowLeftIcon class="rotate-90 stroke-white stroke-1 text-base" />
+								<span>Auto-refresh paused</span>
+							</button>
+						</div>
+					);
+				}
+			})()}
 
 			<div
 				ref={ref}
