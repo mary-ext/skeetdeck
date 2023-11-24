@@ -128,7 +128,9 @@ const Notification = (props: NotificationProps) => {
 							{!read && <div class="absolute bottom-0 left-0 top-0 w-1 bg-accent/60"></div>}
 
 							<div class="flex w-10 shrink-0 flex-col items-end gap-3">
-								<IconComponent class={iconClassname + ` text-2xl`} />
+								<div class="grid h-7.5 w-7.5 place-items-center">
+									<IconComponent class={iconClassname + ` text-2xl`} />
+								</div>
 							</div>
 							<div class="flex min-w-0 grow flex-col gap-3">
 								{avatars}
