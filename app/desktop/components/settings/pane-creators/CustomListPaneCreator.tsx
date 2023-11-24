@@ -2,6 +2,7 @@ import { For, Match, Show, Switch } from 'solid-js';
 
 import { createInfiniteQuery } from '@pkg/solid-query';
 
+import type { RefOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 
 import { type CustomListPaneConfig, PaneType } from '../../../globals/panes.ts';
@@ -13,27 +14,58 @@ import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 
 import type { PaneCreatorProps } from './types.ts';
 
+type List = RefOf<'app.bsky.graph.defs#listView'>;
+
 const CustomListPaneCreator = (props: PaneCreatorProps) => {
 	const lists = createInfiniteQuery(() => ({
 		queryKey: ['getProfileLists', props.uid, props.uid, 30] as const,
 		queryFn: async (ctx) => {
 			const [, uid, actor, limit] = ctx.queryKey;
 
+			const param = ctx.pageParam;
 			const agent = await multiagent.connect(uid);
 
-			const response = await agent.rpc.get('app.bsky.graph.getLists', {
-				signal: ctx.signal,
-				params: {
-					actor: actor,
-					limit: limit,
-					cursor: ctx.pageParam,
-				},
-			});
+			let attempts = 0;
+			let cursor: string | null | undefined;
+			let items: List[] = [];
 
-			return response.data;
+			if (param) {
+				cursor = param.key;
+				items = param.remaining;
+			}
+
+			// We don't have enough to fulfill this request...
+			while (cursor !== null && items.length < limit) {
+				const response = await agent.rpc.get('app.bsky.graph.getLists', {
+					params: {
+						actor: actor,
+						limit: limit,
+						cursor: cursor,
+					},
+				});
+
+				const data = response.data;
+				const filtered = data.lists.filter((list) => list.purpose === 'app.bsky.graph.defs#curatelist');
+
+				items = items.concat(filtered);
+				cursor = data.cursor || null;
+
+				// Give up after 2 attempts
+				if (++attempts >= 2) {
+					break;
+				}
+			}
+
+			const lists = items.slice(0, limit);
+			const remaining = items.slice(limit);
+
+			return {
+				cursor: cursor || remaining.length > 0 ? { key: cursor || null, remaining: remaining } : undefined,
+				lists: lists,
+			};
 		},
 		getNextPageParam: (last) => last.cursor,
-		initialPageParam: undefined as string | undefined,
+		initialPageParam: undefined as { key: string | null; remaining: List[] } | undefined,
 	}));
 
 	return (
