@@ -3,6 +3,7 @@ import type { JSX } from 'solid-js/jsx-runtime';
 
 import { type Signal, signal } from '~/utils/signals.ts';
 
+import DialogOverlay from '../components/dialogs/DialogOverlay.tsx';
 import CircularProgress from '../components/CircularProgress.tsx';
 import Modal from '../components/Modal.tsx';
 
@@ -85,9 +86,11 @@ export const ModalProvider = (_props: ModalProviderProps) => {
 						<StateContext.Provider value={context}>
 							<Suspense
 								fallback={
-									<div class="my-auto">
-										<CircularProgress />
-									</div>
+									<DialogOverlay>
+										<div class="my-auto">
+											<CircularProgress />
+										</div>
+									</DialogOverlay>
 								}
 							>
 								{modal.render()}
