@@ -1,6 +1,6 @@
-import { type JSX } from 'solid-js';
+import type { JSX } from 'solid-js';
 
-import { type DOMHandlers } from '@use-gesture/core/types';
+import type { DOMHandlers } from '@use-gesture/core/types';
 
 type CombinedDOMHandlers = JSX.DOMAttributes<EventTarget> & DOMHandlers;
 

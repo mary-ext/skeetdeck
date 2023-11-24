@@ -1,6 +1,6 @@
 import { parseMergedHandlers } from '@use-gesture/core';
 import { registerAction } from '@use-gesture/core/actions';
-import { type Action, type GestureHandlers, type UserGestureConfig } from '@use-gesture/core/types';
+import type { Action, GestureHandlers, UserGestureConfig } from '@use-gesture/core/types';
 
 import { createRecognizers } from './createRecognizers.ts';
 

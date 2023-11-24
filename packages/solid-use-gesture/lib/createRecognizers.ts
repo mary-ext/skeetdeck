@@ -1,14 +1,9 @@
 import { onCleanup, onMount } from 'solid-js';
 
 import { Controller } from '@use-gesture/core';
-import {
-	type GenericOptions,
-	type GestureKey,
-	type InternalHandlers,
-	type NativeHandlers,
-} from '@use-gesture/core/types';
+import type { GenericOptions, GestureKey, InternalHandlers, NativeHandlers } from '@use-gesture/core/types';
 
-import { type SolidDOMAttributes } from './types.ts';
+import type { SolidDOMAttributes } from './types.ts';
 
 type HookReturnType<Config extends GenericOptions> = Config['target'] extends object
 	? void

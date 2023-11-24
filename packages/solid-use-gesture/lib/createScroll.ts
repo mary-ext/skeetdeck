@@ -1,5 +1,5 @@
 import { registerAction, scrollAction } from '@use-gesture/core/actions';
-import { type UserScrollConfig, type Handler, type EventTypes } from '@use-gesture/core/types';
+import type { UserScrollConfig, Handler, EventTypes } from '@use-gesture/core/types';
 
 import { createRecognizers } from './createRecognizers.ts';
 

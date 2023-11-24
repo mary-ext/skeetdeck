@@ -1,5 +1,5 @@
 import { registerAction, wheelAction } from '@use-gesture/core/actions';
-import { type UserWheelConfig, type Handler, type EventTypes } from '@use-gesture/core/types';
+import type { UserWheelConfig, Handler, EventTypes } from '@use-gesture/core/types';
 
 import { createRecognizers } from './createRecognizers.ts';
 

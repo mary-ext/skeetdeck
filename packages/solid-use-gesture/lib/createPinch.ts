@@ -1,5 +1,5 @@
 import { registerAction, pinchAction } from '@use-gesture/core/actions';
-import { type UserPinchConfig, type Handler, type EventTypes } from '@use-gesture/core/types';
+import type { UserPinchConfig, Handler, EventTypes } from '@use-gesture/core/types';
 
 import { createRecognizers } from './createRecognizers.ts';
 

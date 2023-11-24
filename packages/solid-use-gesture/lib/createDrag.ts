@@ -1,5 +1,5 @@
 import { registerAction, dragAction } from '@use-gesture/core/actions';
-import { type EventTypes, type Handler, type UserDragConfig } from '@use-gesture/core/types';
+import type { EventTypes, Handler, UserDragConfig } from '@use-gesture/core/types';
 
 import { createRecognizers } from './createRecognizers.ts';
 

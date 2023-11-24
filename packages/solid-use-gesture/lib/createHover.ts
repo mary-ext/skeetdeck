@@ -1,5 +1,5 @@
 import { registerAction, hoverAction } from '@use-gesture/core/actions';
-import { type EventTypes, type UserHoverConfig, type Handler } from '@use-gesture/core/types';
+import type { EventTypes, UserHoverConfig, Handler } from '@use-gesture/core/types';
 
 import { createRecognizers } from './createRecognizers.ts';
 

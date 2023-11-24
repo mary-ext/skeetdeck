@@ -6,11 +6,11 @@ import {
 	moveAction,
 	hoverAction,
 } from '@use-gesture/core/actions';
-import {
-	type GestureHandlers,
-	type UserGestureConfig,
-	type EventTypes,
-	type AnyHandlerEventTypes,
+import type {
+	GestureHandlers,
+	UserGestureConfig,
+	EventTypes,
+	AnyHandlerEventTypes,
 } from '@use-gesture/core/types';
 
 import { createGestureMixin } from './createGestureMixin.ts';
