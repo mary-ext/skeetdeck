@@ -1,9 +1,11 @@
-import { type JSX, createSignal } from 'solid-js';
+import { type JSX, createSignal, lazy } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
 import type { DID } from '~/api/atp-schema.ts';
 import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/get-list-info.ts';
+
+import { openModal } from '~/com/globals/modals.tsx';
 
 import type { CustomListPaneConfig } from '../../../globals/panes.ts';
 
@@ -26,6 +28,8 @@ import PaneHeader from '../PaneHeader.tsx';
 import GenericPaneSettings from '../settings/GenericPaneSettings.tsx';
 
 import DefaultAvatar from '~/com/assets/default-avatar.svg';
+
+const LazyImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
 
 const CustomListPane = () => {
 	const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);
@@ -103,7 +107,12 @@ const ListHeader = (props: { uid: DID; uri: string }) => {
 
 							if (avatar) {
 								return (
-									<button onClick={() => {}} class="group aspect-banner bg-background">
+									<button
+										onClick={() => {
+											openModal(() => <LazyImageViewerDialog images={[{ fullsize: avatar }]} />);
+										}}
+										class="group aspect-banner bg-background"
+									>
 										<img src={avatar} class="h-full w-full object-cover group-hover:opacity-75" />
 									</button>
 								);

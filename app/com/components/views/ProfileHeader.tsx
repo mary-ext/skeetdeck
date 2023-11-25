@@ -1,10 +1,12 @@
-import { type JSX } from 'solid-js';
+import { type JSX, lazy } from 'solid-js';
 
 import type { DID } from '~/api/atp-schema.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
+
+import { openModal } from '~/com/globals/modals.tsx';
 
 import { Button } from '../../primitives/button.ts';
 
@@ -15,6 +17,8 @@ import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
 import DefaultAvatar from '../../assets/default-avatar.svg';
 
 import ProfileFollowButton from '../ProfileFollowButton.tsx';
+
+const LazyImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
 
 export interface ProfileHeaderProps {
 	profile: SignalizedProfile;
@@ -30,7 +34,12 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 
 				if (banner) {
 					return (
-						<button onClick={() => {}} class="group aspect-banner bg-background">
+						<button
+							onClick={() => {
+								openModal(() => <LazyImageViewerDialog images={[{ fullsize: banner }]} />);
+							}}
+							class="group aspect-banner bg-background"
+						>
 							<img src={banner} class="h-full w-full object-cover group-hover:opacity-75" />
 						</button>
 					);
@@ -47,7 +56,9 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 						if (avatar) {
 							return (
 								<button
-									onClick={() => {}}
+									onClick={() => {
+										openModal(() => <LazyImageViewerDialog images={[{ fullsize: avatar }]} />);
+									}}
 									class="group -mt-11 h-20 w-20 shrink-0 overflow-hidden rounded-full bg-background outline-2 outline-background outline focus-visible:outline-primary"
 								>
 									<img src={avatar} class="h-full w-full group-hover:opacity-75" />
