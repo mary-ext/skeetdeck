@@ -42,7 +42,7 @@ export const defaultFetchHandler = async (
 	httpMethod: string,
 	httpHeaders: Headers,
 	httpReqBody: unknown,
-	signal?: AbortSignal,
+	signal: AbortSignal | undefined,
 ): Promise<FetchHandlerResponse> => {
 	try {
 		// The duplex field is now required for streaming bodies, but not yet reflected

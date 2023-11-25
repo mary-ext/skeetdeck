@@ -104,10 +104,11 @@ export class Agent extends EventEmitter<AgentEventMap> {
 		httpMethod: string,
 		httpHeaders: Headers,
 		httpReqBody: unknown,
+		signal: AbortSignal | undefined,
 	): Promise<FetchHandlerResponse> {
 		await this.#refreshSessionPromise;
 
-		let res = await this.fetch(httpUri, httpMethod, this.#addAuthHeader(httpHeaders), httpReqBody);
+		let res = await this.fetch(httpUri, httpMethod, this.#addAuthHeader(httpHeaders), httpReqBody, signal);
 
 		if (isErrorResponse(res.body, ['ExpiredToken']) && this.session?.refreshJwt) {
 			// refresh session
@@ -115,7 +116,7 @@ export class Agent extends EventEmitter<AgentEventMap> {
 
 			if (this.session) {
 				// retry fetch
-				res = await this.fetch(httpUri, httpMethod, this.#addAuthHeader(httpHeaders), httpReqBody);
+				res = await this.fetch(httpUri, httpMethod, this.#addAuthHeader(httpHeaders), httpReqBody, signal);
 			}
 		}
 
@@ -169,6 +170,7 @@ export class Agent extends EventEmitter<AgentEventMap> {
 			{
 				authorization: `Bearer ${session.refreshJwt}`,
 			},
+			undefined,
 			undefined,
 		);
 
