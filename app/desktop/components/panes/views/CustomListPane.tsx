@@ -150,8 +150,9 @@ const ListHeader = (props: { uid: DID; uri: string }) => {
 		}
 
 		return (
-			<div class="shrink-0 border-b border-divider" style="height:300.8px">
+			<div class="shrink-0 border-b border-divider">
 				<div class="aspect-banner bg-secondary/20"></div>
+				<div style="height:172px"></div>
 			</div>
 		);
 	}) as unknown as JSX.Element;
