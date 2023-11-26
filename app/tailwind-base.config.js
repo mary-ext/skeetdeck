@@ -59,6 +59,9 @@ export default {
 				DEFAULT: 'rgb(var(--accent))',
 				dark: 'rgb(var(--accent-dark))',
 			},
+			hinted: {
+				DEFAULT: 'rgb(var(--hinted))',
+			},
 			background: {
 				DEFAULT: 'rgb(var(--background))',
 				dark: 'rgb(var(--background-dark))',

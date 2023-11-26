@@ -4,7 +4,8 @@
 		--background-dark: 212 212 216; /* zinc-300 */
 
 		--accent: 37 99 235; /* blue-600 */
-		--accent-dark: 30 64 175 /* blue-700 */;
+		--accent-dark: 30 64 175; /* blue-700 */
+		--hinted: 243 244 246; /* gray-100 */
 
 		--primary: 9 9 11; /* zinc-950 */
 		--primary-fg: 244 244 245; /* zinc-100 */
@@ -26,6 +27,7 @@
 		--background-dark: 39 39 42; /* zinc-800 */
 
 		--accent: 59 130 246; /* blue-500 */
+		--hinted: 17 24 39; /* gray-900 */
 
 		--primary: 250 250 250; /* zinc-50 */
 		--primary-fg: 9 9 11; /* zinc-950 */
