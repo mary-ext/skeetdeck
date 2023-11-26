@@ -33,10 +33,14 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 	onMount(() => {
 		const keydownListener = (ev: KeyboardEvent) => {
 			if (ev.key === 'ArrowLeft') {
+				ev.preventDefault();
+
 				if (hasPrev()) {
 					setActive(active() - 1);
 				}
 			} else if (ev.key === 'ArrowRight') {
+				ev.preventDefault();
+
 				if (hasNext()) {
 					setActive(active() + 1);
 				}
