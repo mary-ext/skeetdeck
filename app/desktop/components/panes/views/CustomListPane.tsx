@@ -101,7 +101,7 @@ const ListHeader = (props: { uid: DID; uri: string }) => {
 
 			return (
 				<VirtualContainer class="shrink-0">
-					<div class="flex flex-col border-b border-divider">
+					<div class="border-b border-divider">
 						{(() => {
 							const avatar = data.avatar.value;
 
@@ -111,7 +111,7 @@ const ListHeader = (props: { uid: DID; uri: string }) => {
 										onClick={() => {
 											openModal(() => <LazyImageViewerDialog images={[{ fullsize: avatar }]} />);
 										}}
-										class="group aspect-banner bg-background"
+										class="group block aspect-banner bg-background"
 									>
 										<img src={avatar} class="h-full w-full object-cover group-hover:opacity-75" />
 									</button>
