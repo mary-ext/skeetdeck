@@ -1,12 +1,18 @@
-import { createEffect, createSignal } from 'solid-js';
+import { createSignal } from 'solid-js';
 
-import { createMutation } from '@pkg/solid-query';
+import { createMutation, useQueryClient } from '@pkg/solid-query';
 
+import type { DID, Records } from '~/api/atp-schema.ts';
+import { multiagent } from '~/api/globals/agent.ts';
+import { getCurrentDate, getRecordId } from '~/api/utils/misc.ts';
+
+import { uploadBlob } from '~/api/mutations/upload-blob.ts';
 import type { SignalizedList } from '~/api/stores/lists.ts';
+import { getListInfoKey } from '~/api/queries/get-list-info.ts';
 
 import { model } from '~/utils/input.ts';
 
-import { closeModal, useModalState } from '~/com/globals/modals.tsx';
+import { useModalState } from '~/com/globals/modals.tsx';
 
 import { Button } from '~/com/primitives/button.ts';
 import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
@@ -24,9 +30,11 @@ import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
 import AddPhotoButton from '~/com/components/inputs/AddPhotoButton.tsx';
 
 export interface ListFormDialogProps {
+	uid: DID;
 	/** Expected to be static */
 	list?: SignalizedList;
-	onAdd?: () => void;
+	onEdit?: () => void;
+	onAdd?: (uri: string) => void;
 	onDelete?: () => void;
 }
 
@@ -35,8 +43,14 @@ const enum ListType {
 	CURATION = 'app.bsky.graph.defs#curatelist',
 }
 
+const listRecordType = 'app.bsky.graph.list';
+
+type ListRecord = Records[typeof listRecordType];
+
 const ListFormDialog = (props: ListFormDialogProps) => {
-	const { disableBackdropClose } = useModalState();
+	const { disableBackdropClose, close } = useModalState();
+
+	const queryClient = useQueryClient();
 
 	const lst = props.list;
 
@@ -45,26 +59,98 @@ const ListFormDialog = (props: ListFormDialogProps) => {
 	const [desc, setDesc] = createSignal((lst && lst.description.value) || '');
 	const [type, setType] = createSignal<string>(lst ? lst.purpose.value : ListType.CURATION);
 
-	const listMutation = createMutation(() => {
-		return {
-			mutationFn: async () => {},
-		};
-	});
+	const listMutation = createMutation(() => ({
+		mutationFn: async () => {
+			let prev: ListRecord | undefined;
+			let swap: string | undefined;
+
+			const uid = props.uid;
+
+			const $avatar = avatar();
+			const $name = name();
+			const $description = desc();
+			const $type = type() as ListType;
+
+			const agent = await multiagent.connect(uid);
+
+			if (lst) {
+				const response = await agent.rpc.get('com.atproto.repo.getRecord', {
+					params: {
+						repo: uid,
+						collection: listRecordType,
+						rkey: getRecordId(lst.uri),
+					},
+				});
+
+				const data = response.data;
+
+				prev = data.value as any;
+				swap = data.cid;
+			}
+
+			const record: ListRecord = {
+				createdAt: prev ? prev.createdAt : getCurrentDate(),
+				avatar:
+					$avatar === undefined
+						? undefined
+						: $avatar instanceof Blob
+						  ? (($avatar as any).$blob ||= await uploadBlob(uid, $avatar))
+						  : prev?.avatar,
+				purpose: $type,
+				name: $name,
+				description: $description,
+				descriptionFacets: undefined,
+				labels: prev?.labels,
+			};
+
+			if (lst) {
+				await agent.rpc.call('com.atproto.repo.putRecord', {
+					data: {
+						repo: uid,
+						collection: listRecordType,
+						rkey: getRecordId(lst.uri),
+						swapRecord: swap,
+						record: record,
+					},
+				});
+
+				await queryClient.invalidateQueries({
+					queryKey: getListInfoKey(props.uid, lst.uri),
+				});
+			} else {
+				const response = await agent.rpc.call('com.atproto.repo.createRecord', {
+					data: {
+						repo: uid,
+						collection: listRecordType,
+						record: record,
+					},
+				});
+
+				return response.data;
+			}
+		},
+		onSuccess: (data) => {
+			close();
+
+			if (data) {
+				props.onAdd?.(data.uri);
+			} else {
+				props.onEdit?.();
+			}
+		},
+	}));
 
 	const handleSubmit = (ev: SubmitEvent) => {
 		ev.preventDefault();
+		listMutation.mutate();
 	};
-
-	createEffect(() => {
-		disableBackdropClose.value = listMutation.isPending;
-	});
 
 	return (
 		<DialogOverlay>
 			<form onSubmit={handleSubmit} class={/* @once */ DialogRoot({ size: 'md' })}>
-				<fieldset class="contents">
+				<fieldset disabled={(disableBackdropClose.value = listMutation.isPending)} class="contents">
 					<div class={/* @once */ DialogHeader({ divider: true })}>
-						<button type="button" onClick={closeModal} class={/* @once */ IconButton({ edge: 'left' })}>
+						<button type="button" onClick={close} class={/* @once */ IconButton({ edge: 'left' })}>
 							<CloseIcon />
 						</button>
 
@@ -74,6 +160,18 @@ const ListFormDialog = (props: ListFormDialogProps) => {
 							Save
 						</button>
 					</div>
+
+					{(() => {
+						const error = listMutation.error;
+
+						if (error) {
+							return (
+								<div title={'' + error} class="shrink-0 bg-red-500 px-4 py-3 text-sm text-white">
+									Something went wrong, try again later.
+								</div>
+							);
+						}
+					})()}
 
 					<div class={/* @once */ DialogBody({ class: 'flex flex-col', scrollable: true, padded: false })}>
 						<div class="relative aspect-banner bg-muted-fg">
@@ -96,22 +194,23 @@ const ListFormDialog = (props: ListFormDialogProps) => {
 							/>
 						</div>
 
-						<div class="mt-4 flex flex-col gap-2 px-4">
-							<label for={'type'} class="block text-sm font-medium leading-6 text-primary">
-								List purpose
-							</label>
+						{!lst && (
+							<div class="mt-4 flex flex-col gap-2 px-4">
+								<label for={'type'} class="block text-sm font-medium leading-6 text-primary">
+									List purpose
+								</label>
 
-							<select
-								id={'type'}
-								class={/* @once */ Select()}
-								value={type()}
-								disabled={!!lst}
-								onChange={(ev) => setType(ev.currentTarget.value)}
-							>
-								<option value={ListType.MODERATION}>Moderation list</option>
-								<option value={ListType.CURATION}>Curation list</option>
-							</select>
-						</div>
+								<select
+									id={'type'}
+									class={/* @once */ Select()}
+									value={type()}
+									onChange={(ev) => setType(ev.currentTarget.value)}
+								>
+									<option value={ListType.MODERATION}>Moderation list</option>
+									<option value={ListType.CURATION}>Curation list</option>
+								</select>
+							</div>
+						)}
 
 						<div class="mt-4 flex flex-col gap-2 px-4">
 							<label for="name" class="block text-sm font-medium leading-6 text-primary">

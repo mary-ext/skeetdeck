@@ -148,7 +148,7 @@ const ListHeader = (props: { uid: DID; uri: string }) => {
 										<div class="my-1 flex gap-3">
 											<button
 												onClick={() => {
-													openModal(() => <ListFormDialog list={data} />);
+													openModal(() => <ListFormDialog uid={props.uid} list={data} />);
 												}}
 												class={/* @once */ Button({ variant: 'outline' })}
 											>
