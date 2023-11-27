@@ -38,6 +38,7 @@ interface BatchedFetchMap<Query, Id, Data> {
 	pending: Map<Id, Deferred<Data>>;
 }
 
+/*#__NO_SIDE_EFFECTS__*/
 export const createBatchedFetch = <Query, Id extends QueryId, Data>(
 	options: BatchedFetchOptions<Query, Id, Data>,
 ) => {
