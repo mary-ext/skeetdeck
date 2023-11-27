@@ -1,7 +1,5 @@
 import { type DefaultError, type QueryKey, QueryObserver } from '@tanstack/query-core';
 
-import { type Accessor, createMemo } from 'solid-js';
-
 import { createBaseQuery } from './createBaseQuery.ts';
 import type { QueryClient } from './QueryClient.ts';
 import type {
@@ -71,7 +69,7 @@ export function createQuery<
 	TQueryKey extends QueryKey = QueryKey,
 >(
 	options: UndefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>,
-	queryClient?: () => QueryClient,
+	queryClient?: QueryClient,
 ): CreateQueryResult<TData, TError>;
 
 export function createQuery<
@@ -81,7 +79,7 @@ export function createQuery<
 	TQueryKey extends QueryKey = QueryKey,
 >(
 	options: DefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>,
-	queryClient?: () => QueryClient,
+	queryClient?: QueryClient,
 ): DefinedCreateQueryResult<TData, TError>;
 export function createQuery<
 	TQueryFnData,
