@@ -13,6 +13,7 @@ import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primiti
 import { IconButton } from '~/com/primitives/icon-button.ts';
 import { Input } from '~/com/primitives/input.ts';
 import { Interactive } from '~/com/primitives/interactive.ts';
+import { Select } from '~/com/primitives/select.ts';
 import { Textarea } from '~/com/primitives/textarea.ts';
 
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
@@ -93,6 +94,23 @@ const ListFormDialog = (props: ListFormDialogProps) => {
 								maxHeight={1000}
 								onPick={setAvatar}
 							/>
+						</div>
+
+						<div class="mt-4 flex flex-col gap-2 px-4">
+							<label for={'type'} class="block text-sm font-medium leading-6 text-primary">
+								List purpose
+							</label>
+
+							<select
+								id={'type'}
+								class={/* @once */ Select()}
+								value={type()}
+								disabled={!!lst}
+								onChange={(ev) => setType(ev.currentTarget.value)}
+							>
+								<option value={ListType.MODERATION}>Moderation list</option>
+								<option value={ListType.CURATION}>Curation list</option>
+							</select>
 						</div>
 
 						<div class="mt-4 flex flex-col gap-2 px-4">
