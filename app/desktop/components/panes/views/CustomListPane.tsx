@@ -29,6 +29,8 @@ import GenericPaneSettings from '../settings/GenericPaneSettings.tsx';
 
 import DefaultAvatar from '~/com/assets/default-avatar.svg';
 
+import ListFormDialog from '../../dialogs/ListFormDialog.tsx';
+
 const LazyImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
 
 const CustomListPane = () => {
@@ -140,9 +142,22 @@ const ListHeader = (props: { uid: DID; uri: string }) => {
 								</span>
 							</Link>
 
-							<div class="my-1 flex gap-3">
-								<button class={/* @once */ Button({ variant: 'outline' })}>Edit list</button>
-							</div>
+							{(() => {
+								if (props.uid === data.creator.uid) {
+									return (
+										<div class="my-1 flex gap-3">
+											<button
+												onClick={() => {
+													openModal(() => <ListFormDialog list={data} />);
+												}}
+												class={/* @once */ Button({ variant: 'outline' })}
+											>
+												Edit list
+											</button>
+										</div>
+									);
+								}
+							})()}
 						</div>
 					</div>
 				</VirtualContainer>
