@@ -65,6 +65,7 @@ export const resetModals = () => {
 	setModals([]);
 };
 
+/*#__NO_SIDE_EFFECTS__*/
 export const useModalState = () => {
 	return useContext(StateContext)!;
 };

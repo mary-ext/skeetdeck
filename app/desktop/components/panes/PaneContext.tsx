@@ -45,6 +45,7 @@ export interface PaneModalContextObject {
 
 export const PaneModalContext = createContext<PaneModalContextObject>();
 
+/*#__NO_SIDE_EFFECTS__*/
 export const usePaneModalState = () => {
 	return useContext(PaneModalContext)!;
 };
@@ -60,6 +61,7 @@ export interface PaneContextObject<T extends BasePaneConfig = BasePaneConfig> {
 
 export const PaneContext = createContext<PaneContextObject>();
 
+/*#__NO_SIDE_EFFECTS__*/
 export const usePaneContext = <T extends BasePaneConfig = BasePaneConfig>() => {
 	return useContext(PaneContext) as PaneContextObject<T>;
 };

@@ -108,6 +108,7 @@ export interface LinkingContextObject {
 
 export const LinkingContext = createContext<LinkingContextObject>();
 
+/*#__NO_SIDE_EFFECTS__*/
 export const useLinking = () => {
 	return useContext(LinkingContext)!;
 };

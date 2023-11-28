@@ -11,6 +11,7 @@ interface MediaStore {
 
 const map: Record<string, MediaStore> = {};
 
+/*#__NO_SIDE_EFFECTS__*/
 export const useMediaQuery = (query: string): Accessor<boolean> => {
 	let media = map[query];
 

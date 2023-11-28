@@ -13,6 +13,7 @@ export interface SharedPreferencesObject {
 
 export const SharedPreferences = createContext<SharedPreferencesObject>();
 
+/*#__NO_SIDE_EFFECTS__*/
 export const useSharedPreferences = () => {
 	return useContext(SharedPreferences)!;
 };
