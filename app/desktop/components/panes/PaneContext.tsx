@@ -11,6 +11,8 @@ import {
 
 import { createSortable, transformStyle } from '@thisbeyond/solid-dnd';
 
+import { type Signal, signal } from '~/utils/signals.ts';
+
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { type LinkingContextObject, LinkingContext, LinkingType } from '~/com/components/Link.tsx';
 
@@ -28,11 +30,13 @@ export interface PaneModalOptions {}
 interface PaneModalState {
 	id: number;
 	render: PaneModalComponent;
+	disableBackdropClose: Signal<boolean>;
 }
 
 export interface PaneModalContextObject {
 	readonly id: number;
 	readonly depth: number;
+	disableBackdropClose: Signal<boolean>;
 	close: () => void;
 	reset: () => void;
 }
@@ -81,6 +85,7 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 		const next = modals().concat({
 			id: _id++,
 			render: fn,
+			disableBackdropClose: signal(false),
 		});
 
 		setModals(next);
@@ -163,6 +168,7 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 								get depth() {
 									return index();
 								},
+								disableBackdropClose: modal.disableBackdropClose,
 								close: () => {
 									const next = modals().slice();
 									const index = next.indexOf(modal);
@@ -178,7 +184,7 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 							return (
 								<div
 									onClick={(ev) => {
-										if (ev.target === ev.currentTarget) {
+										if (ev.target === ev.currentTarget && !modal.disableBackdropClose.value) {
 											resetModals();
 										}
 									}}
