@@ -28,7 +28,11 @@ const FeedHeader = (props: FeedHeaderProps) => {
 		const feed = props.feed;
 
 		if (!feed) {
-			return <div></div>;
+			return (
+				<div class="border-b border-divider" style="height:172.8px">
+					<div class="m-4 h-13 w-13 shrink-0 rounded-md bg-secondary/20"></div>
+				</div>
+			);
 		}
 
 		const creator = feed.creator;
