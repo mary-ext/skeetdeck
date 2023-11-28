@@ -17,7 +17,8 @@ import { closeModal, openModal } from '~/com/globals/modals.tsx';
 
 import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
 import { IconButton } from '~/com/primitives/icon-button.ts';
-import { Interactive, loadMoreBtn } from '~/com/primitives/interactive.ts';
+import { MenuItem, MenuRoot } from '~/com/primitives/menu.ts';
+import { loadMoreBtn } from '~/com/primitives/interactive.ts';
 
 import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
@@ -209,7 +210,7 @@ const OwnedListItem = (props: OwnedListItemProps) => {
 					}
 				>
 					{({ close, menuProps }) => (
-						<div {...menuProps} class="flex flex-col overflow-hidden rounded-lg bg-background shadow-menu">
+						<div {...menuProps} class={MenuRoot()}>
 							<button
 								onClick={() => {
 									close();
@@ -223,12 +224,7 @@ const OwnedListItem = (props: OwnedListItemProps) => {
 										/>
 									));
 								}}
-								class={
-									/* @once */ Interactive({
-										variant: 'danger',
-										class: `flex items-center gap-4 px-4 py-3 text-left text-sm text-red-500`,
-									})
-								}
+								class={MenuItem({ variant: 'danger' })}
 							>
 								<DeleteIcon class="text-lg" />
 								<span>Remove from list</span>

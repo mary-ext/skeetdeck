@@ -7,6 +7,8 @@ import { compressProfileImage } from '~/utils/image.ts';
 
 import { openModal } from '~/com/globals/modals.tsx';
 
+import { MenuItem, MenuRoot } from '../../primitives/menu.ts';
+
 import { Flyout } from '../Flyout.tsx';
 import CircularProgress from '../CircularProgress.tsx';
 
@@ -119,14 +121,14 @@ const AddPhotoButton = (props: AddPhotoButtonProps) => {
 				return (
 					<Flyout button={button} placement="bottom" middleware={[flip(), buttonOffset]}>
 						{({ close, menuProps }) => (
-							<div {...menuProps} class="flex flex-col overflow-hidden rounded-lg bg-background shadow-menu">
+							<div {...menuProps} class={MenuRoot()}>
 								<button
 									type="button"
 									onClick={() => {
 										close();
 										input!.showPicker();
 									}}
-									class="flex cursor-pointer items-center gap-4 px-4 py-3 text-left text-sm outline-2 -outline-offset-2 outline-primary hover:bg-secondary/30 focus-visible:outline disabled:pointer-events-none disabled:opacity-50"
+									class={MenuItem()}
 								>
 									Choose a new image
 								</button>
@@ -137,7 +139,7 @@ const AddPhotoButton = (props: AddPhotoButtonProps) => {
 										close();
 										props.onPick(undefined);
 									}}
-									class="flex cursor-pointer items-center gap-4 px-4 py-3 text-left text-sm outline-2 -outline-offset-2 outline-primary hover:bg-secondary/30 focus-visible:outline disabled:pointer-events-none disabled:opacity-50"
+									class={MenuItem()}
 								>
 									Remove existing image
 								</button>
