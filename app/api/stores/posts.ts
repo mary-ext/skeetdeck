@@ -42,7 +42,7 @@ export interface SignalizedPost {
 }
 
 const createSignalizedPost = (uid: DID, post: Post, key?: number): SignalizedPost => {
-	return markRaw({
+	return markRaw<SignalizedPost>({
 		_key: key,
 		uid: uid,
 

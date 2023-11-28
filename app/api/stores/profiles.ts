@@ -54,7 +54,7 @@ const createSignalizedProfile = (
 	const isProfile = 'description' in profile;
 	const isDetailed = 'postsCount' in profile;
 
-	return markRaw({
+	return markRaw<SignalizedProfile>({
 		_key: key,
 		uid: uid,
 

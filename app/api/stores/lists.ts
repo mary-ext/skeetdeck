@@ -36,7 +36,7 @@ export interface SignalizedList {
 }
 
 const createSignalizedList = (uid: DID, list: List, key?: number): SignalizedList => {
-	return markRaw({
+	return markRaw<SignalizedList>({
 		_key: key,
 		uid: uid,
 

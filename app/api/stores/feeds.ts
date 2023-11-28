@@ -19,6 +19,8 @@ const gc = new FinalizationRegistry<string>((id) => {
 /** @see BskyFeedGenerator */
 export interface SignalizedFeed {
 	_key?: number;
+	uid: DID;
+
 	uri: string;
 	cid: Signal<Feed['cid']>;
 	did: Signal<Feed['did']>;
@@ -34,7 +36,7 @@ export interface SignalizedFeed {
 }
 
 const createSignalizedFeed = (uid: DID, feed: Feed, key?: number): SignalizedFeed => {
-	return markRaw({
+	return markRaw<SignalizedFeed>({
 		_key: key,
 		uid: uid,
 
