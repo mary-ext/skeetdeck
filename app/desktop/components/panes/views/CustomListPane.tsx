@@ -86,5 +86,10 @@ const ListHeaderAccessory = (props: { uid: DID; uri: string }) => {
 		};
 	});
 
-	return <ListHeader list={list.data} />;
+	return (
+		<>
+			<ListHeader list={list.data} />
+			<hr class="border-divider" />
+		</>
+	);
 };

@@ -92,6 +92,9 @@ const CustomFeedPaneDialog = (props: CustomFeedPaneDialogProps) => {
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<FeedHeader feed={feed.data} />
+
+				<hr class="border-divider" />
+
 				<TimelineList uid={pane.uid} params={{ type: 'feed', uri: uri }} />
 			</div>
 		</PaneDialog>

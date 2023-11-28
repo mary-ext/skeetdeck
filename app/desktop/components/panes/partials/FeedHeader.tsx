@@ -29,7 +29,7 @@ const FeedHeader = (props: FeedHeaderProps) => {
 
 		if (!feed) {
 			return (
-				<div class="border-b border-divider" style="height:172.8px">
+				<div style="height:172px">
 					<div class="m-4 h-13 w-13 shrink-0 rounded-md bg-secondary/20"></div>
 				</div>
 			);
@@ -39,7 +39,7 @@ const FeedHeader = (props: FeedHeaderProps) => {
 		const isLiked = () => !!feed.viewer.like.value;
 
 		return (
-			<div class="flex flex-col gap-3 border-b border-divider p-4">
+			<div class="flex flex-col gap-3 p-4">
 				<div class="flex gap-4">
 					{(() => {
 						const avatar = feed.avatar.value;

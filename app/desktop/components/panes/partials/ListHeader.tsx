@@ -31,7 +31,7 @@ const ListHeader = (props: ListHeaderProps) => {
 
 		if (!list) {
 			return (
-				<div class="border-b border-divider" style="height:172.8px">
+				<div style="height:172px">
 					<div class="m-4 h-13 w-13 shrink-0 rounded-md bg-secondary/20"></div>
 				</div>
 			);
@@ -41,7 +41,7 @@ const ListHeader = (props: ListHeaderProps) => {
 
 		return (
 			<VirtualContainer class="shrink-0">
-				<div class="flex flex-col gap-4 border-b border-divider p-4">
+				<div class="flex flex-col gap-4 p-4">
 					<div class="flex gap-4">
 						{(() => {
 							const avatar = list.avatar.value;
