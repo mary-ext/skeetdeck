@@ -142,12 +142,12 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 				})()}
 
 				<fieldset disabled={listMutation.isPending} class="flex min-h-0 grow flex-col overflow-y-auto">
-					<div class="relative aspect-banner bg-muted-fg">
+					<div class="relative mx-4 mt-4 aspect-square h-24 w-24 overflow-hidden rounded-md bg-muted-fg">
 						{(() => {
 							const $avatar = avatar();
 
 							if ($avatar) {
-								return <BlobImage src={$avatar} class="aspect-banner h-full w-full object-cover" />;
+								return <BlobImage src={$avatar} class="h-full w-full object-cover" />;
 							}
 						})()}
 
@@ -162,14 +162,14 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 						/>
 					</div>
 
-					<div class="mt-4 flex flex-col gap-2 px-4">
+					<div class="mx-4 mt-4 flex flex-col gap-2">
 						<label for="name" class="block text-sm font-medium leading-6 text-primary">
 							Name
 						</label>
 						<input ref={model(name, setName)} type="text" id="name" required class={/* @once */ Input()} />
 					</div>
 
-					<div class="mt-4 flex flex-col gap-2 px-4">
+					<div class="mx-4 mt-4 flex flex-col gap-2">
 						<label
 							for="description"
 							class="flex items-center justify-between gap-2 text-sm font-medium leading-6 text-primary"
