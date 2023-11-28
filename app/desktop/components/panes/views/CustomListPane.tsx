@@ -10,6 +10,7 @@ import type { CustomListPaneConfig } from '../../../globals/panes.ts';
 import { IconButton } from '~/com/primitives/icon-button.ts';
 
 import TimelineList from '~/com/components/lists/TimelineList.tsx';
+import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 
 import InfoIcon from '~/com/icons/baseline-info.tsx';
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
@@ -87,9 +88,9 @@ const ListHeaderAccessory = (props: { uid: DID; uri: string }) => {
 	});
 
 	return (
-		<>
+		<VirtualContainer class="shrink-0">
 			<ListHeader list={list.data} />
 			<hr class="border-divider" />
-		</>
+		</VirtualContainer>
 	);
 };
