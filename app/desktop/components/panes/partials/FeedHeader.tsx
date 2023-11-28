@@ -1,15 +1,20 @@
 import { type JSX, lazy } from 'solid-js';
 
+import { updateFeedLike } from '~/api/mutations/like-feed.ts';
 import type { SignalizedFeed } from '~/api/stores/feeds.ts';
+
+import { formatCompact } from '~/utils/intl/number.ts';
 
 import { openModal } from '~/com/globals/modals.tsx';
 
+import { Button } from '~/com/primitives/button.ts';
+
 import { Link, LinkingType } from '~/com/components/Link.tsx';
 
-import DefaultAvatar from '~/com/assets/default-avatar.svg';
-import { Button } from '~/com/primitives/button.ts';
+import FavoriteIcon from '~/com/icons/baseline-favorite.tsx';
 import FavoriteOutlinedIcon from '~/com/icons/outline-favorite.tsx';
-import { formatCompact } from '~/utils/intl/number.ts';
+
+import DefaultAvatar from '~/com/assets/default-avatar.svg';
 
 const LazyImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
 
@@ -26,6 +31,7 @@ const FeedHeader = (props: FeedHeaderProps) => {
 		}
 
 		const creator = feed.creator;
+		const isLiked = () => !!feed.viewer.like.value;
 
 		return (
 			<div class="flex flex-col gap-3 border-b border-divider p-4">
@@ -73,11 +79,17 @@ const FeedHeader = (props: FeedHeaderProps) => {
 
 				<div class="flex gap-2">
 					<button
-						title="Like this feed"
-						onClick={() => {}}
+						title={!isLiked() ? `Like this feed` : `Unlike this feed`}
+						onClick={() => {
+							updateFeedLike(feed, !isLiked());
+						}}
 						class={/* @once */ Button({ variant: 'outline' })}
 					>
-						<FavoriteOutlinedIcon class="-mx-1.5 text-base" />
+						{isLiked() ? (
+							<FavoriteIcon class="-mx-1.5 text-base text-red-500" />
+						) : (
+							<FavoriteOutlinedIcon class="-mx-1.5 text-base" />
+						)}
 					</button>
 				</div>
 			</div>
