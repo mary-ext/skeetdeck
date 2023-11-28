@@ -68,7 +68,7 @@ const Modal = (props: ModalProps) => {
 						onClose();
 					}
 				}}
-				class="m-0 h-full max-h-none w-full max-w-none overflow-hidden bg-transparent backdrop:bg-transparent"
+				class="m-0 h-full max-h-none w-full max-w-none cursor-default overflow-hidden bg-transparent backdrop:bg-transparent"
 				data-modal
 			>
 				{props.children}
