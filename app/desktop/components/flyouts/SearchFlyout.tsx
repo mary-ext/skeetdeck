@@ -124,7 +124,7 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 
 					if (item.type === SuggestionType.SEARCH_POSTS) {
 						node = (
-							<p class="overflow-hidden overflow-ellipsis whitespace-nowrap px-4 py-3">
+							<p class="overflow-hidden text-ellipsis whitespace-nowrap px-4 py-3">
 								Search posts matching <strong>{/* @once */ item.query}</strong>
 							</p>
 						);
