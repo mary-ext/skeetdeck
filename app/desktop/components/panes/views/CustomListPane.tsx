@@ -5,8 +5,6 @@ import { createQuery } from '@pkg/solid-query';
 import type { DID } from '~/api/atp-schema.ts';
 import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/get-list-info.ts';
 
-import { openModal } from '~/com/globals/modals.tsx';
-
 import type { CustomListPaneConfig } from '../../../globals/panes.ts';
 
 import { Button } from '~/com/primitives/button.ts';
@@ -19,17 +17,16 @@ import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 import InfoIcon from '~/com/icons/baseline-info.tsx';
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
 
+import DefaultAvatar from '~/com/assets/default-avatar.svg';
+
 import { usePaneContext } from '../PaneContext.tsx';
 import Pane from '../Pane.tsx';
 import PaneAside from '../PaneAside.tsx';
 import PaneBody from '../PaneBody.tsx';
 import PaneHeader from '../PaneHeader.tsx';
 
+import ListSettingsPaneDialog from '../dialogs/ListSettingsPaneDialog.tsx';
 import GenericPaneSettings from '../settings/GenericPaneSettings.tsx';
-
-import DefaultAvatar from '~/com/assets/default-avatar.svg';
-
-import ListFormDialog from '../../dialogs/ListFormDialog.tsx';
 
 const LazyImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
 
@@ -84,6 +81,8 @@ const CustomListPane = () => {
 export default CustomListPane;
 
 const ListHeader = (props: { uid: DID; uri: string }) => {
+	const { openModal } = usePaneContext();
+
 	const list = createQuery(() => {
 		const key = getListInfoKey(props.uid, props.uri);
 
@@ -148,7 +147,7 @@ const ListHeader = (props: { uid: DID; uri: string }) => {
 										<div class="my-1 flex gap-3">
 											<button
 												onClick={() => {
-													openModal(() => <ListFormDialog uid={props.uid} list={data} />);
+													openModal(() => <ListSettingsPaneDialog list={data} />);
 												}}
 												class={/* @once */ Button({ variant: 'outline' })}
 											>
