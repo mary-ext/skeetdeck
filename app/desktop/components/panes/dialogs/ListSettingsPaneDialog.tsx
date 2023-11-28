@@ -182,20 +182,28 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 
 					<div class="mt-4 grow border-b border-divider"></div>
 
-					<button
-						type="button"
-						onClick={() => {
-							openPaneModal(() => <ListMembersPaneDialog list={list} />);
-						}}
-						class={
-							/* @once */ Interactive({
-								class: `flex items-center justify-between gap-2 px-4 py-3 text-sm disabled:opacity-50`,
-							})
+					{(() => {
+						if (list.purpose.value === 'app.bsky.graph.defs#modlist') {
+							return;
 						}
-					>
-						<span>Manage members</span>
-						<ChevronRightIcon class="-mr-2 text-2xl text-muted-fg" />
-					</button>
+
+						return (
+							<button
+								type="button"
+								onClick={() => {
+									openPaneModal(() => <ListMembersPaneDialog list={list} />);
+								}}
+								class={
+									/* @once */ Interactive({
+										class: `flex items-center justify-between gap-2 px-4 py-3 text-sm disabled:opacity-50`,
+									})
+								}
+							>
+								<span>Manage members</span>
+								<ChevronRightIcon class="-mr-2 text-2xl text-muted-fg" />
+							</button>
+						);
+					})()}
 
 					<button
 						type="button"

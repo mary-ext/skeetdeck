@@ -16,6 +16,7 @@ import { usePaneContext } from '../PaneContext.tsx';
 
 import ListMembersPaneDialog from '../dialogs/ListMembersPaneDialog.tsx';
 import ListSettingsPaneDialog from '../dialogs/ListSettingsPaneDialog.tsx';
+import EditIcon from '~/com/icons/baseline-edit.tsx';
 
 const LazyImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
 
@@ -38,6 +39,8 @@ const ListHeader = (props: ListHeaderProps) => {
 		}
 
 		const creator = list.creator;
+
+		const isModList = () => list.purpose.value === 'app.bsky.graph.defs#modlist';
 
 		return (
 			<VirtualContainer class="shrink-0">
@@ -82,8 +85,16 @@ const ListHeader = (props: ListHeaderProps) => {
 
 					<p class="whitespace-pre-wrap break-words text-sm empty:hidden">{list.description.value}</p>
 
-					<div class="flex gap-2">
+					<div class="flex gap-2 empty:hidden">
 						{(() => {
+							if (isModList()) {
+								return (
+									<button onClick={() => {}} class={Button({ variant: 'primary' })}>
+										Subscribe list
+									</button>
+								);
+							}
+
 							if (list.uid === list.creator.uid) {
 								return (
 									<button
@@ -107,6 +118,24 @@ const ListHeader = (props: ListHeaderProps) => {
 									View members
 								</button>
 							);
+						})()}
+
+						<div class="grow"></div>
+
+						{(() => {
+							if (isModList() && list.uid === list.creator.uid) {
+								return (
+									<button
+										title="Edit this list"
+										onClick={() => {
+											openPaneModal(() => <ListSettingsPaneDialog list={list} />);
+										}}
+										class={/* @once */ Button({ variant: 'outline' })}
+									>
+										<EditIcon class="-mx-1.5 text-base" />
+									</button>
+								);
+							}
 						})()}
 					</div>
 				</div>
