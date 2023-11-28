@@ -12,7 +12,7 @@ import { getListInfoKey } from '~/api/queries/get-list-info.ts';
 
 import { model } from '~/utils/input.ts';
 
-import { useModalState } from '~/com/globals/modals.tsx';
+import { openModal, useModalState } from '~/com/globals/modals.tsx';
 
 import { Button } from '~/com/primitives/button.ts';
 import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
@@ -28,6 +28,8 @@ import BlobImage from '~/com/components/BlobImage.tsx';
 import CloseIcon from '~/com/icons/baseline-close.tsx';
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
 import AddPhotoButton from '~/com/components/inputs/AddPhotoButton.tsx';
+
+import ListMembersDialog from './ListMembersDialog.tsx';
 
 export interface ListFormDialogProps {
 	uid: DID;
@@ -236,7 +238,9 @@ const ListFormDialog = (props: ListFormDialogProps) => {
 							<div class="mt-4 flex flex-col border-t border-divider">
 								<button
 									type="button"
-									onClick={() => {}}
+									onClick={() => {
+										openModal(() => <ListMembersDialog list={lst} />);
+									}}
 									class={
 										/* @once */ Interactive({
 											class: `flex items-center justify-between gap-2 px-4 py-3 text-sm`,

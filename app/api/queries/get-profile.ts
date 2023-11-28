@@ -1,9 +1,36 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID } from '../atp-schema.ts';
+import type { DID, RefOf } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
+import { createBatchedFetch } from '../utils/batch-fetch.ts';
 
 import { type SignalizedProfile, getCachedProfile, mergeProfile } from '../stores/profiles.ts';
+
+type ProfileData = RefOf<'app.bsky.actor.defs#profileViewDetailed'>;
+type Query = [uid: DID, actor: DID];
+
+export const fetchProfileBatched = createBatchedFetch<Query, string, ProfileData>({
+	limit: 25,
+	timeout: 0,
+	key: (query) => query[0],
+	idFromQuery: (query) => query[1],
+	idFromData: (data) => data.did,
+	fetch: async (queries) => {
+		const uid = queries[0][0];
+		const actors = queries.map((query) => query[1]);
+
+		const agent = await multiagent.connect(uid);
+
+		const response = await agent.rpc.get('app.bsky.actor.getProfiles', {
+			params: {
+				actors,
+			},
+		});
+
+		const profiles = response.data.profiles;
+		return profiles;
+	},
+});
 
 export const getProfileKey = (uid: DID, actor: string) => {
 	return ['getProfile', uid, actor] as const;
