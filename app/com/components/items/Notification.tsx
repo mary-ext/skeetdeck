@@ -28,7 +28,7 @@ import RepeatIcon from '../../icons/baseline-repeat.tsx';
 import EmbedRecord from '../embeds/EmbedRecord.tsx';
 import Post from './Post.tsx';
 
-import DefaultAvatar from '../../assets/default-avatar.svg';
+import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 export interface NotificationProps {
 	uid: DID;

@@ -6,7 +6,7 @@ import { INTERACTION_TAGS, isElementAltClicked, isElementClicked } from '~/utils
 
 import ProfileFollowButton from '../ProfileFollowButton.tsx';
 
-import DefaultAvatar from '../../assets/default-avatar.svg';
+import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 export interface ProfileItemAccessory {
 	render: (item: SignalizedProfile) => JSX.Element;

@@ -26,7 +26,7 @@ import ShareIcon from '../../icons/baseline-share.tsx';
 import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble.tsx';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
 
-import DefaultAvatar from '../../assets/default-avatar.svg';
+import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import PostOverflowAction from './posts/PostOverflowAction.tsx';
 import RepostAction from './posts/RepostAction.tsx';

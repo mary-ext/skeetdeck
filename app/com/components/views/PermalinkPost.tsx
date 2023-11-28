@@ -18,7 +18,7 @@ import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
 import RepeatIcon from '../../icons/baseline-repeat.tsx';
 import ShareIcon from '../../icons/baseline-share.tsx';
 
-import DefaultAvatar from '../../assets/default-avatar.svg';
+import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import PostOverflowAction from '../items/posts/PostOverflowAction.tsx';
 import RepostAction from '../items/posts/RepostAction.tsx';

@@ -19,7 +19,7 @@ import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 import InfoIcon from '~/com/icons/baseline-info.tsx';
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
 
-import DefaultAvatar from '~/com/assets/default-avatar.svg';
+import DefaultAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 import { usePaneContext } from '../PaneContext.tsx';
 import Pane from '../Pane.tsx';

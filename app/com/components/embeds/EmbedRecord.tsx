@@ -9,7 +9,7 @@ import PostQuoteWarning from '../moderation/PostQuoteWarning.tsx';
 import { Link, LinkingType } from '../Link.tsx';
 import TimeAgo from '../TimeAgo.tsx';
 
-import DefaultAvatar from '../../assets/default-avatar.svg';
+import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import EmbedImage from './EmbedImage.tsx';
 

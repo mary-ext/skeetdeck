@@ -14,7 +14,7 @@ import { Link, LinkingType } from '../Link.tsx';
 
 import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
 
-import DefaultAvatar from '../../assets/default-avatar.svg';
+import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import ProfileFollowButton from '../ProfileFollowButton.tsx';
 

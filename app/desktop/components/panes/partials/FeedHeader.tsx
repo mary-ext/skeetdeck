@@ -14,7 +14,7 @@ import { Link, LinkingType } from '~/com/components/Link.tsx';
 import FavoriteIcon from '~/com/icons/baseline-favorite.tsx';
 import FavoriteOutlinedIcon from '~/com/icons/outline-favorite.tsx';
 
-import DefaultAvatar from '~/com/assets/default-avatar.svg';
+import DefaultAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 const LazyImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
 
