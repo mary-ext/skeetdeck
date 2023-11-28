@@ -2,7 +2,8 @@ import { EQUALS_DEQUAL } from '~/utils/dequal.ts';
 import { type Signal, signal } from '~/utils/signals.ts';
 
 import type { DID, RefOf } from '../atp-schema.ts';
-import { markRaw } from '../utils/misc.ts';
+
+import { proto } from './_base.ts';
 
 type Profile = RefOf<'app.bsky.actor.defs#profileView'>;
 type ProfileBasic = RefOf<'app.bsky.actor.defs#profileViewBasic'>;
@@ -54,7 +55,10 @@ const createSignalizedProfile = (
 	const isProfile = 'description' in profile;
 	const isDetailed = 'postsCount' in profile;
 
-	return markRaw<SignalizedProfile>({
+	return {
+		// @ts-expect-error
+		__proto__: proto,
+
 		_key: key,
 		uid: uid,
 
@@ -77,7 +81,7 @@ const createSignalizedProfile = (
 			following: signal(profile.viewer?.following),
 			followedBy: signal(profile.viewer?.followedBy),
 		},
-	});
+	};
 };
 
 export const createProfileId = (uid: DID, actor: DID) => {

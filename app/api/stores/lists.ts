@@ -1,8 +1,9 @@
 import { type Signal, signal } from '~/utils/signals.ts';
 
 import type { DID, RefOf } from '../atp-schema.ts';
-import { markRaw } from '../utils/misc.ts';
 import { type SignalizedProfile, mergeProfile } from './profiles.ts';
+
+import { proto } from './_base.ts';
 
 type List = RefOf<'app.bsky.graph.defs#listView'>;
 
@@ -36,7 +37,10 @@ export interface SignalizedList {
 }
 
 const createSignalizedList = (uid: DID, list: List, key?: number): SignalizedList => {
-	return markRaw<SignalizedList>({
+	return {
+		// @ts-expect-error
+		__proto__: proto,
+
 		_key: key,
 		uid: uid,
 
@@ -52,7 +56,7 @@ const createSignalizedList = (uid: DID, list: List, key?: number): SignalizedLis
 			muted: signal(list.viewer?.muted),
 			blocked: signal(list.viewer?.blocked),
 		},
-	});
+	};
 };
 
 export const createListId = (uid: DID, uri: string) => {

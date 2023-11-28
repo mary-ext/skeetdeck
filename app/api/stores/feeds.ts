@@ -1,8 +1,9 @@
 import { type Signal, signal } from '~/utils/signals.ts';
 
 import type { DID, RefOf } from '../atp-schema.ts';
-import { markRaw } from '../utils/misc.ts';
 import { type SignalizedProfile, mergeProfile } from './profiles.ts';
+
+import { proto } from './_base.ts';
 
 type Feed = RefOf<'app.bsky.feed.defs#generatorView'>;
 
@@ -36,7 +37,10 @@ export interface SignalizedFeed {
 }
 
 const createSignalizedFeed = (uid: DID, feed: Feed, key?: number): SignalizedFeed => {
-	return markRaw<SignalizedFeed>({
+	return {
+		// @ts-expect-error
+		__proto__: proto,
+
 		_key: key,
 		uid: uid,
 
@@ -52,7 +56,7 @@ const createSignalizedFeed = (uid: DID, feed: Feed, key?: number): SignalizedFee
 		viewer: {
 			like: signal(feed.viewer?.like),
 		},
-	});
+	};
 };
 
 export const createFeedId = (uid: DID, uri: string) => {

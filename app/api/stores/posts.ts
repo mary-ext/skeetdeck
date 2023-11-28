@@ -2,9 +2,10 @@ import { EQUALS_DEQUAL } from '~/utils/dequal.ts';
 import { type Signal, signal } from '~/utils/signals.ts';
 
 import type { DID, Records, RefOf } from '../atp-schema.ts';
-import { markRaw } from '../utils/misc.ts';
 
 import { type SignalizedProfile, mergeProfile } from './profiles.ts';
+
+import { proto } from './_base.ts';
 
 type Post = RefOf<'app.bsky.feed.defs#postView'>;
 type PostRecord = Records['app.bsky.feed.post'];
@@ -42,7 +43,10 @@ export interface SignalizedPost {
 }
 
 const createSignalizedPost = (uid: DID, post: Post, key?: number): SignalizedPost => {
-	return markRaw<SignalizedPost>({
+	return {
+		// @ts-expect-error
+		__proto__: proto,
+
 		_key: key,
 		uid: uid,
 
@@ -59,7 +63,7 @@ const createSignalizedPost = (uid: DID, post: Post, key?: number): SignalizedPos
 			like: signal(post.viewer?.like),
 			repost: signal(post.viewer?.repost),
 		},
-	});
+	};
 };
 
 export const createPostId = (uid: DID, uri: string) => {
