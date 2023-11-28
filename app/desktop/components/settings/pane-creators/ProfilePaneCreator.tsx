@@ -64,7 +64,6 @@ const ProfilePaneCreator = (props: PaneCreatorProps) => {
 								</p>
 
 								<ProfileList
-									uid={props.uid}
 									profiles={profiles.data?.pages.flatMap((page) => page.profiles)}
 									fetching={profiles.isFetching}
 									error={profiles.error}
@@ -95,7 +94,6 @@ const ProfilePaneCreator = (props: PaneCreatorProps) => {
 
 						return (
 							<ProfileList
-								uid={props.uid}
 								profiles={profiles.data?.pages.flatMap((page) => page.profiles)}
 								fetching={profiles.isFetching}
 								error={profiles.error}
