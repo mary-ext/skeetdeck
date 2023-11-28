@@ -14,7 +14,8 @@ import { Link, LinkingType } from '~/com/components/Link.tsx';
 import FavoriteIcon from '~/com/icons/baseline-favorite.tsx';
 import FavoriteOutlinedIcon from '~/com/icons/outline-favorite.tsx';
 
-import DefaultAvatar from '~/com/assets/default-user-avatar.svg?url';
+import DefaultFeedAvatar from '~/com/assets/default-feed-avatar.svg?url';
+import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 const LazyImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
 
@@ -52,7 +53,7 @@ const FeedHeader = (props: FeedHeaderProps) => {
 							);
 						}
 
-						return <div class="h-13 w-13 shrink-0 rounded-md bg-muted-fg"></div>;
+						return <img src={DefaultFeedAvatar} class="h-13 w-13 shrink-0 rounded-md" />;
 					})()}
 
 					<div class="grow">
@@ -62,7 +63,7 @@ const FeedHeader = (props: FeedHeaderProps) => {
 							to={/* @once */ { type: LinkingType.PROFILE, actor: creator.did }}
 							class="group mt-1 flex items-center text-left"
 						>
-							<img src={creator.avatar.value || DefaultAvatar} class="mr-2 h-5 w-5 rounded-full" />
+							<img src={creator.avatar.value || DefaultUserAvatar} class="mr-2 h-5 w-5 rounded-full" />
 							<span class="mr-1 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold empty:hidden group-hover:underline">
 								{creator.displayName.value}
 							</span>

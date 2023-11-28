@@ -19,7 +19,8 @@ import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 import InfoIcon from '~/com/icons/baseline-info.tsx';
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
 
-import DefaultAvatar from '~/com/assets/default-user-avatar.svg?url';
+import DefaultListAvatar from '~/com/assets/default-list-avatar.svg?url';
+import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 import { usePaneContext } from '../PaneContext.tsx';
 import Pane from '../Pane.tsx';
@@ -124,7 +125,7 @@ const ListHeader = (props: { uid: DID; uri: string }) => {
 									);
 								}
 
-								return <div class="h-13 w-13 shrink-0 rounded-md bg-muted-fg"></div>;
+								return <img src={DefaultListAvatar} class="h-13 w-13 shrink-0 rounded-md" />;
 							})()}
 
 							<div class="grow">
@@ -134,7 +135,7 @@ const ListHeader = (props: { uid: DID; uri: string }) => {
 									to={/* @once */ { type: LinkingType.PROFILE, actor: creator.did }}
 									class="group mt-1 flex items-center text-left"
 								>
-									<img src={creator.avatar.value || DefaultAvatar} class="mr-2 h-5 w-5 rounded-full" />
+									<img src={creator.avatar.value || DefaultUserAvatar} class="mr-2 h-5 w-5 rounded-full" />
 									<span class="mr-1 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold empty:hidden group-hover:underline">
 										{creator.displayName.value}
 									</span>
