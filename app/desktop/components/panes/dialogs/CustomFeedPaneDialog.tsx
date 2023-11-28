@@ -75,6 +75,7 @@ const CustomFeedPaneDialog = (props: CustomFeedPaneDialogProps) => {
 												name: $feed.name.value,
 												uri: $feed.uri,
 											},
+											infoVisible: true,
 										},
 										index() + 1,
 									);

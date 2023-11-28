@@ -80,6 +80,7 @@ export interface CustomFeedPaneConfig extends BasePaneConfig {
 		uri: string;
 		name: string;
 	};
+	infoVisible: boolean;
 }
 
 export interface CustomListPaneConfig extends BasePaneConfig {
