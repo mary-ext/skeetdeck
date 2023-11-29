@@ -24,14 +24,6 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 			return;
 		}
 
-		if (type === LinkingType.POST) {
-			return openModal(() => <ThreadPaneDialog {...to} />);
-		}
-
-		if (type === LinkingType.PROFILE) {
-			return openModal(() => <ProfilePaneDialog {...to} />);
-		}
-
 		if (type === LinkingType.FEED) {
 			return openModal(() => <FeedPaneDialog {...to} />);
 		}
@@ -42,6 +34,14 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 
 		if (type === LinkingType.LIST) {
 			return openModal(() => <ListPaneDialog {...to} />);
+		}
+
+		if (type === LinkingType.POST) {
+			return openModal(() => <ThreadPaneDialog {...to} />);
+		}
+
+		if (type === LinkingType.PROFILE) {
+			return openModal(() => <ProfilePaneDialog {...to} />);
 		}
 	};
 
