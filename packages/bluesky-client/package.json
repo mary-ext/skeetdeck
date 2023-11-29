@@ -2,7 +2,7 @@
 	"type": "module",
 	"name": "@externdefs/bluesky-client",
 	"description": "Lightweight API client for Bluesky/AT Protocol",
-	"version": "0.3.6",
+	"version": "0.3.7",
 	"author": "externdefs",
 	"license": "MIT",
 	"repository": {
@@ -42,8 +42,7 @@
 	"scripts": {
 		"build:lib": "node ./scripts/mkdist.js",
 		"build:schema": "node ./scripts/generate-atp-schema.js",
-		"prepublishOnly": "npm run build:schema && tsc && npm run build:lib",
-		"fmt": "prettier --cache --write ."
+		"prepublishOnly": "npm run build:schema && tsc && npm run build:lib"
 	},
 	"devDependencies": {
 		"@tiptap/core": "^2.1.12",
