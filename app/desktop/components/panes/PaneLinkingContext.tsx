@@ -8,6 +8,7 @@ const FeedLikedByPaneDialog = lazy(() => import('./dialogs/FeedLikedByPaneDialog
 const FeedPaneDialog = lazy(() => import('./dialogs/FeedPaneDialog.tsx'));
 const ListPaneDialog = lazy(() => import('./dialogs/ListPaneDialog.tsx'));
 const PostLikedByPaneDialog = lazy(() => import('./dialogs/PostLikedByPaneDialog.tsx'));
+const PostRepostedByPaneDialog = lazy(() => import('./dialogs/PostRepostedByPaneDialog.tsx'));
 const ProfilePaneDialog = lazy(() => import('./dialogs/ProfilePaneDialog.tsx'));
 const ThreadPaneDialog = lazy(() => import('./dialogs/ThreadPaneDialog.tsx'));
 
@@ -43,6 +44,10 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 
 		if (type === LinkingType.POST_LIKED_BY) {
 			return openModal(() => <PostLikedByPaneDialog {...to} />);
+		}
+
+		if (type === LinkingType.POST_REPOSTED_BY) {
+			return openModal(() => <PostRepostedByPaneDialog {...to} />);
 		}
 
 		if (type === LinkingType.PROFILE) {
