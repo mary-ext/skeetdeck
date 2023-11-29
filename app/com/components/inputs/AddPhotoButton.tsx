@@ -121,14 +121,14 @@ const AddPhotoButton = (props: AddPhotoButtonProps) => {
 				return (
 					<Flyout button={button} placement="bottom" middleware={[flip(), buttonOffset]}>
 						{({ close, menuProps }) => (
-							<div {...menuProps} class={MenuRoot()}>
+							<div {...menuProps} class={/* @once */ MenuRoot()}>
 								<button
 									type="button"
 									onClick={() => {
 										close();
 										input!.showPicker();
 									}}
-									class={MenuItem()}
+									class={/* @once */ MenuItem()}
 								>
 									Choose a new image
 								</button>
@@ -139,7 +139,7 @@ const AddPhotoButton = (props: AddPhotoButtonProps) => {
 										close();
 										props.onPick(undefined);
 									}}
-									class={MenuItem()}
+									class={/* @once */ MenuItem()}
 								>
 									Remove existing image
 								</button>

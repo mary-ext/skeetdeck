@@ -22,13 +22,13 @@ const RepostAction = (props: RepostActionProps) => {
 			return (
 				<Flyout button={props.children} placement="bottom">
 					{({ close, menuProps }) => (
-						<div {...menuProps} class={MenuRoot()}>
+						<div {...menuProps} class={/* @once */ MenuRoot()}>
 							<button
 								onClick={() => {
 									close();
 									updatePostRepost(post, !post.viewer.repost.value);
 								}}
-								class={MenuItem()}
+								class={/* @once */ MenuItem()}
 							>
 								<RepeatIcon class="text-lg" />
 								<span>{post.viewer.repost.value ? 'Undo repost' : 'Repost'}</span>

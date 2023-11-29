@@ -190,7 +190,7 @@ const OwnedListItem = (props: OwnedListItemProps) => {
 				return (
 					<Flyout button={button}>
 						{({ close, menuProps }) => (
-							<div {...menuProps} class={MenuRoot()}>
+							<div {...menuProps} class={/* @once */ MenuRoot()}>
 								<button
 									onClick={() => {
 										close();
@@ -204,7 +204,7 @@ const OwnedListItem = (props: OwnedListItemProps) => {
 											/>
 										));
 									}}
-									class={MenuItem({ variant: 'danger' })}
+									class={/* @once */ MenuItem({ variant: 'danger' })}
 								>
 									<DeleteIcon class="text-lg" />
 									<span>Remove from list</span>

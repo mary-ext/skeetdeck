@@ -22,13 +22,13 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 			return (
 				<Flyout button={props.children} placement="bottom-end">
 					{({ close, menuProps }) => (
-						<div {...menuProps} class={MenuRoot()}>
+						<div {...menuProps} class={/* @once */ MenuRoot()}>
 							<button
 								onClick={() => {
 									close();
 									open(`https://bsky.app/profile/${post.author.did}/post/${getRecordId(post.uri)}`, '_blank');
 								}}
-								class={MenuItem()}
+								class={/* @once */ MenuItem()}
 							>
 								<LaunchIcon class="text-lg" />
 								<span>Open in Bluesky app</span>
