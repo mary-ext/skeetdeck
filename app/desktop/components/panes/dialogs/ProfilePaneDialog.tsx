@@ -119,20 +119,62 @@ const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 									<ProfileHeader profile={data} />
 								</VirtualContainer>
 
-								<TabbedPanel selected={tab()} onChange={setTab}>
-									<TabbedPanelView label="Posts" value={ProfileTab.POSTS}>
-										<TimelineList uid={pane.uid} params={{ type: 'profile', actor: actor, tab: 'posts' }} />
-									</TabbedPanelView>
-									<TabbedPanelView label="Replies" value={ProfileTab.POSTS_WITH_REPLIES}>
-										<TimelineList uid={pane.uid} params={{ type: 'profile', actor: actor, tab: 'replies' }} />
-									</TabbedPanelView>
-									<TabbedPanelView label="Media" value={ProfileTab.MEDIA}>
-										<TimelineList uid={pane.uid} params={{ type: 'profile', actor: actor, tab: 'media' }} />
-									</TabbedPanelView>
-									<TabbedPanelView label="Likes" value={ProfileTab.LIKES} hidden={pane.uid !== data.did}>
-										<TimelineList uid={pane.uid} params={{ type: 'profile', actor: actor, tab: 'likes' }} />
-									</TabbedPanelView>
-								</TabbedPanel>
+								{(() => {
+									if (data.viewer.blockedBy.value) {
+										return (
+											<div class="grid grow place-items-center">
+												<div class="max-w-sm p-4 py-24">
+													<h1 class="mb-1 text-xl font-bold">You are blocked</h1>
+													<p class="text-sm text-muted-fg">
+														You can't view any of the posts if you are blocked.
+													</p>
+												</div>
+											</div>
+										);
+									}
+
+									if (data.viewer.blocking.value) {
+										return (
+											<div class="grid grow place-items-center">
+												<div class="max-w-sm p-4 py-24">
+													<h1 class="mb-1 text-xl font-bold">@{data.handle.value} is blocked</h1>
+													<p class="text-sm text-muted-fg">
+														You can't view any of the posts if you've blocked them.
+													</p>
+												</div>
+											</div>
+										);
+									}
+
+									return (
+										<TabbedPanel selected={tab()} onChange={setTab}>
+											<TabbedPanelView label="Posts" value={ProfileTab.POSTS}>
+												<TimelineList
+													uid={pane.uid}
+													params={{ type: 'profile', actor: actor, tab: 'posts' }}
+												/>
+											</TabbedPanelView>
+											<TabbedPanelView label="Replies" value={ProfileTab.POSTS_WITH_REPLIES}>
+												<TimelineList
+													uid={pane.uid}
+													params={{ type: 'profile', actor: actor, tab: 'replies' }}
+												/>
+											</TabbedPanelView>
+											<TabbedPanelView label="Media" value={ProfileTab.MEDIA}>
+												<TimelineList
+													uid={pane.uid}
+													params={{ type: 'profile', actor: actor, tab: 'media' }}
+												/>
+											</TabbedPanelView>
+											<TabbedPanelView label="Likes" value={ProfileTab.LIKES} hidden={pane.uid !== data.did}>
+												<TimelineList
+													uid={pane.uid}
+													params={{ type: 'profile', actor: actor, tab: 'likes' }}
+												/>
+											</TabbedPanelView>
+										</TabbedPanel>
+									);
+								})()}
 							</div>
 						);
 					}}
