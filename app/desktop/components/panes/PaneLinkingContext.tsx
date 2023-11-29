@@ -9,6 +9,8 @@ const FeedPaneDialog = lazy(() => import('./dialogs/FeedPaneDialog.tsx'));
 const ListPaneDialog = lazy(() => import('./dialogs/ListPaneDialog.tsx'));
 const PostLikedByPaneDialog = lazy(() => import('./dialogs/PostLikedByPaneDialog.tsx'));
 const PostRepostedByPaneDialog = lazy(() => import('./dialogs/PostRepostedByPaneDialog.tsx'));
+const ProfileFollowersPaneDialog = lazy(() => import('./dialogs/ProfileFollowersPaneDialog.tsx'));
+const ProfileFollowsPaneDialog = lazy(() => import('./dialogs/ProfileFollowsPaneDialog.tsx'));
 const ProfilePaneDialog = lazy(() => import('./dialogs/ProfilePaneDialog.tsx'));
 const ThreadPaneDialog = lazy(() => import('./dialogs/ThreadPaneDialog.tsx'));
 
@@ -52,6 +54,14 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 
 		if (type === LinkingType.PROFILE) {
 			return openModal(() => <ProfilePaneDialog {...to} />);
+		}
+
+		if (type === LinkingType.PROFILE_FOLLOWERS) {
+			return openModal(() => <ProfileFollowersPaneDialog {...to} />);
+		}
+
+		if (type === LinkingType.PROFILE_FOLLOWS) {
+			return openModal(() => <ProfileFollowsPaneDialog {...to} />);
 		}
 	};
 
