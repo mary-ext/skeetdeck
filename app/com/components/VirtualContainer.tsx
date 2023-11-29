@@ -1,4 +1,4 @@
-import { type JSX, Show, createSignal } from 'solid-js';
+import { type JSX, createSignal } from 'solid-js';
 
 import { scheduleIdleTask } from '~/utils/idle.ts';
 import { getRectFromEntry, scrollObserver } from '~/utils/intersection-observer.ts';
@@ -8,6 +8,8 @@ export interface VirtualContainerProps {
 	class?: string;
 	children?: JSX.Element;
 }
+
+const isMobile = import.meta.env.VITE_APP_MODE !== 'desktop' && /Android/.test(navigator.userAgent);
 
 export const VirtualContainer = (props: VirtualContainerProps) => {
 	let entry: IntersectionObserverEntry | undefined;
@@ -32,25 +34,49 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 
 		entry = nextEntry;
 
-		// @todo: figure out why this is. not sure why scroll restoration is broken
-		// with this approach on mobile.
-		if (import.meta.env.VITE_APP_MODE === 'desktop') {
+		// @todo: figure out why this is at all.
+		// after scratching my head on and off for 12 hours, I've concluded that:
+		//
+		// 1. the broken assumption around how the virtual container attempts to
+		//    store the height of items somehow makes scroll restoration work.
+		//
+		// 2. fixing this broken assumption somehow breaks scroll restoration.
+		//
+		// 3. this only happens on mobile browsers.
+		//
+		// my only assumption is that mobile phones are slow, but I am not willing
+		// to spend more hours on this for now.
+
+		if (!isMobile) {
+			// new behavior.
+
 			if (!prev && next) {
-				// Hidden -> Visible
+				// hidden -> visible
+				// immediately mount the children, then schedule a task to update the
+				// cached height, this handles the scenario where the virtual container
+				// gets unmounted without ever being out-of-bounds.
 				setIntersecting(next);
 
-				scheduleIdleTask(() => {
-					// Bail out if it's no longer us.
-					if (entry !== nextEntry) {
-						return;
-					}
+				// @todo: this is more meant for mobile web app where navigation blows
+				// the entire page away, if we're making use of Suspense for offscreen
+				// rendering then this shouldn't be necessary at all.
+				if (isMobile) {
+					scheduleIdleTask(() => {
+						// bail out if it's no longer us.
+						if (entry !== nextEntry) {
+							return;
+						}
 
-					calculateHeight();
-				});
+						calculateHeight();
+					});
+				}
 			} else if (prev && !next) {
-				// Visible -> Hidden
+				// visible -> hidden
+				// unmounting is cheap, but we don't need to immediately unmount it, say
+				// for scenarios where layout is still being figured out and we don't
+				// actually know where the virtual container is gonna end up.
 				scheduleIdleTask(() => {
-					// Bail out if it's no longer us.
+					// bail out if it's no longer us.
 					if (entry !== nextEntry) {
 						return;
 					}
@@ -60,8 +86,10 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 				});
 			}
 		} else {
+			// old behavior.
+
 			if (!prev && next) {
-				// Hidden -> Visible
+				// hidden -> visible
 				scheduleIdleTask(calculateHeight);
 			}
 
