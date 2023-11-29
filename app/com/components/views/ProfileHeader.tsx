@@ -5,12 +5,14 @@ import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
+import { formatAbsDateTime } from '~/utils/intl/time.ts';
 
 import { openModal } from '~/com/globals/modals.tsx';
 
 import { Button } from '../../primitives/button.ts';
 
 import { Link, LinkingType } from '../Link.tsx';
+import { isProfileTempMuted, useSharedPreferences } from '../SharedPreferences.tsx';
 
 import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
 
@@ -19,13 +21,16 @@ import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 import ProfileFollowButton from '../ProfileFollowButton.tsx';
 import ProfileOverflowAction from './profiles/ProfileOverflowAction.tsx';
 
-const LazyImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
+const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
+const MuteConfirmDialog = lazy(() => import('../dialogs/MuteConfirmDialog.tsx'));
 
 export interface ProfileHeaderProps {
 	profile: SignalizedProfile;
 }
 
 const ProfileHeader = (props: ProfileHeaderProps) => {
+	const { filters } = useSharedPreferences();
+
 	const profile = () => props.profile;
 
 	return (
@@ -37,7 +42,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 					return (
 						<button
 							onClick={() => {
-								openModal(() => <LazyImageViewerDialog images={[{ fullsize: banner }]} />);
+								openModal(() => <ImageViewerDialog images={[{ fullsize: banner }]} />);
 							}}
 							class="group aspect-banner bg-background"
 						>
@@ -58,7 +63,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 							return (
 								<button
 									onClick={() => {
-										openModal(() => <LazyImageViewerDialog images={[{ fullsize: avatar }]} />);
+										openModal(() => <ImageViewerDialog images={[{ fullsize: avatar }]} />);
 									}}
 									class="group -mt-11 h-20 w-20 shrink-0 overflow-hidden rounded-full bg-background outline-2 outline-background outline focus-visible:outline-primary"
 								>
@@ -136,7 +141,28 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 				</div>
 
 				{(() => {
-					const viewer = profile().viewer;
+					const $profile = profile();
+					const viewer = $profile.viewer;
+
+					const isTemporarilyMuted = isProfileTempMuted(filters, $profile.did);
+					if (isTemporarilyMuted !== null) {
+						return (
+							<div class="text-sm text-muted-fg">
+								<p>
+									You've temporarily muted posts from this user until{' '}
+									<span class="font-bold">{formatAbsDateTime(isTemporarilyMuted)}</span>.{' '}
+									<button
+										onClick={() => {
+											openModal(() => <MuteConfirmDialog profile={$profile} filters={filters} />);
+										}}
+										class="text-accent hover:underline"
+									>
+										Unmute
+									</button>
+								</p>
+							</div>
+						);
+					}
 
 					const blockingByList = viewer.blockingByList.value;
 					if (blockingByList) {
@@ -190,7 +216,12 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 							<div class="text-sm text-muted-fg">
 								<p>
 									You've muted posts from this user.{' '}
-									<button onClick={() => {}} class="text-accent hover:underline">
+									<button
+										onClick={() => {
+											openModal(() => <MuteConfirmDialog profile={$profile} filters={filters} />);
+										}}
+										class="text-accent hover:underline"
+									>
 										Unmute
 									</button>
 								</p>

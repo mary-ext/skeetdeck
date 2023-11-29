@@ -18,6 +18,7 @@
 		"@pkg/solid-use-gesture": "workspace:^",
 		"@solidjs/router": "^0.8.4",
 		"@thisbeyond/solid-dnd": "^0.7.5",
+		"immer": "^10.0.3",
 		"solid-floating-ui": "^0.2.1",
 		"solid-js": "^1.8.6",
 		"solid-textarea-autosize": "^0.0.5"

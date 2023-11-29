@@ -1,4 +1,4 @@
-import { type JSX, batch, createSignal } from 'solid-js';
+import { type JSX, Show, createSignal } from 'solid-js';
 
 import { scheduleIdleTask } from '~/utils/idle.ts';
 import { getRectFromEntry, scrollObserver } from '~/utils/intersection-observer.ts';
@@ -18,6 +18,14 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 	const [intersecting, setIntersecting] = createSignal(false);
 	const [cachedHeight, setCachedHeight] = createSignal(estimateHeight);
 
+	const calculateHeight = () => {
+		const nextHeight = getRectFromEntry(entry!).height;
+
+		if (nextHeight !== height) {
+			setCachedHeight((height = nextHeight));
+		}
+	};
+
 	const handleIntersect = (nextEntry: IntersectionObserverEntry) => {
 		const prev = intersecting();
 		const next = nextEntry.isIntersecting;
@@ -26,30 +34,10 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 
 		if (!prev && next) {
 			// Hidden -> Visible
-			setIntersecting(next);
-		} else if (prev && !next) {
-			// Visible -> Hidden
-
-			scheduleIdleTask(() => {
-				// Bail out if it's no longer us.
-				if (entry !== nextEntry) {
-					return;
-				}
-
-				const nextHeight = getRectFromEntry(nextEntry!).height;
-				const truncatedHeight = Math.trunc(nextHeight * 100) / 100;
-
-				if (truncatedHeight !== height) {
-					batch(() => {
-						height = truncatedHeight;
-						setCachedHeight(truncatedHeight);
-						setIntersecting(next);
-					});
-				} else {
-					setIntersecting(next);
-				}
-			});
+			scheduleIdleTask(calculateHeight);
 		}
+
+		setIntersecting(next);
 	};
 
 	const measure = (node: HTMLElement) => scrollObserver.observe(node);

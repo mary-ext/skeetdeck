@@ -1,11 +1,13 @@
-import { type JSX, createMemo } from 'solid-js';
+import { type JSX, createMemo, lazy } from 'solid-js';
 
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
+
+import { openModal } from '~/com/globals/modals.tsx';
 
 import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu.ts';
 
 import { Flyout } from '../../Flyout.tsx';
-import { useSharedPreferences } from '../../SharedPreferences.tsx';
+import { isProfileTempMuted, useSharedPreferences } from '../../SharedPreferences.tsx';
 
 import BlockIcon from '../../../icons/baseline-block.tsx';
 import LaunchIcon from '../../../icons/baseline-launch.tsx';
@@ -13,6 +15,8 @@ import PlaylistAddIcon from '../../../icons/baseline-playlist-add.tsx';
 import RepeatIcon from '../../../icons/baseline-repeat.tsx';
 import ReportIcon from '../../../icons/baseline-report.tsx';
 import VolumeOffIcon from '../../../icons/baseline-volume-off.tsx';
+
+const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog.tsx'));
 
 export interface ProfileOverflowActionProps {
 	profile: SignalizedProfile;
@@ -25,7 +29,8 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 	return (() => {
 		const profile = props.profile;
 
-		const isMuted = () => profile.viewer.muted.value;
+		const isTempMuted = () => isProfileTempMuted(filters, profile.did);
+		const isMuted = () => profile.viewer.muted.value || isTempMuted();
 		const isBlocked = () => profile.viewer.blocking.value;
 
 		const isRepostHidden = createMemo(() => {
@@ -75,7 +80,13 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								<span>{`Add/remove @${profile.handle.value} from lists`}</span>
 							</button>
 
-							<button class={/* @once */ MenuItem()}>
+							<button
+								onClick={() => {
+									close();
+									openModal(() => <MuteConfirmDialog profile={profile} filters={filters} />);
+								}}
+								class={/* @once */ MenuItem()}
+							>
 								<VolumeOffIcon class={/* @once */ MenuItemIcon()} />
 								<span>{isMuted() ? `Unmute @${profile.handle.value}` : `Mute @${profile.handle.value}`}</span>
 							</button>
