@@ -16,6 +16,7 @@ import RepeatIcon from '../../../icons/baseline-repeat.tsx';
 import ReportIcon from '../../../icons/baseline-report.tsx';
 import VolumeOffIcon from '../../../icons/baseline-volume-off.tsx';
 
+const BlockConfirmDialog = lazy(() => import('../../dialogs/BlockConfirmDialog.tsx'));
 const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog.tsx'));
 
 export interface ProfileOverflowActionProps {
@@ -91,7 +92,13 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								<span>{isMuted() ? `Unmute @${profile.handle.value}` : `Mute @${profile.handle.value}`}</span>
 							</button>
 
-							<button class={/* @once */ MenuItem()}>
+							<button
+								onClick={() => {
+									close();
+									openModal(() => <BlockConfirmDialog profile={profile} />);
+								}}
+								class={/* @once */ MenuItem()}
+							>
 								<BlockIcon class={/* @once */ MenuItemIcon()} />
 								<span>
 									{isBlocked() ? `Unblock @${profile.handle.value}` : `Block @${profile.handle.value}`}

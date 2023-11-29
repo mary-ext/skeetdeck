@@ -6,11 +6,10 @@ import type { RefOf } from '~/api/atp-schema.ts';
 import { ListPurposeLabels } from '~/api/display.ts';
 import type { FilterPreferences } from '~/api/types.ts';
 
-import { produce } from '~/utils/immer.ts';
+import { produceTimelineFilter } from '~/utils/immer.ts';
 
-import type { TimelineSlice } from '~/api/models/timeline.ts';
 import { updateProfileMute } from '~/api/mutations/mute-profile.ts';
-import type { TimelinePage, TimelinePageCursor, getTimelineKey } from '~/api/queries/get-timeline.ts';
+import type { TimelinePage, getTimelineKey } from '~/api/queries/get-timeline.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
 import { closeModal } from '../../globals/modals.tsx';
@@ -35,8 +34,8 @@ export interface MuteConfirmDialogProps {
 const MuteConfirmDialog = (props: MuteConfirmDialogProps) => {
 	return (() => {
 		const profile = props.profile;
-		const mutedByList = profile.viewer.mutedByList.value;
 
+		const mutedByList = profile.viewer.mutedByList.value;
 		if (mutedByList) {
 			return renderMutedByListDialog(profile, mutedByList);
 		}
@@ -124,53 +123,7 @@ const renderMuteConfirmDialog = (profile: SignalizedProfile, filters: FilterPref
 			tempMutes[did] = date;
 		}
 
-		const isSliceMatching = (slice: TimelineSlice) => {
-			const items = slice.items;
-
-			for (let k = items.length - 1; k >= 0; k--) {
-				const item = items[k];
-
-				if (item.reason?.by.did === did || item.post.author.did === did) {
-					return true;
-				}
-			}
-
-			return false;
-		};
-
-		const updateTimeline = produce((draft: InfiniteData<TimelinePage>) => {
-			const pages = draft.pages;
-			const params = draft.pageParams;
-
-			for (let i = 0, il = pages.length; i < il; i++) {
-				const page = pages[i];
-				const slices = page.slices;
-
-				for (let j = slices.length - 1; j >= 0; j--) {
-					const slice = slices[j];
-
-					if (isSliceMatching(slice)) {
-						slices.splice(j, 1);
-					}
-				}
-			}
-
-			for (let i = 0, il = params.length; i < il; i++) {
-				const param = params[i] as TimelinePageCursor | undefined;
-
-				if (param) {
-					const slices = param.remaining;
-
-					for (let j = slices.length - 1; j >= 0; j--) {
-						const slice = slices[j];
-
-						if (isSliceMatching(slice)) {
-							slices.splice(j, 1);
-						}
-					}
-				}
-			}
-		});
+		const updateTimeline = produceTimelineFilter(did);
 
 		queryClient.setQueriesData<InfiniteData<TimelinePage>>(
 			{
