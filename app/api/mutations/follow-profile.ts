@@ -6,6 +6,8 @@ import type { SignalizedProfile } from '../stores/profiles.ts';
 import { getCurrentDate, getRecordId } from '../utils/misc.ts';
 import { createToggleMutation } from '../utils/toggle-mutation.ts';
 
+const followRecordType = 'app.bsky.graph.follow';
+
 const createProfileFollowMutation = (profile: SignalizedProfile) => {
 	return createToggleMutation({
 		initialState: () => profile.viewer.following.value,
@@ -14,7 +16,7 @@ const createProfileFollowMutation = (profile: SignalizedProfile) => {
 			const agent = await multiagent.connect(uid);
 
 			if (shouldFollow) {
-				const record: Records['app.bsky.graph.follow'] = {
+				const record: Records[typeof followRecordType] = {
 					createdAt: getCurrentDate(),
 					subject: profile.did,
 				};
@@ -22,7 +24,7 @@ const createProfileFollowMutation = (profile: SignalizedProfile) => {
 				const response = await agent.rpc.call('com.atproto.repo.createRecord', {
 					data: {
 						repo: uid,
-						collection: 'app.bsky.graph.follow',
+						collection: followRecordType,
 						record: record,
 					},
 				});
@@ -33,7 +35,7 @@ const createProfileFollowMutation = (profile: SignalizedProfile) => {
 					await agent.rpc.call('com.atproto.repo.deleteRecord', {
 						data: {
 							repo: uid,
-							collection: 'app.bsky.graph.follow',
+							collection: followRecordType,
 							rkey: getRecordId(prevFollowingUri),
 						},
 					});

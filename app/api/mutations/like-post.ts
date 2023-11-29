@@ -6,6 +6,8 @@ import type { SignalizedPost } from '../stores/posts.ts';
 import { getCurrentDate, getRecordId } from '../utils/misc.ts';
 import { createToggleMutation } from '../utils/toggle-mutation.ts';
 
+const likeRecordType = 'app.bsky.feed.like';
+
 const createPostLikeMutation = (post: SignalizedPost) => {
 	return createToggleMutation({
 		initialState: () => post.viewer.like.value,
@@ -14,7 +16,7 @@ const createPostLikeMutation = (post: SignalizedPost) => {
 			const agent = await multiagent.connect(uid);
 
 			if (shouldFollow) {
-				const record: Records['app.bsky.feed.like'] = {
+				const record: Records[typeof likeRecordType] = {
 					createdAt: getCurrentDate(),
 					subject: {
 						uri: post.uri,
@@ -25,7 +27,7 @@ const createPostLikeMutation = (post: SignalizedPost) => {
 				const response = await agent.rpc.call('com.atproto.repo.createRecord', {
 					data: {
 						repo: uid,
-						collection: 'app.bsky.feed.like',
+						collection: likeRecordType,
 						record: record,
 					},
 				});
@@ -36,7 +38,7 @@ const createPostLikeMutation = (post: SignalizedPost) => {
 					await agent.rpc.call('com.atproto.repo.deleteRecord', {
 						data: {
 							repo: uid,
-							collection: 'app.bsky.feed.like',
+							collection: likeRecordType,
 							rkey: getRecordId(prevFollowingUri),
 						},
 					});

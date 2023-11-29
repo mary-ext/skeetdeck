@@ -6,6 +6,8 @@ import type { SignalizedFeed } from '../stores/feeds.ts';
 import { getCurrentDate, getRecordId } from '../utils/misc.ts';
 import { createToggleMutation } from '../utils/toggle-mutation.ts';
 
+const likeRecordType = 'app.bsky.feed.like';
+
 const createFeedLikeMutation = (feed: SignalizedFeed) => {
 	return createToggleMutation({
 		initialState: () => feed.viewer.like.value,
@@ -14,7 +16,7 @@ const createFeedLikeMutation = (feed: SignalizedFeed) => {
 			const agent = await multiagent.connect(uid);
 
 			if (shouldFollow) {
-				const record: Records['app.bsky.feed.like'] = {
+				const record: Records[typeof likeRecordType] = {
 					createdAt: getCurrentDate(),
 					subject: {
 						uri: feed.uri,
@@ -25,7 +27,7 @@ const createFeedLikeMutation = (feed: SignalizedFeed) => {
 				const response = await agent.rpc.call('com.atproto.repo.createRecord', {
 					data: {
 						repo: uid,
-						collection: 'app.bsky.feed.like',
+						collection: likeRecordType,
 						record: record,
 					},
 				});
@@ -36,7 +38,7 @@ const createFeedLikeMutation = (feed: SignalizedFeed) => {
 					await agent.rpc.call('com.atproto.repo.deleteRecord', {
 						data: {
 							repo: uid,
-							collection: 'app.bsky.feed.like',
+							collection: likeRecordType,
 							rkey: getRecordId(prevFollowingUri),
 						},
 					});

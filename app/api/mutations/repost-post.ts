@@ -6,6 +6,8 @@ import type { SignalizedPost } from '../stores/posts.ts';
 import { getCurrentDate, getRecordId } from '../utils/misc.ts';
 import { createToggleMutation } from '../utils/toggle-mutation.ts';
 
+const repostRecordType = 'app.bsky.feed.repost';
+
 const createPostRepostMutation = (post: SignalizedPost) => {
 	return createToggleMutation({
 		initialState: () => post.viewer.repost.value,
@@ -14,7 +16,7 @@ const createPostRepostMutation = (post: SignalizedPost) => {
 			const agent = await multiagent.connect(uid);
 
 			if (shouldFollow) {
-				const record: Records['app.bsky.feed.repost'] = {
+				const record: Records[typeof repostRecordType] = {
 					createdAt: getCurrentDate(),
 					subject: {
 						uri: post.uri,
@@ -25,7 +27,7 @@ const createPostRepostMutation = (post: SignalizedPost) => {
 				const response = await agent.rpc.call('com.atproto.repo.createRecord', {
 					data: {
 						repo: uid,
-						collection: 'app.bsky.feed.repost',
+						collection: repostRecordType,
 						record: record,
 					},
 				});
@@ -36,7 +38,7 @@ const createPostRepostMutation = (post: SignalizedPost) => {
 					await agent.rpc.call('com.atproto.repo.deleteRecord', {
 						data: {
 							repo: uid,
-							collection: 'app.bsky.feed.repost',
+							collection: repostRecordType,
 							rkey: getRecordId(prevFollowingUri),
 						},
 					});
