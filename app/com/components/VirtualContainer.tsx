@@ -32,12 +32,41 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 
 		entry = nextEntry;
 
-		if (!prev && next) {
-			// Hidden -> Visible
-			scheduleIdleTask(calculateHeight);
-		}
+		// @todo: figure out why this is. not sure why scroll restoration is broken
+		// with this approach on mobile.
+		if (import.meta.env.VITE_APP_MODE === 'desktop') {
+			if (!prev && next) {
+				// Hidden -> Visible
+				setIntersecting(next);
 
-		setIntersecting(next);
+				scheduleIdleTask(() => {
+					// Bail out if it's no longer us.
+					if (entry !== nextEntry) {
+						return;
+					}
+
+					calculateHeight();
+				});
+			} else if (prev && !next) {
+				// Visible -> Hidden
+				scheduleIdleTask(() => {
+					// Bail out if it's no longer us.
+					if (entry !== nextEntry) {
+						return;
+					}
+
+					calculateHeight();
+					setIntersecting(next);
+				});
+			}
+		} else {
+			if (!prev && next) {
+				// Hidden -> Visible
+				scheduleIdleTask(calculateHeight);
+			}
+
+			setIntersecting(next);
+		}
 	};
 
 	const measure = (node: HTMLElement) => scrollObserver.observe(node);
