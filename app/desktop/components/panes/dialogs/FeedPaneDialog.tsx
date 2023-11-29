@@ -19,14 +19,14 @@ import PaneDialogHeader from '../PaneDialogHeader.tsx';
 
 import FeedHeader from '../partials/FeedHeader.tsx';
 
-export interface CustomFeedPaneDialogProps {
+export interface FeedPaneDialogProps {
 	/** Expected to be static */
 	actor: DID;
 	/** Expected to be static */
 	rkey: string;
 }
 
-const CustomFeedPaneDialog = (props: CustomFeedPaneDialogProps) => {
+const FeedPaneDialog = (props: FeedPaneDialogProps) => {
 	const { actor, rkey } = props;
 
 	const { deck, pane, index } = usePaneContext();
@@ -102,4 +102,4 @@ const CustomFeedPaneDialog = (props: CustomFeedPaneDialogProps) => {
 	);
 };
 
-export default CustomFeedPaneDialog;
+export default FeedPaneDialog;

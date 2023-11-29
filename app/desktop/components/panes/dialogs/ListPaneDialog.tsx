@@ -25,14 +25,14 @@ import PaneDialogHeader from '../PaneDialogHeader.tsx';
 
 import ListHeader from '../partials/ListHeader.tsx';
 
-export interface CustomListPaneDialogProps {
+export interface ListPaneDialogProps {
 	/** Expected to be static */
 	actor: DID;
 	/** Expected to be static */
 	rkey: string;
 }
 
-const CustomListPaneDialog = (props: CustomListPaneDialogProps) => {
+const ListPaneDialog = (props: ListPaneDialogProps) => {
 	const { actor, rkey } = props;
 
 	const linking = useLinking();
@@ -140,4 +140,4 @@ const CustomListPaneDialog = (props: CustomListPaneDialogProps) => {
 	);
 };
 
-export default CustomListPaneDialog;
+export default ListPaneDialog;
