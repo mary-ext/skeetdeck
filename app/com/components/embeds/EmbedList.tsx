@@ -1,5 +1,3 @@
-import { Show } from 'solid-js';
-
 import type { UnionOf } from '~/api/atp-schema.ts';
 import { ListPurposeLabels } from '~/api/display.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
