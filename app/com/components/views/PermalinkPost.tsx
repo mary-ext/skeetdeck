@@ -93,7 +93,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 
 			<div class="flex flex-wrap gap-4 py-4 text-sm">
 				<Link
-					to={{ type: LinkingType.POST_LIKED_BY, actor: author().did, rkey: rkey() }}
+					to={{ type: LinkingType.POST_REPOSTED_BY, actor: author().did, rkey: rkey() }}
 					class="hover:underline"
 				>
 					<span class="font-bold">{formatCompact(post().repostCount.value)}</span>{' '}
@@ -101,7 +101,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 				</Link>
 
 				<Link
-					to={{ type: LinkingType.POST_REPOSTED_BY, actor: author().did, rkey: rkey() }}
+					to={{ type: LinkingType.POST_LIKED_BY, actor: author().did, rkey: rkey() }}
 					class="hover:underline"
 				>
 					<span class="font-bold">{formatCompact(post().likeCount.value)}</span>{' '}
