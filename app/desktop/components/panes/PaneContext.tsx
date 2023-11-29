@@ -18,6 +18,7 @@ import { type LinkingContextObject, LinkingContext, LinkingType } from '~/com/co
 
 import type { BasePaneConfig, DeckConfig } from '../../globals/panes.ts';
 
+const FeedLikedByPaneDialog = lazy(() => import('./dialogs/FeedLikedByPaneDialog.tsx'));
 const FeedPaneDialog = lazy(() => import('./dialogs/FeedPaneDialog.tsx'));
 const ListPaneDialog = lazy(() => import('./dialogs/ListPaneDialog.tsx'));
 const ProfilePaneDialog = lazy(() => import('./dialogs/ProfilePaneDialog.tsx'));
@@ -116,6 +117,10 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 
 		if (type === LinkingType.FEED) {
 			return openModal(() => <FeedPaneDialog {...to} />);
+		}
+
+		if (type === LinkingType.FEED_LIKED_BY) {
+			return openModal(() => <FeedLikedByPaneDialog {...to} />);
 		}
 
 		if (type === LinkingType.LIST) {

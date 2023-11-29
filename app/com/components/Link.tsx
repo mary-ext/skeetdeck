@@ -4,6 +4,7 @@ import type { DID } from '~/api/atp-schema.ts';
 
 export const enum LinkingType {
 	EXTERNAL,
+	FEED_LIKED_BY,
 	FEED,
 	LIST,
 	POST_LIKED_BY,
@@ -20,6 +21,12 @@ export interface ExternalLinking {
 	type: LinkingType.EXTERNAL;
 	url: string;
 	valid: boolean;
+}
+
+export interface FeedLikedByLinking {
+	type: LinkingType.FEED_LIKED_BY;
+	actor: DID;
+	rkey: string;
 }
 
 export interface FeedLinking {
@@ -80,6 +87,7 @@ export interface TagLinking {
 
 export type Linking =
 	| ExternalLinking
+	| FeedLikedByLinking
 	| FeedLinking
 	| ListLinking
 	| PostLikedByLinking

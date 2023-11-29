@@ -1,5 +1,7 @@
 import { type JSX, lazy } from 'solid-js';
 
+import { getRecordId } from '~/api/utils/misc.ts';
+
 import { updateFeedLike } from '~/api/mutations/like-feed.ts';
 import type { SignalizedFeed } from '~/api/stores/feeds.ts';
 
@@ -80,7 +82,12 @@ const FeedHeader = (props: FeedHeaderProps) => {
 
 				<p class="whitespace-pre-wrap break-words text-sm empty:hidden">{feed.description.value}</p>
 
-				<p class="text-sm text-muted-fg">Liked by {formatCompact(feed.likeCount.value)} users</p>
+				<Link
+					to={{ type: LinkingType.FEED_LIKED_BY, actor: creator.did, rkey: getRecordId(feed.uri) }}
+					class="text-left text-sm text-muted-fg hover:underline"
+				>
+					Liked by {formatCompact(feed.likeCount.value)} users
+				</Link>
 
 				<div class="flex gap-2">
 					<button
