@@ -1,9 +1,9 @@
 import type { JSX } from 'solid-js/jsx-runtime';
 
-import { closeModal } from '~/com/globals/modals.tsx';
+import { closeModal } from '../../globals/modals.tsx';
 
-import { Button } from '~/com/primitives/button.ts';
-import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
+import { Button } from '../../primitives/button.ts';
+import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog.ts';
 
 import DialogOverlay from './DialogOverlay.tsx';
 
