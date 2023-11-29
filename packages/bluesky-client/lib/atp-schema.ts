@@ -42,12 +42,18 @@ export interface Queries {
 			preferences: RefOf<'app.bsky.actor.defs#preferences'>;
 		};
 	};
+	/**
+	 * Get detailed profile view of an actor.
+	 */
 	'app.bsky.actor.getProfile': {
 		params: {
 			actor: string;
 		};
 		response: RefOf<'app.bsky.actor.defs#profileViewDetailed'>;
 	};
+	/**
+	 * Get detailed profile views of multiple actors.
+	 */
 	'app.bsky.actor.getProfiles': {
 		params: {
 			/**
@@ -60,7 +66,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a list of actors suggested for following. Used in discovery UIs.
+	 * Get a list of suggested actors, used for discovery.
 	 */
 	'app.bsky.actor.getSuggestions': {
 		params: {
@@ -83,12 +89,12 @@ export interface Queries {
 	'app.bsky.actor.searchActors': {
 		params: {
 			/**
-			 * DEPRECATED: use 'q' instead
+			 * DEPRECATED: use 'q' instead.
 			 * @deprecated
 			 */
 			term?: string;
 			/**
-			 * search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended
+			 * Search query string. Syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
 			 */
 			q?: string;
 			/**
@@ -105,17 +111,17 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Find actor suggestions for a search term.
+	 * Find actor suggestions for a prefix search term.
 	 */
 	'app.bsky.actor.searchActorsTypeahead': {
 		params: {
 			/**
-			 * DEPRECATED: use 'q' instead
+			 * DEPRECATED: use 'q' instead.
 			 * @deprecated
 			 */
 			term?: string;
 			/**
-			 * search query prefix; not a full query string
+			 * Search query prefix; not a full query string.
 			 */
 			q?: string;
 			/**
@@ -130,7 +136,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Returns information about a given feed generator including TOS & offered feed URIs
+	 * Get information about a feed generator, including policies and offered feed URIs.
 	 */
 	'app.bsky.feed.describeFeedGenerator': {
 		response: {
@@ -140,7 +146,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Retrieve a list of feeds created by a given actor
+	 * Get a list of feeds created by the actor.
 	 */
 	'app.bsky.feed.getActorFeeds': {
 		params: {
@@ -159,7 +165,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * A view of the posts liked by an actor.
+	 * Get a list of posts liked by an actor.
 	 */
 	'app.bsky.feed.getActorLikes': {
 		params: {
@@ -182,7 +188,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * A view of an actor's feed.
+	 * Get a view of an actor's feed.
 	 */
 	'app.bsky.feed.getAuthorFeed': {
 		params: {
@@ -209,7 +215,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Compose and hydrate a feed from a user's selected feed generator
+	 * Get a hydrated feed from an actor's selected feed generator.
 	 */
 	'app.bsky.feed.getFeed': {
 		params: {
@@ -231,7 +237,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get information about a specific feed offered by a feed generator, such as its online status
+	 * Get information about a feed generator.
 	 */
 	'app.bsky.feed.getFeedGenerator': {
 		params: {
@@ -244,7 +250,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get information about a list of feed generators
+	 * Get information about a list of feed generators.
 	 */
 	'app.bsky.feed.getFeedGenerators': {
 		params: {
@@ -255,7 +261,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * A skeleton of a feed provided by a feed generator
+	 * Get a skeleton of a feed provided by a feed generator.
 	 */
 	'app.bsky.feed.getFeedSkeleton': {
 		params: {
@@ -276,6 +282,9 @@ export interface Queries {
 			UnknownFeed: {};
 		};
 	};
+	/**
+	 * Get the list of likes.
+	 */
 	'app.bsky.feed.getLikes': {
 		params: {
 			uri: AtUri;
@@ -296,7 +305,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * A view of a recent posts from actors in a list
+	 * Get a view of a recent posts from actors in a list.
 	 */
 	'app.bsky.feed.getListFeed': {
 		params: {
@@ -317,6 +326,9 @@ export interface Queries {
 			UnknownList: {};
 		};
 	};
+	/**
+	 * Get posts in a thread.
+	 */
 	'app.bsky.feed.getPostThread': {
 		params: {
 			uri: AtUri;
@@ -344,7 +356,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * A view of an actor's feed.
+	 * Get a view of an actor's feed.
 	 */
 	'app.bsky.feed.getPosts': {
 		params: {
@@ -357,6 +369,9 @@ export interface Queries {
 			posts: RefOf<'app.bsky.feed.defs#postView'>[];
 		};
 	};
+	/**
+	 * Get a list of reposts.
+	 */
 	'app.bsky.feed.getRepostedBy': {
 		params: {
 			uri: AtUri;
@@ -395,7 +410,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * A view of the user's home timeline.
+	 * Get a view of the actor's home timeline.
 	 */
 	'app.bsky.feed.getTimeline': {
 		params: {
@@ -414,12 +429,12 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Find posts matching search criteria
+	 * Find posts matching search criteria.
 	 */
 	'app.bsky.feed.searchPosts': {
 		params: {
 			/**
-			 * search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended
+			 * Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
 			 */
 			q: string;
 			/**
@@ -429,14 +444,14 @@ export interface Queries {
 			 */
 			limit?: number;
 			/**
-			 * optional pagination mechanism; may not necessarily allow scrolling through entire result set
+			 * Optional pagination mechanism; may not necessarily allow scrolling through entire result set.
 			 */
 			cursor?: string;
 		};
 		response: {
 			cursor?: string;
 			/**
-			 * count of search hits. optional, may be rounded/truncated, and may not be possible to paginate through all hits
+			 * Count of search hits. Optional, may be rounded/truncated, and may not be possible to paginate through all hits.
 			 */
 			hitsTotal?: number;
 			posts: RefOf<'app.bsky.feed.defs#postView'>[];
@@ -446,7 +461,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Who is the requester's account blocking?
+	 * Get a list of who the actor is blocking.
 	 */
 	'app.bsky.graph.getBlocks': {
 		params: {
@@ -464,7 +479,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Who is following an actor?
+	 * Get a list of an actor's followers.
 	 */
 	'app.bsky.graph.getFollowers': {
 		params: {
@@ -484,7 +499,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Who is an actor following?
+	 * Get a list of who the actor follows.
 	 */
 	'app.bsky.graph.getFollows': {
 		params: {
@@ -504,7 +519,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Fetch a list of actors
+	 * Get a list of actors.
 	 */
 	'app.bsky.graph.getList': {
 		params: {
@@ -524,7 +539,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Which lists is the requester's account blocking?
+	 * Get lists that the actor is blocking.
 	 */
 	'app.bsky.graph.getListBlocks': {
 		params: {
@@ -542,7 +557,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Which lists is the requester's account muting?
+	 * Get lists that the actor is muting.
 	 */
 	'app.bsky.graph.getListMutes': {
 		params: {
@@ -560,7 +575,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Fetch a list of lists that belong to an actor
+	 * Get a list of lists that belong to an actor.
 	 */
 	'app.bsky.graph.getLists': {
 		params: {
@@ -579,7 +594,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Who does the viewer mute?
+	 * Get a list of who the actor mutes.
 	 */
 	'app.bsky.graph.getMutes': {
 		params: {
@@ -607,6 +622,9 @@ export interface Queries {
 			suggestions: RefOf<'app.bsky.actor.defs#profileView'>[];
 		};
 	};
+	/**
+	 * Get the count of unread notifications.
+	 */
 	'app.bsky.notification.getUnreadCount': {
 		params: {
 			seenAt?: string;
@@ -615,6 +633,9 @@ export interface Queries {
 			count: number;
 		};
 	};
+	/**
+	 * Get a list of notifications.
+	 */
 	'app.bsky.notification.listNotifications': {
 		params: {
 			/**
@@ -632,7 +653,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * DEPRECATED: will be removed soon, please find a feed generator alternative
+	 * DEPRECATED: will be removed soon. Use a feed generator alternative.
 	 * @deprecated
 	 */
 	'app.bsky.unspecced.getPopular': {
@@ -655,7 +676,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * An unspecced view of globally popular feed generators
+	 * An unspecced view of globally popular feed generators.
 	 */
 	'app.bsky.unspecced.getPopularFeedGenerators': {
 		params: {
@@ -674,7 +695,8 @@ export interface Queries {
 		};
 	};
 	/**
-	 * A skeleton of a timeline - UNSPECCED & WILL GO AWAY SOON
+	 * DEPRECATED: a skeleton of a timeline. Unspecced and will be unavailable soon.
+	 * @deprecated
 	 */
 	'app.bsky.unspecced.getTimelineSkeleton': {
 		params: {
@@ -695,16 +717,16 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Backend Actors (profile) search, returning only skeleton
+	 * Backend Actors (profile) search, returns only skeleton.
 	 */
 	'app.bsky.unspecced.searchActorsSkeleton': {
 		params: {
 			/**
-			 * search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended. For typeahead search, only simple term match is supported, not full syntax
+			 * Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended. For typeahead search, only simple term match is supported, not full syntax.
 			 */
 			q: string;
 			/**
-			 * if true, acts as fast/simple 'typeahead' query
+			 * If true, acts as fast/simple 'typeahead' query.
 			 */
 			typeahead?: boolean;
 			/**
@@ -714,14 +736,14 @@ export interface Queries {
 			 */
 			limit?: number;
 			/**
-			 * optional pagination mechanism; may not necessarily allow scrolling through entire result set
+			 * Optional pagination mechanism; may not necessarily allow scrolling through entire result set.
 			 */
 			cursor?: string;
 		};
 		response: {
 			cursor?: string;
 			/**
-			 * count of search hits. optional, may be rounded/truncated, and may not be possible to paginate through all hits
+			 * Count of search hits. Optional, may be rounded/truncated, and may not be possible to paginate through all hits.
 			 */
 			hitsTotal?: number;
 			actors: RefOf<'app.bsky.unspecced.defs#skeletonSearchActor'>[];
@@ -731,12 +753,12 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Backend Posts search, returning only skeleton
+	 * Backend Posts search, returns only skeleton
 	 */
 	'app.bsky.unspecced.searchPostsSkeleton': {
 		params: {
 			/**
-			 * search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended
+			 * Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
 			 */
 			q: string;
 			/**
@@ -746,14 +768,14 @@ export interface Queries {
 			 */
 			limit?: number;
 			/**
-			 * optional pagination mechanism; may not necessarily allow scrolling through entire result set
+			 * Optional pagination mechanism; may not necessarily allow scrolling through entire result set.
 			 */
 			cursor?: string;
 		};
 		response: {
 			cursor?: string;
 			/**
-			 * count of search hits. optional, may be rounded/truncated, and may not be possible to paginate through all hits
+			 * Count of search hits. Optional, may be rounded/truncated, and may not be possible to paginate through all hits.
 			 */
 			hitsTotal?: number;
 			posts: RefOf<'app.bsky.unspecced.defs#skeletonSearchPost'>[];
@@ -763,7 +785,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * View details about an account.
+	 * Get details about an account.
 	 */
 	'com.atproto.admin.getAccountInfo': {
 		params: {
@@ -772,7 +794,7 @@ export interface Queries {
 		response: RefOf<'com.atproto.admin.defs#accountView'>;
 	};
 	/**
-	 * Admin view of invite codes
+	 * Get an admin view of invite codes.
 	 */
 	'com.atproto.admin.getInviteCodes': {
 		params: {
@@ -794,7 +816,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * View details about a moderation action.
+	 * Get details about a moderation action.
 	 */
 	'com.atproto.admin.getModerationAction': {
 		params: {
@@ -803,7 +825,7 @@ export interface Queries {
 		response: RefOf<'com.atproto.admin.defs#actionViewDetail'>;
 	};
 	/**
-	 * List moderation actions related to a subject.
+	 * Get a list of moderation actions related to a subject.
 	 */
 	'com.atproto.admin.getModerationActions': {
 		params: {
@@ -822,7 +844,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * View details about a moderation report.
+	 * Get details about a moderation report.
 	 */
 	'com.atproto.admin.getModerationReport': {
 		params: {
@@ -831,18 +853,18 @@ export interface Queries {
 		response: RefOf<'com.atproto.admin.defs#reportViewDetail'>;
 	};
 	/**
-	 * List moderation reports related to a subject.
+	 * Get moderation reports related to a subject.
 	 */
 	'com.atproto.admin.getModerationReports': {
 		params: {
 			subject?: string;
 			ignoreSubjects?: string[];
 			/**
-			 * Get all reports that were actioned by a specific moderator
+			 * Get all reports that were actioned by a specific moderator.
 			 */
 			actionedBy?: DID;
 			/**
-			 * Filter reports made by one or more DIDs
+			 * Filter reports made by one or more DIDs.
 			 */
 			reporters?: string[];
 			resolved?: boolean;
@@ -860,7 +882,7 @@ export interface Queries {
 			limit?: number;
 			cursor?: string;
 			/**
-			 * Reverse the order of the returned records? when true, returns reports in chronological order
+			 * Reverse the order of the returned records. When true, returns reports in chronological order.
 			 */
 			reverse?: boolean;
 		};
@@ -870,7 +892,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * View details about a record.
+	 * Get details about a record.
 	 */
 	'com.atproto.admin.getRecord': {
 		params: {
@@ -883,7 +905,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * View details about a repository.
+	 * Get details about a repository.
 	 */
 	'com.atproto.admin.getRepo': {
 		params: {
@@ -895,7 +917,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Fetch the service-specific the admin status of a subject (account, record, or blob)
+	 * Get the service-specific admin status of a subject (account, record, or blob).
 	 */
 	'com.atproto.admin.getSubjectStatus': {
 		params: {
@@ -955,11 +977,11 @@ export interface Queries {
 	'com.atproto.label.queryLabels': {
 		params: {
 			/**
-			 * List of AT URI patterns to match (boolean 'OR'). Each may be a prefix (ending with '*'; will match inclusive of the string leading to '*'), or a full URI
+			 * List of AT URI patterns to match (boolean 'OR'). Each may be a prefix (ending with '*'; will match inclusive of the string leading to '*'), or a full URI.
 			 */
 			uriPatterns: string[];
 			/**
-			 * Optional list of label sources (DIDs) to filter on
+			 * Optional list of label sources (DIDs) to filter on.
 			 */
 			sources?: DID[];
 			/**
@@ -1053,7 +1075,7 @@ export interface Queries {
 			 */
 			rkeyEnd?: string;
 			/**
-			 * Reverse the order of the returned records?
+			 * Flag to reverse the order of the returned records.
 			 */
 			reverse?: boolean;
 		};
@@ -1073,7 +1095,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get all invite codes for a given account
+	 * Get all invite codes for a given account.
 	 */
 	'com.atproto.server.getAccountInviteCodes': {
 		params: {
@@ -1106,7 +1128,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * List all app-specific passwords.
+	 * List all App Passwords.
 	 */
 	'com.atproto.server.listAppPasswords': {
 		response: {
@@ -1133,7 +1155,7 @@ export interface Queries {
 		response: unknown;
 	};
 	/**
-	 * Gets blocks from a given repo.
+	 * Get blocks from a given repo.
 	 */
 	'com.atproto.sync.getBlocks': {
 		params: {
@@ -1177,7 +1199,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Gets the current commit CID & revision of the repo.
+	 * Get the current commit CID & revision of the repo.
 	 */
 	'com.atproto.sync.getLatestCommit': {
 		params: {
@@ -1195,7 +1217,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Gets blocks needed for existence or non-existence of record.
+	 * Get blocks needed for existence or non-existence of record.
 	 */
 	'com.atproto.sync.getRecord': {
 		params: {
@@ -1213,7 +1235,7 @@ export interface Queries {
 		response: unknown;
 	};
 	/**
-	 * Gets the did's repo, optionally catching up from a specific revision.
+	 * Gets the DID's repo, optionally catching up from a specific revision.
 	 */
 	'com.atproto.sync.getRepo': {
 		params: {
@@ -1229,7 +1251,7 @@ export interface Queries {
 		response: unknown;
 	};
 	/**
-	 * List blob cids since some revision
+	 * List blob CIDs since some revision.
 	 */
 	'com.atproto.sync.listBlobs': {
 		params: {
@@ -1238,7 +1260,7 @@ export interface Queries {
 			 */
 			did: DID;
 			/**
-			 * Optional revision of the repo to list blobs since
+			 * Optional revision of the repo to list blobs since.
 			 */
 			since?: string;
 			/**
@@ -1255,7 +1277,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * List dids and root cids of hosted repos
+	 * List DIDs and root CIDs of hosted repos.
 	 */
 	'com.atproto.sync.listRepos': {
 		params: {
@@ -1272,11 +1294,28 @@ export interface Queries {
 			repos: RefOf<'com.atproto.sync.listRepos#repo'>[];
 		};
 	};
+	/**
+	 * Fetch all labels from a labeler created after a certain date.
+	 */
+	'com.atproto.temp.fetchLabels': {
+		params: {
+			since?: number;
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 250
+			 * @default 50
+			 */
+			limit?: number;
+		};
+		response: {
+			labels: RefOf<'com.atproto.label.defs#label'>[];
+		};
+	};
 }
 
 export interface Procedures {
 	/**
-	 * Sets the private preferences attached to the account.
+	 * Set the private preferences attached to the account.
 	 */
 	'app.bsky.actor.putPreferences': {
 		data: {
@@ -1284,7 +1323,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Mute an actor by did or handle.
+	 * Mute an actor by DID or handle.
 	 */
 	'app.bsky.graph.muteActor': {
 		data: {
@@ -1300,7 +1339,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Unmute an actor by did or handle.
+	 * Unmute an actor by DID or handle.
 	 */
 	'app.bsky.graph.unmuteActor': {
 		data: {
@@ -1316,7 +1355,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Register for push notifications with a service
+	 * Register for push notifications with a service.
 	 */
 	'app.bsky.notification.registerPush': {
 		data: {
@@ -1335,19 +1374,19 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Disable an account from receiving new invite codes, but does not invalidate existing codes
+	 * Disable an account from receiving new invite codes, but does not invalidate existing codes.
 	 */
 	'com.atproto.admin.disableAccountInvites': {
 		data: {
 			account: DID;
 			/**
-			 * Additionally add a note describing why the invites were disabled
+			 * Optional reason for disabled invites.
 			 */
 			note?: string;
 		};
 	};
 	/**
-	 * Disable some set of codes and/or all codes associated with a set of users
+	 * Disable some set of codes and/or all codes associated with a set of users.
 	 */
 	'com.atproto.admin.disableInviteCodes': {
 		data: {
@@ -1356,13 +1395,13 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Re-enable an accounts ability to receive invite codes
+	 * Re-enable an account's ability to receive invite codes.
 	 */
 	'com.atproto.admin.enableAccountInvites': {
 		data: {
 			account: DID;
 			/**
-			 * Additionally add a note describing why the invites were enabled
+			 * Optional reason for enabled invites.
 			 */
 			note?: string;
 		};
@@ -1390,7 +1429,7 @@ export interface Procedures {
 		response: RefOf<'com.atproto.admin.defs#actionView'>;
 	};
 	/**
-	 * Send email to a user's primary email address
+	 * Send email to a user's account email address.
 	 */
 	'com.atproto.admin.sendEmail': {
 		data: {
@@ -1403,7 +1442,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Take a moderation action on a repo.
+	 * Take a moderation action on an actor.
 	 */
 	'com.atproto.admin.takeModerationAction': {
 		data: {
@@ -1418,7 +1457,7 @@ export interface Procedures {
 			negateLabelVals?: string[];
 			reason: string;
 			/**
-			 * Indicates how long this action was meant to be in effect before automatically expiring.
+			 * Indicates how long this action is meant to be in effect before automatically expiring.
 			 */
 			durationInHours?: number;
 			createdBy: DID;
@@ -1429,7 +1468,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Administrative action to update an account's email
+	 * Administrative action to update an account's email.
 	 */
 	'com.atproto.admin.updateAccountEmail': {
 		data: {
@@ -1441,7 +1480,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Administrative action to update an account's handle
+	 * Administrative action to update an account's handle.
 	 */
 	'com.atproto.admin.updateAccountHandle': {
 		data: {
@@ -1450,7 +1489,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Update the service-specific admin status of a subject (account, record, or blob)
+	 * Update the service-specific admin status of a subject (account, record, or blob).
 	 */
 	'com.atproto.admin.updateSubjectStatus': {
 		data: {
@@ -1469,7 +1508,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Updates the handle of the account
+	 * Updates the handle of the account.
 	 */
 	'com.atproto.identity.updateHandle': {
 		data: {
@@ -1508,7 +1547,7 @@ export interface Procedures {
 			 */
 			repo: string;
 			/**
-			 * Validate the records?
+			 * Flag for validating the records.
 			 * @default true
 			 */
 			validate?: boolean;
@@ -1542,7 +1581,7 @@ export interface Procedures {
 			 */
 			rkey?: string;
 			/**
-			 * Validate the record?
+			 * Flag for validating the record.
 			 * @default true
 			 */
 			validate?: boolean;
@@ -1551,7 +1590,7 @@ export interface Procedures {
 			 */
 			record: unknown;
 			/**
-			 * Compare and swap with the previous commit by cid.
+			 * Compare and swap with the previous commit by CID.
 			 */
 			swapCommit?: CID;
 		};
@@ -1581,11 +1620,11 @@ export interface Procedures {
 			 */
 			rkey: string;
 			/**
-			 * Compare and swap with the previous record by cid.
+			 * Compare and swap with the previous record by CID.
 			 */
 			swapRecord?: CID;
 			/**
-			 * Compare and swap with the previous commit by cid.
+			 * Compare and swap with the previous commit by CID.
 			 */
 			swapCommit?: CID;
 		};
@@ -1612,7 +1651,7 @@ export interface Procedures {
 			 */
 			rkey: string;
 			/**
-			 * Validate the record?
+			 * Flag for validating the record.
 			 * @default true
 			 */
 			validate?: boolean;
@@ -1621,11 +1660,11 @@ export interface Procedures {
 			 */
 			record: unknown;
 			/**
-			 * Compare and swap with the previous record by cid.
+			 * Compare and swap with the previous record by CID.
 			 */
 			swapRecord?: CID;
 			/**
-			 * Compare and swap with the previous commit by cid.
+			 * Compare and swap with the previous commit by CID.
 			 */
 			swapCommit?: CID;
 		};
@@ -1692,7 +1731,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Create an app-specific password.
+	 * Create an App Password.
 	 */
 	'com.atproto.server.createAppPassword': {
 		data: {
@@ -1716,7 +1755,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Create an invite code.
+	 * Create invite codes.
 	 */
 	'com.atproto.server.createInviteCodes': {
 		data: {
@@ -1756,7 +1795,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Delete a user account with a token and password.
+	 * Delete an actor's account with a token and password.
 	 */
 	'com.atproto.server.deleteAccount': {
 		data: {
@@ -1793,7 +1832,7 @@ export interface Procedures {
 	 */
 	'com.atproto.server.requestAccountDelete': {};
 	/**
-	 * Request an email with a code to confirm ownership of email
+	 * Request an email with a code to confirm ownership of email.
 	 */
 	'com.atproto.server.requestEmailConfirmation': {};
 	/**
@@ -1843,7 +1882,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Revoke an app-specific password by name.
+	 * Revoke an App Password by name.
 	 */
 	'com.atproto.server.revokeAppPassword': {
 		data: {
@@ -1868,7 +1907,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Notify a crawling service of a recent update. Often when a long break between updates causes the connection with the crawling service to break.
+	 * Notify a crawling service of a recent update; often when a long break between updates causes the connection with the crawling service to break.
 	 */
 	'com.atproto.sync.notifyOfUpdate': {
 		data: {
@@ -1979,7 +2018,7 @@ export interface Objects {
 	};
 	'app.bsky.actor.defs#personalDetailsPref': {
 		/**
-		 * The birth date of the owner of the account.
+		 * The birth date of account owner.
 		 */
 		birthDate?: string;
 	};
@@ -2011,7 +2050,7 @@ export interface Objects {
 	};
 	'app.bsky.actor.defs#threadViewPref': {
 		/**
-		 * Sorting mode.
+		 * Sorting mode for threads.
 		 */
 		sort?: 'oldest' | 'newest' | 'most-likes' | 'random' | (string & {});
 		/**
@@ -2136,6 +2175,7 @@ export interface Objects {
 	'app.bsky.feed.defs#viewerState': {
 		repost?: AtUri;
 		like?: AtUri;
+		replyDisabled?: boolean;
 	};
 	'app.bsky.feed.defs#feedViewPost': {
 		post: RefOf<'app.bsky.feed.defs#postView'>;
@@ -2167,7 +2207,6 @@ export interface Objects {
 			| UnionOf<'app.bsky.feed.defs#notFoundPost'>
 			| UnionOf<'app.bsky.feed.defs#blockedPost'>
 		)[];
-		viewer?: RefOf<'app.bsky.feed.defs#viewerThreadState'>;
 	};
 	'app.bsky.feed.defs#notFoundPost': {
 		uri: AtUri;
@@ -2181,9 +2220,6 @@ export interface Objects {
 	'app.bsky.feed.defs#blockedAuthor': {
 		did: DID;
 		viewer?: RefOf<'app.bsky.actor.defs#viewerState'>;
-	};
-	'app.bsky.feed.defs#viewerThreadState': {
-		canReply?: boolean;
 	};
 	'app.bsky.feed.defs#generatorView': {
 		uri: AtUri;
@@ -2394,7 +2430,7 @@ export interface Objects {
 		id: number;
 		action: RefOf<'com.atproto.admin.defs#actionType'>;
 		/**
-		 * Indicates how long this action was meant to be in effect before automatically expiring.
+		 * Indicates how long this action is meant to be in effect before automatically expiring.
 		 */
 		durationInHours?: number;
 		subject: UnionOf<'com.atproto.admin.defs#repoRef'> | UnionOf<'com.atproto.repo.strongRef'>;
@@ -2411,7 +2447,7 @@ export interface Objects {
 		id: number;
 		action: RefOf<'com.atproto.admin.defs#actionType'>;
 		/**
-		 * Indicates how long this action was meant to be in effect before automatically expiring.
+		 * Indicates how long this action is meant to be in effect before automatically expiring.
 		 */
 		durationInHours?: number;
 		subject:
@@ -2432,7 +2468,7 @@ export interface Objects {
 		id: number;
 		action: RefOf<'com.atproto.admin.defs#actionType'>;
 		/**
-		 * Indicates how long this action was meant to be in effect before automatically expiring.
+		 * Indicates how long this action is meant to be in effect before automatically expiring.
 		 */
 		durationInHours?: number;
 	};
@@ -2564,32 +2600,32 @@ export interface Objects {
 		length: number;
 	};
 	/**
-	 * Metadata tag on an atproto resource (eg, repo or record)
+	 * Metadata tag on an atproto resource (eg, repo or record).
 	 */
 	'com.atproto.label.defs#label': {
 		/**
-		 * DID of the actor who created this label
+		 * DID of the actor who created this label.
 		 */
 		src: DID;
 		/**
-		 * AT URI of the record, repository (account), or other resource which this label applies to
+		 * AT URI of the record, repository (account), or other resource that this label applies to.
 		 */
 		uri: string;
 		/**
-		 * optionally, CID specifying the specific version of 'uri' resource this label applies to
+		 * Optionally, CID specifying the specific version of 'uri' resource this label applies to.
 		 */
 		cid?: CID;
 		/**
-		 * the short string name of the value or type of this label \
+		 * The short string name of the value or type of this label. \
 		 * Maximum string length: 128
 		 */
 		val: string;
 		/**
-		 * if true, this is a negation label, overwriting a previous label
+		 * If true, this is a negation label, overwriting a previous label.
 		 */
 		neg?: boolean;
 		/**
-		 * timestamp when this label was created
+		 * Timestamp when this label was created.
 		 */
 		cts: string;
 	};
@@ -2603,11 +2639,11 @@ export interface Objects {
 		values: RefOf<'com.atproto.label.defs#selfLabel'>[];
 	};
 	/**
-	 * Metadata tag on an atproto record, published by the author within the record. Note -- schemas should use #selfLabels, not #selfLabel.
+	 * Metadata tag on an atproto record, published by the author within the record. Note that schemas should use #selfLabels, not #selfLabel.
 	 */
 	'com.atproto.label.defs#selfLabel': {
 		/**
-		 * the short string name of the value or type of this label \
+		 * The short string name of the value or type of this label. \
 		 * Maximum string length: 128
 		 */
 		val: string;
@@ -2712,15 +2748,15 @@ export interface Objects {
 		commit: unknown;
 		prev?: unknown;
 		/**
-		 * The rev of the emitted commit
+		 * The rev of the emitted commit.
 		 */
 		rev: string;
 		/**
-		 * The rev of the last emitted commit from this repo
+		 * The rev of the last emitted commit from this repo.
 		 */
 		since: string;
 		/**
-		 * CAR file containing relevant blocks
+		 * CAR file containing relevant blocks.
 		 */
 		blocks: unknown;
 		/**
@@ -2752,7 +2788,7 @@ export interface Objects {
 		message?: string;
 	};
 	/**
-	 * A repo operation, ie a write of a single record. For creates and updates, cid is the record's CID as of this operation. For deletes, it's null.
+	 * A repo operation, ie a write of a single record. For creates and updates, CID is the record's CID as of this operation. For deletes, it's null.
 	 */
 	'com.atproto.sync.subscribeRepos#repoOp': {
 		action: 'create' | 'update' | 'delete' | (string & {});
@@ -2762,6 +2798,9 @@ export interface Objects {
 }
 
 export interface Records {
+	/**
+	 * A declaration of a profile.
+	 */
 	'app.bsky.actor.profile': {
 		/**
 		 * Maximum string length: 640 \
@@ -2778,7 +2817,7 @@ export interface Records {
 		labels?: UnionOf<'com.atproto.label.defs#selfLabels'>;
 	};
 	/**
-	 * A declaration of the existence of a feed generator
+	 * A declaration of the existence of a feed generator.
 	 */
 	'app.bsky.feed.generator': {
 		did: DID;
@@ -2797,10 +2836,16 @@ export interface Records {
 		labels?: UnionOf<'com.atproto.label.defs#selfLabels'>;
 		createdAt: string;
 	};
+	/**
+	 * A declaration of a like.
+	 */
 	'app.bsky.feed.like': {
 		subject: RefOf<'com.atproto.repo.strongRef'>;
 		createdAt: string;
 	};
+	/**
+	 * A declaration of a post.
+	 */
 	'app.bsky.feed.post': {
 		/**
 		 * Maximum string length: 3000 \
@@ -2833,6 +2878,9 @@ export interface Records {
 		tags?: string[];
 		createdAt: string;
 	};
+	/**
+	 * A declaration of a repost.
+	 */
 	'app.bsky.feed.repost': {
 		subject: RefOf<'com.atproto.repo.strongRef'>;
 		createdAt: string;
@@ -2853,14 +2901,14 @@ export interface Records {
 		createdAt: string;
 	};
 	/**
-	 * A block.
+	 * A declaration of a block.
 	 */
 	'app.bsky.graph.block': {
 		subject: DID;
 		createdAt: string;
 	};
 	/**
-	 * A social follow.
+	 * A declaration of a social follow.
 	 */
 	'app.bsky.graph.follow': {
 		subject: DID;
@@ -2894,7 +2942,7 @@ export interface Records {
 		createdAt: string;
 	};
 	/**
-	 * An item under a declared list of actors
+	 * An item under a declared list of actors.
 	 */
 	'app.bsky.graph.listitem': {
 		subject: DID;

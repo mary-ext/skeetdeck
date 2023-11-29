@@ -1,32 +1,31 @@
 {
 	"lexicon": 1,
-	"id": "app.bsky.graph.getListBlocks",
+	"id": "com.atproto.temp.fetchLabels",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get lists that the actor is blocking.",
+			"description": "Fetch all labels from a labeler created after a certain date.",
 			"parameters": {
 				"type": "params",
 				"properties": {
+					"since": { "type": "integer" },
 					"limit": {
 						"type": "integer",
 						"minimum": 1,
-						"maximum": 100,
+						"maximum": 250,
 						"default": 50
-					},
-					"cursor": { "type": "string" }
+					}
 				}
 			},
 			"output": {
 				"encoding": "application/json",
 				"schema": {
 					"type": "object",
-					"required": ["lists"],
+					"required": ["labels"],
 					"properties": {
-						"cursor": { "type": "string" },
-						"lists": {
+						"labels": {
 							"type": "array",
-							"items": { "type": "ref", "ref": "app.bsky.graph.defs#listView" }
+							"items": { "type": "ref", "ref": "com.atproto.label.defs#label" }
 						}
 					}
 				}
