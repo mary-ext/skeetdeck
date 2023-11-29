@@ -17,22 +17,22 @@ export interface PostOverflowActionProps {
 const PostOverflowAction = (props: PostOverflowActionProps) => {
 	return (() => {
 		const post = props.post;
+		const author = post.author;
 
 		if (import.meta.env.VITE_APP_MODE === 'desktop') {
 			return (
 				<Flyout button={props.children} placement="bottom-end">
 					{({ close, menuProps }) => (
 						<div {...menuProps} class={/* @once */ MenuRoot()}>
-							<button
-								onClick={() => {
-									close();
-									open(`https://bsky.app/profile/${post.author.did}/post/${getRecordId(post.uri)}`, '_blank');
-								}}
+							<a
+								href={`https://bsky.app/profile/${author.did}/post/${getRecordId(post.uri)}`}
+								target="_blank"
+								onClick={close}
 								class={/* @once */ MenuItem()}
 							>
 								<LaunchIcon class={/* @once */ MenuItemIcon()} />
 								<span>Open in Bluesky app</span>
-							</button>
+							</a>
 						</div>
 					)}
 				</Flyout>
