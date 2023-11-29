@@ -1,8 +1,12 @@
+import type { JSX } from 'solid-js';
+
 import type { UnionOf } from '~/api/atp-schema.ts';
 import { ListPurposeLabels } from '~/api/display.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
 import { Link, LinkingType } from '../Link.tsx';
+
+import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';
 
 type EmbeddedList = UnionOf<'app.bsky.graph.defs#listView'>;
 
@@ -11,38 +15,32 @@ export interface EmbedListProps {
 }
 
 const EmbedList = (props: EmbedListProps) => {
-	const list = () => props.list;
+	return (() => {
+		const list = props.list;
+		const creator = list.creator;
 
-	const purpose = () => {
-		const raw = list().purpose;
-		return raw in ListPurposeLabels ? ListPurposeLabels[raw] : `Unknown list`;
-	};
+		const rawPurpose = list.purpose;
+		const purpose = rawPurpose in ListPurposeLabels ? ListPurposeLabels[rawPurpose] : `Unknown list`;
 
-	return (
-		<Link
-			to={{ type: LinkingType.PROFILE_LIST, actor: list().creator.did, rkey: getRecordId(list().uri) }}
-			class="flex flex-col gap-2 rounded-md border border-divider p-3 text-left text-sm hover:bg-secondary/10"
-		>
-			<div class="flex items-center gap-3">
-				<div class="h-9 w-9 overflow-hidden rounded-md bg-muted-fg">
-					{(() => {
-						const avatar = list().avatar;
+		return (
+			<Link
+				to={{ type: LinkingType.PROFILE_LIST, actor: creator.did, rkey: getRecordId(list.uri) }}
+				class="flex flex-col gap-2 rounded-md border border-divider p-3 text-left text-sm hover:bg-secondary/10"
+			>
+				<div class="flex gap-3">
+					<img
+						src={/* @once */ list.avatar || DefaultListAvatar}
+						class="mt-0.5 h-9 w-9 rounded-md object-cover"
+					/>
 
-						if (avatar) {
-							return <img src={avatar} class="h-full w-full" />;
-						}
-					})()}
+					<div>
+						<p class="font-bold">{/* @once */ list.name}</p>
+						<p class="text-muted-fg">{/* @once */ `${purpose} by @${creator.handle}`}</p>
+					</div>
 				</div>
-
-				<div>
-					<p class="font-bold">{list().name}</p>
-					<p class="text-muted-fg">
-						{purpose()} by @{list().creator.handle}
-					</p>
-				</div>
-			</div>
-		</Link>
-	);
+			</Link>
+		);
+	}) as unknown as JSX.Element;
 };
 
 export default EmbedList;
