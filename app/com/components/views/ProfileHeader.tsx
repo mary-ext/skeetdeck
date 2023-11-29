@@ -17,6 +17,7 @@ import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import ProfileFollowButton from '../ProfileFollowButton.tsx';
+import ProfileOverflowAction from './profiles/ProfileOverflowAction.tsx';
 
 const LazyImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
 
@@ -80,9 +81,15 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 
 						if ($profile.did !== $profile.uid) {
 							return [
-								<button title="Actions" onClick={() => {}} class={/* @once */ Button({ variant: 'outline' })}>
-									<MoreHorizIcon class="-mx-1.5 text-base" />
-								</button>,
+								<ProfileOverflowAction profile={$profile}>
+									<button
+										title="Actions"
+										onClick={() => {}}
+										class={/* @once */ Button({ variant: 'outline' })}
+									>
+										<MoreHorizIcon class="-mx-1.5 text-base" />
+									</button>
+								</ProfileOverflowAction>,
 								(() => {
 									if (!$profile.viewer.blocking.value && !$profile.viewer.blockedBy.value) {
 										return <ProfileFollowButton profile={profile()} />;
