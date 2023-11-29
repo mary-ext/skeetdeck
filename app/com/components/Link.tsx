@@ -4,13 +4,13 @@ import type { DID } from '~/api/atp-schema.ts';
 
 export const enum LinkingType {
 	EXTERNAL,
+	FEED,
+	LIST,
 	POST_LIKED_BY,
 	POST_REPOSTED_BY,
 	POST,
-	PROFILE_FEED,
 	PROFILE_FOLLOWERS,
 	PROFILE_FOLLOWS,
-	PROFILE_LIST,
 	PROFILE,
 	REPLY,
 	TAG,
@@ -20,6 +20,18 @@ export interface ExternalLinking {
 	type: LinkingType.EXTERNAL;
 	url: string;
 	valid: boolean;
+}
+
+export interface FeedLinking {
+	type: LinkingType.FEED;
+	actor: DID;
+	rkey: string;
+}
+
+export interface ListLinking {
+	type: LinkingType.LIST;
+	actor: DID;
+	rkey: string;
 }
 
 export interface PostLikedByLinking {
@@ -40,12 +52,6 @@ export interface PostLinking {
 	rkey: string;
 }
 
-export interface ProfileFeedLinking {
-	type: LinkingType.PROFILE_FEED;
-	actor: DID;
-	rkey: string;
-}
-
 export interface ProfileFollowsLinking {
 	type: LinkingType.PROFILE_FOLLOWERS;
 	actor: DID;
@@ -54,12 +60,6 @@ export interface ProfileFollowsLinking {
 export interface ProfileFollowersLinking {
 	type: LinkingType.PROFILE_FOLLOWS;
 	actor: DID;
-}
-
-export interface ProfileListLinking {
-	type: LinkingType.PROFILE_LIST;
-	actor: DID;
-	rkey: string;
 }
 
 export interface ProfileLinking {
@@ -80,13 +80,13 @@ export interface TagLinking {
 
 export type Linking =
 	| ExternalLinking
+	| FeedLinking
+	| ListLinking
 	| PostLikedByLinking
 	| PostRepostedByLinking
 	| PostLinking
-	| ProfileFeedLinking
 	| ProfileFollowersLinking
 	| ProfileFollowsLinking
-	| ProfileListLinking
 	| ProfileLinking
 	| ReplyLinking
 	| TagLinking;

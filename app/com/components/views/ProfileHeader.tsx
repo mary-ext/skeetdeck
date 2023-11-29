@@ -173,7 +173,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 									<Link
 										to={
 											/* @once */ {
-												type: LinkingType.PROFILE_LIST,
+												type: LinkingType.LIST,
 												actor: getRepoId(blockingByList.uri) as DID,
 												rkey: getRecordId(blockingByList.uri),
 											}
@@ -196,7 +196,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 									<Link
 										to={
 											/* @once */ {
-												type: LinkingType.PROFILE_LIST,
+												type: LinkingType.LIST,
 												actor: getRepoId(mutedByList.uri) as DID,
 												rkey: getRecordId(mutedByList.uri),
 											}

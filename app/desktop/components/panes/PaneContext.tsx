@@ -114,11 +114,11 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 			return openModal(() => <ProfilePaneDialog {...to} />);
 		}
 
-		if (type === LinkingType.PROFILE_FEED) {
+		if (type === LinkingType.FEED) {
 			return openModal(() => <CustomFeedPaneDialog {...to} />);
 		}
 
-		if (type === LinkingType.PROFILE_LIST) {
+		if (type === LinkingType.LIST) {
 			return openModal(() => <CustomListPaneDialog {...to} />);
 		}
 	};
