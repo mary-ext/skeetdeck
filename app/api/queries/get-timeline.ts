@@ -150,6 +150,7 @@ export const getTimeline = async (
 		postFilter = combine([
 			createHiddenRepostFilter(timelineOpts?.filters),
 			createDuplicatePostFilter(items),
+			createInvalidReplyFilter(),
 			createLabelPostFilter(timelineOpts?.moderation),
 			createTempMutePostFilter(timelineOpts?.filters),
 		]);
@@ -399,6 +400,17 @@ const createDuplicatePostFilter = (slices: TimelineSlice[]): PostFilter => {
 	};
 };
 
+const createInvalidReplyFilter = (): PostFilter => {
+	return (item) => {
+		// There's no reply attached but the record says it has, let's filter these out.
+		if (!item.reply && (item.post.record as PostRecord).reply) {
+			return false;
+		}
+
+		return true;
+	};
+};
+
 const createLabelPostFilter = (opts?: ModerationOpts): PostFilter | undefined => {
 	if (!opts) {
 		return;
@@ -561,8 +573,6 @@ const createHomeSliceFilter = (uid: DID): SliceFilter | undefined => {
 			) {
 				return yankReposts(items);
 			}
-		} else if (first.post.record.peek().reply) {
-			return yankReposts(items);
 		}
 
 		return true;
