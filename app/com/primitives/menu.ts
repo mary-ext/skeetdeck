@@ -22,3 +22,7 @@ export const MenuItem = (props: MenuItemProps = {}) => {
 
 	return cn;
 };
+
+export const MenuItemIcon = () => {
+	return `shrink-0 text-lg`;
+};

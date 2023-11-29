@@ -3,7 +3,7 @@ import type { JSX } from 'solid-js';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
-import { MenuItem, MenuRoot } from '../../../primitives/menu.ts';
+import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu.ts';
 
 import { Flyout } from '../../Flyout.tsx';
 
@@ -30,7 +30,7 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 								}}
 								class={/* @once */ MenuItem()}
 							>
-								<LaunchIcon class="text-lg" />
+								<LaunchIcon class={/* @once */ MenuItemIcon()} />
 								<span>Open in Bluesky app</span>
 							</button>
 						</div>

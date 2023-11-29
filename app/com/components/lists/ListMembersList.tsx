@@ -16,7 +16,7 @@ import type { SignalizedList } from '~/api/stores/lists.ts';
 import { openModal } from '../../globals/modals.tsx';
 
 import { IconButton } from '../../primitives/icon-button.ts';
-import { MenuItem, MenuRoot } from '../../primitives/menu.ts';
+import { MenuItem, MenuItemIcon, MenuRoot } from '../../primitives/menu.ts';
 import { loadMoreBtn } from '../../primitives/interactive.ts';
 
 import ConfirmDialog from '../dialogs/ConfirmDialog.tsx';
@@ -206,7 +206,7 @@ const OwnedListItem = (props: OwnedListItemProps) => {
 									}}
 									class={/* @once */ MenuItem({ variant: 'danger' })}
 								>
-									<DeleteIcon class="text-lg" />
+									<DeleteIcon class={/* @once */ MenuItemIcon()} />
 									<span>Remove from list</span>
 								</button>
 							</div>

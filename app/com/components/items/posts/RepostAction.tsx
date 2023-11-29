@@ -3,7 +3,7 @@ import type { JSX } from 'solid-js';
 import { updatePostRepost } from '~/api/mutations/repost-post.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 
-import { MenuItem, MenuRoot } from '../../../primitives/menu.ts';
+import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu.ts';
 
 import { Flyout } from '../../Flyout.tsx';
 
@@ -30,7 +30,7 @@ const RepostAction = (props: RepostActionProps) => {
 								}}
 								class={/* @once */ MenuItem()}
 							>
-								<RepeatIcon class="text-lg" />
+								<RepeatIcon class={/* @once */ MenuItemIcon()} />
 								<span>{post.viewer.repost.value ? 'Undo repost' : 'Repost'}</span>
 							</button>
 						</div>
