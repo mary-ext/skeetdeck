@@ -12,14 +12,14 @@ import { usePaneContext } from '../PaneContext.tsx';
 import PaneDialog from '../PaneDialog.tsx';
 import PaneDialogHeader from '../PaneDialogHeader.tsx';
 
-export interface FeedPaneDialogProps {
+export interface FeedLikedByPaneDialogProps {
 	/** Expected to be static */
 	actor: DID;
 	/** Expected to be static */
 	rkey: string;
 }
 
-const FeedPaneDialog = (props: FeedPaneDialogProps) => {
+const FeedLikedByPaneDialog = (props: FeedLikedByPaneDialogProps) => {
 	const { actor, rkey } = props;
 
 	const linking = useLinking();
@@ -87,4 +87,4 @@ const FeedPaneDialog = (props: FeedPaneDialogProps) => {
 	);
 };
 
-export default FeedPaneDialog;
+export default FeedLikedByPaneDialog;
