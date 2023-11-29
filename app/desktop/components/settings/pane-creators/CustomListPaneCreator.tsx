@@ -1,4 +1,4 @@
-import { For, Match, Show, Switch } from 'solid-js';
+import { For, Match, Switch } from 'solid-js';
 
 import { createInfiniteQuery } from '@pkg/solid-query';
 
@@ -15,9 +15,14 @@ import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 
 import type { PaneCreatorProps } from './types.ts';
 
+import DefaultListAvatar from '~/com/assets/default-list-avatar.svg?url';
+
 type List = RefOf<'app.bsky.graph.defs#listView'>;
 
-const listItem = Interactive({ variant: 'muted', class: `flex w-full gap-3 px-4 py-3 text-left` });
+const listItem = Interactive({
+	variant: 'muted',
+	class: 'flex w-full cursor-pointer flex-col gap-3 px-4 py-3 text-left text-sm',
+});
 
 const CustomListPaneCreator = (props: PaneCreatorProps) => {
 	const lists = createInfiniteQuery(() => ({
@@ -87,19 +92,20 @@ const CustomListPaneCreator = (props: PaneCreatorProps) => {
 								}}
 								class={listItem}
 							>
-								<div class="mt-0.5 h-9 w-9 shrink-0 overflow-hidden rounded-md bg-muted-fg">
-									<Show when={list.avatar}>{(avatar) => <img src={avatar()} class="h-full w-full" />}</Show>
+								<div class="flex gap-4">
+									<img
+										src={/* @once */ list.avatar || DefaultListAvatar}
+										class="mt-0.5 h-9 w-9 shrink rounded-md"
+									/>
+
+									<div class="min-w-0 grow">
+										<p class="overflow-hidden text-ellipsis font-bold">{/* @once */ list.name}</p>
+										<p class="text-muted-fg">{/* @once */ `by ${list.creator.handle}`}</p>
+									</div>
 								</div>
 
-								<div class="flex min-w-0 grow flex-col">
-									<p class="text-sm font-bold">{list.name}</p>
-									<p class="text-sm text-muted-fg">List by @{list.creator.handle}</p>
-
-									<Show when={list.description}>
-										{(description) => (
-											<div class="mt-1 whitespace-pre-wrap break-words text-sm">{description()}</div>
-										)}
-									</Show>
+								<div class="max-w-full whitespace-pre-wrap break-words text-sm empty:hidden">
+									{/* @once */ list.description}
 								</div>
 							</button>
 						</VirtualContainer>

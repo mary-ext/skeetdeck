@@ -16,7 +16,10 @@ import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 
 import type { PaneCreatorProps } from './types.ts';
 
+import DefaultFeedAvatar from '~/com/assets/default-feed-avatar.svg?url';
+
 const feedItem = Interactive({
+	variant: 'muted',
 	class: 'flex w-full cursor-pointer flex-col gap-3 px-4 py-3 text-left text-sm',
 });
 
@@ -82,23 +85,21 @@ const CustomFeedPaneCreator = (props: PaneCreatorProps) => {
 							}}
 							class={feedItem}
 						>
-							<div class="flex items-center gap-4">
-								<div class="h-9 w-9 shrink-0 overflow-hidden rounded-md bg-muted-fg">
-									<Show when={feed.avatar}>{(avatar) => <img src={avatar()} class="h-full w-full" />}</Show>
-								</div>
+							<div class="flex gap-4">
+								<img
+									src={/* @once */ feed.avatar || DefaultFeedAvatar}
+									class="mt-0.5 h-9 w-9 shrink rounded-md"
+								/>
 
 								<div class="min-w-0 grow">
-									<p class="overflow-hidden text-ellipsis font-bold">{feed.displayName}</p>
-									<p class="text-muted-fg">by @{feed.creator.handle}</p>
+									<p class="overflow-hidden text-ellipsis font-bold">{/* @once */ feed.displayName}</p>
+									<p class="text-muted-fg">{/* @once */ `by ${feed.creator.handle}`}</p>
 								</div>
 							</div>
 
-							<Show when={feed.description}>
-								{(description) => (
-									// @todo: not sure why `max-w-full` is necessary here, yet it does
-									<div class="max-w-full whitespace-pre-wrap break-words text-sm">{description()}</div>
-								)}
-							</Show>
+							<div class="max-w-full whitespace-pre-wrap break-words text-sm empty:hidden">
+								{/* @once */ feed.description}
+							</div>
 						</button>
 					</VirtualContainer>
 				)}
