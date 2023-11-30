@@ -180,7 +180,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 							const rkey = getRecordId(uri);
 
 							if (idx !== 0) {
-								children.push(', ');
+								children.push(idx !== len - 1 ? `, ` : ` and `);
 							}
 
 							children.push(
@@ -198,7 +198,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 
 					return (
 						<div class="mb-4 flex min-w-0 gap-4 rounded bg-accent/20 px-4 py-3">
-							<AccountCheckIcon class="mt-1.5 shrink-0 text-2xl" />
+							<AccountCheckIcon class="mt-2 shrink-0 text-2xl" />
 
 							<div class="text-sm">
 								<p class="font-bold">Who can reply?</p>
