@@ -17,17 +17,6 @@ import AddAccountDialog from './AddAccountDialog.tsx';
 const SettingsDialog = () => {
 	const asDefault = () => multiagent.active;
 
-	const accounts = () => {
-		const array = multiagent.accounts.slice();
-		const active = multiagent.active;
-
-		if (active) {
-			array.sort((account) => (account.did === active ? -1 : 1));
-		}
-
-		return array;
-	};
-
 	return (
 		<DialogOverlay>
 			<div class={/* @once */ DialogRoot({ size: 'lg', fullHeight: true })}>
@@ -53,7 +42,10 @@ const SettingsDialog = () => {
 							</button>
 						</div>
 
-						<For each={accounts()} fallback={<p class="px-4 py-3 text-sm">No accounts added yet.</p>}>
+						<For
+							each={multiagent.accounts}
+							fallback={<p class="px-4 py-3 text-sm">No accounts added yet.</p>}
+						>
 							{(account) => {
 								const did = account.did;
 

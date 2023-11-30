@@ -95,7 +95,16 @@ export class Multiagent {
 		return value;
 	}
 	set active(next: DID | undefined) {
-		this.store.active = next;
+		batch(() => {
+			this.store.active = next;
+
+			if (next) {
+				const accounts = this.store.accounts.slice();
+				accounts.sort((a, _b) => (a.did === next ? -1 : 1));
+
+				this.store.accounts = accounts;
+			}
+		});
 	}
 
 	/**
@@ -117,8 +126,6 @@ export class Multiagent {
 				const $accounts = this.accounts!;
 				const existing = $accounts.find((acc) => acc.did === did);
 
-				this.active = did;
-
 				if (existing) {
 					existing.service = service;
 					existing.session = session;
@@ -131,6 +138,8 @@ export class Multiagent {
 						isAppPassword: isAppPassword,
 					});
 				}
+
+				this.active = did;
 			});
 
 			this.#agents[did] = Promise.resolve(agent);
