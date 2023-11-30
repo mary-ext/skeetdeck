@@ -1,6 +1,10 @@
+import type { JSX } from 'solid-js';
+
+import type { DID, Records, RefOf } from '~/api/atp-schema.ts';
+import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
+
 import { updatePostLike } from '~/api/mutations/like-post.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
-import { getRecordId } from '~/api/utils/misc.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
 import { formatAbsDateTime } from '~/utils/intl/time.ts';
@@ -11,6 +15,7 @@ import RichTextRenderer from '../RichTextRenderer.tsx';
 import PostEmbedWarning from '../moderation/PostEmbedWarning.tsx';
 import Embed from '../embeds/Embed.tsx';
 
+import AccountCheckIcon from '~/com/icons/baseline-account-check.tsx';
 import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble.tsx';
 import FavoriteIcon from '../../icons/baseline-favorite.tsx';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
@@ -114,7 +119,8 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 			<div class="flex h-13 items-center justify-around text-muted-fg">
 				<Link
 					to={{ type: LinkingType.REPLY, actor: author().did, rkey: rkey() }}
-					class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40"
+					class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40 disabled:pointer-events-none disabled:opacity-50"
+					disabled={post().viewer.replyDisabled.value}
 				>
 					<ChatBubbleOutlinedIcon />
 				</Link>
@@ -146,8 +152,111 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 					<ShareIcon />
 				</button>
 			</div>
+
+			{(() => {
+				const threadgate = unwrapThreadgateRecord(post().threadgate.value);
+				if (threadgate) {
+					const { follow, mention, lists } = threadgate;
+
+					const nodes: JSX.Element[] = [];
+					const handle = `@${author().handle.value}`;
+
+					if (follow && mention) {
+						nodes.push(`Users ${handle} follows or mentioned can reply`);
+					} else if (follow) {
+						nodes.push(`${handle}'s follows can reply`);
+					} else if (mention) {
+						nodes.push(`Users mentioned can reply`);
+					}
+
+					if (lists && lists.length > 0) {
+						const children: JSX.Element = [];
+
+						for (let idx = 0, len = lists.length; idx < len; idx++) {
+							const list = lists[idx];
+
+							const uri = list.uri;
+							const actor = getRepoId(uri) as DID;
+							const rkey = getRecordId(uri);
+
+							if (idx !== 0) {
+								children.push(', ');
+							}
+
+							children.push(
+								<Link
+									to={{ type: LinkingType.LIST, actor: actor, rkey: rkey }}
+									class="text-left font-bold hover:underline"
+								>
+									{/* @once */ list.name}
+								</Link>,
+							);
+						}
+
+						nodes.push([`Users in `, ...children, ` can reply`]);
+					}
+
+					return (
+						<div class="mb-4 flex min-w-0 gap-4 rounded bg-accent/20 px-4 py-3">
+							<AccountCheckIcon class="mt-1.5 shrink-0 text-2xl" />
+
+							<div class="text-sm">
+								<p class="font-bold">Who can reply?</p>
+
+								{
+									/* @once */ nodes.length > 1 ? (
+										<ul class="ml-4 mt-1 flex list-disc flex-col gap-1">
+											{
+												/* @once */ nodes.map((str) => (
+													<li>{str}</li>
+												))
+											}
+										</ul>
+									) : (
+										<p>{nodes[0]}</p>
+									)
+								}
+							</div>
+						</div>
+					);
+				}
+			})()}
 		</div>
 	);
 };
 
 export default PermalinkPost;
+
+const unwrapThreadgateRecord = (threadgate?: RefOf<'app.bsky.feed.defs#threadgateView'>) => {
+	if (!threadgate) {
+		return null;
+	}
+
+	const record = threadgate.record as Records['app.bsky.feed.threadgate'];
+	const rules = record.allow;
+
+	if (!rules) {
+		return null;
+	}
+
+	let mention = false;
+	let follow = false;
+	let lists = threadgate.lists;
+
+	for (let idx = 0, len = rules.length; idx < len; idx++) {
+		const rule = rules[idx];
+		const type = rule.$type;
+
+		if (type === 'app.bsky.feed.threadgate#followingRule') {
+			follow = true;
+		} else if (type === 'app.bsky.feed.threadgate#mentionRule') {
+			mention = true;
+		}
+	}
+
+	return {
+		mention: mention,
+		follow: follow,
+		lists: lists,
+	};
+};

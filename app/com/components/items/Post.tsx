@@ -232,9 +232,10 @@ const Post = (props: PostProps) => {
 									<div class="min-w-0 grow basis-0">
 										<Link
 											to={{ type: LinkingType.REPLY, actor: author().did, rkey: getRecordId(post().uri) }}
-											class="group flex max-w-full items-end gap-0.5"
+											class="group flex max-w-full items-end gap-0.5 disabled:pointer-events-none"
+											disabled={post().viewer.replyDisabled.value}
 										>
-											<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40">
+											<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40 group-disabled:opacity-50">
 												<ChatBubbleOutlinedIcon />
 											</div>
 											<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">

@@ -32,9 +32,11 @@ export class SignalizedPost {
 	readonly likeCount: Signal<NonNullable<Post['likeCount']>>;
 	readonly labels: Signal<Post['labels']>;
 
+	readonly threadgate: Signal<Post['threadgate']>;
 	readonly viewer: {
 		readonly like: Signal<NonNullable<Post['viewer']>['like']>;
 		readonly repost: Signal<NonNullable<Post['viewer']>['repost']>;
+		readonly replyDisabled: Signal<NonNullable<Post['viewer']>['replyDisabled']>;
 	};
 
 	$truncated?: boolean;
@@ -53,9 +55,11 @@ export class SignalizedPost {
 		this.likeCount = signal(post.likeCount ?? 0);
 		this.labels = signal(post.labels, EQUALS_DEQUAL);
 
+		this.threadgate = signal(post.threadgate, EQUALS_DEQUAL);
 		this.viewer = {
 			like: signal(post.viewer?.like),
 			repost: signal(post.viewer?.repost),
+			replyDisabled: signal(post.viewer?.replyDisabled),
 		};
 	}
 }
@@ -95,8 +99,10 @@ export const mergePost = (uid: DID, post: Post, key?: number) => {
 		val.likeCount.value = post.likeCount ?? 0;
 		val.labels.value = post.labels;
 
+		val.threadgate.value = post.threadgate;
 		val.viewer.like.value = post.viewer?.like;
 		val.viewer.repost.value = post.viewer?.repost;
+		val.viewer.replyDisabled.value = post.viewer?.replyDisabled;
 	}
 
 	return val;

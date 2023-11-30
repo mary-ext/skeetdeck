@@ -70,7 +70,7 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 		render(props) {
 			const to = props.to;
 
-			if (to.type === LinkingType.EXTERNAL) {
+			if (to.type === LinkingType.EXTERNAL && !props.disabled) {
 				return (
 					<a
 						{...props}

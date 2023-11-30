@@ -104,6 +104,7 @@ export interface LinkingProps {
 	tabindex?: string | number;
 	ref?: HTMLElement | ((el: HTMLElement) => void);
 	dir?: 'ltr' | 'rtl' | 'auto';
+	disabled?: boolean;
 	class?: string;
 	title?: string;
 	children?: JSX.Element;
