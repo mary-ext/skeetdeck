@@ -4,7 +4,7 @@ import CheckIcon from '~/com/icons/baseline-check.tsx';
 
 const Checkbox = (props: ComponentProps<'input'>) => {
 	return (
-		<label class="relative inline-flex  cursor-pointer text-xl">
+		<label class="relative inline-flex shrink-0 cursor-pointer text-xl">
 			<input {...props} type="checkbox" class="peer h-0 w-0 appearance-none leading-none outline-none" />
 
 			<div class="pointer-events-none absolute -inset-2 rounded-full peer-hover:bg-secondary/20 peer-focus-visible:bg-secondary/20" />
