@@ -77,7 +77,7 @@ const ListPaneDialog = (props: ListPaneDialogProps) => {
 									addPane<CustomListPaneConfig>(
 										deck,
 										{
-											type: PaneType.CUSTOM_LIST,
+											type: PaneType.LIST,
 											uid: pane.uid,
 											list: {
 												name: $list.name.value,

@@ -48,8 +48,8 @@ export interface AddPaneDialogProps {
 
 // @ts-expect-error
 const components: Record<PaneType, Component<PaneCreatorProps>> = {
-	[PaneType.CUSTOM_FEED]: CustomFeedPaneCreator,
-	[PaneType.CUSTOM_LIST]: CustomListPaneCreator,
+	[PaneType.FEED]: CustomFeedPaneCreator,
+	[PaneType.LIST]: CustomListPaneCreator,
 	[PaneType.PROFILE]: ProfilePaneCreator,
 };
 
@@ -142,12 +142,12 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 									<span>Home timeline</span>
 								</button>
 
-								<button onClick={() => setType(PaneType.CUSTOM_LIST)} class={columnItem}>
+								<button onClick={() => setType(PaneType.LIST)} class={columnItem}>
 									<ListBoxOutlinedIcon class="text-xl" />
 									<span>User lists</span>
 								</button>
 
-								<button onClick={() => setType(PaneType.CUSTOM_FEED)} class={columnItem}>
+								<button onClick={() => setType(PaneType.FEED)} class={columnItem}>
 									<PoundIcon class="text-xl" />
 									<span>Feeds</span>
 								</button>

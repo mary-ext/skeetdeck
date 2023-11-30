@@ -69,7 +69,7 @@ const FeedPaneDialog = (props: FeedPaneDialogProps) => {
 									addPane<CustomFeedPaneConfig>(
 										deck,
 										{
-											type: PaneType.CUSTOM_FEED,
+											type: PaneType.FEED,
 											uid: pane.uid,
 											feed: {
 												name: $feed.name.value,

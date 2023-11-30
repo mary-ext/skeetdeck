@@ -7,8 +7,8 @@ export interface PaneRouterProps {
 }
 
 const components: Record<PaneType, Component> = {
-	[PaneType.CUSTOM_FEED]: lazy(() => import('./views/CustomFeedPane.tsx')),
-	[PaneType.CUSTOM_LIST]: lazy(() => import('./views/CustomListPane.tsx')),
+	[PaneType.FEED]: lazy(() => import('./views/CustomFeedPane.tsx')),
+	[PaneType.LIST]: lazy(() => import('./views/CustomListPane.tsx')),
 	[PaneType.HOME]: lazy(() => import('./views/HomePane.tsx')),
 	[PaneType.NOTIFICATIONS]: lazy(() => import('./views/NotificationsPane.tsx')),
 	[PaneType.PROFILE]: lazy(() => import('./views/ProfilePane.tsx')),

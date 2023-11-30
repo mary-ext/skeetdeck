@@ -4,8 +4,8 @@ export const enum PaneType {
 	HOME = 'home',
 	NOTIFICATIONS = 'notifications',
 	PROFILE = 'profile',
-	CUSTOM_FEED = 'custom_feed',
-	CUSTOM_LIST = 'custom_list',
+	FEED = 'feed',
+	LIST = 'list',
 	SEARCH = 'search',
 }
 
@@ -17,9 +17,9 @@ export const labelizePaneType = (type: PaneType) => {
 			return 'Notifications';
 		case PaneType.PROFILE:
 			return 'Profile';
-		case PaneType.CUSTOM_FEED:
+		case PaneType.FEED:
 			return 'Feed';
-		case PaneType.CUSTOM_LIST:
+		case PaneType.LIST:
 			return 'User List';
 		default:
 			return 'N/A';
@@ -75,7 +75,7 @@ export interface ProfilePaneConfig extends BasePaneConfig {
 }
 
 export interface CustomFeedPaneConfig extends BasePaneConfig {
-	readonly type: PaneType.CUSTOM_FEED;
+	readonly type: PaneType.FEED;
 	feed: {
 		uri: string;
 		name: string;
@@ -84,7 +84,7 @@ export interface CustomFeedPaneConfig extends BasePaneConfig {
 }
 
 export interface CustomListPaneConfig extends BasePaneConfig {
-	readonly type: PaneType.CUSTOM_LIST;
+	readonly type: PaneType.LIST;
 	list: {
 		uri: string;
 		name: string;

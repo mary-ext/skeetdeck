@@ -85,7 +85,7 @@ const CustomListPaneCreator = (props: PaneCreatorProps) => {
 							<button
 								onClick={() => {
 									props.onAdd<CustomListPaneConfig>({
-										type: PaneType.CUSTOM_LIST,
+										type: PaneType.LIST,
 										list: { uri: list.uri, name: list.name },
 										infoVisible: true,
 									});
