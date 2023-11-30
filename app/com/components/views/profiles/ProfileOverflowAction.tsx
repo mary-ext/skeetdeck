@@ -78,7 +78,7 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 
 							<button class={/* @once */ MenuItem()}>
 								<PlaylistAddIcon class={/* @once */ MenuItemIcon()} />
-								<span>{`Add/remove @${profile.handle.value} from lists`}</span>
+								<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Add/remove @${profile.handle.value} from lists`}</span>
 							</button>
 
 							<button
@@ -89,7 +89,9 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								class={/* @once */ MenuItem()}
 							>
 								<VolumeOffIcon class={/* @once */ MenuItemIcon()} />
-								<span>{isMuted() ? `Unmute @${profile.handle.value}` : `Mute @${profile.handle.value}`}</span>
+								<span class="overflow-hidden text-ellipsis whitespace-nowrap">
+									{isMuted() ? `Unmute @${profile.handle.value}` : `Mute @${profile.handle.value}`}
+								</span>
 							</button>
 
 							<button
@@ -100,14 +102,14 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								class={/* @once */ MenuItem()}
 							>
 								<BlockIcon class={/* @once */ MenuItemIcon()} />
-								<span>
+								<span class="overflow-hidden text-ellipsis whitespace-nowrap">
 									{isBlocked() ? `Unblock @${profile.handle.value}` : `Block @${profile.handle.value}`}
 								</span>
 							</button>
 
 							<button class={/* @once */ MenuItem()}>
 								<ReportIcon class={/* @once */ MenuItemIcon()} />
-								<span>{`Report @${profile.handle.value}`}</span>
+								<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Report @${profile.handle.value}`}</span>
 							</button>
 						</div>
 					)}
