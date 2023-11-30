@@ -5,8 +5,6 @@ import type { DID, Records, RefOf } from '../atp-schema.ts';
 
 import { type SignalizedProfile, mergeProfile } from './profiles.ts';
 
-import { proto } from './_base.ts';
-
 type Post = RefOf<'app.bsky.feed.defs#postView'>;
 type PostRecord = Records['app.bsky.feed.post'];
 
@@ -20,51 +18,47 @@ const gc = new FinalizationRegistry<string>((id) => {
 	}
 });
 
-/** @see BskyPost */
-export interface SignalizedPost {
+export class SignalizedPost {
+	readonly uid: DID;
 	_key?: number;
-	uid: DID;
 
-	uri: Post['uri'];
-	cid: Signal<Post['cid']>;
-	author: SignalizedProfile;
-	record: Signal<PostRecord>;
-	embed: Signal<Post['embed']>;
-	replyCount: Signal<NonNullable<Post['replyCount']>>;
-	repostCount: Signal<NonNullable<Post['repostCount']>>;
-	likeCount: Signal<NonNullable<Post['likeCount']>>;
-	labels: Signal<Post['labels']>;
-	viewer: {
-		like: Signal<NonNullable<Post['viewer']>['like']>;
-		repost: Signal<NonNullable<Post['viewer']>['repost']>;
+	readonly uri: Post['uri'];
+	readonly cid: Signal<Post['cid']>;
+	readonly author: SignalizedProfile;
+	readonly record: Signal<PostRecord>;
+	readonly embed: Signal<Post['embed']>;
+	readonly replyCount: Signal<NonNullable<Post['replyCount']>>;
+	readonly repostCount: Signal<NonNullable<Post['repostCount']>>;
+	readonly likeCount: Signal<NonNullable<Post['likeCount']>>;
+	readonly labels: Signal<Post['labels']>;
+
+	readonly viewer: {
+		readonly like: Signal<NonNullable<Post['viewer']>['like']>;
+		readonly repost: Signal<NonNullable<Post['viewer']>['repost']>;
 	};
 
 	$truncated?: boolean;
-}
 
-const createSignalizedPost = (uid: DID, post: Post, key?: number): SignalizedPost => {
-	return {
-		// @ts-expect-error
-		__proto__: proto,
+	constructor(uid: DID, post: Post, key?: number) {
+		this.uid = uid;
+		this._key = key;
 
-		_key: key,
-		uid: uid,
+		this.uri = post.uri;
+		this.cid = signal(post.cid);
+		this.author = mergeProfile(uid, post.author, key);
+		this.record = signal(post.record as PostRecord, EQUALS_DEQUAL);
+		this.embed = signal(post.embed, EQUALS_DEQUAL);
+		this.replyCount = signal(post.replyCount ?? 0);
+		this.repostCount = signal(post.repostCount ?? 0);
+		this.likeCount = signal(post.likeCount ?? 0);
+		this.labels = signal(post.labels, EQUALS_DEQUAL);
 
-		uri: post.uri,
-		cid: signal(post.cid),
-		author: mergeProfile(uid, post.author, key),
-		record: signal(post.record as PostRecord),
-		embed: signal(post.embed, EQUALS_DEQUAL),
-		replyCount: signal(post.replyCount ?? 0),
-		repostCount: signal(post.repostCount ?? 0),
-		likeCount: signal(post.likeCount ?? 0),
-		labels: signal(post.labels, EQUALS_DEQUAL),
-		viewer: {
+		this.viewer = {
 			like: signal(post.viewer?.like),
 			repost: signal(post.viewer?.repost),
-		},
-	};
-};
+		};
+	}
+}
 
 export const createPostId = (uid: DID, uri: string) => {
 	return uid + '|' + uri;
@@ -84,7 +78,7 @@ export const mergePost = (uid: DID, post: Post, key?: number) => {
 	let val: SignalizedPost;
 
 	if (!ref || !(val = ref.deref()!)) {
-		val = createSignalizedPost(uid, post, key);
+		val = new SignalizedPost(uid, post, key);
 		posts[id] = new WeakRef(val);
 
 		gc.register(val, id);

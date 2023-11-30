@@ -3,8 +3,6 @@ import { type Signal, signal } from '~/utils/signals.ts';
 
 import type { DID, RefOf } from '../atp-schema.ts';
 
-import { proto } from './_base.ts';
-
 type Profile = RefOf<'app.bsky.actor.defs#profileView'>;
 type ProfileBasic = RefOf<'app.bsky.actor.defs#profileViewBasic'>;
 type ProfileDetailed = RefOf<'app.bsky.actor.defs#profileViewDetailed'>;
@@ -19,60 +17,52 @@ const gc = new FinalizationRegistry<string>((id) => {
 	}
 });
 
-/** @see BskyProfile */
-export interface SignalizedProfile {
+export class SignalizedProfile {
+	readonly uid: DID;
 	_key?: number;
-	uid: DID;
 
-	did: ProfileDetailed['did'];
-	handle: Signal<ProfileDetailed['handle']>;
-	displayName: Signal<ProfileDetailed['displayName']>;
-	description: Signal<ProfileDetailed['description']>;
-	avatar: Signal<ProfileDetailed['avatar']>;
-	banner: Signal<ProfileDetailed['banner']>;
-	followersCount: Signal<NonNullable<ProfileDetailed['followersCount']>>;
-	followsCount: Signal<NonNullable<ProfileDetailed['followsCount']>>;
-	postsCount: Signal<NonNullable<ProfileDetailed['postsCount']>>;
-	labels: Signal<ProfileDetailed['labels']>;
-	viewer: {
-		muted: Signal<NonNullable<ProfileDetailed['viewer']>['muted']>;
+	readonly did: ProfileDetailed['did'];
+	readonly handle: Signal<ProfileDetailed['handle']>;
+	readonly displayName: Signal<ProfileDetailed['displayName']>;
+	readonly description: Signal<ProfileDetailed['description']>;
+	readonly avatar: Signal<ProfileDetailed['avatar']>;
+	readonly banner: Signal<ProfileDetailed['banner']>;
+	readonly followersCount: Signal<NonNullable<ProfileDetailed['followersCount']>>;
+	readonly followsCount: Signal<NonNullable<ProfileDetailed['followsCount']>>;
+	readonly postsCount: Signal<NonNullable<ProfileDetailed['postsCount']>>;
+	readonly labels: Signal<ProfileDetailed['labels']>;
+
+	readonly viewer: {
+		readonly muted: Signal<NonNullable<ProfileDetailed['viewer']>['muted']>;
 		// @todo: perhaps change this to reference SignalizedList?
-		mutedByList: Signal<NonNullable<ProfileDetailed['viewer']>['mutedByList']>;
-		blockedBy: Signal<NonNullable<ProfileDetailed['viewer']>['blockedBy']>;
-		blocking: Signal<NonNullable<ProfileDetailed['viewer']>['blocking']>;
+		readonly mutedByList: Signal<NonNullable<ProfileDetailed['viewer']>['mutedByList']>;
+		readonly blockedBy: Signal<NonNullable<ProfileDetailed['viewer']>['blockedBy']>;
+		readonly blocking: Signal<NonNullable<ProfileDetailed['viewer']>['blocking']>;
 		// @todo: perhaps change this to reference SignalizedList?
-		blockingByList: Signal<NonNullable<ProfileDetailed['viewer']>['blockingByList']>;
-		following: Signal<NonNullable<ProfileDetailed['viewer']>['following']>;
-		followedBy: Signal<NonNullable<ProfileDetailed['viewer']>['followedBy']>;
+		readonly blockingByList: Signal<NonNullable<ProfileDetailed['viewer']>['blockingByList']>;
+		readonly following: Signal<NonNullable<ProfileDetailed['viewer']>['following']>;
+		readonly followedBy: Signal<NonNullable<ProfileDetailed['viewer']>['followedBy']>;
 	};
-}
 
-const createSignalizedProfile = (
-	uid: DID,
-	profile: Profile | ProfileBasic | ProfileDetailed,
-	key?: number,
-): SignalizedProfile => {
-	const isProfile = 'description' in profile;
-	const isDetailed = 'postsCount' in profile;
+	constructor(uid: DID, profile: Profile | ProfileBasic | ProfileDetailed, key?: number) {
+		const isProfile = 'description' in profile;
+		const isDetailed = 'postsCount' in profile;
 
-	return {
-		// @ts-expect-error
-		__proto__: proto,
+		this.uid = uid;
+		this._key = key;
 
-		_key: key,
-		uid: uid,
+		this.did = profile.did;
+		this.handle = signal(profile.handle);
+		this.displayName = signal(profile.displayName);
+		this.description = signal(isProfile ? profile.description : '');
+		this.avatar = signal(profile.avatar);
+		this.banner = signal(isDetailed ? profile.banner : '');
+		this.followersCount = signal((isDetailed && profile.followersCount) || 0);
+		this.followsCount = signal((isDetailed && profile.followsCount) || 0);
+		this.postsCount = signal((isDetailed && profile.postsCount) || 0);
+		this.labels = signal(profile.labels, EQUALS_DEQUAL);
 
-		did: profile.did,
-		handle: signal(profile.handle),
-		displayName: signal(profile.displayName),
-		description: signal(isProfile ? profile.description : ''),
-		avatar: signal(profile.avatar),
-		banner: signal(isDetailed ? profile.banner : ''),
-		followersCount: signal((isDetailed && profile.followersCount) || 0),
-		followsCount: signal((isDetailed && profile.followsCount) || 0),
-		postsCount: signal((isDetailed && profile.postsCount) || 0),
-		labels: signal(profile.labels, EQUALS_DEQUAL),
-		viewer: {
+		this.viewer = {
 			muted: signal(profile.viewer?.muted),
 			mutedByList: signal(profile.viewer?.mutedByList),
 			blockedBy: signal(profile.viewer?.blockedBy),
@@ -80,9 +70,9 @@ const createSignalizedProfile = (
 			blockingByList: signal(profile.viewer?.blockingByList),
 			following: signal(profile.viewer?.following),
 			followedBy: signal(profile.viewer?.followedBy),
-		},
-	};
-};
+		};
+	}
+}
 
 export const createProfileId = (uid: DID, actor: DID) => {
 	return uid + '|' + actor;
@@ -102,7 +92,7 @@ export const mergeProfile = (uid: DID, profile: Profile | ProfileBasic | Profile
 	let val: SignalizedProfile;
 
 	if (!ref || !(val = ref.deref()!)) {
-		val = createSignalizedProfile(uid, profile, key);
+		val = new SignalizedProfile(uid, profile, key);
 		profiles[id] = new WeakRef(val);
 
 		gc.register(val, id);

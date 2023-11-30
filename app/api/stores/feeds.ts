@@ -3,8 +3,6 @@ import { type Signal, signal } from '~/utils/signals.ts';
 import type { DID, RefOf } from '../atp-schema.ts';
 import { type SignalizedProfile, mergeProfile } from './profiles.ts';
 
-import { proto } from './_base.ts';
-
 type Feed = RefOf<'app.bsky.feed.defs#generatorView'>;
 
 export const feeds: Record<string, WeakRef<SignalizedFeed>> = {};
@@ -17,47 +15,43 @@ const gc = new FinalizationRegistry<string>((id) => {
 	}
 });
 
-/** @see BskyFeedGenerator */
-export interface SignalizedFeed {
+export class SignalizedFeed {
+	readonly uid: DID;
 	_key?: number;
-	uid: DID;
 
-	uri: string;
-	cid: Signal<Feed['cid']>;
-	did: Signal<Feed['did']>;
-	creator: SignalizedProfile;
-	name: Signal<Feed['displayName']>;
-	description: Signal<Feed['description']>;
-	descriptionFacets: Signal<Feed['descriptionFacets']>;
-	avatar: Signal<Feed['avatar']>;
-	likeCount: Signal<NonNullable<Feed['likeCount']>>;
-	viewer: {
-		like: Signal<NonNullable<Feed['viewer']>['like']>;
+	readonly uri: string;
+	readonly cid: Signal<Feed['cid']>;
+	readonly did: Signal<Feed['did']>;
+	readonly creator: SignalizedProfile;
+	readonly name: Signal<Feed['displayName']>;
+	readonly description: Signal<Feed['description']>;
+	readonly descriptionFacets: Signal<Feed['descriptionFacets']>;
+	readonly avatar: Signal<Feed['avatar']>;
+	readonly likeCount: Signal<NonNullable<Feed['likeCount']>>;
+
+	readonly viewer: {
+		readonly like: Signal<NonNullable<Feed['viewer']>['like']>;
 	};
-}
 
-const createSignalizedFeed = (uid: DID, feed: Feed, key?: number): SignalizedFeed => {
-	return {
-		// @ts-expect-error
-		__proto__: proto,
+	constructor(uid: DID, feed: Feed, key?: number) {
+		this.uid = uid;
+		this._key = key;
 
-		_key: key,
-		uid: uid,
+		this.uri = feed.uri;
+		this.cid = signal(feed.cid);
+		this.did = signal(feed.did);
+		this.creator = mergeProfile(uid, feed.creator, key);
+		this.name = signal(feed.displayName);
+		this.description = signal(feed.description);
+		this.descriptionFacets = signal(feed.descriptionFacets);
+		this.avatar = signal(feed.avatar);
+		this.likeCount = signal(feed.likeCount ?? 0);
 
-		uri: feed.uri,
-		cid: signal(feed.cid),
-		did: signal(feed.did),
-		creator: mergeProfile(uid, feed.creator, key),
-		name: signal(feed.displayName),
-		description: signal(feed.description),
-		descriptionFacets: signal(feed.descriptionFacets),
-		avatar: signal(feed.avatar),
-		likeCount: signal(feed.likeCount ?? 0),
-		viewer: {
+		this.viewer = {
 			like: signal(feed.viewer?.like),
-		},
-	};
-};
+		};
+	}
+}
 
 export const createFeedId = (uid: DID, uri: string) => {
 	return uid + '|' + uri;
@@ -77,15 +71,17 @@ export const mergeFeed = (uid: DID, feed: Feed, key?: number) => {
 	let val: SignalizedFeed;
 
 	if (!ref || !(val = ref.deref()!)) {
-		gc.register((val = createSignalizedFeed(uid, feed, key)), id);
+		val = new SignalizedFeed(uid, feed, key);
 		feeds[id] = new WeakRef(val);
+
+		gc.register(val, id);
 	} else if (!key || val._key !== key) {
 		val._key = key;
 
 		val.cid.value = feed.cid;
 		val.did.value = feed.did;
 
-		val.creator = mergeProfile(uid, feed.creator, key);
+		mergeProfile(uid, feed.creator, key);
 
 		val.name.value = feed.displayName;
 		val.description.value = feed.description;

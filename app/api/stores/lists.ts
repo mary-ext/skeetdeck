@@ -3,8 +3,6 @@ import { type Signal, signal } from '~/utils/signals.ts';
 import type { DID, RefOf } from '../atp-schema.ts';
 import { type SignalizedProfile, mergeProfile } from './profiles.ts';
 
-import { proto } from './_base.ts';
-
 type List = RefOf<'app.bsky.graph.defs#listView'>;
 
 export const lists: Record<string, WeakRef<SignalizedList>> = {};
@@ -17,47 +15,43 @@ const gc = new FinalizationRegistry<string>((id) => {
 	}
 });
 
-/** @see BskyList */
-export interface SignalizedList {
+export class SignalizedList {
+	readonly uid: DID;
 	_key?: number;
-	uid: DID;
 
-	uri: List['uri'];
-	cid: Signal<List['cid']>;
-	creator: SignalizedProfile;
-	name: Signal<List['name']>;
-	purpose: Signal<List['purpose']>;
-	description: Signal<List['description']>;
-	descriptionFacets: Signal<List['descriptionFacets']>;
-	avatar: Signal<List['avatar']>;
-	viewer: {
-		muted: Signal<NonNullable<List['viewer']>['muted']>;
-		blocked: Signal<NonNullable<List['viewer']>['blocked']>;
+	readonly uri: List['uri'];
+	readonly cid: Signal<List['cid']>;
+	readonly creator: SignalizedProfile;
+	readonly name: Signal<List['name']>;
+	readonly purpose: Signal<List['purpose']>;
+	readonly description: Signal<List['description']>;
+	readonly descriptionFacets: Signal<List['descriptionFacets']>;
+	readonly avatar: Signal<List['avatar']>;
+
+	readonly viewer: {
+		readonly muted: Signal<NonNullable<List['viewer']>['muted']>;
+		readonly blocked: Signal<NonNullable<List['viewer']>['blocked']>;
 	};
-}
 
-const createSignalizedList = (uid: DID, list: List, key?: number): SignalizedList => {
-	return {
-		// @ts-expect-error
-		__proto__: proto,
+	constructor(uid: DID, list: List, key?: number) {
+		this.uid = uid;
+		this._key = key;
 
-		_key: key,
-		uid: uid,
+		this.uri = list.uri;
+		this.cid = signal(list.cid);
+		this.creator = mergeProfile(uid, list.creator, key);
+		this.name = signal(list.name);
+		this.purpose = signal(list.purpose);
+		this.description = signal(list.description);
+		this.descriptionFacets = signal(list.descriptionFacets);
+		this.avatar = signal(list.avatar);
 
-		uri: list.uri,
-		cid: signal(list.cid),
-		creator: mergeProfile(uid, list.creator, key),
-		name: signal(list.name),
-		purpose: signal(list.purpose),
-		description: signal(list.description),
-		descriptionFacets: signal(list.descriptionFacets),
-		avatar: signal(list.avatar),
-		viewer: {
+		this.viewer = {
 			muted: signal(list.viewer?.muted),
 			blocked: signal(list.viewer?.blocked),
-		},
-	};
-};
+		};
+	}
+}
 
 export const createListId = (uid: DID, uri: string) => {
 	return uid + '|' + uri;
@@ -77,14 +71,16 @@ export const mergeList = (uid: DID, list: List, key?: number) => {
 	let val: SignalizedList;
 
 	if (!ref || !(val = ref.deref()!)) {
-		gc.register((val = createSignalizedList(uid, list, key)), id);
+		val = new SignalizedList(uid, list, key);
 		lists[id] = new WeakRef(val);
+
+		gc.register(val, id);
 	} else if (!key || val._key !== key) {
 		val._key = key;
 
 		val.cid.value = list.cid;
 
-		val.creator = mergeProfile(uid, list.creator, key);
+		mergeProfile(uid, list.creator, key);
 
 		val.name.value = list.name;
 		val.purpose.value = list.purpose;
