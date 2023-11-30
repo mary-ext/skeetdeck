@@ -4,6 +4,8 @@ import type { RefOf } from '~/api/atp-schema.ts';
 
 import { openModal } from '~/com/globals/modals.tsx';
 
+import ImageAltAction from './images/ImageAltAction.tsx';
+
 const LazyImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
 
 type EmbeddedImage = RefOf<'app.bsky.embed.images#viewImage'>;
@@ -94,15 +96,14 @@ const EmbedImage = (props: EmbedImageProps) => {
 				{mode === RenderMode.STANDALONE_RATIO && <div ref={placeholder} class="h-screen w-screen"></div>}
 
 				{interactive && alt && (
-					<button
-						class="absolute bottom-0 left-0 m-2 h-5 rounded bg-black/70 px-1 text-xs font-medium"
-						title="Show image description"
-						onClick={() => {
-							// openModal
-						}}
-					>
-						ALT
-					</button>
+					<ImageAltAction alt={alt}>
+						<button
+							class="absolute bottom-0 left-0 m-2 h-5 rounded bg-black/70 px-1 text-xs font-medium"
+							title="Show image description"
+						>
+							ALT
+						</button>
+					</ImageAltAction>
 				)}
 			</div>
 		);
