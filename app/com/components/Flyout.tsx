@@ -1,4 +1,4 @@
-import { type JSX, createSignal } from 'solid-js';
+import { type JSX, createSignal, onCleanup } from 'solid-js';
 
 import { type Middleware, autoUpdate, flip, shift } from '@floating-ui/dom';
 import { type Placement, getSide } from '@floating-ui/utils';
@@ -49,14 +49,17 @@ export const Flyout = (props: FlyoutProps) => {
 	let anchor: HTMLElement;
 
 	const render = () => {
+		const listener = () => {
+			setIsOpen(true);
+		};
+
 		const $button = props.button;
 		assert($button instanceof HTMLElement);
 
 		anchor = $button;
 
-		$button.addEventListener('click', () => {
-			setIsOpen(true);
-		});
+		$button.addEventListener('click', listener);
+		onCleanup(() => $button.removeEventListener('click', listener));
 
 		return $button;
 	};
