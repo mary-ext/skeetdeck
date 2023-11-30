@@ -1,6 +1,6 @@
 import { type JSX, createSignal } from 'solid-js';
 
-import { type Middleware, autoUpdate, flip } from '@floating-ui/dom';
+import { type Middleware, autoUpdate, flip, shift } from '@floating-ui/dom';
 import { type Placement, getSide } from '@floating-ui/utils';
 import { useFloating } from 'solid-floating-ui';
 
@@ -71,7 +71,7 @@ export const Flyout = (props: FlyoutProps) => {
 				const position = useFloating(() => anchor, floating, {
 					placement: props.placement ?? 'bottom-end',
 					strategy: 'absolute',
-					middleware: props.middleware ?? [flip(), offset],
+					middleware: props.middleware ?? [shift({ padding: 16 }), offset, flip()],
 					whileElementsMounted: autoUpdate,
 				});
 
