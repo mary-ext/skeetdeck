@@ -51,7 +51,7 @@ const EmbedLink = (props: EmbedLinkProps) => {
 			})()}
 
 			<div class="flex min-w-0 flex-col justify-center gap-0.5 p-3 text-sm">
-				<p class="text-muted-fg">{getDomain(link().uri)}</p>
+				<p class="overflow-hidden text-ellipsis text-muted-fg">{getDomain(link().uri)}</p>
 				<p class="line-clamp-2 empty:hidden">{link().title}</p>
 			</div>
 		</Dynamic>
