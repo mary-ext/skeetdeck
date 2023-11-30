@@ -10,14 +10,18 @@ import { getProfile, getProfileKey } from '~/api/queries/get-profile.ts';
 
 import { queryClient } from '../../globals/query.ts';
 
-import { closeModal, useModalState } from '~/com/globals/modals.tsx';
+import { closeModal, openModal, useModalState } from '~/com/globals/modals.tsx';
 import { model } from '~/utils/input.ts';
 
+import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
 
 import { Button } from '~/com/primitives/button.ts';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
 import { Input } from '~/com/primitives/input.ts';
+
+const APP_PASSWORD_REGEX = /^[a-zA-Z\d]{4}(-[a-zA-Z\d]{4}){3}$/;
+const APP_PASSWORD_LINK = 'https://atproto.com/community/projects#app-passwords';
 
 const AddAccountDialog = () => {
 	const { disableBackdropClose } = useModalState();
@@ -76,6 +80,30 @@ const AddAccountDialog = () => {
 
 	const handleSubmit = (ev: SubmitEvent) => {
 		ev.preventDefault();
+
+		if (!APP_PASSWORD_REGEX.test(password())) {
+			openModal(() => (
+				<ConfirmDialog
+					title={`Password notice`}
+					body={
+						<>
+							You're attempting to sign in without using an app password, this could be dangerous to your
+							account's safety. We recommend using app passwords when signing in to third-party clients like
+							Skeetdeck.{' '}
+							<a href={APP_PASSWORD_LINK} target="_blank" class="text-accent hover:underline">
+								Learn more here
+							</a>
+							.
+						</>
+					}
+					confirmation={`Continue anyway`}
+					onConfirm={() => loginMutation.mutate()}
+				/>
+			));
+
+			return;
+		}
+
 		loginMutation.mutate();
 	};
 
