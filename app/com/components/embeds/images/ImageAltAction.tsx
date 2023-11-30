@@ -37,7 +37,7 @@ const ImageAltAction = (props: ImageAltActionProps) => {
 					>
 						<h1 class="text-lg font-bold">Image description</h1>
 
-						<p class="whitespace-pre-wrap break-words text-base">{props.alt}</p>
+						<p class="whitespace-pre-wrap break-words text-sm">{props.alt}</p>
 
 						<div class="flex justify-end">
 							<button onClick={close} class={/* @once */ Button({ variant: 'outline' })}>
