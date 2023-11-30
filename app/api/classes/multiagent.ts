@@ -162,7 +162,7 @@ export class Multiagent {
 			delete this.#agents[did];
 
 			if (this.active === did) {
-				this.active === undefined;
+				this.active = undefined;
 			}
 		}
 	}
