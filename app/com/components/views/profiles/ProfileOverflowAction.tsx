@@ -16,6 +16,7 @@ import RepeatIcon from '../../../icons/baseline-repeat.tsx';
 import ReportIcon from '../../../icons/baseline-report.tsx';
 import VolumeOffIcon from '../../../icons/baseline-volume-off.tsx';
 
+const AddProfileInListDialog = lazy(() => import('../../dialogs/AddProfileInListDialog.tsx'));
 const BlockConfirmDialog = lazy(() => import('../../dialogs/BlockConfirmDialog.tsx'));
 const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog.tsx'));
 
@@ -76,7 +77,13 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								<span>{isRepostHidden() ? `Turn on reposts` : `Turn off reposts`}</span>
 							</button>
 
-							<button class={/* @once */ MenuItem()}>
+							<button
+								onClick={() => {
+									close();
+									openModal(() => <AddProfileInListDialog profile={profile} />);
+								}}
+								class={/* @once */ MenuItem()}
+							>
 								<PlaylistAddIcon class={/* @once */ MenuItemIcon()} />
 								<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Add/remove @${profile.handle.value} from lists`}</span>
 							</button>
