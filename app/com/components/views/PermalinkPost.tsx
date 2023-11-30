@@ -26,6 +26,7 @@ import ShareIcon from '../../icons/baseline-share.tsx';
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import PostOverflowAction from '../items/posts/PostOverflowAction.tsx';
+import PostShareAction from '../items/posts/PostShareAction.tsx';
 import RepostAction from '../items/posts/RepostAction.tsx';
 
 export interface PermalinkPostProps {
@@ -145,12 +146,11 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 					<FavoriteIcon class="hidden group-[.is-active]:block" />
 				</button>
 
-				<button
-					class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40"
-					onClick={() => {}}
-				>
-					<ShareIcon />
-				</button>
+				<PostShareAction post={post()}>
+					<button class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40">
+						<ShareIcon />
+					</button>
+				</PostShareAction>
 			</div>
 
 			{(() => {

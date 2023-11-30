@@ -29,6 +29,7 @@ import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import PostOverflowAction from './posts/PostOverflowAction.tsx';
+import PostShareAction from './posts/PostShareAction.tsx';
 import RepostAction from './posts/RepostAction.tsx';
 
 export interface PostProps {
@@ -278,9 +279,11 @@ const Post = (props: PostProps) => {
 									</div>
 
 									<div class="shrink-0">
-										<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary/40">
-											<ShareIcon />
-										</button>
+										<PostShareAction post={post()}>
+											<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary/40">
+												<ShareIcon />
+											</button>
+										</PostShareAction>
 									</div>
 								</div>
 							);
