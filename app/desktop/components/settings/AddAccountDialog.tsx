@@ -5,7 +5,6 @@ import { createMutation } from '@pkg/solid-query';
 import { retrievePdsEndpoint } from '~/api/did.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 
-import _getDid from '~/api/queries/_did.ts';
 import { getProfile, getProfileKey } from '~/api/queries/get-profile.ts';
 
 import { queryClient } from '../../globals/query.ts';
