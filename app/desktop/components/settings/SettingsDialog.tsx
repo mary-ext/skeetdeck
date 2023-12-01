@@ -1,101 +1,129 @@
-import { For, JSX, Show } from 'solid-js';
-
-import { useQueryClient } from '@pkg/solid-query';
-
-import type { MultiagentAccountData } from '~/api/classes/multiagent.ts';
-import { multiagent } from '~/api/globals/agent.js';
+import { type ComponentProps, type JSX, createSignal } from 'solid-js';
 
 import { closeModal, openModal } from '~/com/globals/modals.tsx';
 
-import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
+import { DialogRoot } from '~/com/primitives/dialog.ts';
 import { IconButton } from '~/com/primitives/icon-button.ts';
-import { MenuItem, MenuRoot } from '~/com/primitives/menu.ts';
+import { Interactive } from '~/com/primitives/interactive.ts';
 
-import { Flyout } from '~/com/components/Flyout.tsx';
-import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
 
 import CloseIcon from '~/com/icons/baseline-close.tsx';
-import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
+import ColorLensIcon from '~/com/icons/baseline-color-lens.tsx';
+import FilterAltIcon from '~/com/icons/baseline-filter-alt.tsx';
+import LanguageIcon from '~/com/icons/baseline-language.tsx';
+import PeopleIcon from '~/com/icons/baseline-people.tsx';
+import PersonOffIcon from '~/com/icons/baseline-person-off.tsx';
+import VisibilityIcon from '~/com/icons/baseline-visibility.tsx';
 
-import AddAccountDialog from './AddAccountDialog.tsx';
+import DonationDialog from '../DonationDialog.tsx';
+
+import {
+	type RouterState,
+	type View,
+	ViewType,
+	RouterContext,
+	useViewRouter,
+} from './settings-views/_router.tsx';
+import SettingsRouterView from './settings-views/SettingsRouterView.tsx';
 
 const SettingsDialog = () => {
-	const asDefault = () => multiagent.active;
+	const [view, setView] = createSignal<View>({ type: ViewType.ACCOUNTS });
+
+	const router: RouterState = {
+		get current() {
+			return view();
+		},
+		navigate: (next) => {
+			setView(next);
+		},
+	};
 
 	return (
-		<DialogOverlay>
-			<div class={/* @once */ DialogRoot({ size: 'xl', fullHeight: true })}>
-				<div class="flex grow overflow-hidden">
-					<div class="w-72 shrink-0">
-						<div class="h-13 border-b border-divider"></div>
-						<div></div>
+		<RouterContext.Provider value={router}>
+			<DialogOverlay>
+				<div class={/* @once */ DialogRoot({ size: 'xl', fullHeight: true, class: 'max-h-141' })}>
+					<div class="flex min-w-0 grow overflow-hidden">
+						<div class="flex w-60 shrink-0 flex-col">
+							<div class="flex h-13 min-w-0 shrink-0 items-center gap-2 px-4">
+								<button
+									onClick={closeModal}
+									title="Close dialog"
+									class={/* @once */ IconButton({ edge: 'left' })}
+								>
+									<CloseIcon />
+								</button>
+							</div>
+							<div class="flex grow flex-col overflow-y-auto">
+								<SideItem to={ViewType.ACCOUNTS} icon={PeopleIcon}>
+									Accounts
+								</SideItem>
+								<SideItem to={ViewType.APPEARANCE} icon={ColorLensIcon}>
+									Appearance
+								</SideItem>
+								<SideItem to={ViewType.LANGAUGE} icon={LanguageIcon}>
+									Language
+								</SideItem>
+								<SideItem to={ViewType.CONTENT_FILTERS} icon={VisibilityIcon}>
+									Content filters
+								</SideItem>
+								<SideItem to={ViewType.KEYWORD_FILTERS} icon={FilterAltIcon}>
+									Keyword filters
+								</SideItem>
+								<SideItem to={ViewType.USER_FILTERS} icon={PersonOffIcon}>
+									User filters
+								</SideItem>
+							</div>
+							<div class="flex min-w-0 items-center gap-4 p-4">
+								<button
+									onClick={() => {
+										openModal(() => <DonationDialog />);
+									}}
+									class="text-sm text-accent hover:underline"
+								>
+									About
+								</button>
+								<div class="grow"></div>
+								<button class="font-mono text-xs text-muted-fg hover:underline">trunk/aae1da5</button>
+							</div>
+						</div>
+						<div class="grow overflow-hidden overflow-y-auto border-l border-divider">
+							<SettingsRouterView />
+						</div>
 					</div>
-					<div class="grow overflow-hidden overflow-y-auto border-l border-divider"></div>
 				</div>
-			</div>
-		</DialogOverlay>
+			</DialogOverlay>
+		</RouterContext.Provider>
 	);
 };
 
 export default SettingsDialog;
 
-interface AccountActionMenuProps {
-	/** Expected to be static */
-	account: MultiagentAccountData;
-	children: JSX.Element;
-}
+const sideItem = Interactive({
+	variant: 'muted',
+	class: `flex shrink-0 items-center gap-4 px-4 py-3 text-left text-sm disabled:opacity-50`,
+});
 
-const AccountActionMenu = (props: AccountActionMenuProps) => {
-	const queryClient = useQueryClient();
+type IconComponent = (props: ComponentProps<'svg'>) => JSX.Element;
 
-	const account = props.account;
-	const did = account.did;
+const SideItem = (props: { icon?: IconComponent; to: ViewType; children: JSX.Element }) => {
+	const router = useViewRouter();
 
 	return (
-		<Flyout button={props.children}>
-			{({ close, menuProps }) => (
-				<div {...menuProps} class={/* @once */ MenuRoot()}>
-					<button
-						disabled={did === multiagent.active}
-						onClick={() => {
-							close();
-							multiagent.active = did;
-						}}
-						class={/* @once */ MenuItem()}
-					>
-						Set as default
-					</button>
-					<button
-						onClick={() => {
-							close();
-
-							openModal(() => (
-								<ConfirmDialog
-									title={`Sign out?`}
-									body={`This will sign you out of @${
-										account.profile?.handle || account.session.handle
-									}, and you'll still be signed in to other accounts.`}
-									confirmation={`Sign out`}
-									onConfirm={() => {
-										multiagent.logout(did);
-
-										queryClient.resetQueries({
-											predicate: (query) => {
-												const key = query.queryKey;
-												return key.length >= 2 && key[1] === did && !(key[0] as string).includes('/');
-											},
-										});
-									}}
-								/>
-							));
-						}}
-						class={/* @once */ MenuItem()}
-					>
-						Sign out
-					</button>
-				</div>
-			)}
-		</Flyout>
+		<button
+			onClick={() => {
+				router.navigate({ type: props.to });
+			}}
+			class={sideItem}
+			classList={{ [`bg-secondary/20`]: router.current.type === props.to }}
+		>
+			{(() => {
+				const Icon = props.icon;
+				if (Icon) {
+					return <Icon class="shrink-0 text-lg" />;
+				}
+			})()}
+			<span class="grow">{props.children}</span>
+		</button>
 	);
 };

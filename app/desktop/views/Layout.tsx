@@ -1,4 +1,4 @@
-import { For, Show } from 'solid-js';
+import { For, Show, lazy } from 'solid-js';
 
 import { offset } from '@floating-ui/dom';
 import { A, Outlet, useNavigate, useParams } from '@solidjs/router';
@@ -21,8 +21,9 @@ import SettingsIcon from '~/com/icons/baseline-settings.tsx';
 import TableLargeAddIcon from '~/com/icons/baseline-table-large-add.tsx';
 
 import { SearchFlyout, SuggestionType } from '../components/flyouts/SearchFlyout.tsx';
-import SettingsDialog from '../components/settings/SettingsDialog.tsx';
 import AddDeckDialog from '../components/settings/AddDeckDialog.tsx';
+
+const SettingsDialog = lazy(() => import('../components/settings/SettingsDialog.tsx'));
 
 const menuIconButton = Interactive({
 	class: `h-11 shrink-0 text-lg disabled:pointer-events-none disabled:opacity-50`,

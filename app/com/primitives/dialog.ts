@@ -1,10 +1,11 @@
 export interface DialogRootProps {
+	class?: string;
 	size?: 'sm' | 'md' | 'lg' | 'xl';
 	fullHeight?: boolean;
 }
 
 export const DialogRoot = (props: DialogRootProps = {}) => {
-	const { size = 'md', fullHeight } = props;
+	const { class: className, size = 'md', fullHeight } = props;
 
 	let cn = `flex max-h-full w-full flex-col overflow-hidden rounded-lg bg-background`;
 
@@ -15,11 +16,15 @@ export const DialogRoot = (props: DialogRootProps = {}) => {
 	} else if (size === 'lg') {
 		cn += ` sm:max-w-xl`;
 	} else if (size === 'xl') {
-		cn += ` sm:max-w-5xl`;
+		cn += ` sm:max-w-2xl`;
 	}
 
 	if (fullHeight) {
 		cn += ` h-full`;
+	}
+
+	if (className) {
+		return `${cn} ${className}`;
 	}
 
 	return cn;
