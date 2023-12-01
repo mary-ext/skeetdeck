@@ -188,11 +188,12 @@ const Post = (props: PostProps) => {
 								to={authorPermalink()}
 								class="group flex max-w-full gap-1 overflow-hidden text-ellipsis whitespace-nowrap text-left"
 							>
-								<bdi class="overflow-hidden text-ellipsis group-hover:underline">
-									<span class="font-bold text-primary">
-										{author().displayName.value || author().handle.value}
-									</span>
-								</bdi>
+								{author().displayName.value && (
+									<bdi class="overflow-hidden text-ellipsis group-hover:underline">
+										<span class="font-bold text-primary">{author().displayName.value}</span>
+									</bdi>
+								)}
+
 								<span class="block overflow-hidden text-ellipsis whitespace-nowrap">
 									@{author().handle.value}
 								</span>
