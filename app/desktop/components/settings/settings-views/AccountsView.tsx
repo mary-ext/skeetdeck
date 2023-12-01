@@ -49,10 +49,8 @@ const AccountsView = () => {
 								/>
 
 								<div class="flex grow flex-col text-sm">
-									<span class="line-clamp-1 break-all font-bold">
-										{account.profile
-											? account.profile.displayName || account.profile.handle
-											: account.session.handle}
+									<span class="line-clamp-1 break-all font-bold empty:hidden">
+										{account.profile?.displayName}
 									</span>
 									<span class="line-clamp-1 break-all text-muted-fg">
 										@{account.profile?.handle || account.session.handle}
