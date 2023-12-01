@@ -81,7 +81,7 @@ const SettingsDialog = () => {
 									}}
 									class="text-sm text-accent hover:underline"
 								>
-									About
+									Donate
 								</button>
 								<div class="grow"></div>
 								<button class="font-mono text-xs text-muted-fg hover:underline">trunk/aae1da5</button>
