@@ -16,6 +16,8 @@ import { openModal } from '~/com/globals/modals.tsx';
 
 import AddAccountDialog from '../components/settings/AddAccountDialog.tsx';
 
+const brandName = import.meta.env.VITE_APP_BRAND_NAME;
+
 const createDefaultDeck = (uid: DID) => {
 	const data = getAccountData(uid);
 
@@ -68,12 +70,12 @@ const IndexPage = () => {
 	return (
 		<div class="grid grow">
 			<div class="m-2 h-full max-h-96 w-full max-w-2xl place-self-center p-4">
-				<h1 class="mb-4 text-2xl font-medium">Skeetdeck</h1>
+				<h1 class="mb-4 text-2xl font-medium">{brandName}</h1>
 
 				<Switch>
 					<Match when={preferences.onboarding}>
 						<div>
-							<p class="mb-2">Welcome to Skeetdeck, an alternative web client for Bluesky!</p>
+							<p class="mb-2">Welcome to {brandName}, an alternative web client for Bluesky!</p>
 
 							<p>
 								It looks like this is the first time you're here, so to get started, add your Bluesky account

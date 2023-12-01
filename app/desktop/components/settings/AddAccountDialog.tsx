@@ -22,6 +22,8 @@ import { Input } from '~/com/primitives/input.ts';
 const APP_PASSWORD_REGEX = /^[a-zA-Z\d]{4}(-[a-zA-Z\d]{4}){3}$/;
 const APP_PASSWORD_LINK = 'https://atproto.com/community/projects#app-passwords';
 
+const brandName = import.meta.env.VITE_APP_BRAND_NAME;
+
 const AddAccountDialog = () => {
 	const { disableBackdropClose } = useModalState();
 
@@ -88,7 +90,7 @@ const AddAccountDialog = () => {
 						<>
 							You're attempting to sign in without using an app password, this could be dangerous to your
 							account's safety. We recommend using app passwords when signing in to third-party clients like
-							Skeetdeck.{' '}
+							{brandName}.{' '}
 							<a href={APP_PASSWORD_LINK} target="_blank" class="text-accent hover:underline">
 								Learn more here
 							</a>

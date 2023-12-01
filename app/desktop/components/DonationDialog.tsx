@@ -12,6 +12,8 @@ import CloseIcon from '~/com/icons/baseline-close.tsx';
 import ContentCopyIcon from '~/com/icons/baseline-content-copy.tsx';
 import CheckIcon from '~/com/icons/baseline-check.tsx';
 
+const brandName = import.meta.env.VITE_APP_BRAND_NAME;
+
 const DonationDialog = () => {
 	return (
 		<DialogOverlay>
@@ -21,7 +23,7 @@ const DonationDialog = () => {
 						<CloseIcon />
 					</button>
 
-					<h1 class={/* @once */ DialogTitle()}>Donate to Skeetdeck</h1>
+					<h1 class={/* @once */ DialogTitle()}>Donate to {brandName}</h1>
 				</div>
 
 				<div
@@ -32,10 +34,10 @@ const DonationDialog = () => {
 					<div class="flex min-w-0 items-center gap-4">
 						<img src="https://github.com/mary-ext.png" class="h-16 w-16 shrink-0 rounded-full bg-muted-fg" />
 
-						<p class="text-sm leading-6">
-							Hey! I'm Mary, I develop Skeetdeck on my free time and while I'm happy to work on it for people
-							to keep enjoying the app, unfortunately it doesn't really benefit me financially.
-						</p>
+						<div class="text-sm leading-6">
+							Hey! I'm Mary, I develop {brandName} on my free time and while I'm happy to work on it for
+							people to keep enjoying the app, unfortunately it doesn't really benefit me financially.
+						</div>
 					</div>
 
 					<p class="text-sm leading-6">
