@@ -16,6 +16,8 @@ import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
 import AddIcon from '~/com/icons/baseline-add.tsx';
 import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
 
+import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
+
 import AddAccountDialog from '../AddAccountDialog.tsx';
 
 const AccountsView = () => {
@@ -41,11 +43,10 @@ const AccountsView = () => {
 
 						return (
 							<div class="flex items-center gap-4 px-4 py-3">
-								<div class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-muted-fg">
-									<Show when={account.profile?.avatar}>
-										{(avatar) => <img src={avatar()} class="h-full w-full" />}
-									</Show>
-								</div>
+								<img
+									src={account.profile?.avatar || DefaultUserAvatar}
+									class="h-12 w-12 shrink-0 rounded-full"
+								/>
 
 								<Show when={account.profile} fallback={<div class="grow text-sm">{did}</div>}>
 									{(profile) => (
