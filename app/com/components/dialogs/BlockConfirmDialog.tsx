@@ -16,6 +16,7 @@ import { closeModal } from '../../globals/modals.tsx';
 import { Button } from '../../primitives/button.ts';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog.ts';
 
+import TakingActionNotice from '../views/TakingActionNotice.tsx';
 import DialogOverlay from './DialogOverlay.tsx';
 import ConfirmDialog from './ConfirmDialog.tsx';
 
@@ -92,10 +93,17 @@ const renderBlockConfirmDialog = (profile: SignalizedProfile) => {
 		<ConfirmDialog
 			title={`${isBlocking() ? 'Unblock' : 'Block'} @${profile.handle.value}?`}
 			body={
-				isBlocking()
-					? `They will be allowed to view your posts, and interact with you.`
-					: `They will not be able to view your posts, mention you, or otherwise interact with you, and you will not see posts or replies from @${profile.handle.value}.`
+				<>
+					<p class="text-sm">
+						{isBlocking()
+							? `They will be allowed to view your posts, and interact with you.`
+							: `They will not be able to view your posts, mention you, or otherwise interact with you, and you will not see posts or replies from @${profile.handle.value}.`}
+					</p>
+
+					<TakingActionNotice uid={/* @once */ profile.uid} />
+				</>
 			}
+			unwrap
 			confirmation={isBlocking() ? `Unblock` : `Block`}
 			onConfirm={() => {
 				const next = !isBlocking();

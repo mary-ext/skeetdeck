@@ -20,6 +20,7 @@ import { Select } from '~/com/primitives/select.ts';
 
 import DialogOverlay from './DialogOverlay.tsx';
 
+import TakingActionNotice from '../views/TakingActionNotice.tsx';
 import { isProfileTempMuted } from '../SharedPreferences.tsx';
 
 import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';
@@ -154,8 +155,9 @@ const renderMuteConfirmDialog = (profile: SignalizedProfile, filters: FilterPref
 				</div>
 
 				{isMuted ? (
-					<div class={/* @once */ DialogBody({ padded: true })}>
+					<div class={/* @once */ DialogBody({ padded: true, class: 'flex flex-col gap-4' })}>
 						<p class="text-sm">Their posts will be allowed to show in your home timeline.</p>
+						<TakingActionNotice uid={/* @once */ profile.uid} />
 					</div>
 				) : (
 					<div class={/* @once */ DialogBody({ padded: true, class: 'flex flex-col gap-4' })}>
@@ -163,6 +165,8 @@ const renderMuteConfirmDialog = (profile: SignalizedProfile, filters: FilterPref
 							Their posts will no longer show up in your home timeline, but it will still allow them to see
 							your posts and follow you.
 						</p>
+
+						<TakingActionNotice uid={/* @once */ profile.uid} />
 
 						<label>
 							<span class="mr-4 text-sm">Duration:</span>

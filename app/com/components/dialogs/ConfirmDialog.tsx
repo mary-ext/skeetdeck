@@ -12,6 +12,7 @@ export interface ConfirmDialogProps {
 	body: JSX.Element;
 	confirmation: string;
 	onConfirm: () => void;
+	unwrap?: boolean;
 }
 
 const ConfirmDialog = (props: ConfirmDialogProps) => {
@@ -22,8 +23,8 @@ const ConfirmDialog = (props: ConfirmDialogProps) => {
 					<h1 class={/* @once */ DialogTitle()}>{props.title}</h1>
 				</div>
 
-				<div class={/* @once */ DialogBody({ padded: true })}>
-					<p class="text-sm">{props.body}</p>
+				<div class={/* @once */ DialogBody({ padded: true, class: 'flex flex-col gap-4' })}>
+					{props.unwrap ? props.body : <p class="text-sm">{props.body}</p>}
 				</div>
 
 				<div class={/* @once */ DialogActions()}>
