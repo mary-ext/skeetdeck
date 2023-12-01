@@ -16,11 +16,11 @@
 		"solid-js": "^1.8.5"
 	},
 	"dependencies": {
-		"@tanstack/query-core": "^5.8.7"
+		"@tanstack/query-core": "^5.10.0"
 	},
 	"devDependencies": {
 		"solid-js": "^1.8.6",
-		"vite": "^5.0.3",
+		"vite": "^5.0.4",
 		"vite-plugin-solid": "^2.7.2"
 	}
 }
