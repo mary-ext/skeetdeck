@@ -15,7 +15,7 @@ import CheckIcon from '~/com/icons/baseline-check.tsx';
 const DonationDialog = () => {
 	return (
 		<DialogOverlay>
-			<div class={/* @once */ DialogRoot({ size: 'lg', fullHeight: true })}>
+			<div class={/* @once */ DialogRoot({ size: 'lg' })}>
 				<div class={/* @once */ DialogHeader({ divider: true })}>
 					<button title="Close dialog" onClick={closeModal} class={/* @once */ IconButton({ edge: 'left' })}>
 						<CloseIcon />
