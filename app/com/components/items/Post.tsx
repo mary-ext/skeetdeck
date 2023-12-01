@@ -94,7 +94,7 @@ const Post = (props: PostProps) => {
 
 					if (reason) {
 						return (
-							<div class="-mt-1 mb-1 flex items-center gap-3 text-[0.8125rem] text-muted-fg">
+							<div class="-mt-1 mb-1 flex items-center gap-3 text-de text-muted-fg">
 								<div class="flex w-10 shrink-0 justify-end">
 									<RepeatIcon />
 								</div>
@@ -121,7 +121,7 @@ const Post = (props: PostProps) => {
 					if (!prev) {
 						if (parent) {
 							return (
-								<div class="-mt-1 mb-1 flex items-center gap-3 text-[0.8125rem] text-muted-fg">
+								<div class="-mt-1 mb-1 flex items-center gap-3 text-de text-muted-fg">
 									<div class="flex w-10 shrink-0 justify-end">
 										<ChatBubbleOutlinedIcon />
 									</div>
@@ -148,7 +148,7 @@ const Post = (props: PostProps) => {
 
 						if (post().record.value.reply) {
 							return (
-								<div class="-mt-1 mb-1 flex items-center gap-3 text-[0.8125rem] text-muted-fg">
+								<div class="-mt-1 mb-1 flex items-center gap-3 text-de text-muted-fg">
 									<div class="flex w-10 shrink-0 justify-end">
 										<ChatBubbleOutlinedIcon />
 									</div>
@@ -240,7 +240,7 @@ const Post = (props: PostProps) => {
 											<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40 group-disabled:opacity-50">
 												<ChatBubbleOutlinedIcon />
 											</div>
-											<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
+											<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
 												{formatCompact(post().replyCount.value)}
 											</span>
 										</Link>
@@ -256,7 +256,7 @@ const Post = (props: PostProps) => {
 													<RepeatIcon />
 												</div>
 
-												<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
+												<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
 													{formatCompact(post().repostCount.value)}
 												</span>
 											</button>
@@ -273,7 +273,7 @@ const Post = (props: PostProps) => {
 												<FavoriteOutlinedIcon class="group-[.is-active]:hidden" />
 												<FavoriteIcon class="hidden group-[.is-active]:block" />
 											</div>
-											<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-[0.8125rem]">
+											<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
 												{formatCompact(post().likeCount.value)}
 											</span>
 										</button>

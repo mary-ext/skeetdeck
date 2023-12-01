@@ -5,6 +5,9 @@ import plugin from 'tailwindcss/plugin';
 export default {
 	theme: {
 		extend: {
+			fontSize: {
+				de: ['0.8125rem', '1.25rem'],
+			},
 			zIndex: {
 				1: '1',
 				2: '2',
