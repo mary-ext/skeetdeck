@@ -94,13 +94,21 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 					{(() => {
 						if (type() === undefined) {
 							return (
-								<button onClick={closeModal} class={/* @once */ IconButton({ edge: 'left' })}>
+								<button
+									title="Close dialog"
+									onClick={closeModal}
+									class={/* @once */ IconButton({ edge: 'left' })}
+								>
 									<CloseIcon />
 								</button>
 							);
 						} else {
 							return (
-								<button onClick={() => setType(undefined)} class={/* @once */ IconButton({ edge: 'left' })}>
+								<button
+									title="Return to previous screen"
+									onClick={() => setType(undefined)}
+									class={/* @once */ IconButton({ edge: 'left' })}
+								>
 									<ArrowLeftIcon />
 								</button>
 							);

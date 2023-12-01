@@ -137,7 +137,11 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 				<div class={/* @once */ DialogRoot({ size: 'md', fullHeight: true })}>
 					<fieldset disabled={listMutation.isPending} class="contents">
 						<div class={/* @once */ DialogHeader({ divider: true })}>
-							<button onClick={closeModal} class={/* @once */ IconButton({ edge: 'left' })}>
+							<button
+								title="Close dialog"
+								onClick={closeModal}
+								class={/* @once */ IconButton({ edge: 'left' })}
+							>
 								<CloseIcon />
 							</button>
 

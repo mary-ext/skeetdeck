@@ -17,7 +17,7 @@ const DonationDialog = () => {
 		<DialogOverlay>
 			<div class={/* @once */ DialogRoot({ size: 'lg', fullHeight: true })}>
 				<div class={/* @once */ DialogHeader({ divider: true })}>
-					<button onClick={closeModal} class={/* @once */ IconButton({ edge: 'left' })}>
+					<button title="Close dialog" onClick={closeModal} class={/* @once */ IconButton({ edge: 'left' })}>
 						<CloseIcon />
 					</button>
 

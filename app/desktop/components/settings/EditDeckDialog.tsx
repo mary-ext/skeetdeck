@@ -47,7 +47,12 @@ const EditDeckDialog = (props: EditDeckDialogProps) => {
 		<DialogOverlay>
 			<form onSubmit={handleSubmit} class={/* @once */ DialogRoot({ size: 'md', fullHeight: true })}>
 				<div class={/* @once */ DialogHeader({ divider: true })}>
-					<button type="button" onClick={closeModal} class={/* @once */ IconButton({ edge: 'left' })}>
+					<button
+						title="Close dialog"
+						type="button"
+						onClick={closeModal}
+						class={/* @once */ IconButton({ edge: 'left' })}
+					>
 						<CloseIcon />
 					</button>
 
