@@ -3,10 +3,12 @@ import type { Component, JSX } from 'solid-js';
 import { ViewType, useViewRouter } from './_router.tsx';
 
 import AccountsView from './AccountsView.tsx';
+import AppearanceView from './AppearanceView.tsx';
 
 // @ts-expect-error
 const views: Record<ViewType, Component<any>> = {
 	[ViewType.ACCOUNTS]: AccountsView,
+	[ViewType.APPEARANCE]: AppearanceView,
 };
 
 const SettingsRouterView = () => {

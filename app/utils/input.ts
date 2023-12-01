@@ -24,14 +24,16 @@ export const modelChecked = (getter: Accessor<boolean>, setter: (next: boolean) 
 	};
 };
 
-export const modelRadio = (value: string, getter: Accessor<string>, setter: (next: string) => void) => {
-	return (node: HTMLInputElement) => {
-		createRenderEffect(() => {
-			node.checked = getter() === value;
-		});
+export const createRadioModel = <T extends string>(getter: Accessor<T>, setter: (next: T) => void) => {
+	return (value: T) => {
+		return (node: HTMLInputElement) => {
+			createRenderEffect(() => {
+				node.checked = getter() === value;
+			});
 
-		node.addEventListener('input', () => {
-			setter(value);
-		});
+			node.addEventListener('input', () => {
+				setter(value);
+			});
+		};
 	};
 };
