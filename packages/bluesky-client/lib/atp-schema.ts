@@ -816,80 +816,13 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get details about a moderation action.
+	 * Get details about a moderation event.
 	 */
-	'com.atproto.admin.getModerationAction': {
+	'com.atproto.admin.getModerationEvent': {
 		params: {
 			id: number;
 		};
-		response: RefOf<'com.atproto.admin.defs#actionViewDetail'>;
-	};
-	/**
-	 * Get a list of moderation actions related to a subject.
-	 */
-	'com.atproto.admin.getModerationActions': {
-		params: {
-			subject?: string;
-			/**
-			 * Minimum: 1 \
-			 * Maximum: 100
-			 * @default 50
-			 */
-			limit?: number;
-			cursor?: string;
-		};
-		response: {
-			cursor?: string;
-			actions: RefOf<'com.atproto.admin.defs#actionView'>[];
-		};
-	};
-	/**
-	 * Get details about a moderation report.
-	 */
-	'com.atproto.admin.getModerationReport': {
-		params: {
-			id: number;
-		};
-		response: RefOf<'com.atproto.admin.defs#reportViewDetail'>;
-	};
-	/**
-	 * Get moderation reports related to a subject.
-	 */
-	'com.atproto.admin.getModerationReports': {
-		params: {
-			subject?: string;
-			ignoreSubjects?: string[];
-			/**
-			 * Get all reports that were actioned by a specific moderator.
-			 */
-			actionedBy?: DID;
-			/**
-			 * Filter reports made by one or more DIDs.
-			 */
-			reporters?: string[];
-			resolved?: boolean;
-			actionType?:
-				| 'com.atproto.admin.defs#takedown'
-				| 'com.atproto.admin.defs#flag'
-				| 'com.atproto.admin.defs#acknowledge'
-				| 'com.atproto.admin.defs#escalate'
-				| (string & {});
-			/**
-			 * Minimum: 1 \
-			 * Maximum: 100
-			 * @default 50
-			 */
-			limit?: number;
-			cursor?: string;
-			/**
-			 * Reverse the order of the returned records. When true, returns reports in chronological order.
-			 */
-			reverse?: boolean;
-		};
-		response: {
-			cursor?: string;
-			reports: RefOf<'com.atproto.admin.defs#reportView'>[];
-		};
+		response: RefOf<'com.atproto.admin.defs#modEventViewDetail'>;
 	};
 	/**
 	 * Get details about a record.
@@ -931,6 +864,104 @@ export interface Queries {
 				| UnionOf<'com.atproto.repo.strongRef'>
 				| UnionOf<'com.atproto.admin.defs#repoBlobRef'>;
 			takedown?: RefOf<'com.atproto.admin.defs#statusAttr'>;
+		};
+	};
+	/**
+	 * List moderation events related to a subject.
+	 */
+	'com.atproto.admin.queryModerationEvents': {
+		params: {
+			/**
+			 * The types of events (fully qualified string in the format of com.atproto.admin#modEvent<name>) to filter by. If not specified, all events are returned.
+			 */
+			types?: string[];
+			createdBy?: DID;
+			/**
+			 * Sort direction for the events. Defaults to descending order of created at timestamp.
+			 * @default "desc"
+			 */
+			sortDirection?: string;
+			subject?: string;
+			/**
+			 * If true, events on all record types (posts, lists, profile etc.) owned by the did are returned
+			 * @default false
+			 */
+			includeAllUserRecords?: boolean;
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 100
+			 * @default 50
+			 */
+			limit?: number;
+			cursor?: string;
+		};
+		response: {
+			cursor?: string;
+			events: RefOf<'com.atproto.admin.defs#modEventView'>[];
+		};
+	};
+	/**
+	 * View moderation statuses of subjects (record or repo).
+	 */
+	'com.atproto.admin.queryModerationStatuses': {
+		params: {
+			subject?: string;
+			/**
+			 * Search subjects by keyword from comments
+			 */
+			comment?: string;
+			/**
+			 * Search subjects reported after a given timestamp
+			 */
+			reportedAfter?: string;
+			/**
+			 * Search subjects reported before a given timestamp
+			 */
+			reportedBefore?: string;
+			/**
+			 * Search subjects reviewed after a given timestamp
+			 */
+			reviewedAfter?: string;
+			/**
+			 * Search subjects reviewed before a given timestamp
+			 */
+			reviewedBefore?: string;
+			/**
+			 * By default, we don't include muted subjects in the results. Set this to true to include them.
+			 */
+			includeMuted?: boolean;
+			/**
+			 * Specify when fetching subjects in a certain state
+			 */
+			reviewState?: string;
+			ignoreSubjects?: string[];
+			/**
+			 * Get all subject statuses that were reviewed by a specific moderator
+			 */
+			lastReviewedBy?: DID;
+			/**
+			 * @default "lastReportedAt"
+			 */
+			sortField?: string;
+			/**
+			 * @default "desc"
+			 */
+			sortDirection?: string;
+			/**
+			 * Get subjects that were taken down
+			 */
+			takendown?: boolean;
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 100
+			 * @default 50
+			 */
+			limit?: number;
+			cursor?: string;
+		};
+		response: {
+			cursor?: string;
+			subjectStatuses: RefOf<'com.atproto.admin.defs#subjectStatusView'>[];
 		};
 	};
 	/**
@@ -1395,6 +1426,31 @@ export interface Procedures {
 		};
 	};
 	/**
+	 * Take a moderation action on an actor.
+	 */
+	'com.atproto.admin.emitModerationEvent': {
+		data: {
+			event:
+				| UnionOf<'com.atproto.admin.defs#modEventTakedown'>
+				| UnionOf<'com.atproto.admin.defs#modEventAcknowledge'>
+				| UnionOf<'com.atproto.admin.defs#modEventEscalate'>
+				| UnionOf<'com.atproto.admin.defs#modEventComment'>
+				| UnionOf<'com.atproto.admin.defs#modEventLabel'>
+				| UnionOf<'com.atproto.admin.defs#modEventReport'>
+				| UnionOf<'com.atproto.admin.defs#modEventMute'>
+				| UnionOf<'com.atproto.admin.defs#modEventReverseTakedown'>
+				| UnionOf<'com.atproto.admin.defs#modEventUnmute'>
+				| UnionOf<'com.atproto.admin.defs#modEventEmail'>;
+			subject: UnionOf<'com.atproto.admin.defs#repoRef'> | UnionOf<'com.atproto.repo.strongRef'>;
+			subjectBlobCids?: CID[];
+			createdBy: DID;
+		};
+		response: RefOf<'com.atproto.admin.defs#modEventView'>;
+		errors: {
+			SubjectHasAction: {};
+		};
+	};
+	/**
 	 * Re-enable an account's ability to receive invite codes.
 	 */
 	'com.atproto.admin.enableAccountInvites': {
@@ -1407,28 +1463,6 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Resolve moderation reports by an action.
-	 */
-	'com.atproto.admin.resolveModerationReports': {
-		data: {
-			actionId: number;
-			reportIds: number[];
-			createdBy: DID;
-		};
-		response: RefOf<'com.atproto.admin.defs#actionView'>;
-	};
-	/**
-	 * Reverse a moderation action.
-	 */
-	'com.atproto.admin.reverseModerationAction': {
-		data: {
-			id: number;
-			reason: string;
-			createdBy: DID;
-		};
-		response: RefOf<'com.atproto.admin.defs#actionView'>;
-	};
-	/**
 	 * Send email to a user's account email address.
 	 */
 	'com.atproto.admin.sendEmail': {
@@ -1436,35 +1470,10 @@ export interface Procedures {
 			recipientDid: DID;
 			content: string;
 			subject?: string;
+			senderDid: DID;
 		};
 		response: {
 			sent: boolean;
-		};
-	};
-	/**
-	 * Take a moderation action on an actor.
-	 */
-	'com.atproto.admin.takeModerationAction': {
-		data: {
-			action:
-				| 'com.atproto.admin.defs#takedown'
-				| 'com.atproto.admin.defs#flag'
-				| 'com.atproto.admin.defs#acknowledge'
-				| (string & {});
-			subject: UnionOf<'com.atproto.admin.defs#repoRef'> | UnionOf<'com.atproto.repo.strongRef'>;
-			subjectBlobCids?: CID[];
-			createLabelVals?: string[];
-			negateLabelVals?: string[];
-			reason: string;
-			/**
-			 * Indicates how long this action is meant to be in effect before automatically expiring.
-			 */
-			durationInHours?: number;
-			createdBy: DID;
-		};
-		response: RefOf<'com.atproto.admin.defs#actionView'>;
-		errors: {
-			SubjectHasAction: {};
 		};
 	};
 	/**
@@ -2426,84 +2435,93 @@ export interface Objects {
 		applied: boolean;
 		ref?: string;
 	};
-	'com.atproto.admin.defs#actionView': {
+	'com.atproto.admin.defs#modEventView': {
 		id: number;
-		action: RefOf<'com.atproto.admin.defs#actionType'>;
-		/**
-		 * Indicates how long this action is meant to be in effect before automatically expiring.
-		 */
-		durationInHours?: number;
+		event:
+			| UnionOf<'com.atproto.admin.defs#modEventTakedown'>
+			| UnionOf<'com.atproto.admin.defs#modEventReverseTakedown'>
+			| UnionOf<'com.atproto.admin.defs#modEventComment'>
+			| UnionOf<'com.atproto.admin.defs#modEventReport'>
+			| UnionOf<'com.atproto.admin.defs#modEventLabel'>
+			| UnionOf<'com.atproto.admin.defs#modEventAcknowledge'>
+			| UnionOf<'com.atproto.admin.defs#modEventEscalate'>
+			| UnionOf<'com.atproto.admin.defs#modEventMute'>
+			| UnionOf<'com.atproto.admin.defs#modEventEmail'>;
 		subject: UnionOf<'com.atproto.admin.defs#repoRef'> | UnionOf<'com.atproto.repo.strongRef'>;
 		subjectBlobCids: string[];
-		createLabelVals?: string[];
-		negateLabelVals?: string[];
-		reason: string;
 		createdBy: DID;
 		createdAt: string;
-		reversal?: RefOf<'com.atproto.admin.defs#actionReversal'>;
-		resolvedReportIds: number[];
+		creatorHandle?: string;
+		subjectHandle?: string;
 	};
-	'com.atproto.admin.defs#actionViewDetail': {
+	'com.atproto.admin.defs#modEventViewDetail': {
 		id: number;
-		action: RefOf<'com.atproto.admin.defs#actionType'>;
-		/**
-		 * Indicates how long this action is meant to be in effect before automatically expiring.
-		 */
-		durationInHours?: number;
+		event:
+			| UnionOf<'com.atproto.admin.defs#modEventTakedown'>
+			| UnionOf<'com.atproto.admin.defs#modEventReverseTakedown'>
+			| UnionOf<'com.atproto.admin.defs#modEventComment'>
+			| UnionOf<'com.atproto.admin.defs#modEventReport'>
+			| UnionOf<'com.atproto.admin.defs#modEventLabel'>
+			| UnionOf<'com.atproto.admin.defs#modEventAcknowledge'>
+			| UnionOf<'com.atproto.admin.defs#modEventEscalate'>
+			| UnionOf<'com.atproto.admin.defs#modEventMute'>;
 		subject:
 			| UnionOf<'com.atproto.admin.defs#repoView'>
 			| UnionOf<'com.atproto.admin.defs#repoViewNotFound'>
 			| UnionOf<'com.atproto.admin.defs#recordView'>
 			| UnionOf<'com.atproto.admin.defs#recordViewNotFound'>;
 		subjectBlobs: RefOf<'com.atproto.admin.defs#blobView'>[];
-		createLabelVals?: string[];
-		negateLabelVals?: string[];
-		reason: string;
-		createdBy: DID;
-		createdAt: string;
-		reversal?: RefOf<'com.atproto.admin.defs#actionReversal'>;
-		resolvedReports: RefOf<'com.atproto.admin.defs#reportView'>[];
-	};
-	'com.atproto.admin.defs#actionViewCurrent': {
-		id: number;
-		action: RefOf<'com.atproto.admin.defs#actionType'>;
-		/**
-		 * Indicates how long this action is meant to be in effect before automatically expiring.
-		 */
-		durationInHours?: number;
-	};
-	'com.atproto.admin.defs#actionReversal': {
-		reason: string;
 		createdBy: DID;
 		createdAt: string;
 	};
-	'com.atproto.admin.defs#actionType': '#takedown' | '#flag' | '#acknowledge' | '#escalate' | (string & {});
-	'com.atproto.admin.defs#takedown': 'com.atproto.admin.defs#takedown';
-	'com.atproto.admin.defs#flag': 'com.atproto.admin.defs#flag';
-	'com.atproto.admin.defs#acknowledge': 'com.atproto.admin.defs#acknowledge';
-	'com.atproto.admin.defs#escalate': 'com.atproto.admin.defs#escalate';
 	'com.atproto.admin.defs#reportView': {
 		id: number;
 		reasonType: RefOf<'com.atproto.moderation.defs#reasonType'>;
-		reason?: string;
+		comment?: string;
 		subjectRepoHandle?: string;
 		subject: UnionOf<'com.atproto.admin.defs#repoRef'> | UnionOf<'com.atproto.repo.strongRef'>;
 		reportedBy: DID;
 		createdAt: string;
 		resolvedByActionIds: number[];
 	};
+	'com.atproto.admin.defs#subjectStatusView': {
+		id: number;
+		subject: UnionOf<'com.atproto.admin.defs#repoRef'> | UnionOf<'com.atproto.repo.strongRef'>;
+		subjectBlobCids?: CID[];
+		subjectRepoHandle?: string;
+		/**
+		 * Timestamp referencing when the last update was made to the moderation status of the subject
+		 */
+		updatedAt: string;
+		/**
+		 * Timestamp referencing the first moderation status impacting event was emitted on the subject
+		 */
+		createdAt: string;
+		reviewState: RefOf<'com.atproto.admin.defs#subjectReviewState'>;
+		/**
+		 * Sticky comment on the subject.
+		 */
+		comment?: string;
+		muteUntil?: string;
+		lastReviewedBy?: DID;
+		lastReviewedAt?: string;
+		lastReportedAt?: string;
+		takendown?: boolean;
+		suspendUntil?: string;
+	};
 	'com.atproto.admin.defs#reportViewDetail': {
 		id: number;
 		reasonType: RefOf<'com.atproto.moderation.defs#reasonType'>;
-		reason?: string;
+		comment?: string;
 		subject:
 			| UnionOf<'com.atproto.admin.defs#repoView'>
 			| UnionOf<'com.atproto.admin.defs#repoViewNotFound'>
 			| UnionOf<'com.atproto.admin.defs#recordView'>
 			| UnionOf<'com.atproto.admin.defs#recordViewNotFound'>;
+		subjectStatus?: RefOf<'com.atproto.admin.defs#subjectStatusView'>;
 		reportedBy: DID;
 		createdAt: string;
-		resolvedByActions: RefOf<'com.atproto.admin.defs#actionView'>[];
+		resolvedByActions: RefOf<'com.atproto.admin.defs#modEventView'>[];
 	};
 	'com.atproto.admin.defs#repoView': {
 		did: DID;
@@ -2575,12 +2593,10 @@ export interface Objects {
 		uri: AtUri;
 	};
 	'com.atproto.admin.defs#moderation': {
-		currentAction?: RefOf<'com.atproto.admin.defs#actionViewCurrent'>;
+		subjectStatus?: RefOf<'com.atproto.admin.defs#subjectStatusView'>;
 	};
 	'com.atproto.admin.defs#moderationDetail': {
-		currentAction?: RefOf<'com.atproto.admin.defs#actionViewCurrent'>;
-		actions: RefOf<'com.atproto.admin.defs#actionView'>[];
-		reports: RefOf<'com.atproto.admin.defs#reportView'>[];
+		subjectStatus?: RefOf<'com.atproto.admin.defs#subjectStatusView'>;
 	};
 	'com.atproto.admin.defs#blobView': {
 		cid: CID;
@@ -2598,6 +2614,92 @@ export interface Objects {
 		width: number;
 		height: number;
 		length: number;
+	};
+	'com.atproto.admin.defs#subjectReviewState':
+		| '#reviewOpen'
+		| '#reviewEscalated'
+		| '#reviewClosed'
+		| (string & {});
+	'com.atproto.admin.defs#reviewOpen': 'com.atproto.admin.defs#reviewOpen';
+	'com.atproto.admin.defs#reviewEscalated': 'com.atproto.admin.defs#reviewEscalated';
+	'com.atproto.admin.defs#reviewClosed': 'com.atproto.admin.defs#reviewClosed';
+	/**
+	 * Take down a subject permanently or temporarily
+	 */
+	'com.atproto.admin.defs#modEventTakedown': {
+		comment?: string;
+		/**
+		 * Indicates how long the takedown should be in effect before automatically expiring.
+		 */
+		durationInHours?: number;
+	};
+	/**
+	 * Revert take down action on a subject
+	 */
+	'com.atproto.admin.defs#modEventReverseTakedown': {
+		/**
+		 * Describe reasoning behind the reversal.
+		 */
+		comment?: string;
+	};
+	/**
+	 * Add a comment to a subject
+	 */
+	'com.atproto.admin.defs#modEventComment': {
+		comment: string;
+		/**
+		 * Make the comment persistent on the subject
+		 */
+		sticky?: boolean;
+	};
+	/**
+	 * Report a subject
+	 */
+	'com.atproto.admin.defs#modEventReport': {
+		comment?: string;
+		reportType: RefOf<'com.atproto.moderation.defs#reasonType'>;
+	};
+	/**
+	 * Apply/Negate labels on a subject
+	 */
+	'com.atproto.admin.defs#modEventLabel': {
+		comment?: string;
+		createLabelVals: string[];
+		negateLabelVals: string[];
+	};
+	'com.atproto.admin.defs#modEventAcknowledge': {
+		comment?: string;
+	};
+	'com.atproto.admin.defs#modEventEscalate': {
+		comment?: string;
+	};
+	/**
+	 * Mute incoming reports on a subject
+	 */
+	'com.atproto.admin.defs#modEventMute': {
+		comment?: string;
+		/**
+		 * Indicates how long the subject should remain muted.
+		 */
+		durationInHours: number;
+	};
+	/**
+	 * Unmute action on a subject
+	 */
+	'com.atproto.admin.defs#modEventUnmute': {
+		/**
+		 * Describe reasoning behind the reversal.
+		 */
+		comment?: string;
+	};
+	/**
+	 * Keep a log of outgoing email to a user
+	 */
+	'com.atproto.admin.defs#modEventEmail': {
+		/**
+		 * The subject line of the email sent to the user.
+		 */
+		subjectLine: string;
 	};
 	/**
 	 * Metadata tag on an atproto resource (eg, repo or record).
