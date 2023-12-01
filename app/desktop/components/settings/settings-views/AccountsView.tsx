@@ -1,4 +1,4 @@
-import { For, JSX, Show } from 'solid-js';
+import { For, JSX } from 'solid-js';
 
 import { useQueryClient } from '@pkg/solid-query';
 
@@ -48,19 +48,17 @@ const AccountsView = () => {
 									class="h-12 w-12 shrink-0 rounded-full"
 								/>
 
-								<Show when={account.profile} fallback={<div class="grow text-sm">{did}</div>}>
-									{(profile) => (
-										<div class="flex grow flex-col text-sm">
-											<span class="line-clamp-1 break-all font-bold">
-												{profile().displayName || profile().handle}
-											</span>
-											<span class="line-clamp-1 break-all text-muted-fg">@{profile().handle}</span>
-											<Show when={did === multiagent.active}>
-												<span class="text-muted-fg">Default account</span>
-											</Show>
-										</div>
-									)}
-								</Show>
+								<div class="flex grow flex-col text-sm">
+									<span class="line-clamp-1 break-all font-bold">
+										{account.profile
+											? account.profile.displayName || account.profile.handle
+											: account.session.handle}
+									</span>
+									<span class="line-clamp-1 break-all text-muted-fg">
+										@{account.profile?.handle || account.session.handle}
+									</span>
+									{multiagent.active === did && <span class="text-muted-fg">Default account</span>}
+								</div>
 
 								<div>
 									<AccountActionMenu account={account}>
