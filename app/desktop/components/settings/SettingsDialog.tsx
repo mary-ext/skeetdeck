@@ -34,7 +34,7 @@ const SettingsDialog = () => {
 		get current() {
 			return view();
 		},
-		navigate: (next) => {
+		move: (next) => {
 			setView(next);
 		},
 	};
@@ -112,7 +112,7 @@ const SideItem = (props: { icon?: IconComponent; to: ViewType; children: JSX.Ele
 	return (
 		<button
 			onClick={() => {
-				router.navigate({ type: props.to });
+				router.move({ type: props.to });
 			}}
 			class={sideItem}
 			classList={{ [`bg-secondary/20`]: router.current.type === props.to }}

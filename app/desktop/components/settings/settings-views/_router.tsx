@@ -19,7 +19,7 @@ export type View =
 
 export interface RouterState {
 	readonly current: View;
-	navigate: (next: View) => void;
+	move: (next: View) => void;
 }
 
 export const RouterContext = createContext<RouterState>();
