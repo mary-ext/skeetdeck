@@ -21,7 +21,7 @@ const AppearanceView = () => {
 				<h2 class="grow text-base font-bold">Appearance</h2>
 			</div>
 			<div class="grow overflow-y-auto">
-				<div class="flex flex-col gap-3 p-4 text-sm">
+				<div class="flex flex-col gap-3 px-4 py-3 text-sm">
 					<p class="font-bold">Theme</p>
 
 					<label class="flex items-center justify-between gap-2">
