@@ -42,7 +42,7 @@ const ProfileList = (props: ProfileListProps) => {
 
 			<Switch>
 				<Match when={props.fetching}>
-					<div class="grid h-13 place-items-center">
+					<div class="grid h-13 shrink-0 place-items-center">
 						<CircularProgress />
 					</div>
 				</Match>
