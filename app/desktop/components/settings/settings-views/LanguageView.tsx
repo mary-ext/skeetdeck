@@ -1,23 +1,20 @@
-import { systemLanguages } from '~/api/globals/platform.ts';
-
-import { languageNames } from '~/utils/intl/display-names.ts';
-
 import { preferences } from '~/desktop/globals/settings.ts';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
 import { Interactive } from '~/com/primitives/interactive.ts';
 
 import Checkbox from '~/com/components/inputs/Checkbox.tsx';
 
-import DeleteIcon from '~/com/icons/baseline-delete.tsx';
-import AddIcon from '~/com/icons/baseline-add.tsx';
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
+
+import { ViewType, useViewRouter } from './_router.tsx';
 
 const selectItem = Interactive({
 	class: `px-4 py-3 text-left text-sm`,
 });
 
 const LanguageView = () => {
+	const router = useViewRouter();
+
 	const langs = preferences.language;
 
 	return (
@@ -73,10 +70,23 @@ const LanguageView = () => {
 					</p>
 				</div>
 
-				<button class={`${selectItem} flex items-center justify-between gap-4`}>
+				<button
+					onClick={() => router.move({ type: ViewType.ADDITIONAL_LANGUAGE })}
+					class={`${selectItem} flex items-center justify-between gap-4`}
+				>
 					<div>
 						<p>Additional content languages</p>
-						<p class="text-de text-muted-fg">No languages added</p>
+						<p class="text-de text-muted-fg">
+							{(() => {
+								const count = langs.languages.length;
+
+								if (count === 1) {
+									return `${count} language added`;
+								}
+
+								return `${count} languages added`;
+							})()}
+						</p>
 					</div>
 
 					<ChevronRightIcon class="text-xl text-muted-fg" />

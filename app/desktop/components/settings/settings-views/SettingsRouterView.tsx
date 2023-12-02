@@ -6,11 +6,15 @@ import AccountsView from './AccountsView.tsx';
 import AppearanceView from './AppearanceView.tsx';
 import LanguageView from './LanguageView.tsx';
 
+import AdditionalLanguageView from './languages/AdditionalLanguageView.tsx';
+
 // @ts-expect-error
 const views: Record<ViewType, Component<any>> = {
 	[ViewType.ACCOUNTS]: AccountsView,
 	[ViewType.APPEARANCE]: AppearanceView,
 	[ViewType.LANGAUGE]: LanguageView,
+
+	[ViewType.ADDITIONAL_LANGUAGE]: AdditionalLanguageView,
 };
 
 const SettingsRouterView = () => {

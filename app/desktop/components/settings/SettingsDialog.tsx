@@ -87,7 +87,7 @@ const SettingsDialog = () => {
 								<button class="font-mono text-xs text-muted-fg hover:underline">trunk/aae1da5</button>
 							</div>
 						</div>
-						<div class="grow overflow-hidden overflow-y-auto border-l border-divider">
+						<div class="flex grow flex-col overflow-hidden overflow-y-auto border-l border-divider">
 							<SettingsRouterView />
 						</div>
 					</div>
