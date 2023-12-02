@@ -2356,6 +2356,7 @@ export interface Objects {
 		indexedAt: string;
 	};
 	'app.bsky.graph.defs#listItemView': {
+		uri: AtUri;
 		subject: RefOf<'app.bsky.actor.defs#profileView'>;
 	};
 	'app.bsky.graph.defs#listPurpose':
