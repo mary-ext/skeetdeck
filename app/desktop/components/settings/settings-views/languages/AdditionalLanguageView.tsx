@@ -63,7 +63,7 @@ const AdditionalLanguageView = () => {
 
 				<h2 class="grow text-base font-bold">Additional content languages</h2>
 			</div>
-			<div class="flex grow flex-col overflow-y-auto pt-4">
+			<div class="flex grow flex-col overflow-y-auto pt-3">
 				{(() => {
 					if (!langs.useSystemLanguages) {
 						return;
