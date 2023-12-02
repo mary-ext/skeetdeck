@@ -122,8 +122,15 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 			// we need to wait for the AppView to settle in, so let's add a delay here
 			// ref: https://github.com/bluesky-social/social-app/blob/bb22ebd58866f4b14f8fa07a27b0ccdc9d06595a/src/state/queries/list-memberships.ts#L138
 			setTimeout(() => {
-				queryClient.invalidateQueries({ queryKey: getProfileKey(uid, did) });
-				queryClient.invalidateQueries({ queryKey: getProfileKey(uid, profile.handle.peek()) });
+				queryClient.invalidateQueries({
+					exact: true,
+					queryKey: getProfileKey(uid, did),
+				});
+
+				queryClient.invalidateQueries({
+					exact: true,
+					queryKey: getProfileKey(uid, profile.handle.peek()),
+				});
 			}, 1_000);
 		},
 		onSuccess: () => {
