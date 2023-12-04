@@ -74,6 +74,9 @@ const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => 
 			if (to) {
 				let link: JSX.Element;
 
+				// @todo: should probably stop using <button> on PaneLinkingContext
+				// because it hasn't been fun smoothing out the differences between <a>
+				// and <button> elements, let's just use <span> instead?
 				if (import.meta.env.VITE_APP_MODE === 'desktop' && to.type !== LinkingType.EXTERNAL) {
 					link = (
 						<span
