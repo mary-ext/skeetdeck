@@ -30,7 +30,7 @@ const AdditionalLanguageView = () => {
 
 	return (
 		<div class="contents">
-			<div class="flex h-13 shrink-0 items-center gap-2 px-4">
+			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
 				<button
 					title="Return to previous screen"
 					onClick={() => router.move({ type: ViewType.LANGAUGE })}

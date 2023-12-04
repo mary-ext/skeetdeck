@@ -26,7 +26,7 @@ const LanguageView = () => {
 
 	return (
 		<div class="contents">
-			<div class="flex h-13 shrink-0 items-center gap-2 px-4">
+			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
 				<h2 class="grow text-base font-bold">Language</h2>
 			</div>
 			<div class="flex grow flex-col overflow-y-auto pb-4">
