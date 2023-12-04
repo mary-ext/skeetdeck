@@ -39,6 +39,31 @@ const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => 
 		return segmenter();
 	};
 
+	const navigateLink = (ev: MouseEvent | KeyboardEvent) => {
+		const enum ShouldLink {
+			NO,
+			YES,
+			WITH_ALT,
+		}
+
+		let nav = ShouldLink.NO;
+
+		if (ev instanceof MouseEvent) {
+			nav = ev.ctrlKey || ev.button === 1 ? ShouldLink.WITH_ALT : ShouldLink.YES;
+		} else if (ev instanceof KeyboardEvent && ev.key === 'Enter') {
+			nav = ev.ctrlKey ? ShouldLink.WITH_ALT : ShouldLink.YES;
+		}
+
+		if (nav !== ShouldLink.NO) {
+			const target = ev.currentTarget as any;
+			const to = target.$to as Linking | undefined;
+
+			if (to) {
+				linking.navigate(to, nav === ShouldLink.WITH_ALT);
+			}
+		}
+	};
+
 	const render = () => {
 		const ui = segments();
 		const nodes: JSX.Element = [];
@@ -47,11 +72,29 @@ const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => 
 			const { text, to } = ui[idx];
 
 			if (to) {
-				const link = linking.render({
-					to: to,
-					children: text,
-					class: 'text-accent hover:underline',
-				});
+				let link: JSX.Element;
+
+				if (import.meta.env.VITE_APP_MODE === 'desktop' && to.type !== LinkingType.EXTERNAL) {
+					link = (
+						<span
+							role="link"
+							tabindex={0}
+							// @ts-expect-error
+							prop:$to={to}
+							onClick={navigateLink}
+							onKeyDown={navigateLink}
+							class="cursor-pointer text-accent hover:underline"
+						>
+							{text}
+						</span>
+					);
+				} else {
+					link = linking.render({
+						to: to,
+						children: text,
+						class: 'text-accent hover:underline',
+					});
+				}
 
 				nodes.push(link);
 			} else {
