@@ -5,8 +5,8 @@ export interface BlobImageProps extends Omit<ComponentProps<'img'>, 'src'> {
 }
 
 interface BlobObject {
-	url: string;
-	uses: number;
+	u: string;
+	c: number;
 }
 
 const map = new WeakMap<Blob, BlobObject>();
@@ -19,22 +19,21 @@ const BlobImage = (props: BlobImageProps) => {
 			return src;
 		}
 
-		let obj = map.get(src);
-
+		let obj = map.get(src)!;
 		if (!obj) {
-			map.set(src, (obj = { url: URL.createObjectURL(src), uses: 0 }));
+			map.set(src, (obj = { u: URL.createObjectURL(src), c: 0 }));
 		}
 
-		obj.uses++;
+		obj.c++;
 
 		onCleanup(() => {
-			if (--obj!.uses < 1) {
-				URL.revokeObjectURL(obj!.url);
+			if (--obj.c < 1) {
+				URL.revokeObjectURL(obj.u);
 				map.delete(src);
 			}
 		});
 
-		return obj.url;
+		return obj.u;
 	};
 
 	return <img {...props} src={blob()} />;
