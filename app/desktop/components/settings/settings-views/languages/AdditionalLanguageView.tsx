@@ -18,34 +18,12 @@ import DeleteIcon from '~/com/icons/baseline-delete.tsx';
 
 import { ViewType, useViewRouter } from '../_router.tsx';
 
-const createSortedLanguages = () => {
-	const oob = systemLanguages.length;
-
-	const score = (value: string) => {
-		const raw = systemLanguages.indexOf(value);
-		return raw === -1 ? oob : raw;
-	};
-
-	return CODE2S.map((code2) => {
-		const name = languageNamesStrict.of(code2);
-
-		return {
-			score: name !== undefined ? score(code2) : oob + 1,
-			code: code2,
-			eng: name,
-			native: getNativeLanguageName(code2),
-		};
-	}).sort((a, b) => a.score - b.score);
-};
-
 const AdditionalLanguageView = () => {
 	const router = useViewRouter();
 
 	const [search, setSearch] = createSignal('');
 
 	const normalizedSearch = createMemo(() => search().trim().toLowerCase());
-
-	const availableLanguages = createSortedLanguages();
 
 	const langs = preferences.language;
 	const languages = langs.languages;
@@ -116,7 +94,10 @@ const AdditionalLanguageView = () => {
 					<SearchInput ref={model(search, setSearch)} />
 				</div>
 
-				{availableLanguages.map(({ code, eng, native }) => {
+				{CODE2S.map((code) => {
+					const eng = languageNamesStrict.of(code);
+					const native = getNativeLanguageName(code);
+
 					if (!eng || !native) {
 						return;
 					}

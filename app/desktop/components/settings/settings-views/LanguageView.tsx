@@ -1,8 +1,15 @@
+import { systemLanguages } from '~/api/globals/platform.ts';
+
+import { getNativeLanguageName, languageNames, languageNamesStrict } from '~/utils/intl/display-names.ts';
+import { CODE2S } from '~/utils/intl/languages.ts';
+import { mapDefined } from '~/utils/misc.ts';
+
 import { preferences } from '~/desktop/globals/settings.ts';
 
 import { Interactive } from '~/com/primitives/interactive.ts';
 
 import Checkbox from '~/com/components/inputs/Checkbox.tsx';
+import SelectInput from '~/com/components/inputs/SelectInput.tsx';
 
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
 
@@ -23,12 +30,49 @@ const LanguageView = () => {
 				<h2 class="grow text-base font-bold">Language</h2>
 			</div>
 			<div class="flex grow flex-col overflow-y-auto pb-4">
-				<button class={selectItem}>
-					<p>Default post language</p>
-					<p class="text-de text-muted-fg">Primary system language (English)</p>
-				</button>
+				<div class="px-4 py-3">
+					<label class="flex flex-col gap-2">
+						<span class="text-sm font-medium leading-6 text-primary">Default post language</span>
 
-				<hr class="mx-4 mt-2 border-divider" />
+						<SelectInput
+							value={langs.defaultPostLanguage}
+							options={[
+								{
+									value: 'none',
+									label: 'None',
+								},
+								{
+									value: 'system',
+									get label() {
+										return `Primary system language (${languageNames.of(systemLanguages[0])})`;
+									},
+								},
+								...mapDefined(CODE2S, (code) => {
+									const eng = languageNamesStrict.of(code);
+									const native = getNativeLanguageName(code);
+
+									if (!eng || !native) {
+										return;
+									}
+
+									return {
+										value: code,
+										label: `${eng}${native !== eng ? ` - ${native}` : ``}`,
+									};
+								}),
+							]}
+							onChange={(next) => {
+								langs.defaultPostLanguage = next.value;
+							}}
+						/>
+					</label>
+
+					<p class="mt-2 text-de text-muted-fg">
+						This is the default language used when creating new posts, it will not affect your existing posts.
+					</p>
+				</div>
+
+				<hr class="mx-4 mt-1 border-divider" />
 
 				<p class="p-4 text-base font-bold leading-5">Content languages</p>
 

@@ -22,7 +22,7 @@ const AppearanceView = () => {
 			</div>
 			<div class="grow overflow-y-auto">
 				<div class="flex flex-col gap-3 px-4 py-3 text-sm">
-					<p class="font-bold">Theme</p>
+					<p class="font-medium leading-6 text-primary">Theme</p>
 
 					<label class="flex items-center justify-between gap-2">
 						<span>Automatic</span>
