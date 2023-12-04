@@ -8,7 +8,7 @@ export interface SelectItem {
 export interface SelectInputProps<T extends SelectItem> {
 	value: string;
 	options: T[];
-	onChange?: (next: T) => void;
+	onChange?: (next: string) => void;
 }
 
 const SelectInput = <T extends SelectItem>(props: SelectInputProps<T>) => {
@@ -22,27 +22,13 @@ const SelectInput = <T extends SelectItem>(props: SelectInputProps<T>) => {
 					onChange &&
 					((ev) => {
 						const target = ev.target;
-						const selected = target.selectedOptions[0];
-
-						const item = (selected as any).$item as T | undefined;
-
-						if (!item) {
-							return;
-						}
-
-						onChange(item);
+						onChange(target.value);
 					})
 				}
 				class="w-full appearance-none rounded-md border border-input bg-background px-3 py-2 pr-8 text-sm text-primary outline-2 -outline-offset-1 outline-accent outline-none focus:outline disabled:opacity-50"
 			>
 				{props.options.map((item) => (
-					<option
-						// @ts-expect-error
-						prop:$item={item}
-						value={item.value}
-					>
-						{item.label}
-					</option>
+					<option value={item.value}>{item.label}</option>
 				))}
 			</select>
 

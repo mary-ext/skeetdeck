@@ -62,7 +62,7 @@ const LanguageView = () => {
 								}),
 							]}
 							onChange={(next) => {
-								langs.defaultPostLanguage = next.value;
+								langs.defaultPostLanguage = next;
 							}}
 						/>
 					</label>
