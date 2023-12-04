@@ -32,7 +32,7 @@ const LanguageView = () => {
 			<div class="flex grow flex-col overflow-y-auto pb-4">
 				<div class="px-4 py-3">
 					<label class="flex flex-col gap-2">
-						<span class="text-sm font-medium leading-6 text-primary">Default post language</span>
+						<span class="text-sm font-medium leading-6 text-primary">Post language</span>
 
 						<SelectInput
 							value={langs.defaultPostLanguage}
@@ -68,7 +68,7 @@ const LanguageView = () => {
 					</label>
 
 					<p class="mt-2 text-de text-muted-fg">
-						This is the default language used when creating new posts, it will not affect your existing posts.
+						This is the language used when creating new posts, it will not affect your existing posts.
 					</p>
 				</div>
 
