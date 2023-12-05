@@ -79,7 +79,7 @@ const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => 
 				// and <button> elements, let's just use <span> instead?
 				if (import.meta.env.VITE_APP_MODE === 'desktop' && to.type !== LinkingType.EXTERNAL) {
 					link = (
-						<span
+						<a
 							role="link"
 							tabindex={0}
 							// @ts-expect-error
@@ -89,7 +89,7 @@ const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => 
 							class="cursor-pointer text-accent hover:underline"
 						>
 							{text}
-						</span>
+						</a>
 					);
 				} else {
 					link = linking.render({
