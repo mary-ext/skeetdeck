@@ -46,7 +46,7 @@ const PostEmbedWarning = (props: PostEmbedWarningProps) => {
 
 		return [
 			<div class="mt-3 flex min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider">
-				<VisibilityIcon class="ml-3 text-base text-muted-fg" />
+				<VisibilityIcon class="ml-3 shrink-0 text-base text-muted-fg" />
 				<span class="grow py-3 text-sm">{title}</span>
 
 				{!forced && (
