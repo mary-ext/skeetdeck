@@ -127,7 +127,7 @@ export const decideLabelModeration = (
 						continue;
 					}
 
-					pref = labelerPref.labels[id] ?? labelerPref.groups[id];
+					pref = labelerPref.labels[id] ?? labelerPref.groups[groupId];
 				}
 			}
 
