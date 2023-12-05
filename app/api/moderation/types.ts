@@ -38,9 +38,8 @@ export interface ModerationFiltersOpts {
 export interface ModerationOpts {
 	_filtersCache?: [raw: string, match: RegExp][];
 
-	// Per-user override, this will go *after* the labelers
+	globals: ModerationLabelOpts;
 	users: { [user: DID]: ModerationLabelOpts | undefined };
-	// Per-labeler settings
 	labelers: { [labeler: DID]: ModerationLabelOpts | undefined };
 	keywords: ModerationFiltersOpts[];
 }

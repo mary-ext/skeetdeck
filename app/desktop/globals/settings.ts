@@ -35,7 +35,7 @@ const PREF_KEY = 'rantai_prefs';
 
 export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KEY, (version, prev) => {
 	if (version === 0) {
-		const object: PreferencesSchema = {
+		return {
 			$version: 1,
 			onboarding: true,
 			decks: [],
@@ -44,17 +44,21 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 				defaultPaneSize: PaneSize.MEDIUM,
 			},
 			moderation: {
+				globals: {
+					groups: {
+						sexual: PreferenceWarn,
+						violence: PreferenceWarn,
+						intolerance: PreferenceWarn,
+						rude: PreferenceWarn,
+						spam: PreferenceWarn,
+						misinfo: PreferenceWarn,
+					},
+					labels: {},
+				},
 				users: {},
 				labelers: {
 					[DEFAULT_MODERATION_LABELER]: {
-						groups: {
-							sexual: PreferenceWarn,
-							violence: PreferenceWarn,
-							intolerance: PreferenceWarn,
-							rude: PreferenceWarn,
-							spam: PreferenceWarn,
-							misinfo: PreferenceWarn,
-						},
+						groups: {},
 						labels: {},
 					},
 				},
@@ -71,8 +75,6 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 				defaultPostLanguage: 'system',
 			},
 		};
-
-		return object;
 	}
 
 	return prev;

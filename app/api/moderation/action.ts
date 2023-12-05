@@ -87,17 +87,17 @@ export interface ModerationDecision {
 /**
  * @param accu Array of moderation causes to push into
  * @param labels Labels to work upon
- * @param authorDid DID of the author
+ * @param userDid DID of the author
  * @param opts Moderation options
  */
 export const decideLabelModeration = (
 	accu: ModerationCause[],
 	labels: Label[] | undefined,
-	authorDid: DID,
+	userDid: DID,
 	opts: ModerationOpts,
 ) => {
 	if (labels) {
-		const authorOverride = opts.users[authorDid];
+		const globalPref = opts.globals;
 
 		for (let idx = 0, len = labels.length; idx < len; idx++) {
 			const label = labels[idx];
@@ -113,23 +113,46 @@ export const decideLabelModeration = (
 			const groupId = def.g;
 
 			const src = label.src;
-			const isSelfLabeled = src === authorDid;
+			const isSelfLabeled = src === userDid;
 
 			let pref: number | undefined = def.e;
 
 			if (pref === undefined) {
-				pref = authorOverride?.labels[id] ?? authorOverride?.groups[groupId];
+				if (isSelfLabeled) {
+					const userPref = opts.users[src];
 
-				if (!isSelfLabeled && pref === undefined) {
+					pref =
+						userPref?.labels[id] ??
+						userPref?.groups[groupId] ??
+						globalPref.labels[id] ??
+						globalPref.groups[groupId];
+				} else {
 					const labelerPref = opts.labelers[src];
 
 					if (!labelerPref) {
 						continue;
 					}
 
-					pref = labelerPref.labels[id] ?? labelerPref.groups[groupId];
+					pref =
+						labelerPref.labels[id] ??
+						labelerPref.groups[groupId] ??
+						globalPref.labels[id] ??
+						globalPref.groups[groupId];
 				}
 			}
+
+			// TODO: change it to this when `labels` array is confirmed to only return
+			// labels from subscribed label providers (alongside self-labels)
+			// let pref = labelDef.enforce;
+
+			// if (pref === undefined) {
+			// 	const localPref = isSelfLabeled ? opts.users[src] : opts.labelers[src];
+			// 	pref =
+			// 		localPref?.labels[id] ??
+			// 		localPref?.groups[groupId] ??
+			// 		globalPref.labels[id] ??
+			// 		globalPref.groups[groupId];
+			// }
 
 			if (pref !== PreferenceHide && pref !== PreferenceWarn) {
 				continue;
