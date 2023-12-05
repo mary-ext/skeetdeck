@@ -1,6 +1,7 @@
 import { type JSX, createMemo, createSignal } from 'solid-js';
 
 import type { UnionOf } from '~/api/atp-schema.ts';
+import { renderLabelName } from '~/api/display.ts';
 
 import { type ModerationDecision, CauseLabel, CauseMutedKeyword } from '~/api/moderation/action.ts';
 import { FlagNoOverride } from '~/api/moderation/enums.ts';
@@ -54,7 +55,7 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 
 				const title =
 					source.t === CauseLabel
-						? `Content warning: ${source.l.val}`
+						? `Content warning: ${renderLabelName(source.l.val)}`
 						: source.t === CauseMutedKeyword
 						  ? `Filtered: ${source.n}`
 						  : `You've muted this user`;

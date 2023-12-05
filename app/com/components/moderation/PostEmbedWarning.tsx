@@ -1,6 +1,6 @@
 import { type JSX, createMemo, createSignal } from 'solid-js';
 
-import { renderLabelNames } from '~/api/display.ts';
+import { renderLabelName } from '~/api/display.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 
 import { CauseLabel } from '~/api/moderation/action.ts';
@@ -42,7 +42,7 @@ const PostEmbedWarning = (props: PostEmbedWarningProps) => {
 
 		const source = $decision.s;
 		const forced = source.t === CauseLabel && source.d.f & FlagNoOverride;
-		const title = source.t === CauseLabel ? renderLabelNames(source.l.val) : `Media warning`;
+		const title = source.t === CauseLabel ? renderLabelName(source.l.val) : `Media warning`;
 
 		return [
 			<div class="mt-3 flex min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider">

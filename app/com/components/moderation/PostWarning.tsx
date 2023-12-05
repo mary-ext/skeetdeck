@@ -1,7 +1,7 @@
 import { type JSX, createMemo, createSignal } from 'solid-js';
 
 import type { DID } from '~/api/atp-schema.ts';
-import { renderLabelNames } from '~/api/display.ts';
+import { renderLabelName } from '~/api/display.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 
 import { CauseLabel, CauseMutedKeyword } from '~/api/moderation/action.ts';
@@ -62,7 +62,7 @@ const PostWarning = (props: PostWarningProps) => {
 
 		const title =
 			source.t === CauseLabel
-				? `Content warning: ${renderLabelNames(source.l.val)}`
+				? `Content warning: ${renderLabelName(source.l.val)}`
 				: source.t === CauseMutedKeyword
 				  ? `Filtered: ${source.n}`
 				  : `You've muted this user`;

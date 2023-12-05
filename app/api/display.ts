@@ -56,7 +56,7 @@ export const LabelNames: Record<string, string> = {
 	scam: 'Scam',
 };
 
-export const renderLabelNames = (name: string) => {
+export const renderLabelName = (name: string) => {
 	return LabelNames[name] ?? name;
 };
 
@@ -70,6 +70,6 @@ export const LabelGroupNames: Record<string, string> = {
 	misinfo: 'Misinformation',
 };
 
-export const renderLabelGroupNames = (name: string) => {
+export const renderLabelGroupName = (name: string) => {
 	return LabelGroupNames[name] ?? name;
 };
