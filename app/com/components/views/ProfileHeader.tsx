@@ -106,12 +106,12 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 				</div>
 
 				<div>
-					<p dir="auto" class="break-words text-xl font-bold">
-						{profile().displayName.value || profile().handle.value}
+					<p dir="auto" class="break-words text-xl font-bold empty:hidden">
+						{profile().displayName.value}
 					</p>
-					<p class="flex items-center text-sm text-muted-fg">
-						<button onClick={() => {}} class="hover:underline">
-							<span class="line-clamp-1 break-all text-left">@{profile().handle.value}</span>
+					<p class="flex min-w-0 items-center text-sm text-muted-fg">
+						<button class="overflow-hidden text-ellipsis whitespace-nowrap text-left hover:underline">
+							{'@' + profile().handle.value}
 						</button>
 
 						{(() => {

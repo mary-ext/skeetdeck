@@ -134,14 +134,20 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 						node = (
 							<div class="flex items-center gap-4 px-4 py-2">
 								<div class="h-9 w-9 shrink-0 overflow-hidden rounded-full bg-muted-fg">
-									{/* @once */ profile.avatar && <img src={profile.avatar} class="h-full w-full" />}
+									{
+										/* @once */ profile.avatar && (
+											<img src={/* @once */ profile.avatar} class="h-full w-full" />
+										)
+									}
 								</div>
 
-								<div class="flex grow flex-col text-sm">
-									<span class="line-clamp-1 break-all font-bold">
-										{/* @once */ profile.displayName || profile.handle}
-									</span>
-									<span class="line-clamp-1 shrink-0 break-all text-muted-fg">@{profile.handle}</span>
+								<div class="flex min-w-0 grow flex-col text-sm">
+									<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold empty:hidden">
+										{/* @once */ profile.displayName}
+									</p>
+									<p class="overflow-hidden text-ellipsis whitespace-nowrap text-muted-fg">
+										{/* @once */ '@' + profile.handle}
+									</p>
 								</div>
 							</div>
 						);

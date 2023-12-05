@@ -48,14 +48,14 @@ const AccountsView = () => {
 									class="h-12 w-12 shrink-0 rounded-full"
 								/>
 
-								<div class="flex grow flex-col text-sm">
-									<span class="line-clamp-1 break-all font-bold empty:hidden">
+								<div class="flex min-w-0 grow flex-col text-sm">
+									<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold empty:hidden">
 										{account.profile?.displayName}
-									</span>
-									<span class="line-clamp-1 break-all text-muted-fg">
-										@{account.profile?.handle || account.session.handle}
-									</span>
-									{multiagent.active === did && <span class="text-muted-fg">Default account</span>}
+									</p>
+									<p class="overflow-hidden text-ellipsis whitespace-nowrap text-muted-fg">
+										{'@' + (account.profile?.handle || account.session.handle)}
+									</p>
+									{multiagent.active === did && <p class="text-muted-fg">Default account</p>}
 								</div>
 
 								<div>

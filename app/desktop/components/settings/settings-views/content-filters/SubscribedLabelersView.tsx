@@ -61,9 +61,13 @@ const SubscribedLabelersView = () => {
 						<div tabindex={0} onClick={handleClick} onKeyDown={handleClick} class={selectItem}>
 							<img src={DefaultListAvatar} class="h-12 w-12 shrink-0 rounded-full" />
 
-							<div class="flex grow flex-col text-sm">
-								<p class="line-clamp-1 break-all font-bold empty:hidden">bsky.social Moderation Team</p>
-								<span class="line-clamp-1 break-all text-muted-fg">@moderation.bsky.social</span>
+							<div class="flex min-w-0 grow flex-col text-sm">
+								<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold empty:hidden">
+									bsky.social Moderation Team
+								</p>
+								<p class="overflow-hidden text-ellipsis whitespace-nowrap text-muted-fg">
+									@moderation.bsky.social
+								</p>
 							</div>
 						</div>
 					);

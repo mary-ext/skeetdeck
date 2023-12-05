@@ -98,17 +98,15 @@ const Post = (props: PostProps) => {
 								<div class="flex w-10 shrink-0 justify-end">
 									<RepeatIcon />
 								</div>
-								<div class="min-w-0">
-									<Link
-										to={{ type: LinkingType.PROFILE, actor: reason.by.did }}
-										class="flex font-medium hover:underline"
-									>
-										<span dir="auto" class="line-clamp-1 break-words">
-											{/* @once */ reason.by.displayName || reason.by.handle}
-										</span>
-										<span class="whitespace-pre"> Reposted</span>
-									</Link>
-								</div>
+								<Link
+									to={{ type: LinkingType.PROFILE, actor: reason.by.did }}
+									class="flex min-w-0 text-left font-medium hover:underline"
+								>
+									<span dir="auto" class="overflow-hidden text-ellipsis whitespace-nowrap">
+										{/* @once */ reason.by.displayName || reason.by.handle}
+									</span>
+									<span class="shrink-0 whitespace-pre"> Reposted</span>
+								</Link>
 							</div>
 						);
 					}
@@ -125,23 +123,21 @@ const Post = (props: PostProps) => {
 									<div class="flex w-10 shrink-0 justify-end">
 										<ChatBubbleOutlinedIcon />
 									</div>
-									<div class="min-w-0">
-										<Link
-											to={
-												/* @once */ {
-													type: LinkingType.POST,
-													actor: parent.author.did,
-													rkey: getRecordId(parent.uri),
-												}
+									<Link
+										to={
+											/* @once */ {
+												type: LinkingType.POST,
+												actor: parent.author.did,
+												rkey: getRecordId(parent.uri),
 											}
-											class="flex font-medium hover:underline"
-										>
-											<span class="whitespace-pre">Replying to </span>
-											<span dir="auto" class="line-clamp-1 break-words">
-												{parent.author.displayName.value || parent.author.handle.value}
-											</span>
-										</Link>
-									</div>
+										}
+										class="flex min-w-0 text-left font-medium hover:underline"
+									>
+										<span class="shrink-0 whitespace-pre">Replying to </span>
+										<span dir="auto" class="overflow-hidden text-ellipsis whitespace-nowrap">
+											{parent.author.displayName.value || parent.author.handle.value}
+										</span>
+									</Link>
 								</div>
 							);
 						}
@@ -152,11 +148,9 @@ const Post = (props: PostProps) => {
 									<div class="flex w-10 shrink-0 justify-end">
 										<ChatBubbleOutlinedIcon />
 									</div>
-									<div class="min-w-0">
-										<Link to={postPermalink()} class="flex font-medium hover:underline">
-											Show full thread
-										</Link>
-									</div>
+									<Link to={postPermalink()} class="flex min-w-0 text-left font-medium hover:underline">
+										Show full thread
+									</Link>
 								</div>
 							);
 						}

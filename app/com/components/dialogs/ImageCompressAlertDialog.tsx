@@ -42,7 +42,9 @@ const ImageCompressAlertDialog = (props: ImageCompressAlertDialogProps) => {
 									/>
 
 									<div class="flex min-w-0 flex-col gap-0.5 text-sm">
-										<p class="line-clamp-1 break-words font-bold">{/* @once */ image.name}</p>
+										<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold">
+											{/* @once */ image.name}
+										</p>
 										<p>{/* @once */ `${before.width}x${before.height} → ${after.width}x${after.height}`}</p>
 										<p>
 											<span>{/* @once */ `${formatBytes(before.size)} → ${formatBytes(after.size)}`}</span>{' '}
