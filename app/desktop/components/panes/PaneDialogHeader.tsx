@@ -46,7 +46,7 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 			})()}
 
 			<div class="flex min-w-0 grow flex-col gap-0.5">
-				<p class="overflow-hidden text-ellipsis whitespace-nowrap break-all text-base font-bold leading-5">
+				<p class="overflow-hidden text-ellipsis whitespace-nowrap text-base font-bold leading-5">
 					{props.title}
 				</p>
 

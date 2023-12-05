@@ -82,7 +82,7 @@ const AddressInput = (props: { value: string }) => {
 
 	return (
 		<div class="flex min-w-0 justify-between gap-4">
-			<span class="mt-2 flex cursor-text flex-wrap gap-1 break-all font-mono text-sm tracking-wider text-muted-fg">
+			<span class="mt-2 flex flex-wrap gap-1 break-all font-mono text-sm tracking-wider text-muted-fg">
 				{props.value}
 			</span>
 
