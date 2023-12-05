@@ -138,8 +138,6 @@ export class Multiagent {
 						isAppPassword: isAppPassword,
 					});
 				}
-
-				this.active = did;
 			});
 
 			this.#agents[did] = Promise.resolve(agent);
