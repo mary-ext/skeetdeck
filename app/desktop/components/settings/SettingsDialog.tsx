@@ -102,7 +102,14 @@ const sideItem = Interactive({
 
 type IconComponent = (props: ComponentProps<'svg'>) => JSX.Element;
 
-const SideItem = (props: { icon?: IconComponent; to: ViewType; children: JSX.Element }) => {
+type Exactly<T, U extends T> = { [K in keyof U]: K extends keyof T ? T[K] : never };
+type StandaloneViews<V extends { type: ViewType } = View> = V extends Exactly<{ type: ViewType }, V>
+	? V
+	: never;
+
+type StandaloneViewType = StandaloneViews['type'];
+
+const SideItem = (props: { icon?: IconComponent; to: StandaloneViewType; children: JSX.Element }) => {
 	const router = useViewRouter();
 
 	return (
