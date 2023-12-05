@@ -3,6 +3,8 @@ import { type JSX, createMemo, createSignal } from 'solid-js';
 import type { UnionOf } from '~/api/atp-schema.ts';
 
 import { type ModerationDecision, CauseLabel, CauseMutedKeyword } from '~/api/moderation/action.ts';
+import { FlagNoOverride } from '~/api/moderation/enums.ts';
+
 import { getQuoteModMaker } from '~/api/moderation/decisions/quote.ts';
 
 import { useSharedPreferences } from '../SharedPreferences.tsx';
@@ -48,6 +50,7 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 				}
 
 				const source = $decision.s;
+				const forced = source.t === CauseLabel && source.d.f & FlagNoOverride;
 
 				const title =
 					source.t === CauseLabel
@@ -60,12 +63,14 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 					<div class="flex items-stretch justify-between gap-3 overflow-hidden rounded-md border border-divider">
 						<p class="m-3 text-sm text-muted-fg">{title}</p>
 
-						<button
-							onClick={() => setShow(true)}
-							class="px-4 text-sm font-medium hover:bg-secondary/30 hover:text-secondary-fg"
-						>
-							Show
-						</button>
+						{!forced && (
+							<button
+								onClick={() => setShow(true)}
+								class="px-4 text-sm font-medium hover:bg-secondary/30 hover:text-secondary-fg"
+							>
+								Show
+							</button>
+						)}
 					</div>
 				);
 			},

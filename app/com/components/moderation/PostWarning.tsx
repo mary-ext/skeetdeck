@@ -5,6 +5,8 @@ import { renderLabelNames } from '~/api/display.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 
 import { CauseLabel, CauseMutedKeyword } from '~/api/moderation/action.ts';
+import { FlagNoOverride } from '~/api/moderation/enums.ts';
+
 import { getPostModMaker } from '~/api/moderation/decisions/post.ts';
 
 import { useSharedPreferences } from '../SharedPreferences.tsx';
@@ -56,6 +58,7 @@ const PostWarning = (props: PostWarningProps) => {
 		const [show, setShow] = createSignal(false);
 
 		const source = $decision.s;
+		const forced = source.t === CauseLabel && source.d.f & FlagNoOverride;
 
 		const title =
 			source.t === CauseLabel
@@ -71,19 +74,22 @@ const PostWarning = (props: PostWarningProps) => {
 			>
 				<p class="m-3 text-sm text-muted-fg">{title}</p>
 
-				<button
-					onClick={() => setShow(!show())}
-					class="px-4 text-sm font-medium hover:bg-secondary/30 hover:text-secondary-fg"
-				>
-					{show() ? 'Hide' : 'Show'}
-				</button>
+				{!forced && (
+					<button
+						onClick={() => setShow(!show())}
+						class="px-4 text-sm font-medium hover:bg-secondary/30 hover:text-secondary-fg"
+					>
+						{show() ? 'Hide' : 'Show'}
+					</button>
+				)}
 			</div>,
 
-			() => {
-				if (show()) {
-					return props.children;
-				}
-			},
+			!forced &&
+				(() => {
+					if (show()) {
+						return props.children;
+					}
+				}),
 		];
 	};
 

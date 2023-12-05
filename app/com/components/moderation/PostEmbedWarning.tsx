@@ -4,6 +4,8 @@ import { renderLabelNames } from '~/api/display.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 
 import { CauseLabel } from '~/api/moderation/action.ts';
+import { FlagNoOverride } from '~/api/moderation/enums.ts';
+
 import { getPostModMaker } from '~/api/moderation/decisions/post.ts';
 
 import ShieldIcon from '../../icons/baseline-shield.tsx';
@@ -39,6 +41,7 @@ const PostEmbedWarning = (props: PostEmbedWarningProps) => {
 		const [show, setShow] = createSignal(false);
 
 		const source = $decision.s;
+		const forced = source.t === CauseLabel && source.d.f & FlagNoOverride;
 		const title = source.t === CauseLabel ? renderLabelNames(source.l.val) : `Media warning`;
 
 		return [
@@ -46,19 +49,22 @@ const PostEmbedWarning = (props: PostEmbedWarningProps) => {
 				<ShieldIcon class="ml-3 text-base" />
 				<span class="grow text-sm">{title}</span>
 
-				<button
-					onClick={() => setShow(!show())}
-					class="p-3 text-de font-medium text-accent hover:bg-secondary/30"
-				>
-					{show() ? 'Hide' : 'Show'}
-				</button>
+				{!forced && (
+					<button
+						onClick={() => setShow(!show())}
+						class="p-3 text-de font-medium text-accent hover:bg-secondary/30"
+					>
+						{show() ? 'Hide' : 'Show'}
+					</button>
+				)}
 			</div>,
 
-			() => {
-				if (show()) {
-					return props.children;
-				}
-			},
+			!forced &&
+				(() => {
+					if (show()) {
+						return props.children;
+					}
+				}),
 		];
 	};
 
