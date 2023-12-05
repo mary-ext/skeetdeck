@@ -160,7 +160,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 			</div>
 
 			<Suspense fallback={<div class="h-64"></div>}>
-				<div ref={scrollRef} tabindex={-1} class="h-64 overflow-y-auto p-2">
+				<div ref={scrollRef} class="h-64 overflow-y-auto p-2">
 					<div class="grid grid-cols-6">
 						{(() => {
 							const children = emojis()?.map((emoji) => {

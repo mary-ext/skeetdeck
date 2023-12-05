@@ -35,8 +35,7 @@ const DecksView = () => {
 	return (
 		<Show when={deck()} keyed fallback={<Navigate href="/" />}>
 			{(deck) => (
-				// @todo: not sure why this is focusable to begin with
-				<div class="flex grow gap-1 overflow-x-auto bg-background-dark px-1" tabindex={-1}>
+				<div class="flex grow gap-1 overflow-x-auto bg-background-dark px-1">
 					<DragDropProvider
 						onDragEnd={({ draggable, droppable }) => {
 							if (draggable && droppable) {
