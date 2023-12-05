@@ -16,7 +16,7 @@ import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
 import { ViewType, useViewRouter } from './_router.tsx';
 
 const selectItem = Interactive({
-	class: `px-4 py-3 text-left text-sm`,
+	class: `flex items-center justify-between gap-4 px-4 py-3 text-left text-sm`,
 });
 
 const LanguageView = () => {
@@ -114,10 +114,7 @@ const LanguageView = () => {
 					</p>
 				</div>
 
-				<button
-					onClick={() => router.move({ type: ViewType.ADDITIONAL_LANGUAGE })}
-					class={`${selectItem} flex items-center justify-between gap-4`}
-				>
+				<button onClick={() => router.move({ type: ViewType.ADDITIONAL_LANGUAGE })} class={selectItem}>
 					<div>
 						<p>Additional content languages</p>
 						<p class="text-de text-muted-fg">
