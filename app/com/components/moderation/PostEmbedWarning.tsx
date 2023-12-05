@@ -8,7 +8,7 @@ import { FlagNoOverride } from '~/api/moderation/enums.ts';
 
 import { getPostModMaker } from '~/api/moderation/decisions/post.ts';
 
-import ShieldIcon from '../../icons/baseline-shield.tsx';
+import VisibilityIcon from '~/com/icons/baseline-visibility.tsx';
 
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 
@@ -46,13 +46,13 @@ const PostEmbedWarning = (props: PostEmbedWarningProps) => {
 
 		return [
 			<div class="mt-3 flex min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider">
-				<ShieldIcon class="ml-3 text-base" />
-				<span class="grow text-sm">{title}</span>
+				<VisibilityIcon class="ml-3 text-base text-muted-fg" />
+				<span class="grow py-3 text-sm">{title}</span>
 
 				{!forced && (
 					<button
 						onClick={() => setShow(!show())}
-						class="p-3 text-de font-medium text-accent hover:bg-secondary/30"
+						class="self-stretch px-3 text-de font-medium text-accent hover:bg-secondary/30"
 					>
 						{show() ? 'Hide' : 'Show'}
 					</button>
