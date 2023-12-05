@@ -7,7 +7,7 @@ import { createBatchedFetch } from '../utils/batch-fetch.ts';
 import { type SignalizedProfile, getCachedProfile, mergeProfile } from '../stores/profiles.ts';
 
 type ProfileData = RefOf<'app.bsky.actor.defs#profileViewDetailed'>;
-type Query = [uid: DID, actor: DID];
+type Query = [uid: DID, actor: string];
 
 export const fetchProfileBatched = createBatchedFetch<Query, string, ProfileData>({
 	limit: 25,
@@ -38,16 +38,24 @@ export const getProfileKey = (uid: DID, actor: string) => {
 export const getProfile = async (ctx: QC<ReturnType<typeof getProfileKey>>) => {
 	const [, uid, actor] = ctx.queryKey;
 
-	const agent = await multiagent.connect(uid);
+	let data: ProfileData;
 
-	const response = await agent.rpc.get('app.bsky.actor.getProfile', {
-		signal: ctx.signal,
-		params: {
-			actor: actor,
-		},
-	});
+	if (ctx.meta?.batched) {
+		data = await fetchProfileBatched([uid, actor]);
+		ctx.signal.throwIfAborted();
+	} else {
+		const agent = await multiagent.connect(uid);
 
-	const data = response.data;
+		const response = await agent.rpc.get('app.bsky.actor.getProfile', {
+			signal: ctx.signal,
+			params: {
+				actor: actor,
+			},
+		});
+
+		data = response.data;
+	}
+
 	const profile = mergeProfile(uid, data);
 
 	if (data.did === uid) {
