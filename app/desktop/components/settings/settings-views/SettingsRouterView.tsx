@@ -4,7 +4,10 @@ import { ViewType, useViewRouter } from './_router.tsx';
 
 import AccountsView from './AccountsView.tsx';
 import AppearanceView from './AppearanceView.tsx';
+import ContentFiltersView from './ContentFiltersView.tsx';
 import LanguageView from './LanguageView.tsx';
+
+import SubscribedLabelersView from './content-filters/SubscribedLabelersView.tsx';
 
 import AdditionalLanguageView from './languages/AdditionalLanguageView.tsx';
 
@@ -12,7 +15,10 @@ import AdditionalLanguageView from './languages/AdditionalLanguageView.tsx';
 const views: Record<ViewType, Component<any>> = {
 	[ViewType.ACCOUNTS]: AccountsView,
 	[ViewType.APPEARANCE]: AppearanceView,
+	[ViewType.CONTENT_FILTERS]: ContentFiltersView,
 	[ViewType.LANGAUGE]: LanguageView,
+
+	[ViewType.SUBSCRIBED_LABELERS]: SubscribedLabelersView,
 
 	[ViewType.ADDITIONAL_LANGUAGE]: AdditionalLanguageView,
 };

@@ -13,7 +13,6 @@ import ColorLensIcon from '~/com/icons/baseline-color-lens.tsx';
 import FilterAltIcon from '~/com/icons/baseline-filter-alt.tsx';
 import LanguageIcon from '~/com/icons/baseline-language.tsx';
 import PeopleIcon from '~/com/icons/baseline-people.tsx';
-import PersonOffIcon from '~/com/icons/baseline-person-off.tsx';
 import VisibilityIcon from '~/com/icons/baseline-visibility.tsx';
 
 import DonationDialog from '../DonationDialog.tsx';
@@ -69,9 +68,6 @@ const SettingsDialog = () => {
 								</SideItem>
 								<SideItem to={ViewType.KEYWORD_FILTERS} icon={FilterAltIcon}>
 									Keyword filters
-								</SideItem>
-								<SideItem to={ViewType.USER_FILTERS} icon={PersonOffIcon}>
-									User filters
 								</SideItem>
 							</div>
 							<div class="flex min-w-0 items-center gap-4 p-4">

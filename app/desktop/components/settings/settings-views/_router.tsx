@@ -1,5 +1,7 @@
 import { createContext, useContext } from 'solid-js';
 
+import type { DID } from '~/api/atp-schema.ts';
+
 export const enum ViewType {
 	// Root
 	ACCOUNTS,
@@ -11,6 +13,10 @@ export const enum ViewType {
 
 	// Language
 	ADDITIONAL_LANGUAGE,
+
+	// Content filters
+	SUBSCRIBED_LABELERS,
+	LABEL_CONFIG,
 }
 
 export type View =
@@ -20,7 +26,9 @@ export type View =
 	| { type: ViewType.LANGAUGE }
 	| { type: ViewType.CONTENT_FILTERS }
 	| { type: ViewType.KEYWORD_FILTERS }
-	| { type: ViewType.USER_FILTERS }
+	// Content filters
+	| { type: ViewType.SUBSCRIBED_LABELERS }
+	| { type: ViewType.LABEL_CONFIG; kind: 'user' | 'labeler'; did: DID }
 	// Language
 	| { type: ViewType.ADDITIONAL_LANGUAGE };
 
