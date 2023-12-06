@@ -4,7 +4,7 @@ import type { DID } from '~/api/atp-schema.ts';
 
 import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info.ts';
 
-import { PaneType, type CustomFeedPaneConfig } from '../../../globals/panes.ts';
+import { type CustomFeedPaneConfig, PANE_TYPE_FEED } from '../../../globals/panes.ts';
 import { addPane } from '../../../globals/settings.ts';
 
 import { IconButton } from '~/com/primitives/icon-button.ts';
@@ -69,7 +69,7 @@ const FeedPaneDialog = (props: FeedPaneDialogProps) => {
 									addPane<CustomFeedPaneConfig>(
 										deck,
 										{
-											type: PaneType.FEED,
+											type: PANE_TYPE_FEED,
 											uid: pane.uid,
 											feed: {
 												name: $feed.name.value,

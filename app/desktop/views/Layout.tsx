@@ -8,7 +8,13 @@ import { getCurrentTid } from '~/api/utils/tid.ts';
 
 import { openModal } from '~/com/globals/modals.tsx';
 
-import { type ProfilePaneConfig, type SearchPaneConfig, PaneType, ProfilePaneTab } from '../globals/panes.ts';
+import {
+	type ProfilePaneConfig,
+	type SearchPaneConfig,
+	PANE_TYPE_SEARCH,
+	PANE_TYPE_PROFILE,
+	ProfilePaneTab,
+} from '../globals/panes.ts';
 import { addPane, preferences } from '../globals/settings.ts';
 
 import { Interactive } from '~/com/primitives/interactive.ts';
@@ -76,13 +82,13 @@ const DashboardLayout = () => {
 
 												if (item.type === SuggestionType.SEARCH_POSTS) {
 													addPane<SearchPaneConfig>(deck, {
-														type: PaneType.SEARCH,
+														type: PANE_TYPE_SEARCH,
 														query: item.query,
 														uid: $uid,
 													});
 												} else if (item.type === SuggestionType.PROFILE) {
 													addPane<ProfilePaneConfig>(deck, {
-														type: PaneType.PROFILE,
+														type: PANE_TYPE_PROFILE,
 														profile: {
 															did: item.profile.did,
 															handle: item.profile.handle,

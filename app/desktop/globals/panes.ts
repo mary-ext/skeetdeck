@@ -1,25 +1,31 @@
 import type { DID } from '~/api/atp-schema.ts';
 
-export const enum PaneType {
-	HOME = 'home',
-	NOTIFICATIONS = 'notifications',
-	PROFILE = 'profile',
-	FEED = 'feed',
-	LIST = 'list',
-	SEARCH = 'search',
-}
+export const PANE_TYPE_HOME = 'home';
+export const PANE_TYPE_NOTIFICATIONS = 'notifications';
+export const PANE_TYPE_PROFILE = 'profile';
+export const PANE_TYPE_FEED = 'feed';
+export const PANE_TYPE_LIST = 'list';
+export const PANE_TYPE_SEARCH = 'search';
+
+export type PaneType =
+	| typeof PANE_TYPE_HOME
+	| typeof PANE_TYPE_NOTIFICATIONS
+	| typeof PANE_TYPE_PROFILE
+	| typeof PANE_TYPE_FEED
+	| typeof PANE_TYPE_LIST
+	| typeof PANE_TYPE_SEARCH;
 
 export const labelizePaneType = (type: PaneType) => {
 	switch (type) {
-		case PaneType.HOME:
+		case PANE_TYPE_HOME:
 			return 'Home';
-		case PaneType.NOTIFICATIONS:
+		case PANE_TYPE_NOTIFICATIONS:
 			return 'Notifications';
-		case PaneType.PROFILE:
+		case PANE_TYPE_PROFILE:
 			return 'Profile';
-		case PaneType.FEED:
+		case PANE_TYPE_FEED:
 			return 'Feed';
-		case PaneType.LIST:
+		case PANE_TYPE_LIST:
 			return 'User List';
 		default:
 			return 'N/A';
@@ -55,16 +61,16 @@ export interface BasePaneConfig {
 }
 
 export interface HomePaneConfig extends BasePaneConfig {
-	readonly type: PaneType.HOME;
+	readonly type: typeof PANE_TYPE_HOME;
 }
 
 export interface NotificationsPaneConfig extends BasePaneConfig {
-	readonly type: PaneType.NOTIFICATIONS;
+	readonly type: typeof PANE_TYPE_NOTIFICATIONS;
 	mask: number;
 }
 
 export interface ProfilePaneConfig extends BasePaneConfig {
-	readonly type: PaneType.PROFILE;
+	readonly type: typeof PANE_TYPE_PROFILE;
 	profile: {
 		did: DID;
 		handle: string;
@@ -75,7 +81,7 @@ export interface ProfilePaneConfig extends BasePaneConfig {
 }
 
 export interface CustomFeedPaneConfig extends BasePaneConfig {
-	readonly type: PaneType.FEED;
+	readonly type: typeof PANE_TYPE_FEED;
 	feed: {
 		uri: string;
 		name: string;
@@ -84,7 +90,7 @@ export interface CustomFeedPaneConfig extends BasePaneConfig {
 }
 
 export interface CustomListPaneConfig extends BasePaneConfig {
-	readonly type: PaneType.LIST;
+	readonly type: typeof PANE_TYPE_LIST;
 	list: {
 		uri: string;
 		name: string;
@@ -93,7 +99,7 @@ export interface CustomListPaneConfig extends BasePaneConfig {
 }
 
 export interface SearchPaneConfig extends BasePaneConfig {
-	readonly type: PaneType.SEARCH;
+	readonly type: typeof PANE_TYPE_SEARCH;
 	query: string;
 }
 

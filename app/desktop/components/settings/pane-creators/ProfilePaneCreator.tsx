@@ -5,7 +5,7 @@ import { createInfiniteQuery } from '@pkg/solid-query';
 import { getSuggestedFollows, getSuggestedFollowsKey } from '~/api/queries/get-suggested-follows.ts';
 import { searchProfiles, searchProfilesKey } from '~/api/queries/search-profiles.ts';
 
-import { PaneType, ProfilePaneTab, type ProfilePaneConfig } from '~/desktop/globals/panes.ts';
+import { type ProfilePaneConfig, PANE_TYPE_PROFILE, ProfilePaneTab } from '~/desktop/globals/panes.ts';
 
 import { DialogBody } from '~/com/primitives/dialog.ts';
 
@@ -25,7 +25,7 @@ const ProfilePaneCreator = (props: PaneCreatorProps) => {
 		}
 
 		props.onAdd<ProfilePaneConfig>({
-			type: PaneType.PROFILE,
+			type: PANE_TYPE_PROFILE,
 			profile: {
 				did: profile.did,
 				handle: profile.handle.value,

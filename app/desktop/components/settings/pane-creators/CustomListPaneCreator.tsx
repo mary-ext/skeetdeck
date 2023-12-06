@@ -5,7 +5,7 @@ import { createInfiniteQuery } from '@pkg/solid-query';
 import type { RefOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 
-import { type CustomListPaneConfig, PaneType } from '../../../globals/panes.ts';
+import { type CustomListPaneConfig, PANE_TYPE_LIST } from '../../../globals/panes.ts';
 
 import { DialogBody } from '~/com/primitives/dialog.ts';
 import { Interactive, loadMoreBtn } from '~/com/primitives/interactive.ts';
@@ -85,7 +85,7 @@ const CustomListPaneCreator = (props: PaneCreatorProps) => {
 							<button
 								onClick={() => {
 									props.onAdd<CustomListPaneConfig>({
-										type: PaneType.LIST,
+										type: PANE_TYPE_LIST,
 										list: { uri: list.uri, name: list.name },
 										infoVisible: true,
 									});

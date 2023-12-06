@@ -4,7 +4,7 @@ import { createInfiniteQuery } from '@pkg/solid-query';
 
 import { multiagent } from '~/api/globals/agent.ts';
 
-import { type CustomFeedPaneConfig, PaneType } from '../../../globals/panes.ts';
+import { type CustomFeedPaneConfig, PANE_TYPE_FEED } from '../../../globals/panes.ts';
 
 import { DialogBody } from '~/com/primitives/dialog.ts';
 import { Interactive } from '~/com/primitives/interactive.ts';
@@ -78,7 +78,7 @@ const CustomFeedPaneCreator = (props: PaneCreatorProps) => {
 						<button
 							onClick={() => {
 								props.onAdd<CustomFeedPaneConfig>({
-									type: PaneType.FEED,
+									type: PANE_TYPE_FEED,
 									feed: { uri: feed.uri, name: feed.displayName },
 									infoVisible: true,
 								});

@@ -18,7 +18,7 @@ import { IconButton } from '~/com/primitives/icon-button.ts';
 
 import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add.tsx';
 
-import { type ProfilePaneConfig, PaneType, ProfilePaneTab } from '../../../globals/panes.ts';
+import { type ProfilePaneConfig, PANE_TYPE_PROFILE, ProfilePaneTab } from '../../../globals/panes.ts';
 import { addPane } from '../../../globals/settings.ts';
 
 import { usePaneContext, usePaneModalState } from '../PaneContext.tsx';
@@ -86,7 +86,7 @@ const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 								addPane<ProfilePaneConfig>(
 									deck,
 									{
-										type: PaneType.PROFILE,
+										type: PANE_TYPE_PROFILE,
 										uid: pane.uid,
 										profile: {
 											did: data.did,

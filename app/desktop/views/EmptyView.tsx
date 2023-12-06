@@ -8,7 +8,13 @@ import { getCurrentTid } from '~/api/utils/tid.ts';
 
 import { FILTER_ALL } from '~/api/queries/get-notifications.ts';
 
-import { PaneType, ProfilePaneTab, SpecificPaneSize } from '../globals/panes.ts';
+import {
+	PANE_TYPE_HOME,
+	PANE_TYPE_NOTIFICATIONS,
+	PANE_TYPE_PROFILE,
+	ProfilePaneTab,
+	SpecificPaneSize,
+} from '../globals/panes.ts';
 import { preferences } from '../globals/settings.ts';
 
 import { Button } from '~/com/primitives/button.ts';
@@ -34,14 +40,14 @@ const createDefaultDeck = (uid: DID) => {
 			emoji: '⭐',
 			panes: [
 				{
-					type: PaneType.HOME,
+					type: PANE_TYPE_HOME,
 					id: getCurrentTid(),
 					uid: uid,
 					size: SpecificPaneSize.INHERIT,
 					title: null,
 				},
 				{
-					type: PaneType.NOTIFICATIONS,
+					type: PANE_TYPE_NOTIFICATIONS,
 					id: getCurrentTid(),
 					uid: uid,
 					size: SpecificPaneSize.INHERIT,
@@ -49,7 +55,7 @@ const createDefaultDeck = (uid: DID) => {
 					mask: FILTER_ALL,
 				},
 				{
-					type: PaneType.PROFILE,
+					type: PANE_TYPE_PROFILE,
 					id: getCurrentTid(),
 					uid: uid,
 					size: SpecificPaneSize.INHERIT,

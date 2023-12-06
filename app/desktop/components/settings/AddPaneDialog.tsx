@@ -16,7 +16,10 @@ import {
 	type HomePaneConfig,
 	type NotificationsPaneConfig,
 	type PaneConfig,
-	PaneType,
+	type PaneType,
+	PANE_TYPE_FEED,
+	PANE_TYPE_LIST,
+	PANE_TYPE_PROFILE,
 	SpecificPaneSize,
 	labelizePaneType,
 } from '../../globals/panes.ts';
@@ -48,9 +51,9 @@ export interface AddPaneDialogProps {
 
 // @ts-expect-error
 const components: Record<PaneType, Component<PaneCreatorProps>> = {
-	[PaneType.FEED]: CustomFeedPaneCreator,
-	[PaneType.LIST]: CustomListPaneCreator,
-	[PaneType.PROFILE]: ProfilePaneCreator,
+	[PANE_TYPE_FEED]: CustomFeedPaneCreator,
+	[PANE_TYPE_LIST]: CustomListPaneCreator,
+	[PANE_TYPE_PROFILE]: ProfilePaneCreator,
 };
 
 const columnItem = Interactive({ class: 'flex items-center gap-4 p-4 text-sm' });
@@ -145,29 +148,29 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 							</div>
 
 							<div class="flex flex-col">
-								<button onClick={() => add<HomePaneConfig>({ type: PaneType.HOME })} class={columnItem}>
+								<button onClick={() => add<HomePaneConfig>({ type: PANE_TYPE_HOME })} class={columnItem}>
 									<HomeOutlinedIcon class="text-xl" />
 									<span>Home timeline</span>
 								</button>
 
-								<button onClick={() => setType(PaneType.LIST)} class={columnItem}>
+								<button onClick={() => setType(PANE_TYPE_LIST)} class={columnItem}>
 									<ListBoxOutlinedIcon class="text-xl" />
 									<span>User lists</span>
 								</button>
 
-								<button onClick={() => setType(PaneType.FEED)} class={columnItem}>
+								<button onClick={() => setType(PANE_TYPE_FEED)} class={columnItem}>
 									<PoundIcon class="text-xl" />
 									<span>Feeds</span>
 								</button>
 
-								<button onClick={() => setType(PaneType.PROFILE)} class={columnItem}>
+								<button onClick={() => setType(PANE_TYPE_PROFILE)} class={columnItem}>
 									<PersonOutlinedIcon class="text-xl" />
 									<span>Profiles</span>
 								</button>
 
 								<button
 									onClick={() =>
-										add<NotificationsPaneConfig>({ type: PaneType.NOTIFICATIONS, mask: FILTER_ALL })
+										add<NotificationsPaneConfig>({ type: PANE_TYPE_NOTIFICATIONS, mask: FILTER_ALL })
 									}
 									class={columnItem}
 								>

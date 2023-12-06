@@ -6,7 +6,7 @@ import type { DID } from '~/api/atp-schema.ts';
 
 import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/get-list-info.ts';
 
-import { PaneType, type CustomListPaneConfig } from '../../../globals/panes.ts';
+import { type CustomListPaneConfig, PANE_TYPE_LIST } from '../../../globals/panes.ts';
 import { addPane } from '../../../globals/settings.ts';
 
 import { IconButton } from '~/com/primitives/icon-button.ts';
@@ -77,7 +77,7 @@ const ListPaneDialog = (props: ListPaneDialogProps) => {
 									addPane<CustomListPaneConfig>(
 										deck,
 										{
-											type: PaneType.LIST,
+											type: PANE_TYPE_LIST,
 											uid: pane.uid,
 											list: {
 												name: $list.name.value,
