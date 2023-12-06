@@ -1,6 +1,6 @@
 import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults.ts';
 
-import { isElementClicked } from '~/utils/interaction.ts';
+import { INTERACTION_TAGS, isElementClicked } from '~/utils/interaction.ts';
 
 import { IconButton } from '~/com/primitives/icon-button.ts';
 import { Interactive } from '~/com/primitives/interactive.ts';
@@ -50,7 +50,7 @@ const SubscribedLabelersView = () => {
 
 				{(() => {
 					const handleClick = (ev: MouseEvent | KeyboardEvent) => {
-						if (!isElementClicked(ev)) {
+						if (!isElementClicked(ev, INTERACTION_TAGS)) {
 							return;
 						}
 

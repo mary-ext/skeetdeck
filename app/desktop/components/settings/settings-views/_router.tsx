@@ -28,9 +28,12 @@ export type View =
 	| { type: ViewType.KEYWORD_FILTERS }
 	// Content filters
 	| { type: ViewType.SUBSCRIBED_LABELERS }
-	| { type: ViewType.LABEL_CONFIG; kind: 'user' | 'labeler'; did: DID }
+	| { type: ViewType.LABEL_CONFIG; kind: 'global' }
+	| { type: ViewType.LABEL_CONFIG; kind: 'labeler'; did: DID }
 	// Language
 	| { type: ViewType.ADDITIONAL_LANGUAGE };
+
+export type ViewParams<T extends ViewType, V = View> = V extends { type: T } ? Omit<V, 'type'> : never;
 
 export interface RouterState {
 	readonly current: View;

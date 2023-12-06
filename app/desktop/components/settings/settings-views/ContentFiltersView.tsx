@@ -19,15 +19,23 @@ const ContentFiltersView = () => {
 			<div class="flex grow flex-col overflow-y-auto pb-4">
 				<p class="p-4 text-base font-bold leading-5">Label filters</p>
 
+				<button
+					onClick={() => router.move({ type: ViewType.LABEL_CONFIG, kind: 'global' })}
+					class={selectItem}
+				>
+					<span>Content filter preferences</span>
+					<ChevronRightIcon class="text-xl text-muted-fg" />
+				</button>
+
 				<button onClick={() => router.move({ type: ViewType.SUBSCRIBED_LABELERS })} class={selectItem}>
 					<span>Subscribed label providers</span>
 					<ChevronRightIcon class="text-xl text-muted-fg" />
 				</button>
 
-				<button onClick={() => router.move({ type: ViewType.CONTENT_FILTERS })} class={selectItem}>
+				{/* <button onClick={() => router.move({ type: ViewType.CONTENT_FILTERS })} class={selectItem}>
 					<span>Per-user label overrides</span>
 					<ChevronRightIcon class="text-xl text-muted-fg" />
-				</button>
+				</button> */}
 
 				<hr class="mx-4 mt-1 border-divider" />
 
