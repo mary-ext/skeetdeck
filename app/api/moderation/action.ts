@@ -117,9 +117,10 @@ export const decideLabelModeration = (
 
 			if (pref === undefined) {
 				if (isSelfLabeled) {
-					const userPref = opts.users[src];
+					// const userPref = opts.users[src];
+					// pref = userPref?.labels[id] ?? globalPref.labels[id];
 
-					pref = userPref?.labels[id] ?? globalPref.labels[id];
+					pref = globalPref.labels[id];
 				} else {
 					const labelerPref = opts.labelers[src];
 

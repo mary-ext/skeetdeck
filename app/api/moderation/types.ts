@@ -39,7 +39,7 @@ export interface ModerationOpts {
 	_filtersCache?: [raw: string, match: RegExp][];
 
 	globals: ModerationLabelOpts;
-	users: { [user: DID]: ModerationLabelOpts | undefined };
+	// users: { [user: DID]: ModerationLabelOpts | undefined };
 	labelers: { [labeler: DID]: ModerationLabelOpts | undefined };
 	keywords: ModerationFiltersOpts[];
 }

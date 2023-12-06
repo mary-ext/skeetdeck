@@ -69,7 +69,7 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 						scam: PreferenceWarn,
 					},
 				},
-				users: {},
+				// users: {},
 				labelers: {
 					[DEFAULT_MODERATION_LABELER]: {
 						labels: {},
