@@ -4,15 +4,15 @@
 	},
 	"devDependencies": {
 		"prettier": "^3.1.0",
-		"prettier-plugin-tailwindcss": "^0.5.7",
-		"tailwindcss": "^3.3.5",
+		"prettier-plugin-tailwindcss": "^0.5.9",
+		"tailwindcss": "^3.3.6",
 		"typescript": "^5.3.2"
 	},
 	"pnpm": {
 		"patchedDependencies": {
 			"@solidjs/router@0.8.4": "patches/@solidjs__router@0.8.4.patch",
 			"solid-textarea-autosize@0.0.5": "patches/solid-textarea-autosize@0.0.5.patch",
-			"solid-js@1.8.6": "patches/solid-js@1.8.6.patch"
+			"solid-js@1.8.7": "patches/solid-js@1.8.6.patch"
 		}
 	}
 }
