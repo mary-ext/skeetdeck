@@ -26,7 +26,11 @@ import SearchIcon from '~/com/icons/baseline-search.tsx';
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
 import TableLargeAddIcon from '~/com/icons/baseline-table-large-add.tsx';
 
-import { SearchFlyout, SuggestionType } from '../components/flyouts/SearchFlyout.tsx';
+import {
+	SUGGESTION_PROFILE,
+	SUGGESTION_SEARCH_POSTS,
+	SearchFlyout,
+} from '../components/flyouts/SearchFlyout.tsx';
 import AddDeckDialog from '../components/settings/AddDeckDialog.tsx';
 
 const SettingsDialog = lazy(() => import('../components/settings/SettingsDialog.tsx'));
@@ -80,13 +84,13 @@ const DashboardLayout = () => {
 													navigate(`/decks/${deck.id}`);
 												}
 
-												if (item.type === SuggestionType.SEARCH_POSTS) {
+												if (item.type === SUGGESTION_SEARCH_POSTS) {
 													addPane<SearchPaneConfig>(deck, {
 														type: PANE_TYPE_SEARCH,
 														query: item.query,
 														uid: $uid,
 													});
-												} else if (item.type === SuggestionType.PROFILE) {
+												} else if (item.type === SUGGESTION_PROFILE) {
 													addPane<ProfilePaneConfig>(deck, {
 														type: PANE_TYPE_PROFILE,
 														profile: {

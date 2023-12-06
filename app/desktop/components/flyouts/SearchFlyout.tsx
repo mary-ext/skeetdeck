@@ -14,18 +14,18 @@ import { model } from '~/utils/input.ts';
 
 import SearchInput from '~/com/components/inputs/SearchInput.tsx';
 
-export const enum SuggestionType {
-	SEARCH_POSTS,
-	PROFILE,
-}
+export const SUGGESTION_SEARCH_POSTS = 0;
+export const SUGGESTION_PROFILE = 1;
+
+export type SuggestionType = typeof SUGGESTION_SEARCH_POSTS | typeof SUGGESTION_PROFILE;
 
 export interface SearchPostsSuggestionItem {
-	type: SuggestionType.SEARCH_POSTS;
+	type: typeof SUGGESTION_SEARCH_POSTS;
 	query: string;
 }
 
 export interface ProfileSuggestionItem {
-	type: SuggestionType.PROFILE;
+	type: typeof SUGGESTION_PROFILE;
 	id: DID;
 	profile: RefOf<'app.bsky.actor.defs#profileViewBasic'>;
 }
@@ -53,7 +53,7 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 			select: (data) => {
 				return data.map((profile): ProfileSuggestionItem => {
 					return {
-						type: SuggestionType.PROFILE,
+						type: SUGGESTION_PROFILE,
 						id: profile.did,
 						profile: profile,
 					};
@@ -71,7 +71,7 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 
 		if ($search) {
 			items.push({
-				type: SuggestionType.SEARCH_POSTS,
+				type: SUGGESTION_SEARCH_POSTS,
 				query: $search,
 			});
 		}
@@ -122,13 +122,13 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 				{(item, index) => {
 					let node: JSX.Element;
 
-					if (item.type === SuggestionType.SEARCH_POSTS) {
+					if (item.type === SUGGESTION_SEARCH_POSTS) {
 						node = (
 							<p class="overflow-hidden text-ellipsis whitespace-nowrap px-4 py-3">
 								Search posts matching <strong>{/* @once */ item.query}</strong>
 							</p>
 						);
-					} else if (item.type === SuggestionType.PROFILE) {
+					} else if (item.type === SUGGESTION_PROFILE) {
 						const profile = item.profile;
 
 						node = (
