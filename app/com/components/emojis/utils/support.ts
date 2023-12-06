@@ -12,7 +12,7 @@ const FONT_FAMILY = '"Noto Color Emoji", "Twemoji Mozilla", sans-serif';
 // Note that compound emojis have to be tested individually as some fonts might
 // not support them fully, and can be problematic on how it's displaying them.
 const emojiVersions: [emoji: string, version: number][] = [
-	['🫨', 15],
+	['🫨', 15.1],
 	['🫠', 14],
 	['🥲', 13.1],
 	['🥻', 12.1],
