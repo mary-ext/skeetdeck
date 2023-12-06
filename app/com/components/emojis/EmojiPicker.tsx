@@ -42,7 +42,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 	const [search, setSearch] = createSignal('');
 	const [group, setGroup] = createSignal(0);
 
-	const [pending, start] = useTransition();
+	const [_pending, start] = useTransition();
 
 	const [emojis] = createResource(
 		() => [search(), group()] as const,

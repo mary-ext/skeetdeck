@@ -2,15 +2,16 @@ import { type JSX, lazy } from 'solid-js';
 
 import {
 	type LinkingContextObject,
-	LINK_FEED,
+	LINK_EXTERNAL,
 	LINK_FEED_LIKED_BY,
+	LINK_FEED,
 	LINK_LIST,
-	LINK_POST,
 	LINK_POST_LIKED_BY,
 	LINK_POST_REPOSTED_BY,
-	LINK_PROFILE,
+	LINK_POST,
 	LINK_PROFILE_FOLLOWERS,
 	LINK_PROFILE_FOLLOWS,
+	LINK_PROFILE,
 	LinkingContext,
 } from '~/com/components/Link.tsx';
 

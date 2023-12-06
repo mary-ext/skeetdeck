@@ -11,7 +11,6 @@ import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu.ts';
 import { Flyout } from '../../Flyout.tsx';
 
 import ContentCopyIcon from '~/com/icons/baseline-content-copy.tsx';
-import LaunchIcon from '../../../icons/baseline-launch.tsx';
 import LinkIcon from '~/com/icons/baseline-link.tsx';
 import ShareIcon from '~/com/icons/baseline-share.tsx';
 

@@ -1,4 +1,4 @@
-import { type JSX, Show, createEffect, createSignal } from 'solid-js';
+import { type JSX, createEffect } from 'solid-js';
 
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
 

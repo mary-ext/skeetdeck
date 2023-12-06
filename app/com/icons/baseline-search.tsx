@@ -1,4 +1,4 @@
-import { createIcon } from './_icon';
+import { createIcon } from './_icon.tsx';
 
 const SearchIcon = createIcon([
 	[
