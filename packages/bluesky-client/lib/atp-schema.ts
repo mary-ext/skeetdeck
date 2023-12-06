@@ -1405,6 +1405,14 @@ export interface Procedures {
 		};
 	};
 	/**
+	 * Delete a user account as an administrator.
+	 */
+	'com.atproto.admin.deleteAccount': {
+		data: {
+			did: DID;
+		};
+	};
+	/**
 	 * Disable an account from receiving new invite codes, but does not invalidate existing codes.
 	 */
 	'com.atproto.admin.disableAccountInvites': {
@@ -1935,6 +1943,56 @@ export interface Procedures {
 			 * Hostname of the service that is requesting to be crawled.
 			 */
 			hostname: string;
+		};
+	};
+	/**
+	 * Gets the did's repo, optionally catching up from a specific revision.
+	 */
+	'com.atproto.temp.importRepo': {
+		params: {
+			/**
+			 * The DID of the repo.
+			 */
+			did: DID;
+		};
+		data: Blob;
+		response: unknown;
+	};
+	/**
+	 * Gets the did's repo, optionally catching up from a specific revision.
+	 */
+	'com.atproto.temp.pushBlob': {
+		params: {
+			/**
+			 * The DID of the repo.
+			 */
+			did: DID;
+		};
+		data: Blob;
+	};
+	/**
+	 * Transfer an account.
+	 */
+	'com.atproto.temp.transferAccount': {
+		data: {
+			handle: Handle;
+			did: DID;
+			plcOp: unknown;
+		};
+		response: {
+			accessJwt: string;
+			refreshJwt: string;
+			handle: Handle;
+			did: DID;
+		};
+		errors: {
+			InvalidHandle: {};
+			InvalidPassword: {};
+			InvalidInviteCode: {};
+			HandleNotAvailable: {};
+			UnsupportedDomain: {};
+			UnresolvableDid: {};
+			IncompatibleDidDoc: {};
 		};
 	};
 }
