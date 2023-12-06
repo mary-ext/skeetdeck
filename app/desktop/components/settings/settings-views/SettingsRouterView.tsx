@@ -1,19 +1,19 @@
-import type { Component, JSX } from 'solid-js';
+import { type Component, type JSX, lazy } from 'solid-js';
 
 import { ViewType, useViewRouter } from './_router.tsx';
 
-import AccountsView from './AccountsView.tsx';
-import AppearanceView from './AppearanceView.tsx';
-import ContentFiltersView from './ContentFiltersView.tsx';
-import KeywordFiltersView from './KeywordFiltersView.tsx';
-import LanguageView from './LanguageView.tsx';
+const AccountsView = lazy(() => import('./AccountsView.tsx'));
+const AppearanceView = lazy(() => import('./AppearanceView.tsx'));
+const ContentFiltersView = lazy(() => import('./ContentFiltersView.tsx'));
+const KeywordFiltersView = lazy(() => import('./KeywordFiltersView.tsx'));
+const LanguageView = lazy(() => import('./LanguageView.tsx'));
 
-import LabelConfigView from './content-filters/LabelConfigView.tsx';
-import SubscribedLabelersView from './content-filters/SubscribedLabelersView.tsx';
+const LabelConfigView = lazy(() => import('./content-filters/LabelConfigView.tsx'));
+const SubscribedLabelersView = lazy(() => import('./content-filters/SubscribedLabelersView.tsx'));
 
-import KeywordFilterFormView from './keyword-filters/KeywordFilterFormView.tsx';
+const KeywordFilterFormView = lazy(() => import('./keyword-filters/KeywordFilterFormView.tsx'));
 
-import AdditionalLanguageView from './languages/AdditionalLanguageView.tsx';
+const AdditionalLanguageView = lazy(() => import('./languages/AdditionalLanguageView.tsx'));
 
 const views: Record<ViewType, Component> = {
 	[ViewType.ACCOUNTS]: AccountsView,

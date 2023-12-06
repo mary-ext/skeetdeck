@@ -1,4 +1,4 @@
-import { type ComponentProps, type JSX, createSignal } from 'solid-js';
+import { type ComponentProps, type JSX, createSignal, Suspense } from 'solid-js';
 
 import { closeModal, openModal } from '~/com/globals/modals.tsx';
 
@@ -25,6 +25,7 @@ import {
 	useViewRouter,
 } from './settings-views/_router.tsx';
 import SettingsRouterView from './settings-views/SettingsRouterView.tsx';
+import CircularProgress from '~/com/components/CircularProgress.tsx';
 
 const SettingsDialog = () => {
 	const [view, setView] = createSignal<View>({ type: ViewType.ACCOUNTS });
@@ -84,7 +85,15 @@ const SettingsDialog = () => {
 							</div>
 						</div>
 						<div class="flex grow flex-col overflow-hidden overflow-y-auto border-l border-divider">
-							<SettingsRouterView />
+							<Suspense
+								fallback={
+									<div class="grid grow place-items-center">
+										<CircularProgress />
+									</div>
+								}
+							>
+								<SettingsRouterView />
+							</Suspense>
 						</div>
 					</div>
 				</div>
