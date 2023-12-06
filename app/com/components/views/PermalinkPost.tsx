@@ -9,7 +9,14 @@ import type { SignalizedPost } from '~/api/stores/posts.ts';
 import { formatCompact } from '~/utils/intl/number.ts';
 import { formatAbsDateTime } from '~/utils/intl/time.ts';
 
-import { Link, LinkingType } from '../Link.tsx';
+import {
+	LINK_LIST,
+	LINK_POST_LIKED_BY,
+	LINK_POST_REPOSTED_BY,
+	LINK_PROFILE,
+	LINK_REPLY,
+	Link,
+} from '../Link.tsx';
 import RichTextRenderer from '../RichTextRenderer.tsx';
 
 import PostEmbedWarning from '../moderation/PostEmbedWarning.tsx';
@@ -47,7 +54,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 		<div class="px-4 pt-3">
 			<div class="mb-3 flex items-center text-sm text-muted-fg">
 				<Link
-					to={{ type: LinkingType.PROFILE, actor: author().did }}
+					to={{ type: LINK_PROFILE, actor: author().did }}
 					class="group pointer-events-none inline-flex max-w-full items-start overflow-hidden text-left"
 				>
 					<div class="pointer-events-auto z-2 mr-3 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-muted-fg">
@@ -98,18 +105,12 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 			<hr class="border-divider" />
 
 			<div class="flex flex-wrap gap-4 py-4 text-sm">
-				<Link
-					to={{ type: LinkingType.POST_REPOSTED_BY, actor: author().did, rkey: rkey() }}
-					class="hover:underline"
-				>
+				<Link to={{ type: LINK_POST_REPOSTED_BY, actor: author().did, rkey: rkey() }} class="hover:underline">
 					<span class="font-bold">{formatCompact(post().repostCount.value)}</span>{' '}
 					<span class="text-muted-fg">Reposts</span>
 				</Link>
 
-				<Link
-					to={{ type: LinkingType.POST_LIKED_BY, actor: author().did, rkey: rkey() }}
-					class="hover:underline"
-				>
+				<Link to={{ type: LINK_POST_LIKED_BY, actor: author().did, rkey: rkey() }} class="hover:underline">
 					<span class="font-bold">{formatCompact(post().likeCount.value)}</span>{' '}
 					<span class="text-muted-fg">Likes</span>
 				</Link>
@@ -119,7 +120,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 
 			<div class="flex h-13 items-center justify-around text-muted-fg">
 				<Link
-					to={{ type: LinkingType.REPLY, actor: author().did, rkey: rkey() }}
+					to={{ type: LINK_REPLY, actor: author().did, rkey: rkey() }}
 					class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40 disabled:pointer-events-none disabled:opacity-50"
 					disabled={post().viewer.replyDisabled.value}
 				>
@@ -185,7 +186,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 
 							children.push(
 								<Link
-									to={{ type: LinkingType.LIST, actor: actor, rkey: rkey }}
+									to={{ type: LINK_LIST, actor: actor, rkey: rkey }}
 									class="text-left font-bold hover:underline"
 								>
 									{/* @once */ list.name}

@@ -11,7 +11,15 @@ import { updatePostLike } from '~/api/mutations/like-post.ts';
 import { formatCompact } from '~/utils/intl/number.ts';
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
 
-import { type PostLinking, type ProfileLinking, Link, LinkingType, useLinking } from '../Link.tsx';
+import {
+	type PostLinking,
+	type ProfileLinking,
+	LINK_PROFILE,
+	LINK_POST,
+	LINK_REPLY,
+	Link,
+	useLinking,
+} from '../Link.tsx';
 import RichTextRenderer from '../RichTextRenderer.tsx';
 import TimeAgo from '../TimeAgo.tsx';
 
@@ -52,11 +60,11 @@ const Post = (props: PostProps) => {
 	const record = () => post().record.value;
 
 	const authorPermalink = (): ProfileLinking => {
-		return { type: LinkingType.PROFILE, actor: author().did };
+		return { type: LINK_PROFILE, actor: author().did };
 	};
 
 	const postPermalink = (): PostLinking => {
-		return { type: LinkingType.POST, actor: author().did, rkey: getRecordId(post().uri) };
+		return { type: LINK_POST, actor: author().did, rkey: getRecordId(post().uri) };
 	};
 
 	const handleClick = (ev: MouseEvent | KeyboardEvent) => {
@@ -99,7 +107,7 @@ const Post = (props: PostProps) => {
 									<RepeatIcon />
 								</div>
 								<Link
-									to={{ type: LinkingType.PROFILE, actor: reason.by.did }}
+									to={{ type: LINK_PROFILE, actor: reason.by.did }}
 									class="flex min-w-0 text-left font-medium hover:underline"
 								>
 									<span dir="auto" class="overflow-hidden text-ellipsis whitespace-nowrap">
@@ -126,7 +134,7 @@ const Post = (props: PostProps) => {
 									<Link
 										to={
 											/* @once */ {
-												type: LinkingType.POST,
+												type: LINK_POST,
 												actor: parent.author.did,
 												rkey: getRecordId(parent.uri),
 											}
@@ -227,7 +235,7 @@ const Post = (props: PostProps) => {
 								<div class="mt-3 flex text-muted-fg">
 									<div class="min-w-0 grow basis-0">
 										<Link
-											to={{ type: LinkingType.REPLY, actor: author().did, rkey: getRecordId(post().uri) }}
+											to={{ type: LINK_REPLY, actor: author().did, rkey: getRecordId(post().uri) }}
 											class="group flex max-w-full items-end gap-0.5 disabled:pointer-events-none"
 											disabled={post().viewer.replyDisabled.value}
 										>

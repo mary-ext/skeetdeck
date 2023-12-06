@@ -6,7 +6,7 @@ import { getRecordId } from '~/api/utils/misc.ts';
 
 import PostQuoteWarning from '../moderation/PostQuoteWarning.tsx';
 
-import { Link, LinkingType } from '../Link.tsx';
+import { LINK_POST, Link } from '../Link.tsx';
 import TimeAgo from '../TimeAgo.tsx';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
@@ -56,7 +56,7 @@ const EmbedRecord = (props: EmbedRecordProps) => {
 					component={interactive() ? Link : 'div'}
 					to={
 						interactive()
-							? { type: LinkingType.POST, actor: author().did, rkey: getRecordId(record().uri) }
+							? { type: LINK_POST, actor: author().did, rkey: getRecordId(record().uri) }
 							: undefined
 					}
 					class="overflow-hidden rounded-md border border-divider text-left"

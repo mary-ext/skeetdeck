@@ -11,7 +11,7 @@ import { openModal } from '~/com/globals/modals.tsx';
 
 import { Button } from '../../primitives/button.ts';
 
-import { Link, LinkingType } from '../Link.tsx';
+import { LINK_LIST, LINK_PROFILE_FOLLOWERS, LINK_PROFILE_FOLLOWS, Link } from '../Link.tsx';
 import { isProfileTempMuted, useSharedPreferences } from '../SharedPreferences.tsx';
 
 import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
@@ -129,12 +129,12 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 				<div class="whitespace-pre-wrap break-words text-sm empty:hidden">{profile().description.value}</div>
 
 				<div class="flex flex-wrap gap-4 text-sm">
-					<Link to={{ type: LinkingType.PROFILE_FOLLOWS, actor: profile().did }} class="hover:underline">
+					<Link to={{ type: LINK_PROFILE_FOLLOWS, actor: profile().did }} class="hover:underline">
 						<span class="font-bold">{formatCompact(profile().followsCount.value)}</span>{' '}
 						<span class="text-muted-fg">Follows</span>
 					</Link>
 
-					<Link to={{ type: LinkingType.PROFILE_FOLLOWERS, actor: profile().did }} class="hover:underline">
+					<Link to={{ type: LINK_PROFILE_FOLLOWERS, actor: profile().did }} class="hover:underline">
 						<span class="font-bold">{formatCompact(profile().followersCount.value)}</span>{' '}
 						<span class="text-muted-fg">Followers</span>
 					</Link>
@@ -173,7 +173,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 									<Link
 										to={
 											/* @once */ {
-												type: LinkingType.LIST,
+												type: LINK_LIST,
 												actor: getRepoId(blockingByList.uri) as DID,
 												rkey: getRecordId(blockingByList.uri),
 											}
@@ -196,7 +196,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 									<Link
 										to={
 											/* @once */ {
-												type: LinkingType.LIST,
+												type: LINK_LIST,
 												actor: getRepoId(mutedByList.uri) as DID,
 												rkey: getRecordId(mutedByList.uri),
 											}

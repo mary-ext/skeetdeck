@@ -4,7 +4,7 @@ import type { UnionOf } from '~/api/atp-schema.ts';
 import { ListPurposeLabels } from '~/api/display.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
-import { Link, LinkingType } from '../Link.tsx';
+import { LINK_LIST, Link } from '../Link.tsx';
 
 import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';
 
@@ -24,7 +24,7 @@ const EmbedList = (props: EmbedListProps) => {
 
 		return (
 			<Link
-				to={{ type: LinkingType.LIST, actor: creator.did, rkey: getRecordId(list.uri) }}
+				to={{ type: LINK_LIST, actor: creator.did, rkey: getRecordId(list.uri) }}
 				class="flex flex-col gap-2 rounded-md border border-divider p-3 text-left text-sm hover:bg-secondary/10"
 			>
 				<div class="flex gap-3">

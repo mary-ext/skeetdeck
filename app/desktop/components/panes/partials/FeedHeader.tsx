@@ -11,7 +11,7 @@ import { openModal } from '~/com/globals/modals.tsx';
 
 import { Button } from '~/com/primitives/button.ts';
 
-import { Link, LinkingType } from '~/com/components/Link.tsx';
+import { LINK_FEED_LIKED_BY, LINK_PROFILE, Link } from '~/com/components/Link.tsx';
 
 import FavoriteIcon from '~/com/icons/baseline-favorite.tsx';
 import FavoriteOutlinedIcon from '~/com/icons/outline-favorite.tsx';
@@ -66,7 +66,7 @@ const FeedHeader = (props: FeedHeaderProps) => {
 						<p class="break-words text-lg font-bold">{feed.name.value}</p>
 
 						<Link
-							to={/* @once */ { type: LinkingType.PROFILE, actor: creator.did }}
+							to={/* @once */ { type: LINK_PROFILE, actor: creator.did }}
 							class="group mt-1 flex items-center text-left"
 						>
 							<img src={creator.avatar.value || DefaultUserAvatar} class="mr-2 h-5 w-5 rounded-full" />
@@ -83,7 +83,7 @@ const FeedHeader = (props: FeedHeaderProps) => {
 				<p class="whitespace-pre-wrap break-words text-sm empty:hidden">{feed.description.value}</p>
 
 				<Link
-					to={{ type: LinkingType.FEED_LIKED_BY, actor: creator.did, rkey: getRecordId(feed.uri) }}
+					to={{ type: LINK_FEED_LIKED_BY, actor: creator.did, rkey: getRecordId(feed.uri) }}
 					class="text-left text-sm text-muted-fg hover:underline"
 				>
 					Liked by {formatCompact(feed.likeCount.value)} users

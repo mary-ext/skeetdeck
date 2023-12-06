@@ -1,6 +1,6 @@
 import type { SignalizedList } from '~/api/stores/lists.ts';
 
-import { LinkingType, useLinking } from '~/com/components/Link.tsx';
+import { LINK_PROFILE, useLinking } from '~/com/components/Link.tsx';
 
 import PaneDialog from '../PaneDialog.tsx';
 import PaneDialogHeader from '../PaneDialogHeader.tsx';
@@ -25,7 +25,7 @@ const ListMembersPaneDialog = (props: ListMembersPaneDialogProps) => {
 				<ListMembersList
 					list={list}
 					onClick={(profile) => {
-						linking.navigate({ type: LinkingType.PROFILE, actor: profile.did });
+						linking.navigate({ type: LINK_PROFILE, actor: profile.did });
 					}}
 				/>
 			</div>

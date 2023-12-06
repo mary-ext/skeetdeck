@@ -15,7 +15,7 @@ import TimelineList from '~/com/components/lists/TimelineList.tsx';
 import ListMembersList from '~/com/components/lists/ListMembersList.tsx';
 import GenericErrorView from '~/com/components/views/GenericErrorView.tsx';
 import CircularProgress from '~/com/components/CircularProgress.tsx';
-import { LinkingType, useLinking } from '~/com/components/Link.tsx';
+import { LINK_PROFILE, useLinking } from '~/com/components/Link.tsx';
 
 import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add.tsx';
 
@@ -117,7 +117,7 @@ const ListPaneDialog = (props: ListPaneDialogProps) => {
 									<ListMembersList
 										list={$list}
 										onClick={(profile) => {
-											linking.navigate({ type: LinkingType.PROFILE, actor: profile.did });
+											linking.navigate({ type: LINK_PROFILE, actor: profile.did });
 										}}
 									/>
 								);

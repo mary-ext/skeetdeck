@@ -11,7 +11,7 @@ import {
 } from '~/api/queries/get-profile-followers.ts';
 
 import ProfileList from '~/com/components/lists/ProfileList.tsx';
-import { LinkingType, useLinking } from '~/com/components/Link.tsx';
+import { LINK_PROFILE, useLinking } from '~/com/components/Link.tsx';
 
 import { usePaneContext } from '../PaneContext.tsx';
 import PaneDialog from '../PaneDialog.tsx';
@@ -76,7 +76,7 @@ const ProfileFollowersPaneDialog = (props: ProfileFollowersPaneDialogProps) => {
 							return;
 						}
 
-						linking.navigate({ type: LinkingType.PROFILE, actor: profile.did });
+						linking.navigate({ type: LINK_PROFILE, actor: profile.did });
 					}}
 				/>
 			</div>

@@ -4,7 +4,7 @@ import { isLinkValid } from '~/api/richtext/renderer.ts';
 import { segmentRichText } from '~/api/richtext/segmentize.ts';
 import type { Facet, RichTextSegment } from '~/api/richtext/types.ts';
 
-import { type Linking, LinkingType, useLinking } from './Link.tsx';
+import { type Linking, LINK_EXTERNAL, LINK_PROFILE, LINK_TAG, useLinking } from './Link.tsx';
 
 export interface RichTextReturn {
 	t: string;
@@ -77,7 +77,7 @@ const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => 
 				// @todo: should probably stop using <button> on PaneLinkingContext
 				// because it hasn't been fun smoothing out the differences between <a>
 				// and <button> elements, let's just use <span> instead?
-				if (import.meta.env.VITE_APP_MODE === 'desktop' && to.type !== LinkingType.EXTERNAL) {
+				if (import.meta.env.VITE_APP_MODE === 'desktop' && to.type !== LINK_EXTERNAL) {
 					link = (
 						<a
 							role="link"
@@ -149,12 +149,12 @@ const renderRichText = (segments: RichTextSegment[]): RichTextUiSegment[] => {
 
 		if (mention) {
 			to = {
-				type: LinkingType.PROFILE,
+				type: LINK_PROFILE,
 				actor: mention.did,
 			};
 		} else if (tag) {
 			to = {
-				type: LinkingType.TAG,
+				type: LINK_TAG,
 				tag: tag.tag,
 			};
 		} else if (link) {
@@ -162,7 +162,7 @@ const renderRichText = (segments: RichTextSegment[]): RichTextUiSegment[] => {
 			const valid = isLinkValid(uri, text);
 
 			to = {
-				type: LinkingType.EXTERNAL,
+				type: LINK_EXTERNAL,
 				url: uri,
 				valid: valid,
 			};

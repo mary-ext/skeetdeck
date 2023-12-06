@@ -2,86 +2,98 @@ import { type JSX, createContext, useContext } from 'solid-js';
 
 import type { DID } from '~/api/atp-schema.ts';
 
-export const enum LinkingType {
-	EXTERNAL,
-	FEED_LIKED_BY,
-	FEED,
-	LIST,
-	POST_LIKED_BY,
-	POST_REPOSTED_BY,
-	POST,
-	PROFILE_FOLLOWERS,
-	PROFILE_FOLLOWS,
-	PROFILE,
-	REPLY,
-	TAG,
-}
+export const LINK_EXTERNAL = 0;
+export const LINK_FEED_LIKED_BY = 1;
+export const LINK_FEED = 2;
+export const LINK_LIST = 3;
+export const LINK_POST_LIKED_BY = 4;
+export const LINK_POST_REPOSTED_BY = 5;
+export const LINK_POST = 6;
+export const LINK_PROFILE_FOLLOWERS = 7;
+export const LINK_PROFILE_FOLLOWS = 8;
+export const LINK_PROFILE = 9;
+export const LINK_REPLY = 10;
+export const LINK_TAG = 11;
+
+export type LinkingType =
+	| typeof LINK_EXTERNAL
+	| typeof LINK_FEED_LIKED_BY
+	| typeof LINK_FEED
+	| typeof LINK_LIST
+	| typeof LINK_POST_LIKED_BY
+	| typeof LINK_POST_REPOSTED_BY
+	| typeof LINK_POST
+	| typeof LINK_PROFILE_FOLLOWERS
+	| typeof LINK_PROFILE_FOLLOWS
+	| typeof LINK_PROFILE
+	| typeof LINK_REPLY
+	| typeof LINK_TAG;
 
 export interface ExternalLinking {
-	type: LinkingType.EXTERNAL;
+	type: typeof LINK_EXTERNAL;
 	url: string;
 	valid: boolean;
 }
 
 export interface FeedLikedByLinking {
-	type: LinkingType.FEED_LIKED_BY;
+	type: typeof LINK_FEED_LIKED_BY;
 	actor: DID;
 	rkey: string;
 }
 
 export interface FeedLinking {
-	type: LinkingType.FEED;
+	type: typeof LINK_FEED;
 	actor: DID;
 	rkey: string;
 }
 
 export interface ListLinking {
-	type: LinkingType.LIST;
+	type: typeof LINK_LIST;
 	actor: DID;
 	rkey: string;
 }
 
 export interface PostLikedByLinking {
-	type: LinkingType.POST_LIKED_BY;
+	type: typeof LINK_POST_LIKED_BY;
 	actor: DID;
 	rkey: string;
 }
 
 export interface PostRepostedByLinking {
-	type: LinkingType.POST_REPOSTED_BY;
+	type: typeof LINK_POST_REPOSTED_BY;
 	actor: DID;
 	rkey: string;
 }
 
 export interface PostLinking {
-	type: LinkingType.POST;
+	type: typeof LINK_POST;
 	actor: DID;
 	rkey: string;
 }
 
 export interface ProfileFollowsLinking {
-	type: LinkingType.PROFILE_FOLLOWERS;
+	type: typeof LINK_PROFILE_FOLLOWERS;
 	actor: DID;
 }
 
 export interface ProfileFollowersLinking {
-	type: LinkingType.PROFILE_FOLLOWS;
+	type: typeof LINK_PROFILE_FOLLOWS;
 	actor: DID;
 }
 
 export interface ProfileLinking {
-	type: LinkingType.PROFILE;
+	type: typeof LINK_PROFILE;
 	actor: DID;
 }
 
 export interface ReplyLinking {
-	type: LinkingType.REPLY;
+	type: typeof LINK_REPLY;
 	actor: DID;
 	rkey: string;
 }
 
 export interface TagLinking {
-	type: LinkingType.TAG;
+	type: typeof LINK_TAG;
 	tag: string;
 }
 

@@ -16,7 +16,7 @@ import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 import { Button } from '~/com/primitives/button.ts';
 
 import CircularProgress from '~/com/components/CircularProgress.tsx';
-import { Link, LinkingType } from '~/com/components/Link.tsx';
+import { LINK_POST, LINK_PROFILE, Link } from '~/com/components/Link.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 
 import GenericErrorView from '~/com/components/views/GenericErrorView.tsx';
@@ -88,7 +88,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 											</div>
 
 											<Link
-												to={{ type: LinkingType.PROFILE, actor: actor }}
+												to={{ type: LINK_PROFILE, actor: actor }}
 												class={/* @once */ Button({ variant: 'primary' })}
 											>
 												View profile
@@ -169,7 +169,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 										{(item) => (
 											<Link
 												to={{
-													type: LinkingType.POST,
+													type: LINK_POST,
 													actor: getRepoId(item().uri) as DID,
 													rkey: getRecordId(item().uri),
 												}}
@@ -234,7 +234,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 														{overflowing && (
 															<Link
 																to={{
-																	type: LinkingType.POST,
+																	type: LINK_POST,
 																	actor: getRepoId(items[len - 1].uri) as DID,
 																	rkey: getRecordId(items[len - 1].uri),
 																}}

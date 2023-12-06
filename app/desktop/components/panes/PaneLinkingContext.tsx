@@ -1,6 +1,18 @@
 import { type JSX, lazy } from 'solid-js';
 
-import { LinkingType, type LinkingContextObject, LinkingContext } from '~/com/components/Link.tsx';
+import {
+	type LinkingContextObject,
+	LINK_FEED,
+	LINK_FEED_LIKED_BY,
+	LINK_LIST,
+	LINK_POST,
+	LINK_POST_LIKED_BY,
+	LINK_POST_REPOSTED_BY,
+	LINK_PROFILE,
+	LINK_PROFILE_FOLLOWERS,
+	LINK_PROFILE_FOLLOWS,
+	LinkingContext,
+} from '~/com/components/Link.tsx';
 
 import { usePaneContext } from './PaneContext.tsx';
 
@@ -28,39 +40,39 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 			return;
 		}
 
-		if (type === LinkingType.FEED) {
+		if (type === LINK_FEED) {
 			return openModal(() => <FeedPaneDialog {...to} />);
 		}
 
-		if (type === LinkingType.FEED_LIKED_BY) {
+		if (type === LINK_FEED_LIKED_BY) {
 			return openModal(() => <FeedLikedByPaneDialog {...to} />);
 		}
 
-		if (type === LinkingType.LIST) {
+		if (type === LINK_LIST) {
 			return openModal(() => <ListPaneDialog {...to} />);
 		}
 
-		if (type === LinkingType.POST) {
+		if (type === LINK_POST) {
 			return openModal(() => <ThreadPaneDialog {...to} />);
 		}
 
-		if (type === LinkingType.POST_LIKED_BY) {
+		if (type === LINK_POST_LIKED_BY) {
 			return openModal(() => <PostLikedByPaneDialog {...to} />);
 		}
 
-		if (type === LinkingType.POST_REPOSTED_BY) {
+		if (type === LINK_POST_REPOSTED_BY) {
 			return openModal(() => <PostRepostedByPaneDialog {...to} />);
 		}
 
-		if (type === LinkingType.PROFILE) {
+		if (type === LINK_PROFILE) {
 			return openModal(() => <ProfilePaneDialog {...to} />);
 		}
 
-		if (type === LinkingType.PROFILE_FOLLOWERS) {
+		if (type === LINK_PROFILE_FOLLOWERS) {
 			return openModal(() => <ProfileFollowersPaneDialog {...to} />);
 		}
 
-		if (type === LinkingType.PROFILE_FOLLOWS) {
+		if (type === LINK_PROFILE_FOLLOWS) {
 			return openModal(() => <ProfileFollowsPaneDialog {...to} />);
 		}
 	};
@@ -70,7 +82,7 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 		render(props) {
 			const to = props.to;
 
-			if (to.type === LinkingType.EXTERNAL && !props.disabled) {
+			if (to.type === LINK_EXTERNAL && !props.disabled) {
 				return (
 					<a
 						{...props}

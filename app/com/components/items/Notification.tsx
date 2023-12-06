@@ -16,7 +16,7 @@ import { getInitialPost, getPost, getPostKey } from '~/api/queries/get-post.ts';
 
 import { Interactive } from '~/com/primitives/interactive.ts';
 
-import { Link, LinkingType } from '../Link.tsx';
+import { LINK_PROFILE, Link } from '../Link.tsx';
 import CircularProgress from '../CircularProgress.tsx';
 import { VirtualContainer } from '../VirtualContainer.tsx';
 
@@ -156,7 +156,7 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 		return (
 			<div class="flex gap-2 overflow-hidden">
 				<Link
-					to={{ type: LinkingType.PROFILE, actor: did }}
+					to={{ type: LINK_PROFILE, actor: did }}
 					title={displayName ? `${displayName} (@${handle})` : `@${handle}`}
 					class="h-7.5 w-7.5 shrink-0 overflow-hidden rounded-full bg-muted-fg hover:opacity-80"
 				>
@@ -219,7 +219,7 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 
 						return (
 							<Link
-								to={{ type: LinkingType.PROFILE, actor: did }}
+								to={{ type: LINK_PROFILE, actor: did }}
 								class={
 									/* @once */ Interactive({
 										class: `-m-1 flex min-w-0 items-center rounded p-1 text-left text-sm`,
@@ -266,7 +266,7 @@ const renderText = (data: FollowNotificationSlice | LikeNotificationSlice | Repo
 
 		nodes.push(
 			<Link
-				to={{ type: LinkingType.PROFILE, actor: author.did }}
+				to={{ type: LINK_PROFILE, actor: author.did }}
 				dir="auto"
 				class="inline-block overflow-hidden text-left align-top font-bold hover:underline"
 			>

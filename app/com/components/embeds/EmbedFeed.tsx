@@ -3,7 +3,7 @@ import type { JSX } from 'solid-js';
 import type { UnionOf } from '~/api/atp-schema.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
-import { Link, LinkingType } from '../Link.tsx';
+import { LINK_FEED, Link } from '../Link.tsx';
 
 import DefaultFeedAvatar from '../../assets/default-feed-avatar.svg?url';
 
@@ -20,7 +20,7 @@ const EmbedFeed = (props: EmbedFeedProps) => {
 
 		return (
 			<Link
-				to={{ type: LinkingType.FEED, actor: creator.did, rkey: getRecordId(feed.uri) }}
+				to={{ type: LINK_FEED, actor: creator.did, rkey: getRecordId(feed.uri) }}
 				class="flex flex-col gap-2 rounded-md border border-divider p-3 text-left text-sm hover:bg-secondary/10"
 			>
 				<div class="flex gap-3">

@@ -3,7 +3,7 @@ import { type JSX } from 'solid-js';
 import type { DID, UnionOf } from '~/api/atp-schema.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
-import { Link, LinkingType } from '../Link.tsx';
+import { LINK_POST, Link } from '../Link.tsx';
 
 import EmbedRecordNotFound from './EmbedRecordNotFound.tsx';
 
@@ -25,7 +25,7 @@ const EmbedRecordBlocked = (props: EmbedRecordBlockedProps) => {
 					<Link
 						to={
 							/* @once */ {
-								type: LinkingType.POST,
+								type: LINK_POST,
 								actor: getRepoId(record.uri) as DID,
 								rkey: getRecordId(record.uri),
 							}

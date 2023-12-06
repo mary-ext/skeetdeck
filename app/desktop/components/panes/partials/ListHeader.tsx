@@ -6,7 +6,7 @@ import { openModal } from '~/com/globals/modals.tsx';
 
 import { Button } from '~/com/primitives/button.ts';
 
-import { Link, LinkingType } from '~/com/components/Link.tsx';
+import { LINK_PROFILE, Link } from '~/com/components/Link.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 
 import DefaultListAvatar from '~/com/assets/default-list-avatar.svg?url';
@@ -69,7 +69,7 @@ const ListHeader = (props: ListHeaderProps) => {
 							<p class="break-words text-lg font-bold">{list.name.value}</p>
 
 							<Link
-								to={/* @once */ { type: LinkingType.PROFILE, actor: creator.did }}
+								to={/* @once */ { type: LINK_PROFILE, actor: creator.did }}
 								class="group mt-1 flex items-center text-left"
 							>
 								<img src={creator.avatar.value || DefaultUserAvatar} class="mr-2 h-5 w-5 rounded-full" />
