@@ -8,157 +8,157 @@ import {
 } from './enums.ts';
 import type { LabelDefinitionMap } from './types.ts';
 
-const LabelSystem = 'system';
-const LabelLegal = 'legal';
-const LabelSexual = 'sexual';
-const LabelViolence = 'violence';
-const LabelIntolerance = 'intolerance';
-const LabelRude = 'rude';
-const LabelCuration = 'curation';
-const LabelSpam = 'spam';
-const LabelMisinfo = 'misinfo';
+// const LabelSystem = 'system';
+// const LabelLegal = 'legal';
+// const LabelSexual = 'sexual';
+// const LabelViolence = 'violence';
+// const LabelIntolerance = 'intolerance';
+// const LabelRude = 'rude';
+// const LabelCuration = 'curation';
+// const LabelSpam = 'spam';
+// const LabelMisinfo = 'misinfo';
 
 export const LABELS: LabelDefinitionMap = {
 	'!hide': {
-		g: LabelSystem,
+		// g: LabelSystem,
 		e: PreferenceHide,
 		f: FlagNoOverride,
 		a: ActionBlur,
 	},
 	'!no-promote': {
-		g: LabelSystem,
+		// g: LabelSystem,
 		e: PreferenceHide,
 		f: 0,
 		a: 0,
 	},
 	'!warn': {
-		g: LabelSystem,
+		// g: LabelSystem,
 		e: PreferenceWarn,
 		f: 0,
 		a: ActionBlur,
 	},
 
 	'dmca-violation': {
-		g: LabelLegal,
+		// g: LabelLegal,
 		e: PreferenceHide,
 		f: FlagNoOverride,
 		a: ActionBlur,
 	},
 	doxxing: {
-		g: LabelLegal,
+		// g: LabelLegal,
 		e: PreferenceHide,
 		f: FlagNoOverride,
 		a: ActionBlur,
 	},
 
 	porn: {
-		g: LabelSexual,
+		// g: LabelSexual,
 		f: 0,
 		a: ActionBlurMedia,
 	},
 	sexual: {
-		g: LabelSexual,
+		// g: LabelSexual,
 		f: 0,
 		a: ActionBlurMedia,
 	},
 	nudity: {
-		g: LabelSexual,
+		// g: LabelSexual,
 		f: 0,
 		a: ActionBlurMedia,
 	},
 
 	nsfl: {
-		g: LabelViolence,
+		// g: LabelViolence,
 		f: 0,
 		a: ActionBlurMedia,
 	},
 	corpse: {
-		g: LabelViolence,
+		// g: LabelViolence,
 		f: 0,
 		a: ActionBlurMedia,
 	},
 	gore: {
-		g: LabelViolence,
+		// g: LabelViolence,
 		f: 0,
 		a: ActionBlurMedia,
 	},
 	torture: {
-		g: LabelViolence,
+		// g: LabelViolence,
 		f: 0,
 		a: ActionBlur,
 	},
 	'self-harm': {
-		g: LabelViolence,
+		// g: LabelViolence,
 		f: 0,
 		a: ActionBlurMedia,
 	},
 
 	intolerant: {
-		g: LabelIntolerance,
+		// g: LabelIntolerance,
 		f: 0,
 		a: ActionBlur,
 	},
 	'intolerant-race': {
-		g: LabelIntolerance,
+		// g: LabelIntolerance,
 		f: 0,
 		a: ActionBlur,
 	},
 	'intolerant-gender': {
-		g: LabelIntolerance,
+		// g: LabelIntolerance,
 		f: 0,
 		a: ActionBlur,
 	},
 	'intolerant-sexual-orientation': {
-		g: LabelIntolerance,
+		// g: LabelIntolerance,
 		f: 0,
 		a: ActionBlur,
 	},
 	'intolerant-religion': {
-		g: LabelIntolerance,
+		// g: LabelIntolerance,
 		f: 0,
 		a: ActionBlur,
 	},
 	'icon-intolerant': {
-		g: LabelIntolerance,
+		// g: LabelIntolerance,
 		f: 0,
 		a: ActionBlurMedia,
 	},
 
 	threat: {
-		g: LabelRude,
+		// g: LabelRude,
 		f: 0,
 		a: ActionBlur,
 	},
 
 	spoiler: {
-		g: LabelCuration,
+		// g: LabelCuration,
 		f: 0,
 		a: ActionBlur,
 	},
 
 	spam: {
-		g: LabelSpam,
+		// g: LabelSpam,
 		f: 0,
 		a: ActionBlur,
 	},
 
 	'account-security': {
-		g: LabelMisinfo,
+		// g: LabelMisinfo,
 		f: 0,
 		a: ActionBlur,
 	},
 	'net-abuse': {
-		g: LabelMisinfo,
+		// g: LabelMisinfo,
 		f: 0,
 		a: ActionBlur,
 	},
 	impersonation: {
-		g: LabelMisinfo,
+		// g: LabelMisinfo,
 		f: 0,
 		a: ActionAlert,
 	},
 	scam: {
-		g: LabelMisinfo,
+		// g: LabelMisinfo,
 		f: 0,
 		a: ActionAlert,
 	},

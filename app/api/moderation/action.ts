@@ -110,8 +110,6 @@ export const decideLabelModeration = (
 				continue;
 			}
 
-			const groupId = def.g;
-
 			const src = label.src;
 			const isSelfLabeled = src === userDid;
 
@@ -121,11 +119,7 @@ export const decideLabelModeration = (
 				if (isSelfLabeled) {
 					const userPref = opts.users[src];
 
-					pref =
-						userPref?.labels[id] ??
-						userPref?.groups[groupId] ??
-						globalPref.labels[id] ??
-						globalPref.groups[groupId];
+					pref = userPref?.labels[id] ?? globalPref.labels[id];
 				} else {
 					const labelerPref = opts.labelers[src];
 
@@ -133,11 +127,7 @@ export const decideLabelModeration = (
 						continue;
 					}
 
-					pref =
-						labelerPref.labels[id] ??
-						labelerPref.groups[groupId] ??
-						globalPref.labels[id] ??
-						globalPref.groups[groupId];
+					pref = labelerPref.labels[id] ?? globalPref.labels[id];
 				}
 			}
 

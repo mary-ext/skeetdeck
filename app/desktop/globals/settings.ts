@@ -35,7 +35,7 @@ const PREF_KEY = 'rantai_prefs';
 
 export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KEY, (version, prev) => {
 	if (version === 0) {
-		return {
+		const object: PreferencesSchema = {
 			$version: 1,
 			onboarding: true,
 			decks: [],
@@ -45,20 +45,33 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 			},
 			moderation: {
 				globals: {
-					groups: {
+					labels: {
+						porn: PreferenceWarn,
 						sexual: PreferenceWarn,
-						violence: PreferenceWarn,
-						intolerance: PreferenceWarn,
-						rude: PreferenceWarn,
+						nudity: PreferenceWarn,
+						nsfl: PreferenceWarn,
+						corpse: PreferenceWarn,
+						gore: PreferenceWarn,
+						torture: PreferenceWarn,
+						'self-harm': PreferenceWarn,
+						intolerant: PreferenceWarn,
+						'intolerant-race': PreferenceWarn,
+						'intolerant-gender': PreferenceWarn,
+						'intolerant-sexual-orientation': PreferenceWarn,
+						'intolerant-religion': PreferenceWarn,
+						'icon-intolerant': PreferenceWarn,
+						threat: PreferenceWarn,
+						spoiler: PreferenceWarn,
 						spam: PreferenceWarn,
-						misinfo: PreferenceWarn,
+						'account-security': PreferenceWarn,
+						'net-abuse': PreferenceWarn,
+						impersonation: PreferenceWarn,
+						scam: PreferenceWarn,
 					},
-					labels: {},
 				},
 				users: {},
 				labelers: {
 					[DEFAULT_MODERATION_LABELER]: {
-						groups: {},
 						labels: {},
 					},
 				},
@@ -75,6 +88,8 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 				defaultPostLanguage: 'system',
 			},
 		};
+
+		return object;
 	}
 
 	return prev;

@@ -6,7 +6,7 @@ export type Label = RefOf<'com.atproto.label.defs#label'>;
 
 export interface LabelDefinition {
 	/** The group ID that the label falls under */
-	g: string;
+	// g: string;
 	/** Enforce a specific preference value, means that the user can't configure what to do with this label */
 	e?: number;
 	/** Additional flags for this label */
@@ -18,7 +18,7 @@ export interface LabelDefinition {
 export type LabelDefinitionMap = Record<string, LabelDefinition>;
 
 export interface ModerationLabelOpts {
-	groups: { [group: string]: number | undefined };
+	// groups: { [group: string]: number | undefined };
 	labels: { [label: string]: number | undefined };
 }
 
