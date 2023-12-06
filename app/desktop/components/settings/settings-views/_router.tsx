@@ -9,10 +9,12 @@ export const enum ViewType {
 	LANGAUGE,
 	CONTENT_FILTERS,
 	KEYWORD_FILTERS,
-	USER_FILTERS,
 
 	// Language
 	ADDITIONAL_LANGUAGE,
+
+	// Keyword filters
+	KEYWORD_FILTER_FORM,
 
 	// Content filters
 	SUBSCRIBED_LABELERS,
@@ -30,6 +32,8 @@ export type View =
 	| { type: ViewType.SUBSCRIBED_LABELERS }
 	| { type: ViewType.LABEL_CONFIG; kind: 'global' }
 	| { type: ViewType.LABEL_CONFIG; kind: 'labeler'; did: DID }
+	// Keyword filter form
+	| { type: ViewType.KEYWORD_FILTER_FORM; id: string | undefined }
 	// Language
 	| { type: ViewType.ADDITIONAL_LANGUAGE };
 
