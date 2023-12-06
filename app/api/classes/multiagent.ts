@@ -11,13 +11,6 @@ import { decodeJwt } from '@externdefs/bluesky-client/jwt';
 
 import { createReactiveLocalStorage } from '~/utils/storage.ts';
 
-export const enum MultiagentState {
-	PRISTINE,
-	UNAUTHORIZED,
-	PENDING,
-	AUTHORIZED,
-}
-
 export interface MultiagentLoginOptions extends AtpLoginOptions {
 	service: string;
 }
