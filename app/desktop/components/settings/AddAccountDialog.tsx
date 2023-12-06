@@ -123,25 +123,24 @@ const AddAccountDialog = () => {
 					disabled={loginMutation.isPending}
 					class={/* @once */ DialogBody({ class: 'flex flex-col gap-4' })}
 				>
-					<div class="flex flex-col">
-						<label for="user" class="mb-2 block text-sm font-medium leading-6 text-primary">
-							Identifier
+					<div>
+						<label class="block">
+							<span class="mb-2 block text-sm font-medium leading-6 text-primary">Identifier</span>
+							<input
+								ref={model(identifier, setIdentifier)}
+								type="text"
+								required
+								pattern=".*\\S+.*"
+								placeholder="you.bsky.social"
+								autocomplete="username"
+								onBlur={() => {
+									if (isEmail()) {
+										setAdvanced(true);
+									}
+								}}
+								class={/* @once */ Input()}
+							/>
 						</label>
-						<input
-							ref={model(identifier, setIdentifier)}
-							type="text"
-							id="user"
-							required
-							pattern=".*\\S+.*"
-							placeholder="you.bsky.social"
-							autocomplete="username"
-							onBlur={() => {
-								if (isEmail()) {
-									setAdvanced(true);
-								}
-							}}
-							class={/* @once */ Input()}
-						/>
 
 						<Show when={advanced() && isEmail()}>
 							<p class="mt-3 text-xs text-muted-fg">
@@ -150,36 +149,30 @@ const AddAccountDialog = () => {
 						</Show>
 					</div>
 
-					<div class="flex flex-col gap-2">
-						<label for="pwd" class="block text-sm font-medium leading-6 text-primary">
-							Password
-						</label>
+					<label class="block">
+						<span class="mb-2 block text-sm font-medium leading-6 text-primary">Password</span>
 						<input
 							ref={model(password, setPassword)}
 							type="password"
-							id="pwd"
 							required
 							autocomplete="password"
 							placeholder="Password"
 							class={/* @once */ Input()}
 						/>
-					</div>
+					</label>
 
 					<Show when={advanced()}>
-						<div class="flex flex-col gap-2">
-							<label for="svc" class="block text-sm font-medium leading-6 text-primary">
-								Hosting provider
-							</label>
+						<label class="block">
+							<span class="mb-2 block text-sm font-medium leading-6 text-primary">Hosting provider</span>
 							<input
 								ref={model(service, setService)}
 								type="string"
-								id="svc"
 								required={isEmail()}
 								pattern="([a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*(?:\\.[a-zA-Z]+))"
 								placeholder={isEmail() ? `example.social` : `Leave blank for automatic provider detection`}
 								class={/* @once */ Input()}
 							/>
-						</div>
+						</label>
 					</Show>
 
 					<Switch>

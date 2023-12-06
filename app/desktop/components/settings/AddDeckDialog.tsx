@@ -51,12 +51,10 @@ const AddDeckDialog = () => {
 				</div>
 
 				<div class={/* @once */ DialogBody({ class: 'flex flex-col gap-4', scrollable: true })}>
-					<div class="flex flex-col gap-2">
-						<label for="name" class="block text-sm font-medium leading-6 text-primary">
-							Name
-						</label>
-						<input ref={model(name, setName)} type="text" id="name" required class={/* @once */ Input()} />
-					</div>
+					<label class="block">
+						<span class="mb-2 block text-sm font-medium leading-6 text-primary">Name</span>
+						<input ref={model(name, setName)} type="text" required class={/* @once */ Input()} />
+					</label>
 
 					<div class="flex flex-col gap-2">
 						<label class="block text-sm font-medium leading-6 text-primary">Emoji</label>

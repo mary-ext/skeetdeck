@@ -162,23 +162,19 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 						/>
 					</div>
 
-					<div class="mx-4 mt-4 flex flex-col gap-2">
-						<label for="name" class="block text-sm font-medium leading-6 text-primary">
-							Name
-						</label>
-						<input ref={model(name, setName)} type="text" id="name" required class={/* @once */ Input()} />
-					</div>
+					<label class="mx-4 mt-4 block">
+						<span class="mb-2 block text-sm font-medium leading-6 text-primary">Name</span>
+						<input ref={model(name, setName)} type="text" required class={/* @once */ Input()} />
+					</label>
 
-					<div class="mx-4 mt-4 flex flex-col gap-2">
-						<label
-							for="description"
-							class="flex items-center justify-between gap-2 text-sm font-medium leading-6 text-primary"
-						>
+					<label class="mx-4 mt-4 block">
+						<span class="mb-2 flex items-center justify-between gap-2 text-sm font-medium leading-6 text-primary">
 							<span>Description</span>
 							<span class="text-xs font-normal text-muted-fg">{desc().length}/300</span>
-						</label>
-						<textarea ref={model(desc, setDesc)} id="description" class={/* @once */ Textarea()} rows={4} />
-					</div>
+						</span>
+
+						<textarea ref={model(desc, setDesc)} class={/* @once */ Textarea()} rows={4} />
+					</label>
 
 					<div class="mt-4 grow border-b border-divider"></div>
 

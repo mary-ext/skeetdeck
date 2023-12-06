@@ -64,12 +64,10 @@ const EditDeckDialog = (props: EditDeckDialogProps) => {
 				</div>
 
 				<div class={/* @once */ DialogBody({ class: 'flex flex-col', scrollable: true, padded: false })}>
-					<div class="mt-4 flex flex-col gap-2 px-4">
-						<label for="name" class="block text-sm font-medium leading-6 text-primary">
-							Name
-						</label>
-						<input ref={model(name, setName)} type="text" id="name" required class={/* @once */ Input()} />
-					</div>
+					<label class="mt-4 block px-4">
+						<span class="mb-2 block text-sm font-medium leading-6 text-primary">Name</span>
+						<input ref={model(name, setName)} type="text" required class={/* @once */ Input()} />
+					</label>
 
 					<div class="mt-4 flex flex-col gap-2 px-4">
 						<label class="block text-sm font-medium leading-6 text-primary">Emoji</label>
