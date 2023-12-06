@@ -9,7 +9,7 @@ import { Interactive } from '~/com/primitives/interactive.ts';
 
 import AddIcon from '~/com/icons/baseline-add.tsx';
 
-import { ViewType, useViewRouter } from './_router.tsx';
+import { VIEW_KEYWORD_FILTER_FORM, useViewRouter } from './_router.tsx';
 
 const selectItem = Interactive({
 	variant: 'muted',
@@ -28,7 +28,7 @@ const KeywordFiltersView = () => {
 
 				<button
 					title="Add new keyword filter"
-					onClick={() => router.move({ type: ViewType.KEYWORD_FILTER_FORM, id: undefined })}
+					onClick={() => router.move({ type: VIEW_KEYWORD_FILTER_FORM, id: undefined })}
 					class={/* @once */ IconButton({ edge: 'right' })}
 				>
 					<AddIcon />
@@ -42,7 +42,7 @@ const KeywordFiltersView = () => {
 					{(filter) => {
 						return (
 							<button
-								onClick={() => router.move({ type: ViewType.KEYWORD_FILTER_FORM, id: filter.id })}
+								onClick={() => router.move({ type: VIEW_KEYWORD_FILTER_FORM, id: filter.id })}
 								class={selectItem}
 							>
 								<p class="font-bold">{filter.name}</p>

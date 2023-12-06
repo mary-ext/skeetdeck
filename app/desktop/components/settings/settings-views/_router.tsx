@@ -2,40 +2,47 @@ import { createContext, useContext } from 'solid-js';
 
 import type { DID } from '~/api/atp-schema.ts';
 
-export const enum ViewType {
-	// Root
-	ACCOUNTS,
-	APPEARANCE,
-	LANGAUGE,
-	CONTENT_FILTERS,
-	KEYWORD_FILTERS,
+// Root
+export const VIEW_ACCOUNTS = 0;
+export const VIEW_APPEARANCE = 1;
+export const VIEW_LANGAUGE = 2;
+export const VIEW_CONTENT_FILTERS = 3;
+export const VIEW_KEYWORD_FILTERS = 4;
+export const VIEW_ADDITIONAL_LANGUAGE = 5;
 
-	// Language
-	ADDITIONAL_LANGUAGE,
+// Keyword filters
+export const VIEW_KEYWORD_FILTER_FORM = 6;
 
-	// Keyword filters
-	KEYWORD_FILTER_FORM,
+// Content filters
+export const VIEW_SUBSCRIBED_LABELERS = 7;
+export const VIEW_LABEL_CONFIG = 8;
 
-	// Content filters
-	SUBSCRIBED_LABELERS,
-	LABEL_CONFIG,
-}
+export type ViewType =
+	| typeof VIEW_ACCOUNTS
+	| typeof VIEW_APPEARANCE
+	| typeof VIEW_LANGAUGE
+	| typeof VIEW_CONTENT_FILTERS
+	| typeof VIEW_KEYWORD_FILTERS
+	| typeof VIEW_ADDITIONAL_LANGUAGE
+	| typeof VIEW_KEYWORD_FILTER_FORM
+	| typeof VIEW_SUBSCRIBED_LABELERS
+	| typeof VIEW_LABEL_CONFIG;
 
 export type View =
 	// Root
-	| { type: ViewType.ACCOUNTS }
-	| { type: ViewType.APPEARANCE }
-	| { type: ViewType.LANGAUGE }
-	| { type: ViewType.CONTENT_FILTERS }
-	| { type: ViewType.KEYWORD_FILTERS }
+	| { type: typeof VIEW_ACCOUNTS }
+	| { type: typeof VIEW_APPEARANCE }
+	| { type: typeof VIEW_LANGAUGE }
+	| { type: typeof VIEW_CONTENT_FILTERS }
+	| { type: typeof VIEW_KEYWORD_FILTERS }
 	// Content filters
-	| { type: ViewType.SUBSCRIBED_LABELERS }
-	| { type: ViewType.LABEL_CONFIG; kind: 'global' }
-	| { type: ViewType.LABEL_CONFIG; kind: 'labeler'; did: DID }
+	| { type: typeof VIEW_SUBSCRIBED_LABELERS }
+	| { type: typeof VIEW_LABEL_CONFIG; kind: 'global' }
+	| { type: typeof VIEW_LABEL_CONFIG; kind: 'labeler'; did: DID }
 	// Keyword filter form
-	| { type: ViewType.KEYWORD_FILTER_FORM; id: string | undefined }
+	| { type: typeof VIEW_KEYWORD_FILTER_FORM; id: string | undefined }
 	// Language
-	| { type: ViewType.ADDITIONAL_LANGUAGE };
+	| { type: typeof VIEW_ADDITIONAL_LANGUAGE };
 
 export type ViewParams<T extends ViewType, V = View> = V extends { type: T } ? Omit<V, 'type'> : never;
 

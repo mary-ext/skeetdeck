@@ -25,7 +25,12 @@ import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
 import DeleteIcon from '~/com/icons/baseline-delete.tsx';
 import FormatLetterMatchesIcon from '~/com/icons/baseline-format-letter-matches.tsx';
 
-import { type ViewParams, ViewType, useViewRouter } from '../_router.tsx';
+import {
+	type ViewParams,
+	VIEW_KEYWORD_FILTER_FORM,
+	VIEW_KEYWORD_FILTERS,
+	useViewRouter,
+} from '../_router.tsx';
 import { openModal } from '~/com/globals/modals.tsx';
 import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
 
@@ -41,7 +46,7 @@ const createKeywordState = (keyword: string, whole: boolean): KeywordState => {
 
 const KeywordFilterFormView = () => {
 	const router = useViewRouter();
-	const params = router.current as ViewParams<ViewType.KEYWORD_FILTER_FORM>;
+	const params = router.current as ViewParams<typeof VIEW_KEYWORD_FILTER_FORM>;
 
 	const filters = preferences.moderation.keywords;
 	const conf = filters.find((filter) => filter.id === params.id);
@@ -82,7 +87,7 @@ const KeywordFilterFormView = () => {
 				});
 			}
 
-			router.move({ type: ViewType.KEYWORD_FILTERS });
+			router.move({ type: VIEW_KEYWORD_FILTERS });
 		});
 	};
 
@@ -92,7 +97,7 @@ const KeywordFilterFormView = () => {
 				<button
 					type="button"
 					title="Return to previous screen"
-					onClick={() => router.move({ type: ViewType.KEYWORD_FILTERS })}
+					onClick={() => router.move({ type: VIEW_KEYWORD_FILTERS })}
 					class={/* @once */ IconButton({ edge: 'left' })}
 				>
 					<ArrowLeftIcon />
@@ -210,7 +215,7 @@ const KeywordFilterFormView = () => {
 													filters.splice(index, 1);
 												}
 
-												router.move({ type: ViewType.KEYWORD_FILTERS });
+												router.move({ type: VIEW_KEYWORD_FILTERS });
 											});
 										}}
 									/>

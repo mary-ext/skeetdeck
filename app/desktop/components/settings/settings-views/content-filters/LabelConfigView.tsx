@@ -21,7 +21,13 @@ import { MenuItem, MenuRoot } from '~/com/primitives/menu.ts';
 import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down.tsx';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
 
-import { type ViewParams, ViewType, useViewRouter } from '../_router.tsx';
+import {
+	type ViewParams,
+	VIEW_CONTENT_FILTERS,
+	VIEW_LABEL_CONFIG,
+	VIEW_SUBSCRIBED_LABELERS,
+	useViewRouter,
+} from '../_router.tsx';
 import CheckIcon from '~/com/icons/baseline-check.tsx';
 
 interface LabelDef {
@@ -184,7 +190,7 @@ const LABEL_DEFS: LabelGroupDef[] = [
 
 const LabelConfigView = () => {
 	const router = useViewRouter();
-	const params = router.current as ViewParams<ViewType.LABEL_CONFIG>;
+	const params = router.current as ViewParams<typeof VIEW_LABEL_CONFIG>;
 
 	const mods = preferences.moderation;
 
@@ -213,7 +219,7 @@ const LabelConfigView = () => {
 					title="Return to previous screen"
 					onClick={() =>
 						router.move({
-							type: params.kind === 'labeler' ? ViewType.SUBSCRIBED_LABELERS : ViewType.CONTENT_FILTERS,
+							type: params.kind === 'labeler' ? VIEW_SUBSCRIBED_LABELERS : VIEW_CONTENT_FILTERS,
 						})
 					}
 					class={/* @once */ IconButton({ edge: 'left' })}

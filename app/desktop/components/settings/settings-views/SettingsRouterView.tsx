@@ -1,6 +1,18 @@
 import { type Component, type JSX, lazy } from 'solid-js';
 
-import { ViewType, useViewRouter } from './_router.tsx';
+import {
+	type ViewType,
+	VIEW_ACCOUNTS,
+	VIEW_ADDITIONAL_LANGUAGE,
+	VIEW_APPEARANCE,
+	VIEW_CONTENT_FILTERS,
+	VIEW_KEYWORD_FILTER_FORM,
+	VIEW_KEYWORD_FILTERS,
+	VIEW_LABEL_CONFIG,
+	VIEW_LANGAUGE,
+	VIEW_SUBSCRIBED_LABELERS,
+	useViewRouter,
+} from './_router.tsx';
 
 const AccountsView = lazy(() => import('./AccountsView.tsx'));
 const AppearanceView = lazy(() => import('./AppearanceView.tsx'));
@@ -16,18 +28,18 @@ const KeywordFilterFormView = lazy(() => import('./keyword-filters/KeywordFilter
 const AdditionalLanguageView = lazy(() => import('./languages/AdditionalLanguageView.tsx'));
 
 const views: Record<ViewType, Component> = {
-	[ViewType.ACCOUNTS]: AccountsView,
-	[ViewType.APPEARANCE]: AppearanceView,
-	[ViewType.CONTENT_FILTERS]: ContentFiltersView,
-	[ViewType.KEYWORD_FILTERS]: KeywordFiltersView,
-	[ViewType.LANGAUGE]: LanguageView,
+	[VIEW_ACCOUNTS]: AccountsView,
+	[VIEW_APPEARANCE]: AppearanceView,
+	[VIEW_CONTENT_FILTERS]: ContentFiltersView,
+	[VIEW_KEYWORD_FILTERS]: KeywordFiltersView,
+	[VIEW_LANGAUGE]: LanguageView,
 
-	[ViewType.LABEL_CONFIG]: LabelConfigView,
-	[ViewType.SUBSCRIBED_LABELERS]: SubscribedLabelersView,
+	[VIEW_LABEL_CONFIG]: LabelConfigView,
+	[VIEW_SUBSCRIBED_LABELERS]: SubscribedLabelersView,
 
-	[ViewType.KEYWORD_FILTER_FORM]: KeywordFilterFormView,
+	[VIEW_KEYWORD_FILTER_FORM]: KeywordFilterFormView,
 
-	[ViewType.ADDITIONAL_LANGUAGE]: AdditionalLanguageView,
+	[VIEW_ADDITIONAL_LANGUAGE]: AdditionalLanguageView,
 };
 
 const SettingsRouterView = () => {

@@ -20,15 +20,20 @@ import DonationDialog from '../DonationDialog.tsx';
 import {
 	type RouterState,
 	type View,
-	ViewType,
+	type ViewType,
 	RouterContext,
+	VIEW_ACCOUNTS,
+	VIEW_APPEARANCE,
+	VIEW_CONTENT_FILTERS,
+	VIEW_KEYWORD_FILTERS,
+	VIEW_LANGAUGE,
 	useViewRouter,
 } from './settings-views/_router.tsx';
 import SettingsRouterView from './settings-views/SettingsRouterView.tsx';
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 
 const SettingsDialog = () => {
-	const [view, setView] = createSignal<View>({ type: ViewType.ACCOUNTS });
+	const [view, setView] = createSignal<View>({ type: VIEW_ACCOUNTS });
 
 	const router: RouterState = {
 		get current() {
@@ -55,19 +60,19 @@ const SettingsDialog = () => {
 								</button>
 							</div>
 							<div class="flex grow flex-col overflow-y-auto">
-								<SideItem to={ViewType.ACCOUNTS} icon={PeopleIcon}>
+								<SideItem to={VIEW_ACCOUNTS} icon={PeopleIcon}>
 									Accounts
 								</SideItem>
-								<SideItem to={ViewType.APPEARANCE} icon={ColorLensIcon}>
+								<SideItem to={VIEW_APPEARANCE} icon={ColorLensIcon}>
 									Appearance
 								</SideItem>
-								<SideItem to={ViewType.LANGAUGE} icon={LanguageIcon}>
+								<SideItem to={VIEW_LANGAUGE} icon={LanguageIcon}>
 									Language
 								</SideItem>
-								<SideItem to={ViewType.CONTENT_FILTERS} icon={VisibilityIcon}>
+								<SideItem to={VIEW_CONTENT_FILTERS} icon={VisibilityIcon}>
 									Content filters
 								</SideItem>
-								<SideItem to={ViewType.KEYWORD_FILTERS} icon={FilterAltIcon}>
+								<SideItem to={VIEW_KEYWORD_FILTERS} icon={FilterAltIcon}>
 									Keyword filters
 								</SideItem>
 							</div>

@@ -10,7 +10,7 @@ import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
 
 import DefaultListAvatar from '~/com/assets/default-list-avatar.svg?url';
 
-import { ViewType, useViewRouter } from '../_router.tsx';
+import { VIEW_CONTENT_FILTERS, VIEW_LABEL_CONFIG, useViewRouter } from '../_router.tsx';
 
 const selectItem = Interactive({
 	variant: 'muted',
@@ -25,7 +25,7 @@ const SubscribedLabelersView = () => {
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
 				<button
 					title="Return to previous screen"
-					onClick={() => router.move({ type: ViewType.CONTENT_FILTERS })}
+					onClick={() => router.move({ type: VIEW_CONTENT_FILTERS })}
 					class={/* @once */ IconButton({ edge: 'left' })}
 				>
 					<ArrowLeftIcon />
@@ -54,7 +54,7 @@ const SubscribedLabelersView = () => {
 							return;
 						}
 
-						router.move({ type: ViewType.LABEL_CONFIG, kind: 'labeler', did: DEFAULT_MODERATION_LABELER });
+						router.move({ type: VIEW_LABEL_CONFIG, kind: 'labeler', did: DEFAULT_MODERATION_LABELER });
 					};
 
 					return (
