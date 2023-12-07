@@ -47,6 +47,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install -r --frozen-lockfile
 
+      - name: Build bluesky-client
+        working-directory: packages/bluesky-client
+        run: |
+          pnpm run build:lib
+
       - name: Build project
         working-directory: app
         run: |
