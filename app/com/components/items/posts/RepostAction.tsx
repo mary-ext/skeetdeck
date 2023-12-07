@@ -18,7 +18,7 @@ const RepostAction = (props: RepostActionProps) => {
 	return (() => {
 		const post = props.post;
 
-		if (import.meta.env.VITE_APP_MODE === 'desktop') {
+		if (import.meta.env.VITE_MODE === 'desktop') {
 			return (
 				<Flyout button={props.children} placement="bottom">
 					{({ close, menuProps }) => (

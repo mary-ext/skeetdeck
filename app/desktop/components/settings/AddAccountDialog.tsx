@@ -22,7 +22,7 @@ import { Input } from '~/com/primitives/input.ts';
 const APP_PASSWORD_REGEX = /^[a-zA-Z\d]{4}(-[a-zA-Z\d]{4}){3}$/;
 const APP_PASSWORD_LINK = 'https://atproto.com/community/projects#app-passwords';
 
-const brandName = import.meta.env.VITE_APP_BRAND_NAME;
+const brandName = import.meta.env.VITE_BRAND_NAME;
 
 const AddAccountDialog = () => {
 	const { disableBackdropClose } = useModalState();

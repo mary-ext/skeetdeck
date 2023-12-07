@@ -4,7 +4,7 @@ export interface DialogOverlayProps {
 	children: JSX.Element;
 }
 
-const isDesktop = import.meta.env.VITE_APP_MODE === 'desktop';
+const isDesktop = import.meta.env.VITE_MODE === 'desktop';
 
 const DialogOverlay = (props: DialogOverlayProps) => {
 	return (

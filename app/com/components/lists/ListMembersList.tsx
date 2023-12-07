@@ -186,7 +186,7 @@ const OwnedListItem = (props: OwnedListItemProps) => {
 				</button>
 			);
 
-			if (import.meta.env.VITE_APP_MODE === 'desktop') {
+			if (import.meta.env.VITE_MODE === 'desktop') {
 				return (
 					<Flyout button={button}>
 						{({ close, menuProps }) => (

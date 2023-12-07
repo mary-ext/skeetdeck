@@ -25,7 +25,7 @@ export interface ProfileOverflowActionProps {
 	children: JSX.Element;
 }
 
-const isDesktop = import.meta.env.VITE_APP_MODE === 'desktop';
+const isDesktop = import.meta.env.VITE_MODE === 'desktop';
 
 const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 	const { filters } = useSharedPreferences();
@@ -46,7 +46,7 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 			}
 		});
 
-		if (import.meta.env.VITE_APP_MODE === 'desktop') {
+		if (import.meta.env.VITE_MODE === 'desktop') {
 			return (
 				<Flyout button={props.children} placement="bottom-end">
 					{({ close, menuProps }) => (

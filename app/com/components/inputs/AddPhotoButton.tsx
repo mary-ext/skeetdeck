@@ -101,7 +101,7 @@ const AddPhotoButton = (props: AddPhotoButtonProps) => {
 				);
 			}
 
-			const isDesktop = import.meta.env.VITE_APP_MODE === 'desktop';
+			const isDesktop = import.meta.env.VITE_MODE === 'desktop';
 			const exists = props.exists;
 
 			const shouldDisplayFlyout = isDesktop && exists;

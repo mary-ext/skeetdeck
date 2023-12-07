@@ -88,7 +88,7 @@ const renderMutedByListDialog = (profile: SignalizedProfile, list: ListView) => 
 	);
 };
 
-const isDesktop = import.meta.env.VITE_APP_MODE === 'desktop';
+const isDesktop = import.meta.env.VITE_MODE === 'desktop';
 
 const renderMuteConfirmDialog = (profile: SignalizedProfile, filters: FilterPreferences) => {
 	const queryClient = useQueryClient();

@@ -12,7 +12,7 @@ export interface ImageAltActionProps {
 }
 
 const ImageAltAction = (props: ImageAltActionProps) => {
-	if (import.meta.env.VITE_APP_MODE === 'desktop') {
+	if (import.meta.env.VITE_MODE === 'desktop') {
 		return (
 			<Flyout
 				button={props.children}

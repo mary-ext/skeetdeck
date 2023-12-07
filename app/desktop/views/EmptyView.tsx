@@ -22,7 +22,7 @@ import { openModal } from '~/com/globals/modals.tsx';
 
 import AddAccountDialog from '../components/settings/AddAccountDialog.tsx';
 
-const brandName = import.meta.env.VITE_APP_BRAND_NAME;
+const brandName = import.meta.env.VITE_BRAND_NAME;
 
 const createDefaultDeck = (uid: DID) => {
 	const data = getAccountData(uid);

@@ -142,7 +142,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 		disableBackdropClose.value = listMutation.isPending;
 	});
 
-	if (import.meta.env.VITE_APP_MODE === 'desktop') {
+	if (import.meta.env.VITE_MODE === 'desktop') {
 		return (
 			<DialogOverlay>
 				<div class={/* @once */ DialogRoot({ size: 'md', fullHeight: true })}>

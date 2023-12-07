@@ -32,6 +32,10 @@ import {
 import SettingsRouterView from './settings-views/SettingsRouterView.tsx';
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 
+const GIT_SOURCE = import.meta.env.VITE_GIT_SOURCE;
+const GIT_COMMIT = import.meta.env.VITE_GIT_COMMIT;
+const GIT_BRANCH = import.meta.env.VITE_GIT_BRANCH;
+
 const SettingsDialog = () => {
 	const [view, setView] = createSignal<View>({ type: VIEW_ACCOUNTS });
 
@@ -86,7 +90,9 @@ const SettingsDialog = () => {
 									Donate
 								</button>
 								<div class="grow"></div>
-								<button class="font-mono text-xs text-muted-fg hover:underline">trunk/aae1da5</button>
+								<a target="_blank" href={GIT_SOURCE} class="font-mono text-xs text-muted-fg hover:underline">
+									{/* @once */ GIT_COMMIT ? `${GIT_BRANCH}/${GIT_COMMIT}` : `indev`}
+								</a>
 							</div>
 						</div>
 						<div class="flex grow flex-col overflow-hidden overflow-y-auto border-l border-divider">

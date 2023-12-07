@@ -12,7 +12,7 @@ import CloseIcon from '~/com/icons/baseline-close.tsx';
 import ContentCopyIcon from '~/com/icons/baseline-content-copy.tsx';
 import CheckIcon from '~/com/icons/baseline-check.tsx';
 
-const brandName = import.meta.env.VITE_APP_BRAND_NAME;
+const brandName = import.meta.env.VITE_BRAND_NAME;
 
 const DonationDialog = () => {
 	return (

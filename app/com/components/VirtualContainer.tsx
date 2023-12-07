@@ -9,7 +9,7 @@ export interface VirtualContainerProps {
 	children?: JSX.Element;
 }
 
-const isMobile = import.meta.env.VITE_APP_MODE !== 'desktop' && /Android/.test(navigator.userAgent);
+const isMobile = import.meta.env.VITE_MODE !== 'desktop' && /Android/.test(navigator.userAgent);
 
 export const VirtualContainer = (props: VirtualContainerProps) => {
 	let entry: IntersectionObserverEntry | undefined;

@@ -19,7 +19,7 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 		const post = props.post;
 		const author = post.author;
 
-		if (import.meta.env.VITE_APP_MODE === 'desktop') {
+		if (import.meta.env.VITE_MODE === 'desktop') {
 			return (
 				<Flyout button={props.children} placement="bottom-end">
 					{({ close, menuProps }) => (
