@@ -30,7 +30,7 @@ export class SignalizedProfile {
 	readonly followersCount: Signal<NonNullable<ProfileDetailed['followersCount']>>;
 	readonly followsCount: Signal<NonNullable<ProfileDetailed['followsCount']>>;
 	readonly postsCount: Signal<NonNullable<ProfileDetailed['postsCount']>>;
-	readonly labels: Signal<ProfileDetailed['labels']>;
+	readonly labels: Signal<NonNullable<ProfileDetailed['labels']>>;
 
 	readonly viewer: {
 		readonly muted: Signal<NonNullable<ProfileDetailed['viewer']>['muted']>;
@@ -60,7 +60,7 @@ export class SignalizedProfile {
 		this.followersCount = signal((isDetailed && profile.followersCount) || 0);
 		this.followsCount = signal((isDetailed && profile.followsCount) || 0);
 		this.postsCount = signal((isDetailed && profile.postsCount) || 0);
-		this.labels = signal(profile.labels, EQUALS_DEQUAL);
+		this.labels = signal(profile.labels || [], EQUALS_DEQUAL);
 
 		this.viewer = {
 			muted: signal(profile.viewer?.muted),
@@ -102,7 +102,7 @@ export const mergeProfile = (uid: DID, profile: Profile | ProfileBasic | Profile
 		val.handle.value = profile.handle;
 		val.displayName.value = profile.displayName;
 		val.avatar.value = profile.avatar;
-		val.labels.value = profile.labels;
+		val.labels.value = profile.labels || [];
 
 		val.viewer.muted.value = profile.viewer?.muted;
 		val.viewer.mutedByList.value = profile.viewer?.mutedByList;
