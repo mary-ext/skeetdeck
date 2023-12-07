@@ -45,19 +45,16 @@ const PostEmbedWarning = (props: PostEmbedWarningProps) => {
 		const title = source.t === CauseLabel ? renderLabelName(source.l.val) : `Media warning`;
 
 		return [
-			<div class="mt-3 flex min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider">
-				<VisibilityIcon class="ml-3 shrink-0 text-base text-muted-fg" />
-				<span class="grow py-3 text-sm">{title}</span>
+			<button
+				disabled={!!forced}
+				onClick={() => setShow(!show())}
+				class="mt-3 flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider p-3 text-left hover:bg-secondary/30 disabled:pointer-events-none"
+			>
+				<VisibilityIcon class="shrink-0 text-base text-muted-fg" />
+				<span class="grow text-sm">{title}</span>
 
-				{!forced && (
-					<button
-						onClick={() => setShow(!show())}
-						class="self-stretch px-3 text-de font-medium text-accent hover:bg-secondary/30"
-					>
-						{show() ? 'Hide' : 'Show'}
-					</button>
-				)}
-			</div>,
+				{!forced && <span class="text-de font-medium text-accent">{show() ? `Hide` : `Show`}</span>}
+			</button>,
 
 			!forced &&
 				(() => {
