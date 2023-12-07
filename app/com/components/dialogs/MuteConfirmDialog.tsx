@@ -166,8 +166,6 @@ const renderMuteConfirmDialog = (profile: SignalizedProfile, filters: FilterPref
 							your posts and follow you.
 						</p>
 
-						<TakingActionNotice uid={/* @once */ profile.uid} />
-
 						<label>
 							<span class="mr-4 text-sm">Duration:</span>
 							<select
@@ -186,10 +184,12 @@ const renderMuteConfirmDialog = (profile: SignalizedProfile, filters: FilterPref
 							</select>
 						</label>
 
-						{duration() !== '-1' && (
+						{duration() !== '-1' ? (
 							<p class="text-sm text-muted-fg">
 								This mute action will not be synced to any other clients or devices.
 							</p>
+						) : (
+							<TakingActionNotice uid={/* @once */ profile.uid} />
 						)}
 					</div>
 				)}
