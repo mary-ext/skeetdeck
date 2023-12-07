@@ -1,4 +1,6 @@
-import { sequal } from '~/utils/dequal.ts';
+import { createRoot } from 'solid-js';
+
+import { createLazyMemo } from '~/utils/hooks.ts';
 
 import type { SignalizedPost } from '../../stores/posts.ts';
 
@@ -16,19 +18,14 @@ import type { ModerationOpts } from '../types.ts';
 const cache = new WeakMap<SignalizedPost, () => ModerationDecision | null>();
 
 const createPostModDecision = (post: SignalizedPost, opts: ModerationOpts) => {
-	let prev: unknown[] = [];
-	let decision: ModerationDecision | null;
+	return createRoot(() => {
+		return createLazyMemo((): ModerationDecision | null => {
+			const labels = post.labels.value;
+			const text = post.record.value.text;
 
-	return (): ModerationDecision | null => {
-		const labels = post.labels.value;
-		const text = post.record.value.text;
+			const authorDid = post.author.did;
+			const isMuted = post.author.viewer.muted.value;
 
-		const authorDid = post.author.did;
-		const isMuted = post.author.viewer.muted.value;
-
-		const next = [labels, text, isMuted];
-
-		if (!sequal(prev, next)) {
 			const accu: ModerationCause[] = [];
 
 			decideLabelModeration(accu, labels, authorDid, opts);
@@ -36,12 +33,9 @@ const createPostModDecision = (post: SignalizedPost, opts: ModerationOpts) => {
 			// decideMutedTemporaryModeration(accu, isProfileTemporarilyMuted(uid, authorDid));
 			decideMutedKeywordModeration(accu, text, PreferenceWarn, opts);
 
-			prev = next;
-			decision = finalizeModeration(accu);
-		}
-
-		return decision;
-	};
+			return finalizeModeration(accu);
+		});
+	});
 };
 
 export const getPostModMaker = (post: SignalizedPost, opts: ModerationOpts) => {

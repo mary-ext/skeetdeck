@@ -1,4 +1,6 @@
-import { sequal } from '~/utils/dequal.ts';
+import { createRoot } from 'solid-js';
+
+import { createLazyMemo } from '~/utils/hooks.ts';
 
 import type { Records, UnionOf } from '../../atp-schema.ts';
 
@@ -19,19 +21,14 @@ type PostRecord = Records['app.bsky.feed.post'];
 const cache = new WeakMap<EmbeddedPostRecord, () => ModerationDecision | null>();
 
 const createQuoteModDecision = (quote: EmbeddedPostRecord, opts: ModerationOpts) => {
-	let prev: unknown[] = [];
-	let decision: ModerationDecision | null;
+	return createRoot(() => {
+		return createLazyMemo((): ModerationDecision | null => {
+			const labels = quote.labels;
+			const text = (quote.value as PostRecord).text;
 
-	return (): ModerationDecision | null => {
-		const labels = quote.labels;
-		const text = (quote.value as PostRecord).text;
+			const authorDid = quote.author.did;
+			const isMuted = quote.author.viewer?.muted;
 
-		const authorDid = quote.author.did;
-		const isMuted = quote.author.viewer?.muted;
-
-		const next = [labels, text, isMuted];
-
-		if (!sequal(prev, next)) {
 			const accu: ModerationCause[] = [];
 
 			decideLabelModeration(accu, labels, authorDid, opts);
@@ -39,12 +36,9 @@ const createQuoteModDecision = (quote: EmbeddedPostRecord, opts: ModerationOpts)
 			// decideMutedTemporaryModeration(accu, isProfileTemporarilyMuted(uid, authorDid));
 			decideMutedKeywordModeration(accu, text, PreferenceWarn, opts);
 
-			prev = next;
-			decision = finalizeModeration(accu);
-		}
-
-		return decision;
-	};
+			return finalizeModeration(accu);
+		});
+	});
 };
 
 export const getQuoteModMaker = (post: EmbeddedPostRecord, opts: ModerationOpts) => {
