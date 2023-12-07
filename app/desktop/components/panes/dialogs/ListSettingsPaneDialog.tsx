@@ -149,8 +149,7 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 
 						<AddPhotoButton
 							exists={!!avatar()}
-							title="Add banner image"
-							// We're dealing with a square avatar pretending to be a banner
+							title="Add avatar image"
 							aspectRatio={1 / 1}
 							maxWidth={1000}
 							maxHeight={1000}
