@@ -39,7 +39,7 @@ const ContentFiltersView = () => {
 					<ChevronRightIcon class="text-xl text-muted-fg" />
 				</button> */}
 
-				<hr class="mx-4 mt-1 border-divider" />
+				{/* <hr class="mx-4 mt-1 border-divider" />
 
 				<p class="p-4 text-base font-bold leading-5">User filters</p>
 
@@ -51,7 +51,7 @@ const ContentFiltersView = () => {
 				<button onClick={() => router.move({ type: VIEW_CONTENT_FILTERS })} class={selectItem}>
 					<span>Hidden reposters</span>
 					<ChevronRightIcon class="text-xl text-muted-fg" />
-				</button>
+				</button> */}
 			</div>
 		</div>
 	);
