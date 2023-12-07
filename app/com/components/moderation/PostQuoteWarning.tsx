@@ -1,4 +1,4 @@
-import { type JSX, createMemo, createSignal } from 'solid-js';
+import { type Component, type ComponentProps, type JSX, createMemo, createSignal } from 'solid-js';
 
 import type { UnionOf } from '~/api/atp-schema.ts';
 import { renderLabelName } from '~/api/display.ts';
@@ -9,6 +9,10 @@ import { FlagNoOverride } from '~/api/moderation/enums.ts';
 import { getQuoteModMaker } from '~/api/moderation/decisions/quote.ts';
 
 import { useSharedPreferences } from '../SharedPreferences.tsx';
+
+import VisibilityIcon from '../../icons/baseline-visibility.tsx';
+import FilterAltIcon from '../../icons/baseline-filter-alt.tsx';
+import PersonOffIcon from '../../icons/baseline-person-off.tsx';
 
 type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
 
@@ -53,26 +57,31 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 				const source = $decision.s;
 				const forced = source.t === CauseLabel && source.d.f & FlagNoOverride;
 
-				const title =
-					source.t === CauseLabel
-						? `Content warning: ${renderLabelName(source.l.val)}`
-						: source.t === CauseMutedKeyword
-						  ? `Filtered: ${source.n}`
-						  : `You've muted this user`;
+				let Icon: Component<ComponentProps<'svg'>>;
+				let title: string;
+
+				if (source.t === CauseLabel) {
+					Icon = VisibilityIcon;
+					title = renderLabelName(source.l.val);
+				} else if (source.t === CauseMutedKeyword) {
+					Icon = FilterAltIcon;
+					title = source.n;
+				} else {
+					Icon = PersonOffIcon;
+					title = `Muted user`;
+				}
 
 				return (
-					<div class="flex items-stretch justify-between gap-3 overflow-hidden rounded-md border border-divider">
-						<p class="m-3 text-sm text-muted-fg">{title}</p>
+					<button
+						disabled={!!forced}
+						onClick={() => setShow(!show())}
+						class="flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider p-3 text-left hover:bg-secondary/30 disabled:pointer-events-none"
+					>
+						<Icon class="shrink-0 text-base text-muted-fg" />
+						<span class="grow text-sm">{title}</span>
 
-						{!forced && (
-							<button
-								onClick={() => setShow(true)}
-								class="px-4 text-sm font-medium hover:bg-secondary/30 hover:text-secondary-fg"
-							>
-								Show
-							</button>
-						)}
-					</div>
+						{!forced && <span class="text-de font-medium text-accent">{show() ? `Hide` : `Show`}</span>}
+					</button>
 				);
 			},
 		];
