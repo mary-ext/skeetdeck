@@ -13,6 +13,7 @@ import {
 	LINK_PROFILE_FOLLOWS,
 	LINK_PROFILE,
 	LinkingContext,
+	LINK_PROFILE_EDIT,
 } from '~/com/components/Link.tsx';
 
 import { usePaneContext } from './PaneContext.tsx';
@@ -25,6 +26,7 @@ const PostRepostedByPaneDialog = lazy(() => import('./dialogs/PostRepostedByPane
 const ProfileFollowersPaneDialog = lazy(() => import('./dialogs/ProfileFollowersPaneDialog.tsx'));
 const ProfileFollowsPaneDialog = lazy(() => import('./dialogs/ProfileFollowsPaneDialog.tsx'));
 const ProfilePaneDialog = lazy(() => import('./dialogs/ProfilePaneDialog.tsx'));
+const ProfileSettingsPaneDialog = lazy(() => import('./dialogs/ProfileSettingsPaneDialog.tsx'));
 const ThreadPaneDialog = lazy(() => import('./dialogs/ThreadPaneDialog.tsx'));
 
 export interface PaneLinkingContextProps {
@@ -67,6 +69,10 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 
 		if (type === LINK_PROFILE) {
 			return openModal(() => <ProfilePaneDialog {...to} />);
+		}
+
+		if (type === LINK_PROFILE_EDIT) {
+			return openModal(() => <ProfileSettingsPaneDialog {...to} />);
 		}
 
 		if (type === LINK_PROFILE_FOLLOWERS) {

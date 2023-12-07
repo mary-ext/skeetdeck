@@ -8,7 +8,7 @@ import { openModal } from '~/com/globals/modals.tsx';
 import { preferences } from '../globals/settings.ts';
 import { ConstrainYDragAxis } from '../utils/dnd.ts';
 
-import { PaneContextProvider } from '../components/panes/PaneContext.tsx';
+import { PaneContextProvider } from '../components/panes/PaneContextProvider.tsx';
 import PaneFallback from '../components/panes/PaneFallback.tsx';
 import PaneRouter from '../components/panes/PaneRouter.tsx';
 
