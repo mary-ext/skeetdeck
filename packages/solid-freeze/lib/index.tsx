@@ -1,4 +1,4 @@
-import { type JSX, Suspense, createMemo, createResource } from 'solid-js';
+import { type Accessor, type JSX, Suspense, createMemo, createResource } from 'solid-js';
 
 export interface FreezeProps {
 	freeze: boolean;
@@ -9,6 +9,28 @@ export interface FreezeProps {
 type Deferred = Promise<undefined> & { r: (value: undefined) => void };
 
 const identity = <T,>(value: T): T => value;
+
+export const useFreeze = (accessor: Accessor<boolean>): (() => undefined) => {
+	const promise = createMemo((prev: Deferred | undefined) => {
+		if (accessor()) {
+			if (prev) {
+				return prev;
+			}
+
+			let _resolve: Deferred['r'];
+			let promise = new Promise((resolve) => (_resolve = resolve)) as Deferred;
+
+			promise.r = _resolve!;
+			return promise;
+		} else if (prev) {
+			prev.r(undefined);
+		}
+	});
+
+	const [suspend] = createResource(promise, identity);
+
+	return suspend;
+};
 
 export const Freeze = (props: FreezeProps) => {
 	const promise = createMemo((prev: Deferred | undefined) => {
