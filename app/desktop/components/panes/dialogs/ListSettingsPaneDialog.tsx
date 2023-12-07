@@ -45,9 +45,9 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 
 	const list = props.list;
 
-	const [avatar, setAvatar] = signal<Blob | string | undefined>((list && list.avatar.value) || undefined);
-	const [name, setName] = signal((list && list.name.value) || '');
-	const [desc, setDesc] = signal((list && list.description.value) || '');
+	const [avatar, setAvatar] = signal<Blob | string | undefined>(list.avatar.value || undefined);
+	const [name, setName] = signal(list.name.value || '');
+	const [desc, setDesc] = signal(list.description.value || '');
 
 	const listMutation = createMutation(() => ({
 		mutationFn: async () => {
