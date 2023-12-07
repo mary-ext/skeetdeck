@@ -26,6 +26,7 @@ import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import ProfileFollowButton from '../ProfileFollowButton.tsx';
 import ProfileOverflowAction from './profiles/ProfileOverflowAction.tsx';
+import ProfileHandleAction from './profiles/ProfileHandleAction.tsx';
 
 const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
 const MuteConfirmDialog = lazy(() => import('../dialogs/MuteConfirmDialog.tsx'));
@@ -126,9 +127,11 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 						{profile().displayName.value}
 					</p>
 					<p class="flex min-w-0 items-center text-sm text-muted-fg">
-						<button class="overflow-hidden text-ellipsis whitespace-nowrap text-left hover:underline">
-							{'@' + profile().handle.value}
-						</button>
+						<ProfileHandleAction profile={profile()}>
+							<button class="overflow-hidden text-ellipsis whitespace-nowrap text-left hover:underline">
+								{'@' + profile().handle.value}
+							</button>
+						</ProfileHandleAction>
 
 						{(() => {
 							if (profile().viewer.followedBy.value) {
