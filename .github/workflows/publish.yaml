@@ -45,7 +45,9 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install -r --frozen-lockfile
+        run: |
+          pnpm install -r --frozen-lockfile
+          pnpm install -g wrangler
 
       - name: Build bluesky-client
         working-directory: packages/bluesky-client
