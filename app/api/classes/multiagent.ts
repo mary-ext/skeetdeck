@@ -197,7 +197,9 @@ export class Multiagent {
 			const existing = $accounts.find((acc) => acc.did === did);
 
 			if (existing) {
-				existing.session = session;
+				batch(() => {
+					Object.assign(existing.session, session);
+				});
 			}
 		});
 
