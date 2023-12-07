@@ -25,6 +25,8 @@ export interface ProfileOverflowActionProps {
 	children: JSX.Element;
 }
 
+const isDesktop = import.meta.env.VITE_APP_MODE === 'desktop';
+
 const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 	const { filters } = useSharedPreferences();
 
@@ -59,7 +61,7 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								<span>Open in Bluesky app</span>
 							</a>
 
-							{!isSelf && (
+							{!isDesktop && !isSelf && (
 								<button
 									onClick={() => {
 										const array = filters.hideReposts;

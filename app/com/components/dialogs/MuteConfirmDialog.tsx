@@ -88,10 +88,12 @@ const renderMutedByListDialog = (profile: SignalizedProfile, list: ListView) => 
 	);
 };
 
+const isDesktop = import.meta.env.VITE_APP_MODE === 'desktop';
+
 const renderMuteConfirmDialog = (profile: SignalizedProfile, filters: FilterPreferences) => {
 	const queryClient = useQueryClient();
 
-	const isTempMuted = isProfileTempMuted(filters, profile.did);
+	const isTempMuted = !isDesktop && isProfileTempMuted(filters, profile.did);
 	const isMuted = profile.viewer.muted.value || isTempMuted;
 
 	const [duration, setDuration] = createSignal('-1');
@@ -166,25 +168,27 @@ const renderMuteConfirmDialog = (profile: SignalizedProfile, filters: FilterPref
 							your posts and follow you.
 						</p>
 
-						<label>
-							<span class="mr-4 text-sm">Duration:</span>
-							<select
-								value={duration()}
-								onChange={(el) => setDuration(el.currentTarget.value)}
-								class={/* @once */ Select()}
-							>
-								<option value={-1}>Indefinite</option>
-								<option value={1 * 60 * 60 * 1_000}>1 hour</option>
-								<option value={6 * 60 * 60 * 1_000}>6 hour</option>
-								<option value={12 * 60 * 60 * 1_000}>12 hour</option>
-								<option value={1 * 24 * 60 * 60 * 1_000}>1 day</option>
-								<option value={3 * 24 * 60 * 60 * 1_000}>3 days</option>
-								<option value={7 * 24 * 60 * 60 * 1_000}>7 days</option>
-								<option value={14 * 24 * 60 * 60 * 1_000}>14 days</option>
-							</select>
-						</label>
+						{!isDesktop && (
+							<label>
+								<span class="mr-4 text-sm">Duration:</span>
+								<select
+									value={duration()}
+									onChange={(el) => setDuration(el.currentTarget.value)}
+									class={/* @once */ Select()}
+								>
+									<option value={-1}>Indefinite</option>
+									<option value={1 * 60 * 60 * 1_000}>1 hour</option>
+									<option value={6 * 60 * 60 * 1_000}>6 hour</option>
+									<option value={12 * 60 * 60 * 1_000}>12 hour</option>
+									<option value={1 * 24 * 60 * 60 * 1_000}>1 day</option>
+									<option value={3 * 24 * 60 * 60 * 1_000}>3 days</option>
+									<option value={7 * 24 * 60 * 60 * 1_000}>7 days</option>
+									<option value={14 * 24 * 60 * 60 * 1_000}>14 days</option>
+								</select>
+							</label>
+						)}
 
-						{duration() !== '-1' ? (
+						{!isDesktop && duration() !== '-1' ? (
 							<p class="text-sm text-muted-fg">
 								This mute action will not be synced to any other clients or devices.
 							</p>
