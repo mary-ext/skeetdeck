@@ -17,7 +17,7 @@ export interface MultiagentLoginOptions extends AtpLoginOptions {
 
 export interface MultiagentProfileData {
 	displayName?: string;
-	handle: string;
+	// handle: string;
 	avatar?: string;
 	indexedAt?: string;
 }

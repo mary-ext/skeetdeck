@@ -68,7 +68,7 @@ export const getProfile = async (ctx: QC<ReturnType<typeof getProfileKey>>) => {
 			if (!profile || profile.indexedAt !== data.indexedAt || profile.handle !== data.handle) {
 				account.profile = {
 					displayName: data.displayName,
-					handle: data.handle,
+					// handle: data.handle,
 					avatar: data.avatar,
 					indexedAt: data.indexedAt,
 				};

@@ -9,8 +9,10 @@ export const getAccountData = (uid: DID): MultiagentAccountData | undefined => {
 };
 
 export const renderAccountHandle = (account: MultiagentAccountData) => {
-	const handle = account.profile?.handle;
-	return handle && handle !== 'handle.invalid' ? handle : account.session.handle;
+	// const handle = account.profile?.handle;
+	// return handle && handle !== 'handle.invalid' ? handle : account.session.handle;
+
+	return account.session.handle;
 };
 
 export const getAccountHandle = (uid: DID): string | null => {
