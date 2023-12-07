@@ -111,7 +111,7 @@ const AddPhotoButton = (props: AddPhotoButtonProps) => {
 					type="button"
 					title={props.title}
 					onClick={!shouldDisplayFlyout ? handleButtonClick : undefined}
-					class="absolute inset-0 grid w-full place-items-center bg-black/80 opacity-0 hover:opacity-100 disabled:pointer-events-none"
+					class="absolute inset-0 grid w-full place-items-center bg-black/80 opacity-0 hover:opacity-100 focus-visible:opacity-100 disabled:pointer-events-none"
 				>
 					<AddPhotoAlternateIcon class="text-2xl" />
 				</button>
