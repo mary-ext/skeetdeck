@@ -254,7 +254,8 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 						</label>
 
 						<p class="mr-8 text-de text-muted-fg">
-							This option tells every app, including Bluesky app, that you don't want your account to be seen by users who aren't currently signed in to an account.
+							This option tells every app, including Bluesky app, that you don't want your account to be seen
+							by users who aren't currently signed in to an account.
 						</p>
 
 						<p class="mr-8 mt-1 text-de font-bold text-muted-fg">
