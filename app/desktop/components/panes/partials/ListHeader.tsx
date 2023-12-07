@@ -14,11 +14,11 @@ import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 import { usePaneContext } from '../PaneContext.tsx';
 
-import ListMembersPaneDialog from '../dialogs/ListMembersPaneDialog.tsx';
-import ListSettingsPaneDialog from '../dialogs/ListSettingsPaneDialog.tsx';
 import EditIcon from '~/com/icons/baseline-edit.tsx';
 
 const LazyImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
+const ListMembersPaneDialog = lazy(() => import('../dialogs/ListMembersPaneDialog.tsx'));
+const ListSettingsPaneDialog = lazy(() => import('../dialogs/ListSettingsPaneDialog.tsx'));
 
 export interface ListHeaderProps {
 	list?: SignalizedList;
