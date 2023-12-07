@@ -80,20 +80,16 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 
 			// 2. Merge our changes
 			{
-				const record: ListRecord = {
-					createdAt: prev.createdAt,
-					avatar:
-						$avatar === undefined
-							? undefined
-							: $avatar instanceof Blob
-							  ? (($avatar as any).$blob ||= await uploadBlob(uid, $avatar))
-							  : prev.avatar,
-					purpose: prev.purpose,
-					name: $name,
-					description: $description,
-					descriptionFacets: undefined,
-					labels: prev.labels,
-				};
+				prev.avatar =
+					$avatar === undefined
+						? undefined
+						: $avatar instanceof Blob
+						  ? (($avatar as any).$blob ||= await uploadBlob(uid, $avatar))
+						  : prev.avatar;
+
+				prev.name = $name;
+				prev.description = $description;
+				prev.descriptionFacets = undefined;
 
 				await agent.rpc.call('com.atproto.repo.putRecord', {
 					data: {
@@ -101,7 +97,7 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 						collection: listRecordType,
 						rkey: getRecordId(list.uri),
 						swapRecord: swap,
-						record: record,
+						record: prev,
 					},
 				});
 
