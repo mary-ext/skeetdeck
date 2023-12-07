@@ -1,6 +1,6 @@
 export interface InteractiveProps {
 	class?: string;
-	variant?: 'default' | 'muted' | 'danger';
+	variant?: 'default' | 'muted' | 'danger' | 'none';
 }
 
 export const Interactive = (props: InteractiveProps) => {
