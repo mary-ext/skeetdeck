@@ -1,0 +1,50 @@
+on: [push]
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      deployments: write
+
+    strategy:
+      matrix:
+        include:
+          - viteConfigFile: vite-desktop.config.ts
+            viteOutputDir: desktop/dist
+            cfProjectName: skeetdeck
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install -r --frozen-lockfile
+
+      - name: Build project
+        working-directory: app
+        run: |
+          RAW_COMMIT=$(git rev-parse HEAD)
+
+          export VITE_GIT_BRANCH=$(git branch --show-current)
+          export VITE_GIT_COMMIT=${RAW_COMMIT:0:7}
+
+          pnpm exec vite build -c ${{ matrix.viteConfigFile }}
+
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          projectName: ${{ matrix.cfProjectName }}
+          workingDirectory: app
+          directory: ${{ matrix.viteOutputDir }}
