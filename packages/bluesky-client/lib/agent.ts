@@ -90,6 +90,25 @@ export class Agent extends EventEmitter<AgentEventMap> {
 
 		if (now >= accessToken.exp) {
 			await this.#refreshSession();
+		} else {
+			const promise = this.rpc.get('com.atproto.server.getSession', {});
+
+			promise.then((response) => {
+				const existing = this.session;
+				const next = response.data;
+
+				if (!existing) {
+					return;
+				}
+
+				this.#updateSession({
+					...existing,
+					handle: next.handle,
+					didDoc: next.didDoc,
+					email: next.email,
+					emailConfirmed: next.emailConfirmed,
+				});
+			});
 		}
 
 		if (!this.session) {
