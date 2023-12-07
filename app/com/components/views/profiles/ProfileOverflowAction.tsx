@@ -30,6 +30,7 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 
 	return (() => {
 		const profile = props.profile;
+		const isSelf = profile.uid === profile.did;
 
 		const isTempMuted = () => isProfileTempMuted(filters, profile.did);
 		const isMuted = () => profile.viewer.muted.value || isTempMuted();
@@ -58,24 +59,26 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								<span>Open in Bluesky app</span>
 							</a>
 
-							<button
-								onClick={() => {
-									const array = filters.hideReposts;
-									const repostHidden = isRepostHidden();
+							{!isSelf && (
+								<button
+									onClick={() => {
+										const array = filters.hideReposts;
+										const repostHidden = isRepostHidden();
 
-									close();
+										close();
 
-									if (repostHidden) {
-										array.splice(repostHidden.index, 1);
-									} else {
-										array.push(profile.did);
-									}
-								}}
-								class={/* @once */ MenuItem()}
-							>
-								<RepeatIcon class={/* @once */ MenuItemIcon()} />
-								<span>{isRepostHidden() ? `Turn on reposts` : `Turn off reposts`}</span>
-							</button>
+										if (repostHidden) {
+											array.splice(repostHidden.index, 1);
+										} else {
+											array.push(profile.did);
+										}
+									}}
+									class={/* @once */ MenuItem()}
+								>
+									<RepeatIcon class={/* @once */ MenuItemIcon()} />
+									<span>{isRepostHidden() ? `Turn on reposts` : `Turn off reposts`}</span>
+								</button>
+							)}
 
 							<button
 								onClick={() => {
@@ -88,31 +91,35 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Add/remove @${profile.handle.value} from lists`}</span>
 							</button>
 
-							<button
-								onClick={() => {
-									close();
-									openModal(() => <MuteConfirmDialog profile={profile} filters={filters} />);
-								}}
-								class={/* @once */ MenuItem()}
-							>
-								<VolumeOffIcon class={/* @once */ MenuItemIcon()} />
-								<span class="overflow-hidden text-ellipsis whitespace-nowrap">
-									{isMuted() ? `Unmute @${profile.handle.value}` : `Mute @${profile.handle.value}`}
-								</span>
-							</button>
+							{!isSelf && (
+								<button
+									onClick={() => {
+										close();
+										openModal(() => <MuteConfirmDialog profile={profile} filters={filters} />);
+									}}
+									class={/* @once */ MenuItem()}
+								>
+									<VolumeOffIcon class={/* @once */ MenuItemIcon()} />
+									<span class="overflow-hidden text-ellipsis whitespace-nowrap">
+										{isMuted() ? `Unmute @${profile.handle.value}` : `Mute @${profile.handle.value}`}
+									</span>
+								</button>
+							)}
 
-							<button
-								onClick={() => {
-									close();
-									openModal(() => <BlockConfirmDialog profile={profile} />);
-								}}
-								class={/* @once */ MenuItem()}
-							>
-								<BlockIcon class={/* @once */ MenuItemIcon()} />
-								<span class="overflow-hidden text-ellipsis whitespace-nowrap">
-									{isBlocked() ? `Unblock @${profile.handle.value}` : `Block @${profile.handle.value}`}
-								</span>
-							</button>
+							{!isSelf && (
+								<button
+									onClick={() => {
+										close();
+										openModal(() => <BlockConfirmDialog profile={profile} />);
+									}}
+									class={/* @once */ MenuItem()}
+								>
+									<BlockIcon class={/* @once */ MenuItemIcon()} />
+									<span class="overflow-hidden text-ellipsis whitespace-nowrap">
+										{isBlocked() ? `Unblock @${profile.handle.value}` : `Block @${profile.handle.value}`}
+									</span>
+								</button>
+							)}
 
 							<button class={/* @once */ MenuItem()}>
 								<ReportIcon class={/* @once */ MenuItemIcon()} />

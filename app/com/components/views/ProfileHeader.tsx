@@ -11,7 +11,13 @@ import { openModal } from '~/com/globals/modals.tsx';
 
 import { Button } from '../../primitives/button.ts';
 
-import { LINK_LIST, LINK_PROFILE_FOLLOWERS, LINK_PROFILE_FOLLOWS, Link } from '../Link.tsx';
+import {
+	LINK_LIST,
+	LINK_PROFILE_EDIT,
+	LINK_PROFILE_FOLLOWERS,
+	LINK_PROFILE_FOLLOWS,
+	Link,
+} from '../Link.tsx';
 import { isProfileTempMuted, useSharedPreferences } from '../SharedPreferences.tsx';
 
 import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
@@ -87,11 +93,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 						if ($profile.did !== $profile.uid) {
 							return [
 								<ProfileOverflowAction profile={$profile}>
-									<button
-										title="Actions"
-										onClick={() => {}}
-										class={/* @once */ Button({ variant: 'outline' })}
-									>
+									<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
 										<MoreHorizIcon class="-mx-1.5 text-base" />
 									</button>
 								</ProfileOverflowAction>,
@@ -102,6 +104,20 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 								}) as unknown as JSX.Element,
 							];
 						}
+
+						return [
+							<ProfileOverflowAction profile={$profile}>
+								<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
+									<MoreHorizIcon class="-mx-1.5 text-base" />
+								</button>
+							</ProfileOverflowAction>,
+							<Link
+								to={/* @once */ { type: LINK_PROFILE_EDIT, actor: $profile.did }}
+								class={/* @once */ Button({ variant: 'primary' })}
+							>
+								Edit profile
+							</Link>,
+						];
 					})()}
 				</div>
 
