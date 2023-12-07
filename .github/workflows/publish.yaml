@@ -69,5 +69,6 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           projectName: ${{ matrix.cfProjectName }}
+          branch: ${{ github.ref_name == 'trunk' && 'main' || github.ref_name }}
           workingDirectory: app
           directory: ${{ matrix.viteOutputDir }}
