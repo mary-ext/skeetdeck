@@ -112,7 +112,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 								</button>
 							</ProfileOverflowAction>,
 							<Link
-								to={/* @once */ { type: LINK_PROFILE_EDIT, actor: $profile.did }}
+								to={{ type: LINK_PROFILE_EDIT, profile: $profile }}
 								class={/* @once */ Button({ variant: 'primary' })}
 							>
 								Edit profile

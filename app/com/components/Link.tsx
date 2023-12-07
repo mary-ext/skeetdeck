@@ -1,6 +1,7 @@
 import { type JSX, createContext, useContext } from 'solid-js';
 
 import type { DID } from '~/api/atp-schema.ts';
+import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
 export const LINK_EXTERNAL = 0;
 export const LINK_FEED = 1;
@@ -80,7 +81,7 @@ export interface ProfileLinking {
 
 export interface ProfileEditLinking {
 	type: typeof LINK_PROFILE_EDIT;
-	actor: DID;
+	profile: SignalizedProfile;
 }
 
 export interface ProfileFollowsLinking {
