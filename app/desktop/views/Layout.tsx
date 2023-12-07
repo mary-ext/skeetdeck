@@ -17,6 +17,8 @@ import {
 } from '../globals/panes.ts';
 import { addPane, preferences } from '../globals/settings.ts';
 
+import { isUpdateReady, updateSW } from '~/utils/service-worker.ts';
+
 import { Interactive } from '~/com/primitives/interactive.ts';
 
 import { Flyout } from '~/com/components/Flyout.tsx';
@@ -24,6 +26,7 @@ import { Flyout } from '~/com/components/Flyout.tsx';
 import FeatherIcon from '~/com/icons/baseline-feather.tsx';
 import SearchIcon from '~/com/icons/baseline-search.tsx';
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
+import SystemUpdateAltIcon from '~/com/icons/baseline-system-update-alt.tsx';
 import TableLargeAddIcon from '~/com/icons/baseline-table-large-add.tsx';
 
 import {
@@ -36,7 +39,11 @@ import AddDeckDialog from '../components/settings/AddDeckDialog.tsx';
 const SettingsDialog = lazy(() => import('../components/settings/SettingsDialog.tsx'));
 
 const menuIconButton = Interactive({
-	class: `h-11 shrink-0 text-lg disabled:pointer-events-none disabled:opacity-50`,
+	class: `grid h-11 shrink-0 place-items-center text-lg disabled:opacity-50`,
+});
+
+const updateButton = Interactive({
+	class: `grid h-11 shrink-0 place-items-center text-lg text-green-600`,
 });
 
 const DashboardLayout = () => {
@@ -49,14 +56,14 @@ const DashboardLayout = () => {
 				<Show when={multiagent.active}>
 					{(uid) => (
 						<>
-							<button title="Post..." class={menuIconButton}>
-								<FeatherIcon class="mx-auto" />
+							<button disabled title="Post..." class={menuIconButton}>
+								<FeatherIcon />
 							</button>
 
 							<Flyout
 								button={
 									<button title="Search..." class={menuIconButton}>
-										<SearchIcon class="mx-auto" />
+										<SearchIcon />
 									</button>
 								}
 								placement="bottom-start"
@@ -149,6 +156,22 @@ const DashboardLayout = () => {
 					</For>
 				</div>
 
+				{(() => {
+					if (isUpdateReady()) {
+						return (
+							<button
+								title="Skeetdeck update is ready, click here to reload"
+								onClick={() => {
+									updateSW();
+								}}
+								class={updateButton}
+							>
+								<SystemUpdateAltIcon />
+							</button>
+						);
+					}
+				})()}
+
 				<button
 					title="Open application settings"
 					disabled={preferences.onboarding}
@@ -157,7 +180,7 @@ const DashboardLayout = () => {
 					}}
 					class={menuIconButton}
 				>
-					<SettingsIcon class="mx-auto" />
+					<SettingsIcon />
 				</button>
 			</div>
 
