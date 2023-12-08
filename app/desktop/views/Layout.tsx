@@ -38,6 +38,8 @@ import AddDeckDialog from '../components/settings/AddDeckDialog.tsx';
 
 const SettingsDialog = lazy(() => import('../components/settings/SettingsDialog.tsx'));
 
+const brandName = import.meta.env.VITE_BRAND_NAME;
+
 const menuIconButton = Interactive({
 	class: `grid h-11 shrink-0 place-items-center text-lg disabled:opacity-50`,
 });
@@ -160,7 +162,7 @@ const DashboardLayout = () => {
 					if (isUpdateReady()) {
 						return (
 							<button
-								title="Skeetdeck update is ready, click here to reload"
+								title={`${brandName} update is ready, click here to reload`}
 								onClick={() => {
 									updateSW();
 								}}
