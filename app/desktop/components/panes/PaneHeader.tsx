@@ -22,7 +22,7 @@ const PaneHeader = (props: PaneHeaderProps) => {
 		const data = multiagent.accounts.find((acc) => acc.did === uid);
 
 		if (data) {
-			return '@' + (data.profile?.handle || data.session.handle);
+			return '@' + data.session.handle;
 		}
 
 		return 'N/A';

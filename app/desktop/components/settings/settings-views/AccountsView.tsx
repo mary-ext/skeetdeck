@@ -53,7 +53,7 @@ const AccountsView = () => {
 										{account.profile?.displayName}
 									</p>
 									<p class="overflow-hidden text-ellipsis whitespace-nowrap text-muted-fg">
-										{'@' + (account.profile?.handle || account.session.handle)}
+										{'@' + account.session.handle}
 									</p>
 									{multiagent.active === did && <p class="text-muted-fg">Default account</p>}
 								</div>
@@ -109,9 +109,7 @@ const AccountActionMenu = (props: AccountActionMenuProps) => {
 							openModal(() => (
 								<ConfirmDialog
 									title={`Sign out?`}
-									body={`This will sign you out of @${
-										account.profile?.handle || account.session.handle
-									}, and you'll still be signed in to other accounts.`}
+									body={`This will sign you out of @${account.session.handle}, and you'll still be signed in to other accounts.`}
 									confirmation={`Sign out`}
 									onConfirm={() => {
 										multiagent.logout(did);
