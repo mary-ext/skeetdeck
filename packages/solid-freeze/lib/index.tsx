@@ -45,37 +45,23 @@ export interface ShowFreezeProps {
 }
 
 export const ShowFreeze = (props: ShowFreezeProps) => {
-	const promise = createMemo((prev: Deferred | undefined) => {
-		if (props.when) {
-			if (prev) {
-				return prev;
-			}
-
-			let _resolve: Deferred['r'];
-			let promise = new Promise((resolve) => (_resolve = resolve)) as Deferred;
-
-			promise.r = _resolve!;
-			return promise;
-		} else if (prev) {
-			prev.r(undefined);
-		}
-	});
-
+	// Hard-stuck to `true` if `props.when` is true
 	const show = createMemo((prev: boolean) => {
 		if (prev || props.when) {
-			return prev;
+			return true;
 		}
 
 		return prev;
 	}, false);
 
-	const [suspend] = createResource(promise, identity);
-
-	return (
-		<Suspense
-			fallback={props.fallback}
-			// @ts-expect-error
-			children={[suspend, () => show() && props.children]}
-		/>
-	);
+	return Freeze({
+		get freeze() {
+			return show() && !props.when;
+		},
+		get children() {
+			if (show()) {
+				return props.children;
+			}
+		},
+	});
 };
