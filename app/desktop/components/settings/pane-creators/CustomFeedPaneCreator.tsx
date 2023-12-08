@@ -1,18 +1,19 @@
-import { For, Match, Show, Switch, createSignal } from 'solid-js';
+import { For, Match, Switch, createSignal } from 'solid-js';
 
 import { createInfiniteQuery } from '@pkg/solid-query';
 
-import { multiagent } from '~/api/globals/agent.ts';
+import type { DID, ResponseOf } from '~/api/atp-schema.ts';
+import { multiagent, renderAccountHandle } from '~/api/globals/agent.ts';
 
 import { type CustomFeedPaneConfig, PANE_TYPE_FEED } from '../../../globals/panes.ts';
 
 import { DialogBody } from '~/com/primitives/dialog.ts';
 import { Interactive } from '~/com/primitives/interactive.ts';
 
-import SearchInput from '~/com/components/inputs/SearchInput.tsx';
-
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
+import SearchInput from '~/com/components/inputs/SearchInput.tsx';
+import FilterBar from '~/com/components/inputs/FilterBar.tsx';
 
 import type { PaneCreatorProps } from './types.ts';
 
@@ -29,24 +30,41 @@ const showMoreBtn = Interactive({
 
 const CustomFeedPaneCreator = (props: PaneCreatorProps) => {
 	const [search, setSearch] = createSignal('');
+	const [filter, setFilter] = createSignal<DID>();
 
 	const feeds = createInfiniteQuery(() => ({
-		queryKey: ['getPopularFeedGenerators', props.uid, search(), 30] as const,
+		queryKey: ['getPopularFeedGenerators', props.uid, filter(), search(), 30] as const,
 		queryFn: async (ctx) => {
-			const [, uid, search, limit] = ctx.queryKey;
+			const [, uid, actor, search, limit] = ctx.queryKey;
 
 			const agent = await multiagent.connect(uid);
 
-			const response = await agent.rpc.get('app.bsky.unspecced.getPopularFeedGenerators', {
-				signal: ctx.signal,
-				params: {
-					query: search,
-					limit: limit,
-					cursor: ctx.pageParam,
-				},
-			});
+			let data: ResponseOf<'app.bsky.unspecced.getPopularFeedGenerators'>;
+			if (actor) {
+				const response = await agent.rpc.get('app.bsky.feed.getActorFeeds', {
+					signal: ctx.signal,
+					params: {
+						actor: actor,
+						limit: limit,
+						cursor: ctx.pageParam,
+					},
+				});
 
-			return response.data;
+				data = response.data;
+			} else {
+				const response = await agent.rpc.get('app.bsky.unspecced.getPopularFeedGenerators', {
+					signal: ctx.signal,
+					params: {
+						query: search,
+						limit: limit,
+						cursor: ctx.pageParam,
+					},
+				});
+
+				data = response.data;
+			}
+
+			return data;
 		},
 		getNextPageParam: (last) => last.cursor,
 		initialPageParam: undefined as string | undefined,
@@ -54,23 +72,41 @@ const CustomFeedPaneCreator = (props: PaneCreatorProps) => {
 
 	return (
 		<div class={/* @once */ DialogBody({ padded: false, scrollable: true })}>
-			<div class="flex gap-4 p-4">
-				<SearchInput
-					onKeyDown={(ev) => {
-						if (ev.key === 'Enter') {
-							setSearch(ev.currentTarget.value.trim());
-						}
-					}}
+			<div class="p-4">
+				<FilterBar
+					value={filter()}
+					onChange={setFilter}
+					items={[
+						{ value: undefined, label: `All` },
+						...multiagent.accounts.map((account) => ({
+							value: account.did,
+							get label() {
+								return `@${renderAccountHandle(account)}'s feeds`;
+							},
+						})),
+					]}
 				/>
-
-				{/* @todo: filter by one's saved feeds or own feeds */}
 			</div>
 
-			<Show when={search()}>
-				<p class="-mt-1 px-4 pb-2 text-sm text-muted-fg">
-					Searching for "<span class="whitespace-pre-wrap break-words">{search()}</span>"
-				</p>
-			</Show>
+			{!filter() && (
+				<>
+					<div class="flex gap-4 p-4 pt-0">
+						<SearchInput
+							onKeyDown={(ev) => {
+								if (ev.key === 'Enter') {
+									setSearch(ev.currentTarget.value.trim());
+								}
+							}}
+						/>
+					</div>
+
+					{search() && (
+						<p class="-mt-1 px-4 pb-2 text-sm text-muted-fg">
+							Searching for "<span class="whitespace-pre-wrap break-words">{search()}</span>"
+						</p>
+					)}
+				</>
+			)}
 
 			<For each={feeds.data?.pages.flatMap((page) => page.feeds)}>
 				{(feed) => (
