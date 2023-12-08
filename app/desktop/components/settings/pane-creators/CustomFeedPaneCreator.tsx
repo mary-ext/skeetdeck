@@ -3,7 +3,7 @@ import { For, Match, Switch, createSignal } from 'solid-js';
 import { createInfiniteQuery } from '@pkg/solid-query';
 
 import type { DID, ResponseOf } from '~/api/atp-schema.ts';
-import { multiagent, renderAccountHandle } from '~/api/globals/agent.ts';
+import { multiagent, renderAccountName } from '~/api/globals/agent.ts';
 
 import { type CustomFeedPaneConfig, PANE_TYPE_FEED } from '../../../globals/panes.ts';
 
@@ -81,7 +81,7 @@ const CustomFeedPaneCreator = (props: PaneCreatorProps) => {
 						...multiagent.accounts.map((account) => ({
 							value: account.did,
 							get label() {
-								return `@${renderAccountHandle(account)}'s feeds`;
+								return `${renderAccountName(account)}'s feeds`;
 							},
 						})),
 					]}

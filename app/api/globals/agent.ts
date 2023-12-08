@@ -15,6 +15,10 @@ export const renderAccountHandle = (account: MultiagentAccountData) => {
 	return account.session.handle;
 };
 
+export const renderAccountName = (account: MultiagentAccountData) => {
+	return account.profile?.displayName || `@` + account.session.handle;
+};
+
 export const getAccountHandle = (uid: DID): string | null => {
 	const account = getAccountData(uid);
 

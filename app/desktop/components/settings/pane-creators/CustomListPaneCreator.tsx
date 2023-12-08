@@ -3,7 +3,7 @@ import { For, Match, Switch, createSignal } from 'solid-js';
 import { createInfiniteQuery } from '@pkg/solid-query';
 
 import type { DID, RefOf } from '~/api/atp-schema.ts';
-import { multiagent, renderAccountHandle } from '~/api/globals/agent.ts';
+import { multiagent, renderAccountName } from '~/api/globals/agent.ts';
 
 import { type CustomListPaneConfig, PANE_TYPE_LIST } from '../../../globals/panes.ts';
 
@@ -89,7 +89,7 @@ const CustomListPaneCreator = (props: PaneCreatorProps) => {
 						items={multiagent.accounts.map((account) => ({
 							value: account.did,
 							get label() {
-								return `@${renderAccountHandle(account)}'s lists`;
+								return `${renderAccountName(account)}'s lists`;
 							},
 						}))}
 					/>
