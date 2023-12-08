@@ -1,8 +1,8 @@
-import { type Accessor, createRenderEffect } from 'solid-js';
+import { type Accessor, createEffect } from 'solid-js';
 
 export const model = (getter: Accessor<string>, setter: (next: string) => void) => {
 	return (node: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement) => {
-		createRenderEffect(() => {
+		createEffect(() => {
 			node.value = getter();
 		});
 
@@ -14,7 +14,7 @@ export const model = (getter: Accessor<string>, setter: (next: string) => void) 
 
 export const modelChecked = (getter: Accessor<boolean>, setter: (next: boolean) => void) => {
 	return (node: HTMLInputElement) => {
-		createRenderEffect(() => {
+		createEffect(() => {
 			node.checked = getter();
 		});
 
@@ -27,7 +27,7 @@ export const modelChecked = (getter: Accessor<boolean>, setter: (next: boolean) 
 export const createRadioModel = <T extends string>(getter: Accessor<T>, setter: (next: T) => void) => {
 	return (value: T) => {
 		return (node: HTMLInputElement) => {
-			createRenderEffect(() => {
+			createEffect(() => {
 				node.checked = getter() === value;
 			});
 
