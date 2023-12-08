@@ -18,6 +18,7 @@ import DeleteIcon from '~/com/icons/baseline-delete.tsx';
 import SyncAltIcon from '~/com/icons/baseline-sync-alt.tsx';
 
 import { usePaneContext } from '../PaneContext.tsx';
+import SwitchAccountAction from '../../flyouts/SwitchAccountAction.tsx';
 
 const GenericPaneSettings = () => {
 	const { pane, deletePane } = usePaneContext();
@@ -103,17 +104,19 @@ const GenericPaneSettings = () => {
 			</div>
 
 			<Show when={multiagent.accounts.length > 1}>
-				<button
-					class={
-						/* @once */ Interactive({
-							variant: 'muted',
-							class: 'flex items-center gap-4 border-b border-divider p-4',
-						})
-					}
-				>
-					<SyncAltIcon class="text-lg" />
-					<span class="text-sm">Switch accounts</span>
-				</button>
+				<SwitchAccountAction value={pane.uid} onChange={(next) => (pane.uid = next)}>
+					<button
+						class={
+							/* @once */ Interactive({
+								variant: 'muted',
+								class: 'flex items-center gap-4 border-b border-divider p-4',
+							})
+						}
+					>
+						<SyncAltIcon class="text-lg" />
+						<span class="text-sm">Switch accounts</span>
+					</button>
+				</SwitchAccountAction>
 			</Show>
 
 			<button
