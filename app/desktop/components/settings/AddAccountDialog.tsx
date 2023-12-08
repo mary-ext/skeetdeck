@@ -89,7 +89,7 @@ const AddAccountDialog = () => {
 					body={
 						<>
 							You're attempting to sign in without using an app password, this could be dangerous to your
-							account's safety. We recommend using app passwords when signing in to third-party clients like
+							account's safety. We recommend using app passwords when signing in to third-party clients like{' '}
 							{brandName}.{' '}
 							<a href={APP_PASSWORD_LINK} target="_blank" class="text-accent hover:underline">
 								Learn more here
