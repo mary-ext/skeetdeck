@@ -36,9 +36,13 @@ const SwitchAccountAction = (props: SwitchAccountActionProps) => {
 								class="h-10 w-10 shrink-0 rounded-full"
 							/>
 
-							<div class="grow text-sm">
-								<p class="font-bold">{account.profile?.displayName}</p>
-								<p class="text-muted-fg">{'@' + account.session.handle}</p>
+							<div class="min-w-0 grow text-sm">
+								<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold empty:hidden">
+									{account.profile?.displayName}
+								</p>
+								<p class="overflow-hidden text-ellipsis whitespace-nowrap text-muted-fg">
+									{'@' + account.session.handle}
+								</p>
 							</div>
 
 							<CheckIcon
