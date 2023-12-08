@@ -1,9 +1,9 @@
-import { For, Match, Switch } from 'solid-js';
+import { For, Match, Switch, createSignal } from 'solid-js';
 
 import { createInfiniteQuery } from '@pkg/solid-query';
 
-import type { RefOf } from '~/api/atp-schema.ts';
-import { multiagent } from '~/api/globals/agent.ts';
+import type { DID, RefOf } from '~/api/atp-schema.ts';
+import { multiagent, renderAccountHandle } from '~/api/globals/agent.ts';
 
 import { type CustomListPaneConfig, PANE_TYPE_LIST } from '../../../globals/panes.ts';
 
@@ -12,6 +12,7 @@ import { Interactive, loadMoreBtn } from '~/com/primitives/interactive.ts';
 
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
+import FilterBar from '~/com/components/inputs/FilterBar.tsx';
 
 import type { PaneCreatorProps } from './types.ts';
 
@@ -25,8 +26,10 @@ const listItem = Interactive({
 });
 
 const CustomListPaneCreator = (props: PaneCreatorProps) => {
+	const [filter, setFilter] = createSignal<DID>(props.uid);
+
 	const lists = createInfiniteQuery(() => ({
-		queryKey: ['getProfileLists', props.uid, props.uid, 30] as const,
+		queryKey: ['getProfileLists', props.uid, filter(), 30] as const,
 		queryFn: async (ctx) => {
 			const [, uid, actor, limit] = ctx.queryKey;
 
@@ -78,6 +81,21 @@ const CustomListPaneCreator = (props: PaneCreatorProps) => {
 
 	return (
 		<div class={/* @once */ DialogBody({ padded: false, scrollable: true })}>
+			{multiagent.accounts.length > 1 && (
+				<div class="p-4">
+					<FilterBar
+						value={filter()}
+						onChange={setFilter}
+						items={multiagent.accounts.map((account) => ({
+							value: account.did,
+							get label() {
+								return `@${renderAccountHandle(account)}'s lists`;
+							},
+						}))}
+					/>
+				</div>
+			)}
+
 			<div>
 				<For each={lists.data?.pages.flatMap((page) => page.lists)}>
 					{(list) => (
