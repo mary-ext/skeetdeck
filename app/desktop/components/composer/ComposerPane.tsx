@@ -69,6 +69,7 @@ import DummyPost from './DummyPost.tsx';
 import TagsInput from './TagInput.tsx';
 import ContentWarningAction from './actions/ContentWarningAction.tsx';
 import PostLanguageAction from './actions/PostLanguageAction.tsx';
+import type { getTimelineLatestKey } from '~/api/queries/get-timeline.ts';
 
 type PostRecord = Records['app.bsky.feed.post'];
 type StrongRef = RefOf<'com.atproto.repo.strongRef'>;
@@ -562,7 +563,13 @@ const ComposerPane = () => {
 			// 2. Invalidate all getTimelineLatest queries
 			// This one is done last, because *maybe* by the time the above fetch
 			// finishes, we'll get an accurate view over the timeline
-			queryClient.invalidateQueries({ queryKey: ['getTimelineLatest'] });
+			queryClient.invalidateQueries({
+				queryKey: ['getTimelineLatest'],
+				predicate: (query) => {
+					const [, , params] = query.queryKey as ReturnType<typeof getTimelineLatestKey>;
+					return params.type !== 'profile' || params.actor === $authorDid;
+				},
+			});
 		} catch {}
 
 		// We're finished, let's wrap it up by resetting the entire state
