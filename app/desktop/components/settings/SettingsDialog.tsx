@@ -51,7 +51,7 @@ const SettingsDialog = () => {
 	return (
 		<RouterContext.Provider value={router}>
 			<DialogOverlay>
-				<div class={/* @once */ DialogRoot({ size: 'xl', fullHeight: true, class: 'max-h-141' })}>
+				<div class={/* @once */ DialogRoot({ size: 'xl', fullHeight: true, maxHeight: 'sm' })}>
 					<div class="flex min-w-0 grow overflow-hidden">
 						<div class="flex w-60 shrink-0 flex-col bg-secondary/10">
 							<div class="flex h-13 min-w-0 shrink-0 items-center gap-2 px-4">
