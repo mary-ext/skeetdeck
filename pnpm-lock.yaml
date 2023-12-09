@@ -55,6 +55,9 @@ importers:
       '@pkg/solid-use-gesture':
         specifier: workspace:^
         version: link:../packages/solid-use-gesture
+      '@solid-primitives/event-listener':
+        specifier: ^2.3.0
+        version: 2.3.0(solid-js@1.8.7)
       '@solidjs/router':
         specifier: ^0.8.4
         version: 0.8.4(patch_hash=2juozfaksvcwbkonoaj2ws2ewm)(solid-js@1.8.7)
@@ -2123,6 +2126,23 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@solid-primitives/event-listener@2.3.0(solid-js@1.8.7):
+    resolution: {integrity: sha512-0DS7DQZvCExWSpurVZC9/wjI8RmkhuOtWOy6Pp1Woq9ElMT9/bfjNpkwXsOwisLpcTqh9eUs17kp7jtpWcC20w==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      '@solid-primitives/utils': 6.2.1(solid-js@1.8.7)
+      solid-js: 1.8.7(patch_hash=f5qnzwo3cikk5uqd2gnigzqrxi)
+    dev: false
+
+  /@solid-primitives/utils@6.2.1(solid-js@1.8.7):
+    resolution: {integrity: sha512-TsecNzxiO5bLfzqb4OOuzfUmdOROcssuGqgh5rXMMaasoFZ3GoveUgdY1wcf17frMJM7kCNGNuK34EjErneZkg==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      solid-js: 1.8.7(patch_hash=f5qnzwo3cikk5uqd2gnigzqrxi)
+    dev: false
 
   /@solidjs/router@0.8.4(patch_hash=2juozfaksvcwbkonoaj2ws2ewm)(solid-js@1.8.7):
     resolution: {integrity: sha512-Gi/WVoVseGMKS1DBdT3pNAMgOzEOp6Q3dpgNd2mW9GUEnVocPmtyBjDvXwN6m7tjSGsqqfqJFXk7bm1hxabSRw==}

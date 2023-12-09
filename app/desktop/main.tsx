@@ -10,6 +10,8 @@ import { ModalProvider } from '~/com/globals/modals.tsx';
 
 import { SharedPreferences } from '~/com/components/SharedPreferences.tsx';
 
+import ComposerContextProvider from './components/composer/ComposerContextProvider.tsx';
+
 import { createSharedPreferencesObject, preferences } from './globals/settings.ts';
 import { queryClient } from './globals/query.ts';
 
@@ -53,8 +55,10 @@ const App = () => {
 		<Router>
 			<QueryClientProvider client={queryClient}>
 				<SharedPreferences.Provider value={/* @once */ createSharedPreferencesObject()}>
-					<Routes />
-					<ModalProvider />
+					<ComposerContextProvider>
+						<Routes />
+						<ModalProvider />
+					</ComposerContextProvider>
 				</SharedPreferences.Provider>
 			</QueryClientProvider>
 		</Router>

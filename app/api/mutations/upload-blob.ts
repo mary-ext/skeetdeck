@@ -1,12 +1,17 @@
 import type { AtBlob, DID } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
 
-const cache = new WeakMap<Blob, AtBlob>();
+interface BlobMetadata {
+	u: DID;
+	b: AtBlob;
+}
+
+const cache = new WeakMap<Blob, BlobMetadata>();
 
 export const uploadBlob = async <T extends string = string>(uid: DID, blob: Blob): Promise<AtBlob<T>> => {
-	let atblob = cache.get(blob);
+	let meta = cache.get(blob);
 
-	if (!atblob) {
+	if (!meta || meta.u !== uid) {
 		const agent = await multiagent.connect(uid);
 
 		const response = await agent.rpc.call('com.atproto.repo.uploadBlob', {
@@ -14,8 +19,13 @@ export const uploadBlob = async <T extends string = string>(uid: DID, blob: Blob
 			encoding: blob.type,
 		});
 
-		cache.set(blob, (atblob = response.data.blob));
+		cache.set(blob, (meta = { u: uid, b: response.data.blob }));
 	}
 
-	return atblob as AtBlob<T>;
+	return meta.b as AtBlob<T>;
+};
+
+export const getUploadedBlob = <T extends string = string>(uid: DID, blob: Blob): AtBlob<T> | undefined => {
+	const meta = cache.get(blob);
+	return meta && meta.u === uid ? (meta.b as AtBlob<T>) : undefined;
 };

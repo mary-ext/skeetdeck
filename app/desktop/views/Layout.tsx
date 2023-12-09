@@ -1,6 +1,7 @@
-import { For, Show, lazy } from 'solid-js';
+import { For, Show, Suspense, lazy } from 'solid-js';
 
 import { offset } from '@floating-ui/dom';
+import { ShowFreeze } from '@pkg/solid-freeze';
 import { A, Outlet, useNavigate, useParams } from '@solidjs/router';
 
 import { multiagent } from '~/api/globals/agent.ts';
@@ -21,6 +22,7 @@ import { isUpdateReady, updateSW } from '~/utils/service-worker.ts';
 
 import { Interactive } from '~/com/primitives/interactive.ts';
 
+import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { Flyout } from '~/com/components/Flyout.tsx';
 
 import FeatherIcon from '~/com/icons/baseline-feather.tsx';
@@ -29,12 +31,16 @@ import SettingsIcon from '~/com/icons/baseline-settings.tsx';
 import SystemUpdateAltIcon from '~/com/icons/baseline-system-update-alt.tsx';
 import TableLargeAddIcon from '~/com/icons/baseline-table-large-add.tsx';
 
+import { useComposer } from '../components/composer/ComposerContext.tsx';
+
 import {
 	SUGGESTION_PROFILE,
 	SUGGESTION_SEARCH_POSTS,
 	SearchFlyout,
 } from '../components/flyouts/SearchFlyout.tsx';
 import AddDeckDialog from '../components/settings/AddDeckDialog.tsx';
+
+const ComposerPane = lazy(() => import('../components/composer/ComposerPane.tsx'));
 
 const SettingsDialog = lazy(() => import('../components/settings/SettingsDialog.tsx'));
 
@@ -52,13 +58,22 @@ const DashboardLayout = () => {
 	const params = useParams();
 	const navigate = useNavigate();
 
+	const composer = useComposer();
+
 	return (
 		<div class="flex h-screen w-screen overflow-hidden">
 			<div class="flex w-14 shrink-0 flex-col border-r border-divider">
 				<Show when={multiagent.active}>
 					{(uid) => (
 						<>
-							<button disabled title="Post..." class={menuIconButton}>
+							<button
+								disabled={composer.open}
+								title="Post..."
+								onClick={() => {
+									composer.open = true;
+								}}
+								class={menuIconButton}
+							>
 								<FeatherIcon />
 							</button>
 
@@ -185,6 +200,23 @@ const DashboardLayout = () => {
 					<SettingsIcon />
 				</button>
 			</div>
+
+			<ShowFreeze when={composer.open}>
+				<Suspense
+					fallback={
+						<div class="grid w-96 shrink-0 place-items-center border-r border-divider">
+							<CircularProgress />
+						</div>
+					}
+				>
+					{(() => {
+						// The best way to properly reset the composer is by remounting it,
+						// so this does just that, mutate `reset` to reset the composer.
+						composer.reset;
+						return <ComposerPane />;
+					})()}
+				</Suspense>
+			</ShowFreeze>
 
 			{/* <Suspense
 				fallback={

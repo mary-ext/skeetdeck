@@ -3,7 +3,6 @@ import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 import type { DID, RefOf } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
 import { createBatchedFetch } from '../utils/batch-fetch.ts';
-import { BSKY_POST_URL_RE, isAppUrl } from '../utils/links.ts';
 
 import { getCachedPost, mergePost, type SignalizedPost } from '../stores/posts.ts';
 
@@ -40,19 +39,7 @@ export const getPostKey = (uid: DID, uri: string) => {
 export const getPost = async (ctx: QC<ReturnType<typeof getPostKey>>) => {
 	const [, uid, uri] = ctx.queryKey;
 
-	const bskyMatch = isAppUrl(uri) && BSKY_POST_URL_RE.exec(uri);
-
-	let resolvedUri = uri;
-	if (bskyMatch) {
-		const agent = await multiagent.connect(uid);
-
-		const repo = await _getDid(agent, bskyMatch[1], ctx.signal);
-		const record = bskyMatch[2];
-
-		resolvedUri = `at://${repo}/app.bsky.feed.post/${record}`;
-	}
-
-	const post = await fetchPost([uid, resolvedUri]);
+	const post = await fetchPost([uid, uri]);
 	ctx.signal.throwIfAborted();
 
 	return mergePost(uid, post);

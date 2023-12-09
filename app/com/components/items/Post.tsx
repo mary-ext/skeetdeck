@@ -89,11 +89,9 @@ const Post = (props: PostProps) => {
 			}}
 		>
 			{(() => {
-				if (!props.highlight) {
-					return null;
+				if (props.highlight) {
+					return <div class="absolute bottom-0 left-0 top-0 w-1 bg-accent/60"></div>;
 				}
-
-				return <div class="absolute bottom-0 left-0 top-0 w-1 bg-accent/60"></div>;
 			})()}
 
 			<div class="flex flex-col gap-1 pt-3">

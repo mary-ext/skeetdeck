@@ -16,6 +16,7 @@
 		"@pkg/solid-freeze": "workspace:^",
 		"@pkg/solid-query": "workspace:^",
 		"@pkg/solid-use-gesture": "workspace:^",
+		"@solid-primitives/event-listener": "^2.3.0",
 		"@solidjs/router": "^0.8.4",
 		"@thisbeyond/solid-dnd": "^0.7.5",
 		"immer": "^10.0.3",

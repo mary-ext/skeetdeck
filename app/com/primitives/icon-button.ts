@@ -1,6 +1,6 @@
 export interface IconButtonProps {
 	class?: string;
-	size?: 'md';
+	size?: 'md' | 'lg';
 	color?: 'primary' | 'muted';
 	edge?: 'left' | 'right';
 }
@@ -12,6 +12,8 @@ export const IconButton = (props: IconButtonProps = {}) => {
 
 	if (size === 'md') {
 		cn += ` h-8 w-8 text-lg`;
+	} else if (size === 'lg') {
+		cn += ` h-9 w-9 text-lg`;
 	}
 
 	if (color === 'primary') {

@@ -1,12 +1,13 @@
 export interface InteractiveProps {
 	class?: string;
 	variant?: 'default' | 'muted' | 'danger' | 'none';
+	offset?: boolean;
 }
 
 export const Interactive = (props: InteractiveProps) => {
-	const { class: className, variant = 'default' } = props;
+	const { class: className, variant = 'default', offset = true } = props;
 
-	let cn = `outline-2 -outline-offset-2 outline-primary focus-visible:outline disabled:pointer-events-none`;
+	let cn = `outline-2 outline-primary focus-visible:outline disabled:pointer-events-none`;
 
 	if (variant === 'default') {
 		cn += ` outline-accent hover:bg-secondary/30`;
@@ -14,6 +15,10 @@ export const Interactive = (props: InteractiveProps) => {
 		cn += ` outline-accent hover:bg-secondary/10`;
 	} else if (variant === 'danger') {
 		cn += ` outline-red-500 hover:bg-red-500/20 dark:hover:bg-red-500/10`;
+	}
+
+	if (offset) {
+		cn += ` -outline-offset-2`;
 	}
 
 	if (className) {

@@ -27,3 +27,24 @@ export const getCurrentDate = () => {
 
 	return date.toISOString();
 };
+
+export const followAbortSignal = (signals: (AbortSignal | undefined)[]) => {
+	const controller = new AbortController();
+	const own = controller.signal;
+
+	for (let idx = 0, len = signals.length; idx < len; idx++) {
+		const signal = signals[idx];
+
+		if (!signal) {
+			continue;
+		}
+
+		if (signal.aborted) {
+			return signal;
+		}
+
+		signal.addEventListener('abort', () => controller.abort(signal.reason), { signal: own });
+	}
+
+	return own;
+};

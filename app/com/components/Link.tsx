@@ -14,8 +14,9 @@ export const LINK_PROFILE = 7;
 export const LINK_PROFILE_EDIT = 8;
 export const LINK_PROFILE_FOLLOWERS = 9;
 export const LINK_PROFILE_FOLLOWS = 10;
-export const LINK_REPLY = 11;
-export const LINK_TAG = 12;
+export const LINK_QUOTE = 11;
+export const LINK_REPLY = 12;
+export const LINK_TAG = 13;
 
 export type LinkingType =
 	| typeof LINK_EXTERNAL
@@ -29,6 +30,7 @@ export type LinkingType =
 	| typeof LINK_PROFILE_EDIT
 	| typeof LINK_PROFILE_FOLLOWERS
 	| typeof LINK_PROFILE_FOLLOWS
+	| typeof LINK_QUOTE
 	| typeof LINK_REPLY
 	| typeof LINK_TAG;
 
@@ -94,6 +96,12 @@ export interface ProfileFollowersLinking {
 	actor: DID;
 }
 
+export interface QuoteLinking {
+	type: typeof LINK_QUOTE;
+	actor: DID;
+	rkey: string;
+}
+
 export interface ReplyLinking {
 	type: typeof LINK_REPLY;
 	actor: DID;
@@ -117,6 +125,7 @@ export type Linking =
 	| ProfileEditLinking
 	| ProfileFollowersLinking
 	| ProfileFollowsLinking
+	| QuoteLinking
 	| ReplyLinking
 	| TagLinking;
 
@@ -148,4 +157,22 @@ export const Link = (props: LinkingProps): JSX.Element => {
 
 	// @ts-expect-error
 	return () => linking.render(props);
+};
+
+export interface DummyLinkingProviderProps {
+	children: JSX.Element;
+}
+
+export const DummyLinkingProvider = (props: DummyLinkingProviderProps) => {
+	const linkContext: LinkingContextObject = {
+		navigate: () => {},
+		render(props) {
+			const to = props.to;
+
+			// @ts-expect-error
+			return <button {...props} to={null} disabled />;
+		},
+	};
+
+	return <LinkingContext.Provider value={linkContext}>{props.children}</LinkingContext.Provider>;
 };

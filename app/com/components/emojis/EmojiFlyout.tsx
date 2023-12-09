@@ -12,7 +12,7 @@ const EmojiPicker = lazy(() => import('./EmojiPicker.tsx'));
 export interface EmojiFlyoutProps {
 	children: JSX.Element;
 	multiple?: boolean;
-	onPick: (emoji: PickedEmoji) => void;
+	onPick: (emoji: PickedEmoji, shift: boolean) => void;
 }
 
 const EmojiFlyout = (props: EmojiFlyoutProps) => {
@@ -38,7 +38,7 @@ const EmojiFlyout = (props: EmojiFlyoutProps) => {
 									close();
 								}
 
-								props.onPick(emoji);
+								props.onPick(emoji, shouldClose);
 							}}
 						/>
 					</Suspense>

@@ -1,4 +1,4 @@
-import { type JSX, lazy } from 'solid-js';
+import { type JSX, lazy, batch } from 'solid-js';
 
 import {
 	type LinkingContextObject,
@@ -9,12 +9,16 @@ import {
 	LINK_POST_LIKED_BY,
 	LINK_POST_REPOSTED_BY,
 	LINK_POST,
+	LINK_PROFILE_EDIT,
 	LINK_PROFILE_FOLLOWERS,
 	LINK_PROFILE_FOLLOWS,
 	LINK_PROFILE,
+	LINK_QUOTE,
+	LINK_REPLY,
 	LinkingContext,
-	LINK_PROFILE_EDIT,
 } from '~/com/components/Link.tsx';
+
+import { useComposer } from '../composer/ComposerContext.tsx';
 
 import { usePaneContext } from './PaneContext.tsx';
 
@@ -34,7 +38,8 @@ export interface PaneLinkingContextProps {
 }
 
 export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
-	const { openModal } = usePaneContext();
+	const { pane, openModal } = usePaneContext();
+	const composer = useComposer();
 
 	const navigate: LinkingContextObject['navigate'] = (to, alt) => {
 		const type = to.type;
@@ -81,6 +86,25 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 
 		if (type === LINK_PROFILE_FOLLOWS) {
 			return openModal(() => <ProfileFollowsPaneDialog {...to} />);
+		}
+
+		if (type === LINK_QUOTE) {
+			batch(() => {
+				composer.open = true;
+				composer.recordUri = `at://${to.actor}/app.bsky.feed.post/${to.rkey}`;
+			});
+
+			return;
+		}
+
+		if (type === LINK_REPLY) {
+			batch(() => {
+				composer.open = true;
+				composer.authorDid = pane.uid;
+				composer.replyUri = `at://${to.actor}/app.bsky.feed.post/${to.rkey}`;
+			});
+
+			return;
 		}
 	};
 
