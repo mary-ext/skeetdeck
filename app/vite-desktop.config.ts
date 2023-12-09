@@ -30,8 +30,8 @@ export default defineConfig({
 				scope: '/',
 				icons: [
 					{
-						src: 'favicon.svg',
-						type: 'image/svg+xml',
+						src: 'favicon.png',
+						type: 'image/png',
 						sizes: '150x150',
 					},
 				],
