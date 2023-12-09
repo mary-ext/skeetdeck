@@ -89,7 +89,7 @@ const renderRecord = (
 		}
 
 		if (type === 'app.bsky.embed.record#viewRecord') {
-			return <EmbedRecord record={record} large={large()} interactive />;
+			return <EmbedRecord record={record} large={large()} />;
 		}
 	}
 

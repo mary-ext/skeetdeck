@@ -1,5 +1,4 @@
 import { type JSX } from 'solid-js';
-import { Dynamic } from 'solid-js/web';
 
 import type { Records, UnionOf } from '~/api/atp-schema.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
@@ -20,12 +19,10 @@ export interface EmbedRecordProps {
 	record: EmbeddedPostRecord;
 	/** Whether it should show a large UI for image embeds */
 	large?: boolean;
-	interactive?: boolean;
 }
 
 const EmbedRecord = (props: EmbedRecordProps) => {
 	const record = () => props.record;
-	const interactive = () => props.interactive;
 
 	const author = () => record().author;
 	const val = () => record().value;
@@ -52,15 +49,9 @@ const EmbedRecord = (props: EmbedRecordProps) => {
 	return (
 		<PostQuoteWarning quote={props.record}>
 			{(mod) => (
-				<Dynamic
-					component={interactive() ? Link : 'div'}
-					to={
-						interactive()
-							? { type: LINK_POST, actor: author().did, rkey: getRecordId(record().uri) }
-							: undefined
-					}
-					class="overflow-hidden rounded-md border border-divider text-left"
-					classList={{ 'cursor-pointer hover:bg-secondary/10': interactive() }}
+				<Link
+					to={{ type: LINK_POST, actor: author().did, rkey: getRecordId(record().uri) }}
+					class="overflow-hidden rounded-md border border-divider text-left hover:bg-secondary/10"
 				>
 					<div class="mx-3 mt-3 flex text-sm text-muted-fg">
 						<div class="mr-1 h-5 w-5 shrink-0 overflow-hidden rounded-full bg-muted-fg">
@@ -110,7 +101,7 @@ const EmbedRecord = (props: EmbedRecordProps) => {
 							],
 						];
 					})()}
-				</Dynamic>
+				</Link>
 			)}
 		</PostQuoteWarning>
 	);

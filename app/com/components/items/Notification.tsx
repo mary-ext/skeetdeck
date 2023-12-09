@@ -340,7 +340,6 @@ const renderAccessory = (
 											text: record().text,
 										},
 									}}
-									interactive
 								/>
 							</VirtualContainer>
 						);
