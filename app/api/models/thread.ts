@@ -56,11 +56,14 @@ export interface ThreadPage {
 	post: SignalizedPost;
 	ancestors: [first: SignalizedPost | NotFoundPost | BlockedPost, ...items: SignalizedPost[]];
 	descendants: ThreadSlice[];
+
+	depth: number;
+	height: number;
 }
 
 type ThreadStackNode = [thread: Thread, slice: ThreadSlice | undefined];
 
-export const createThreadPage = (uid: DID, data: Thread): ThreadPage => {
+export const createThreadPage = (uid: DID, data: Thread, depth: number, height: number): ThreadPage => {
 	const ancestors: (SignalizedPost | NotFoundPost | BlockedPost)[] = [];
 	const descendants: ThreadSlice[] = [];
 
@@ -145,5 +148,8 @@ export const createThreadPage = (uid: DID, data: Thread): ThreadPage => {
 		post: mergePost(uid, data.post, key),
 		ancestors: ancestors.reverse() as any,
 		descendants: descendants,
+
+		depth: depth,
+		height: height,
 	};
 };

@@ -41,12 +41,12 @@ export const getPostThread = async (ctx: QC<ReturnType<typeof getPostThreadKey>>
 		case 'app.bsky.feed.defs#notFoundPost':
 			throw new Error(`Post not found`);
 		case 'app.bsky.feed.defs#threadViewPost':
-			return createThreadPage(uid, data.thread);
+			return createThreadPage(uid, data.thread, depth, height);
 	}
 };
 
 export const getInitialPostThread = (key: ReturnType<typeof getPostThreadKey>): ThreadPage | undefined => {
-	const [, uid, actor, rkey] = key;
+	const [, uid, actor, rkey, depth, height] = key;
 
 	const post = getCachedPost(uid, `at://${actor}/app.bsky.feed.post/${rkey}`);
 
@@ -77,6 +77,9 @@ export const getInitialPostThread = (key: ReturnType<typeof getPostThreadKey>): 
 			// @ts-expect-error
 			ancestors: ancestors,
 			descendants: [],
+
+			depth: depth,
+			height: height,
 		};
 	}
 
