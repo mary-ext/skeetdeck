@@ -14,7 +14,7 @@ export interface EmbedListProps {
 	list: EmbeddedList;
 }
 
-const EmbedList = (props: EmbedListProps) => {
+export const EmbedListContent = (props: EmbedListProps, interactive?: boolean) => {
 	return (() => {
 		const list = props.list;
 		const creator = list.creator;
@@ -23,9 +23,9 @@ const EmbedList = (props: EmbedListProps) => {
 		const purpose = rawPurpose in ListPurposeLabels ? ListPurposeLabels[rawPurpose] : `Unknown list`;
 
 		return (
-			<Link
-				to={{ type: LINK_LIST, actor: creator.did, rkey: getRecordId(list.uri) }}
-				class="flex flex-col gap-2 rounded-md border border-divider p-3 text-left text-sm hover:bg-secondary/10"
+			<div
+				class="flex flex-col gap-2 rounded-md border border-divider p-3 text-left text-sm"
+				classList={{ [`hover:bg-secondary/10`]: interactive }}
 			>
 				<div class="flex gap-3">
 					<img
@@ -38,6 +38,19 @@ const EmbedList = (props: EmbedListProps) => {
 						<p class="text-muted-fg">{/* @once */ `${purpose} by @${creator.handle}`}</p>
 					</div>
 				</div>
+			</div>
+		);
+	}) as unknown as JSX.Element;
+};
+
+const EmbedList = (props: EmbedListProps) => {
+	return (() => {
+		const list = props.list;
+		const creator = list.creator;
+
+		return (
+			<Link to={{ type: LINK_LIST, actor: creator.did, rkey: getRecordId(list.uri) }} class="contents">
+				{/* @once */ EmbedListContent(props, true)}
 			</Link>
 		);
 	}) as unknown as JSX.Element;
