@@ -3,7 +3,7 @@ import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 
 import { multiagent } from '../globals/agent.ts';
 
-import { graphemeLen } from './intl.ts';
+import { asciiLen, graphemeLen } from './intl.ts';
 import { toShortUrl } from './renderer.ts';
 
 import type { Facet, LinkFeature, MentionFeature, TagFeature, UnresolvedMentionFeature } from './types.ts';
@@ -183,13 +183,13 @@ export const getRtText = (rt: PreliminaryRichText) => {
 
 export const getRtLength = (rt: PreliminaryRichText) => {
 	const text = getRtText(rt);
-	return isAscii(text) ? text.length : graphemeLen(text);
+	return graphemeLen(text);
 };
 
 const encoder = new TextEncoder();
 
 const getUtf8Length = (str: string): number => {
-	return isAscii(str) ? str.length : encoder.encode(str).byteLength;
+	return asciiLen(str) ?? encoder.encode(str).byteLength;
 };
 
 export const finalizeRt = async (uid: DID, rt: PreliminaryRichText) => {

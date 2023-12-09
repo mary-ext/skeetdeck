@@ -1,11 +1,33 @@
-export let graphemeLen: (text: string) => number;
+var _graphemeLen: (text: string) => number;
+
+export const graphemeLen = (text: string) => {
+	var length = asciiLen(text);
+
+	if (length === undefined) {
+		return _graphemeLen(text);
+	}
+
+	return length;
+};
+
+export const asciiLen = (str: string) => {
+	for (var idx = 0, len = str.length; idx < len; idx++) {
+		const char = str.charCodeAt(idx);
+
+		if (char > 127) {
+			return undefined;
+		}
+	}
+
+	return len;
+};
 
 if (Intl.Segmenter) {
-	const segmenter = new Intl.Segmenter();
+	var segmenter = new Intl.Segmenter();
 
-	graphemeLen = (text) => {
-		const iterator = segmenter.segment(text)[Symbol.iterator]();
-		let count = 0;
+	_graphemeLen = (text) => {
+		var iterator = segmenter.segment(text)[Symbol.iterator]();
+		var count = 0;
 
 		while (!iterator.next().done) {
 			count++;
@@ -16,6 +38,6 @@ if (Intl.Segmenter) {
 } else {
 	console.log('Intl.Segmenter API not available, falling back to polyfill...');
 
-	const { countGraphemes } = await import('./graphemer.ts');
-	graphemeLen = countGraphemes;
+	var { countGraphemes } = await import('./graphemer.ts');
+	_graphemeLen = countGraphemes;
 }
