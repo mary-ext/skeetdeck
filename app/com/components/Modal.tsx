@@ -14,6 +14,8 @@ const Modal = (props: ModalProps) => {
 		<Show when={props.open}>
 			<dialog
 				ref={(node) => {
+					focused = document.activeElement;
+
 					onMount(() => {
 						// handle accidental opening of modals when the parent container has a
 						// display: none set on it, this shall be dev only.
@@ -38,7 +40,6 @@ const Modal = (props: ModalProps) => {
 							document.documentElement.style.setProperty('--sb-width', `${scrollbarSize}px`);
 						}
 
-						focused = document.activeElement;
 						node.returnValue = '';
 						node.showModal();
 					});
