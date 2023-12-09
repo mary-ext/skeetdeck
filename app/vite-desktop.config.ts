@@ -45,6 +45,11 @@ export default defineConfig({
 		modulePreload: {
 			polyfill: false,
 		},
+		rollupOptions: {
+			output: {
+				chunkFileNames: '[hash].js',
+			},
+		},
 		terserOptions: {
 			compress: {
 				passes: 2,
