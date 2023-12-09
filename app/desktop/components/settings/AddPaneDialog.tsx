@@ -1,7 +1,7 @@
 import { type Component, For, Match, Show, Switch, createSignal } from 'solid-js';
 
 import type { DID } from '~/api/atp-schema.ts';
-import { getAccountHandle, multiagent, renderAccountHandle } from '~/api/globals/agent.ts';
+import { getAccountHandle, multiagent } from '~/api/globals/agent.ts';
 import { getCurrentTid } from '~/api/utils/tid.ts';
 
 import { FILTER_ALL } from '~/api/queries/get-notifications.ts';
@@ -144,7 +144,7 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 									class={/* @once */ Select()}
 								>
 									<For each={multiagent.accounts}>
-										{(account) => <option value={account.did}>@{renderAccountHandle(account)}</option>}
+										{(account) => <option value={account.did}>{'@' + account.session.handle}</option>}
 									</For>
 								</select>
 							</div>
