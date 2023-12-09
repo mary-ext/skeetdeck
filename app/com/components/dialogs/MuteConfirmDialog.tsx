@@ -134,7 +134,7 @@ const renderMuteConfirmDialog = (profile: SignalizedProfile, filters: FilterPref
 					const [t, u, p] = query.queryKey as ReturnType<typeof getTimelineKey>;
 
 					// Do not try to filter user's own feed
-					return t === 'getFeed' && u === uid && (p.type !== 'profile' || p.actor !== did);
+					return t === 'getTimeline' && u === uid && (p.type !== 'profile' || p.actor !== did);
 				},
 			},
 			(data) => {

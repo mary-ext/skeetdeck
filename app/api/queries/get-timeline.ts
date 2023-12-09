@@ -114,7 +114,7 @@ const countPosts = (slices: TimelineSlice[], limit?: number) => {
 };
 
 export const getTimelineKey = (uid: DID, params: TimelineParams, limit = MAX_POSTS) => {
-	return ['getFeed', uid, params, limit] as const;
+	return ['getTimeline', uid, params, limit] as const;
 };
 export const getTimeline = async (
 	ctx: QC<ReturnType<typeof getTimelineKey>, TimelinePageCursor | undefined>,
@@ -211,7 +211,7 @@ export const getTimeline = async (
 
 /// Latest feed query
 export const getTimelineLatestKey = (uid: DID, params: TimelineParams) => {
-	return ['getFeedLatest', uid, params] as const;
+	return ['getTimelineLatest', uid, params] as const;
 };
 export const getTimelineLatest = async (ctx: QC<ReturnType<typeof getTimelineLatestKey>>) => {
 	const [, uid, params] = ctx.queryKey;
