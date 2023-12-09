@@ -175,7 +175,6 @@ const ComposerPane = () => {
 			enabled: !!$replyUri,
 			queryKey: key,
 			queryFn: getPost,
-			initialDataUpdatedAt: 0,
 			initialData: () => getInitialPost(key),
 		};
 	});
@@ -203,7 +202,6 @@ const ComposerPane = () => {
 					return {
 						queryKey: key,
 						queryFn: getPost,
-						initialDataUpdatedAt: 0,
 						initialData: () => getInitialPost(key),
 					};
 				});
@@ -222,7 +220,6 @@ const ComposerPane = () => {
 					return {
 						queryKey: key,
 						queryFn: getFeedInfo,
-						initialDataUpdatedAt: 0,
 						initialData: () => getInitialFeedInfo(key),
 					};
 				});
@@ -241,7 +238,6 @@ const ComposerPane = () => {
 					return {
 						queryKey: key,
 						queryFn: getListInfo,
-						initialDataUpdatedAt: 0,
 						initialData: () => getInitialListInfo(key),
 					};
 				});
@@ -272,9 +268,9 @@ const ComposerPane = () => {
 		return (
 			$state < PostState.DISPATCHING &&
 			(($length > 0 && $length <= 300) || $images.length > 0) &&
-			!reply.isFetching &&
-			!external.isFetching &&
-			(!$embedding || !$embedding.query.isFetching)
+			!reply.isLoading &&
+			!external.isLoading &&
+			(!$embedding || !$embedding.query.isLoading)
 		);
 	};
 
