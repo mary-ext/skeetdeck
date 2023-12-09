@@ -1,4 +1,4 @@
-import { type JSX, createSignal, onCleanup } from 'solid-js';
+import { type JSX, createSignal, onCleanup, untrack } from 'solid-js';
 
 import { type Middleware, autoUpdate, flip, shift } from '@floating-ui/dom';
 import { type Placement, getSide } from '@floating-ui/utils';
@@ -92,7 +92,7 @@ export const Flyout = (props: FlyoutProps) => {
 					close: () => setIsOpen(false),
 				};
 
-				return (() => props.children(context)) as unknown as JSX.Element;
+				return untrack(() => props.children(context)) as unknown as JSX.Element;
 			})()}
 		/>
 	);
