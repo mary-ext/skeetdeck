@@ -13,15 +13,15 @@ export interface EmbedFeedProps {
 	feed: EmbeddedFeed;
 }
 
-const EmbedFeed = (props: EmbedFeedProps) => {
+export const EmbedFeedContent = (props: EmbedFeedProps, interactive?: boolean) => {
 	return (() => {
 		const feed = props.feed;
 		const creator = feed.creator;
 
 		return (
-			<Link
-				to={{ type: LINK_FEED, actor: creator.did, rkey: getRecordId(feed.uri) }}
-				class="flex flex-col gap-2 rounded-md border border-divider p-3 text-left text-sm hover:bg-secondary/10"
+			<div
+				class="flex flex-col gap-2 rounded-md border border-divider p-3 text-left text-sm"
+				classList={{ [`hover:bg-secondary/10`]: interactive }}
 			>
 				<div class="flex gap-3">
 					<img
@@ -34,6 +34,19 @@ const EmbedFeed = (props: EmbedFeedProps) => {
 						<p class="text-muted-fg">{/* @once */ `Feed by @${creator.handle}`}</p>
 					</div>
 				</div>
+			</div>
+		);
+	}) as unknown as JSX.Element;
+};
+
+const EmbedFeed = (props: EmbedFeedProps) => {
+	return (() => {
+		const feed = props.feed;
+		const creator = feed.creator;
+
+		return (
+			<Link to={{ type: LINK_FEED, actor: creator.did, rkey: getRecordId(feed.uri) }} class="contents">
+				{/* @once */ EmbedFeedContent(props, true)}
 			</Link>
 		);
 	}) as unknown as JSX.Element;
