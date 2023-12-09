@@ -1,9 +1,16 @@
+import type { JSX } from 'solid-js';
+
 import type { RefOf } from '~/api/atp-schema.ts';
+import BlobImage from '../BlobImage.tsx';
 
 type EmbeddedLink = RefOf<'app.bsky.embed.external#viewExternal'>;
 
+export interface EmbedLinkData extends Omit<EmbeddedLink, 'thumb'> {
+	thumb?: Blob | string;
+}
+
 export interface EmbedLinkProps {
-	link: EmbeddedLink;
+	link: EmbedLinkData;
 }
 
 export const getDomain = (url: string) => {
@@ -15,30 +22,35 @@ export const getDomain = (url: string) => {
 	}
 };
 
-const EmbedLink = (props: EmbedLinkProps) => {
-	const link = () => props.link;
+export const EmbedLinkContent = (props: EmbedLinkProps, interactive?: boolean) => {
+	return (() => {
+		const { uri, thumb, title } = props.link;
 
-	return (
-		<a
-			href={link().uri}
-			rel="noopener noreferrer nofollow"
-			target="_blank"
-			class="flex overflow-hidden rounded-md border border-divider hover:bg-secondary/10"
-		>
-			{(() => {
-				const thumb = link().thumb;
+		return (
+			<div
+				class="flex overflow-hidden rounded-md border border-divider"
+				classList={{ [`hover:bg-secondary/10`]: interactive }}
+			>
+				{thumb && (
+					<BlobImage
+						src={thumb}
+						class="aspect-square w-[86px] shrink-0 border-r border-divider object-cover"
+					/>
+				)}
 
-				if (thumb) {
-					return (
-						<img src={thumb} class="aspect-square w-[86px] shrink-0 border-r border-divider object-cover" />
-					);
-				}
-			})()}
-
-			<div class="flex min-w-0 flex-col justify-center gap-0.5 p-3 text-sm">
-				<p class="overflow-hidden text-ellipsis text-muted-fg">{getDomain(link().uri)}</p>
-				<p class="line-clamp-2 empty:hidden">{link().title}</p>
+				<div class="flex min-w-0 flex-col justify-center gap-0.5 p-3 text-sm">
+					<p class="overflow-hidden text-ellipsis text-muted-fg">{/* @once */ getDomain(uri)}</p>
+					<p class="line-clamp-2 empty:hidden">{title}</p>
+				</div>
 			</div>
+		);
+	}) as unknown as JSX.Element;
+};
+
+const EmbedLink = (props: EmbedLinkProps) => {
+	return (
+		<a href={props.link.uri} rel="noopener noreferrer nofollow" target="_blank" class="contents">
+			{/* @once */ EmbedLinkContent(props, true)}
 		</a>
 	);
 };
