@@ -1,21 +1,12 @@
-import { Dynamic } from 'solid-js/web';
-
 import type { RefOf } from '~/api/atp-schema.ts';
-
-import BlobImage from '../BlobImage.tsx';
 
 type EmbeddedLink = RefOf<'app.bsky.embed.external#viewExternal'>;
 
-export interface EmbedLinkData extends Omit<EmbeddedLink, 'thumb'> {
-	thumb?: string | Blob;
-}
-
 export interface EmbedLinkProps {
-	link: EmbedLinkData;
-	interactive?: boolean;
+	link: EmbeddedLink;
 }
 
-const getDomain = (url: string) => {
+export const getDomain = (url: string) => {
 	try {
 		const host = new URL(url).host;
 		return host.startsWith('www.') ? host.slice(4) : host;
@@ -26,26 +17,20 @@ const getDomain = (url: string) => {
 
 const EmbedLink = (props: EmbedLinkProps) => {
 	const link = () => props.link;
-	const interactive = () => props.interactive;
 
 	return (
-		<Dynamic
-			component={interactive() ? 'a' : 'div'}
+		<a
 			href={link().uri}
 			rel="noopener noreferrer nofollow"
 			target="_blank"
-			class="flex overflow-hidden rounded-md border border-divider"
-			classList={{ 'hover:bg-secondary/10': interactive() }}
+			class="flex overflow-hidden rounded-md border border-divider hover:bg-secondary/10"
 		>
 			{(() => {
 				const thumb = link().thumb;
 
 				if (thumb) {
 					return (
-						<BlobImage
-							src={thumb}
-							class="aspect-square w-[86px] shrink-0 border-r border-divider object-cover"
-						/>
+						<img src={thumb} class="aspect-square w-[86px] shrink-0 border-r border-divider object-cover" />
 					);
 				}
 			})()}
@@ -54,7 +39,7 @@ const EmbedLink = (props: EmbedLinkProps) => {
 				<p class="overflow-hidden text-ellipsis text-muted-fg">{getDomain(link().uri)}</p>
 				<p class="line-clamp-2 empty:hidden">{link().title}</p>
 			</div>
-		</Dynamic>
+		</a>
 	);
 };
 
