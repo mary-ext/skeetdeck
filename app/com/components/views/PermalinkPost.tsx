@@ -27,6 +27,7 @@ import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble.tsx';
 import FavoriteIcon from '../../icons/baseline-favorite.tsx';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
 import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
+import PoundIcon from '~/com/icons/baseline-pound.tsx';
 import RepeatIcon from '../../icons/baseline-repeat.tsx';
 import ShareIcon from '../../icons/baseline-share.tsx';
 
@@ -97,6 +98,15 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 					<Embed embed={post().embed.value!} large />
 				</PostEmbedWarning>
 			)}
+
+			<div class="my-3 flex flex-wrap gap-1.5 text-sm empty:hidden">
+				{record().tags?.map((tag) => (
+					<div class="flex min-w-0 items-center gap-1 rounded-full bg-secondary/30 px-2 leading-6">
+						<PoundIcon />
+						<span class="overflow-hidden text-ellipsis whitespace-nowrap">{tag}</span>
+					</div>
+				))}
+			</div>
 
 			<div class="my-3">
 				<span class="text-sm text-muted-fg">{formatAbsDateTime(record().createdAt)}</span>
