@@ -84,7 +84,11 @@ const AdditionalLanguageView = () => {
 
 				{(() => {
 					if (languages.length === 0 && (!langs.useSystemLanguages || systemLanguages.length === 0)) {
-						return <div class="grid place-items-center pb-3 text-sm text-muted-fg">No languages added.</div>;
+						return (
+							<div class="grid h-13 shrink-0 place-items-center pb-1 text-sm text-muted-fg">
+								No languages added.
+							</div>
+						);
 					}
 				})()}
 
