@@ -123,7 +123,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 				</div>
 
 				<div>
-					<p dir="auto" class="break-words text-xl font-bold empty:hidden">
+					<p dir="auto" class="overflow-hidden break-words text-xl font-bold empty:hidden">
 						{profile().displayName.value}
 					</p>
 					<p class="flex min-w-0 items-center text-sm text-muted-fg">
