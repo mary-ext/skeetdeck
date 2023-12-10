@@ -91,6 +91,7 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 		if (type === LINK_QUOTE) {
 			batch(() => {
 				composer.open = true;
+				composer.authorDid = pane.uid;
 				composer.recordUri = `at://${to.actor}/app.bsky.feed.post/${to.rkey}`;
 			});
 
