@@ -8,6 +8,7 @@ import { Interactive } from '~/com/primitives/interactive.ts';
 
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
 
+import AccessibilityIcon from '~/com/icons/baseline-accessibility.tsx';
 import CloseIcon from '~/com/icons/baseline-close.tsx';
 import ColorLensIcon from '~/com/icons/baseline-color-lens.tsx';
 import FilterAltIcon from '~/com/icons/baseline-filter-alt.tsx';
@@ -22,6 +23,7 @@ import {
 	type View,
 	type ViewType,
 	RouterContext,
+	VIEW_ACCESSIBILITY,
 	VIEW_ACCOUNTS,
 	VIEW_APPEARANCE,
 	VIEW_CONTENT_FILTERS,
@@ -69,6 +71,9 @@ const SettingsDialog = () => {
 								</SideItem>
 								<SideItem to={VIEW_APPEARANCE} icon={ColorLensIcon}>
 									Appearance
+								</SideItem>
+								<SideItem to={VIEW_ACCESSIBILITY} icon={AccessibilityIcon}>
+									Accessibility
 								</SideItem>
 								<SideItem to={VIEW_LANGAUGE} icon={LanguageIcon}>
 									Language

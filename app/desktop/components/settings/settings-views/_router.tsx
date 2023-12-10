@@ -8,18 +8,20 @@ export const VIEW_APPEARANCE = 1;
 export const VIEW_LANGAUGE = 2;
 export const VIEW_CONTENT_FILTERS = 3;
 export const VIEW_KEYWORD_FILTERS = 4;
+export const VIEW_ACCESSIBILITY = 5;
 
 // Keyword filters
-export const VIEW_KEYWORD_FILTER_FORM = 5;
+export const VIEW_KEYWORD_FILTER_FORM = 6;
 
 // Content filters
-export const VIEW_LABEL_CONFIG = 6;
-export const VIEW_SUBSCRIBED_LABELERS = 7;
+export const VIEW_LABEL_CONFIG = 7;
+export const VIEW_SUBSCRIBED_LABELERS = 8;
 
 // Languages
-export const VIEW_ADDITIONAL_LANGUAGE = 8;
+export const VIEW_ADDITIONAL_LANGUAGE = 9;
 
 export type ViewType =
+	| typeof VIEW_ACCESSIBILITY
 	| typeof VIEW_ACCOUNTS
 	| typeof VIEW_ADDITIONAL_LANGUAGE
 	| typeof VIEW_APPEARANCE
@@ -37,6 +39,7 @@ export type View =
 	| { type: typeof VIEW_LANGAUGE }
 	| { type: typeof VIEW_CONTENT_FILTERS }
 	| { type: typeof VIEW_KEYWORD_FILTERS }
+	| { type: typeof VIEW_ACCESSIBILITY }
 	// Content filters
 	| { type: typeof VIEW_LABEL_CONFIG; kind: 'global' }
 	| { type: typeof VIEW_LABEL_CONFIG; kind: 'labeler'; did: DID }
