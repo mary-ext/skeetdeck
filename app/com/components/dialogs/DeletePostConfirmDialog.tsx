@@ -7,7 +7,7 @@ import type { ThreadPage } from '~/api/models/thread.ts';
 import { getPost, getPostKey } from '~/api/queries/get-post.ts';
 import type { getPostThreadKey } from '~/api/queries/get-post-thread.ts';
 import type { TimelinePage } from '~/api/queries/get-timeline.ts';
-import type { SignalizedPost } from '~/api/stores/posts.ts';
+import { type SignalizedPost, removeCachedPost } from '~/api/stores/posts.ts';
 import { producePostDelete } from '~/api/updaters/delete-post.ts';
 
 import { closeModal } from '~/com/globals/modals.tsx';
@@ -50,7 +50,10 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 
 				closeModal();
 
-				// 1. Reset any post thread queries that directly shows the post
+				// 1. Remove our cached post
+				removeCachedPost(did, postUri);
+
+				// 2. Reset any post thread queries that directly shows the post
 				queryClient.resetQueries({
 					queryKey: ['getPostThread'],
 					predicate: (query) => {
@@ -59,7 +62,7 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 					},
 				});
 
-				// 2. Mutate all timeline and post thread queries
+				// 3. Mutate all timeline and post thread queries
 				queryClient.setQueriesData<InfiniteData<TimelinePage>>({ queryKey: ['getTimeline'] }, (data) => {
 					if (data) {
 						return updateTimeline(data);
