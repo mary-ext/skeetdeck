@@ -759,7 +759,11 @@ const ComposerPane = () => {
 								disabled={multiagent.accounts.length < 2}
 								class="h-10 w-10 overflow-hidden rounded-full hover:opacity-80 disabled:pointer-events-none"
 							>
-								<img src={author()?.profile?.avatar || DefaultUserAvatar} class="h-full w-full" />
+								<img
+									src={author()?.profile?.avatar || DefaultUserAvatar}
+									title={`Currently posting as @${author()?.session.handle}`}
+									class="h-full w-full"
+								/>
 							</button>
 						</SwitchAccountAction>
 					</div>
