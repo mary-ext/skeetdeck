@@ -11,7 +11,7 @@ import { type DeckConfig, type PaneConfig, PaneSize, SpecificPaneSize } from './
 import { getCurrentTid } from '~/api/utils/tid.ts';
 
 export interface PreferencesSchema {
-	$version: 1;
+	$version: 2;
 	/** Onboarding mode */
 	onboarding: boolean;
 	/** Deck configuration */
@@ -22,6 +22,8 @@ export interface PreferencesSchema {
 		theme: 'auto' | 'dark' | 'light';
 		/** Default pane size */
 		defaultPaneSize: PaneSize;
+		/** Warn if the media being posted contains no alt text */
+		warnNoMediaAlt: boolean;
 	};
 	/** Content moderation */
 	moderation: Omit<ModerationOpts, '_filtersCache'>;
@@ -36,12 +38,13 @@ const PREF_KEY = 'rantai_prefs';
 export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KEY, (version, prev) => {
 	if (version === 0) {
 		const object: PreferencesSchema = {
-			$version: 1,
+			$version: 2,
 			onboarding: true,
 			decks: [],
 			ui: {
 				theme: 'auto',
 				defaultPaneSize: PaneSize.MEDIUM,
+				warnNoMediaAlt: true,
 			},
 			moderation: {
 				globals: {
@@ -90,6 +93,13 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 		};
 
 		return object;
+	}
+
+	if (version < 2) {
+		const _prev = prev as PreferencesSchema;
+
+		_prev.ui.warnNoMediaAlt = true;
+		_prev.$version = 2;
 	}
 
 	return prev;
