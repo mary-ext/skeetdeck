@@ -11,32 +11,30 @@ interface BlobObject {
 
 const map = new WeakMap<Blob, BlobObject>();
 
+export const getBlobSrc = (src: Blob | string) => {
+	if (typeof src === 'string') {
+		return src;
+	}
+
+	let obj = map.get(src)!;
+	if (!obj) {
+		map.set(src, (obj = { u: URL.createObjectURL(src), c: 0 }));
+	}
+
+	obj.c++;
+
+	onCleanup(() => {
+		if (--obj.c < 1) {
+			URL.revokeObjectURL(obj.u);
+			map.delete(src);
+		}
+	});
+
+	return obj.u;
+};
+
 const BlobImage = (props: BlobImageProps) => {
-	const blob = () => {
-		const src = props.src;
-
-		if (typeof src === 'string') {
-			return src;
-		}
-
-		let obj = map.get(src)!;
-		if (!obj) {
-			map.set(src, (obj = { u: URL.createObjectURL(src), c: 0 }));
-		}
-
-		obj.c++;
-
-		onCleanup(() => {
-			if (--obj.c < 1) {
-				URL.revokeObjectURL(obj.u);
-				map.delete(src);
-			}
-		});
-
-		return obj.u;
-	};
-
-	return <img {...props} src={blob()} />;
+	return <img {...props} src={getBlobSrc(props.src)} />;
 };
 
 export default BlobImage;
