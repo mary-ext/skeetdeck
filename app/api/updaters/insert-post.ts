@@ -20,7 +20,7 @@ export const producePostInsert = (post: SignalizedPost, parentUri: string) => {
 
 			// UI always has actualDepth + 1 for the height,
 			// so let's use that as our assumption.
-			if (items.length > draft.depth - 1) {
+			if (items.length >= draft.depth) {
 				continue;
 			}
 
