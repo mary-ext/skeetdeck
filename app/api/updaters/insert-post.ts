@@ -1,14 +1,15 @@
+import type { InfiniteData } from '@pkg/solid-query';
+
 import { produce } from '~/utils/immer.ts';
 
-import type { ThreadPage } from '~/api/models/thread.ts';
+import type { ThreadPage } from '../models/thread.ts';
+import { SignalizedPost } from '../stores/posts.ts';
 
-import { SignalizedPost } from '~/api/stores/posts.ts';
+export const producePostInsert = (post: SignalizedPost, parentUri: string) => {
+	const updatePostThread = produce((draft: ThreadPage) => {
+		const descendants = draft.descendants;
 
-export const producePostThreadInsert = (post: SignalizedPost, parentUri: string) => {
-	return produce((data: ThreadPage) => {
-		const descendants = data.descendants;
-
-		if (data.post.uri === parentUri) {
+		if (draft.post.uri === parentUri) {
 			descendants.unshift({ items: [post] });
 			return;
 		}
@@ -19,7 +20,7 @@ export const producePostThreadInsert = (post: SignalizedPost, parentUri: string)
 
 			// UI always has actualDepth + 1 for the height,
 			// so let's use that as our assumption.
-			if (items.length > data.depth - 1) {
+			if (items.length > draft.depth - 1) {
 				continue;
 			}
 
@@ -39,4 +40,6 @@ export const producePostThreadInsert = (post: SignalizedPost, parentUri: string)
 			}
 		}
 	});
+
+	return updatePostThread;
 };

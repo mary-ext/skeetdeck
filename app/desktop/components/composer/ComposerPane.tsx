@@ -16,7 +16,7 @@ import { getResolvedHandle, getResolvedHandleKey } from '~/api/queries/get-resol
 import type { SignalizedFeed } from '~/api/stores/feeds.ts';
 import type { SignalizedList } from '~/api/stores/lists.ts';
 import { SignalizedPost } from '~/api/stores/posts.ts';
-import { producePostThreadInsert } from '~/api/updaters/post-thread-insert.ts';
+import { producePostInsert } from '~/api/updaters/insert-post.ts';
 
 import { finalizeRt, getRtLength, textToPrelimRt } from '~/api/richtext/composer.ts';
 import type { Facet } from '~/api/richtext/types.ts';
@@ -502,7 +502,7 @@ const ComposerPane = () => {
 
 					// - We should only do this for $authorDid's getPostThread specifically.
 					// - We can skip posts where the root reply URI doesn't match
-					const updatePostThread = producePostThreadInsert(post, parentUri);
+					const updatePostThread = producePostInsert(post, parentUri);
 
 					queryClient.setQueriesData<ThreadPage>(
 						{
