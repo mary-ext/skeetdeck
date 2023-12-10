@@ -134,7 +134,7 @@ const ComposerPane = () => {
 	const queryClient = useQueryClient();
 	const context = useComposer();
 
-	const author = createMemo(() => multiagent.accounts.find((acc) => acc.did === context.authorDid)!);
+	const author = createMemo(() => multiagent.accounts.find((acc) => acc.did === context.authorDid));
 
 	const [status, setStatus] = createSignal<string>();
 	const [message, setMessage] = createSignal<string>();
@@ -742,7 +742,7 @@ const ComposerPane = () => {
 								disabled={multiagent.accounts.length < 2}
 								class="h-10 w-10 overflow-hidden rounded-full hover:opacity-80 disabled:pointer-events-none"
 							>
-								<img src={author().profile?.avatar || DefaultUserAvatar} class="h-full w-full" />
+								<img src={author()?.profile?.avatar || DefaultUserAvatar} class="h-full w-full" />
 							</button>
 						</SwitchAccountAction>
 					</div>
