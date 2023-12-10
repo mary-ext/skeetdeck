@@ -50,19 +50,7 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 
 				closeModal();
 
-				// 1. Remove our cached post
-				removeCachedPost(did, postUri);
-
-				// 2. Reset any post thread queries that directly shows the post
-				queryClient.resetQueries({
-					queryKey: ['getPostThread'],
-					predicate: (query) => {
-						const [, , actor, post] = query.queryKey as ReturnType<typeof getPostThreadKey>;
-						return post === rkey && (actor === did || actor === handle);
-					},
-				});
-
-				// 3. Mutate all timeline and post thread queries
+				// 1. Mutate all timeline and post thread queries
 				queryClient.setQueriesData<InfiniteData<TimelinePage>>({ queryKey: ['getTimeline'] }, (data) => {
 					if (data) {
 						return updateTimeline(data);
@@ -89,8 +77,20 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 				});
 			},
 			onSuccess: () => {
+				// 2. Remove our cached post
+				removeCachedPost(did, postUri);
+
+				// 3. Reset any post thread queries that directly shows the post
+				queryClient.resetQueries({
+					queryKey: ['getPostThread'],
+					predicate: (query) => {
+						const [, , actor, post] = query.queryKey as ReturnType<typeof getPostThreadKey>;
+						return post === rkey && (actor === did || actor === handle);
+					},
+				});
+
+				// 4. Re-fetch the parent post to get an accurate view over the reply count
 				if (parentUri) {
-					// Re-fetch the parent post to get an accurate view over the reply count
 					queryClient.fetchQuery({
 						queryKey: getPostKey(post.uid, parentUri),
 						queryFn: getPost,
