@@ -18,14 +18,16 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 	const modal = usePaneModalState();
 
 	return (
-		<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
+		<fieldset
+			disabled={props.disabled}
+			class="flex h-13 min-w-0 shrink-0 items-center gap-2 border-b border-divider px-4"
+		>
 			{(() => {
 				if (modal.depth > 0) {
 					return (
 						<button
 							title="Go back to previous dialog"
 							onClick={modal.close}
-							disabled={props.disabled}
 							class={/* @once */ IconButton({ edge: 'left' })}
 						>
 							<ArrowLeftIcon />
@@ -36,7 +38,6 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 						<button
 							title="Close dialog"
 							onClick={modal.close}
-							disabled={props.disabled}
 							class={/* @once */ IconButton({ edge: 'left' })}
 						>
 							<CloseIcon />
@@ -57,10 +58,8 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 				)}
 			</div>
 
-			<fieldset disabled={props.disabled} class="flex empty:hidden">
-				{props.children}
-			</fieldset>
-		</div>
+			<div class="flex empty:hidden">{props.children}</div>
+		</fieldset>
 	);
 };
 
