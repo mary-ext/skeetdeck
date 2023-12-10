@@ -23,6 +23,9 @@ export interface PreferencesSchema {
 		/** Default pane size */
 		defaultPaneSize: PaneSize;
 		/** Warn if the media being posted contains no alt text */
+	};
+	/** Accessibility configuration */
+	a11y: {
 		warnNoMediaAlt: boolean;
 	};
 	/** Content moderation */
@@ -44,6 +47,8 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 			ui: {
 				theme: 'auto',
 				defaultPaneSize: PaneSize.MEDIUM,
+			},
+			a11y: {
 				warnNoMediaAlt: true,
 			},
 			moderation: {
@@ -98,7 +103,10 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 	if (version < 2) {
 		const _prev = prev as PreferencesSchema;
 
-		_prev.ui.warnNoMediaAlt = true;
+		_prev.a11y = {
+			warnNoMediaAlt: true,
+		};
+
 		_prev.$version = 2;
 	}
 

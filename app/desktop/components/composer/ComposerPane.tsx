@@ -281,7 +281,7 @@ const ComposerPane = () => {
 
 	const handleSubmitPrereq = () => {
 		// Check if every media has alt text provided
-		if (preferences.ui.warnNoMediaAlt) {
+		if (preferences.a11y.warnNoMediaAlt) {
 			const $images = images();
 
 			if ($images.some((image) => !image.alt.value)) {
