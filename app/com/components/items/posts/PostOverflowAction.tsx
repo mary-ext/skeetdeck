@@ -17,6 +17,7 @@ import VolumeOffIcon from '../../../icons/baseline-volume-off.tsx';
 
 const DeletePostConfirmDialog = lazy(() => import('../../dialogs/DeletePostConfirmDialog.tsx'));
 const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog.tsx'));
+const ReportDialog = lazy(() => import('../../dialogs/ReportDialog.tsx'));
 
 export interface PostOverflowActionProps {
 	post: SignalizedPost;
@@ -76,7 +77,19 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 								</button>
 							)}
 
-							<button class={/* @once */ MenuItem()}>
+							<button
+								onClick={() => {
+									close();
+
+									openModal(() => (
+										<ReportDialog
+											uid={/* @once */ post.uid}
+											report={/* @once */ { type: 'post', uri: post.uri, cid: post.cid.value }}
+										/>
+									));
+								}}
+								class={/* @once */ MenuItem()}
+							>
 								<ReportIcon class={/* @once */ MenuItemIcon()} />
 								<span class="overflow-hidden text-ellipsis whitespace-nowrap">Report post</span>
 							</button>

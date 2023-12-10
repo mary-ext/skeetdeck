@@ -19,6 +19,7 @@ import VolumeOffIcon from '../../../icons/baseline-volume-off.tsx';
 const AddProfileInListDialog = lazy(() => import('../../dialogs/AddProfileInListDialog.tsx'));
 const BlockConfirmDialog = lazy(() => import('../../dialogs/BlockConfirmDialog.tsx'));
 const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog.tsx'));
+const ReportDialog = lazy(() => import('../../dialogs/ReportDialog.tsx'));
 
 export interface ProfileOverflowActionProps {
 	profile: SignalizedProfile;
@@ -123,7 +124,19 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								</button>
 							)}
 
-							<button class={/* @once */ MenuItem()}>
+							<button
+								onClick={() => {
+									close();
+
+									openModal(() => (
+										<ReportDialog
+											uid={/* @once */ profile.uid}
+											report={/* @once */ { type: 'profile', did: profile.did }}
+										/>
+									));
+								}}
+								class={/* @once */ MenuItem()}
+							>
 								<ReportIcon class={/* @once */ MenuItemIcon()} />
 								<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Report @${profile.handle.value}`}</span>
 							</button>
