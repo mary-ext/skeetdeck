@@ -25,7 +25,7 @@ import { getCurrentTid } from '~/api/utils/tid.ts';
 import { getCollectionId, getCurrentDate, isDid } from '~/api/utils/misc.ts';
 
 import { type ComposedImage, type PendingImage, compressPostImage } from '~/utils/image.ts';
-import { produce } from '~/utils/immer.ts';
+import { producePostThreadInsert } from '~/utils/immer.ts';
 import { signal } from '~/utils/signals.ts';
 import { languageNames } from '~/utils/intl/display-names.ts';
 
@@ -502,41 +502,7 @@ const ComposerPane = () => {
 
 					// - We should only do this for $authorDid's getPostThread specifically.
 					// - We can skip posts where the root reply URI doesn't match
-
-					const updatePostThread = produce((data: ThreadPage) => {
-						const descendants = data.descendants;
-
-						if (data.post.uri === parentUri) {
-							descendants.unshift({ items: [post] });
-							return;
-						}
-
-						for (let i = 0, ilen = descendants.length; i < ilen; i++) {
-							const slice = descendants[i];
-							const items = slice.items;
-
-							// UI always has actualDepth + 1 for the height,
-							// so let's use that as our assumption.
-							if (items.length > data.depth - 1) {
-								continue;
-							}
-
-							for (let j = 0, jlen = items.length; j < jlen; j++) {
-								const item = items[j];
-
-								// It's only at the end, but let's do this to make TS happy.
-								if (!(item instanceof SignalizedPost)) {
-									break;
-								}
-
-								// We found the post, break out of the loop entirely.
-								if (item.uri === parentUri) {
-									items.splice(j + 1, jlen, post);
-									return;
-								}
-							}
-						}
-					});
+					const updatePostThread = producePostThreadInsert(post, parentUri);
 
 					queryClient.setQueriesData<ThreadPage>(
 						{
