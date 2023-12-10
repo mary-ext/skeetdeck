@@ -90,6 +90,7 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 			},
 			onSuccess: () => {
 				if (parentUri) {
+					// Re-fetch the parent post to get an accurate view over the reply count
 					queryClient.fetchQuery({
 						queryKey: getPostKey(post.uid, parentUri),
 						queryFn: getPost,
