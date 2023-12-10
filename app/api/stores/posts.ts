@@ -72,12 +72,19 @@ export const getCachedPost = (uid: DID, uri: string) => {
 	const id = createPostId(uid, uri);
 	const ref = posts[id];
 
-	return ref && ref.deref();
+	return ref?.deref();
 };
 
 export const removeCachedPost = (uid: DID, uri: string) => {
 	const id = createPostId(uid, uri);
-	delete posts[id];
+
+	const ref = posts[id];
+	const val = ref?.deref();
+
+	if (val) {
+		gc.unregister(val);
+		delete posts[id];
+	}
 };
 
 export const mergePost = (uid: DID, post: Post, key?: number) => {
