@@ -82,6 +82,11 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 		<div class="w-max bg-background">
 			<div class="flex gap-2 p-2">
 				<SearchInput
+					ref={(node) => {
+						onMount(() => {
+							node.focus();
+						});
+					}}
 					value={search()}
 					onInput={(ev) => {
 						const value = ev.target.value;
