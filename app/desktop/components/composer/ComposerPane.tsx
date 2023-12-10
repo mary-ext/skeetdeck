@@ -73,6 +73,7 @@ import ContentWarningAction from './actions/ContentWarningAction.tsx';
 import PostLanguageAction from './actions/PostLanguageAction.tsx';
 
 import ImageAltDialog from './dialogs/ImageAltDialog.tsx';
+import ImageAltReminderDialog from './dialogs/ImageAltReminderDialog.tsx';
 
 type PostRecord = Records['app.bsky.feed.post'];
 type StrongRef = RefOf<'com.atproto.repo.strongRef'>;
@@ -278,7 +279,21 @@ const ComposerPane = () => {
 		);
 	};
 
-	const handleSubmit = async () => {
+	const handleSubmitPrereq = () => {
+		// Check if every media has alt text provided
+		if (preferences.ui.warnNoMediaAlt) {
+			const $images = images();
+
+			if ($images.some((image) => !image.alt.value)) {
+				openModal(() => <ImageAltReminderDialog onIgnore={submitPost} />);
+				return;
+			}
+		}
+
+		submitPost();
+	};
+
+	const submitPost = async () => {
 		if (!isEnabled()) {
 			return;
 		}
@@ -693,7 +708,7 @@ const ComposerPane = () => {
 				) : (
 					<button
 						disabled={!isEnabled()}
-						onClick={handleSubmit}
+						onClick={handleSubmitPrereq}
 						class={/* @once */ Button({ variant: 'primary', size: 'xs' })}
 					>
 						Post
@@ -759,7 +774,7 @@ const ComposerPane = () => {
 							placeholder="What's happening?"
 							minRows={4}
 							onChange={setText}
-							onSubmit={handleSubmit}
+							onSubmit={handleSubmitPrereq}
 							onImageDrop={addImages}
 						/>
 
