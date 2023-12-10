@@ -1,5 +1,3 @@
-import type { AtBlob } from '~/api/atp-schema.ts';
-
 import type { Signal } from './signals.ts';
 
 const MAX_SIZE = 1_000_000; // 1 MB
@@ -31,7 +29,6 @@ export interface ComposedImage {
 		height: number;
 	};
 	alt: Signal<string>;
-	record?: AtBlob | undefined;
 }
 
 export interface CompressProfileImageOptions {
