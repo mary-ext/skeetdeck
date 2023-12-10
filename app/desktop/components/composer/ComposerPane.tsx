@@ -16,6 +16,7 @@ import { getResolvedHandle, getResolvedHandleKey } from '~/api/queries/get-resol
 import type { SignalizedFeed } from '~/api/stores/feeds.ts';
 import type { SignalizedList } from '~/api/stores/lists.ts';
 import { SignalizedPost } from '~/api/stores/posts.ts';
+import { producePostThreadInsert } from '~/api/updaters/post-thread-insert.ts';
 
 import { finalizeRt, getRtLength, textToPrelimRt } from '~/api/richtext/composer.ts';
 import type { Facet } from '~/api/richtext/types.ts';
@@ -25,7 +26,6 @@ import { getCurrentTid } from '~/api/utils/tid.ts';
 import { getCollectionId, getCurrentDate, isDid } from '~/api/utils/misc.ts';
 
 import { type ComposedImage, type PendingImage, compressPostImage } from '~/utils/image.ts';
-import { producePostThreadInsert } from '~/utils/immer.ts';
 import { signal } from '~/utils/signals.ts';
 import { languageNames } from '~/utils/intl/display-names.ts';
 

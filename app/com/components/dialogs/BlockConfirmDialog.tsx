@@ -5,11 +5,10 @@ import { type InfiniteData, useQueryClient } from '@pkg/solid-query';
 import type { RefOf } from '~/api/atp-schema.ts';
 import { ListPurposeLabels } from '~/api/display.ts';
 
-import { produceTimelineFilter } from '~/utils/immer.ts';
-
 import type { TimelinePage, getTimelineKey } from '~/api/queries/get-timeline.ts';
 import { updateProfileBlock } from '~/api/mutations/block-profile.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
+import { produceTimelineFilter } from '~/api/updaters/timeline-filter.ts';
 
 import { closeModal } from '../../globals/modals.tsx';
 
