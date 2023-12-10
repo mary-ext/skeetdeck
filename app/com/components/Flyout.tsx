@@ -1,4 +1,4 @@
-import { type JSX, Show, createSignal, untrack } from 'solid-js';
+import { type JSX, createSignal, untrack } from 'solid-js';
 
 import { type Middleware, autoUpdate, flip, shift, size } from '@floating-ui/dom';
 import { type Placement, getSide } from '@floating-ui/utils';
@@ -66,25 +66,12 @@ const defaultMiddlewares: Middleware[] = [offset, ...offsetlessMiddlewares];
 export const Flyout = (props: FlyoutProps) => {
 	const [isOpen, setIsOpen] = createSignal(false);
 
-	let anchor: HTMLElement;
+	const anchor = props.button;
+	assert(anchor instanceof HTMLElement);
 
-	const listener = () => {
+	anchor.addEventListener('click', () => {
 		setIsOpen(true);
-	};
-
-	// @todo: previously this was a direct render function, but it seems that it's
-	// causing the button to continuously rerender, need to figure out why.
-	const child = (
-		<Show when={props.button} keyed>
-			{(button) => {
-				assert(button instanceof HTMLElement);
-
-				anchor = button;
-				button.addEventListener('click', listener);
-				return button;
-			}}
-		</Show>
-	);
+	});
 
 	const modal = (
 		<Modal
@@ -119,5 +106,5 @@ export const Flyout = (props: FlyoutProps) => {
 		/>
 	);
 
-	return [child, modal] as unknown as JSX.Element;
+	return [anchor, modal] as unknown as JSX.Element;
 };
