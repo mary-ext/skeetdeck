@@ -10,7 +10,7 @@ import {
 	getPostThread,
 	getPostThreadKey,
 } from '~/api/queries/get-post-thread.ts';
-import type { SignalizedPost } from '~/api/stores/posts.ts';
+import { SignalizedPost } from '~/api/stores/posts.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
 import { Button } from '~/com/primitives/button.ts';
@@ -22,6 +22,7 @@ import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 import GenericErrorView from '~/com/components/views/GenericErrorView.tsx';
 import PermalinkPost from '~/com/components/views/PermalinkPost.tsx';
 
+import EmbedRecordBlocked from '~/com/components/embeds/EmbedRecordBlocked.tsx';
 import EmbedRecordNotFound from '~/com/components/embeds/EmbedRecordNotFound.tsx';
 import Post from '~/com/components/items/Post.tsx';
 
@@ -116,7 +117,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 
 								return {
 									overflowing: overflow,
-									items: overflow ? ($ancestors.slice(-MAX_ANCESTORS) as any) : $ancestors,
+									items: overflow ? ($ancestors.slice(-MAX_ANCESTORS) as typeof $ancestors) : $ancestors,
 								};
 							});
 
@@ -140,7 +141,13 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 												}
 
 												if ($ancestors.items.length > 0) {
-													post = $ancestors.items[0];
+													const item = $ancestors.items[0];
+
+													if (!(item instanceof SignalizedPost)) {
+														return;
+													}
+
+													post = item;
 												} else {
 													post = data().post;
 												}
@@ -186,6 +193,33 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 									<For each={ancestors().items}>
 										{(item) => {
 											if ('$type' in item) {
+												const type = item.$type;
+
+												if (type === 'app.bsky.feed.defs#notFoundPost') {
+													return (
+														<div class="p-3">
+															<EmbedRecordNotFound />
+														</div>
+													);
+												}
+
+												if (type === 'app.bsky.feed.defs#blockedPost') {
+													return (
+														<div class="p-3">
+															<EmbedRecordBlocked
+																record={
+																	/* @once */ {
+																		$type: 'app.bsky.embed.record#viewBlocked',
+																		uri: item.uri,
+																		blocked: item.blocked,
+																		author: item.author,
+																	}
+																}
+															/>
+														</div>
+													);
+												}
+
 												return null;
 											}
 
@@ -221,6 +255,25 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 													<>
 														{items.map((item, idx) => {
 															if ('$type' in item) {
+																const type = item.$type;
+
+																if (type === 'app.bsky.feed.defs#blockedPost') {
+																	return (
+																		<div class="p-3">
+																			<EmbedRecordBlocked
+																				record={
+																					/* @once */ {
+																						$type: 'app.bsky.embed.record#viewBlocked',
+																						uri: item.uri,
+																						blocked: item.blocked,
+																						author: item.author,
+																					}
+																				}
+																			/>
+																		</div>
+																	);
+																}
+
 																return null;
 															}
 
