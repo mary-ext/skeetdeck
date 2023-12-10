@@ -1,4 +1,4 @@
-import { type JSX, For, batch, createMemo, createSignal } from 'solid-js';
+import { type JSX, For, batch, createMemo, createSignal, createEffect } from 'solid-js';
 
 import { type CreateQueryResult, createQuery, useQueryClient } from '@pkg/solid-query';
 
@@ -676,6 +676,14 @@ const ComposerPane = () => {
 		addImages(files);
 	};
 
+	createEffect(() => {
+		context.recordUri;
+		context.replyUri;
+		linkUrl();
+
+		textareaRef!.focus();
+	});
+
 	return (
 		<div class="flex w-96 shrink-0 flex-col border-r border-divider">
 			<input
@@ -811,7 +819,6 @@ const ComposerPane = () => {
 									<button
 										title="Remove embed"
 										onClick={() => {
-											textareaRef!.focus();
 											context.recordUri = undefined;
 										}}
 										class={`${removeEmbedBtn} m-px`}
@@ -946,7 +953,6 @@ const ComposerPane = () => {
 										<button
 											title="Remove link embed"
 											onClick={() => {
-												textareaRef!.focus();
 												setLinkUrl(undefined);
 											}}
 											class={`${removeEmbedBtn} m-px`}

@@ -8,7 +8,6 @@ import {
 	createMemo,
 	createResource,
 	createSignal,
-	onMount,
 } from 'solid-js';
 
 import { autoUpdate, flip, offset, shift } from '@floating-ui/dom';
@@ -217,10 +216,6 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 		}
 
 		handleInputSelection();
-	});
-
-	onMount(() => {
-		textarea!.focus();
 	});
 
 	return (
