@@ -28,7 +28,7 @@ const ContentWarningAction = (props: ContentWarningActionProps) => {
 							}}
 							class={/* @once */ MenuItem()}
 						>
-							<div class="grow min-w-0">
+							<div class="min-w-0 grow">
 								<p>{label}</p>
 								<p class="text-de text-muted-fg">{description}</p>
 							</div>
