@@ -1,6 +1,6 @@
 import { type JSX, batch } from 'solid-js';
 
-import { type Middleware, flip } from '@floating-ui/dom';
+import { type Middleware } from '@floating-ui/dom';
 
 import { renderLabelGroupName, renderLabelName } from '~/api/display.ts';
 import { getSide } from '@floating-ui/utils';
@@ -12,7 +12,7 @@ import { assert } from '~/utils/misc.ts';
 
 import { preferences } from '~/desktop/globals/settings.ts';
 
-import { Flyout } from '~/com/components/Flyout.tsx';
+import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout.tsx';
 
 import { IconButton } from '~/com/primitives/icon-button.ts';
 import { Interactive } from '~/com/primitives/interactive.ts';
@@ -359,7 +359,7 @@ const offsetMiddleware: Middleware = {
 
 const LabelConfigFlyout = (props: LabelConfigFlyoutProps) => {
 	return (
-		<Flyout button={props.children} middleware={[offsetMiddleware, flip()]}>
+		<Flyout button={props.children} middleware={[offsetMiddleware, ...offsetlessMiddlewares]}>
 			{({ close, menuProps }) => {
 				const renderItem = (value: number | undefined, title: string, subtitle?: string) => {
 					return (

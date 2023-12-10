@@ -1,13 +1,11 @@
 import type { JSX } from 'solid-js';
 
-import { flip, shift } from '@floating-ui/dom';
-
 import type { DID } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 
 import { MenuItem, MenuRoot } from '~/com/primitives/menu.ts';
 
-import { Flyout } from '~/com/components/Flyout.tsx';
+import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout.tsx';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 import CheckIcon from '~/com/icons/baseline-check.tsx';
@@ -20,7 +18,7 @@ export interface SwitchAccountActionProps {
 
 const SwitchAccountAction = (props: SwitchAccountActionProps) => {
 	return (
-		<Flyout button={props.children} middleware={[shift({ padding: 16 }), flip()]} placement="bottom">
+		<Flyout button={props.children} middleware={offsetlessMiddlewares} placement="bottom">
 			{({ close, menuProps }) => (
 				<div {...menuProps} class={/* @once */ MenuRoot()}>
 					{multiagent.accounts.map((account) => (

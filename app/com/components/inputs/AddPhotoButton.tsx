@@ -1,6 +1,6 @@
 import { type JSX, createSignal } from 'solid-js';
 
-import { type Middleware, flip } from '@floating-ui/dom';
+import { type Middleware } from '@floating-ui/dom';
 import { getSide } from '@floating-ui/utils';
 
 import { compressProfileImage } from '~/utils/image.ts';
@@ -9,7 +9,7 @@ import { openModal } from '~/com/globals/modals.tsx';
 
 import { MenuItem, MenuRoot } from '../../primitives/menu.ts';
 
-import { Flyout } from '../Flyout.tsx';
+import { Flyout, offsetlessMiddlewares } from '../Flyout.tsx';
 import CircularProgress from '../CircularProgress.tsx';
 
 import AddPhotoAlternateIcon from '../../icons/baseline-add-photo-alternate.tsx';
@@ -119,7 +119,7 @@ const AddPhotoButton = (props: AddPhotoButtonProps) => {
 
 			if (shouldDisplayFlyout) {
 				return (
-					<Flyout button={button} placement="bottom" middleware={[flip(), buttonOffset]}>
+					<Flyout button={button} placement="bottom" middleware={[buttonOffset, ...offsetlessMiddlewares]}>
 						{({ close, menuProps }) => (
 							<div {...menuProps} class={/* @once */ MenuRoot()}>
 								<button

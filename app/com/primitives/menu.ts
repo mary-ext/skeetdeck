@@ -1,7 +1,7 @@
 import { Interactive } from './interactive.ts';
 
 export const MenuRoot = () => {
-	return `flex max-w-sm flex-col overflow-hidden rounded-lg bg-background shadow-menu`;
+	return `flex max-w-sm flex-col overflow-hidden overflow-y-auto rounded-lg bg-background shadow-menu`;
 };
 
 export interface MenuItemProps {

@@ -1,12 +1,10 @@
 import { type JSX } from 'solid-js';
 
-import { flip, shift } from '@floating-ui/dom';
-
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
 import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu.ts';
 
-import { Flyout } from '../../Flyout.tsx';
+import { Flyout, offsetlessMiddlewares } from '../../Flyout.tsx';
 
 import ContentCopyIcon from '~/com/icons/baseline-content-copy.tsx';
 
@@ -21,11 +19,7 @@ const ProfileHandleAction = (props: ProfileHandleActionProps) => {
 
 		if (import.meta.env.VITE_MODE === 'desktop') {
 			return (
-				<Flyout
-					button={props.children}
-					placement="bottom-start"
-					middleware={[shift({ padding: 16 }), flip()]}
-				>
+				<Flyout button={props.children} placement="bottom-start" middleware={offsetlessMiddlewares}>
 					{({ close, menuProps }) => (
 						<div {...menuProps} class={/* @once */ MenuRoot()}>
 							<button

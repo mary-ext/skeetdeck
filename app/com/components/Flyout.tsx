@@ -1,6 +1,6 @@
 import { type JSX, Show, createSignal, untrack } from 'solid-js';
 
-import { type Middleware, autoUpdate, flip, shift } from '@floating-ui/dom';
+import { type Middleware, autoUpdate, flip, shift, size } from '@floating-ui/dom';
 import { type Placement, getSide } from '@floating-ui/utils';
 import { useFloating } from 'solid-floating-ui';
 
@@ -43,6 +43,26 @@ export const offset: Middleware = {
 	},
 };
 
+export const offsetlessMiddlewares = [
+	shift({
+		padding: 16,
+	}),
+	flip({
+		padding: 16,
+	}),
+	size({
+		padding: 16,
+		apply({ availableWidth, availableHeight, elements }) {
+			Object.assign(elements.floating.style, {
+				maxWidth: `${availableWidth}px`,
+				maxHeight: `${availableHeight}px`,
+			});
+		},
+	}),
+];
+
+const defaultMiddlewares: Middleware[] = [offset, ...offsetlessMiddlewares];
+
 export const Flyout = (props: FlyoutProps) => {
 	const [isOpen, setIsOpen] = createSignal(false);
 
@@ -76,7 +96,7 @@ export const Flyout = (props: FlyoutProps) => {
 				const position = useFloating(() => anchor, floating, {
 					placement: props.placement ?? 'bottom-end',
 					strategy: 'absolute',
-					middleware: props.middleware ?? [shift({ padding: 16 }), offset, flip()],
+					middleware: props.middleware ?? defaultMiddlewares,
 					whileElementsMounted: autoUpdate,
 				});
 

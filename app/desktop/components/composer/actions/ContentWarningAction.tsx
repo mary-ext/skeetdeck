@@ -1,10 +1,8 @@
 import type { JSX } from 'solid-js';
 
-import { flip, shift } from '@floating-ui/dom';
-
 import { MenuItem, MenuRoot } from '~/com/primitives/menu.ts';
 
-import { Flyout } from '~/com/components/Flyout.tsx';
+import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout.tsx';
 
 import CheckIcon from '~/com/icons/baseline-check.tsx';
 
@@ -16,7 +14,7 @@ export interface ContentWarningActionProps {
 
 const ContentWarningAction = (props: ContentWarningActionProps) => {
 	return (
-		<Flyout button={props.children} placement="bottom" middleware={[shift({ padding: 16 }), flip()]}>
+		<Flyout button={props.children} placement="bottom" middleware={offsetlessMiddlewares}>
 			{({ close, menuProps }) => {
 				const renderItem = (value: string | undefined, label: string, description: string) => {
 					return (

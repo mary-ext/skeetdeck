@@ -1,7 +1,5 @@
 import type { JSX } from 'solid-js';
 
-import { flip, shift, size } from '@floating-ui/dom';
-
 import { systemLanguages } from '~/api/globals/platform.ts';
 
 import { getNativeLanguageName, languageNames } from '~/utils/intl/display-names.ts';
@@ -12,7 +10,7 @@ import { preferences } from '~/desktop/globals/settings.ts';
 
 import { MenuItem, MenuRoot } from '~/com/primitives/menu.ts';
 
-import { Flyout } from '~/com/components/Flyout.tsx';
+import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout.tsx';
 
 import CheckIcon from '~/com/icons/baseline-check.tsx';
 
@@ -45,22 +43,7 @@ const getLanguageCodes = () => {
 
 const PostLanguageAction = (props: PostLanguageActionProps) => {
 	return (
-		<Flyout
-			button={props.children}
-			placement="bottom"
-			middleware={[
-				shift({ padding: 16 }),
-				flip(),
-				size({
-					padding: 16,
-					apply({ availableHeight, elements }) {
-						Object.assign(elements.floating.style, {
-							maxHeight: `${availableHeight}px`,
-						});
-					},
-				}),
-			]}
-		>
+		<Flyout button={props.children} placement="bottom" middleware={offsetlessMiddlewares}>
 			{({ close, menuProps }) => {
 				const languages = getLanguageCodes();
 

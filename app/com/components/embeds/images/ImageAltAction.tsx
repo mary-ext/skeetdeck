@@ -1,10 +1,8 @@
 import type { JSX } from 'solid-js';
 
-import { flip, shift, size } from '@floating-ui/dom';
-
 import { Button } from '../../../primitives/button.ts';
 
-import { Flyout } from '../../Flyout.tsx';
+import { Flyout, offsetlessMiddlewares } from '../../Flyout.tsx';
 
 export interface ImageAltActionProps {
 	alt: string;
@@ -14,22 +12,7 @@ export interface ImageAltActionProps {
 const ImageAltAction = (props: ImageAltActionProps) => {
 	if (import.meta.env.VITE_MODE === 'desktop') {
 		return (
-			<Flyout
-				button={props.children}
-				placement="bottom"
-				middleware={[
-					flip(),
-					shift({ padding: 16 }),
-					size({
-						padding: 16,
-						apply({ availableHeight, elements }) {
-							Object.assign(elements.floating.style, {
-								maxHeight: `${availableHeight}px`,
-							});
-						},
-					}),
-				]}
-			>
+			<Flyout button={props.children} placement="bottom" middleware={offsetlessMiddlewares}>
 				{({ close, menuProps }) => (
 					<div
 						{...menuProps}
