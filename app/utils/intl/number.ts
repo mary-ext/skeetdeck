@@ -12,3 +12,11 @@ export const formatCompact = (value: number) => {
 
 	return compact.format(value);
 };
+
+export const formatLong = (value: number) => {
+	if (value < 1_000) {
+		return '' + value;
+	}
+
+	return long.format(value);
+};
