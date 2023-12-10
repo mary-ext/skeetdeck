@@ -16,7 +16,7 @@ import { Flyout } from '~/com/components/Flyout.tsx';
 
 import CheckIcon from '~/com/icons/baseline-check.tsx';
 
-import CustomPostLanguageDialog from './CustomPostLanguageDialog.tsx';
+import CustomPostLanguageDialog from '../dialogs/CustomPostLanguageDialog.tsx';
 
 export interface PostLanguageActionProps {
 	languages: string[];
