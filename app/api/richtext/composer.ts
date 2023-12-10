@@ -15,7 +15,7 @@ const enum RichText {
 }
 
 const WS_RE = / +(?=\n)/g;
-const EOF_WS_RE = /\s+$| +(?=\n)/g;
+export const EOF_WS_RE = /\s+$| +(?=\n)/g;
 
 const ABS_LINK_RE = /https?:\/\/[\S]+/g;
 const TRAILING_RE = /\)?[.,;]*$/;

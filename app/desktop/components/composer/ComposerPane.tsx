@@ -13,6 +13,7 @@ import { getLinkMeta, getLinkMetaKey } from '~/api/queries/get-link-meta.ts';
 import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/get-list-info.ts';
 import { getInitialPost, getPost, getPostKey } from '~/api/queries/get-post.ts';
 import { getResolvedHandle, getResolvedHandleKey } from '~/api/queries/get-resolved-handle.ts';
+import type { getTimelineLatestKey } from '~/api/queries/get-timeline.ts';
 import type { SignalizedFeed } from '~/api/stores/feeds.ts';
 import type { SignalizedList } from '~/api/stores/lists.ts';
 import { SignalizedPost } from '~/api/stores/posts.ts';
@@ -67,9 +68,11 @@ import SwitchAccountAction from '../flyouts/SwitchAccountAction.tsx';
 import { useComposer } from './ComposerContext.tsx';
 import DummyPost from './DummyPost.tsx';
 import TagsInput from './TagInput.tsx';
+
 import ContentWarningAction from './actions/ContentWarningAction.tsx';
 import PostLanguageAction from './actions/PostLanguageAction.tsx';
-import type { getTimelineLatestKey } from '~/api/queries/get-timeline.ts';
+
+import ImageAltDialog from './dialogs/ImageAltDialog.tsx';
 
 type PostRecord = Records['app.bsky.feed.post'];
 type StrongRef = RefOf<'com.atproto.repo.strongRef'>;
@@ -556,7 +559,6 @@ const ComposerPane = () => {
 				blob: img.blob,
 				ratio: img.ratio,
 				alt: signal(''),
-				record: undefined,
 			});
 		}
 
@@ -900,7 +902,9 @@ const ComposerPane = () => {
 
 										<button
 											title="Add image description"
-											onClick={() => {}}
+											onClick={() => {
+												openModal(() => <ImageAltDialog image={image} />);
+											}}
 											class="absolute bottom-0 left-0 m-1 flex h-5 items-center rounded bg-black/70 px-1 text-xs font-medium text-white"
 										>
 											<span>ALT</span>
