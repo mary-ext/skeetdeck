@@ -1,5 +1,3 @@
-import type { InfiniteData } from '@pkg/solid-query';
-
 import { produce } from '~/utils/immer.ts';
 
 import type { ThreadPage } from '../models/thread.ts';
@@ -17,12 +15,6 @@ export const producePostInsert = (post: SignalizedPost, parentUri: string) => {
 		for (let i = 0, ilen = descendants.length; i < ilen; i++) {
 			const slice = descendants[i];
 			const items = slice.items;
-
-			// UI always has actualDepth + 1 for the height,
-			// so let's use that as our assumption.
-			if (items.length >= draft.depth) {
-				continue;
-			}
 
 			for (let j = 0, jlen = items.length; j < jlen; j++) {
 				const item = items[j];
