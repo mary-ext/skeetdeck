@@ -24,7 +24,7 @@ export const modelChecked = (getter: Accessor<boolean>, setter: (next: boolean) 
 	};
 };
 
-export const createRadioModel = <T extends string>(getter: Accessor<T>, setter: (next: T) => void) => {
+export const createRadioModel = <T>(getter: Accessor<T>, setter: (next: T) => void) => {
 	return (value: T) => {
 		return (node: HTMLInputElement) => {
 			createEffect(() => {
