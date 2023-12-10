@@ -1,13 +1,18 @@
-import type { JSX } from 'solid-js';
+import { type JSX, lazy } from 'solid-js';
 
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
+
+import { openModal } from '../../../globals/modals.tsx';
 
 import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu.ts';
 
 import { Flyout } from '../../Flyout.tsx';
 
+import DeleteIcon from '../../../icons/baseline-delete.tsx';
 import LaunchIcon from '../../../icons/baseline-launch.tsx';
+
+const DeletePostConfirmDialog = lazy(() => import('../../dialogs/DeletePostConfirmDialog.tsx'));
 
 export interface PostOverflowActionProps {
 	post: SignalizedPost;
@@ -18,6 +23,8 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 	return (() => {
 		const post = props.post;
 		const author = post.author;
+
+		const isSameAuthor = post.uid === post.author.did;
 
 		if (import.meta.env.VITE_MODE === 'desktop') {
 			return (
@@ -33,6 +40,19 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 								<LaunchIcon class={/* @once */ MenuItemIcon()} />
 								<span>Open in Bluesky app</span>
 							</a>
+
+							{isSameAuthor && (
+								<button
+									onClick={() => {
+										close();
+										openModal(() => <DeletePostConfirmDialog post={post} />);
+									}}
+									class={/* @once */ MenuItem()}
+								>
+									<DeleteIcon class={/* @once */ MenuItemIcon()} />
+									<span>Delete post</span>
+								</button>
+							)}
 						</div>
 					)}
 				</Flyout>
