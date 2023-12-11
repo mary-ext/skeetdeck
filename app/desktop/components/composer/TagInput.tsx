@@ -78,7 +78,7 @@ const TagsInput = (props: TagsInputProps) => {
 				return (
 					<div
 						ref={setFloating}
-						class="rounded-md border border-divider px-2 py-1 text-de shadow-md shadow-background"
+						class="rounded-md border border-divider bg-background px-2 py-1 text-de shadow-md shadow-background"
 						style={{
 							position: position.strategy,
 							top: `${position.y ?? 0}px`,
