@@ -205,6 +205,10 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 						nodes.push([`Users in `, ...children, ` can reply`]);
 					}
 
+					if (nodes.length === 0) {
+						nodes.push(`Replies to this thread are disabled`);
+					}
+
 					return (
 						<div class="mb-4 flex min-w-0 gap-4 rounded bg-accent/20 px-4 py-3">
 							<AccountCheckIcon class="mt-2 shrink-0 text-2xl" />
