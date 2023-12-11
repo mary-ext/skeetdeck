@@ -3,7 +3,7 @@
 		"fmt": "prettier --cache --write ."
 	},
 	"devDependencies": {
-		"prettier": "^3.1.0",
+		"prettier": "^3.1.1",
 		"prettier-plugin-tailwindcss": "^0.5.9",
 		"tailwindcss": "^3.3.6",
 		"typescript": "^5.3.3"
