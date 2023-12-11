@@ -1,4 +1,4 @@
-import { type JSX, For, createSignal } from 'solid-js';
+import { type JSX, For, createSignal, onCleanup } from 'solid-js';
 
 import { autoUpdate, offset } from '@floating-ui/dom';
 import { useFloating } from 'solid-floating-ui';
@@ -71,6 +71,10 @@ const TagsInput = (props: TagsInputProps) => {
 	return [
 		() => {
 			if (focused()) {
+				onCleanup(() => {
+					setFloating(undefined);
+				});
+
 				return (
 					<div
 						ref={setFloating}
@@ -155,7 +159,6 @@ const TagsInput = (props: TagsInputProps) => {
 				}}
 				onBlur={() => {
 					setFocused(false);
-					setReference(undefined);
 				}}
 				onKeyDown={(ev) => {
 					const key = ev.key;
