@@ -1,8 +1,13 @@
-import { For } from 'solid-js';
+import { For, createSignal } from 'solid-js';
+
+import { autoUpdate, offset } from '@floating-ui/dom';
+import { useFloating } from 'solid-floating-ui';
 
 import { graphemeLen } from '~/api/richtext/intl.ts';
 
 import { Interactive } from '~/com/primitives/interactive.ts';
+
+import { offsetlessMiddlewares } from '~/com/components/Flyout.tsx';
 
 import CloseIcon from '~/com/icons/baseline-close.tsx';
 import PoundIcon from '~/com/icons/baseline-pound.tsx';
@@ -19,10 +24,39 @@ const tagBtn = Interactive({
 });
 
 const TagsInput = (props: TagsInputProps) => {
+	const [focused, setFocused] = createSignal(false);
+
+	const [reference, setReference] = createSignal<HTMLElement>();
+	const [floating, setFloating] = createSignal<HTMLElement>();
+
+	const position = useFloating(reference, floating, {
+		placement: 'top-start',
+		middleware: [offset({ mainAxis: 8 }), ...offsetlessMiddlewares],
+		whileElementsMounted: autoUpdate,
+	});
+
 	const onChange = props.onChange;
 
 	return (
-		<div class="flex flex-wrap gap-1.5 text-sm">
+		<div ref={setReference} class="flex flex-wrap gap-1.5 text-sm">
+			{(() => {
+				if (focused()) {
+					return (
+						<div
+							ref={setFloating}
+							class="rounded-md border border-divider px-2 py-1 text-de shadow-md shadow-background"
+							style={{
+								position: position.strategy,
+								top: `${position.y ?? 0}px`,
+								left: `${position.x ?? 0}px`,
+							}}
+						>
+							Press Enter to save your tag
+						</div>
+					);
+				}
+			})()}
+
 			<For each={props.tags}>
 				{(tag, index) => (
 					<button
@@ -94,6 +128,12 @@ const TagsInput = (props: TagsInputProps) => {
 				onFocus={(ev) => {
 					const target = ev.currentTarget;
 					target.tabIndex = 0;
+
+					setFocused(true);
+				}}
+				onBlur={() => {
+					setFocused(false);
+					setReference(undefined);
 				}}
 				onKeyDown={(ev) => {
 					const key = ev.key;
