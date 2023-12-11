@@ -9,14 +9,7 @@ import type { SignalizedPost } from '~/api/stores/posts.ts';
 import { formatCompact } from '~/utils/intl/number.ts';
 import { formatAbsDateTime } from '~/utils/intl/time.ts';
 
-import {
-	LINK_LIST,
-	LINK_POST_LIKED_BY,
-	LINK_POST_REPOSTED_BY,
-	LINK_PROFILE,
-	LINK_REPLY,
-	Link,
-} from '../Link.tsx';
+import { LINK_LIST, LINK_POST_LIKED_BY, LINK_POST_REPOSTED_BY, LINK_PROFILE, Link } from '../Link.tsx';
 import RichTextRenderer from '../RichTextRenderer.tsx';
 
 import PostEmbedWarning from '../moderation/PostEmbedWarning.tsx';
@@ -36,6 +29,7 @@ import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 import PostOverflowAction from '../items/posts/PostOverflowAction.tsx';
 import PostShareAction from '../items/posts/PostShareAction.tsx';
 import RepostAction from '../items/posts/RepostAction.tsx';
+import ReplyAction from '../items/posts/ReplyAction.tsx';
 
 export interface PermalinkPostProps {
 	post: SignalizedPost;
@@ -127,13 +121,16 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 			<hr class="border-divider" />
 
 			<div class="flex h-13 items-center justify-around text-muted-fg">
-				<Link
-					to={{ type: LINK_REPLY, actor: author().did, rkey: rkey() }}
-					class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40 disabled:pointer-events-none disabled:opacity-50"
-					disabled={post().viewer.replyDisabled.value}
-				>
-					<ChatBubbleOutlinedIcon />
-				</Link>
+				<ReplyAction post={post()}>
+					{(disabled) => (
+						<button
+							class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40 disabled:pointer-events-none"
+							classList={{ [`opacity-50`]: disabled }}
+						>
+							<ChatBubbleOutlinedIcon />
+						</button>
+					)}
+				</ReplyAction>
 
 				<RepostAction post={post()}>
 					<button

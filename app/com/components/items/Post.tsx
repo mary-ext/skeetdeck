@@ -16,7 +16,6 @@ import {
 	type ProfileLinking,
 	LINK_PROFILE,
 	LINK_POST,
-	LINK_REPLY,
 	Link,
 	useLinking,
 } from '../Link.tsx';
@@ -38,6 +37,7 @@ import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import PostOverflowAction from './posts/PostOverflowAction.tsx';
 import PostShareAction from './posts/PostShareAction.tsx';
+import ReplyAction from './posts/ReplyAction.tsx';
 import RepostAction from './posts/RepostAction.tsx';
 
 export interface PostProps {
@@ -232,18 +232,21 @@ const Post = (props: PostProps) => {
 							return (
 								<div class="mt-3 flex text-muted-fg">
 									<div class="min-w-0 grow basis-0">
-										<Link
-											to={{ type: LINK_REPLY, actor: author().did, rkey: getRecordId(post().uri) }}
-											class="group flex max-w-full items-end gap-0.5 disabled:pointer-events-none"
-											disabled={post().viewer.replyDisabled.value}
-										>
-											<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40 group-disabled:opacity-50">
-												<ChatBubbleOutlinedIcon />
-											</div>
-											<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
-												{formatCompact(post().replyCount.value)}
-											</span>
-										</Link>
+										<ReplyAction post={post()}>
+											{(disabled) => (
+												<button class="group flex max-w-full items-end gap-0.5">
+													<div
+														class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40 group-disabled:opacity-50"
+														classList={{ [`opacity-50`]: disabled }}
+													>
+														<ChatBubbleOutlinedIcon />
+													</div>
+													<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
+														{formatCompact(post().replyCount.value)}
+													</span>
+												</button>
+											)}
+										</ReplyAction>
 									</div>
 
 									<div class="min-w-0 grow basis-0">
