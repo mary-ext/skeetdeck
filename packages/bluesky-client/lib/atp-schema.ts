@@ -203,7 +203,12 @@ export interface Queries {
 			/**
 			 * @default "posts_with_replies"
 			 */
-			filter?: 'posts_with_replies' | 'posts_no_replies' | 'posts_with_media' | (string & {});
+			filter?:
+				| 'posts_with_replies'
+				| 'posts_no_replies'
+				| 'posts_with_media'
+				| 'posts_and_author_threads'
+				| (string & {});
 		};
 		response: {
 			cursor?: string;
