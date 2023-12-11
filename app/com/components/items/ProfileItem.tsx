@@ -50,16 +50,14 @@ export const ProfileItem = (props: ProfileItemProps) => {
 
 			<div class="flex min-w-0 grow flex-col gap-1">
 				<div class="flex items-center justify-between gap-3">
-					<span class="block max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-fg">
-						<bdi class="overflow-hidden text-ellipsis group-hover:underline">
-							<span class="font-bold text-primary">
-								{profile().displayName.value || profile().handle.value}
-							</span>
-						</bdi>
-						<span class="block overflow-hidden text-ellipsis whitespace-nowrap">
-							@{profile().handle.value}
-						</span>
-					</span>
+					<div class="min-w-0 text-sm">
+						<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold">
+							{profile().displayName.value}
+						</p>
+						<p class="overflow-hidden text-ellipsis whitespace-nowrap text-muted-fg">
+							{'@' + profile().handle.value}
+						</p>
+					</div>
 
 					<div class="empty:hidden">{aside?.render(profile())}</div>
 				</div>
