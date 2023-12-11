@@ -71,8 +71,7 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 					ref={sortable.ref}
 					class="relative"
 					classList={{
-						[`z-10 cursor-grabbing shadow-lg shadow-primary dark:shadow-background`]:
-							sortable.isActiveDraggable,
+						[`z-10 cursor-grabbing shadow-lg shadow-black`]: sortable.isActiveDraggable,
 					}}
 					style={transformStyle(sortable.transform)}
 				>
