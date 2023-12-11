@@ -58,7 +58,6 @@ import EmojiEmotionsIcon from '~/com/icons/baseline-emoji-emotions.tsx';
 import ImageIcon from '~/com/icons/baseline-image.tsx';
 import LanguageIcon from '~/com/icons/baseline-language.tsx';
 import LinkIcon from '~/com/icons/baseline-link.tsx';
-// import PublicIcon from '~/com/icons/baseline-public.tsx';
 import ShieldIcon from '~/com/icons/baseline-shield.tsx';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
@@ -71,11 +70,18 @@ import TagsInput from './TagInput.tsx';
 
 import ContentWarningAction from './actions/ContentWarningAction.tsx';
 import PostLanguageAction from './actions/PostLanguageAction.tsx';
+import ThreadgateAction, {
+	type GateState,
+	renderGateIcon,
+	renderGateAlt,
+	buildGateRules,
+} from './actions/ThreadgateAction.tsx';
 
 import ImageAltDialog from './dialogs/ImageAltDialog.tsx';
 import ImageAltReminderDialog from './dialogs/ImageAltReminderDialog.tsx';
 
 type PostRecord = Records['app.bsky.feed.post'];
+type ThreadgateRecord = Records['app.bsky.feed.threadgate'];
 type StrongRef = RefOf<'com.atproto.repo.strongRef'>;
 
 type PostRecordEmbed = UnionOf<'app.bsky.embed.record'>;
@@ -154,6 +160,7 @@ const ComposerPane = () => {
 
 	const [tags, setTags] = createSignal<string[]>([]);
 	const [labels, setLabels] = createSignal<string[]>([]);
+	const [gate, setGate] = createSignal<GateState>();
 	const [languages, setLanguages] = createSignal(getLanguages());
 
 	const links = createMemo(() => prelimRt()?.links, undefined, {
@@ -312,6 +319,7 @@ const ComposerPane = () => {
 
 		const $languages = languages();
 		const $labels = labels();
+		const $gate = gate();
 
 		let replyTo: PostRecord['reply'];
 		let embedded: PostRecord['embed'];
@@ -443,12 +451,14 @@ const ComposerPane = () => {
 
 		// Create the record
 		const rkey = getCurrentTid();
+		const date = getCurrentDate();
 
 		{
 			setStatus(`Sending post`);
 
-			const record: PostRecord = {
-				createdAt: getCurrentDate(),
+			// Create the post record
+			const postRecord: PostRecord = {
+				createdAt: date,
 				text: text,
 				facets: facets,
 				tags: $tags.length > 0 ? $tags : undefined,
@@ -466,9 +476,26 @@ const ComposerPane = () => {
 					$type: 'com.atproto.repo.applyWrites#create',
 					collection: 'app.bsky.feed.post',
 					rkey: rkey,
-					value: record,
+					value: postRecord,
 				},
 			];
+
+			// Create the threadgate record
+			const gateRules = buildGateRules($gate);
+			if (gateRules) {
+				const threadgateRecord: ThreadgateRecord = {
+					createdAt: date,
+					post: `at://${$authorDid}/app.bsky.feed.post/${rkey}`,
+					allow: gateRules,
+				};
+
+				writes.push({
+					$type: 'com.atproto.repo.applyWrites#create',
+					collection: 'app.bsky.feed.threadgate',
+					rkey: rkey,
+					value: threadgateRecord,
+				});
+			}
 
 			try {
 				const agent = await multiagent.connect($authorDid);
@@ -665,6 +692,21 @@ const ComposerPane = () => {
 		linkUrl();
 
 		textareaRef!.focus();
+	});
+
+	// remove content warning if no images are present.
+	// @todo: remove this once CW is available outside of images
+	createEffect(() => {
+		if (images().length === 0) {
+			setLabels([]);
+		}
+	});
+
+	// remove threadgate if it's a reply
+	createEffect(() => {
+		if (context.replyUri) {
+			setGate(undefined);
+		}
 	});
 
 	return (
@@ -908,8 +950,6 @@ const ComposerPane = () => {
 
 												if (next.length === 0) {
 													textareaRef!.focus();
-
-													setLabels([]);
 												}
 
 												setImages(next);
@@ -1050,14 +1090,6 @@ const ComposerPane = () => {
 								</button>
 							)}
 
-							{images().length >= 1 && (
-								<ContentWarningAction labels={labels()} onChange={setLabels}>
-									<button title="Add content warning..." class={/* @once */ IconButton({ size: 'lg' })}>
-										<ShieldIcon classList={{ [`text-accent`]: labels().length > 0 }} />
-									</button>
-								</ContentWarningAction>
-							)}
-
 							<EmojiFlyout
 								multiple
 								onPick={(emoji, single) => {
@@ -1078,15 +1110,6 @@ const ComposerPane = () => {
 								</button>
 							</EmojiFlyout>
 
-							{/* {!context.replyUri && (
-								<button
-									title="Everyone can reply to your post.\nClick here to change..."
-									class={IconButton({ size: 'lg' })}
-								>
-									<PublicIcon />
-								</button>
-							)} */}
-
 							<div class="grow px-2"></div>
 
 							<span
@@ -1095,6 +1118,22 @@ const ComposerPane = () => {
 							>
 								{GRAPHEME_LIMIT - length()}
 							</span>
+
+							{images().length >= 1 && (
+								<ContentWarningAction labels={labels()} onChange={setLabels}>
+									<button title="Add content warning..." class={/* @once */ IconButton({ size: 'lg' })}>
+										<ShieldIcon classList={{ [`text-accent`]: labels().length > 0 }} />
+									</button>
+								</ContentWarningAction>
+							)}
+
+							{!context.replyUri && (
+								<ThreadgateAction state={gate()} onChange={setGate}>
+									<button title={renderGateAlt(gate())} class={/* @once */ IconButton({ size: 'lg' })}>
+										{renderGateIcon(gate())}
+									</button>
+								</ThreadgateAction>
+							)}
 
 							<PostLanguageAction languages={languages()} onChange={setLanguages}>
 								<button
