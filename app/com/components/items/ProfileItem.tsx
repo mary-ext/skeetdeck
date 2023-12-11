@@ -49,7 +49,7 @@ export const ProfileItem = (props: ProfileItemProps) => {
 			</div>
 
 			<div class="flex min-w-0 grow flex-col gap-1">
-				<div class="flex items-center justify-between gap-3">
+				<div class="my-auto flex items-center justify-between gap-3">
 					<div class="min-w-0 text-sm">
 						<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold">
 							{profile().displayName.value}
@@ -64,7 +64,7 @@ export const ProfileItem = (props: ProfileItemProps) => {
 
 				{(() => {
 					const description = profile().description.value;
-					return <div class="line-clamp-3 break-words text-sm">{description}</div>;
+					return <div class="line-clamp-3 break-words text-sm empty:hidden">{description}</div>;
 				})()}
 
 				{footer?.render(profile())}
