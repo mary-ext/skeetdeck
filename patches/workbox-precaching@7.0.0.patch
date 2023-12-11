@@ -1,5 +1,5 @@
 diff --git a/PrecacheController.js b/PrecacheController.js
-index e00975e3762dc6382c39bebee04a89a651aae3d0..05a60c9a2a1388cad5b9f4833fc976a63447bb11 100644
+index e00975e3762dc6382c39bebee04a89a651aae3d0..41a57e8ee7f7e8c11be0b69e1517874ed605c00f 100644
 --- a/PrecacheController.js
 +++ b/PrecacheController.js
 @@ -150,9 +150,7 @@ class PrecacheController {
@@ -9,7 +9,7 @@ index e00975e3762dc6382c39bebee04a89a651aae3d0..05a60c9a2a1388cad5b9f4833fc976a6
 -            // Cache entries one at a time.
 -            // See https://github.com/GoogleChrome/workbox/issues/2528
 -            for (const [url, cacheKey] of this._urlsToCacheKeys) {
-+            await eachLimit(Array.from(this._urlsToCacheKeys), 4, async ([url, cacheKey]) => {
++            await eachLimit(Array.from(this._urlsToCacheKeys), 6, async ([url, cacheKey]) => {
                  const integrity = this._cacheKeysToIntegrities.get(cacheKey);
                  const cacheMode = this._urlsToCacheModes.get(url);
                  const request = new Request(url, {

@@ -15,7 +15,7 @@ patchedDependencies:
     hash: xoixqosplh7bmfbnvr4hschede
     path: patches/solid-textarea-autosize@0.0.5.patch
   workbox-precaching@7.0.0:
-    hash: 2my5lhr32uf2f2wkl7w5jvmjqu
+    hash: accbuubki4hhuii52le4znwv2y
     path: patches/workbox-precaching@7.0.0.patch
 
 importers:
@@ -5061,7 +5061,7 @@ packages:
       workbox-expiration: 7.0.0
       workbox-google-analytics: 7.0.0
       workbox-navigation-preload: 7.0.0
-      workbox-precaching: 7.0.0(patch_hash=2my5lhr32uf2f2wkl7w5jvmjqu)
+      workbox-precaching: 7.0.0(patch_hash=accbuubki4hhuii52le4znwv2y)
       workbox-range-requests: 7.0.0
       workbox-recipes: 7.0.0
       workbox-routing: 7.0.0
@@ -5106,7 +5106,7 @@ packages:
       workbox-core: 7.0.0
     dev: true
 
-  /workbox-precaching@7.0.0(patch_hash=2my5lhr32uf2f2wkl7w5jvmjqu):
+  /workbox-precaching@7.0.0(patch_hash=accbuubki4hhuii52le4znwv2y):
     resolution: {integrity: sha512-EC0vol623LJqTJo1mkhD9DZmMP604vHqni3EohhQVwhJlTgyKyOkMrZNy5/QHfOby+39xqC01gv4LjOm4HSfnA==}
     dependencies:
       workbox-core: 7.0.0
@@ -5127,7 +5127,7 @@ packages:
       workbox-cacheable-response: 7.0.0
       workbox-core: 7.0.0
       workbox-expiration: 7.0.0
-      workbox-precaching: 7.0.0(patch_hash=2my5lhr32uf2f2wkl7w5jvmjqu)
+      workbox-precaching: 7.0.0(patch_hash=accbuubki4hhuii52le4znwv2y)
       workbox-routing: 7.0.0
       workbox-strategies: 7.0.0
     dev: true
