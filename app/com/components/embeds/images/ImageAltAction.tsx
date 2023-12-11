@@ -16,11 +16,11 @@ const ImageAltAction = (props: ImageAltActionProps) => {
 				{({ close, menuProps }) => (
 					<div
 						{...menuProps}
-						class="flex max-w-sm flex-col gap-4 overflow-hidden overflow-y-auto rounded-lg bg-background p-4 shadow-menu"
+						class="flex flex-col gap-4 overflow-hidden overflow-y-auto rounded-lg bg-background p-4 shadow-menu"
 					>
 						<h1 class="text-lg font-bold">Image description</h1>
 
-						<p class="whitespace-pre-wrap break-words text-sm">{props.alt}</p>
+						<p class="max-w-sm whitespace-pre-wrap break-words text-sm">{props.alt}</p>
 
 						<div class="flex justify-end">
 							<button onClick={close} class={/* @once */ Button({ variant: 'outline' })}>
