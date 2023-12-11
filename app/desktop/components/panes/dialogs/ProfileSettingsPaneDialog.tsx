@@ -95,15 +95,15 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 					$avatar === undefined
 						? undefined
 						: $avatar instanceof Blob
-						  ? await uploadBlob<any>(uid, $avatar)
-						  : prev?.avatar;
+							? await uploadBlob<any>(uid, $avatar)
+							: prev?.avatar;
 
 				const nextBanner =
 					$banner === undefined
 						? undefined
 						: $banner instanceof Blob
-						  ? await uploadBlob<any>(uid, $banner)
-						  : prev?.banner;
+							? await uploadBlob<any>(uid, $banner)
+							: prev?.banner;
 
 				const nextLabels: UnionOf<'com.atproto.label.defs#selfLabels'> | undefined =
 					$labels.length > 0

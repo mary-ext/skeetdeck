@@ -84,8 +84,8 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 					$avatar === undefined
 						? undefined
 						: $avatar instanceof Blob
-						  ? await uploadBlob(uid, $avatar)
-						  : prev.avatar;
+							? await uploadBlob(uid, $avatar)
+							: prev.avatar;
 
 				prev.name = $name;
 				prev.description = $description;

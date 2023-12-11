@@ -25,10 +25,10 @@ export type ResponseOf<K extends keyof Queries | keyof Procedures> = K extends k
 		? Queries[K]['response']
 		: unknown
 	: K extends keyof Procedures
-	  ? Procedures[K] extends { response: any }
+		? Procedures[K] extends { response: any }
 			? Procedures[K]['response']
 			: unknown
-	  : never;
+		: never;
 
 export type RefOf<K extends keyof Objects> = Objects[K];
 export type UnionOf<K extends keyof Objects> = Objects[K] & { $type: K };

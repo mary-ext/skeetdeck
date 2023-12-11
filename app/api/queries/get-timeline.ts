@@ -307,8 +307,8 @@ const fetchPage = async (
 						params.tab === 'media'
 							? 'posts_with_media'
 							: params.tab === 'replies'
-							  ? 'posts_with_replies'
-							  : 'posts_no_replies',
+								? 'posts_with_replies'
+								: 'posts_no_replies',
 				},
 			});
 
