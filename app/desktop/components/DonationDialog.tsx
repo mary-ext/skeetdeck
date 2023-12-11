@@ -31,25 +31,20 @@ const DonationDialog = () => {
 						/* @once */ DialogBody({ padded: false, scrollable: true, class: 'flex flex-col gap-4 p-4' })
 					}
 				>
-					<div class="flex min-w-0 items-center gap-4">
-						<img src="https://github.com/mary-ext.png" class="h-16 w-16 shrink-0 rounded-full bg-muted-fg" />
-
-						<div class="text-sm leading-6">
-							Hey! I'm Mary, I develop {brandName} on my free time and while I'm happy to work on it for
-							people to keep enjoying the app, unfortunately it doesn't really benefit me financially.
-						</div>
-					</div>
-
 					<p class="text-sm leading-6">
-						I'm sorry that I can't offer any direct donation links here, as a transfem living in hiding,
-						offering PayPal, Patreon, Ko-fi, Liberapay or any other services like it is simply not a choice
-						for me out of concerns for my personal safety. It's a bit unfortunate that cryptocurrencies gets a
-						bad rep due to the many grifts surrounding it, but at the same time it's the only option that I
-						can provide due to the anonymity guarantee that some currencies has.
+						Sorry, I can't offer any direct donation links via PayPal, Patreon, Ko-fi, Liberapay or any other
+						services like it. Living as a transfem in hiding means that I can't do it without potentially
+						exposing my identity.
 					</p>
 
 					<p class="text-sm leading-6">
-						If you have any ideas on how I could solve this dilemma, feel free to reach out to me via Bluesky{' '}
+						So, cryptocurrency it is, it's unfortunate that it's gotten a bad rep due to the grifts
+						surrounding it, but it's the only form of donation I could accept. It's fine if you don't donate
+						too, you don't need to feel obligated. I am not in a dire situation.
+					</p>
+
+					<p class="text-sm leading-6">
+						If you have any ideas on how I could solve this issue, feel free to reach out to me via Bluesky{' '}
 						<span class="font-bold">@mary.my.id</span>, but otherwise I'll be providing my addresses below:
 					</p>
 
