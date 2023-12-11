@@ -366,7 +366,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 			{matchedCompletion() && (
 				<ul
 					ref={setFloating}
-					class="absolute z-40 w-full max-w-sm overflow-auto rounded-md border border-divider bg-background shadow-lg sm:w-max"
+					class="absolute z-40 w-full max-w-sm overflow-auto rounded-md border border-divider bg-background shadow-lg shadow-background sm:w-max"
 					style={{
 						'max-width': 'calc(100% - 12px)',
 						'min-width': `180px`,
