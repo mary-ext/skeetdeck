@@ -45,6 +45,29 @@ const TagsInput = (props: TagsInputProps) => {
 
 	const onChange = props.onChange;
 
+	const moveFocus = (target: HTMLElement, action: MoveAction) => {
+		let sibling: HTMLButtonElement | HTMLInputElement | null;
+
+		if (action === MoveAction.LEFT) {
+			sibling = target.previousSibling as any;
+		} else if (action === MoveAction.RIGHT) {
+			sibling = target.nextSibling as any;
+		} else if (action === MoveAction.ANYWHERE) {
+			sibling = (target.previousSibling || target.nextSibling) as any;
+		} else {
+			assert(false);
+		}
+
+		if (sibling) {
+			if (sibling instanceof HTMLInputElement && sibling.classList.contains('hidden')) {
+				return;
+			}
+
+			sibling.focus();
+			target.tabIndex = -1;
+		}
+	};
+
 	return [
 		() => {
 			if (focused()) {
@@ -69,34 +92,11 @@ const TagsInput = (props: TagsInputProps) => {
 				{(tag, index) => {
 					let target: HTMLButtonElement;
 
-					const moveFocus = (action: MoveAction) => {
-						let sibling: HTMLButtonElement | HTMLInputElement | null;
-
-						if (action === MoveAction.LEFT) {
-							sibling = target.previousSibling as any;
-						} else if (action === MoveAction.RIGHT) {
-							sibling = target.nextSibling as any;
-						} else if (action === MoveAction.ANYWHERE) {
-							sibling = (target.previousSibling || target.nextSibling) as any;
-						} else {
-							assert(false);
-						}
-
-						if (sibling) {
-							if (sibling instanceof HTMLInputElement && sibling.classList.contains('hidden')) {
-								return;
-							}
-
-							sibling.focus();
-							target.tabIndex = -1;
-						}
-					};
-
 					const removeSelf = () => {
 						const clone = props.tags.slice();
 						clone.splice(index(), 1);
 
-						moveFocus(MoveAction.ANYWHERE);
+						moveFocus(target, MoveAction.ANYWHERE);
 						onChange(clone);
 					};
 
@@ -109,10 +109,10 @@ const TagsInput = (props: TagsInputProps) => {
 
 						if (key === 'ArrowLeft') {
 							ev.preventDefault();
-							moveFocus(MoveAction.LEFT);
+							moveFocus(target, MoveAction.LEFT);
 						} else if (key === 'ArrowRight') {
 							ev.preventDefault();
-							moveFocus(MoveAction.RIGHT);
+							moveFocus(target, MoveAction.RIGHT);
 						} else if (key === 'Enter' || key === 'Backspace') {
 							ev.preventDefault();
 							removeSelf();
@@ -191,26 +191,15 @@ const TagsInput = (props: TagsInputProps) => {
 							onChange(props.tags.concat(trimmed));
 
 							if (limit !== undefined && tags.length >= limit - 1) {
-								const sibling = target.previousSibling as HTMLButtonElement | null;
-
-								if (sibling) {
-									sibling.focus();
-									target.tabIndex = -1;
-								}
+								moveFocus(target, MoveAction.LEFT);
 							}
 						}
 					} else if (key === 'ArrowLeft') {
 						const isStart = target.selectionStart === 0 && target.selectionStart === target.selectionEnd;
 
 						if (isStart) {
-							const sibling = target.previousSibling as HTMLButtonElement | null;
-
 							ev.preventDefault();
-
-							if (sibling) {
-								sibling.focus();
-								target.tabIndex = -1;
-							}
+							moveFocus(target, MoveAction.LEFT);
 						}
 					} else if (key === 'Backspace') {
 						const isStart = target.selectionStart === 0 && target.selectionStart === target.selectionEnd;
