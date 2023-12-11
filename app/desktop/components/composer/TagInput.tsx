@@ -1,9 +1,11 @@
-import { For, createSignal } from 'solid-js';
+import { type JSX, For, createSignal } from 'solid-js';
 
 import { autoUpdate, offset } from '@floating-ui/dom';
 import { useFloating } from 'solid-floating-ui';
 
 import { graphemeLen } from '~/api/richtext/intl.ts';
+
+import { assert } from '~/utils/misc.ts';
 
 import { Interactive } from '~/com/primitives/interactive.ts';
 
@@ -16,6 +18,12 @@ export interface TagsInputProps {
 	tags: string[];
 	limit?: number;
 	onChange: (next: string[]) => void;
+}
+
+const enum MoveAction {
+	LEFT,
+	RIGHT,
+	ANYWHERE,
 }
 
 const tagBtn = Interactive({
@@ -37,86 +45,100 @@ const TagsInput = (props: TagsInputProps) => {
 
 	const onChange = props.onChange;
 
-	return (
-		<div ref={setReference} class="flex flex-wrap gap-1.5 text-sm">
-			{(() => {
-				if (focused()) {
-					return (
-						<div
-							ref={setFloating}
-							class="rounded-md border border-divider px-2 py-1 text-de shadow-md shadow-background"
-							style={{
-								position: position.strategy,
-								top: `${position.y ?? 0}px`,
-								left: `${position.x ?? 0}px`,
-							}}
-						>
-							Press Enter to save your tag
-						</div>
-					);
-				}
-			})()}
-
-			<For each={props.tags}>
-				{(tag, index) => (
-					<button
-						tabIndex={-1}
-						onFocus={(ev) => {
-							const target = ev.currentTarget as HTMLButtonElement | HTMLInputElement;
-							target.tabIndex = 0;
+	return [
+		() => {
+			if (focused()) {
+				return (
+					<div
+						ref={setFloating}
+						class="rounded-md border border-divider px-2 py-1 text-de shadow-md shadow-background"
+						style={{
+							position: position.strategy,
+							top: `${position.y ?? 0}px`,
+							left: `${position.x ?? 0}px`,
 						}}
-						onKeyDown={(ev) => {
-							const key = ev.key;
-							const target = ev.currentTarget as HTMLButtonElement;
-
-							if (key === 'ArrowLeft') {
-								const sibling = target.previousSibling as HTMLButtonElement | null;
-
-								ev.preventDefault();
-
-								if (sibling) {
-									sibling.focus();
-									target.tabIndex = -1;
-								}
-							} else if (key === 'ArrowRight') {
-								const sibling = target.nextSibling as HTMLButtonElement | HTMLInputElement | null;
-
-								ev.preventDefault();
-
-								if (sibling) {
-									if (sibling instanceof HTMLInputElement && sibling.classList.contains('hidden')) {
-										return;
-									}
-
-									sibling.focus();
-									target.tabIndex = -1;
-								}
-							} else if (key === 'Enter' || key === 'Backspace') {
-								const sibling = (target.previousSibling || target.nextSibling) as HTMLElement | null;
-
-								const clone = props.tags.slice();
-								clone.splice(index(), 1);
-
-								ev.preventDefault();
-
-								if (sibling) {
-									sibling.focus();
-									target.tabIndex = -1;
-								}
-
-								onChange(clone);
-							}
-						}}
-						class={tagBtn}
 					>
-						<PoundIcon class="group-hover:hidden group-focus-visible:hidden" />
-						<CloseIcon class="hidden group-hover:block group-focus-visible:block" />
+						Press Enter to save your tag
+					</div>
+				);
+			}
+		},
 
-						<span tabIndex={-1} class="overflow-hidden text-ellipsis whitespace-nowrap">
-							{tag}
-						</span>
-					</button>
-				)}
+		<div ref={setReference} class="flex flex-wrap gap-1.5 text-sm">
+			<For each={props.tags}>
+				{(tag, index) => {
+					let target: HTMLButtonElement;
+
+					const moveFocus = (action: MoveAction) => {
+						let sibling: HTMLButtonElement | HTMLInputElement | null;
+
+						if (action === MoveAction.LEFT) {
+							sibling = target.previousSibling as any;
+						} else if (action === MoveAction.RIGHT) {
+							sibling = target.nextSibling as any;
+						} else if (action === MoveAction.ANYWHERE) {
+							sibling = (target.previousSibling || target.nextSibling) as any;
+						} else {
+							assert(false);
+						}
+
+						if (sibling) {
+							if (sibling instanceof HTMLInputElement && sibling.classList.contains('hidden')) {
+								return;
+							}
+
+							sibling.focus();
+							target.tabIndex = -1;
+						}
+					};
+
+					const removeSelf = () => {
+						const clone = props.tags.slice();
+						clone.splice(index(), 1);
+
+						moveFocus(MoveAction.ANYWHERE);
+						onChange(clone);
+					};
+
+					const handleFocus = () => {
+						target.tabIndex = 0;
+					};
+
+					const handleKeydown = (ev: KeyboardEvent) => {
+						const key = ev.key;
+
+						if (key === 'ArrowLeft') {
+							ev.preventDefault();
+							moveFocus(MoveAction.LEFT);
+						} else if (key === 'ArrowRight') {
+							ev.preventDefault();
+							moveFocus(MoveAction.RIGHT);
+						} else if (key === 'Enter' || key === 'Backspace') {
+							ev.preventDefault();
+							removeSelf();
+						}
+					};
+
+					return (
+						<button
+							ref={(node) => {
+								target = node;
+							}}
+							tabIndex={-1}
+							onFocus={handleFocus}
+							onClick={removeSelf}
+							onKeyDown={handleKeydown}
+							class={tagBtn}
+						>
+							<PoundIcon class="group-hover:hidden group-focus-visible:hidden" />
+							<CloseIcon class="hidden group-hover:block group-focus-visible:block" />
+
+							<span tabIndex={-1} class="overflow-hidden text-ellipsis whitespace-nowrap">
+								{tag}
+							</span>
+						</button>
+					);
+				}}
 			</For>
 
 			<input
@@ -199,8 +221,8 @@ const TagsInput = (props: TagsInputProps) => {
 					}
 				}}
 			/>
-		</div>
-	);
+		</div>,
+	] as unknown as JSX.Element;
 };
 
 export default TagsInput;
