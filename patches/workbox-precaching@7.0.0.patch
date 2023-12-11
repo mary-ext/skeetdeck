@@ -1,0 +1,89 @@
+diff --git a/PrecacheController.js b/PrecacheController.js
+index e00975e3762dc6382c39bebee04a89a651aae3d0..7b2757cc83e9eea6937ebeb2fdd8d913ccc19974 100644
+--- a/PrecacheController.js
++++ b/PrecacheController.js
+@@ -150,9 +150,7 @@ class PrecacheController {
+         return waitUntil(event, async () => {
+             const installReportPlugin = new PrecacheInstallReportPlugin();
+             this.strategy.plugins.push(installReportPlugin);
+-            // Cache entries one at a time.
+-            // See https://github.com/GoogleChrome/workbox/issues/2528
+-            for (const [url, cacheKey] of this._urlsToCacheKeys) {
++            await eachLimit(this._urlsToCacheKeys, 4, async ([url, cacheKey]) => {
+                 const integrity = this._cacheKeysToIntegrities.get(cacheKey);
+                 const cacheMode = this._urlsToCacheModes.get(url);
+                 const request = new Request(url, {
+@@ -165,7 +163,7 @@ class PrecacheController {
+                     request,
+                     event,
+                 }));
+-            }
++            });
+             const { updatedURLs, notUpdatedURLs } = installReportPlugin;
+             if (process.env.NODE_ENV !== 'production') {
+                 printInstallDetails(updatedURLs, notUpdatedURLs);
+@@ -290,3 +288,64 @@ class PrecacheController {
+     }
+ }
+ export { PrecacheController };
++
++const eachLimit = (values, limit, iterator) => {
++    return new Promise((res, rej) => {
++        let active = 0;
++        let current = 0;
++
++        let fulfilled = false;
++
++        const resolve = () => {
++            if (fulfilled || active > 0) {
++                return;
++            }
++
++            fulfilled = true;
++            res();
++        };
++
++        const reject = (err) => {
++            if (fulfilled) {
++                return;
++            }
++
++            rej(err);
++        };
++
++        const run = () => {
++            const c = current++;
++
++            if (fulfilled) {
++                return;
++            }
++            if (c >= values.length) {
++                return resolve();
++            }
++
++            const value = values[c];
++
++            active++;
++
++            try {
++                const ret = iterator(value, c);
++
++                if (ret && 'then' in ret) {
++                    ret.then(() => {
++                        active--;
++                        run();
++                    }, rej);
++                } else {
++                    active--;
++                    run();
++                }
++            } catch (err) {
++                reject(err);
++            }
++        };
++
++        for (let i = 0; i < limit; i++) {
++            run();
++        }
++    });
++};
