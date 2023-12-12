@@ -962,7 +962,7 @@ const ComposerPane = () => {
 										<button
 											title="Add image description"
 											onClick={() => {
-												openModal(() => <ImageAltDialog image={image} />);
+												openModal(() => <ImageAltDialog image={image} />, { disableBackdropClose: true });
 											}}
 											class="absolute bottom-0 left-0 m-1 flex h-5 items-center rounded bg-black/70 px-1 text-xs font-medium text-white"
 										>
