@@ -156,21 +156,3 @@ export const Link = (props: LinkingProps): JSX.Element => {
 	// @ts-expect-error
 	return () => linking.render(props);
 };
-
-export interface DummyLinkingProviderProps {
-	children: JSX.Element;
-}
-
-export const DummyLinkingProvider = (props: DummyLinkingProviderProps) => {
-	const linkContext: LinkingContextObject = {
-		navigate: () => {},
-		render(props) {
-			const to = props.to;
-
-			// @ts-expect-error
-			return <button {...props} to={null} disabled />;
-		},
-	};
-
-	return <LinkingContext.Provider value={linkContext}>{props.children}</LinkingContext.Provider>;
-};
