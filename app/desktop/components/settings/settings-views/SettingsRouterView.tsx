@@ -12,6 +12,7 @@ import {
 	VIEW_LABEL_CONFIG,
 	VIEW_LANGAUGE,
 	VIEW_SUBSCRIBED_LABELERS,
+	VIEW_TEMPORARY_MUTES,
 	useViewRouter,
 } from './_router.tsx';
 
@@ -24,6 +25,7 @@ const LanguageView = lazy(() => import('./LanguageView.tsx'));
 
 const LabelConfigView = lazy(() => import('./content-filters/LabelConfigView.tsx'));
 const SubscribedLabelersView = lazy(() => import('./content-filters/SubscribedLabelersView.tsx'));
+const TemporaryMutesView = lazy(() => import('./content-filters/TemporaryMutesView.tsx'));
 
 const KeywordFilterFormView = lazy(() => import('./keyword-filters/KeywordFilterFormView.tsx'));
 
@@ -39,6 +41,7 @@ const views: Record<ViewType, Component> = {
 
 	[VIEW_LABEL_CONFIG]: LabelConfigView,
 	[VIEW_SUBSCRIBED_LABELERS]: SubscribedLabelersView,
+	[VIEW_TEMPORARY_MUTES]: TemporaryMutesView,
 
 	[VIEW_KEYWORD_FILTER_FORM]: KeywordFilterFormView,
 

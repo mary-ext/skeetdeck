@@ -1,3 +1,5 @@
+import { multiagent } from '~/api/globals/agent.ts';
+
 import { Interactive } from '~/com/primitives/interactive.ts';
 
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
@@ -6,11 +8,12 @@ import {
 	VIEW_CONTENT_FILTERS,
 	VIEW_LABEL_CONFIG,
 	VIEW_SUBSCRIBED_LABELERS,
+	VIEW_TEMPORARY_MUTES,
 	useViewRouter,
 } from './_router.tsx';
 
 const selectItem = Interactive({
-	class: `flex items-center justify-between gap-4 px-4 py-3 text-left text-sm`,
+	class: `flex items-center justify-between gap-4 px-4 py-3 text-left text-sm disabled:opacity-50`,
 });
 
 const ContentFiltersView = () => {
@@ -39,19 +42,21 @@ const ContentFiltersView = () => {
 					<ChevronRightIcon class="text-xl text-muted-fg" />
 				</button> */}
 
-				{/* <hr class="mx-4 mt-1 border-divider" />
+				<hr class="mx-4 mt-1 border-divider" />
 
 				<p class="p-4 text-base font-bold leading-5">User filters</p>
 
-				<button onClick={() => router.move({ type: VIEW_CONTENT_FILTERS })} class={selectItem}>
-					<span>Temporarily muted users</span>
-					<ChevronRightIcon class="text-xl text-muted-fg" />
-				</button>
+				<fieldset disabled={!multiagent.active} class="contents">
+					<button onClick={() => router.move({ type: VIEW_TEMPORARY_MUTES })} class={selectItem}>
+						<span>Temporarily muted users</span>
+						<ChevronRightIcon class="text-xl text-muted-fg" />
+					</button>
 
-				<button onClick={() => router.move({ type: VIEW_CONTENT_FILTERS })} class={selectItem}>
-					<span>Hidden reposters</span>
-					<ChevronRightIcon class="text-xl text-muted-fg" />
-				</button> */}
+					<button onClick={() => router.move({ type: VIEW_CONTENT_FILTERS })} class={selectItem}>
+						<span>Hidden reposters</span>
+						<ChevronRightIcon class="text-xl text-muted-fg" />
+					</button>
+				</fieldset>
 			</div>
 		</div>
 	);
