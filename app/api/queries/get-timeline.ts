@@ -153,7 +153,7 @@ export const getTimeline = async (
 			createDuplicatePostFilter(items),
 			createInvalidReplyFilter(),
 			createLabelPostFilter(timelineOpts?.moderation),
-			createTempMutePostFilter(timelineOpts?.filters),
+			createTempMutePostFilter(uid, timelineOpts?.filters),
 		]);
 	} else if (type === 'feed' || type === 'list') {
 		sliceFilter = createFeedSliceFilter();
@@ -161,7 +161,7 @@ export const getTimeline = async (
 			createDuplicatePostFilter(items),
 			createLanguagePostFilter(timelineOpts?.language),
 			createLabelPostFilter(timelineOpts?.moderation),
-			createTempMutePostFilter(timelineOpts?.filters),
+			createTempMutePostFilter(uid, timelineOpts?.filters),
 		]);
 	} else if (type === 'profile') {
 		postFilter = createLabelPostFilter(timelineOpts?.moderation);
@@ -485,7 +485,7 @@ const createHiddenRepostFilter = (prefs?: FilterPreferences): PostFilter | undef
 	};
 };
 
-const createTempMutePostFilter = (prefs?: FilterPreferences): PostFilter | undefined => {
+const createTempMutePostFilter = (uid: DID, prefs?: FilterPreferences): PostFilter | undefined => {
 	if (!prefs) {
 		return;
 	}
@@ -514,16 +514,16 @@ const createTempMutePostFilter = (prefs?: FilterPreferences): PostFilter | undef
 		const reason = item.reason;
 
 		if (reason) {
-			const byDid = reason.by.did;
+			const did = reason.by.did;
 
-			if (mutes![byDid] && now < mutes![byDid]!) {
+			if (did !== uid && mutes![did] && now < mutes![did]!) {
 				return false;
 			}
 		}
 
 		const did = item.post.author.did;
 
-		if (mutes![did] && now < mutes![did]!) {
+		if (did !== uid && mutes![did] && now < mutes![did]!) {
 			return false;
 		}
 
