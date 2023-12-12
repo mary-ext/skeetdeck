@@ -1,18 +1,24 @@
 import { createRadioModel } from '~/utils/input.ts';
 import { getUniqueId } from '~/utils/misc.ts';
 
+import { PaneSize } from '~/desktop/globals/panes.ts';
 import { preferences } from '~/desktop/globals/settings.ts';
 
 import Radio from '~/com/components/inputs/Radio.tsx';
 
 const AppearanceView = () => {
-	const themeId = getUniqueId();
-
 	const ui = preferences.ui;
 
+	const themeId = getUniqueId();
 	const themeModel = createRadioModel(
 		() => ui.theme,
 		(next) => (ui.theme = next),
+	);
+
+	const columnSizeId = getUniqueId();
+	const paneSizeModel = createRadioModel(
+		() => ui.defaultPaneSize,
+		(next) => (ui.defaultPaneSize = next),
 	);
 
 	return (
@@ -35,6 +41,23 @@ const AppearanceView = () => {
 					<label class="flex items-center justify-between gap-2">
 						<span>Dark</span>
 						<Radio ref={themeModel('dark')} name={themeId} />
+					</label>
+				</div>
+
+				<div class="flex flex-col gap-3 px-4 py-3 text-sm">
+					<p class="font-medium leading-6 text-primary">Default column size</p>
+
+					<label class="flex items-center justify-between gap-2">
+						<span>Small</span>
+						<Radio ref={paneSizeModel(PaneSize.SMALL)} name={columnSizeId} />
+					</label>
+					<label class="flex items-center justify-between gap-2">
+						<span>Medium</span>
+						<Radio ref={paneSizeModel(PaneSize.MEDIUM)} name={columnSizeId} />
+					</label>
+					<label class="flex items-center justify-between gap-2">
+						<span>Large</span>
+						<Radio ref={paneSizeModel(PaneSize.LARGE)} name={columnSizeId} />
 					</label>
 				</div>
 			</div>
