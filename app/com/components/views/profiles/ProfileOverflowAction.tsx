@@ -68,7 +68,7 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								<span>Open in Bluesky app</span>
 							</a>
 
-							{!isDesktop && !isSelf && (
+							{!isSelf && (
 								<button
 									onClick={() => {
 										const array = filters.hideReposts;

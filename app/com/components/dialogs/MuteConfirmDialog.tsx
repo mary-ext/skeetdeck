@@ -167,29 +167,27 @@ const renderMuteConfirmDialog = (profile: SignalizedProfile, filters: FilterPref
 							your posts and follow you.
 						</p>
 
-						{!isDesktop && (
-							<label>
-								<span class="mr-4 text-sm">Duration:</span>
-								<select
-									value={duration()}
-									onChange={(el) => setDuration(el.currentTarget.value)}
-									class={/* @once */ Select()}
-								>
-									<option value={-1}>Indefinite</option>
-									<option value={1 * 60 * 60 * 1_000}>1 hour</option>
-									<option value={6 * 60 * 60 * 1_000}>6 hour</option>
-									<option value={12 * 60 * 60 * 1_000}>12 hour</option>
-									<option value={1 * 24 * 60 * 60 * 1_000}>1 day</option>
-									<option value={3 * 24 * 60 * 60 * 1_000}>3 days</option>
-									<option value={7 * 24 * 60 * 60 * 1_000}>7 days</option>
-									<option value={14 * 24 * 60 * 60 * 1_000}>14 days</option>
-								</select>
-							</label>
-						)}
+						<label>
+							<span class="mr-4 text-sm">Duration:</span>
+							<select
+								value={duration()}
+								onChange={(el) => setDuration(el.currentTarget.value)}
+								class={/* @once */ Select()}
+							>
+								<option value={-1}>Indefinite</option>
+								<option value={1 * 60 * 60 * 1_000}>1 hour</option>
+								<option value={6 * 60 * 60 * 1_000}>6 hour</option>
+								<option value={12 * 60 * 60 * 1_000}>12 hour</option>
+								<option value={1 * 24 * 60 * 60 * 1_000}>1 day</option>
+								<option value={3 * 24 * 60 * 60 * 1_000}>3 days</option>
+								<option value={7 * 24 * 60 * 60 * 1_000}>7 days</option>
+								<option value={14 * 24 * 60 * 60 * 1_000}>14 days</option>
+							</select>
+						</label>
 
-						{!isDesktop && duration() !== '-1' ? (
+						{duration() !== '-1' ? (
 							<p class="text-sm text-muted-fg">
-								This mute action will not be synced to any other clients or devices.
+								This mute action will not be synced to other clients and devices.
 							</p>
 						) : (
 							<TakingActionNotice uid={/* @once */ profile.uid} />
