@@ -4,6 +4,8 @@ import { getRecordId } from '~/api/utils/misc.ts';
 
 import type { SignalizedList } from '~/api/stores/lists.ts';
 
+import { Interactive } from '../../primitives/interactive.ts';
+
 import { LINK_LIST, Link } from '../Link.tsx';
 
 import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';
@@ -12,12 +14,14 @@ export interface ListItemProps {
 	list: SignalizedList;
 }
 
-const ListItemContent = (props: ListItemProps, interactive?: boolean) => {
+const listItemInteractive = Interactive({ variant: 'muted', class: 'w-full' });
+
+const ListItemContent = (props: ListItemProps) => {
 	return (() => {
 		const list = props.list;
 
 		return (
-			<div class="flex gap-3 px-4 py-3 text-left" classList={{ [`hover:bg-secondary/10`]: interactive }}>
+			<div class="flex gap-3 px-4 py-3 text-left">
 				<img src={list.avatar.value || DefaultListAvatar} class="h-12 w-12 shrink-0 rounded-md" />
 
 				<div class="flex min-w-0 grow flex-col gap-1">
@@ -40,8 +44,11 @@ const ListItem = (props: ListItemProps) => {
 		const list = props.list;
 
 		return (
-			<Link to={{ type: LINK_LIST, actor: list.creator.did, rkey: getRecordId(list.uri) }} class="contents">
-				{/* @once */ ListItemContent(props, true)}
+			<Link
+				to={{ type: LINK_LIST, actor: list.creator.did, rkey: getRecordId(list.uri) }}
+				class={listItemInteractive}
+			>
+				{/* @once */ ListItemContent(props)}
 			</Link>
 		);
 	}) as unknown as JSX.Element;

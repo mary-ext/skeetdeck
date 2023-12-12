@@ -5,13 +5,14 @@ import { getRecordId } from '~/api/utils/misc.ts';
 
 import type { ModerationDecision } from '~/api/moderation/action.ts';
 
-import PostQuoteWarning from '../moderation/PostQuoteWarning.tsx';
+import { Interactive } from '../../primitives/interactive.ts';
 
 import { LINK_POST, Link } from '../Link.tsx';
 import TimeAgo from '../TimeAgo.tsx';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
+import PostQuoteWarning from '../moderation/PostQuoteWarning.tsx';
 import EmbedImage from './EmbedImage.tsx';
 
 type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
@@ -44,6 +45,8 @@ const getPostImages = (post: EmbeddedPostRecord) => {
 		}
 	}
 };
+
+const embedRecordInteractive = Interactive({ variant: 'muted', class: 'w-full' });
 
 export const EmbedRecordContent = (props: EmbedRecordContentProps, interactive?: boolean) => {
 	return (() => {
@@ -114,7 +117,10 @@ const EmbedRecord = (props: EmbedRecordProps) => {
 		return (
 			<PostQuoteWarning quote={post}>
 				{(mod) => (
-					<Link to={{ type: LINK_POST, actor: author.did, rkey: getRecordId(post.uri) }} class="contents">
+					<Link
+						to={{ type: LINK_POST, actor: author.did, rkey: getRecordId(post.uri) }}
+						class={embedRecordInteractive}
+					>
 						{/* @once */ EmbedRecordContent({ ...props, mod: mod }, true)}
 					</Link>
 				)}

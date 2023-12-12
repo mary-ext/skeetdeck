@@ -4,6 +4,8 @@ import { getRecordId } from '~/api/utils/misc.ts';
 
 import type { SignalizedFeed } from '~/api/stores/feeds.ts';
 
+import { Interactive } from '../../primitives/interactive.ts';
+
 import { LINK_FEED, Link } from '../Link.tsx';
 
 import DefaultFeedAvatar from '../../assets/default-feed-avatar.svg?url';
@@ -11,6 +13,8 @@ import DefaultFeedAvatar from '../../assets/default-feed-avatar.svg?url';
 export interface FeedItemProps {
 	feed: SignalizedFeed;
 }
+
+const feedItemInteractive = Interactive({ variant: 'muted', class: 'w-full' });
 
 const FeedItemContent = (props: FeedItemProps, interactive?: boolean) => {
 	return (() => {
@@ -40,7 +44,10 @@ const FeedItem = (props: FeedItemProps) => {
 		const feed = props.feed;
 
 		return (
-			<Link to={{ type: LINK_FEED, actor: feed.creator.did, rkey: getRecordId(feed.uri) }} class="contents">
+			<Link
+				to={{ type: LINK_FEED, actor: feed.creator.did, rkey: getRecordId(feed.uri) }}
+				class={feedItemInteractive}
+			>
 				{/* @once */ FeedItemContent(props, true)}
 			</Link>
 		);

@@ -4,6 +4,8 @@ import type { UnionOf } from '~/api/atp-schema.ts';
 import { ListPurposeLabels } from '~/api/display.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
+import { Interactive } from '../../primitives/interactive.ts';
+
 import { LINK_LIST, Link } from '../Link.tsx';
 
 import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';
@@ -14,7 +16,9 @@ export interface EmbedListProps {
 	list: EmbeddedList;
 }
 
-export const EmbedListContent = (props: EmbedListProps, interactive?: boolean) => {
+const embedListInteractive = Interactive({ variant: 'muted', class: 'w-full' });
+
+export const EmbedListContent = (props: EmbedListProps) => {
 	return (() => {
 		const list = props.list;
 		const creator = list.creator;
@@ -23,10 +27,7 @@ export const EmbedListContent = (props: EmbedListProps, interactive?: boolean) =
 		const purpose = rawPurpose in ListPurposeLabels ? ListPurposeLabels[rawPurpose] : `Unknown list`;
 
 		return (
-			<div
-				class="flex flex-col gap-2 rounded-md border border-divider p-3 text-left text-sm"
-				classList={{ [`hover:bg-secondary/10`]: interactive }}
-			>
+			<div class="flex flex-col gap-2 rounded-md border border-divider p-3 text-left text-sm">
 				<div class="flex gap-3">
 					<img
 						src={/* @once */ list.avatar || DefaultListAvatar}
@@ -49,8 +50,11 @@ const EmbedList = (props: EmbedListProps) => {
 		const creator = list.creator;
 
 		return (
-			<Link to={{ type: LINK_LIST, actor: creator.did, rkey: getRecordId(list.uri) }} class="contents">
-				{/* @once */ EmbedListContent(props, true)}
+			<Link
+				to={{ type: LINK_LIST, actor: creator.did, rkey: getRecordId(list.uri) }}
+				class={embedListInteractive}
+			>
+				{/* @once */ EmbedListContent(props)}
 			</Link>
 		);
 	}) as unknown as JSX.Element;

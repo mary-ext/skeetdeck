@@ -3,6 +3,8 @@ import type { JSX } from 'solid-js';
 import type { UnionOf } from '~/api/atp-schema.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
+import { Interactive } from '../../primitives/interactive.ts';
+
 import { LINK_FEED, Link } from '../Link.tsx';
 
 import DefaultFeedAvatar from '../../assets/default-feed-avatar.svg?url';
@@ -13,16 +15,15 @@ export interface EmbedFeedProps {
 	feed: EmbeddedFeed;
 }
 
-export const EmbedFeedContent = (props: EmbedFeedProps, interactive?: boolean) => {
+const embedFeedInteractive = Interactive({ variant: 'muted', class: 'w-full' });
+
+export const EmbedFeedContent = (props: EmbedFeedProps) => {
 	return (() => {
 		const feed = props.feed;
 		const creator = feed.creator;
 
 		return (
-			<div
-				class="flex flex-col gap-2 rounded-md border border-divider p-3 text-left text-sm"
-				classList={{ [`hover:bg-secondary/10`]: interactive }}
-			>
+			<div class="flex flex-col gap-2 rounded-md border border-divider p-3 text-left text-sm">
 				<div class="flex gap-3">
 					<img
 						src={/* @once */ feed.avatar || DefaultFeedAvatar}
@@ -45,8 +46,11 @@ const EmbedFeed = (props: EmbedFeedProps) => {
 		const creator = feed.creator;
 
 		return (
-			<Link to={{ type: LINK_FEED, actor: creator.did, rkey: getRecordId(feed.uri) }} class="contents">
-				{/* @once */ EmbedFeedContent(props, true)}
+			<Link
+				to={{ type: LINK_FEED, actor: creator.did, rkey: getRecordId(feed.uri) }}
+				class={embedFeedInteractive}
+			>
+				{/* @once */ EmbedFeedContent(props)}
 			</Link>
 		);
 	}) as unknown as JSX.Element;

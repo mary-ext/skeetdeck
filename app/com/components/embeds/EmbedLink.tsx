@@ -1,6 +1,9 @@
 import type { JSX } from 'solid-js';
 
 import type { RefOf } from '~/api/atp-schema.ts';
+
+import { Interactive } from '../../primitives/interactive.ts';
+
 import BlobImage from '../BlobImage.tsx';
 
 type EmbeddedLink = RefOf<'app.bsky.embed.external#viewExternal'>;
@@ -22,15 +25,14 @@ export const getDomain = (url: string) => {
 	}
 };
 
-export const EmbedLinkContent = (props: EmbedLinkProps, interactive?: boolean) => {
+const embedLinkInteractive = Interactive({ variant: 'muted', class: 'w-full' });
+
+export const EmbedLinkContent = (props: EmbedLinkProps) => {
 	return (() => {
 		const { uri, thumb, title } = props.link;
 
 		return (
-			<div
-				class="flex overflow-hidden rounded-md border border-divider"
-				classList={{ [`hover:bg-secondary/10`]: interactive }}
-			>
+			<div class="flex overflow-hidden rounded-md border border-divider">
 				{thumb && (
 					<BlobImage
 						src={thumb}
@@ -49,8 +51,8 @@ export const EmbedLinkContent = (props: EmbedLinkProps, interactive?: boolean) =
 
 const EmbedLink = (props: EmbedLinkProps) => {
 	return (
-		<a href={props.link.uri} rel="noopener noreferrer nofollow" target="_blank" class="contents">
-			{/* @once */ EmbedLinkContent(props, true)}
+		<a href={props.link.uri} rel="noopener noreferrer nofollow" target="_blank" class={embedLinkInteractive}>
+			{/* @once */ EmbedLinkContent(props)}
 		</a>
 	);
 };
