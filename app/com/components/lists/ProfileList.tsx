@@ -33,7 +33,7 @@ const ProfileList = (props: ProfileListProps) => {
 			<div>
 				<For each={props.profiles}>
 					{(profile) => (
-						<VirtualContainer class="shrink-0" estimateHeight={112}>
+						<VirtualContainer class="shrink-0" estimateHeight={88}>
 							<ProfileItem profile={profile} aside={aside} onClick={props.onItemClick} />
 						</VirtualContainer>
 					)}
