@@ -1,7 +1,7 @@
 import { Agent } from '@externdefs/bluesky-client/agent';
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import { assert } from '~/utils/misc.ts';
+import { assert, mapDefined } from '~/utils/misc.ts';
 
 import type { DID, Records, RefOf, ResponseOf } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
@@ -31,8 +31,6 @@ import _getDid from './_did.ts';
 import { fetchPost } from './get-post.ts';
 
 const PALOMAR_SERVICE = 'https://palomar.bsky.social';
-
-type Post = RefOf<'app.bsky.feed.defs#postView'>;
 
 export interface HomeTimelineParams {
 	type: 'home';
@@ -335,16 +333,14 @@ const fetchPage = async (
 		const skeletons = data.posts;
 
 		const uid = agent.session!.did;
-		const promises = await Promise.allSettled(skeletons.map((post) => fetchPost([uid, post.uri])));
+		const results = await Promise.allSettled(skeletons.map((post) => fetchPost([uid, post.uri])));
 
 		signal?.throwIfAborted();
 
 		return {
 			cid: skeletons.length > 0 ? skeletons[0].uri : undefined,
 			cursor: data.cursor,
-			feed: promises
-				.filter((x): x is PromiseFulfilledResult<Post> => x.status === 'fulfilled')
-				.map((x) => ({ post: x.value })),
+			feed: mapDefined(results, (x) => (x.status === 'fulfilled' ? { post: x.value } : undefined)),
 		};
 	} else {
 		assert(false, `Unknown type: ${type}`);
