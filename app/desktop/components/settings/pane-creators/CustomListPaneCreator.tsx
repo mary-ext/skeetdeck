@@ -29,7 +29,7 @@ const CustomListPaneCreator = (props: PaneCreatorProps) => {
 	const [filter, setFilter] = createSignal<DID>(props.uid);
 
 	const lists = createInfiniteQuery(() => ({
-		queryKey: ['getProfileLists', props.uid, filter(), 30] as const,
+		queryKey: ['getProfileCurationLists', props.uid, filter(), 30] as const,
 		queryFn: async (ctx) => {
 			const [, uid, actor, limit] = ctx.queryKey;
 
