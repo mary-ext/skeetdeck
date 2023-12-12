@@ -1,9 +1,10 @@
-import { type JSX, createSignal } from 'solid-js';
+import { type JSX, createSignal, createMemo } from 'solid-js';
 
 import { type InfiniteData, useQueryClient } from '@pkg/solid-query';
 
 import type { RefOf } from '~/api/atp-schema.ts';
 import { ListPurposeLabels } from '~/api/display.ts';
+import { multiagent } from '~/api/globals/agent.ts';
 import type { FilterPreferences } from '~/api/types.ts';
 
 import { updateProfileMute } from '~/api/mutations/mute-profile.ts';
@@ -95,6 +96,10 @@ const renderMuteConfirmDialog = (profile: SignalizedProfile, filters: FilterPref
 
 	const [duration, setDuration] = createSignal('-1');
 
+	const isAccount = createMemo(() => {
+		return multiagent.accounts.some((account) => account.did === profile.did);
+	});
+
 	const handleConfirm = () => {
 		const uid = profile.uid;
 		const did = profile.did;
@@ -165,23 +170,29 @@ const renderMuteConfirmDialog = (profile: SignalizedProfile, filters: FilterPref
 							your posts and follow you.
 						</p>
 
-						<label>
-							<span class="mr-4 text-sm">Duration:</span>
-							<select
-								value={duration()}
-								onChange={(el) => setDuration(el.currentTarget.value)}
-								class={/* @once */ Select()}
-							>
-								<option value={-1}>Indefinite</option>
-								<option value={1 * 60 * 60 * 1_000}>1 hour</option>
-								<option value={6 * 60 * 60 * 1_000}>6 hour</option>
-								<option value={12 * 60 * 60 * 1_000}>12 hour</option>
-								<option value={1 * 24 * 60 * 60 * 1_000}>1 day</option>
-								<option value={3 * 24 * 60 * 60 * 1_000}>3 days</option>
-								<option value={7 * 24 * 60 * 60 * 1_000}>7 days</option>
-								<option value={14 * 24 * 60 * 60 * 1_000}>14 days</option>
-							</select>
-						</label>
+						{(() => {
+							if (!isAccount()) {
+								return (
+									<label>
+										<span class="mr-4 text-sm">Duration:</span>
+										<select
+											value={duration()}
+											onChange={(el) => setDuration(el.currentTarget.value)}
+											class={/* @once */ Select()}
+										>
+											<option value={-1}>Indefinite</option>
+											<option value={1 * 60 * 60 * 1_000}>1 hour</option>
+											<option value={6 * 60 * 60 * 1_000}>6 hour</option>
+											<option value={12 * 60 * 60 * 1_000}>12 hour</option>
+											<option value={1 * 24 * 60 * 60 * 1_000}>1 day</option>
+											<option value={3 * 24 * 60 * 60 * 1_000}>3 days</option>
+											<option value={7 * 24 * 60 * 60 * 1_000}>7 days</option>
+											<option value={14 * 24 * 60 * 60 * 1_000}>14 days</option>
+										</select>
+									</label>
+								);
+							}
+						})()}
 
 						{duration() !== '-1' ? (
 							<p class="text-sm text-muted-fg">
