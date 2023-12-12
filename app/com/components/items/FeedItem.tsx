@@ -28,7 +28,7 @@ const FeedItemContent = (props: FeedItemProps, interactive?: boolean) => {
 					<div class="my-auto min-w-0 text-sm">
 						<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold">{feed.name.value}</p>
 						<p class="overflow-hidden text-ellipsis whitespace-nowrap text-muted-fg">
-							{`by @${feed.creator.handle.value}`}
+							{`Feed by @${feed.creator.handle.value}`}
 						</p>
 					</div>
 

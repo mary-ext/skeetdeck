@@ -1,5 +1,6 @@
 import type { JSX } from 'solid-js';
 
+import { ListPurposeLabels } from '~/api/display.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
 import type { SignalizedList } from '~/api/stores/lists.ts';
@@ -20,6 +21,11 @@ const ListItemContent = (props: ListItemProps) => {
 	return (() => {
 		const list = props.list;
 
+		const purpose = () => {
+			const raw = list.purpose.value;
+			return raw in ListPurposeLabels ? ListPurposeLabels[raw] : `Unknown list`;
+		};
+
 		return (
 			<div class="flex gap-3 px-4 py-3 text-left">
 				<img src={list.avatar.value || DefaultListAvatar} class="h-12 w-12 shrink-0 rounded-md" />
@@ -28,7 +34,7 @@ const ListItemContent = (props: ListItemProps) => {
 					<div class="my-auto min-w-0 text-sm">
 						<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold">{list.name.value}</p>
 						<p class="overflow-hidden text-ellipsis whitespace-nowrap text-muted-fg">
-							{`by @${list.creator.handle.value}`}
+							{`${purpose()} by @${list.creator.handle.value}`}
 						</p>
 					</div>
 
