@@ -95,7 +95,7 @@ const ListHeader = (props: ListHeaderProps) => {
 								);
 							}
 
-							if (list.uid === list.creator.uid) {
+							if (list.uid === list.creator.did) {
 								return (
 									<button
 										onClick={() => {
