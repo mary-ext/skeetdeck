@@ -27,6 +27,7 @@ import {
 
 import type { FilterPreferences, LanguagePreferences } from '../types.ts';
 
+import _getDid from './_did.ts';
 import { fetchPost } from './get-post.ts';
 
 const PALOMAR_SERVICE = 'https://palomar.bsky.social';
@@ -165,7 +166,11 @@ export const getTimeline = async (
 	} else if (type === 'profile') {
 		postFilter = createLabelPostFilter(timelineOpts?.moderation);
 
-		if (params.tab === 'likes' || params.tab === 'media') {
+		if (params.tab === 'posts') {
+			const did = await _getDid(agent, params.actor);
+			sliceFilter = createProfileSliceFilter(did);
+			postFilter = combine([createInvalidReplyFilter(), createLabelPostFilter(timelineOpts?.moderation)]);
+		} else if (params.tab === 'likes' || params.tab === 'media') {
 			sliceFilter = null;
 		}
 	} else {
@@ -308,7 +313,7 @@ const fetchPage = async (
 							? 'posts_with_media'
 							: params.tab === 'replies'
 								? 'posts_with_replies'
-								: 'posts_no_replies',
+								: 'posts_and_author_threads',
 				},
 			});
 
@@ -571,6 +576,28 @@ const createHomeSliceFilter = (uid: DID): SliceFilter | undefined => {
 				(rAuthor.did !== uid && (!rViewer.following.peek() || rViewer.muted.peek())) ||
 				(pAuthor.did !== uid && (!pViewer.following.peek() || pViewer.muted.peek()))
 			) {
+				return yankReposts(items);
+			}
+		}
+
+		return true;
+	};
+};
+
+const createProfileSliceFilter = (did: DID): SliceFilter | undefined => {
+	return (slice) => {
+		const items = slice.items;
+		const first = items[0];
+
+		// skip any posts that are in reply to non-followed
+		if (first.reply && (!first.reason || first.reason.$type !== 'app.bsky.feed.defs#reasonRepost')) {
+			const root = first.reply.root;
+			const parent = first.reply.parent;
+
+			const rAuthor = root.author;
+			const pAuthor = parent.author;
+
+			if (rAuthor.did !== did || pAuthor.did !== did) {
 				return yankReposts(items);
 			}
 		}
