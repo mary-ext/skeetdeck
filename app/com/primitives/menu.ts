@@ -13,7 +13,7 @@ export const MenuItem = (props: MenuItemProps = {}) => {
 
 	let cn = Interactive({
 		variant,
-		class: `flex items-center gap-4 px-4 py-3 text-left text-sm disabled:opacity-50`,
+		class: `flex items-center gap-4 px-4 py-2.5 text-left text-sm disabled:opacity-50`,
 	});
 
 	if (variant === 'danger') {
