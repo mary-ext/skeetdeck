@@ -24,22 +24,24 @@ import { useComposer } from '../composer/ComposerContext.tsx';
 
 import { usePaneContext } from './PaneContext.tsx';
 
-const FeedLikedByPaneDialog = lazy(() => import('./dialogs/FeedLikedByPaneDialog.tsx'));
-const FeedPaneDialog = lazy(() => import('./dialogs/FeedPaneDialog.tsx'));
-const ListPaneDialog = lazy(() => import('./dialogs/ListPaneDialog.tsx'));
-const PostLikedByPaneDialog = lazy(() => import('./dialogs/PostLikedByPaneDialog.tsx'));
-const PostRepostedByPaneDialog = lazy(() => import('./dialogs/PostRepostedByPaneDialog.tsx'));
-const ProfileFeedsPaneDialog = lazy(() => import('./dialogs/ProfileFeedsPaneDialog.tsx'));
-const ProfileFollowersPaneDialog = lazy(() => import('./dialogs/ProfileFollowersPaneDialog.tsx'));
-const ProfileFollowsPaneDialog = lazy(() => import('./dialogs/ProfileFollowsPaneDialog.tsx'));
-const ProfileListsPaneDialog = lazy(() => import('./dialogs/ProfileListsPaneDialog.tsx'));
-const ProfilePaneDialog = lazy(() => import('./dialogs/ProfilePaneDialog.tsx'));
-const ProfileSettingsPaneDialog = lazy(() => import('./dialogs/ProfileSettingsPaneDialog.tsx'));
-const ThreadPaneDialog = lazy(() => import('./dialogs/ThreadPaneDialog.tsx'));
-
 export interface PaneLinkingContextProps {
 	children: JSX.Element;
 }
+
+const PaneDialogs = {
+	[LINK_FEED]: lazy(() => import('./dialogs/FeedPaneDialog.tsx')),
+	[LINK_FEED_LIKED_BY]: lazy(() => import('./dialogs/FeedLikedByPaneDialog.tsx')),
+	[LINK_LIST]: lazy(() => import('./dialogs/ListPaneDialog.tsx')),
+	[LINK_POST]: lazy(() => import('./dialogs/ThreadPaneDialog.tsx')),
+	[LINK_POST_LIKED_BY]: lazy(() => import('./dialogs/PostLikedByPaneDialog.tsx')),
+	[LINK_POST_REPOSTED_BY]: lazy(() => import('./dialogs/PostRepostedByPaneDialog.tsx')),
+	[LINK_PROFILE]: lazy(() => import('./dialogs/ProfilePaneDialog.tsx')),
+	[LINK_PROFILE_FEEDS]: lazy(() => import('./dialogs/ProfileFeedsPaneDialog.tsx')),
+	[LINK_PROFILE_EDIT]: lazy(() => import('./dialogs/ProfileSettingsPaneDialog.tsx')),
+	[LINK_PROFILE_FOLLOWERS]: lazy(() => import('./dialogs/ProfileFollowersPaneDialog.tsx')),
+	[LINK_PROFILE_FOLLOWS]: lazy(() => import('./dialogs/ProfileFollowsPaneDialog.tsx')),
+	[LINK_PROFILE_LISTS]: lazy(() => import('./dialogs/ProfileListsPaneDialog.tsx')),
+};
 
 export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 	const { pane, openModal } = usePaneContext();
@@ -52,52 +54,11 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 			return;
 		}
 
-		if (type === LINK_FEED) {
-			return openModal(() => <FeedPaneDialog {...to} />);
-		}
+		// @ts-expect-error
+		const PaneDialog = PaneDialogs[type];
 
-		if (type === LINK_FEED_LIKED_BY) {
-			return openModal(() => <FeedLikedByPaneDialog {...to} />);
-		}
-
-		if (type === LINK_LIST) {
-			return openModal(() => <ListPaneDialog {...to} />);
-		}
-
-		if (type === LINK_POST) {
-			return openModal(() => <ThreadPaneDialog {...to} />);
-		}
-
-		if (type === LINK_POST_LIKED_BY) {
-			return openModal(() => <PostLikedByPaneDialog {...to} />);
-		}
-
-		if (type === LINK_POST_REPOSTED_BY) {
-			return openModal(() => <PostRepostedByPaneDialog {...to} />);
-		}
-
-		if (type === LINK_PROFILE) {
-			return openModal(() => <ProfilePaneDialog {...to} />);
-		}
-
-		if (type === LINK_PROFILE_FEEDS) {
-			return openModal(() => <ProfileFeedsPaneDialog {...to} />);
-		}
-
-		if (type === LINK_PROFILE_EDIT) {
-			return openModal(() => <ProfileSettingsPaneDialog {...to} />);
-		}
-
-		if (type === LINK_PROFILE_FOLLOWERS) {
-			return openModal(() => <ProfileFollowersPaneDialog {...to} />);
-		}
-
-		if (type === LINK_PROFILE_FOLLOWS) {
-			return openModal(() => <ProfileFollowsPaneDialog {...to} />);
-		}
-
-		if (type === LINK_PROFILE_LISTS) {
-			return openModal(() => <ProfileListsPaneDialog {...to} />);
+		if (PaneDialog) {
+			return openModal(() => <PaneDialog {...to} />);
 		}
 
 		if (type === LINK_QUOTE) {
