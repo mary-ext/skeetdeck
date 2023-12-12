@@ -21,7 +21,7 @@ const PostEmbedWarning = (props: PostEmbedWarningProps) => {
 	const decision = createMemo(() => {
 		const post = props.post;
 
-		const maker = getPostModMaker(post, useSharedPreferences().moderation);
+		const maker = getPostModMaker(post, useSharedPreferences());
 		const decision = maker();
 
 		if (decision) {
