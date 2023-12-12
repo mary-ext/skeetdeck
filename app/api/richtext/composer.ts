@@ -23,18 +23,6 @@ const TRAILING_RE = /\)?[.,;]*$/;
 const MENTION_RE = /(?<=^|\s)(\\)?@([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]+))\b/g;
 const HASHTAG_RE = /(?<=^|\s)(\\)?#([^\s]+)/g;
 
-const isAscii = (str: string) => {
-	for (let idx = 0, len = str.length; idx < len; idx++) {
-		const char = str.charCodeAt(idx);
-
-		if (char > 127) {
-			return false;
-		}
-	}
-
-	return true;
-};
-
 interface PreliminaryMatch {
 	t: RichText;
 	m: RegExpExecArray;

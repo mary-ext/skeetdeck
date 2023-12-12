@@ -3,7 +3,7 @@ import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
 import { assert, mapDefined } from '~/utils/misc.ts';
 
-import type { DID, Records, RefOf, ResponseOf } from '../atp-schema.ts';
+import type { DID, Records, ResponseOf } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
 import { systemLanguages } from '../globals/platform.ts';
 

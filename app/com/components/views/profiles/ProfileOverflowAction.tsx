@@ -29,8 +29,6 @@ export interface ProfileOverflowActionProps {
 	children: JSX.Element;
 }
 
-const isDesktop = import.meta.env.VITE_MODE === 'desktop';
-
 const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 	const linking = useLinking();
 	const { filters } = useSharedPreferences();
