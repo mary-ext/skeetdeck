@@ -87,12 +87,10 @@ const renderMutedByListDialog = (profile: SignalizedProfile, list: ListView) => 
 	);
 };
 
-const isDesktop = import.meta.env.VITE_MODE === 'desktop';
-
 const renderMuteConfirmDialog = (profile: SignalizedProfile, filters: FilterPreferences) => {
 	const queryClient = useQueryClient();
 
-	const isTempMuted = !isDesktop && isProfileTempMuted(filters, profile.did);
+	const isTempMuted = isProfileTempMuted(filters, profile.did);
 	const isMuted = profile.viewer.muted.value || isTempMuted;
 
 	const [duration, setDuration] = createSignal('-1');
