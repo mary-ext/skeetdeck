@@ -158,7 +158,7 @@ const OwnedListItem = (props: OwnedListItemProps) => {
 							const member = members[j];
 
 							if ((member as SelfListMember).uri === itemUri) {
-								members.splice(j, 0);
+								members.splice(j, 1);
 							}
 						}
 					}
