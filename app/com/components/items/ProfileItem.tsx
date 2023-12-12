@@ -44,9 +44,7 @@ export const ProfileItem = (props: ProfileItemProps) => {
 			tabindex={0}
 			class="flex gap-3 px-4 py-3 hover:bg-secondary/10"
 		>
-			<div class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-muted-fg">
-				<img src={profile().avatar.value || DefaultAvatar} class="h-full w-full" />
-			</div>
+			<img src={profile().avatar.value || DefaultAvatar} class="h-12 w-12 shrink-0 rounded-full" />
 
 			<div class="flex min-w-0 grow flex-col gap-1">
 				<div class="my-auto flex items-center justify-between gap-3">
