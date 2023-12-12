@@ -62,8 +62,8 @@ const Embed = (props: EmbedProps) => {
 				const { images, link, record } = embeds();
 
 				return [
-					link && <EmbedLink link={link} interactive />,
-					images && <EmbedImage images={images} interactive />,
+					link && <EmbedLink link={link} />,
+					images && <EmbedImage images={images} />,
 					record && renderRecord(record, () => props.large),
 				];
 			})()}
