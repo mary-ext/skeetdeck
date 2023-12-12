@@ -44,10 +44,11 @@ export const offset: Middleware = {
 };
 
 export const offsetlessMiddlewares = [
-	shift({
-		padding: 16,
-	}),
 	flip({
+		padding: 16,
+		crossAxis: false,
+	}),
+	shift({
 		padding: 16,
 	}),
 	size({
