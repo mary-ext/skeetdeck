@@ -17,21 +17,18 @@ const FeedItemContent = (props: FeedItemProps, interactive?: boolean) => {
 		const feed = props.feed;
 
 		return (
-			<div
-				class="flex w-full cursor-pointer flex-col gap-3 px-4 py-3 text-left text-sm hover:bg-secondary/10"
-				classList={{ [`hover:bg-secondary/10`]: interactive }}
-			>
-				<div class="flex gap-4">
-					<img src={feed.avatar.value || DefaultFeedAvatar} class="mt-0.5 h-9 w-9 shrink rounded-md" />
+			<div class="flex gap-3 px-4 py-3 text-left" classList={{ [`hover:bg-secondary/10`]: interactive }}>
+				<img src={feed.avatar.value || DefaultFeedAvatar} class="h-12 w-12 shrink-0 rounded-md" />
 
-					<div class="min-w-0 grow">
-						<p class="overflow-hidden text-ellipsis font-bold">{feed.name.value}</p>
-						<p class="text-muted-fg">{`by ${feed.creator.handle.value}`}</p>
+				<div class="flex min-w-0 grow flex-col gap-1">
+					<div class="my-auto min-w-0 text-sm">
+						<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold">{feed.name.value}</p>
+						<p class="overflow-hidden text-ellipsis whitespace-nowrap text-muted-fg">
+							{`by @${feed.creator.handle.value}`}
+						</p>
 					</div>
-				</div>
 
-				<div class="max-w-full whitespace-pre-wrap break-words text-sm empty:hidden">
-					{feed.description.value}
+					<div class="line-clamp-3 break-words text-sm empty:hidden">{feed.description.value}</div>
 				</div>
 			</div>
 		);
@@ -44,7 +41,7 @@ const FeedItem = (props: FeedItemProps) => {
 
 		return (
 			<Link to={{ type: LINK_FEED, actor: feed.creator.did, rkey: getRecordId(feed.uri) }} class="contents">
-				{/* @once */ FeedItemContent(props)}
+				{/* @once */ FeedItemContent(props, true)}
 			</Link>
 		);
 	}) as unknown as JSX.Element;
