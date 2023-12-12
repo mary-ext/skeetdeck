@@ -1,4 +1,4 @@
-import { type JSX, For, createSignal } from 'solid-js';
+import { type JSX, For } from 'solid-js';
 
 import { type InfiniteData, createInfiniteQuery, useQueryClient } from '@pkg/solid-query';
 
@@ -12,6 +12,8 @@ import {
 	getListMembersKey,
 } from '~/api/queries/get-list-members.ts';
 import type { SignalizedList } from '~/api/stores/lists.ts';
+
+import { produce } from '~/utils/immer.ts';
 
 import { openModal } from '../../globals/modals.tsx';
 
@@ -139,43 +141,42 @@ const OwnedListItem = (props: OwnedListItemProps) => {
 	const { profile, itemUri, listUri } = props;
 
 	const queryClient = useQueryClient();
-	const [deleted, setDeleted] = createSignal(false);
 
 	const onRemove = async () => {
-		if (deleted()) {
-			return;
-		}
+		const uid = profile.uid;
 
-		setDeleted(true);
+		queryClient.setQueryData<InfiniteData<ListMembersPage>>(getListMembersKey(uid, listUri), (prev) => {
+			if (prev) {
+				return produce(prev, (draft) => {
+					const pages = draft.pages;
 
-		try {
-			const uid = profile.uid;
-			const agent = await multiagent.connect(uid);
+					for (let i = 0, ilen = pages.length; i < ilen; i++) {
+						const page = pages[i];
+						const members = page.members;
 
-			await agent.rpc.call('com.atproto.repo.deleteRecord', {
-				data: {
-					repo: uid,
-					collection: 'app.bsky.graph.listitem',
-					rkey: getRecordId(itemUri),
-				},
-			});
+						for (let j = 0, jlen = members.length; j < jlen; j++) {
+							const member = members[j];
 
-			queryClient.setQueryData<InfiniteData<ListMembersPage>>(getListMembersKey(uid, listUri), (prev) => {
-				if (prev) {
-					return {
-						...prev,
-						pages: prev.pages.map((page) => {
-							return {
-								...page,
-								members: page.members.filter((member) => (member as SelfListMember).uri !== itemUri),
-							};
-						}),
-					};
-				}
+							if ((member as SelfListMember).uri === itemUri) {
+								members.splice(j, 0);
+							}
+						}
+					}
+				});
+			}
 
-				return prev;
-			});
-		} catch (_err) {}
+			return prev;
+		});
+
+		const agent = await multiagent.connect(uid);
+
+		await agent.rpc.call('com.atproto.repo.deleteRecord', {
+			data: {
+				repo: uid,
+				collection: 'app.bsky.graph.listitem',
+				rkey: getRecordId(itemUri),
+			},
+		});
 	};
 
 	const accessory: ProfileItemAccessory = {
@@ -220,7 +221,7 @@ const OwnedListItem = (props: OwnedListItemProps) => {
 	};
 
 	return (
-		<VirtualContainer estimateHeight={88} class={deleted() ? `pointer-events-none opacity-50` : undefined}>
+		<VirtualContainer estimateHeight={88}>
 			<ProfileItem profile={profile} aside={accessory} onClick={/* @once */ props.onClick} />
 		</VirtualContainer>
 	);
