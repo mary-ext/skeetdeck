@@ -7,11 +7,14 @@ import { openModal } from '~/com/globals/modals.tsx';
 import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu.ts';
 
 import { Flyout } from '../../Flyout.tsx';
+import { LINK_PROFILE_FEEDS, LINK_PROFILE_LISTS, useLinking } from '../../Link.tsx';
 import { isProfileTempMuted, useSharedPreferences } from '../../SharedPreferences.tsx';
 
 import BlockIcon from '../../../icons/baseline-block.tsx';
 import LaunchIcon from '../../../icons/baseline-launch.tsx';
+import ListBoxOutlinedIcon from '../../../icons/outline-list-box.tsx';
 import PlaylistAddIcon from '../../../icons/baseline-playlist-add.tsx';
+import PoundIcon from '../../../icons/baseline-pound.tsx';
 import RepeatIcon from '../../../icons/baseline-repeat.tsx';
 import ReportIcon from '../../../icons/baseline-report.tsx';
 import VolumeOffIcon from '../../../icons/baseline-volume-off.tsx';
@@ -29,18 +32,21 @@ export interface ProfileOverflowActionProps {
 const isDesktop = import.meta.env.VITE_MODE === 'desktop';
 
 const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
+	const linking = useLinking();
 	const { filters } = useSharedPreferences();
 
 	return (() => {
 		const profile = props.profile;
-		const isSelf = profile.uid === profile.did;
+		const did = profile.did;
 
-		const isTempMuted = () => isProfileTempMuted(filters, profile.did);
+		const isSelf = profile.uid === did;
+
+		const isTempMuted = () => isProfileTempMuted(filters, did);
 		const isMuted = () => profile.viewer.muted.value || isTempMuted();
 		const isBlocked = () => profile.viewer.blocking.value;
 
 		const isRepostHidden = createMemo(() => {
-			const index = filters.hideReposts.indexOf(profile.did);
+			const index = filters.hideReposts.indexOf(did);
 
 			if (index !== -1) {
 				return { index: index };
@@ -53,7 +59,7 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 					{({ close, menuProps }) => (
 						<div {...menuProps} class={/* @once */ MenuRoot()}>
 							<a
-								href={`https://bsky.app/profile/${profile.did}`}
+								href={`https://bsky.app/profile/${did}`}
 								target="_blank"
 								onClick={close}
 								class={/* @once */ MenuItem()}
@@ -73,7 +79,7 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 										if (repostHidden) {
 											array.splice(repostHidden.index, 1);
 										} else {
-											array.push(profile.did);
+											array.push(did);
 										}
 									}}
 									class={/* @once */ MenuItem()}
@@ -92,6 +98,28 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 							>
 								<PlaylistAddIcon class={/* @once */ MenuItemIcon()} />
 								<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Add/remove @${profile.handle.value} from lists`}</span>
+							</button>
+
+							<button
+								onClick={() => {
+									close();
+									linking.navigate({ type: LINK_PROFILE_LISTS, actor: did });
+								}}
+								class={/* @once */ MenuItem()}
+							>
+								<ListBoxOutlinedIcon class={/* @once */ MenuItemIcon()} />
+								<span>View lists</span>
+							</button>
+
+							<button
+								onClick={() => {
+									close();
+									linking.navigate({ type: LINK_PROFILE_FEEDS, actor: did });
+								}}
+								class={/* @once */ MenuItem()}
+							>
+								<PoundIcon class={/* @once */ MenuItemIcon()} />
+								<span>View feeds</span>
 							</button>
 
 							{!isSelf && (
@@ -131,7 +159,7 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 									openModal(() => (
 										<ReportDialog
 											uid={/* @once */ profile.uid}
-											report={/* @once */ { type: 'profile', did: profile.did }}
+											report={/* @once */ { type: 'profile', did: did }}
 										/>
 									));
 								}}

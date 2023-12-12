@@ -1,0 +1,31 @@
+import type { QueryFunctionContext as QC } from '@pkg/solid-query';
+
+import type { DID } from '../atp-schema.ts';
+import { multiagent } from '../globals/agent.ts';
+
+import { mergeFeed } from '../stores/feeds.ts';
+
+export const getProfileFeedsKey = (uid: DID, actor: string, limit: number = 30) => {
+	return ['getProfileFeeds', uid, actor, limit] as const;
+};
+export const getProfileFeeds = async (ctx: QC<ReturnType<typeof getProfileFeedsKey>, string | undefined>) => {
+	const [, uid, actor, limit] = ctx.queryKey;
+
+	const agent = await multiagent.connect(uid);
+
+	const response = await agent.rpc.get('app.bsky.feed.getActorFeeds', {
+		signal: ctx.signal,
+		params: {
+			actor: actor,
+			limit: limit,
+			cursor: ctx.pageParam,
+		},
+	});
+
+	const data = response.data;
+
+	return {
+		cursor: data.cursor,
+		feeds: data.feeds.map((feed) => mergeFeed(uid, feed)),
+	};
+};

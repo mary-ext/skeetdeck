@@ -12,27 +12,13 @@ export const LINK_POST_LIKED_BY = 5;
 export const LINK_POST_REPOSTED_BY = 6;
 export const LINK_PROFILE = 7;
 export const LINK_PROFILE_EDIT = 8;
-export const LINK_PROFILE_FOLLOWERS = 9;
-export const LINK_PROFILE_FOLLOWS = 10;
-export const LINK_QUOTE = 11;
-export const LINK_REPLY = 12;
-export const LINK_TAG = 13;
-
-export type LinkingType =
-	| typeof LINK_EXTERNAL
-	| typeof LINK_FEED
-	| typeof LINK_FEED_LIKED_BY
-	| typeof LINK_LIST
-	| typeof LINK_POST
-	| typeof LINK_POST_LIKED_BY
-	| typeof LINK_POST_REPOSTED_BY
-	| typeof LINK_PROFILE
-	| typeof LINK_PROFILE_EDIT
-	| typeof LINK_PROFILE_FOLLOWERS
-	| typeof LINK_PROFILE_FOLLOWS
-	| typeof LINK_QUOTE
-	| typeof LINK_REPLY
-	| typeof LINK_TAG;
+export const LINK_PROFILE_FEEDS = 9;
+export const LINK_PROFILE_FOLLOWERS = 10;
+export const LINK_PROFILE_FOLLOWS = 11;
+export const LINK_PROFILE_LISTS = 12;
+export const LINK_QUOTE = 13;
+export const LINK_REPLY = 14;
+export const LINK_TAG = 15;
 
 export interface ExternalLinking {
 	type: typeof LINK_EXTERNAL;
@@ -86,6 +72,11 @@ export interface ProfileEditLinking {
 	profile: SignalizedProfile;
 }
 
+export interface ProfileFeedsLinking {
+	type: typeof LINK_PROFILE_FEEDS;
+	actor: DID;
+}
+
 export interface ProfileFollowsLinking {
 	type: typeof LINK_PROFILE_FOLLOWERS;
 	actor: DID;
@@ -93,6 +84,11 @@ export interface ProfileFollowsLinking {
 
 export interface ProfileFollowersLinking {
 	type: typeof LINK_PROFILE_FOLLOWS;
+	actor: DID;
+}
+
+export interface ProfileListsLinking {
+	type: typeof LINK_PROFILE_LISTS;
 	actor: DID;
 }
 
@@ -123,8 +119,10 @@ export type Linking =
 	| PostRepostedByLinking
 	| ProfileLinking
 	| ProfileEditLinking
+	| ProfileFeedsLinking
 	| ProfileFollowersLinking
 	| ProfileFollowsLinking
+	| ProfileListsLinking
 	| QuoteLinking
 	| ReplyLinking
 	| TagLinking;
