@@ -1,3 +1,5 @@
+// @todo: move this to ~/com as it's now making use of SharedPreferences
+
 import { createRoot } from 'solid-js';
 
 import { createLazyMemo } from '~/utils/hooks.ts';
@@ -10,14 +12,18 @@ import {
 	decideLabelModeration,
 	decideMutedKeywordModeration,
 	decideMutedPermanentModeration,
+	decideMutedTemporaryModeration,
 	finalizeModeration,
 } from '../action.ts';
 import { PreferenceWarn } from '../enums.ts';
-import type { ModerationOpts } from '../types.ts';
+
+import { isProfileTempMuted, type SharedPreferencesObject } from '~/com/components/SharedPreferences.tsx';
 
 const cache = new WeakMap<SignalizedPost, () => ModerationDecision | null>();
 
-const createPostModDecision = (post: SignalizedPost, opts: ModerationOpts) => {
+const createPostModDecision = (post: SignalizedPost, opts: SharedPreferencesObject) => {
+	const { moderation, filters } = opts;
+
 	return createRoot(() => {
 		return createLazyMemo((): ModerationDecision | null => {
 			const labels = post.labels.value;
@@ -28,17 +34,17 @@ const createPostModDecision = (post: SignalizedPost, opts: ModerationOpts) => {
 
 			const accu: ModerationCause[] = [];
 
-			decideLabelModeration(accu, labels, authorDid, opts);
+			decideLabelModeration(accu, labels, authorDid, moderation);
 			decideMutedPermanentModeration(accu, isMuted);
-			// decideMutedTemporaryModeration(accu, isProfileTemporarilyMuted(uid, authorDid));
-			decideMutedKeywordModeration(accu, text, PreferenceWarn, opts);
+			decideMutedTemporaryModeration(accu, isProfileTempMuted(filters, authorDid));
+			decideMutedKeywordModeration(accu, text, PreferenceWarn, moderation);
 
 			return finalizeModeration(accu);
 		});
 	});
 };
 
-export const getPostModMaker = (post: SignalizedPost, opts: ModerationOpts) => {
+export const getPostModMaker = (post: SignalizedPost, opts: SharedPreferencesObject) => {
 	let mod = cache.get(post);
 
 	if (!mod) {

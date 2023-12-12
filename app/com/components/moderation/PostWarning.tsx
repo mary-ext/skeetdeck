@@ -28,7 +28,7 @@ const PostWarning = (props: PostWarningProps) => {
 		const permalink = props.permalink;
 		const timelineDid = props.timelineDid;
 
-		const maker = getPostModMaker(post, useSharedPreferences().moderation);
+		const maker = getPostModMaker(post, useSharedPreferences());
 		const decision = maker();
 
 		if (decision) {

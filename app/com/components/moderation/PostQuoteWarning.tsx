@@ -25,7 +25,7 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 	const decision = createMemo(() => {
 		const quote = props.quote;
 
-		const maker = getQuoteModMaker(quote, useSharedPreferences().moderation);
+		const maker = getQuoteModMaker(quote, useSharedPreferences());
 		const decision = maker();
 
 		if (decision) {
