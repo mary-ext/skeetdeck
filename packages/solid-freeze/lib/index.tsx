@@ -10,9 +10,9 @@ type Deferred = Promise<undefined> & { r: (value: undefined) => void };
 
 const identity = <T,>(value: T): T => value;
 
-export const Freeze = (props: FreezeProps) => {
+export const useSuspend = (freeze: () => boolean) => {
 	const promise = createMemo((prev: Deferred | undefined) => {
-		if (props.freeze) {
+		if (freeze()) {
 			if (prev) {
 				return prev;
 			}
@@ -28,6 +28,12 @@ export const Freeze = (props: FreezeProps) => {
 	});
 
 	const [suspend] = createResource(promise, identity);
+
+	return suspend;
+};
+
+export const Freeze = (props: FreezeProps) => {
+	const suspend = useSuspend(() => props.freeze);
 
 	return (
 		<Suspense
