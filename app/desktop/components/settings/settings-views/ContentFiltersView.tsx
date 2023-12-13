@@ -5,7 +5,7 @@ import { Interactive } from '~/com/primitives/interactive.ts';
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
 
 import {
-	VIEW_CONTENT_FILTERS,
+	VIEW_HIDDEN_REPOSTERS,
 	VIEW_LABEL_CONFIG,
 	VIEW_SUBSCRIBED_LABELERS,
 	VIEW_TEMPORARY_MUTES,
@@ -52,7 +52,7 @@ const ContentFiltersView = () => {
 						<ChevronRightIcon class="text-xl text-muted-fg" />
 					</button>
 
-					<button onClick={() => router.move({ type: VIEW_CONTENT_FILTERS })} class={selectItem}>
+					<button onClick={() => router.move({ type: VIEW_HIDDEN_REPOSTERS })} class={selectItem}>
 						<span>Hidden reposters</span>
 						<ChevronRightIcon class="text-xl text-muted-fg" />
 					</button>

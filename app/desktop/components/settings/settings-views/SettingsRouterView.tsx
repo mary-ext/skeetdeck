@@ -7,6 +7,7 @@ import {
 	VIEW_ADDITIONAL_LANGUAGE,
 	VIEW_APPEARANCE,
 	VIEW_CONTENT_FILTERS,
+	VIEW_HIDDEN_REPOSTERS,
 	VIEW_KEYWORD_FILTER_FORM,
 	VIEW_KEYWORD_FILTERS,
 	VIEW_LABEL_CONFIG,
@@ -23,6 +24,7 @@ const ContentFiltersView = lazy(() => import('./ContentFiltersView.tsx'));
 const KeywordFiltersView = lazy(() => import('./KeywordFiltersView.tsx'));
 const LanguageView = lazy(() => import('./LanguageView.tsx'));
 
+const HiddenRepostersView = lazy(() => import('./content-filters/HiddenRepostersView.tsx'));
 const LabelConfigView = lazy(() => import('./content-filters/LabelConfigView.tsx'));
 const SubscribedLabelersView = lazy(() => import('./content-filters/SubscribedLabelersView.tsx'));
 const TemporaryMutesView = lazy(() => import('./content-filters/TemporaryMutesView.tsx'));
@@ -39,6 +41,7 @@ const views: Record<ViewType, Component> = {
 	[VIEW_KEYWORD_FILTERS]: KeywordFiltersView,
 	[VIEW_LANGAUGE]: LanguageView,
 
+	[VIEW_HIDDEN_REPOSTERS]: HiddenRepostersView,
 	[VIEW_LABEL_CONFIG]: LabelConfigView,
 	[VIEW_SUBSCRIBED_LABELERS]: SubscribedLabelersView,
 	[VIEW_TEMPORARY_MUTES]: TemporaryMutesView,
