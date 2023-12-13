@@ -9,10 +9,16 @@ type ProfileDetailed = RefOf<'app.bsky.actor.defs#profileViewDetailed'>;
 
 export const profiles: Record<string, WeakRef<SignalizedProfile>> = {};
 
+const branchName = import.meta.env.VITE_GIT_BRANCH;
+
 const gc = new FinalizationRegistry<string>((id) => {
 	const ref = profiles[id];
 
 	if (!ref || !ref.deref()) {
+		if (branchName === 'canary') {
+			console.debug(`removing profile: ${id}`);
+		}
+
 		delete profiles[id];
 	}
 });
