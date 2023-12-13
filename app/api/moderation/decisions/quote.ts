@@ -47,15 +47,11 @@ const createQuoteModDecision = (quote: EmbeddedPostRecord, opts: SharedPreferenc
 	});
 };
 
-export const getQuoteModMaker = (quote: EmbeddedPostRecord, opts: SharedPreferencesObject) => {
-	if (import.meta.env.VITE_GIT_BRANCH === 'canary') {
-		return createQuoteModDecision(quote, opts);
-	}
-
-	let mod = cache.get(quote);
+export const getQuoteModMaker = (post: EmbeddedPostRecord, opts: SharedPreferencesObject) => {
+	let mod = cache.get(post);
 
 	if (!mod) {
-		cache.set(quote, (mod = createQuoteModDecision(quote, opts)));
+		cache.set(post, (mod = createQuoteModDecision(post, opts)));
 	}
 
 	return mod;
