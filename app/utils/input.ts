@@ -37,3 +37,30 @@ export const createRadioModel = <T>(getter: Accessor<T>, setter: (next: T) => vo
 		};
 	};
 };
+
+export const createMultipleChoiceModel = <T>(getter: Accessor<T[]>, setter: (next: T[]) => void) => {
+	return (value: T) => {
+		return (node: HTMLInputElement) => {
+			createEffect(() => {
+				node.checked = getter().includes(value);
+			});
+
+			node.addEventListener('input', () => {
+				const next = node.checked;
+				const array = getter().slice();
+
+				if (next) {
+					array.push(value);
+					setter(array);
+				} else {
+					const index = array.indexOf(value);
+
+					if (index !== -1) {
+						array.splice(index, 1);
+						setter(array);
+					}
+				}
+			});
+		};
+	};
+};
