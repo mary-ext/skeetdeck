@@ -144,6 +144,7 @@ const TemporaryMutesView = () => {
 													<MuteConfirmDialog
 														profile={profile}
 														filters={/* @once */ useSharedPreferences().filters}
+														forceTempMute
 													/>
 												));
 											}}

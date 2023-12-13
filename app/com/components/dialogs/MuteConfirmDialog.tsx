@@ -30,6 +30,7 @@ type ListView = RefOf<'app.bsky.graph.defs#listViewBasic'>;
 export interface MuteConfirmDialogProps {
 	profile: SignalizedProfile;
 	filters: FilterPreferences;
+	forceTempMute?: boolean;
 }
 
 const MuteConfirmDialog = (props: MuteConfirmDialogProps) => {
@@ -41,7 +42,7 @@ const MuteConfirmDialog = (props: MuteConfirmDialogProps) => {
 			return renderMutedByListDialog(profile, mutedByList);
 		}
 
-		return renderMuteConfirmDialog(profile, props.filters);
+		return renderMuteConfirmDialog(profile, props.filters, props.forceTempMute);
 	}) as unknown as JSX.Element;
 };
 
@@ -88,13 +89,17 @@ const renderMutedByListDialog = (profile: SignalizedProfile, list: ListView) => 
 	);
 };
 
-const renderMuteConfirmDialog = (profile: SignalizedProfile, filters: FilterPreferences) => {
+const renderMuteConfirmDialog = (
+	profile: SignalizedProfile,
+	filters: FilterPreferences,
+	forceTempMute?: boolean,
+) => {
 	const queryClient = useQueryClient();
 
 	const isTempMuted = isProfileTempMuted(filters, profile.did);
 	const isMuted = profile.viewer.muted.value || isTempMuted;
 
-	const [duration, setDuration] = createSignal('-1');
+	const [duration, setDuration] = createSignal('' + (!forceTempMute ? -1 : 1 * 60 * 60 * 1_000));
 
 	const isAccount = createMemo(() => {
 		return multiagent.accounts.some((account) => account.did === profile.did);
@@ -180,7 +185,7 @@ const renderMuteConfirmDialog = (profile: SignalizedProfile, filters: FilterPref
 											onChange={(el) => setDuration(el.currentTarget.value)}
 											class={/* @once */ Select()}
 										>
-											<option value={-1}>Indefinite</option>
+											{!forceTempMute && <option value={-1}>Indefinite</option>}
 											<option value={1 * 60 * 60 * 1_000}>1 hour</option>
 											<option value={6 * 60 * 60 * 1_000}>6 hour</option>
 											<option value={12 * 60 * 60 * 1_000}>12 hour</option>
