@@ -45,6 +45,10 @@ const createPostModDecision = (post: SignalizedPost, opts: SharedPreferencesObje
 };
 
 export const getPostModMaker = (post: SignalizedPost, opts: SharedPreferencesObject) => {
+	if (import.meta.env.VITE_GIT_BRANCH === 'canary') {
+		return createPostModDecision(post, opts);
+	}
+
 	let mod = cache.get(post);
 
 	if (!mod) {
