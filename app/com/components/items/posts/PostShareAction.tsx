@@ -101,6 +101,17 @@ const PostShareAction = (props: PostShareActionProps) => {
 								<ContentCopyIcon class={/* @once */ MenuItemIcon()} />
 								<span>Copy post text</span>
 							</button>
+
+							<button
+								onClick={() => {
+									close();
+									navigator.clipboard.writeText(post.uri);
+								}}
+								class={/* @once */ MenuItem()}
+							>
+								<LinkIcon class={/* @once */ MenuItemIcon()} />
+								<span>Copy AT URI</span>
+							</button>
 						</div>
 					)}
 				</Flyout>
