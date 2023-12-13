@@ -3,9 +3,6 @@ import { type Signal, signal } from '~/utils/signals.ts';
 
 import type { DID, Records, RefOf } from '../atp-schema.ts';
 
-import { createRichTextSegmenter } from '../richtext/renderer.ts';
-import type { RichTextSegment } from '../richtext/types.ts';
-
 import { type SignalizedProfile, mergeProfile } from './profiles.ts';
 
 type Post = RefOf<'app.bsky.feed.defs#postView'>;
@@ -42,8 +39,6 @@ export class SignalizedPost {
 		readonly replyDisabled: Signal<NonNullable<Post['viewer']>['replyDisabled']>;
 	};
 
-	readonly rtSegments: () => RichTextSegment[];
-
 	$truncated?: boolean;
 
 	constructor(uid: DID, post: Post, key?: number) {
@@ -66,12 +61,6 @@ export class SignalizedPost {
 			repost: signal(post.viewer?.repost),
 			replyDisabled: signal(post.viewer?.replyDisabled),
 		};
-
-		this.rtSegments = createRichTextSegmenter(() => {
-			const record = this.record.value;
-
-			return { t: record.text, f: record.facets };
-		});
 	}
 }
 

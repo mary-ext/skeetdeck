@@ -1,10 +1,3 @@
-import { createRoot } from 'solid-js';
-
-import { createLazyMemo } from '~/utils/hooks.ts';
-
-import { segmentRichText } from './segmentize.ts';
-import type { Facet } from './types.ts';
-
 const TRIM_HOST_RE = /^www\./;
 const TRIM_URLTEXT_RE = /^\s*(https?:\/\/)?(?:www\.)?/;
 const PATH_MAX_LENGTH = 18;
@@ -73,19 +66,4 @@ export const isLinkValid = (uri: string, text: string) => {
 		(!boundary || boundary === '/' || boundary === '?' || boundary === '#') &&
 		normalized.startsWith(expectedHost)
 	);
-};
-
-export interface RtReturn {
-	t: string;
-	f: Facet[] | undefined;
-}
-
-export const createRichTextSegmenter = (accessor: () => RtReturn) => {
-	return createRoot(() => {
-		return createLazyMemo(() => {
-			const { t: text, f: facets } = accessor();
-
-			return segmentRichText(text, facets);
-		});
-	});
 };
