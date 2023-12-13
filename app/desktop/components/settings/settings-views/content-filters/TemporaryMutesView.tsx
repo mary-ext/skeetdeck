@@ -139,6 +139,9 @@ const TemporaryMutesView = () => {
 								render: (profile) => {
 									return (
 										<button
+											title={
+												!muted.value ? `Temporarily mute this user` : `Remove temporary mute from this user`
+											}
 											onClick={() => {
 												openModal(() => (
 													<MuteConfirmDialog

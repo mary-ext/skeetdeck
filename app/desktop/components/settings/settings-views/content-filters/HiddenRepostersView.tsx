@@ -116,6 +116,7 @@ const TemporaryMutesView = () => {
 								render: () => {
 									return (
 										<button
+											title={!hidden.value ? `Hide this user's reposts` : `Unhide this user's reposts`}
 											onClick={() => {
 												const next = !hidden.value;
 
