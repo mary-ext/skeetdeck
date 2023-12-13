@@ -1,4 +1,4 @@
-import { type JSX, createSignal } from 'solid-js';
+import { type JSX, createSignal, onCleanup } from 'solid-js';
 
 import { scheduleIdleTask } from '~/utils/idle.ts';
 import { getRectFromEntry, scrollObserver } from '~/utils/intersection-observer.ts';
@@ -97,12 +97,11 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 		}
 	};
 
-	const measure = (node: HTMLElement) => scrollObserver.observe(node);
 	const shouldHide = () => !intersecting() && cachedHeight() !== undefined;
 
 	return (
 		<article
-			ref={measure}
+			ref={startMeasure}
 			class={props.class}
 			style={{ height: shouldHide() ? `${height ?? cachedHeight()}px` : undefined }}
 			prop:$onintersect={handleIntersect}
@@ -114,4 +113,12 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 			})()}
 		</article>
 	);
+};
+
+const startMeasure = (node: HTMLElement) => {
+	scrollObserver.observe(node);
+
+	onCleanup(() => {
+		scrollObserver.unobserve(node);
+	});
 };
