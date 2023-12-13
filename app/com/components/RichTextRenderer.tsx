@@ -1,8 +1,10 @@
-import { type JSX } from 'solid-js';
+import { type JSX, createRoot } from 'solid-js';
 
 import { isLinkValid } from '~/api/richtext/renderer.ts';
 import { segmentRichText } from '~/api/richtext/segmentize.ts';
 import type { Facet, RichTextSegment } from '~/api/richtext/types.ts';
+
+import { createLazyMemo } from '~/utils/hooks.ts';
 
 import { type Linking, LINK_EXTERNAL, LINK_PROFILE, LINK_TAG, useLinking } from './Link.tsx';
 
@@ -114,24 +116,14 @@ const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => 
 export default RichTextRenderer;
 
 const createSegmenter = <T extends object>(item: T, get: (item: T) => RichTextReturn) => {
-	let _text: string;
-	let _facets: Facet[] | undefined;
-
-	let _ui: RichTextUiSegment[];
-
-	return (): RichTextUiSegment[] => {
-		const { t: text, f: facets } = get(item);
-
-		if (_text !== text || _facets !== facets) {
-			_text = text;
-			_facets = facets;
+	return createRoot(() => {
+		return createLazyMemo((): RichTextUiSegment[] => {
+			const { t: text, f: facets } = get(item);
 
 			const segments = segmentRichText(text, facets);
-			_ui = renderRichText(segments);
-		}
-
-		return _ui;
-	};
+			return renderRichText(segments);
+		});
+	});
 };
 
 const renderRichText = (segments: RichTextSegment[]): RichTextUiSegment[] => {
