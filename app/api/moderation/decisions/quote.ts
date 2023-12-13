@@ -49,7 +49,23 @@ const createQuoteModDecision = (quote: EmbeddedPostRecord, opts: SharedPreferenc
 
 export const getQuoteModMaker = (quote: EmbeddedPostRecord, opts: SharedPreferencesObject) => {
 	if (import.meta.env.VITE_GIT_BRANCH === 'canary') {
-		return createQuoteModDecision(quote, opts);
+		const { moderation, filters } = opts;
+
+		const labels = quote.labels;
+		const text = (quote.value as PostRecord).text;
+
+		const authorDid = quote.author.did;
+		const isMuted = quote.author.viewer?.muted;
+
+		const accu: ModerationCause[] = [];
+
+		decideLabelModeration(accu, labels, authorDid, moderation);
+		decideMutedPermanentModeration(accu, isMuted);
+		decideMutedTemporaryModeration(accu, isProfileTempMuted(filters, authorDid));
+		decideMutedKeywordModeration(accu, text, PreferenceWarn, moderation);
+
+		const finalized = finalizeModeration(accu);
+		return () => finalized;
 	}
 
 	let mod = cache.get(quote);
