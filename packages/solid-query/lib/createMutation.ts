@@ -1,6 +1,6 @@
 import { type DefaultError, MutationObserver } from '@tanstack/query-core';
 
-import { createRenderEffect, on, onCleanup, untrack } from 'solid-js';
+import { createMemo, createRenderEffect, on, onCleanup, untrack } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 import type { QueryClient } from './QueryClient.ts';
@@ -14,7 +14,13 @@ export function createMutation<TData = unknown, TError = DefaultError, TVariable
 ): CreateMutationResult<TData, TError, TVariables, TContext> {
 	const client = useQueryClient(queryClient);
 
-	const observer = new MutationObserver<TData, TError, TVariables, TContext>(client, untrack(options));
+	const defaultedOptions = createMemo(() => {
+		return options(client);
+	});
+
+	const initialDefaultedOptions = untrack(defaultedOptions);
+
+	const observer = new MutationObserver<TData, TError, TVariables, TContext>(client, initialDefaultedOptions);
 
 	const mutate: CreateMutateFunction<TData, TError, TVariables, TContext> = (variables, mutateOptions) => {
 		observer.mutate(variables, mutateOptions).catch(noop);
@@ -28,9 +34,9 @@ export function createMutation<TData = unknown, TError = DefaultError, TVariable
 
 	createRenderEffect(
 		on(
-			options,
-			($options) => {
-				observer.setOptions($options);
+			defaultedOptions,
+			($defaultedOptions) => {
+				observer.setOptions($defaultedOptions);
 			},
 			{ defer: true },
 		),

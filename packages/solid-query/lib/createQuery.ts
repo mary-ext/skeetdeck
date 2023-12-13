@@ -6,7 +6,7 @@ import type {
 	CreateQueryOptions,
 	CreateQueryResult,
 	DefinedCreateQueryResult,
-	FunctionedParams,
+	QueryAccessor,
 	SolidQueryOptions,
 } from './types.ts';
 
@@ -15,7 +15,7 @@ type UndefinedInitialDataOptions<
 	TError = DefaultError,
 	TData = TQueryFnData,
 	TQueryKey extends QueryKey = QueryKey,
-> = FunctionedParams<
+> = QueryAccessor<
 	SolidQueryOptions<TQueryFnData, TError, TData, TQueryKey> & {
 		initialData?: undefined;
 	}
@@ -26,7 +26,7 @@ type DefinedInitialDataOptions<
 	TError = DefaultError,
 	TData = TQueryFnData,
 	TQueryKey extends QueryKey = QueryKey,
-> = FunctionedParams<
+> = QueryAccessor<
 	SolidQueryOptions<TQueryFnData, TError, TData, TQueryKey> & {
 		initialData: TQueryFnData | (() => TQueryFnData);
 	}

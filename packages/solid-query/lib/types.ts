@@ -10,9 +10,9 @@ import type {
 	WithRequired,
 } from '@tanstack/query-core';
 
-import type { InfiniteQueryObserverOptions, QueryObserverOptions } from './QueryClient.ts';
+import type { InfiniteQueryObserverOptions, QueryClient, QueryObserverOptions } from './QueryClient.ts';
 
-export type FunctionedParams<T> = () => T;
+export type QueryAccessor<T> = (queryClient: QueryClient) => T;
 
 export interface CreateBaseQueryOptions<
 	TQueryFnData = unknown,
@@ -40,7 +40,7 @@ export type CreateQueryOptions<
 	TError = DefaultError,
 	TData = TQueryFnData,
 	TQueryKey extends QueryKey = QueryKey,
-> = FunctionedParams<SolidQueryOptions<TQueryFnData, TError, TData, TQueryKey>>;
+> = QueryAccessor<SolidQueryOptions<TQueryFnData, TError, TData, TQueryKey>>;
 
 /* --- Create Query and Create Base Query  Types --- */
 
@@ -83,7 +83,7 @@ export type CreateInfiniteQueryOptions<
 	TData = TQueryFnData,
 	TQueryKey extends QueryKey = QueryKey,
 	TPageParam = unknown,
-> = FunctionedParams<
+> = QueryAccessor<
 	SolidInfiniteQueryOptions<TQueryFnData, TError, TData, TQueryFnData, TQueryKey, TPageParam>
 >;
 
@@ -105,7 +105,7 @@ export type CreateMutationOptions<
 	TError = DefaultError,
 	TVariables = void,
 	TContext = unknown,
-> = FunctionedParams<SolidMutationOptions<TData, TError, TVariables, TContext>>;
+> = QueryAccessor<SolidMutationOptions<TData, TError, TVariables, TContext>>;
 
 export type CreateMutateFunction<
 	TData = unknown,

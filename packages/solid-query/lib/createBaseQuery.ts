@@ -1,17 +1,17 @@
 import { type QueryKey, type QueryObserver, type QueryObserverResult } from '@tanstack/query-core';
 
-import { type Accessor, createMemo, createRenderEffect, mergeProps, on, onCleanup, untrack } from 'solid-js';
+import { createMemo, createRenderEffect, mergeProps, on, onCleanup, untrack } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import { isServer } from 'solid-js/web';
 
 import { useIsRestoring } from './isRestoring.ts';
 import type { QueryClient } from './QueryClient.ts';
 import { useQueryClient } from './QueryClientProvider.tsx';
-import type { CreateBaseQueryOptions } from './types.ts';
+import type { CreateBaseQueryOptions, QueryAccessor } from './types.ts';
 
 // Base Query Function that is used to create the query.
 export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryKey extends QueryKey>(
-	options: Accessor<CreateBaseQueryOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>>,
+	options: QueryAccessor<CreateBaseQueryOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>>,
 	Observer: typeof QueryObserver,
 	queryClient?: QueryClient,
 ) {
@@ -19,7 +19,7 @@ export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryK
 	const isRestoring = useIsRestoring();
 
 	const defaultedOptions = createMemo(() => {
-		return mergeProps(client.defaultQueryOptions(options()) || {}, {
+		return mergeProps(client.defaultQueryOptions(options(client)) || {}, {
 			get _optimisticResults() {
 				return isRestoring() ? 'isRestoring' : 'optimistic';
 			},
