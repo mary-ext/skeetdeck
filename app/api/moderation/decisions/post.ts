@@ -46,23 +46,7 @@ const createPostModDecision = (post: SignalizedPost, opts: SharedPreferencesObje
 
 export const getPostModMaker = (post: SignalizedPost, opts: SharedPreferencesObject) => {
 	if (import.meta.env.VITE_GIT_BRANCH === 'canary') {
-		const { moderation, filters } = opts;
-
-		const labels = post.labels.value;
-		const text = post.record.value.text;
-
-		const authorDid = post.author.did;
-		const isMuted = post.author.viewer.muted.value;
-
-		const accu: ModerationCause[] = [];
-
-		decideLabelModeration(accu, labels, authorDid, moderation);
-		decideMutedPermanentModeration(accu, isMuted);
-		decideMutedTemporaryModeration(accu, isProfileTempMuted(filters, authorDid));
-		decideMutedKeywordModeration(accu, text, PreferenceWarn, moderation);
-
-		const finalized = finalizeModeration(accu);
-		return () => finalized;
+		return createPostModDecision(post, opts);
 	}
 
 	let mod = cache.get(post);
