@@ -10,16 +10,10 @@ type PostRecord = Records['app.bsky.feed.post'];
 
 export const posts: Record<string, WeakRef<SignalizedPost>> = {};
 
-const branchName = import.meta.env.VITE_GIT_BRANCH;
-
 const gc = new FinalizationRegistry<string>((id) => {
 	const ref = posts[id];
 
 	if (!ref || !ref.deref()) {
-		if (branchName === 'canary') {
-			console.debug(`removing post: ${id}`);
-		}
-
 		delete posts[id];
 	}
 });
@@ -80,6 +74,10 @@ export const getCachedPost = (uid: DID, uri: string) => {
 
 	return ref?.deref();
 };
+
+if (import.meta.env.VITE_GIT_BRANCH === 'canary') {
+	(window as any)._getCachedPost = getCachedPost;
+}
 
 export const removeCachedPost = (uid: DID, uri: string) => {
 	const id = createPostId(uid, uri);
