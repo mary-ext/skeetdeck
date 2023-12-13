@@ -85,6 +85,10 @@ export const getCachedProfile = (uid: DID, actor: DID) => {
 	return ref && ref.deref();
 };
 
+if (import.meta.env.VITE_GIT_BRANCH === 'canary') {
+	(window as any)._getCachedProfile = getCachedProfile;
+}
+
 export const mergeProfile = (uid: DID, profile: Profile | ProfileBasic | ProfileDetailed, key?: number) => {
 	let id = createProfileId(uid, profile.did);
 

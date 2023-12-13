@@ -75,6 +75,10 @@ export const getCachedPost = (uid: DID, uri: string) => {
 	return ref?.deref();
 };
 
+if (import.meta.env.VITE_GIT_BRANCH === 'canary') {
+	(window as any)._getCachedPost = getCachedPost;
+}
+
 export const removeCachedPost = (uid: DID, uri: string) => {
 	const id = createPostId(uid, uri);
 
