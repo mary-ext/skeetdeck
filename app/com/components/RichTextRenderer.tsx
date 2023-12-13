@@ -1,45 +1,20 @@
-import { type JSX, createRoot } from 'solid-js';
+import { type JSX } from 'solid-js';
 
 import { isLinkValid } from '~/api/richtext/renderer.ts';
-import { segmentRichText } from '~/api/richtext/segmentize.ts';
-import type { Facet, RichTextSegment } from '~/api/richtext/types.ts';
-
-import { createLazyMemo } from '~/utils/hooks.ts';
+import type { RichTextSegment } from '~/api/richtext/types.ts';
 
 import { type Linking, LINK_EXTERNAL, LINK_PROFILE, LINK_TAG, useLinking } from './Link.tsx';
 
-export interface RichTextReturn {
-	t: string;
-	f: Facet[] | undefined;
+export interface RtExpectedObject {
+	rtSegments: () => RichTextSegment[];
 }
 
-export interface RichTextRendererProps<T extends object> {
+export interface RichTextRendererProps<T extends RtExpectedObject> {
 	item: T;
-	/** Expected to be static */
-	get: (item: T) => RichTextReturn;
 }
 
-interface RichTextUiSegment {
-	text: string;
-	to: Linking | undefined;
-}
-
-const richtexts = new WeakMap<WeakKey, () => RichTextUiSegment[]>();
-
-const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => {
+const RichTextRenderer = <T extends RtExpectedObject>(props: RichTextRendererProps<T>) => {
 	const linking = useLinking();
-	const get = props.get;
-
-	const segments = () => {
-		const item = props.item;
-
-		let segmenter = richtexts.get(item);
-		if (!segmenter) {
-			richtexts.set(item, (segmenter = createSegmenter(item, get)));
-		}
-
-		return segmenter();
-	};
 
 	const navigateLink = (ev: MouseEvent | KeyboardEvent) => {
 		const enum ShouldLink {
@@ -67,7 +42,7 @@ const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => 
 	};
 
 	const render = () => {
-		const ui = segments();
+		const ui = renderRichText(props.item.rtSegments());
 		const nodes: JSX.Element = [];
 
 		for (let idx = 0, len = ui.length; idx < len; idx++) {
@@ -115,16 +90,10 @@ const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => 
 
 export default RichTextRenderer;
 
-const createSegmenter = <T extends object>(item: T, get: (item: T) => RichTextReturn) => {
-	return createRoot(() => {
-		return createLazyMemo((): RichTextUiSegment[] => {
-			const { t: text, f: facets } = get(item);
-
-			const segments = segmentRichText(text, facets);
-			return renderRichText(segments);
-		});
-	});
-};
+interface RichTextUiSegment {
+	text: string;
+	to: Linking | undefined;
+}
 
 const renderRichText = (segments: RichTextSegment[]): RichTextUiSegment[] => {
 	const ui: RichTextUiSegment[] = [];
