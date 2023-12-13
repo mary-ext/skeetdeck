@@ -1,5 +1,7 @@
 import { type JSX, createSignal, untrack } from 'solid-js';
 
+import { makeEventListener } from '@solid-primitives/event-listener';
+
 import { type Middleware, autoUpdate, flip, shift, size } from '@floating-ui/dom';
 import { type Placement, getSide } from '@floating-ui/utils';
 import { useFloating } from 'solid-floating-ui';
@@ -70,7 +72,7 @@ export const Flyout = (props: FlyoutProps) => {
 	const anchor = props.button;
 	assert(anchor instanceof HTMLElement);
 
-	anchor.addEventListener('click', () => {
+	makeEventListener(anchor, 'click', () => {
 		setIsOpen(true);
 	});
 

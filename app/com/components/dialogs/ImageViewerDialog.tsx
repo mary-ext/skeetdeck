@@ -1,6 +1,7 @@
 import { For, JSX, batch, createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js';
 
 import { type Vector2, createGesture } from '@pkg/solid-use-gesture';
+import { makeEventListener } from '@solid-primitives/event-listener';
 
 import { closeModal } from '../../globals/modals.tsx';
 
@@ -31,7 +32,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 	const hasPrev = createMemo(() => active() > 0);
 
 	onMount(() => {
-		const keydownListener = (ev: KeyboardEvent) => {
+		makeEventListener(document.body, 'keydown', (ev: KeyboardEvent) => {
 			const key = ev.key;
 
 			if (key === 'ArrowLeft') {
@@ -49,10 +50,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 			} else if (key === 'ArrowUp' || key === 'ArrowDown') {
 				ev.preventDefault();
 			}
-		};
-
-		document.body.addEventListener('keydown', keydownListener);
-		onCleanup(() => document.body.removeEventListener('keydown', keydownListener));
+		});
 	});
 
 	return (

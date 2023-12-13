@@ -1,5 +1,7 @@
 import { type JSX, untrack } from 'solid-js';
 
+import { makeEventListener } from '@solid-primitives/event-listener';
+
 import { getRecordId } from '~/api/utils/misc.ts';
 
 import type { SignalizedPost } from '~/api/stores/posts.ts';
@@ -54,7 +56,7 @@ const ReplyAction = (props: ReplyActionProps) => {
 			);
 		}
 
-		button.addEventListener('click', () => {
+		makeEventListener(button, 'click', () => {
 			linking.navigate({ type: LINK_REPLY, actor: post.author.did, rkey: getRecordId(post.uri) });
 		});
 
