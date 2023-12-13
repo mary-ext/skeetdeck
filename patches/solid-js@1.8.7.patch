@@ -1,5 +1,5 @@
 diff --git a/dist/dev.cjs b/dist/dev.cjs
-index d615cc449542355d4eeb4626828280788f8e0120..1325aab11ddc82d188ef8146f7d329b127359f3e 100644
+index ca8fceced373d52401970b2ee09f5b1dba73558a..85c817ffbfbe28bb6209922e67341ca1d8e96fcc 100644
 --- a/dist/dev.cjs
 +++ b/dist/dev.cjs
 @@ -1797,3 +1797,4 @@ exports.startTransition = startTransition;
@@ -8,7 +8,7 @@ index d615cc449542355d4eeb4626828280788f8e0120..1325aab11ddc82d188ef8146f7d329b1
  exports.useTransition = useTransition;
 +exports.getSuspenseContext = getSuspenseContext;
 diff --git a/dist/dev.js b/dist/dev.js
-index c171f4e055d9f2b642d34d6dacd90a5a0149df1c..4523d9e605234bb3b016b3a902ad30016a3fff6c 100644
+index 7025e77204dd84185d399e1cd6413865ef8dc98d..8fe4ed26ee9ea47670c78d1a731d8d6971d55df5 100644
 --- a/dist/dev.js
 +++ b/dist/dev.js
 @@ -1975,5 +1975,6 @@ export {
@@ -52,7 +52,7 @@ index 3a7bf9af5c528ba765004b0bf052583e4596e169..4199bd98be9977aa7625c4b73fda473f
 +  getSuspenseContext
  };
 diff --git a/dist/solid.cjs b/dist/solid.cjs
-index 7c905f678bcb91d05d15a5cb434a3b236a70ff68..06873a62468f2353bba0df65498ad81693f0dc1c 100644
+index 6e925743d89555749a7861772fa75671b6d18d7f..445b95872e68c44fc89abc5165c317d5d56e66e7 100644
 --- a/dist/solid.cjs
 +++ b/dist/solid.cjs
 @@ -1726,3 +1726,4 @@ exports.startTransition = startTransition;
@@ -61,10 +61,34 @@ index 7c905f678bcb91d05d15a5cb434a3b236a70ff68..06873a62468f2353bba0df65498ad816
  exports.useTransition = useTransition;
 +exports.getSuspenseContext = getSuspenseContext;
 diff --git a/dist/solid.js b/dist/solid.js
-index 2781f8c71945eddee1025921db29c7d5d25cec99..5298fff32674b2296b394f381d295ade35b078d1 100644
+index 7cfbb3bf7abc85beab27a3863fc0312bcf4ef500..d80e36822a18757a610ff7c02ee027eb3dbd4f7d 100644
 --- a/dist/solid.js
 +++ b/dist/solid.js
-@@ -1873,5 +1873,6 @@ export {
+@@ -1534,7 +1534,6 @@ function createUniqueId() {
+   return ctx ? `${ctx.id}${ctx.count++}` : `cl-${counter++}`;
+ }
+ 
+-const narrowedError = name => `Stale read from <${name}>.`;
+ function For(props) {
+   const fallback = "fallback" in props && {
+     fallback: () => props.fallback
+@@ -1564,7 +1563,6 @@ function Show(props) {
+                 keyed
+                   ? c
+                   : () => {
+-                      if (!untrack(condition)) throw narrowedError("Show");
+                       return props.when;
+                     }
+               )
+@@ -1612,7 +1610,6 @@ function Switch(props) {
+               keyed
+                 ? when
+                 : () => {
+-                    if (untrack(evalConditions)[0] !== index) throw narrowedError("Match");
+                     return cond.when;
+                   }
+             )
+@@ -1873,5 +1870,6 @@ export {
    startTransition,
    untrack,
    useContext,
