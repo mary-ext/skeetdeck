@@ -149,10 +149,10 @@ const TemporaryMutesView = () => {
 												));
 											}}
 											class={
-												'grid h-9 w-9 place-items-center rounded-full border text-xl outline-2 outline-primary focus-visible:outline disabled:pointer-events-none' +
+												'grid h-9 w-9 place-items-center rounded-full border border-input text-xl outline-2 outline-primary focus-visible:outline disabled:pointer-events-none' +
 												(!muted.value
-													? ' border-input text-accent hover:bg-secondary/40'
-													: ' border-red-800 text-red-500 hover:bg-red-900/40')
+													? ' hover:bg-secondary/40'
+													: ' text-red-500 hover:bg-red-500/20 dark:hover:bg-red-500/10')
 											}
 										>
 											{(() => {
