@@ -9,7 +9,6 @@ export { createInfiniteQuery } from './createInfiniteQuery.ts';
 export { createMutation } from './createMutation.ts';
 export { createQueries } from './createQueries.ts';
 export { createQuery, queryOptions } from './createQuery.ts';
-export { IsRestoringProvider, useIsRestoring } from './isRestoring.ts';
 export { QueryClient } from './QueryClient.ts';
 export type {
 	DefaultOptions,

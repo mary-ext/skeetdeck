@@ -21,7 +21,6 @@ import {
 } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
-import { useIsRestoring } from './isRestoring.ts';
 import type { QueryClient } from './QueryClient.ts';
 import { useQueryClient } from './QueryClientProvider.tsx';
 import type { CreateQueryResult, SolidQueryOptions } from './types.ts';
@@ -174,14 +173,10 @@ export function createQueries<
 	queryClient?: QueryClient,
 ): TCombinedResult {
 	const client = useQueryClient(queryClient);
-	const isRestoring = useIsRestoring();
 
 	const defaultedQueries = createMemo(() => {
 		return queriesOptions().queries.map((options) => {
-			return {
-				...client.defaultQueryOptions(options),
-				_optimisticResults: isRestoring() ? ('isRestoring' as const) : ('optimistic' as const),
-			};
+			return client.defaultQueryOptions(options);
 		});
 	});
 
@@ -228,7 +223,7 @@ export function createQueries<
 	let unsubscribe: () => void = () => undefined;
 	createComputed<() => void>((cleanup) => {
 		cleanup?.();
-		unsubscribe = isRestoring() ? () => undefined : subscribeToObserver();
+		unsubscribe = subscribeToObserver();
 		// cleanup needs to be scheduled after synchronous effects take place
 		return () => queueMicrotask(unsubscribe);
 	});

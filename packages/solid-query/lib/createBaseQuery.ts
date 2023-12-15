@@ -2,9 +2,7 @@ import { type QueryKey, type QueryObserver, type QueryObserverResult } from '@ta
 
 import { createMemo, createRenderEffect, on, onCleanup, untrack } from 'solid-js';
 import { createStore } from 'solid-js/store';
-import { isServer } from 'solid-js/web';
 
-import { useIsRestoring } from './isRestoring.ts';
 import type { QueryClient } from './QueryClient.ts';
 import { useQueryClient } from './QueryClientProvider.tsx';
 import type { CreateBaseQueryOptions, QueryAccessor } from './types.ts';
@@ -16,14 +14,9 @@ export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryK
 	queryClient?: QueryClient,
 ) {
 	const client = useQueryClient(queryClient);
-	const isRestoring = useIsRestoring();
 
 	const defaultedOptions = createMemo(() => {
-		return {
-			...client.defaultQueryOptions(options(client)),
-			_optimisticResults: isRestoring() ? ('isRestoring' as const) : ('optimistic' as const),
-			...(isServer && { retry: false, throwOnError: true }),
-		};
+		return client.defaultQueryOptions(options(client));
 	});
 
 	const initialDefaultedOptions = untrack(defaultedOptions);
@@ -47,20 +40,12 @@ export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryK
 		),
 	);
 
-	createRenderEffect(() => {
-		const $isRestoring = isRestoring();
+	onCleanup(
+		observer.subscribe((result) => {
+			setState(result);
+		}),
+	);
 
-		if (!$isRestoring) {
-			onCleanup(
-				observer.subscribe((result) => {
-					// @todo: do we even need to wrap these with notifyManager.batchCalls?
-					setState(result);
-				}),
-			);
-		}
-
-		observer.updateResult();
-	});
-
+	observer.updateResult();
 	return state;
 }
