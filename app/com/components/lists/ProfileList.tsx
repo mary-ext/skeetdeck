@@ -1,4 +1,4 @@
-import { For, Match, Switch } from 'solid-js';
+import { type JSX, For } from 'solid-js';
 
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
@@ -28,43 +28,45 @@ export interface ProfileListProps {
 const ProfileList = (props: ProfileListProps) => {
 	const aside = props.asideAccessory;
 
-	return (
-		<>
-			<div>
-				<For each={props.profiles}>
-					{(profile) => (
-						<VirtualContainer class="shrink-0" estimateHeight={88}>
-							<ProfileItem profile={profile} aside={aside} onClick={props.onItemClick} />
-						</VirtualContainer>
-					)}
-				</For>
-			</div>
+	return [
+		<div>
+			<For each={props.profiles}>
+				{(profile) => (
+					<VirtualContainer class="shrink-0" estimateHeight={88}>
+						<ProfileItem profile={profile} aside={aside} onClick={props.onItemClick} />
+					</VirtualContainer>
+				)}
+			</For>
+		</div>,
 
-			<Switch>
-				<Match when={props.fetching}>
-					<div class="grid h-13 shrink-0 place-items-center">
+		() => {
+			if (props.fetching) {
+				return (
+					<div class="grid h-13 place-items-center">
 						<CircularProgress />
 					</div>
-				</Match>
+				);
+			}
 
-				<Match when={props.error} keyed>
-					{(error) => <GenericErrorView error={error} onRetry={props.onRetry} />}
-				</Match>
+			if (props.error) {
+				return <GenericErrorView error={/* @once */ props.error} onRetry={props.onRetry} />;
+			}
 
-				<Match when={props.hasMore}>
+			if (props.hasMore) {
+				return (
 					<button onClick={props.onLoadMore} class={loadMoreBtn}>
 						Show more profiles
 					</button>
-				</Match>
+				);
+			}
 
-				<Match when>
-					<div class="grid h-13 shrink-0 place-items-center">
-						<p class="text-sm text-muted-fg">End of list</p>
-					</div>
-				</Match>
-			</Switch>
-		</>
-	);
+			return (
+				<div class="grid h-13 shrink-0 place-items-center">
+					<p class="text-sm text-muted-fg">End of list</p>
+				</div>
+			);
+		},
+	] as unknown as JSX.Element;
 };
 
 export default ProfileList;
