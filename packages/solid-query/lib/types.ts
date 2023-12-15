@@ -69,13 +69,10 @@ export interface SolidInfiniteQueryOptions<
 	TQueryData = TQueryFnData,
 	TQueryKey extends QueryKey = QueryKey,
 	TPageParam = unknown,
-> extends Omit<
+> extends WithRequired<
 		InfiniteQueryObserverOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey, TPageParam>,
 		'queryKey'
-	> {
-	queryKey: TQueryKey;
-	deferStream?: boolean;
-}
+	> {}
 
 export type CreateInfiniteQueryOptions<
 	TQueryFnData = unknown,
