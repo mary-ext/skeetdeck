@@ -3,7 +3,6 @@ import { type JSX, createSignal, createMemo } from 'solid-js';
 import { type InfiniteData, useQueryClient } from '@pkg/solid-query';
 
 import type { RefOf } from '~/api/atp-schema.ts';
-import { ListPurposeLabels } from '~/api/display.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 import type { FilterPreferences } from '~/api/types.ts';
 
@@ -23,7 +22,7 @@ import DialogOverlay from './DialogOverlay.tsx';
 import TakingActionNotice from '../views/TakingActionNotice.tsx';
 import { isProfileTempMuted } from '../SharedPreferences.tsx';
 
-import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';
+import { EmbedListContent } from '../embeds/EmbedList.tsx';
 
 type ListView = RefOf<'app.bsky.graph.defs#listViewBasic'>;
 
@@ -62,21 +61,7 @@ const renderMutedByListDialog = (profile: SignalizedProfile, list: ListView) => 
 						are on this list:
 					</p>
 
-					<div class="flex flex-col gap-2 rounded-md border border-divider p-3 text-left text-sm">
-						<div class="flex gap-3">
-							<img
-								src={/* @once */ list.avatar || DefaultListAvatar}
-								class="mt-0.5 h-9 w-9 rounded-md object-cover"
-							/>
-
-							<div>
-								<p class="font-bold">{/* @once */ list.name}</p>
-								<p class="text-muted-fg">{
-									/* @once */ `${ListPurposeLabels['app.bsky.graph.defs#modlist']}`
-								}</p>
-							</div>
-						</div>
-					</div>
+					<EmbedListContent list={list} />
 				</div>
 
 				<div class={/* @once */ DialogActions()}>

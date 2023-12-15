@@ -2,13 +2,12 @@ import { createSignal as signal } from 'solid-js';
 
 import { createMutation, useQueryClient } from '@pkg/solid-query';
 
-import type { Records } from '~/api/atp-schema.ts';
+import type { DID, Records, RefOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
 import { uploadBlob } from '~/api/mutations/upload-blob.ts';
 import { getListInfoKey } from '~/api/queries/get-list-info.ts';
-import type { SignalizedList } from '~/api/stores/lists.ts';
 
 import { model } from '~/utils/input.ts';
 
@@ -30,7 +29,9 @@ import ListMembersPaneDialog from './ListMembersPaneDialog.tsx';
 
 export interface ListSettingsPaneDialogProps {
 	/** Expected to be static */
-	list: SignalizedList;
+	uid: DID;
+	/** Expected to be static */
+	list: RefOf<'app.bsky.graph.defs#listView'>;
 }
 
 const listRecordType = 'app.bsky.graph.list';
@@ -43,18 +44,17 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 	const { openModal: openPaneModal } = usePaneContext();
 	const { disableBackdropClose, close } = usePaneModalState();
 
+	const uid = props.uid;
 	const list = props.list;
 
-	const [avatar, setAvatar] = signal<Blob | string | undefined>(list.avatar.value || undefined);
-	const [name, setName] = signal(list.name.value || '');
-	const [desc, setDesc] = signal(list.description.value || '');
+	const [avatar, setAvatar] = signal<Blob | string | undefined>(list.avatar || undefined);
+	const [name, setName] = signal(list.name || '');
+	const [desc, setDesc] = signal(list.description || '');
 
 	const listMutation = createMutation(() => ({
 		mutationFn: async () => {
 			let prev: ListRecord;
 			let swap: string | undefined;
-
-			const uid = list.uid;
 
 			const $avatar = avatar();
 			const $name = name();
@@ -102,7 +102,7 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 				});
 
 				await queryClient.invalidateQueries({
-					queryKey: getListInfoKey(list.uid, list.uri),
+					queryKey: getListInfoKey(uid, list.uri),
 				});
 			}
 		},
@@ -173,12 +173,8 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 
 					<div class="mt-4 grow border-b border-divider"></div>
 
-					{(() => {
-						if (list.purpose.value === 'app.bsky.graph.defs#modlist') {
-							return;
-						}
-
-						return (
+					{
+						/* @once */ list.purpose !== 'app.bsky.graph.defs#modlist' && (
 							<button
 								type="button"
 								onClick={() => {
@@ -193,8 +189,8 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 								<span>Manage members</span>
 								<ChevronRightIcon class="-mr-2 text-2xl text-muted-fg" />
 							</button>
-						);
-					})()}
+						)
+					}
 
 					<button
 						type="button"

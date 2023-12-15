@@ -34,11 +34,9 @@ export class SignalizedProfile {
 
 	readonly viewer: {
 		readonly muted: Signal<NonNullable<ProfileDetailed['viewer']>['muted']>;
-		// @todo: perhaps change this to reference SignalizedList?
 		readonly mutedByList: Signal<NonNullable<ProfileDetailed['viewer']>['mutedByList']>;
 		readonly blockedBy: Signal<NonNullable<ProfileDetailed['viewer']>['blockedBy']>;
 		readonly blocking: Signal<NonNullable<ProfileDetailed['viewer']>['blocking']>;
-		// @todo: perhaps change this to reference SignalizedList?
 		readonly blockingByList: Signal<NonNullable<ProfileDetailed['viewer']>['blockingByList']>;
 		readonly following: Signal<NonNullable<ProfileDetailed['viewer']>['following']>;
 		readonly followedBy: Signal<NonNullable<ProfileDetailed['viewer']>['followedBy']>;

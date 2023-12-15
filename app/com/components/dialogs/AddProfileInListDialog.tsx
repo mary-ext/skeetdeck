@@ -5,7 +5,7 @@ import { createInfiniteQuery, createMutation, createQuery, useQueryClient } from
 
 import type { Records } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
-import { ListPurposeLabels } from '~/api/display.ts';
+import { renderListPurposeLabel } from '~/api/display.ts';
 import { getCurrentDate, getRecordId } from '~/api/utils/misc.ts';
 
 import {
@@ -181,10 +181,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 
 										const [checked, setChecked] = createDerivedSignal(() => !!result.data?.exists.value);
 
-										const purpose = () => {
-											const raw = list.purpose.value;
-											return raw in ListPurposeLabels ? ListPurposeLabels[raw] : `Unknown list`;
-										};
+										const purpose = renderListPurposeLabel(list.purpose);
 
 										return (
 											<button
@@ -196,13 +193,13 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 												class={listItem}
 											>
 												<img
-													src={list.avatar.value || DefaultListAvatar}
+													src={/* @once */ list.avatar || DefaultListAvatar}
 													class="h-9 w-9 shrink-0 rounded-md"
 												/>
 
 												<div class="min-w-0 grow">
-													<p class="break-words text-sm font-bold">{list.name.value}</p>
-													<p class="text-sm text-muted-fg">{purpose()}</p>
+													<p class="break-words text-sm font-bold">{/* @once */ list.name}</p>
+													<p class="text-sm text-muted-fg">{/* @once */ purpose}</p>
 												</div>
 
 												<CheckIcon class="text-xl text-accent" classList={{ [`invisible`]: !checked() }} />

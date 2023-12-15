@@ -76,20 +76,20 @@ const CustomListPane = () => {
 export default CustomListPane;
 
 const ListHeaderAccessory = (props: { uid: DID; uri: string }) => {
-	const list = createQuery(() => {
+	const list = createQuery((client) => {
 		const key = getListInfoKey(props.uid, props.uri);
 
 		return {
 			queryKey: key,
 			queryFn: getListInfo,
 			initialDataUpdatedAt: 0,
-			initialData: () => getInitialListInfo(key),
+			initialData: () => getInitialListInfo(client, key),
 		};
 	});
 
 	return (
 		<VirtualContainer class="shrink-0">
-			<ListHeader list={list.data} />
+			<ListHeader uid={props.uid} list={list.data} />
 			<hr class="border-divider" />
 		</VirtualContainer>
 	);
