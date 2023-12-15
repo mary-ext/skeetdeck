@@ -28,7 +28,7 @@ const ProfileFollowersPaneDialog = (props: ProfileFollowersPaneDialogProps) => {
 	const linking = useLinking();
 	const { pane } = usePaneContext();
 
-	const follows = createInfiniteQuery(() => {
+	const followers = createInfiniteQuery(() => {
 		const key = getProfileFollowersKey(pane.uid, actor);
 
 		return {
@@ -41,7 +41,7 @@ const ProfileFollowersPaneDialog = (props: ProfileFollowersPaneDialogProps) => {
 	});
 
 	const subject = createMemo(() => {
-		return follows.data?.pages[0].subject;
+		return followers.data?.pages[0].subject;
 	});
 
 	return (
@@ -59,18 +59,12 @@ const ProfileFollowersPaneDialog = (props: ProfileFollowersPaneDialogProps) => {
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<ProfileList
-					profiles={follows.data?.pages.flatMap((page) => page.profiles)}
-					fetching={follows.isFetching}
-					error={follows.error}
-					hasMore={follows.hasNextPage}
-					onRetry={() => {
-						if (follows.isRefetchError || follows.isLoadingError) {
-							follows.refetch();
-						} else {
-							follows.fetchNextPage();
-						}
-					}}
-					onLoadMore={() => follows.fetchNextPage()}
+					profiles={followers.data?.pages.flatMap((page) => page.profiles)}
+					fetching={followers.isFetching}
+					error={followers.error}
+					hasMore={followers.hasNextPage}
+					onRetry={() => followers.fetchNextPage()}
+					onLoadMore={() => followers.fetchNextPage()}
 					onItemClick={(profile, alt) => {
 						if (alt) {
 							return;

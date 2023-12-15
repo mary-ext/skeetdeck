@@ -45,13 +45,7 @@ const PostLikedByPaneDialog = (props: PostLikedByDialogProps) => {
 					fetching={likes.isFetching}
 					error={likes.error}
 					hasMore={likes.hasNextPage}
-					onRetry={() => {
-						if (likes.isRefetchError || likes.isLoadingError) {
-							likes.refetch();
-						} else {
-							likes.fetchNextPage();
-						}
-					}}
+					onRetry={() => likes.fetchNextPage()}
 					onLoadMore={() => likes.fetchNextPage()}
 					onItemClick={(profile, alt) => {
 						if (alt) {

@@ -26,7 +26,7 @@ const PostRepostedByPaneDialog = (props: PostRepostedByDialogProps) => {
 
 	const uri = `at://${actor}/app.bsky.feed.post/${rkey}`;
 
-	const likes = createInfiniteQuery(() => {
+	const reposts = createInfiniteQuery(() => {
 		return {
 			queryKey: getPostRepostsKey(pane.uid, uri),
 			queryFn: getPostReposts,
@@ -41,18 +41,12 @@ const PostRepostedByPaneDialog = (props: PostRepostedByDialogProps) => {
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<ProfileList
-					profiles={likes.data?.pages.flatMap((page) => page.profiles)}
-					fetching={likes.isFetching}
-					error={likes.error}
-					hasMore={likes.hasNextPage}
-					onRetry={() => {
-						if (likes.isRefetchError || likes.isLoadingError) {
-							likes.refetch();
-						} else {
-							likes.fetchNextPage();
-						}
-					}}
-					onLoadMore={() => likes.fetchNextPage()}
+					profiles={reposts.data?.pages.flatMap((page) => page.profiles)}
+					fetching={reposts.isFetching}
+					error={reposts.error}
+					hasMore={reposts.hasNextPage}
+					onRetry={() => reposts.fetchNextPage()}
+					onLoadMore={() => reposts.fetchNextPage()}
 					onItemClick={(profile, alt) => {
 						if (alt) {
 							return;

@@ -63,13 +63,7 @@ const ProfileFollowsPaneDialog = (props: ProfileFollowsPaneDialogProps) => {
 					fetching={follows.isFetching}
 					error={follows.error}
 					hasMore={follows.hasNextPage}
-					onRetry={() => {
-						if (follows.isRefetchError || follows.isLoadingError) {
-							follows.refetch();
-						} else {
-							follows.fetchNextPage();
-						}
-					}}
+					onRetry={() => follows.fetchNextPage()}
 					onLoadMore={() => follows.fetchNextPage()}
 					onItemClick={(profile, alt) => {
 						if (alt) {

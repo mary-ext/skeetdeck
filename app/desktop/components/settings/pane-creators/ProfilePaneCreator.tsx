@@ -68,13 +68,7 @@ const ProfilePaneCreator = (props: PaneCreatorProps) => {
 									fetching={profiles.isFetching}
 									error={profiles.error}
 									hasMore={profiles.hasNextPage}
-									onRetry={() => {
-										if (profiles.isRefetchError || profiles.isLoadingError) {
-											profiles.refetch();
-										} else {
-											profiles.fetchNextPage();
-										}
-									}}
+									onRetry={() => profiles.fetchNextPage()}
 									onLoadMore={() => profiles.fetchNextPage()}
 									onItemClick={handleItemClick}
 								/>
@@ -98,13 +92,7 @@ const ProfilePaneCreator = (props: PaneCreatorProps) => {
 								fetching={profiles.isFetching}
 								error={profiles.error}
 								hasMore={profiles.hasNextPage}
-								onRetry={() => {
-									if (profiles.isRefetchError || profiles.isLoadingError) {
-										profiles.refetch();
-									} else {
-										profiles.fetchNextPage();
-									}
-								}}
+								onRetry={() => profiles.fetchNextPage()}
 								onLoadMore={() => profiles.fetchNextPage()}
 								onItemClick={handleItemClick}
 							/>
