@@ -56,12 +56,7 @@ const FeedList = (props: FeedListProps) => {
 					<GenericErrorView
 						error={feeds.error}
 						onRetry={() => {
-							if (feeds.isRefetchError || feeds.isLoadingError) {
-								feeds.refetch();
-							} else {
-								// @ts-expect-error
-								feeds.fetchNextPage();
-							}
+							feeds.fetchNextPage();
 						}}
 					/>
 				);

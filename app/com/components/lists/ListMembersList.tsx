@@ -100,12 +100,7 @@ const ListMembersList = (props: ListMembersListProps) => {
 					<GenericErrorView
 						error={members.error}
 						onRetry={() => {
-							if (members.isRefetchError || members.isLoadingError) {
-								members.refetch();
-							} else {
-								// @ts-expect-error
-								members.fetchNextPage();
-							}
+							members.fetchNextPage();
 						}}
 					/>
 				);

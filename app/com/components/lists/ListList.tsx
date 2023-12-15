@@ -56,12 +56,7 @@ const ListList = (props: ListListProps) => {
 					<GenericErrorView
 						error={lists.error}
 						onRetry={() => {
-							if (lists.isRefetchError || lists.isLoadingError) {
-								lists.refetch();
-							} else {
-								// @ts-expect-error
-								lists.fetchNextPage();
-							}
+							lists.fetchNextPage();
 						}}
 					/>
 				);
