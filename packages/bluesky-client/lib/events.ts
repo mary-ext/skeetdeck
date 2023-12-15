@@ -25,6 +25,8 @@ export class EventEmitter<Events extends EventMap> {
 		} else {
 			existing.push(listener);
 		}
+
+		return () => this.off(type, listener);
 	}
 	off<E extends keyof Events>(type: E, listener: Events[E]) {
 		const events = this.#events;
