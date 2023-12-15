@@ -1,6 +1,6 @@
 import { type QueryKey, type QueryObserver, type QueryObserverResult } from '@tanstack/query-core';
 
-import { createMemo, createRenderEffect, mergeProps, on, onCleanup, untrack } from 'solid-js';
+import { createMemo, createRenderEffect, on, onCleanup, untrack } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import { isServer } from 'solid-js/web';
 
@@ -19,12 +19,11 @@ export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryK
 	const isRestoring = useIsRestoring();
 
 	const defaultedOptions = createMemo(() => {
-		return mergeProps(client.defaultQueryOptions(options(client)) || {}, {
-			get _optimisticResults() {
-				return isRestoring() ? 'isRestoring' : 'optimistic';
-			},
+		return {
+			...client.defaultQueryOptions(options(client)),
+			_optimisticResults: isRestoring() ? ('isRestoring' as const) : ('optimistic' as const),
 			...(isServer && { retry: false, throwOnError: true }),
-		});
+		};
 	});
 
 	const initialDefaultedOptions = untrack(defaultedOptions);

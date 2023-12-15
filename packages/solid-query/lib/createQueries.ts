@@ -15,7 +15,6 @@ import {
 	createComputed,
 	createMemo,
 	createRenderEffect,
-	mergeProps,
 	on,
 	onCleanup,
 	onMount,
@@ -178,13 +177,12 @@ export function createQueries<
 	const isRestoring = useIsRestoring();
 
 	const defaultedQueries = createMemo(() => {
-		return queriesOptions().queries.map((options) =>
-			mergeProps(client.defaultQueryOptions(options), {
-				get _optimisticResults() {
-					return isRestoring() ? 'isRestoring' : 'optimistic';
-				},
-			}),
-		);
+		return queriesOptions().queries.map((options) => {
+			return {
+				...client.defaultQueryOptions(options),
+				_optimisticResults: isRestoring() ? ('isRestoring' as const) : ('optimistic' as const),
+			};
+		});
 	});
 
 	const observer = new QueriesObserver(
