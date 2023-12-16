@@ -1,17 +1,19 @@
 import { type DefaultError, MutationObserver } from '@tanstack/query-core';
 
-import { createMemo, createRenderEffect, on, onCleanup, untrack } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { createMemo, createRenderEffect, createSignal, getOwner, on, onCleanup, untrack } from 'solid-js';
 
 import type { QueryClient } from './QueryClient.ts';
 import { useQueryClient } from './QueryClientProvider.tsx';
+
 import type { CreateMutateFunction, CreateMutationOptions, CreateMutationResult } from './types.ts';
+import { memoHandlers } from './utils.ts';
 
 // HOOK
 export function createMutation<TData = unknown, TError = DefaultError, TVariables = void, TContext = unknown>(
 	options: CreateMutationOptions<TData, TError, TVariables, TContext>,
 	queryClient?: QueryClient,
 ): CreateMutationResult<TData, TError, TVariables, TContext> {
+	const owner = getOwner();
 	const client = useQueryClient(queryClient);
 
 	const defaultedOptions = createMemo(() => {
@@ -26,7 +28,7 @@ export function createMutation<TData = unknown, TError = DefaultError, TVariable
 		observer.mutate(variables, mutateOptions).catch(noop);
 	};
 
-	const [state, setState] = createStore<CreateMutationResult<TData, TError, TVariables, TContext>>({
+	const [state, setState] = createSignal<CreateMutationResult<TData, TError, TVariables, TContext>>({
 		...observer.getCurrentResult(),
 		mutate,
 		mutateAsync: observer.getCurrentResult().mutate,
@@ -52,7 +54,8 @@ export function createMutation<TData = unknown, TError = DefaultError, TVariable
 		}),
 	);
 
-	return state;
+	const proxy = new Proxy({ s: state, o: owner, h: {} }, memoHandlers);
+	return proxy as unknown as CreateMutationResult<TData, TError, TVariables, TContext>;
 }
 
 function noop() {}

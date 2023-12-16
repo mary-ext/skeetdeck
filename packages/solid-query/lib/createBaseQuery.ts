@@ -1,11 +1,12 @@
 import { type QueryKey, type QueryObserver, type QueryObserverResult } from '@tanstack/query-core';
 
-import { createMemo, createRenderEffect, on, onCleanup, untrack } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { createMemo, createRenderEffect, createSignal, getOwner, on, onCleanup, untrack } from 'solid-js';
 
 import type { QueryClient } from './QueryClient.ts';
 import { useQueryClient } from './QueryClientProvider.tsx';
+
 import type { CreateBaseQueryOptions, QueryAccessor } from './types.ts';
+import { memoHandlers } from './utils.ts';
 
 // Base Query Function that is used to create the query.
 export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryKey extends QueryKey>(
@@ -13,6 +14,7 @@ export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryK
 	Observer: typeof QueryObserver,
 	queryClient?: QueryClient,
 ) {
+	const owner = getOwner();
 	const client = useQueryClient(queryClient);
 
 	const defaultedOptions = createMemo(() => {
@@ -26,7 +28,7 @@ export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryK
 		initialDefaultedOptions,
 	);
 
-	const [state, setState] = createStore<QueryObserverResult<TData, TError>>(
+	const [state, setState] = createSignal<QueryObserverResult<TData, TError>>(
 		observer.getOptimisticResult(initialDefaultedOptions),
 	);
 
@@ -47,5 +49,7 @@ export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryK
 	);
 
 	observer.updateResult();
-	return state;
+
+	const proxy = new Proxy({ s: state, o: owner, h: {} }, memoHandlers);
+	return proxy as unknown as QueryObserverResult<TData, TError>;
 }

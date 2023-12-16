@@ -162,6 +162,9 @@ export type QueriesResults<
 					: // Fallback
 						Array<CreateQueryResult>;
 
+// @todo: rewrite this to not use Solid.js stores, but then again, I don't
+// really use this functionality much.
+
 export function createQueries<
 	T extends Array<any>,
 	TCombinedResult extends QueriesResults<T> = QueriesResults<T>,
