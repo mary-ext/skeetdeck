@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 
-import type { UnionOf } from '~/api/atp-schema.ts';
+import type { RefOf } from '~/api/atp-schema.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
 import { Interactive } from '../../primitives/interactive.ts';
@@ -9,10 +9,8 @@ import { LINK_FEED, Link } from '../Link.tsx';
 
 import DefaultFeedAvatar from '../../assets/default-feed-avatar.svg?url';
 
-type EmbeddedFeed = UnionOf<'app.bsky.feed.defs#generatorView'>;
-
 export interface EmbedFeedProps {
-	feed: EmbeddedFeed;
+	feed: RefOf<'app.bsky.feed.defs#generatorView'>;
 }
 
 const embedFeedInteractive = Interactive({ variant: 'muted', class: 'w-full' });

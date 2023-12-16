@@ -1,9 +1,12 @@
-import { type JSX, lazy } from 'solid-js';
+import { type JSX, lazy, createMemo } from 'solid-js';
 
+import { useQueryClient } from '@pkg/solid-query';
+
+import type { DID, RefOf } from '~/api/atp-schema.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
+import { feedShadow } from '~/api/caches/feeds.ts';
 import { updateFeedLike } from '~/api/mutations/like-feed.ts';
-import type { SignalizedFeed } from '~/api/stores/feeds.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
 
@@ -12,39 +15,56 @@ import { openModal } from '~/com/globals/modals.tsx';
 import { Button } from '~/com/primitives/button.ts';
 
 import { LINK_FEED_LIKED_BY, LINK_PROFILE, Link } from '~/com/components/Link.tsx';
-
-import FavoriteIcon from '~/com/icons/baseline-favorite.tsx';
-import FavoriteOutlinedIcon from '~/com/icons/outline-favorite.tsx';
+import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 
 import DefaultFeedAvatar from '~/com/assets/default-feed-avatar.svg?url';
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
+import FavoriteIcon from '~/com/icons/baseline-favorite.tsx';
+import FavoriteOutlinedIcon from '~/com/icons/outline-favorite.tsx';
 
 const LazyImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
 
 export interface FeedHeaderProps {
-	feed?: SignalizedFeed;
+	uid: DID;
+	feed?: RefOf<'app.bsky.feed.defs#generatorView'>;
 }
 
 const FeedHeader = (props: FeedHeaderProps) => {
-	return (() => {
-		const feed = props.feed;
+	const hasList = createMemo(() => props.feed !== undefined);
 
-		if (!feed) {
-			return (
-				<div class="p-4" style="height:172px">
-					<div class="h-13 w-13 shrink-0 rounded-md bg-secondary/20"></div>
-				</div>
-			);
+	return (() => {
+		if (hasList()) {
+			return renderFeedHeader(props.uid, () => props.feed!);
 		}
 
-		const creator = feed.creator;
-		const isLiked = () => !!feed.viewer.like.value;
+		return renderFallback();
+	}) as unknown as JSX.Element;
+};
 
-		return (
-			<div class="flex flex-col gap-3 p-4">
+const renderFallback = () => {
+	return (
+		<div class="shrink-0 p-4" style="height:172px">
+			<div class="h-13 w-13 shrink-0 rounded-md bg-secondary/20"></div>
+		</div>
+	);
+};
+
+const renderFeedHeader = (uid: DID, feed: () => RefOf<'app.bsky.feed.defs#generatorView'>) => {
+	const client = useQueryClient();
+
+	const shadowed = feedShadow.get(feed);
+	const creator = createMemo(() => feed().creator);
+
+	const isLiked = () => {
+		return shadowed().viewer?.like;
+	};
+
+	return (
+		<VirtualContainer class="shrink-0">
+			<div class="flex flex-col gap-4 p-4">
 				<div class="flex gap-4">
 					{(() => {
-						const avatar = feed.avatar.value;
+						const avatar = feed().avatar;
 
 						if (avatar) {
 							return (
@@ -63,37 +83,49 @@ const FeedHeader = (props: FeedHeaderProps) => {
 					})()}
 
 					<div class="grow">
-						<p class="break-words text-lg font-bold">{feed.name.value}</p>
+						<p class="break-words text-lg font-bold">{feed().displayName}</p>
 
 						<Link
-							to={/* @once */ { type: LINK_PROFILE, actor: creator.did }}
+							to={/* @once */ { type: LINK_PROFILE, actor: creator().did }}
 							class="group mt-1 flex items-center text-left"
-						>
-							<img src={creator.avatar.value || DefaultUserAvatar} class="mr-2 h-5 w-5 rounded-full" />
-							<span class="mr-1 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold empty:hidden group-hover:underline">
-								{creator.displayName.value}
-							</span>
-							<span class="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-fg">
-								@{creator.handle.value}
-							</span>
-						</Link>
+							children={(() => {
+								// We needed to destroy the image element, so let's do them all
+								// in one single template anyway.
+								const $creator = feed().creator;
+
+								return (
+									<div class="contents">
+										<img
+											src={/* @once */ $creator.avatar || DefaultUserAvatar}
+											class="mr-2 h-5 w-5 rounded-full"
+										/>
+										<span class="mr-1 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold empty:hidden group-hover:underline">
+											{/* @once */ $creator.displayName}
+										</span>
+										<span class="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-fg">
+											{/* @once */ '@' + $creator.handle}
+										</span>
+									</div>
+								);
+							})()}
+						/>
 					</div>
 				</div>
 
-				<p class="whitespace-pre-wrap break-words text-sm empty:hidden">{feed.description.value}</p>
+				<p class="whitespace-pre-wrap break-words text-sm empty:hidden">{feed().description}</p>
 
 				<Link
-					to={{ type: LINK_FEED_LIKED_BY, actor: creator.did, rkey: getRecordId(feed.uri) }}
+					to={{ type: LINK_FEED_LIKED_BY, actor: creator().did, rkey: getRecordId(feed().uri) }}
 					class="text-left text-sm text-muted-fg hover:underline"
 				>
-					Liked by {formatCompact(feed.likeCount.value)} users
+					Liked by {formatCompact(shadowed().likeCount ?? 0)} users
 				</Link>
 
 				<div class="flex gap-2">
 					<button
 						title={!isLiked() ? `Like this feed` : `Unlike this feed`}
 						onClick={() => {
-							updateFeedLike(feed, !isLiked());
+							updateFeedLike(client, uid, shadowed());
 						}}
 						class={/* @once */ Button({ variant: 'outline' })}
 					>
@@ -105,8 +137,8 @@ const FeedHeader = (props: FeedHeaderProps) => {
 					</button>
 				</div>
 			</div>
-		);
-	}) as unknown as JSX.Element;
+		</VirtualContainer>
+	);
 };
 
 export default FeedHeader;

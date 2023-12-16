@@ -1,10 +1,10 @@
-import type { QueryFunctionContext as QC } from '@pkg/solid-query';
+import type { QueryFunctionContext as QC, QueryClient } from '@pkg/solid-query';
 
 import type { DID, RefOf } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
 import { createBatchedFetch } from '../utils/batch-fetch.ts';
 
-import { getCachedFeed, mergeFeed } from '../stores/feeds.ts';
+import { findFeedInQueryData as findFeedInProfileListsData } from './get-profile-feeds.ts';
 
 type Feed = RefOf<'app.bsky.feed.defs#generatorView'>;
 type Query = [uid: DID, uri: string];
@@ -41,13 +41,16 @@ export const getFeedInfo = async (ctx: QC<ReturnType<typeof getFeedInfoKey>>) =>
 	const feed = await fetchFeedBatched([uid, uri]);
 	ctx.signal.throwIfAborted();
 
-	return mergeFeed(uid, feed);
+	return feed;
 };
 
-export const getInitialFeedInfo = (key: ReturnType<typeof getFeedInfoKey>) => {
+export const getInitialFeedInfo = (client: QueryClient, key: ReturnType<typeof getFeedInfoKey>) => {
 	const [, uid, uri] = key;
 
-	const list = getCachedFeed(uid, uri);
-
-	return list;
+	{
+		const data = findFeedInProfileListsData(client, uid, uri);
+		if (data) {
+			return data;
+		}
+	}
 };

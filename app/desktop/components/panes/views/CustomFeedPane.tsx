@@ -11,7 +11,6 @@ import type { CustomFeedPaneConfig } from '../../../globals/panes.ts';
 import { IconButton } from '~/com/primitives/icon-button.ts';
 
 import TimelineList from '~/com/components/lists/TimelineList.tsx';
-import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 
 import InfoIcon from '~/com/icons/baseline-info.tsx';
 import SettingsIcon from '~/com/icons/baseline-settings.tsx';
@@ -75,21 +74,21 @@ const CustomFeedPane = () => {
 export default CustomFeedPane;
 
 const FeedHeaderAccessory = (props: { uid: DID; uri: string }) => {
-	const list = createQuery(() => {
+	const list = createQuery((client) => {
 		const key = getFeedInfoKey(props.uid, props.uri);
 
 		return {
 			queryKey: key,
 			queryFn: getFeedInfo,
 			initialDataUpdatedAt: 0,
-			initialData: () => getInitialFeedInfo(key),
+			initialData: () => getInitialFeedInfo(client, key),
 		};
 	});
 
 	return (
-		<VirtualContainer class="shrink-0">
-			<FeedHeader feed={list.data} />
+		<>
+			<FeedHeader uid={props.uid} feed={list.data} />
 			<hr class="border-divider" />
-		</VirtualContainer>
+		</>
 	);
 };

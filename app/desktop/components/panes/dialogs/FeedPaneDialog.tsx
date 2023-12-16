@@ -1,3 +1,5 @@
+import { createMemo } from 'solid-js';
+
 import { createQuery } from '@pkg/solid-query';
 
 import type { DID } from '~/api/atp-schema.ts';
@@ -34,16 +36,18 @@ const FeedPaneDialog = (props: FeedPaneDialogProps) => {
 
 	const uri = `at://${actor}/app.bsky.feed.generator/${rkey}`;
 
-	const feed = createQuery(() => {
+	const feed = createQuery((client) => {
 		const key = getFeedInfoKey(pane.uid, uri);
 
 		return {
 			queryKey: key,
 			queryFn: getFeedInfo,
 			initialDataUpdatedAt: 0,
-			initialData: () => getInitialFeedInfo(key),
+			initialData: () => getInitialFeedInfo(client, key),
 		};
 	});
+
+	const hasFeed = createMemo(() => feed.data !== undefined);
 
 	return (
 		<PaneDialog>
@@ -52,27 +56,27 @@ const FeedPaneDialog = (props: FeedPaneDialogProps) => {
 					const $feed = feed.data;
 
 					if ($feed) {
-						return $feed.name.value;
+						return $feed.displayName;
 					}
 
 					return `Feed`;
 				})()}
 			>
 				{(() => {
-					const $feed = feed.data;
-
-					if ($feed) {
+					if (hasFeed()) {
 						return (
 							<button
 								title="Add as column"
 								onClick={() => {
+									const $feed = feed.data!;
+
 									addPane<CustomFeedPaneConfig>(
 										deck,
 										{
 											type: PANE_TYPE_FEED,
 											uid: pane.uid,
 											feed: {
-												name: $feed.name.value,
+												name: $feed.displayName,
 												uri: $feed.uri,
 											},
 											infoVisible: true,
@@ -92,7 +96,7 @@ const FeedPaneDialog = (props: FeedPaneDialogProps) => {
 			</PaneDialogHeader>
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
-				<FeedHeader feed={feed.data} />
+				<FeedHeader uid={pane.uid} feed={feed.data} />
 
 				<hr class="border-divider" />
 
