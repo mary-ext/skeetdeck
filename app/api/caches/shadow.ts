@@ -42,12 +42,14 @@ export const createShadow = <T extends WeakKey, S, P extends unknown[]>(
 			}
 
 			batch(() => {
+				const update = (prev: Partial<S> | undefined) => (prev ? { ...prev, ...partial } : partial);
+
 				for (let i = 0, ilen = items.length; i < ilen; i++) {
 					const item = items[i];
 
 					let signal = locals.get(item);
 					if (signal !== undefined) {
-						signal[1]((prev) => (prev ? { ...prev, ...partial } : partial));
+						signal[1](update);
 					} else {
 						// @ts-expect-error - no idea why it's throwing a fit here
 						locals.set(item, createSignal(partial));
