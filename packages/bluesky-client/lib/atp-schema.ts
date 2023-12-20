@@ -655,6 +655,7 @@ export interface Queries {
 		response: {
 			cursor?: string;
 			notifications: RefOf<'app.bsky.notification.listNotifications#notification'>[];
+			seenAt?: string;
 		};
 	};
 	/**
@@ -1484,6 +1485,10 @@ export interface Procedures {
 			content: string;
 			subject?: string;
 			senderDid: DID;
+			/**
+			 * Additional comment by the sender that won't be used in the email itself but helpful to provide more context for moderators/reviewers
+			 */
+			comment?: string;
 		};
 		response: {
 			sent: boolean;
@@ -2764,6 +2769,10 @@ export interface Objects {
 		 * The subject line of the email sent to the user.
 		 */
 		subjectLine: string;
+		/**
+		 * Additional comment about the outgoing comm.
+		 */
+		comment?: string;
 	};
 	/**
 	 * Metadata tag on an atproto resource (eg, repo or record).
