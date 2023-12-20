@@ -4,10 +4,10 @@ import type { DID } from '~/api/atp-schema.ts';
 import { renderLabelName } from '~/api/display.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 
-import { CauseLabel, CauseMutedKeyword } from '~/api/moderation/action.ts';
+import { CauseLabel, CauseMutedKeyword, type ModerationDecision } from '~/api/moderation/action.ts';
 import { FlagNoOverride } from '~/api/moderation/enums.ts';
 
-import { getPostModMaker } from '~/api/moderation/decisions/post.ts';
+import { getPostModDecision } from '~/api/moderation/decisions/post.ts';
 
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 
@@ -19,49 +19,52 @@ export interface PostWarningProps {
 	post: SignalizedPost;
 	timelineDid?: DID;
 	permalink?: boolean;
-	children?: JSX.Element;
+	children: (decision: () => ModerationDecision | null) => JSX.Element;
 }
 
 const PostWarning = (props: PostWarningProps) => {
 	const decision = createMemo(() => {
+		return getPostModDecision(props.post, useSharedPreferences());
+	});
+
+	const verdict = createMemo(() => {
 		const post = props.post;
 		const permalink = props.permalink;
 		const timelineDid = props.timelineDid;
 
-		const maker = getPostModMaker(post, useSharedPreferences());
-		const decision = maker();
+		const $decision = decision();
 
-		if (decision) {
+		if ($decision) {
 			if (permalink) {
-				if (decision.b && decision.s.t === CauseLabel) {
-					return decision;
+				if ($decision.b && $decision.s.t === CauseLabel) {
+					return $decision;
 				}
 
 				return;
 			}
 
 			if (
-				decision.b &&
+				$decision.b &&
 				(!timelineDid ||
-					decision.s.t === CauseLabel ||
-					decision.s.t === CauseMutedKeyword ||
+					$decision.s.t === CauseLabel ||
+					$decision.s.t === CauseMutedKeyword ||
 					timelineDid !== post.author.did)
 			) {
-				return decision;
+				return $decision;
 			}
 		}
 	});
 
 	const render = () => {
-		const $decision = decision();
+		const $verdict = verdict();
 
-		if (!$decision) {
-			return props.children;
+		if (!$verdict) {
+			return props.children(decision);
 		}
 
 		const [show, setShow] = createSignal(false);
 
-		const source = $decision.s;
+		const source = $verdict.s;
 		const forced = source.t === CauseLabel && source.d.f & FlagNoOverride;
 
 		let Icon: Component<ComponentProps<'svg'>>;
@@ -94,7 +97,7 @@ const PostWarning = (props: PostWarningProps) => {
 			!forced &&
 				(() => {
 					if (show()) {
-						return props.children;
+						return props.children(decision);
 					}
 				}),
 		];

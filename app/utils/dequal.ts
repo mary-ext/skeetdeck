@@ -4,6 +4,10 @@ export const dequal = (a: any, b: any): boolean => {
 	let ctor: any;
 	let len: number;
 
+	if (a === b) {
+		return true;
+	}
+
 	if (a && b && (ctor = a.constructor) === b.constructor) {
 		if (ctor === Array) {
 			if ((len = a.length) === b.length) {
@@ -28,10 +32,6 @@ export const dequal = (a: any, b: any): boolean => {
 
 			return keys(b).length === len;
 		}
-	}
-
-	if (a === b) {
-		return true;
 	}
 
 	return a !== a && b !== b;

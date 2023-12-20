@@ -3,44 +3,38 @@ import { type JSX, createMemo, createSignal } from 'solid-js';
 import { renderLabelName } from '~/api/display.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 
-import { CauseLabel } from '~/api/moderation/action.ts';
+import { CauseLabel, type ModerationDecision } from '~/api/moderation/action.ts';
 import { FlagNoOverride } from '~/api/moderation/enums.ts';
-
-import { getPostModMaker } from '~/api/moderation/decisions/post.ts';
 
 import VisibilityIcon from '~/com/icons/baseline-visibility.tsx';
 
-import { useSharedPreferences } from '../SharedPreferences.tsx';
-
 export interface PostEmbedWarningProps {
 	post: SignalizedPost;
+	decision: ModerationDecision | undefined | null;
 	children?: JSX.Element;
 }
 
 const PostEmbedWarning = (props: PostEmbedWarningProps) => {
-	const decision = createMemo(() => {
-		const post = props.post;
+	const verdict = createMemo(() => {
+		const $decision = props.decision;
 
-		const maker = getPostModMaker(post, useSharedPreferences());
-		const decision = maker();
-
-		if (decision) {
-			if (decision.m) {
-				return decision;
+		if ($decision) {
+			if ($decision.m) {
+				return $decision;
 			}
 		}
 	});
 
 	const render = () => {
-		const $decision = decision();
+		const $verdict = verdict();
 
-		if (!$decision) {
+		if (!$verdict) {
 			return props.children;
 		}
 
 		const [show, setShow] = createSignal(false);
 
-		const source = $decision.s;
+		const source = $verdict.s;
 		const forced = source.t === CauseLabel && source.d.f & FlagNoOverride;
 		const title = source.t === CauseLabel ? renderLabelName(source.l.val) : `Media warning`;
 

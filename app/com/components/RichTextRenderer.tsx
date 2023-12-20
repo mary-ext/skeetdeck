@@ -1,10 +1,8 @@
-import { type JSX } from 'solid-js';
+import { createMemo, type JSX } from 'solid-js';
 
 import { isLinkValid } from '~/api/richtext/renderer.ts';
 import { segmentRichText } from '~/api/richtext/segmentize.ts';
 import type { Facet, RichTextSegment } from '~/api/richtext/types.ts';
-
-import { dequal } from '~/utils/dequal.ts';
 
 import { type Linking, LINK_EXTERNAL, LINK_PROFILE, LINK_TAG, useLinking } from './Link.tsx';
 
@@ -24,24 +22,16 @@ interface RichTextUiSegment {
 	to: Linking | undefined;
 }
 
-const richtexts = new WeakMap<WeakKey, WeakRef<() => RichTextUiSegment[]>>();
-
 const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => {
 	const linking = useLinking();
 	const get = props.get;
 
-	const segments = () => {
-		const item = props.item;
+	const segments = createMemo(() => {
+		const ret = get(props.item);
+		const segments = segmentRichText(ret.t, ret.f);
 
-		let ref = richtexts.get(item);
-		let segmenter = ref?.deref();
-
-		if (!segmenter) {
-			richtexts.set(item, new WeakRef((segmenter = createSegmenter(item, get))));
-		}
-
-		return segmenter();
-	};
+		return renderRichText(segments);
+	});
 
 	const navigateLink = (ev: MouseEvent | KeyboardEvent) => {
 		const enum ShouldLink {
@@ -116,24 +106,6 @@ const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => 
 };
 
 export default RichTextRenderer;
-
-const createSegmenter = <T extends object>(item: T, get: (item: T) => RichTextReturn) => {
-	let curr: unknown;
-	let rendered: RichTextUiSegment[];
-
-	return (): RichTextUiSegment[] => {
-		const next = get(item);
-
-		if (!dequal(curr, next)) {
-			const segments = segmentRichText(next.t, next.f);
-
-			curr = next;
-			rendered = renderRichText(segments);
-		}
-
-		return rendered;
-	};
-};
 
 const renderRichText = (segments: RichTextSegment[]): RichTextUiSegment[] => {
 	const ui: RichTextUiSegment[] = [];

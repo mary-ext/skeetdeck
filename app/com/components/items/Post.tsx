@@ -313,40 +313,44 @@ const PostContent = ({ post, postPermalink, timelineDid }: PostContentProps) => 
 
 	return (
 		<PostWarning post={post()} timelineDid={timelineDid()}>
-			<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
-				<RichTextRenderer
-					item={post()}
-					get={(item) => {
-						const record = item.record.value;
-						return { t: record.text, f: record.facets };
-					}}
-				/>
-			</div>
+			{(decision) => (
+				<>
+					<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
+						<RichTextRenderer
+							item={post()}
+							get={(item) => {
+								const record = item.record.value;
+								return { t: record.text, f: record.facets };
+							}}
+						/>
+					</div>
 
-			<Link
-				ref={(node) => {
-					node.style.display = post().$truncated !== false ? 'block' : 'none';
+					<Link
+						ref={(node) => {
+							node.style.display = post().$truncated !== false ? 'block' : 'none';
 
-					createEffect(() => {
-						const $post = post();
-						const delta = content!.scrollHeight - content!.clientHeight;
+							createEffect(() => {
+								const $post = post();
+								const delta = content!.scrollHeight - content!.clientHeight;
 
-						const next = delta > 10 && !!$post.record.value.text;
+								const next = delta > 10 && !!$post.record.value.text;
 
-						$post.$truncated = next;
-						node.style.display = next ? 'block' : 'none';
-					});
-				}}
-				to={postPermalink()}
-				class="text-sm text-accent hover:underline"
-			>
-				Show more
-			</Link>
+								$post.$truncated = next;
+								node.style.display = next ? 'block' : 'none';
+							});
+						}}
+						to={postPermalink()}
+						class="text-sm text-accent hover:underline"
+					>
+						Show more
+					</Link>
 
-			{post().embed.value && (
-				<PostEmbedWarning post={post()}>
-					<Embed embed={post().embed.value!} />
-				</PostEmbedWarning>
+					{post().embed.value && (
+						<PostEmbedWarning post={post()} decision={decision()}>
+							<Embed embed={post().embed.value!} />
+						</PostEmbedWarning>
+					)}
+				</>
 			)}
 		</PostWarning>
 	);

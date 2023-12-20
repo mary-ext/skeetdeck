@@ -6,7 +6,7 @@ import { renderLabelName } from '~/api/display.ts';
 import { type ModerationDecision, CauseLabel, CauseMutedKeyword } from '~/api/moderation/action.ts';
 import { FlagNoOverride } from '~/api/moderation/enums.ts';
 
-import { getQuoteModMaker } from '~/api/moderation/decisions/quote.ts';
+import { getQuoteModDecision } from '~/api/moderation/decisions/quote.ts';
 
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 
@@ -23,23 +23,24 @@ export interface PostQuoteWarningProps {
 
 const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 	const decision = createMemo(() => {
-		const quote = props.quote;
+		return getQuoteModDecision(props.quote, useSharedPreferences());
+	});
 
-		const maker = getQuoteModMaker(quote, useSharedPreferences());
-		const decision = maker();
+	const verdict = createMemo(() => {
+		const $decision = decision();
 
-		if (decision) {
-			if (decision.b || decision.m) {
-				return decision;
+		if ($decision) {
+			if ($decision.b || $decision.m) {
+				return $decision;
 			}
 		}
 	});
 
 	const render = () => {
-		const $decision = decision();
+		const $verdict = verdict();
 
-		if (!$decision || !$decision.b) {
-			return props.children?.($decision || null);
+		if (!$verdict || !$verdict.b) {
+			return props.children?.($verdict || null);
 		}
 
 		const [show, setShow] = createSignal(false);
@@ -51,10 +52,10 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 				const $show = show();
 
 				if ($show) {
-					return props.children?.($decision);
+					return props.children?.($verdict);
 				}
 
-				const source = $decision.s;
+				const source = $verdict.s;
 				const forced = source.t === CauseLabel && source.d.f & FlagNoOverride;
 
 				let Icon: Component<ComponentProps<'svg'>>;

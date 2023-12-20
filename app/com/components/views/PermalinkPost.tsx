@@ -1,4 +1,4 @@
-import type { JSX } from 'solid-js';
+import { type JSX, createMemo } from 'solid-js';
 
 import type { DID, Records, RefOf } from '~/api/atp-schema.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
@@ -6,11 +6,14 @@ import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 import { updatePostLike } from '~/api/mutations/like-post.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 
+import { getPostModDecision } from '~/api/moderation/decisions/post.ts';
+
 import { formatCompact } from '~/utils/intl/number.ts';
 import { formatAbsDateTime } from '~/utils/intl/time.ts';
 
 import { LINK_LIST, LINK_POST_LIKED_BY, LINK_POST_REPOSTED_BY, LINK_PROFILE, Link } from '../Link.tsx';
 import RichTextRenderer from '../RichTextRenderer.tsx';
+import { useSharedPreferences } from '../SharedPreferences.tsx';
 
 import PostEmbedWarning from '../moderation/PostEmbedWarning.tsx';
 import Embed from '../embeds/Embed.tsx';
@@ -44,6 +47,10 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 	const rkey = () => {
 		return getRecordId(post().uri);
 	};
+
+	const decision = createMemo(() => {
+		return getPostModDecision(post(), useSharedPreferences());
+	});
 
 	return (
 		<div class="px-4 pt-3">
@@ -86,7 +93,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 			</div>
 
 			{post().embed.value && (
-				<PostEmbedWarning post={post()}>
+				<PostEmbedWarning post={post()} decision={decision()}>
 					<Embed embed={post().embed.value!} large />
 				</PostEmbedWarning>
 			)}
