@@ -1,8 +1,6 @@
 // @todo: move this to ~/com as it's now making use of SharedPreferences
 
-import { createRoot } from 'solid-js';
-
-import { createLazyMemo } from '~/utils/hooks.ts';
+import { dequal } from '~/utils/dequal.ts';
 
 import type { Records, UnionOf } from '../../atp-schema.ts';
 
@@ -22,19 +20,24 @@ import { type SharedPreferencesObject, isProfileTempMuted } from '~/com/componen
 type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
 type PostRecord = Records['app.bsky.feed.post'];
 
-const cache = new WeakMap<EmbeddedPostRecord, () => ModerationDecision | null>();
+const cache = new WeakMap<EmbeddedPostRecord, WeakRef<() => ModerationDecision | null>>();
 
 const createQuoteModDecision = (quote: EmbeddedPostRecord, opts: SharedPreferencesObject) => {
 	const { moderation, filters } = opts;
 
-	return createRoot(() => {
-		return createLazyMemo((): ModerationDecision | null => {
-			const labels = quote.labels;
-			const text = (quote.value as PostRecord).text;
+	let curr: unknown[];
+	let result: ModerationDecision | null;
 
-			const authorDid = quote.author.did;
-			const isMuted = quote.author.viewer?.muted;
+	return (): ModerationDecision | null => {
+		const labels = quote.labels;
+		const text = (quote.value as PostRecord).text;
 
+		const authorDid = quote.author.did;
+		const isMuted = quote.author.viewer?.muted;
+
+		const cacheKey = [moderation, filters];
+
+		if (!dequal(curr, cacheKey)) {
 			const accu: ModerationCause[] = [];
 
 			decideLabelModeration(accu, labels, authorDid, moderation);
@@ -42,16 +45,20 @@ const createQuoteModDecision = (quote: EmbeddedPostRecord, opts: SharedPreferenc
 			decideMutedTemporaryModeration(accu, isProfileTempMuted(filters, authorDid));
 			decideMutedKeywordModeration(accu, text, PreferenceWarn, moderation);
 
-			return finalizeModeration(accu);
-		});
-	});
+			curr = cacheKey;
+			result = finalizeModeration(accu);
+		}
+
+		return result;
+	};
 };
 
 export const getQuoteModMaker = (post: EmbeddedPostRecord, opts: SharedPreferencesObject) => {
-	let mod = cache.get(post);
+	let ref = cache.get(post);
+	let mod = ref?.deref();
 
 	if (!mod) {
-		cache.set(post, (mod = createQuoteModDecision(post, opts)));
+		cache.set(post, new WeakRef((mod = createQuoteModDecision(post, opts))));
 	}
 
 	return mod;

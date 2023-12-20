@@ -1,10 +1,10 @@
-import { type JSX, createRoot } from 'solid-js';
+import { type JSX } from 'solid-js';
 
 import { isLinkValid } from '~/api/richtext/renderer.ts';
 import { segmentRichText } from '~/api/richtext/segmentize.ts';
 import type { Facet, RichTextSegment } from '~/api/richtext/types.ts';
 
-import { createLazyMemo } from '~/utils/hooks.ts';
+import { dequal } from '~/utils/dequal.ts';
 
 import { type Linking, LINK_EXTERNAL, LINK_PROFILE, LINK_TAG, useLinking } from './Link.tsx';
 
@@ -24,7 +24,7 @@ interface RichTextUiSegment {
 	to: Linking | undefined;
 }
 
-const richtexts = new WeakMap<WeakKey, () => RichTextUiSegment[]>();
+const richtexts = new WeakMap<WeakKey, WeakRef<() => RichTextUiSegment[]>>();
 
 const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => {
 	const linking = useLinking();
@@ -33,9 +33,11 @@ const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => 
 	const segments = () => {
 		const item = props.item;
 
-		let segmenter = richtexts.get(item);
+		let ref = richtexts.get(item);
+		let segmenter = ref?.deref();
+
 		if (!segmenter) {
-			richtexts.set(item, (segmenter = createSegmenter(item, get)));
+			richtexts.set(item, new WeakRef((segmenter = createSegmenter(item, get))));
 		}
 
 		return segmenter();
@@ -116,14 +118,21 @@ const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => 
 export default RichTextRenderer;
 
 const createSegmenter = <T extends object>(item: T, get: (item: T) => RichTextReturn) => {
-	return createRoot(() => {
-		return createLazyMemo((): RichTextUiSegment[] => {
-			const { t: text, f: facets } = get(item);
+	let curr: unknown;
+	let rendered: RichTextUiSegment[];
 
-			const segments = segmentRichText(text, facets);
-			return renderRichText(segments);
-		});
-	});
+	return (): RichTextUiSegment[] => {
+		const next = get(item);
+
+		if (!dequal(curr, next)) {
+			const segments = segmentRichText(next.t, next.f);
+
+			curr = next;
+			rendered = renderRichText(segments);
+		}
+
+		return rendered;
+	};
 };
 
 const renderRichText = (segments: RichTextSegment[]): RichTextUiSegment[] => {

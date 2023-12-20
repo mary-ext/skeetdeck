@@ -14,6 +14,7 @@ const gc = new FinalizationRegistry<string>((id) => {
 	const ref = posts[id];
 
 	if (!ref || !ref.deref()) {
+		console.log(`removing post ${id}`);
 		delete posts[id];
 	}
 });
