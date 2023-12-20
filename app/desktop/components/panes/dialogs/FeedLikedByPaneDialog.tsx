@@ -27,14 +27,14 @@ const FeedLikedByPaneDialog = (props: FeedLikedByPaneDialogProps) => {
 
 	const uri = `at://${actor}/app.bsky.feed.generator/${rkey}`;
 
-	const feed = createQuery((client) => {
+	const feed = createQuery(() => {
 		const key = getFeedInfoKey(pane.uid, uri);
 
 		return {
 			queryKey: key,
 			queryFn: getFeedInfo,
 			initialDataUpdatedAt: 0,
-			initialData: () => getInitialFeedInfo(client, key),
+			initialData: () => getInitialFeedInfo(key),
 		};
 	});
 
@@ -55,7 +55,7 @@ const FeedLikedByPaneDialog = (props: FeedLikedByPaneDialogProps) => {
 					const $feed = feed.data;
 
 					if ($feed) {
-						return $feed.displayName;
+						return $feed.name.value;
 					}
 				})()}
 			/>

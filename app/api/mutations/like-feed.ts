@@ -1,55 +1,71 @@
-import type { QueryClient } from '@pkg/solid-query';
-
-import type { DID, Records, RefOf } from '../atp-schema.ts';
+import type { Records } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
 
-import type { Shadow } from '../caches/shadow.ts';
-import { feedShadow } from '../caches/feeds.ts';
+import type { SignalizedFeed } from '../stores/feeds.ts';
 
 import { getCurrentDate, getRecordId } from '../utils/misc.ts';
+import { createToggleMutation } from '../utils/toggle-mutation.ts';
 
 const likeRecordType = 'app.bsky.feed.like';
 
-type FeedView = RefOf<'app.bsky.feed.defs#generatorView'>;
+const createFeedLikeMutation = (feed: SignalizedFeed) => {
+	return createToggleMutation({
+		initialState: () => feed.viewer.like.value,
+		mutate: async (prevFollowingUri, shouldFollow) => {
+			const uid = feed.uid;
+			const agent = await multiagent.connect(uid);
 
-export const updateFeedLike = async (qc: QueryClient, uid: DID, feed: Shadow<FeedView>) => {
-	const likeUri = feed.viewer?.like;
+			if (shouldFollow) {
+				const record: Records[typeof likeRecordType] = {
+					createdAt: getCurrentDate(),
+					subject: {
+						uri: feed.uri,
+						cid: feed.cid.value,
+					},
+				};
 
-	const agent = await multiagent.connect(uid);
+				const response = await agent.rpc.call('com.atproto.repo.createRecord', {
+					data: {
+						repo: uid,
+						collection: likeRecordType,
+						record: record,
+					},
+				});
 
-	if (!likeUri) {
-		const record: Records[typeof likeRecordType] = {
-			createdAt: getCurrentDate(),
-			subject: {
-				uri: feed.uri,
-				cid: feed.cid,
-			},
-		};
+				return response.data.uri;
+			} else {
+				if (prevFollowingUri) {
+					await agent.rpc.call('com.atproto.repo.deleteRecord', {
+						data: {
+							repo: uid,
+							collection: likeRecordType,
+							rkey: getRecordId(prevFollowingUri),
+						},
+					});
+				}
 
-		const response = await agent.rpc.call('com.atproto.repo.createRecord', {
-			data: {
-				repo: uid,
-				collection: likeRecordType,
-				record: record,
-			},
-		});
+				return undefined;
+			}
+		},
+		finalize: (likeUri) => {
+			feed.viewer.like.value = likeUri;
+		},
+	});
+};
 
-		feedShadow.update([qc, uid, feed.uri], {
-			likeCount: (feed.likeCount ?? 0) + 1,
-			likeUri: response.data.uri,
-		});
-	} else {
-		await agent.rpc.call('com.atproto.repo.deleteRecord', {
-			data: {
-				repo: uid,
-				collection: likeRecordType,
-				rkey: getRecordId(likeUri),
-			},
-		});
+const mutations = new WeakMap<SignalizedFeed, ReturnType<typeof createFeedLikeMutation>>();
 
-		feedShadow.update([qc, uid, feed.uri], {
-			likeCount: (feed.likeCount ?? 1) - 1,
-			likeUri: undefined,
-		});
+export const updateFeedLike = (feed: SignalizedFeed, like: boolean) => {
+	let mutate = mutations.get(feed);
+	if (!mutate) {
+		mutations.set(feed, (mutate = createFeedLikeMutation(feed)));
 	}
+
+	const promise = mutate(like);
+	const likeUri = feed.viewer.like;
+
+	feed.likeCount.value += likeUri.value ? -1 : 1;
+	likeUri.value = like ? 'pending' : undefined;
+
+	return promise;
 };

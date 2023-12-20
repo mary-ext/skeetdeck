@@ -14,6 +14,7 @@ import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/g
 import { getInitialPost, getPost, getPostKey } from '~/api/queries/get-post.ts';
 import { getResolvedHandle, getResolvedHandleKey } from '~/api/queries/get-resolved-handle.ts';
 import type { getTimelineLatestKey } from '~/api/queries/get-timeline.ts';
+import type { SignalizedFeed } from '~/api/stores/feeds.ts';
 import { SignalizedPost } from '~/api/stores/posts.ts';
 import { producePostInsert } from '~/api/updaters/insert-post.ts';
 
@@ -109,7 +110,7 @@ const enum EmbeddingType {
 
 type Embedding =
 	| BaseEmbedding<EmbeddingType.QUOTE, SignalizedPost>
-	| BaseEmbedding<EmbeddingType.FEED, RefOf<'app.bsky.feed.defs#generatorView'>>
+	| BaseEmbedding<EmbeddingType.FEED, SignalizedFeed>
 	| BaseEmbedding<EmbeddingType.LIST, RefOf<'app.bsky.graph.defs#listView'>>;
 
 const getLanguages = (): string[] => {
@@ -224,13 +225,13 @@ const ComposerPane = () => {
 			}
 
 			if (collection === 'app.bsky.feed.generator') {
-				const feed = createQuery((client) => {
+				const feed = createQuery(() => {
 					const key = getFeedInfoKey(context.authorDid, uri);
 
 					return {
 						queryKey: key,
 						queryFn: getFeedInfo,
-						initialData: () => getInitialFeedInfo(client, key),
+						initialData: () => getInitialFeedInfo(key),
 					};
 				});
 
@@ -882,9 +883,22 @@ const ComposerPane = () => {
 											}
 
 											if (type === EmbeddingType.FEED) {
-												const data = query.data as RefOf<'app.bsky.feed.defs#generatorView'>;
+												const data = query.data as SignalizedFeed;
 
-												return <EmbedFeedContent feed={data} />;
+												const creator = data.creator;
+
+												return (
+													<EmbedFeedContent
+														feed={{
+															// @ts-expect-error
+															creator: {
+																handle: creator.handle.value,
+															},
+															avatar: data.avatar.value,
+															displayName: data.name.value,
+														}}
+													/>
+												);
 											}
 
 											if (type === EmbeddingType.LIST) {
