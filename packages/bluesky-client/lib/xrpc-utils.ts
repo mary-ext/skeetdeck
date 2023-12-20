@@ -15,14 +15,17 @@ export class XRPCResponse<T = any> {
 
 export class XRPCError extends Error {
 	success = false;
+	headers?: Headers;
 
 	constructor(
 		public status: ResponseType,
 		public error?: string,
 		message?: string,
+		headers?: Headers,
 	) {
 		super(message || error);
 		this.name = 'XRPCError';
+		this.headers = headers;
 	}
 }
 
