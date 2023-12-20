@@ -63,7 +63,6 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 			ref={startMeasure}
 			class={props.class}
 			style={{ height: shouldHide() ? `${height ?? cachedHeight()}px` : undefined }}
-			data-cached={cachedHeight()}
 			prop:$onintersect={handleIntersect}
 			prop:$onresize={handleResize}
 		>
