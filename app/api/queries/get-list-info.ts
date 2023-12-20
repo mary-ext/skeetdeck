@@ -1,9 +1,9 @@
-import type { QueryFunctionContext as QC, QueryClient } from '@pkg/solid-query';
+import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
 import type { DID } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
 
-import { findListInQueryData as findListInProfileListsData } from './get-profile-lists.ts';
+import { getCachedList, mergeList } from '../stores/lists.ts';
 
 export const getListInfoKey = (uid: DID, uri: string) => {
 	return ['getListInfo', uid, uri] as const;
@@ -22,16 +22,13 @@ export const getListInfo = async (ctx: QC<ReturnType<typeof getListInfoKey>>) =>
 	});
 
 	const data = response.data;
-	return data.list;
+	return mergeList(uid, data.list);
 };
 
-export const getInitialListInfo = (client: QueryClient, key: ReturnType<typeof getListInfoKey>) => {
+export const getInitialListInfo = (key: ReturnType<typeof getListInfoKey>) => {
 	const [, uid, uri] = key;
 
-	{
-		const data = findListInProfileListsData(client, uid, uri);
-		if (data) {
-			return data;
-		}
-	}
+	const list = getCachedList(uid, uri);
+
+	return list;
 };

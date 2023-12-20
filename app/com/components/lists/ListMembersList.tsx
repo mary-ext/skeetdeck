@@ -2,7 +2,6 @@ import { type JSX, For } from 'solid-js';
 
 import { type InfiniteData, createInfiniteQuery, useQueryClient } from '@pkg/solid-query';
 
-import type { AtUri, DID } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
@@ -12,6 +11,7 @@ import {
 	getListMembers,
 	getListMembersKey,
 } from '~/api/queries/get-list-members.ts';
+import type { SignalizedList } from '~/api/stores/lists.ts';
 
 import { produce } from '~/utils/immer.ts';
 
@@ -33,15 +33,17 @@ import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
 import ProfileItem, { type ProfileItemAccessory, type ProfileItemProps } from '../items/ProfileItem.tsx';
 
 export interface ListMembersListProps {
-	uid: DID;
-	uri: AtUri;
+	/** Expected to be static */
+	list: SignalizedList;
 	onClick?: ProfileItemProps['onClick'];
 }
 
 const ListMembersList = (props: ListMembersListProps) => {
+	const list = props.list;
+
 	const members = createInfiniteQuery(() => {
 		return {
-			queryKey: getListMembersKey(props.uid, props.uri),
+			queryKey: getListMembersKey(list.uid, list.uri),
 			queryFn: getListMembers,
 			initialPageParam: undefined,
 			getNextPageParam: (last) => last.cursor,
@@ -70,8 +72,7 @@ const ListMembersList = (props: ListMembersListProps) => {
 							<OwnedListItem
 								profile={/* @once */ member.profile}
 								itemUri={/* @once */ member.uri}
-								// if `uri` changes this ListItem would be destroyed.
-								listUri={/* @once */ props.uri}
+								listUri={/* @once */ list.uri}
 								onClick={props.onClick}
 							/>
 						);

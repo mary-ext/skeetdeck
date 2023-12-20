@@ -10,10 +10,6 @@ export const ListPurposeLabels: Record<ListPurpose, string> = {
 	'app.bsky.graph.defs#curatelist': 'Curation list',
 };
 
-export const renderListPurposeLabel = (purpose: string) => {
-	return ListPurposeLabels[purpose] || 'Unknown list';
-};
-
 export const LabelNames: Record<string, string> = {
 	// system
 	'!hide': 'Hidden by moderators',

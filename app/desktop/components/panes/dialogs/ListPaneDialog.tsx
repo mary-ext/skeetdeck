@@ -1,4 +1,4 @@
-import { createMemo } from 'solid-js';
+import type { JSX } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
@@ -42,22 +42,15 @@ const ListPaneDialog = (props: ListPaneDialogProps) => {
 
 	const uri = `at://${actor}/app.bsky.graph.list/${rkey}`;
 
-	const list = createQuery((client) => {
+	const list = createQuery(() => {
 		const key = getListInfoKey(pane.uid, uri);
 
 		return {
 			queryKey: key,
 			queryFn: getListInfo,
 			initialDataUpdatedAt: 0,
-			initialData: () => getInitialListInfo(client, key),
+			initialData: () => getInitialListInfo(key),
 		};
-	});
-
-	const hasList = createMemo(() => list.data !== undefined);
-
-	const isCurationList = createMemo(() => {
-		const $list = list.data;
-		return $list ? $list.purpose === 'app.bsky.graph.defs#curatelist' : false;
 	});
 
 	return (
@@ -67,27 +60,27 @@ const ListPaneDialog = (props: ListPaneDialogProps) => {
 					const $list = list.data;
 
 					if ($list) {
-						return $list.name;
+						return $list.name.value;
 					}
 
 					return `List`;
 				})()}
 			>
 				{(() => {
-					if (isCurationList()) {
+					const $list = list.data;
+
+					if ($list && $list.purpose.value === 'app.bsky.graph.defs#curatelist') {
 						return (
 							<button
 								title="Add as column"
 								onClick={() => {
-									const $list = list.data!;
-
 									addPane<CustomListPaneConfig>(
 										deck,
 										{
 											type: PANE_TYPE_LIST,
 											uid: pane.uid,
 											list: {
-												name: $list.name,
+												name: $list.name.value,
 												uri: $list.uri,
 											},
 											infoVisible: true,
@@ -108,40 +101,38 @@ const ListPaneDialog = (props: ListPaneDialogProps) => {
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				{(() => {
+					const $list = list.data;
+
+					if ($list) {
+						return [
+							<ListHeader list={$list} />,
+							<hr class="border-divider" />,
+
+							() => {
+								if ($list.purpose.value === 'app.bsky.graph.defs#curatelist') {
+									return <TimelineList uid={$list.uid} params={{ type: 'list', uri: $list.uri }} />;
+								}
+
+								return (
+									<ListMembersList
+										list={$list}
+										onClick={(profile) => {
+											linking.navigate({ type: LINK_PROFILE, actor: profile.did });
+										}}
+									/>
+								);
+							},
+						] as unknown as JSX.Element;
+					}
+
 					if (list.isError) {
 						return <GenericErrorView error={list.error} onRetry={() => list.refetch()} />;
 					}
 
-					return [<ListHeader uid={pane.uid} list={list.data} />, <hr class="border-divider" />];
-				})()}
-
-				{(() => {
-					if (list.isLoading && !list.data) {
-						return (
-							<div class="grid h-13 place-items-center">
-								<CircularProgress />
-							</div>
-						);
-					}
-				})()}
-
-				{(() => {
-					if (!hasList()) {
-						return;
-					}
-
-					if (isCurationList()) {
-						return <TimelineList uid={pane.uid} params={{ type: 'list', uri: list.data!.uri }} />;
-					}
-
 					return (
-						<ListMembersList
-							uid={pane.uid}
-							uri={list.data!.uri}
-							onClick={(profile) => {
-								linking.navigate({ type: LINK_PROFILE, actor: profile.did });
-							}}
-						/>
+						<div class="grid h-13 place-items-center">
+							<CircularProgress />
+						</div>
 					);
 				})()}
 			</div>

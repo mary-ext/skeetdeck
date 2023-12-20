@@ -15,6 +15,7 @@ import { getInitialPost, getPost, getPostKey } from '~/api/queries/get-post.ts';
 import { getResolvedHandle, getResolvedHandleKey } from '~/api/queries/get-resolved-handle.ts';
 import type { getTimelineLatestKey } from '~/api/queries/get-timeline.ts';
 import type { SignalizedFeed } from '~/api/stores/feeds.ts';
+import type { SignalizedList } from '~/api/stores/lists.ts';
 import { SignalizedPost } from '~/api/stores/posts.ts';
 import { producePostInsert } from '~/api/updaters/insert-post.ts';
 
@@ -111,7 +112,7 @@ const enum EmbeddingType {
 type Embedding =
 	| BaseEmbedding<EmbeddingType.QUOTE, SignalizedPost>
 	| BaseEmbedding<EmbeddingType.FEED, SignalizedFeed>
-	| BaseEmbedding<EmbeddingType.LIST, RefOf<'app.bsky.graph.defs#listView'>>;
+	| BaseEmbedding<EmbeddingType.LIST, SignalizedList>;
 
 const getLanguages = (): string[] => {
 	const prefs = preferences.language;
@@ -249,7 +250,7 @@ const ComposerPane = () => {
 					return {
 						queryKey: key,
 						queryFn: getListInfo,
-						initialData: () => getInitialListInfo(queryClient, key),
+						initialData: () => getInitialListInfo(key),
 					};
 				});
 
@@ -409,7 +410,7 @@ const ComposerPane = () => {
 			const rec: PostRecordEmbed = {
 				$type: 'app.bsky.embed.record',
 				record: {
-					cid: typeof thing.cid === 'string' ? thing.cid : thing.cid.value,
+					cid: thing.cid.value,
 					uri: thing.uri,
 				},
 			};
@@ -902,8 +903,23 @@ const ComposerPane = () => {
 											}
 
 											if (type === EmbeddingType.LIST) {
-												const data = query.data as RefOf<'app.bsky.graph.defs#listView'>;
-												return <EmbedListContent list={data} />;
+												const data = query.data as SignalizedList;
+
+												const creator = data.creator;
+
+												return (
+													<EmbedListContent
+														list={{
+															// @ts-expect-error
+															creator: {
+																handle: creator.handle.value,
+															},
+															avatar: data.avatar.value,
+															purpose: data.purpose.value,
+															name: data.name.value,
+														}}
+													/>
+												);
 											}
 										}
 
