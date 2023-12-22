@@ -27,17 +27,15 @@ export const EmbedListContent = (props: EmbedListProps) => {
 		const purpose = rawPurpose in ListPurposeLabels ? ListPurposeLabels[rawPurpose] : `Unknown list`;
 
 		return (
-			<div class="flex flex-col gap-2 rounded-md border border-divider p-3 text-left text-sm">
-				<div class="flex gap-3">
-					<img
-						src={/* @once */ list.avatar || DefaultListAvatar}
-						class="mt-0.5 h-9 w-9 rounded-md object-cover"
-					/>
+			<div class="flex gap-3 rounded-md border border-divider p-3 text-left text-sm">
+				<img
+					src={/* @once */ list.avatar || DefaultListAvatar}
+					class="mt-0.5 h-9 w-9 rounded-md object-cover"
+				/>
 
-					<div>
-						<p class="font-bold">{/* @once */ list.name}</p>
-						<p class="text-muted-fg">{/* @once */ `${purpose} by @${creator.handle}`}</p>
-					</div>
+				<div>
+					<p class="font-bold">{/* @once */ list.name}</p>
+					<p class="text-muted-fg">{/* @once */ `${purpose} by @${creator.handle}`}</p>
 				</div>
 			</div>
 		);

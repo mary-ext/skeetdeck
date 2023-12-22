@@ -23,17 +23,15 @@ export const EmbedFeedContent = (props: EmbedFeedProps) => {
 		const creator = feed.creator;
 
 		return (
-			<div class="flex flex-col gap-2 rounded-md border border-divider p-3 text-left text-sm">
-				<div class="flex gap-3">
-					<img
-						src={/* @once */ feed.avatar || DefaultFeedAvatar}
-						class="mt-0.5 h-9 w-9 rounded-md object-cover"
-					/>
+			<div class="flex gap-3 rounded-md border border-divider p-3 text-left text-sm">
+				<img
+					src={/* @once */ feed.avatar || DefaultFeedAvatar}
+					class="mt-0.5 h-9 w-9 rounded-md object-cover"
+				/>
 
-					<div>
-						<p class="font-bold">{/* @once */ feed.displayName}</p>
-						<p class="text-muted-fg">{/* @once */ `Feed by @${creator.handle}`}</p>
-					</div>
+				<div>
+					<p class="font-bold">{/* @once */ feed.displayName}</p>
+					<p class="text-muted-fg">{/* @once */ `Feed by @${creator.handle}`}</p>
 				</div>
 			</div>
 		);
