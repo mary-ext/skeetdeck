@@ -46,7 +46,7 @@ const getPostImages = (post: EmbeddedPostRecord) => {
 	}
 };
 
-const embedRecordInteractive = Interactive({ variant: 'muted', class: 'w-full' });
+const embedRecordInteractive = Interactive({ variant: 'muted', class: `w-full rounded-md` });
 
 export const EmbedRecordContent = (props: EmbedRecordContentProps, interactive?: boolean) => {
 	return (() => {

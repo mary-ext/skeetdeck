@@ -16,7 +16,7 @@ export interface EmbedListProps {
 	list: EmbeddedList;
 }
 
-const embedListInteractive = Interactive({ variant: 'muted', class: 'w-full' });
+const embedListInteractive = Interactive({ variant: 'muted', class: `w-full rounded-md` });
 
 export const EmbedListContent = (props: EmbedListProps) => {
 	return (() => {

@@ -25,7 +25,7 @@ export const getDomain = (url: string) => {
 	}
 };
 
-const embedLinkInteractive = Interactive({ variant: 'muted', class: 'w-full' });
+const embedLinkInteractive = Interactive({ variant: 'muted', class: `w-full rounded-md` });
 
 export const EmbedLinkContent = (props: EmbedLinkProps) => {
 	return (() => {

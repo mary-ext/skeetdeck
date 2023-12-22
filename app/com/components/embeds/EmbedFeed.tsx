@@ -15,7 +15,7 @@ export interface EmbedFeedProps {
 	feed: EmbeddedFeed;
 }
 
-const embedFeedInteractive = Interactive({ variant: 'muted', class: 'w-full' });
+const embedFeedInteractive = Interactive({ variant: 'muted', class: `w-full rounded-md` });
 
 export const EmbedFeedContent = (props: EmbedFeedProps) => {
 	return (() => {
