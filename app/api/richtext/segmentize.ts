@@ -32,8 +32,6 @@ const createSegment = (text: string, facet?: Facet): RichTextSegment => {
 	return { text, link, mention, tag };
 };
 
-export const facetSort = (a: Facet, b: Facet) => a.index.byteStart - b.index.byteStart;
-
 export const segmentRichText = (rtText: string, facets: Facet[] | undefined) => {
 	if (!facets || facets.length < 1) {
 		return [createSegment(rtText)];
