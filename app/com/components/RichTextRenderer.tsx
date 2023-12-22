@@ -22,15 +22,26 @@ interface RichTextUiSegment {
 	to: Linking | undefined;
 }
 
+const cache = new WeakMap<Facet[], RichTextUiSegment[]>();
+
 const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => {
 	const linking = useLinking();
 	const get = props.get;
 
-	const segments = createMemo(() => {
-		const ret = get(props.item);
-		const segments = segmentRichText(ret.t, ret.f);
+	const segments = createMemo((): RichTextUiSegment[] => {
+		const { t: text, f: facets } = get(props.item);
 
-		return renderRichText(segments);
+		if (facets !== undefined) {
+			let rendered = cache.get(facets);
+			if (rendered === undefined) {
+				const segments = segmentRichText(text, facets);
+				cache.set(facets, (rendered = renderRichText(segments)));
+			}
+
+			return rendered;
+		}
+
+		return [{ text: text, to: undefined }];
 	});
 
 	const navigateLink = (ev: MouseEvent | KeyboardEvent) => {
