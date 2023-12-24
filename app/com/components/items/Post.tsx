@@ -183,7 +183,7 @@ const Post = (props: PostProps) => {
 
 				<div class="min-w-0 grow pb-3">
 					<div class="mb-0.5 flex items-center justify-between gap-4">
-						<div class="flex items-center text-sm text-muted-fg">
+						<div class="flex items-center overflow-hidden text-sm text-muted-fg">
 							<Link
 								to={authorPermalink()}
 								class="group flex max-w-full gap-1 overflow-hidden text-ellipsis whitespace-nowrap text-left"
