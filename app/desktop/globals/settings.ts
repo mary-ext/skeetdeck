@@ -3,15 +3,18 @@ import { PreferenceWarn } from '~/api/moderation/enums.ts';
 import type { ModerationOpts } from '~/api/moderation/types.ts';
 import type { FilterPreferences, LanguagePreferences } from '~/api/types.ts';
 
+import { getCurrentTid } from '~/api/utils/tid.ts';
+
 import { createReactiveLocalStorage } from '~/utils/storage.ts';
 
 import type { SharedPreferencesObject } from '~/com/components/SharedPreferences.tsx';
 
 import { type DeckConfig, type PaneConfig, PaneSize, SpecificPaneSize } from './panes.ts';
-import { getCurrentTid } from '~/api/utils/tid.ts';
 
 export interface PreferencesSchema {
-	$version: 2;
+	$version: 3;
+	/** Used for cache-busting moderation filters */
+	rev: number;
 	/** Onboarding mode */
 	onboarding: boolean;
 	/** Deck configuration */
@@ -41,7 +44,8 @@ const PREF_KEY = 'rantai_prefs';
 export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KEY, (version, prev) => {
 	if (version === 0) {
 		const object: PreferencesSchema = {
-			$version: 2,
+			$version: 3,
+			rev: 0,
 			onboarding: true,
 			decks: [],
 			ui: {
@@ -106,8 +110,13 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 		_prev.a11y = {
 			warnNoMediaAlt: true,
 		};
+	}
 
-		_prev.$version = 2;
+	if (version < 3) {
+		const _prev = prev as PreferencesSchema;
+
+		_prev.rev = 0;
+		_prev.$version = 3;
 	}
 
 	return prev;
@@ -115,6 +124,12 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 
 export const createSharedPreferencesObject = (): SharedPreferencesObject => {
 	return {
+		get rev() {
+			return preferences.rev;
+		},
+		set rev(next) {
+			preferences.rev = next;
+		},
 		// ModerationOpts contains internal state properties, we don't want them
 		// to be reflected back into persisted storage.
 		moderation: {
@@ -123,6 +138,10 @@ export const createSharedPreferencesObject = (): SharedPreferencesObject => {
 		filters: preferences.filters,
 		language: preferences.language,
 	};
+};
+
+export const bustRevisionCache = () => {
+	preferences.rev = ~~(Math.random() * 1024);
 };
 
 export const addPane = <T extends PaneConfig>(

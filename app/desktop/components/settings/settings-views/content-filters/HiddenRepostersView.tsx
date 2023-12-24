@@ -74,8 +74,6 @@ const TemporaryMutesView = () => {
 			}
 		}
 
-		console.log({ prev, next });
-
 		return next;
 	}, []);
 

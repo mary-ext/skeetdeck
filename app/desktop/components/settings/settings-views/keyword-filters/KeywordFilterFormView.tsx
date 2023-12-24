@@ -11,7 +11,7 @@ import type { ModerationFilterKeywordOpts } from '~/api/moderation/types.ts';
 import { createRadioModel, model } from '~/utils/input.ts';
 import { getUniqueId } from '~/utils/misc.ts';
 
-import { preferences } from '~/desktop/globals/settings.ts';
+import { bustRevisionCache, preferences } from '~/desktop/globals/settings.ts';
 
 import { Button } from '~/com/primitives/button.ts';
 import { IconButton } from '~/com/primitives/icon-button.ts';
@@ -87,6 +87,7 @@ const KeywordFilterFormView = () => {
 				});
 			}
 
+			bustRevisionCache();
 			router.move({ type: VIEW_KEYWORD_FILTERS });
 		});
 	};
@@ -215,6 +216,7 @@ const KeywordFilterFormView = () => {
 													filters.splice(index, 1);
 												}
 
+												bustRevisionCache();
 												router.move({ type: VIEW_KEYWORD_FILTERS });
 											});
 										}}

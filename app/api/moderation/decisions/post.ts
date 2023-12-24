@@ -1,9 +1,12 @@
 // @todo: move this to ~/com as it's now making use of SharedPreferences
 
+import { sequal } from '~/utils/dequal.ts';
+
 import type { SignalizedPost } from '../../stores/posts.ts';
 
 import {
 	type ModerationCause,
+	type ModerationDecision,
 	decideLabelModeration,
 	decideMutedKeywordModeration,
 	decideMutedPermanentModeration,
@@ -12,23 +15,34 @@ import {
 } from '../action.ts';
 import { PreferenceWarn } from '../enums.ts';
 
-import { isProfileTempMuted, type SharedPreferencesObject } from '~/com/components/SharedPreferences.tsx';
+import { type SharedPreferencesObject, isProfileTempMuted } from '~/com/components/SharedPreferences.tsx';
+
+type ModerationResult = { d: ModerationDecision | null; c: unknown[] };
+const cached = new WeakMap<SignalizedPost, ModerationResult>();
 
 export const getPostModDecision = (post: SignalizedPost, opts: SharedPreferencesObject) => {
-	const { moderation, filters } = opts;
-
 	const labels = post.labels.value;
 	const text = post.record.value.text;
 
 	const authorDid = post.author.did;
 	const isMuted = post.author.viewer.muted.value;
 
-	const accu: ModerationCause[] = [];
+	const key: unknown[] = [labels, text, isMuted, opts.rev];
 
-	decideLabelModeration(accu, labels, authorDid, moderation);
-	decideMutedPermanentModeration(accu, isMuted);
-	decideMutedTemporaryModeration(accu, isProfileTempMuted(filters, authorDid));
-	decideMutedKeywordModeration(accu, text, PreferenceWarn, moderation);
+	let res = cached.get(post);
 
-	return finalizeModeration(accu);
+	if (!res || !sequal(res.c, key)) {
+		const { moderation, filters } = opts;
+
+		const accu: ModerationCause[] = [];
+
+		decideLabelModeration(accu, labels, authorDid, moderation);
+		decideMutedPermanentModeration(accu, isMuted);
+		decideMutedTemporaryModeration(accu, isProfileTempMuted(filters, authorDid));
+		decideMutedKeywordModeration(accu, text, PreferenceWarn, moderation);
+
+		cached.set(post, (res = { d: finalizeModeration(accu), c: key }));
+	}
+
+	return res.d;
 };

@@ -1,4 +1,4 @@
-import { type JSX, createSignal, createMemo } from 'solid-js';
+import { type JSX, createSignal, createMemo, batch } from 'solid-js';
 
 import { type InfiniteData, useQueryClient } from '@pkg/solid-query';
 
@@ -21,7 +21,7 @@ import { Select } from '~/com/primitives/select.ts';
 import DialogOverlay from './DialogOverlay.tsx';
 
 import TakingActionNotice from '../views/TakingActionNotice.tsx';
-import { isProfileTempMuted } from '../SharedPreferences.tsx';
+import { isProfileTempMuted, useBustRevCache } from '../SharedPreferences.tsx';
 
 import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';
 
@@ -95,6 +95,7 @@ const renderMuteConfirmDialog = (
 	forceTempMute?: boolean,
 ) => {
 	const queryClient = useQueryClient();
+	const bustRev = useBustRevCache();
 
 	const isTempMuted = isProfileTempMuted(filters, profile.did);
 	const isMuted = profile.viewer.muted.value || isTempMuted;
@@ -114,7 +115,11 @@ const renderMuteConfirmDialog = (
 		if (isMuted) {
 			if (isTempMuted) {
 				const tempMutes = filters.tempMutes;
-				delete tempMutes[did];
+
+				batch(() => {
+					delete tempMutes[did];
+					bustRev();
+				});
 			} else {
 				updateProfileMute(profile, false);
 			}
@@ -128,9 +133,12 @@ const renderMuteConfirmDialog = (
 			updateProfileMute(profile, true);
 		} else {
 			const date = Date.now() + parsedDuration;
-
 			const tempMutes = filters.tempMutes;
-			tempMutes[did] = date;
+
+			batch(() => {
+				tempMutes[did] = date;
+				bustRev();
+			});
 		}
 
 		const updateTimeline = produceTimelineFilter(did);

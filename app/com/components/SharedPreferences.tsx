@@ -8,6 +8,8 @@ import type { FilterPreferences, LanguagePreferences } from '~/api/types.ts';
 import type { ModerationOpts } from '~/api/moderation/types.ts';
 
 export interface SharedPreferencesObject {
+	/** Used as a cache-busting mechanism */
+	rev: number;
 	moderation: ModerationOpts;
 	filters: FilterPreferences;
 	language: LanguagePreferences;
@@ -23,4 +25,11 @@ export const useSharedPreferences = () => {
 export const isProfileTempMuted = (prefs: FilterPreferences, actor: DID): number | null => {
 	const date = prefs.tempMutes[actor];
 	return date !== undefined && Date.now() < date ? date : null;
+};
+
+export const useBustRevCache = () => {
+	const prefs = useSharedPreferences();
+	return () => {
+		prefs.rev = ~~(Math.random() * 1024);
+	};
 };

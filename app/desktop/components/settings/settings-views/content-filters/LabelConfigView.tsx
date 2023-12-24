@@ -10,7 +10,7 @@ import type { ModerationLabelOpts } from '~/api/moderation/types.ts';
 
 import { assert } from '~/utils/misc.ts';
 
-import { preferences } from '~/desktop/globals/settings.ts';
+import { bustRevisionCache, preferences } from '~/desktop/globals/settings.ts';
 
 import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout.tsx';
 
@@ -288,6 +288,8 @@ const renderOptionsScreen = (opts: ModerationLabelOpts, global: boolean) => {
 											const k = label.k;
 											labels[k] = next;
 										}
+
+										bustRevisionCache();
 									});
 								}}
 							>
@@ -307,7 +309,10 @@ const renderOptionsScreen = (opts: ModerationLabelOpts, global: boolean) => {
 											global={global}
 											value={labels[k]}
 											onChange={(next) => {
-												labels[k] = next;
+												batch(() => {
+													labels[k] = next;
+													bustRevisionCache();
+												});
 											}}
 										>
 											<button class={`${labelItem} items-start justify-between gap-4 pl-8`}>
