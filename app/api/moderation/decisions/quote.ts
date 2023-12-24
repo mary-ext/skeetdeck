@@ -24,7 +24,7 @@ type ModerationResult = { d: ModerationDecision | null; c: unknown[] };
 const cached = new WeakMap<EmbeddedPostRecord, ModerationResult>();
 
 export const getQuoteModDecision = (quote: EmbeddedPostRecord, opts: SharedPreferencesObject) => {
-	const key = [quote, opts.rev];
+	const key = [opts.rev];
 
 	let res = cached.get(quote);
 
