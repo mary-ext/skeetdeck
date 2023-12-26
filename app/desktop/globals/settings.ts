@@ -1,7 +1,7 @@
 import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults.ts';
 import { PreferenceWarn } from '~/api/moderation/enums.ts';
 import type { ModerationOpts } from '~/api/moderation/types.ts';
-import type { FilterPreferences, LanguagePreferences } from '~/api/types.ts';
+import type { FilterPreferences, LanguagePreferences, TranslationPreferences } from '~/api/types.ts';
 
 import { getCurrentTid } from '~/api/utils/tid.ts';
 
@@ -12,7 +12,7 @@ import type { SharedPreferencesObject } from '~/com/components/SharedPreferences
 import { type DeckConfig, type PaneConfig, PaneSize, SpecificPaneSize } from './panes.ts';
 
 export interface PreferencesSchema {
-	$version: 3;
+	$version: 4;
 	/** Used for cache-busting moderation filters */
 	rev: number;
 	/** Onboarding mode */
@@ -37,6 +37,8 @@ export interface PreferencesSchema {
 	filters: FilterPreferences;
 	/** Language configuration */
 	language: LanguagePreferences;
+	/** Translation configuration */
+	translation: TranslationPreferences;
 }
 
 const PREF_KEY = 'rantai_prefs';
@@ -44,7 +46,7 @@ const PREF_KEY = 'rantai_prefs';
 export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KEY, (version, prev) => {
 	if (version === 0) {
 		const object: PreferencesSchema = {
-			$version: 3,
+			$version: 4,
 			rev: 0,
 			onboarding: true,
 			decks: [],
@@ -99,6 +101,10 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 				allowUnspecified: true,
 				defaultPostLanguage: 'system',
 			},
+			translation: {
+				to: 'system',
+				exclusions: [],
+			},
 		};
 
 		return object;
@@ -116,7 +122,16 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 		const _prev = prev as PreferencesSchema;
 
 		_prev.rev = 0;
-		_prev.$version = 3;
+	}
+
+	if (version < 4) {
+		const _prev = prev as PreferencesSchema;
+
+		_prev.translation = {
+			to: 'system',
+			exclusions: [],
+		};
+		// _prev.$version = 4;
 	}
 
 	return prev;
@@ -137,6 +152,7 @@ export const createSharedPreferencesObject = (): SharedPreferencesObject => {
 		},
 		filters: preferences.filters,
 		language: preferences.language,
+		translation: preferences.translation,
 	};
 };
 

@@ -1,4 +1,4 @@
-import { type JSX, createMemo } from 'solid-js';
+import { type JSX, createMemo, createSignal } from 'solid-js';
 
 import type { DID, Records, RefOf } from '~/api/atp-schema.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
@@ -34,11 +34,16 @@ import PostShareAction from '../items/posts/PostShareAction.tsx';
 import RepostAction from '../items/posts/RepostAction.tsx';
 import ReplyAction from '../items/posts/ReplyAction.tsx';
 
+import PostTranslation, { needTranslation } from './posts/PostTranslation.tsx';
+
 export interface PermalinkPostProps {
 	post: SignalizedPost;
 }
 
 const PermalinkPost = (props: PermalinkPostProps) => {
+	const preferences = useSharedPreferences();
+	const [showTl, setShowTl] = createSignal(false);
+
 	const post = () => props.post;
 
 	const author = () => post().author;
@@ -49,7 +54,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 	};
 
 	const decision = createMemo(() => {
-		return getPostModDecision(post(), useSharedPreferences());
+		return getPostModDecision(post(), preferences);
 	});
 
 	return (
@@ -91,6 +96,22 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 					}}
 				/>
 			</div>
+
+			{(() => {
+				if (showTl()) {
+					return <PostTranslation post={post()} />;
+				}
+
+				if (needTranslation(post(), preferences.translation)) {
+					return (
+						<button onClick={() => setShowTl(true)} class="mt-1 text-sm text-accent hover:underline">
+							Translate post
+						</button>
+					);
+				}
+
+				return null;
+			})()}
 
 			{post().embed.value && (
 				<PostEmbedWarning post={post()} decision={decision()}>

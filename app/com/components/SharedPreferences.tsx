@@ -3,7 +3,7 @@
 import { createContext, useContext } from 'solid-js';
 
 import type { DID } from '~/api/atp-schema.ts';
-import type { FilterPreferences, LanguagePreferences } from '~/api/types.ts';
+import type { FilterPreferences, LanguagePreferences, TranslationPreferences } from '~/api/types.ts';
 
 import type { ModerationOpts } from '~/api/moderation/types.ts';
 
@@ -13,6 +13,7 @@ export interface SharedPreferencesObject {
 	moderation: ModerationOpts;
 	filters: FilterPreferences;
 	language: LanguagePreferences;
+	translation: TranslationPreferences;
 }
 
 export const SharedPreferences = createContext<SharedPreferencesObject>();

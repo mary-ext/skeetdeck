@@ -17,3 +17,10 @@ export interface LanguagePreferences {
 	/** Show posts that do not explicitly specify a language */
 	allowUnspecified: boolean;
 }
+
+export interface TranslationPreferences {
+	/** Preferred language to translate posts into */
+	to: string;
+	/** Do not offer the option to translate on these languages */
+	exclusions: string[];
+}
