@@ -9,11 +9,11 @@ import { preferences } from '~/desktop/globals/settings.ts';
 import { Interactive } from '~/com/primitives/interactive.ts';
 
 import Checkbox from '~/com/components/inputs/Checkbox.tsx';
-import SelectInput from '~/com/components/inputs/SelectInput.tsx';
+import SelectInput, { type SelectItem } from '~/com/components/inputs/SelectInput.tsx';
 
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
 
-import { VIEW_ADDITIONAL_LANGUAGE, useViewRouter } from './_router.tsx';
+import { VIEW_ADDITIONAL_LANGUAGE, VIEW_EXCLUDED_TRANSLATION, useViewRouter } from './_router.tsx';
 
 const selectItem = Interactive({
 	class: `flex items-center justify-between gap-4 px-4 py-3 text-left text-sm`,
@@ -23,6 +23,33 @@ const LanguageView = () => {
 	const router = useViewRouter();
 
 	const langs = preferences.language;
+	const trans = preferences.translation;
+
+	const availableLanguages: SelectItem[] = [
+		{
+			value: 'none',
+			label: 'None',
+		},
+		{
+			value: 'system',
+			get label() {
+				return `Primary system language (${languageNames.of(systemLanguages[0])})`;
+			},
+		},
+		...mapDefined(CODE2S, (code) => {
+			const eng = languageNamesStrict.of(code);
+			const native = getNativeLanguageName(code);
+
+			if (!eng || !native) {
+				return;
+			}
+
+			return {
+				value: code,
+				label: `${eng}${native !== eng ? ` - ${native}` : ``}`,
+			};
+		}),
+	];
 
 	return (
 		<div class="contents">
@@ -36,31 +63,7 @@ const LanguageView = () => {
 
 						<SelectInput
 							value={langs.defaultPostLanguage}
-							options={[
-								{
-									value: 'none',
-									label: 'None',
-								},
-								{
-									value: 'system',
-									get label() {
-										return `Primary system language (${languageNames.of(systemLanguages[0])})`;
-									},
-								},
-								...mapDefined(CODE2S, (code) => {
-									const eng = languageNamesStrict.of(code);
-									const native = getNativeLanguageName(code);
-
-									if (!eng || !native) {
-										return;
-									}
-
-									return {
-										value: code,
-										label: `${eng}${native !== eng ? ` - ${native}` : ``}`,
-									};
-								}),
-							]}
+							options={availableLanguages}
 							onChange={(next) => {
 								langs.defaultPostLanguage = next;
 							}}
@@ -126,6 +129,43 @@ const LanguageView = () => {
 								}
 
 								return `${count} languages added`;
+							})()}
+						</p>
+					</div>
+
+					<ChevronRightIcon class="text-xl text-muted-fg" />
+				</button>
+
+				<hr class="mx-4 mt-1 border-divider" />
+
+				<p class="p-4 text-base font-bold leading-5">Content translation</p>
+
+				<div class="px-4 py-3">
+					<label class="flex flex-col gap-2">
+						<span class="text-sm font-medium leading-6 text-primary">Translate into this language</span>
+
+						<SelectInput
+							value={trans.to}
+							options={availableLanguages}
+							onChange={(next) => {
+								trans.to = next;
+							}}
+						/>
+					</label>
+				</div>
+
+				<button onClick={() => router.move({ type: VIEW_EXCLUDED_TRANSLATION })} class={selectItem}>
+					<div>
+						<p>Exclude languages from translation</p>
+						<p class="text-de text-muted-fg">
+							{(() => {
+								const count = trans.exclusions.length;
+
+								if (count === 1) {
+									return `${count} language excluded`;
+								}
+
+								return `${count} languages excluded`;
 							})()}
 						</p>
 					</div>

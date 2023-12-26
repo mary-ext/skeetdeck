@@ -15,6 +15,7 @@ import {
 	VIEW_SUBSCRIBED_LABELERS,
 	VIEW_TEMPORARY_MUTES,
 	useViewRouter,
+	VIEW_EXCLUDED_TRANSLATION,
 } from './_router.tsx';
 
 const AccessibilityView = lazy(() => import('./AccessibilityView.tsx'));
@@ -32,6 +33,7 @@ const TemporaryMutesView = lazy(() => import('./content-filters/TemporaryMutesVi
 const KeywordFilterFormView = lazy(() => import('./keyword-filters/KeywordFilterFormView.tsx'));
 
 const AdditionalLanguageView = lazy(() => import('./languages/AdditionalLanguageView.tsx'));
+const ExcludedTranslationView = lazy(() => import('./languages/ExcludedTranslationView.tsx'));
 
 const views: Record<ViewType, Component> = {
 	[VIEW_ACCESSIBILITY]: AccessibilityView,
@@ -49,6 +51,7 @@ const views: Record<ViewType, Component> = {
 	[VIEW_KEYWORD_FILTER_FORM]: KeywordFilterFormView,
 
 	[VIEW_ADDITIONAL_LANGUAGE]: AdditionalLanguageView,
+	[VIEW_EXCLUDED_TRANSLATION]: ExcludedTranslationView,
 };
 
 const SettingsRouterView = () => {

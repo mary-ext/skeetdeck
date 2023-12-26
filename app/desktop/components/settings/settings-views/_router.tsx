@@ -21,6 +21,7 @@ export const VIEW_TEMPORARY_MUTES = 10;
 
 // Languages
 export const VIEW_ADDITIONAL_LANGUAGE = 11;
+export const VIEW_EXCLUDED_TRANSLATION = 12;
 
 export type ViewType =
 	| typeof VIEW_ACCESSIBILITY
@@ -28,6 +29,7 @@ export type ViewType =
 	| typeof VIEW_ADDITIONAL_LANGUAGE
 	| typeof VIEW_APPEARANCE
 	| typeof VIEW_CONTENT_FILTERS
+	| typeof VIEW_EXCLUDED_TRANSLATION
 	| typeof VIEW_HIDDEN_REPOSTERS
 	| typeof VIEW_KEYWORD_FILTER_FORM
 	| typeof VIEW_KEYWORD_FILTERS
@@ -53,7 +55,8 @@ export type View =
 	// Keyword filter form
 	| { type: typeof VIEW_KEYWORD_FILTER_FORM; id: string | undefined }
 	// Language
-	| { type: typeof VIEW_ADDITIONAL_LANGUAGE };
+	| { type: typeof VIEW_ADDITIONAL_LANGUAGE }
+	| { type: typeof VIEW_EXCLUDED_TRANSLATION };
 
 export type ViewParams<T extends ViewType, V = View> = V extends { type: T } ? Omit<V, 'type'> : never;
 
