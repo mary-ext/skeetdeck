@@ -19,6 +19,7 @@ import type { DID, RefOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 
 import type { PreliminaryRichText } from '~/api/richtext/composer.ts';
+// import { graphemeLen } from '~/api/richtext/intl.ts';
 
 import { createDebouncedValue } from '~/utils/hooks.ts';
 import { assert } from '~/utils/misc.ts';
@@ -61,6 +62,16 @@ const findNodePosition = (node: Node, position: number): { node: Node; position:
 	}
 
 	return;
+};
+
+const createText = document.createTextNode.bind(document);
+
+const createSpan = (text: string, className: string) => {
+	const span = document.createElement('span');
+	span.textContent = text;
+	span.className = className;
+
+	return span;
 };
 
 const enum Suggestion {
@@ -221,18 +232,48 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 	return (
 		<div class="relative">
 			<div ref={renderer} class="absolute inset-0 z-0 whitespace-pre-wrap break-words pb-4 pr-3 pt-5 text-xl">
-				{props.rt.segments.map((segment) => {
-					const feature = segment.feature;
+				{(() => {
+					// const MAX_LEN = 300;
 
-					if (feature) {
-						const node = document.createElement('span');
-						node.textContent = segment.orig;
-						node.className = 'text-accent';
-						return node;
+					const nodes: JSX.Element = [];
+					const segments = props.rt.segments;
+
+					// let len = 0;
+
+					for (let i = 0, il = segments.length; i < il; i++) {
+						const segment = segments[i];
+
+						const orig = segment.orig;
+						const feature = segment.feature;
+
+						// const textLen = segment.text.length;
+
+						// if (len > MAX_LEN) {
+						// 	nodes.push(createSpan(orig, `bg-red-600 text-white`));
+						// } else if (len + textLen > MAX_LEN) {
+						// 	const x = textLen - (len + textLen - (orig.length - textLen) - MAX_LEN);
+						// 	const first = orig.slice(0, x);
+						// 	const second = orig.slice(x);
+
+						// 	if (feature) {
+						// 		nodes.push(createSpan(first, `text-accent`));
+						// 	} else {
+						// 		nodes.push(createText(first));
+						// 	}
+
+						// 	nodes.push(createSpan(second, `bg-red-600 text-white`));
+						// } else
+						if (feature) {
+							nodes.push(createSpan(orig, `text-accent`));
+						} else {
+							nodes.push(createText(orig));
+						}
+
+						// len += textLen;
 					}
 
-					return segment.orig;
-				})}
+					return nodes;
+				})()}
 			</div>
 
 			<TextareaAutosize
