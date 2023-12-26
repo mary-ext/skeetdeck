@@ -23,15 +23,13 @@ export const createReactiveLocalStorage = <T extends StoreNode>(name: string, mi
 	let writable = true;
 
 	createRoot(() => {
-		createEffect((changed: boolean) => {
+		createEffect(() => {
 			const json = JSON.stringify(mutable);
 
-			if (writable && changed) {
+			if (writable) {
 				localStorage.setItem(name, json);
 			}
-
-			return true;
-		}, false);
+		});
 	});
 
 	window.addEventListener('storage', (ev) => {
