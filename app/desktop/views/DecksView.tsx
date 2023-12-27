@@ -4,6 +4,7 @@ import { Navigate, useParams } from '@solidjs/router';
 import { DragDropProvider, DragDropSensors, SortableProvider } from '@thisbeyond/solid-dnd';
 
 import { openModal } from '~/com/globals/modals.tsx';
+import { Title } from '~/com/lib/meta.tsx';
 
 import { preferences } from '../globals/settings.ts';
 import { ConstrainYDragAxis } from '../utils/dnd.ts';
@@ -36,6 +37,7 @@ const DecksView = () => {
 		<Show when={deck()} keyed fallback={<Navigate href="/" />}>
 			{(deck) => (
 				<div class="flex grow gap-1 overflow-x-auto bg-background-dark px-1">
+					<Title render={() => `Skeetdeck - ${deck.name}`} />
 					<DragDropProvider
 						onDragEnd={({ draggable, droppable }) => {
 							if (draggable && droppable) {

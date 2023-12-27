@@ -8,6 +8,7 @@ import { multiagent } from '~/api/globals/agent.ts';
 import { getCurrentTid } from '~/api/utils/tid.ts';
 
 import { openModal } from '~/com/globals/modals.tsx';
+import { Title } from '~/com/lib/meta.tsx';
 
 import {
 	type ProfilePaneConfig,
@@ -62,6 +63,7 @@ const DashboardLayout = () => {
 
 	return (
 		<div class="flex h-screen w-screen overflow-hidden">
+			<Title render="Skeetdeck" />
 			<div class="flex w-14 shrink-0 flex-col border-r border-divider">
 				<Show when={multiagent.active}>
 					{(uid) => (

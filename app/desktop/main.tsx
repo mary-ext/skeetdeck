@@ -7,6 +7,7 @@ import { Router, useRoutes } from '@solidjs/router';
 import { useMediaQuery } from '~/utils/media-query.ts';
 
 import { ModalProvider } from '~/com/globals/modals.tsx';
+import { MetaProvider } from '~/com/lib/meta.tsx';
 
 import { SharedPreferences } from '~/com/components/SharedPreferences.tsx';
 
@@ -54,12 +55,14 @@ const App = () => {
 	return (
 		<Router>
 			<QueryClientProvider client={queryClient}>
-				<SharedPreferences.Provider value={/* @once */ createSharedPreferencesObject()}>
-					<ComposerContextProvider>
-						<Routes />
-						<ModalProvider />
-					</ComposerContextProvider>
-				</SharedPreferences.Provider>
+				<MetaProvider>
+					<SharedPreferences.Provider value={/* @once */ createSharedPreferencesObject()}>
+						<ComposerContextProvider>
+							<Routes />
+							<ModalProvider />
+						</ComposerContextProvider>
+					</SharedPreferences.Provider>
+				</MetaProvider>
 			</QueryClientProvider>
 		</Router>
 	);
