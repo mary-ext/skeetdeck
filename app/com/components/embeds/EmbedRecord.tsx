@@ -88,7 +88,7 @@ export const EmbedRecordContent = (props: EmbedRecordContentProps, interactive?:
 					</span>
 				</div>
 
-				{text && (
+				{text ? (
 					<div class="flex items-start">
 						{images && !large && (
 							<div class="mb-3 ml-3 mt-2 grow basis-0">
@@ -100,9 +100,10 @@ export const EmbedRecordContent = (props: EmbedRecordContentProps, interactive?:
 							{text}
 						</div>
 					</div>
+				) : (
+					<div class="mt-3"></div>
 				)}
 
-				{showLargeImages && !text && <div class="mt-3"></div>}
 				{showLargeImages && <EmbedImage images={images} blur={/* @once */ mod?.m} borderless />}
 			</div>
 		);
