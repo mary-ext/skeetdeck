@@ -50,22 +50,33 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 			queryKey: searchProfilesTypeaheadKey(props.uid, $debouncedSearch, 5),
 			queryFn: searchProfilesTypeahead,
 			placeholderData: keepPreviousData,
-			select: (data) => {
-				return data.map((profile): ProfileSuggestionItem => {
-					return {
-						type: SUGGESTION_PROFILE,
-						id: profile.did,
-						profile: profile,
-					};
-				});
-			},
-			reconcile: 'id',
 		};
 	});
 
+	const reconciledProfileSuggestions = createMemo((prev: ProfileSuggestionItem[]) => {
+		const mapping = new Map(prev.map((x) => [x.id, x]));
+		const next: ProfileSuggestionItem[] = [];
+
+		const data = profileSuggestions.data;
+
+		if (data) {
+			for (let i = 0, il = data.length; i < il; i++) {
+				const profile = data[i];
+
+				if (mapping.has(profile.did)) {
+					next.push(mapping.get(profile.did)!);
+				} else {
+					next.push({ type: SUGGESTION_PROFILE, id: profile.did, profile: profile });
+				}
+			}
+		}
+
+		return next;
+	}, []);
+
 	const suggestions = createMemo((): SuggestionItem[] => {
 		const $search = search().trim();
-		const $profileSuggestions = profileSuggestions.data;
+		const $profileSuggestions = reconciledProfileSuggestions();
 
 		let items: SuggestionItem[] = [];
 
