@@ -65,7 +65,7 @@ const ListHeader = (props: ListHeaderProps) => {
 							return <img src={DefaultListAvatar} class="h-13 w-13 shrink-0 rounded-md" />;
 						})()}
 
-						<div class="grow">
+						<div class="flex min-w-0 grow flex-col">
 							<p class="break-words text-lg font-bold">{list.name.value}</p>
 
 							<Link

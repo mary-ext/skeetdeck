@@ -62,7 +62,7 @@ const FeedHeader = (props: FeedHeaderProps) => {
 						return <img src={DefaultFeedAvatar} class="h-13 w-13 shrink-0 rounded-md" />;
 					})()}
 
-					<div class="grow">
+					<div class="flex min-w-0 grow flex-col">
 						<p class="break-words text-lg font-bold">{feed.name.value}</p>
 
 						<Link
