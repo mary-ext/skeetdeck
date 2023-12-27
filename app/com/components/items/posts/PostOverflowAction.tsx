@@ -13,6 +13,7 @@ import { isProfileTempMuted, useSharedPreferences } from '../../SharedPreference
 import DeleteIcon from '../../../icons/baseline-delete.tsx';
 import LaunchIcon from '../../../icons/baseline-launch.tsx';
 import ReportIcon from '../../../icons/baseline-report.tsx';
+import TranslateIcon from '../../../icons/baseline-translate.tsx';
 import VolumeOffIcon from '../../../icons/baseline-volume-off.tsx';
 
 const DeletePostConfirmDialog = lazy(() => import('../../dialogs/DeletePostConfirmDialog.tsx'));
@@ -21,11 +22,14 @@ const ReportDialog = lazy(() => import('../../dialogs/ReportDialog.tsx'));
 
 export interface PostOverflowActionProps {
 	post: SignalizedPost;
+	onTranslate?: () => void;
 	children: JSX.Element;
 }
 
 const PostOverflowAction = (props: PostOverflowActionProps) => {
 	const { filters } = useSharedPreferences();
+
+	const onTranslate = props.onTranslate;
 
 	return (() => {
 		const post = props.post;
@@ -50,6 +54,19 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 								<LaunchIcon class={/* @once */ MenuItemIcon()} />
 								<span>Open in Bluesky app</span>
 							</a>
+
+							{onTranslate && (
+								<button
+									onClick={() => {
+										close();
+										onTranslate();
+									}}
+									class={/* @once */ MenuItem()}
+								>
+									<TranslateIcon class={/* @once */ MenuItemIcon()} />
+									<span>Translate post</span>
+								</button>
+							)}
 
 							{isSameAuthor && (
 								<button

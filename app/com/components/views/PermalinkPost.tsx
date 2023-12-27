@@ -79,7 +79,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 				</Link>
 
 				<div class="flex shrink-0 grow justify-end">
-					<PostOverflowAction post={post()}>
+					<PostOverflowAction post={post()} onTranslate={() => setShowTl(true)}>
 						<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary/40">
 							<MoreHorizIcon />
 						</button>
