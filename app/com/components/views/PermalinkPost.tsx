@@ -59,7 +59,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 
 	return (
 		<div class="px-4 pt-3">
-			<div class="mb-3 flex items-center text-sm text-muted-fg">
+			<div class="mb-3 flex items-center gap-3 text-sm text-muted-fg">
 				<Link
 					to={{ type: LINK_PROFILE, actor: author().did }}
 					class="group pointer-events-none inline-flex max-w-full items-center overflow-hidden text-left"
