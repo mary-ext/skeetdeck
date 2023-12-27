@@ -29,6 +29,7 @@ import Post from '~/com/components/items/Post.tsx';
 import { usePaneContext } from '../PaneContext.tsx';
 import PaneDialog from '../PaneDialog.tsx';
 import PaneDialogHeader from '../PaneDialogHeader.tsx';
+import Keyed from '~/com/components/Keyed.ts';
 
 export interface ThreadPaneDialogProps {
 	/** Expected to be static */
@@ -235,7 +236,10 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 
 									<div ref={focusRef} class="h-[calc(100%-0.75rem)] scroll-m-3">
 										<VirtualContainer>
-											<PermalinkPost post={data().post} />
+											<Keyed key={data().post}>
+												<PermalinkPost post={data().post} />
+											</Keyed>
+
 											<hr class="border-divider" />
 										</VirtualContainer>
 
