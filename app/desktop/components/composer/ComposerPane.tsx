@@ -7,7 +7,7 @@ import type { DID, Records, RefOf, UnionOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 import { extractAppLink } from '~/api/utils/links.ts';
 import { getCurrentTid } from '~/api/utils/tid.ts';
-import { getCollectionId, getCurrentDate, isDid } from '~/api/utils/misc.ts';
+import { getCollectionId, isDid } from '~/api/utils/misc.ts';
 
 import type { ThreadPage } from '~/api/models/thread.ts';
 import { getUploadedBlob, uploadBlob } from '~/api/mutations/upload-blob.ts';
@@ -263,7 +263,7 @@ const ComposerPane = () => {
 				setLog(logPending(`Sending post`));
 
 				const writes: UnionOf<'com.atproto.repo.applyWrites#create'>[] = [];
-				const date = getCurrentDate();
+				const date = new Date();
 
 				// Create post records
 				{
@@ -288,6 +288,11 @@ const ComposerPane = () => {
 					for (let i = 0, il = posts.length; i < il; i++) {
 						// Careful, `cborg` does not like undefined values, and we need to use
 						// it to calculate the correct CID values for StrongRef in replies.
+
+						// The timeline arbitrarily sorts the posts if they share the same
+						// createdAt date, we'll increment the date by one milisecond for
+						// each post in the chain.
+						date.setMilliseconds(i);
 
 						const draft = posts[i];
 						const rkey = getCurrentTid();
@@ -363,7 +368,7 @@ const ComposerPane = () => {
 						// mismatching CIDs
 						const record: PostRecord & { $type: 'app.bsky.feed.post' } = {
 							$type: 'app.bsky.feed.post',
-							createdAt: date,
+							createdAt: date.toISOString(),
 							text: rt.text,
 							facets: rt.facets,
 						};
@@ -432,8 +437,10 @@ const ComposerPane = () => {
 					if (rules) {
 						const rkey = writes[0].rkey!;
 
+						date.setMilliseconds(0);
+
 						const record: ThreadgateRecord = {
-							createdAt: date,
+							createdAt: date.toISOString(),
 							post: `at://${uid}/app.bsky.feed.post/${rkey}`,
 							allow: rules,
 						};
