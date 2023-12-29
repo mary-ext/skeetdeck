@@ -975,7 +975,9 @@ const ComposerPane = () => {
 
 									{/* Add links */}
 									<div class="mb-2 mr-4 flex flex-col gap-3 empty:hidden">
-										<For each={!draft.external && !draft.record ? draft.rt.links : undefined}>
+										<For
+											each={!draft.images && !draft.external && !draft.record ? draft.rt.links : undefined}
+										>
 											{(link) => {
 												const [pending, setPending] = createSignal(false);
 
