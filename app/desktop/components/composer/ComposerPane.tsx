@@ -27,7 +27,6 @@ import { preferences } from '~/desktop/globals/settings.ts';
 
 import { languageNames } from '~/utils/intl/display-names.ts';
 import { type PendingImage, compressPostImage } from '~/utils/image.ts';
-import { assert } from '~/utils/misc.ts';
 import { Signal, signal } from '~/utils/signals.ts';
 
 import { Button } from '~/com/primitives/button.ts';
