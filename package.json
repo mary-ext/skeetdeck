@@ -4,7 +4,7 @@
 	},
 	"devDependencies": {
 		"prettier": "^3.1.1",
-		"prettier-plugin-tailwindcss": "^0.5.9",
+		"prettier-plugin-tailwindcss": "^0.5.10",
 		"tailwindcss": "^3.4.0",
 		"typescript": "^5.3.3"
 	},
