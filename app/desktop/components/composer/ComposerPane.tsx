@@ -1,4 +1,4 @@
-import { type JSX, For, batch, createEffect, createMemo, createSignal, untrack } from 'solid-js';
+import { type JSX, For, Show, batch, createEffect, createMemo, createSignal, untrack } from 'solid-js';
 import { unwrap } from 'solid-js/store';
 
 import { createQuery, useQueryClient } from '@pkg/solid-query';
@@ -930,212 +930,42 @@ const ComposerPane = () => {
 									</div>
 
 									{/* External links */}
-									<div class="relative mb-4 mr-2 empty:hidden">
-										{draft.external !== undefined && [
-											<button
-												title="Remove link embed"
-												onClick={() => {
-													draft.external = undefined;
-												}}
-												class={`${removeEmbedBtn} m-px`}
-											>
-												<CloseIcon />
-											</button>,
+									<Show when={draft.external}>
+										{(url) => (
+											<div class="relative mb-2 mr-4 empty:hidden">
+												<button
+													title="Remove link embed"
+													onClick={() => {
+														draft.external = undefined;
+													}}
+													class={`${removeEmbedBtn} m-px`}
+												>
+													<CloseIcon />
+												</button>
 
-											untrack(() => {
-												const external = createQuery(() => {
-													return {
-														queryKey: getLinkMetaKey(draft.external!),
-														queryFn: getLinkMeta,
-													};
-												});
-
-												return (() => {
-													const data = external.data;
-													if (data) {
-														return <EmbedLinkContent link={data} />;
-													}
-
-													const error = external.error;
-													if (error) {
-														return (
-															<div class="rounded-md border border-divider p-3 text-sm">
-																<p class="font-bold">Error adding link card</p>
-																<p class="text-de text-muted-fg">{/* @once */ '' + error}</p>
-															</div>
-														);
-													}
-
-													return (
-														<div class="grid place-items-center rounded-md border border-divider p-4">
-															<CircularProgress />
-														</div>
-													);
-												}) as unknown as JSX.Element;
-											}),
-										]}
-									</div>
+												<EmbedExternal url={url()} />
+											</div>
+										)}
+									</Show>
 
 									{/* Records */}
-									<div class="relative mb-4 mr-2 empty:hidden">
-										{draft.record !== undefined && [
-											<button
-												title="Remove embed"
-												onClick={() => {
-													draft.record = undefined;
-												}}
-												class={`${removeEmbedBtn} m-px`}
-											>
-												<CloseIcon />
-											</button>,
+									<Show when={draft.record}>
+										{(uri) => (
+											<div class="relative mb-2 mr-4 empty:hidden">
+												<button
+													title="Remove embed"
+													onClick={() => {
+														draft.record = undefined;
+													}}
+													class={`${removeEmbedBtn} m-px`}
+												>
+													<CloseIcon />
+												</button>
 
-											untrack(() => {
-												const opts = createMemo(() => {
-													const uid = context.author;
-													const uri = draft.record!;
-
-													const ns = getCollectionId(uri);
-
-													if (ns === 'app.bsky.feed.post') {
-														const key = getPostKey(uid, uri);
-
-														return {
-															type: ns,
-															query: createQuery(() => {
-																return {
-																	queryKey: key,
-																	queryFn: getPost,
-																	initialData: () => getInitialPost(key),
-																};
-															}),
-														} as const;
-													}
-
-													if (ns === 'app.bsky.feed.generator') {
-														const key = getFeedInfoKey(uid, uri);
-
-														return {
-															type: ns,
-															query: createQuery(() => {
-																return {
-																	queryKey: key,
-																	queryFn: getFeedInfo,
-																	initialData: () => getInitialFeedInfo(key),
-																};
-															}),
-														} as const;
-													}
-
-													if (ns === 'app.bsky.graph.list') {
-														const key = getListInfoKey(uid, uri);
-
-														return {
-															type: ns,
-															query: createQuery(() => {
-																return {
-																	queryKey: key,
-																	queryFn: getListInfo,
-																	initialData: () => getInitialListInfo(key),
-																};
-															}),
-														} as const;
-													}
-
-													assert(false, `Unsupported namespace: ${ns}`);
-												});
-
-												return (() => {
-													const { type, query } = opts();
-
-													// It doesn't like it if we extract query.data
-													if (query.data) {
-														if (type === 'app.bsky.feed.post') {
-															const data = query.data;
-
-															const author = data.author;
-															const record = data.record;
-
-															return (
-																<EmbedRecordContent
-																	record={{
-																		// @ts-expect-error
-																		author: {
-																			avatar: author.avatar.value,
-																			handle: author.handle.value,
-																			displayName: author.displayName.value,
-																		},
-																		embeds: data.embed.value ? [data.embed.value!] : [],
-																		value: {
-																			createdAt: record.value.createdAt,
-																			text: record.value.text,
-																		},
-																	}}
-																	mod={null}
-																/>
-															);
-														}
-
-														if (type === 'app.bsky.feed.generator') {
-															const data = query.data;
-
-															const creator = data.creator;
-
-															return (
-																<EmbedFeedContent
-																	feed={{
-																		// @ts-expect-error
-																		creator: {
-																			handle: creator.handle.value,
-																		},
-																		avatar: data.avatar.value,
-																		displayName: data.name.value,
-																	}}
-																/>
-															);
-														}
-
-														if (type === 'app.bsky.graph.list') {
-															const data = query.data;
-
-															const creator = data.creator;
-
-															return (
-																<EmbedListContent
-																	list={{
-																		// @ts-expect-error
-																		creator: {
-																			handle: creator.handle.value,
-																		},
-																		avatar: data.avatar.value,
-																		purpose: data.purpose.value,
-																		name: data.name.value,
-																	}}
-																/>
-															);
-														}
-
-														return null;
-													}
-
-													const error = query.error;
-													if (error) {
-														return (
-															<div class="rounded-md border border-divider p-3 text-sm">
-																<p class="font-bold">Error adding embed</p>
-																<p class="text-de text-muted-fg">{/* @once */ '' + error}</p>
-															</div>
-														);
-													}
-
-													return (
-														<div class="grid place-items-center rounded-md border border-divider p-4">
-															<CircularProgress />
-														</div>
-													);
-												}) as unknown as JSX.Element;
-											}),
-										]}
-									</div>
+												<EmbedRecord uid={context.author} uri={uri()} />
+											</div>
+										)}
+									</Show>
 
 									{/* Add links */}
 									<div class="mb-2 mr-4 flex flex-col gap-3 empty:hidden">
@@ -1325,3 +1155,184 @@ const ComposerPane = () => {
 };
 
 export default ComposerPane;
+
+const EmbedExternal = (props: { url: string }) => {
+	const external = createQuery(() => {
+		return {
+			queryKey: getLinkMetaKey(props.url),
+			queryFn: getLinkMeta,
+		};
+	});
+
+	return (() => {
+		const data = external.data;
+		if (data) {
+			return <EmbedLinkContent link={data} />;
+		}
+
+		const error = external.error;
+		if (error) {
+			return (
+				<div class="rounded-md border border-divider p-3 text-sm">
+					<p class="font-bold">Error adding link card</p>
+					<p class="text-de text-muted-fg">{/* @once */ '' + error}</p>
+				</div>
+			);
+		}
+
+		return (
+			<div class="grid place-items-center rounded-md border border-divider p-4">
+				<CircularProgress />
+			</div>
+		);
+	}) as unknown as JSX.Element;
+};
+
+const EmbedRecord = (props: { uid: DID; uri: string }) => {
+	const opts = createMemo(() => {
+		const uid = props.uid;
+		const uri = props.uri;
+
+		const ns = getCollectionId(uri);
+
+		if (ns === 'app.bsky.feed.post') {
+			const key = getPostKey(uid, uri);
+
+			return {
+				type: ns,
+				query: createQuery(() => {
+					return {
+						queryKey: key,
+						queryFn: getPost,
+						initialDataUpdatedAt: 0,
+						initialData: () => getInitialPost(key),
+					};
+				}),
+			} as const;
+		}
+
+		if (ns === 'app.bsky.feed.generator') {
+			const key = getFeedInfoKey(uid, uri);
+
+			return {
+				type: ns,
+				query: createQuery(() => {
+					return {
+						queryKey: key,
+						queryFn: getFeedInfo,
+						initialDataUpdatedAt: 0,
+						initialData: () => getInitialFeedInfo(key),
+					};
+				}),
+			} as const;
+		}
+
+		if (ns === 'app.bsky.graph.list') {
+			const key = getListInfoKey(uid, uri);
+
+			return {
+				type: ns,
+				query: createQuery(() => {
+					return {
+						queryKey: key,
+						queryFn: getListInfo,
+						initialDataUpdatedAt: 0,
+						initialData: () => getInitialListInfo(key),
+					};
+				}),
+			} as const;
+		}
+
+		throw new Error(`unknown ns: ${ns}`);
+	});
+
+	return (() => {
+		const { type, query } = opts();
+
+		// It doesn't like it if we extract query.data
+		if (query.data) {
+			if (type === 'app.bsky.feed.post') {
+				const data = query.data;
+
+				const author = data.author;
+				const record = data.record;
+
+				return (
+					<EmbedRecordContent
+						record={{
+							// @ts-expect-error
+							author: {
+								avatar: author.avatar.value,
+								handle: author.handle.value,
+								displayName: author.displayName.value,
+							},
+							embeds: data.embed.value ? [data.embed.value!] : [],
+							value: {
+								createdAt: record.value.createdAt,
+								text: record.value.text,
+							},
+						}}
+						mod={null}
+					/>
+				);
+			}
+
+			if (type === 'app.bsky.feed.generator') {
+				const data = query.data;
+
+				const creator = data.creator;
+
+				return (
+					<EmbedFeedContent
+						feed={{
+							// @ts-expect-error
+							creator: {
+								handle: creator.handle.value,
+							},
+							avatar: data.avatar.value,
+							displayName: data.name.value,
+						}}
+					/>
+				);
+			}
+
+			if (type === 'app.bsky.graph.list') {
+				const data = query.data;
+
+				const creator = data.creator;
+
+				return (
+					<EmbedListContent
+						list={{
+							// @ts-expect-error
+							creator: {
+								handle: creator.handle.value,
+							},
+							avatar: data.avatar.value,
+							purpose: data.purpose.value,
+							name: data.name.value,
+						}}
+					/>
+				);
+			}
+
+			return null;
+		}
+
+		const error = query.error;
+		if (error) {
+			return (
+				<div class="rounded-md border border-divider p-3 text-sm">
+					<p class="font-bold">Error adding embed</p>
+					<p class="text-de text-muted-fg">{/* @once */ '' + error}</p>
+				</div>
+			);
+		}
+
+		return (
+			<div class="grid place-items-center rounded-md border border-divider p-4">
+				<CircularProgress />
+			</div>
+		);
+	}) as unknown as JSX.Element;
+};
