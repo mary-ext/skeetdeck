@@ -169,9 +169,17 @@ export const getRtText = (rt: PreliminaryRichText) => {
 	return str;
 };
 
+const cachedLength = new WeakMap<PreliminaryRichText, number>();
+
 export const getRtLength = (rt: PreliminaryRichText) => {
-	const text = getRtText(rt);
-	return graphemeLen(text);
+	let len = cachedLength.get(rt);
+
+	if (len === undefined) {
+		const text = getRtText(rt);
+		cachedLength.set(rt, (len = graphemeLen(text)));
+	}
+
+	return len;
 };
 
 const encoder = new TextEncoder();

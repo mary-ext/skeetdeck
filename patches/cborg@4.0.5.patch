@@ -1,0 +1,98 @@
+diff --git a/cborg.js b/cborg.js
+index 90bde204e5f14e14d6a98a95413bb64fb8c807c2..b1bfe5bd9054c362a8c9b7216403b10d6f7d901b 100644
+--- a/cborg.js
++++ b/cborg.js
+@@ -4,11 +4,11 @@ import { Token, Type } from './lib/token.js'
+ 
+ /**
+  * Export the types that were present in the original manual cborg.d.ts
+- * @typedef {import('./interface').TagDecoder} TagDecoder
++ * @typedef {import('./interface.js').TagDecoder} TagDecoder
+  * There was originally just `TypeEncoder` so don't break types by renaming or not exporting
+- * @typedef {import('./interface').OptionalTypeEncoder} TypeEncoder
+- * @typedef {import('./interface').DecodeOptions} DecodeOptions
+- * @typedef {import('./interface').EncodeOptions} EncodeOptions
++ * @typedef {import('./interface.js').OptionalTypeEncoder} TypeEncoder
++ * @typedef {import('./interface.js').DecodeOptions} DecodeOptions
++ * @typedef {import('./interface.js').EncodeOptions} EncodeOptions
+  */
+ 
+ export {
+diff --git a/interface.ts b/interface.d.ts
+similarity index 95%
+rename from interface.ts
+rename to interface.d.ts
+index 020264da98b4ab5d184d5ef471e8c957c32b4da1..b26c48daab83440ab51773c922fe92d2af111acd 100644
+--- a/interface.ts
++++ b/interface.d.ts
+@@ -1,5 +1,5 @@
+-import { Token } from './lib/token'
+-import { Bl } from './lib/bl'
++import { Token } from './lib/token.js'
++import { Bl } from './lib/bl.js'
+ 
+ export type TokenOrNestedTokens = Token | Token[] | TokenOrNestedTokens[]
+ 
+diff --git a/lib/encode.js b/lib/encode.js
+index acd7bac1f580d27e8c0052c493e891136d0e8c47..3ae4185291dea9885d5a769f6e4818890ea1f87f 100644
+--- a/lib/encode.js
++++ b/lib/encode.js
+@@ -15,12 +15,12 @@ import { encodeTag } from './6tag.js'
+ import { encodeFloat } from './7float.js'
+ 
+ /**
+- * @typedef {import('../interface').EncodeOptions} EncodeOptions
+- * @typedef {import('../interface').OptionalTypeEncoder} OptionalTypeEncoder
+- * @typedef {import('../interface').Reference} Reference
+- * @typedef {import('../interface').StrictTypeEncoder} StrictTypeEncoder
+- * @typedef {import('../interface').TokenTypeEncoder} TokenTypeEncoder
+- * @typedef {import('../interface').TokenOrNestedTokens} TokenOrNestedTokens
++ * @typedef {import('../interface.js').EncodeOptions} EncodeOptions
++ * @typedef {import('../interface.js').OptionalTypeEncoder} OptionalTypeEncoder
++ * @typedef {import('../interface.js').Reference} Reference
++ * @typedef {import('../interface.js').StrictTypeEncoder} StrictTypeEncoder
++ * @typedef {import('../interface.js').TokenTypeEncoder} TokenTypeEncoder
++ * @typedef {import('../interface.js').TokenOrNestedTokens} TokenOrNestedTokens
+  */
+ 
+ /** @type {EncodeOptions} */
+diff --git a/types/cborg.d.ts b/types/cborg.d.ts
+index 1f8711ab5dcc7cf16f3682c538544379094841dd..0b53251a245b295cff0daf02d025df8a9abf411a 100644
+--- a/types/cborg.d.ts
++++ b/types/cborg.d.ts
+@@ -1,19 +1,19 @@
+ /**
+  * There was originally just `TypeEncoder` so don't break types by renaming or not exporting
+  */
+-export type TagDecoder = import('./interface').TagDecoder;
++export type TagDecoder = import('./interface.js').TagDecoder;
+ /**
+  * Export the types that were present in the original manual cborg.d.ts
+  */
+-export type TypeEncoder = import('./interface').OptionalTypeEncoder;
++export type TypeEncoder = import('./interface.js').OptionalTypeEncoder;
+ /**
+  * Export the types that were present in the original manual cborg.d.ts
+  */
+-export type DecodeOptions = import('./interface').DecodeOptions;
++export type DecodeOptions = import('./interface.js').DecodeOptions;
+ /**
+  * Export the types that were present in the original manual cborg.d.ts
+  */
+-export type EncodeOptions = import('./interface').EncodeOptions;
++export type EncodeOptions = import('./interface.js').EncodeOptions;
+ import { decode } from './lib/decode.js';
+ import { decodeFirst } from './lib/decode.js';
+ import { encode } from './lib/encode.js';
+diff --git a/types/interface.d.ts b/types/interface.d.ts
+index 40b734f397df16956bd5e99c396f31027fbb2231..6692903b3fb3390c92b534258e421fc977697136 100644
+--- a/types/interface.d.ts
++++ b/types/interface.d.ts
+@@ -1,5 +1,5 @@
+-import { Token } from './lib/token';
+-import { Bl } from './lib/bl';
++import { Token } from './lib/token.js';
++import { Bl } from './lib/bl.js';
+ export type TokenOrNestedTokens = Token | Token[] | TokenOrNestedTokens[];
+ export interface Reference {
+     parent: Reference | undefined;

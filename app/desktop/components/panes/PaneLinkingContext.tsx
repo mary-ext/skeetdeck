@@ -64,9 +64,12 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 
 		if (type === LINK_QUOTE) {
 			batch(() => {
+				const posts = composer.state.posts;
+
 				composer.open = true;
-				composer.authorDid = pane.uid;
-				composer.recordUri = `at://${to.actor}/app.bsky.feed.post/${to.rkey}`;
+				composer.author = pane.uid;
+
+				posts[posts.length - 1].record = `at://${to.actor}/app.bsky.feed.post/${to.rkey}`;
 			});
 
 			return;
@@ -75,8 +78,9 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 		if (type === LINK_REPLY) {
 			batch(() => {
 				composer.open = true;
-				composer.authorDid = pane.uid;
-				composer.replyUri = `at://${to.actor}/app.bsky.feed.post/${to.rkey}`;
+				composer.author = pane.uid;
+
+				composer.state.reply = `at://${to.actor}/app.bsky.feed.post/${to.rkey}`;
 			});
 
 			return;

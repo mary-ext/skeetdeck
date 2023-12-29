@@ -12,6 +12,9 @@ patchedDependencies:
   '@solidjs/router@0.8.4':
     hash: 2juozfaksvcwbkonoaj2ws2ewm
     path: patches/@solidjs__router@0.8.4.patch
+  cborg@4.0.5:
+    hash: dz6b6r6dc4jadjfng7vtgi53hy
+    path: patches/cborg@4.0.5.patch
   solid-js@1.8.7:
     hash: xj6px56gniuze42wtbvnzyvhg4
     path: patches/solid-js@1.8.7.patch
@@ -71,6 +74,9 @@ importers:
       '@thisbeyond/solid-dnd':
         specifier: ^0.7.5
         version: 0.7.5(solid-js@1.8.7)
+      cborg:
+        specifier: ^4.0.5
+        version: 4.0.5(patch_hash=dz6b6r6dc4jadjfng7vtgi53hy)
       immer:
         specifier: ^10.0.3
         version: 10.0.3
@@ -2241,6 +2247,12 @@ packages:
   /caniuse-lite@1.0.30001571:
     resolution: {integrity: sha512-tYq/6MoXhdezDLFZuCO/TKboTzuQ/xR5cFdgXPfDtM7/kchBO3b4VWghE/OAi/DV7tTdhmLjZiZBZi1fA/GheQ==}
     dev: true
+
+  /cborg@4.0.5(patch_hash=dz6b6r6dc4jadjfng7vtgi53hy):
+    resolution: {integrity: sha512-q8TAjprr8pn9Fp53rOIGp/UFDdFY6os2Nq62YogPSIzczJD9M6g2b6igxMkpCiZZKJ0kn/KzDLDvG+EqBIEeCg==}
+    hasBin: true
+    dev: false
+    patched: true
 
   /chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}

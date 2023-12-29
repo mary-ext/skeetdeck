@@ -3,12 +3,13 @@ import { produce } from '~/utils/immer.ts';
 import type { ThreadPage } from '../models/thread.ts';
 import { SignalizedPost } from '../stores/posts.ts';
 
-export const producePostInsert = (post: SignalizedPost, parentUri: string) => {
+export const producePostsInsert = (posts: SignalizedPost[], parentUri: string) => {
 	const updatePostThread = produce((draft: ThreadPage) => {
 		const descendants = draft.descendants;
 
 		if (draft.post.uri === parentUri) {
-			descendants.unshift({ items: [post] });
+			// @ts-expect-error
+			descendants.unshift({ items: posts });
 			return;
 		}
 
@@ -26,7 +27,8 @@ export const producePostInsert = (post: SignalizedPost, parentUri: string) => {
 
 				// We found the post, break out of the loop entirely.
 				if (item.uri === parentUri) {
-					items.splice(j + 1, jlen, post);
+					// @ts-expect-error
+					slice.items = items.slice(0, j + 1).concat(posts);
 					return;
 				}
 			}

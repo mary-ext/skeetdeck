@@ -1,6 +1,6 @@
 import type { Component, ComponentProps, JSX } from 'solid-js';
 
-import type { AtUri, UnionOf } from '~/api/atp-schema.ts';
+import type { UnionOf } from '~/api/atp-schema.ts';
 
 import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu.ts';
 
@@ -13,27 +13,16 @@ import CheckIcon from '~/com/icons/baseline-check.tsx';
 import PublicIcon from '~/com/icons/baseline-public.tsx';
 import LockIcon from '~/com/icons/baseline-lock.tsx';
 
+import type { GateState } from '../ComposerContext.tsx';
+
 type Rule =
 	| UnionOf<'app.bsky.feed.threadgate#followingRule'>
 	| UnionOf<'app.bsky.feed.threadgate#listRule'>
 	| UnionOf<'app.bsky.feed.threadgate#mentionRule'>;
 
-const enum GateType {
-	EVERYONE,
-	MENTIONED_ONLY,
-	FOLLOWED_ONLY,
-	CUSTOM,
-}
-
-export type GateState =
-	| { type: GateType.EVERYONE }
-	| { type: GateType.MENTIONED_ONLY }
-	| { type: GateType.FOLLOWED_ONLY }
-	| { type: GateType.CUSTOM; mentions: boolean; follows: boolean; lists: AtUri[] };
-
 export interface ThreadgateActionProps {
-	state: GateState | undefined;
-	onChange: (next: GateState | undefined) => void;
+	state: GateState;
+	onChange: (next: GateState) => void;
 	children: JSX.Element;
 }
 
@@ -45,17 +34,15 @@ const ThreadgateAction = (props: ThreadgateActionProps) => {
 	return (
 		<Flyout button={props.children} placement="bottom" middleware={offsetlessMiddlewares}>
 			{({ close, menuProps }) => {
-				const current = props.state ?? { type: GateType.EVERYONE };
+				const current = props.state;
 
-				const item = (value: GateType, Icon: IconComponent, name: string) => {
+				const item = (value: GateState['type'], Icon: IconComponent, name: string) => {
 					return (
 						<button
 							onClick={() => {
 								close();
 
-								if (value === GateType.CUSTOM) {
-								} else if (value === GateType.EVERYONE) {
-									onChange(undefined);
+								if (value === 'c') {
 								} else {
 									onChange({ type: value });
 								}
@@ -79,12 +66,12 @@ const ThreadgateAction = (props: ThreadgateActionProps) => {
 							<p class="text-muted-fg">Choose who can reply to this post.</p>
 						</div>
 
-						{/* @once */ item(GateType.EVERYONE, PublicIcon, `Everyone`)}
-						{/* @once */ item(GateType.MENTIONED_ONLY, AlternateEmailIcon, `Mentioned users only`)}
-						{/* @once */ item(GateType.FOLLOWED_ONLY, AccountCheckIcon, `Followed users only`)}
+						{/* @once */ item('e', PublicIcon, `Everyone`)}
+						{/* @once */ item('m', AlternateEmailIcon, `Mentioned users only`)}
+						{/* @once */ item('f', AccountCheckIcon, `Followed users only`)}
 
 						{/* @todo: get around to doing this later. */}
-						{/* {item(GateType.CUSTOM, MoreHorizIcon, `Custom`)} */}
+						{/* {item('c', MoreHorizIcon, `Custom`)} */}
 					</div>
 				);
 			}}
@@ -94,66 +81,64 @@ const ThreadgateAction = (props: ThreadgateActionProps) => {
 
 export default ThreadgateAction;
 
-export const buildGateRules = (state: GateState | undefined): Rule[] | undefined => {
-	if (state) {
-		const type = state.type;
+export const buildGateRules = (state: GateState): Rule[] | undefined => {
+	const type = state.type;
 
-		if (type === GateType.MENTIONED_ONLY) {
-			return [{ $type: 'app.bsky.feed.threadgate#mentionRule' }];
-		} else if (type === GateType.FOLLOWED_ONLY) {
-			return [{ $type: 'app.bsky.feed.threadgate#followingRule' }];
-		} else if (type === GateType.CUSTOM) {
-			const rules: Rule[] = [];
-			const lists = state.lists;
+	if (type === 'm') {
+		return [{ $type: 'app.bsky.feed.threadgate#mentionRule' }];
+	} else if (type === 'f') {
+		return [{ $type: 'app.bsky.feed.threadgate#followingRule' }];
+	} else if (type === 'c') {
+		const rules: Rule[] = [];
+		const lists = state.lists;
 
-			if (state.mentions) {
-				rules.push({ $type: 'app.bsky.feed.threadgate#mentionRule' });
-			}
-			if (state.follows) {
-				rules.push({ $type: 'app.bsky.feed.threadgate#followingRule' });
-			}
-
-			for (let i = 0, ilen = lists.length; i < ilen; i++) {
-				const uri = lists[i];
-				rules.push({ $type: 'app.bsky.feed.threadgate#listRule', list: uri });
-			}
-
-			return rules;
+		if (state.mentions) {
+			rules.push({ $type: 'app.bsky.feed.threadgate#mentionRule' });
 		}
+		if (state.follows) {
+			rules.push({ $type: 'app.bsky.feed.threadgate#followingRule' });
+		}
+
+		for (let i = 0, ilen = lists.length; i < ilen; i++) {
+			const uri = lists[i];
+			rules.push({ $type: 'app.bsky.feed.threadgate#listRule', list: uri });
+		}
+
+		return rules;
 	}
 };
 
-export const renderGateIcon = (state: GateState | undefined): JSX.Element => {
+export const renderGateIcon = (state: GateState): JSX.Element => {
+	const type = state.type;
+
 	let Icon: IconComponent = PublicIcon;
 
-	if (state) {
-		const type = state.type;
-
-		if (type === GateType.FOLLOWED_ONLY) {
-			Icon = AccountCheckIcon;
-		} else if (type === GateType.MENTIONED_ONLY) {
-			Icon = AlternateEmailIcon;
-		} else if (type === GateType.CUSTOM) {
-			Icon = LockIcon;
-		}
+	if (type === 'e') {
+		Icon = PublicIcon;
+	} else if (type === 'f') {
+		Icon = AccountCheckIcon;
+	} else if (type === 'm') {
+		Icon = AlternateEmailIcon;
+	} else {
+		Icon = LockIcon;
 	}
 
 	return <Icon />;
 };
 
-export const renderGateAlt = (state: GateState | undefined): string => {
-	let msg = `Everyone can reply to your post.`;
+export const renderGateAlt = (state: GateState): string => {
+	const type = state.type;
 
-	if (state) {
-		const type = state.type;
+	let msg: string;
 
-		if (type === GateType.FOLLOWED_ONLY) {
-			msg = `Only followed users can reply.`;
-		} else if (type === GateType.MENTIONED_ONLY) {
-			msg = `Only mentioned users can reply.`;
-		} else if (type === GateType.CUSTOM) {
-			msg = `Custom reply limits are set.`;
-		}
+	if (type === 'e') {
+		msg = `Everyone can reply to your post.`;
+	} else if (type === 'f') {
+		msg = `Only followed users can reply.`;
+	} else if (type === 'm') {
+		msg = `Only mentioned users can reply.`;
+	} else {
+		msg = `Custom reply limits are set.`;
 	}
 
 	return msg + `\nClick here to change...`;

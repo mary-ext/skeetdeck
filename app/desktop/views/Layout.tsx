@@ -25,6 +25,7 @@ import { Interactive } from '~/com/primitives/interactive.ts';
 
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { Flyout } from '~/com/components/Flyout.tsx';
+import Keyed from '~/com/components/Keyed.ts';
 
 import FeatherIcon from '~/com/icons/baseline-feather.tsx';
 import SearchIcon from '~/com/icons/baseline-search.tsx';
@@ -211,12 +212,9 @@ const DashboardLayout = () => {
 						</div>
 					}
 				>
-					{(() => {
-						// The best way to properly reset the composer is by remounting it,
-						// so this does just that, mutate `reset` to reset the composer.
-						composer.reset;
-						return <ComposerPane />;
-					})()}
+					<Keyed key={composer.state}>
+						<ComposerPane />
+					</Keyed>
 				</Suspense>
 			</ShowFreeze>
 

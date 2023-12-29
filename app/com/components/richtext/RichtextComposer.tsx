@@ -230,8 +230,8 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 	});
 
 	return (
-		<div class="relative">
-			<div ref={renderer} class="absolute inset-0 z-0 whitespace-pre-wrap break-words pb-4 pr-3 pt-5 text-xl">
+		<div class="group relative">
+			<div ref={renderer} class="absolute inset-0 z-0 whitespace-pre-wrap break-words pb-2 pr-4 text-base">
 				{(() => {
 					// const MAX_LEN = 300;
 
@@ -286,7 +286,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 				value={props.value}
 				placeholder={props.placeholder}
 				minRows={props.minRows}
-				class="relative z-10 block w-full resize-none overflow-hidden bg-transparent pb-4 pr-3 pt-5 text-xl text-transparent caret-primary outline-none"
+				class="relative z-10 block w-full resize-none overflow-hidden bg-transparent pb-2 pr-4 text-base text-transparent caret-primary outline-none placeholder:text-muted-fg"
 				onPaste={(ev) => {
 					const items = ev.clipboardData?.items ?? [];
 					let images: File[] = [];
@@ -407,7 +407,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 			{matchedCompletion() && (
 				<ul
 					ref={setFloating}
-					class="absolute z-40 w-full max-w-sm overflow-auto rounded-md border border-divider bg-background shadow-lg shadow-black sm:w-max"
+					class="absolute z-40 hidden w-full max-w-sm overflow-auto rounded-md border border-divider bg-background shadow-lg shadow-black group-focus-within:block sm:w-max"
 					style={{
 						'max-width': 'calc(100% - 12px)',
 						'min-width': `180px`,

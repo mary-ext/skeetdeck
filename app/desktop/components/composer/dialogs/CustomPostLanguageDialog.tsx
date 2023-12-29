@@ -1,4 +1,4 @@
-import { type JSX, For, createMemo, createSignal } from 'solid-js';
+import { type JSX, For, createMemo, createSignal, batch } from 'solid-js';
 
 import { getNativeLanguageName, languageNames, languageNamesStrict } from '~/utils/intl/display-names.ts';
 import { CODE2S } from '~/utils/intl/languages.ts';
@@ -19,7 +19,6 @@ import DeleteIcon from '~/com/icons/baseline-delete.tsx';
 
 export interface CustomPostLanguageDialogProps {
 	languages: string[];
-	onChange: (next: string[]) => void;
 }
 
 const CustomPostLanguageDialog = (props: CustomPostLanguageDialogProps) => {
@@ -46,7 +45,11 @@ const CustomPostLanguageDialog = (props: CustomPostLanguageDialogProps) => {
 					<button
 						onClick={() => {
 							closeModal();
-							props.onChange(languages());
+
+							batch(() => {
+								props.languages.length = 0;
+								props.languages.push(...languages());
+							});
 						}}
 						class={/* @once */ Button({ variant: 'primary', size: 'xs' })}
 					>

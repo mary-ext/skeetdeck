@@ -1,4 +1,4 @@
-import type { JSX } from 'solid-js';
+import { type JSX, batch } from 'solid-js';
 
 import { MenuItem, MenuRoot } from '~/com/primitives/menu.ts';
 
@@ -8,7 +8,6 @@ import CheckIcon from '~/com/icons/baseline-check.tsx';
 
 export interface ContentWarningActionProps {
 	labels: string[];
-	onChange: (next: string[]) => void;
 	children: JSX.Element;
 }
 
@@ -16,13 +15,21 @@ const ContentWarningAction = (props: ContentWarningActionProps) => {
 	return (
 		<Flyout button={props.children} placement="bottom" middleware={offsetlessMiddlewares}>
 			{({ close, menuProps }) => {
+				const selected = props.labels;
+
 				const renderItem = (value: string | undefined, label: string, description: string) => {
 					return (
 						<button
 							onClick={() => {
 								close();
 
-								props.onChange(value !== undefined ? [value] : []);
+								batch(() => {
+									selected.length = 0;
+
+									if (value !== undefined) {
+										selected.push(value);
+									}
+								});
 							}}
 							class={/* @once */ MenuItem()}
 						>
@@ -34,8 +41,7 @@ const ContentWarningAction = (props: ContentWarningActionProps) => {
 							<CheckIcon
 								class="text-xl text-accent"
 								classList={{
-									[`invisible`]:
-										value !== undefined ? !props.labels.includes(value) : props.labels.length !== 0,
+									[`invisible`]: value !== undefined ? !selected.includes(value) : selected.length !== 0,
 								}}
 							/>
 						</button>

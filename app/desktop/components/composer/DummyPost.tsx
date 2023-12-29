@@ -16,10 +16,10 @@ const DummyPost = (props: DummyPostProps) => {
 		const record = () => post.record.value;
 
 		return (
-			<div class="flex min-w-0 gap-3 px-4 py-3">
+			<div class="flex min-w-0 gap-3 px-4 pt-3">
 				<div class="flex shrink-0 flex-col items-center">
 					<img src={author.avatar.value || DefaultUserAvatar} class="h-10 w-10 rounded-full" />
-					<div class="-mb-4 mt-3 grow border-l-2 border-divider" />
+					<div class="-mb-4 mt-2 grow border-l-2 border-divider" />
 				</div>
 
 				<div class="min-w-0 grow">

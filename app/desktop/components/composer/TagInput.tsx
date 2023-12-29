@@ -17,7 +17,6 @@ import PoundIcon from '~/com/icons/baseline-pound.tsx';
 export interface TagsInputProps {
 	tags: string[];
 	limit?: number;
-	onChange: (next: string[]) => void;
 }
 
 const enum MoveAction {
@@ -43,7 +42,8 @@ const TagsInput = (props: TagsInputProps) => {
 		whileElementsMounted: autoUpdate,
 	});
 
-	const onChange = props.onChange;
+	const tags = props.tags;
+	const limit = props.limit ?? Infinity;
 
 	const moveFocus = (target: HTMLElement, action: MoveAction) => {
 		let sibling: HTMLButtonElement | HTMLInputElement | null;
@@ -78,7 +78,7 @@ const TagsInput = (props: TagsInputProps) => {
 				return (
 					<div
 						ref={setFloating}
-						class="rounded-md border border-divider bg-background px-2 py-1 text-de shadow-md shadow-black"
+						class="pointer-events-none z-10 rounded-md border border-divider bg-background px-2 py-1 text-de shadow-md"
 						style={{
 							position: position.strategy,
 							top: `${position.y ?? 0}px`,
@@ -97,11 +97,8 @@ const TagsInput = (props: TagsInputProps) => {
 					let target: HTMLButtonElement;
 
 					const removeSelf = () => {
-						const clone = props.tags.slice();
-						clone.splice(index(), 1);
-
 						moveFocus(target, MoveAction.ANYWHERE);
-						onChange(clone);
+						tags.splice(index(), 1);
 					};
 
 					const handleFocus = () => {
@@ -150,7 +147,7 @@ const TagsInput = (props: TagsInputProps) => {
 				type="text"
 				placeholder="#add tags"
 				class="min-w-0 grow rounded-md bg-transparent leading-6 outline-2 outline-transparent outline placeholder:text-muted-fg"
-				classList={{ [`hidden`]: props.limit !== undefined && props.tags.length >= props.limit }}
+				classList={{ [`hidden`]: tags.length >= limit }}
 				onFocus={(ev) => {
 					const target = ev.currentTarget;
 					target.tabIndex = 0;
@@ -185,15 +182,12 @@ const TagsInput = (props: TagsInputProps) => {
 								},
 							);
 						} else {
-							const tags = props.tags;
-							const limit = props.limit;
-
 							target.value = '';
 							ev.preventDefault();
 
-							onChange(props.tags.concat(trimmed));
+							tags.push(trimmed);
 
-							if (limit !== undefined && tags.length >= limit - 1) {
+							if (tags.length >= limit - 1) {
 								moveFocus(target, MoveAction.LEFT);
 							}
 						}
@@ -208,7 +202,8 @@ const TagsInput = (props: TagsInputProps) => {
 						const isStart = target.selectionStart === 0 && target.selectionStart === target.selectionEnd;
 
 						if (isStart && props.tags.length > 0) {
-							props.onChange(props.tags.slice(0, -1));
+							ev.preventDefault();
+							tags.splice(-1, 1);
 						}
 					}
 				}}

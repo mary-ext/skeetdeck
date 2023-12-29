@@ -1,4 +1,4 @@
-import type { JSX } from 'solid-js';
+import { batch, type JSX } from 'solid-js';
 
 import { systemLanguages } from '~/api/globals/platform.ts';
 
@@ -18,7 +18,6 @@ import CustomPostLanguageDialog from '../dialogs/CustomPostLanguageDialog.tsx';
 
 export interface PostLanguageActionProps {
 	languages: string[];
-	onChange: (next: string[]) => void;
 	children: JSX.Element;
 }
 
@@ -45,9 +44,8 @@ const PostLanguageAction = (props: PostLanguageActionProps) => {
 	return (
 		<Flyout button={props.children} placement="bottom" middleware={offsetlessMiddlewares}>
 			{({ close, menuProps }) => {
-				const languages = getLanguageCodes();
-
-				const onChange = props.onChange;
+				const available = getLanguageCodes();
+				const selected = props.languages;
 
 				return (
 					<div {...menuProps} class={/* @once */ MenuRoot()}>
@@ -58,11 +56,15 @@ const PostLanguageAction = (props: PostLanguageActionProps) => {
 
 						<div class="flex grow flex-col overflow-y-auto">
 							{
-								/* @once  */ languages.map((code) => (
+								/* @once  */ available.map((code) => (
 									<button
 										onClick={() => {
 											close();
-											onChange([code]);
+
+											batch(() => {
+												selected.length = 0;
+												selected.push(code);
+											});
 										}}
 										class={/* @once */ MenuItem()}
 									>
@@ -85,9 +87,7 @@ const PostLanguageAction = (props: PostLanguageActionProps) => {
 								onClick={() => {
 									close();
 
-									openModal(() => (
-										<CustomPostLanguageDialog languages={props.languages} onChange={onChange} />
-									));
+									openModal(() => <CustomPostLanguageDialog languages={props.languages} />);
 								}}
 								class={/* @once */ MenuItem()}
 							>
@@ -97,7 +97,7 @@ const PostLanguageAction = (props: PostLanguageActionProps) => {
 									class="text-xl text-accent"
 									classList={{
 										[`invisible`]:
-											props.languages.length < 2 && props.languages.every((code) => languages.includes(code)),
+											props.languages.length < 2 && props.languages.every((code) => available.includes(code)),
 									}}
 								/>
 							</button>

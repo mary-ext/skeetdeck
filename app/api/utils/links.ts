@@ -3,37 +3,39 @@ export const BSKY_POST_URL_RE = /\/profile\/([^\/]+)\/post\/([^\/]+)$/;
 export const BSKY_FEED_URL_RE = /\/profile\/([^\/]+)\/feed\/([^\/]+)$/;
 export const BSKY_LIST_URL_RE = /\/profile\/([^\/]+)\/lists\/([^\/]+)$/;
 
-export const ATP_POST_URL_RE = /([^\/]+)\/app.bsky.feed.post\/([^\/]+)$/;
-export const ATP_FEED_URL_RE = /([^\/]+)\/app.bsky.feed.generator\/([^\/]+)$/;
-
 export const isBskyUrl = (url: string) => {
-	return url.startsWith('https://bsky.app/');
+	try {
+		const urli = new URL(url);
+		const host = urli.host;
+
+		return host === 'bsky.app' || host === 'staging.bsky.app';
+	} catch {}
+
+	return false;
 };
 
-export const isAppUrl = (url: string) => {
-	return isBskyUrl(url) || url.startsWith(`${location.protocol}//${location.hostname}/`);
-};
+export interface ExtractedAppLink {
+	type: string;
+	author: string;
+	rkey: string;
+}
 
-export const isBskyPostUrl = (url: string) => {
-	return isAppUrl(url) && BSKY_POST_URL_RE.test(url);
-};
+export const extractAppLink = (url: string): ExtractedAppLink | null => {
+	let match: RegExpExecArray | null;
 
-export const isBskyFeedUrl = (url: string) => {
-	return isAppUrl(url) && BSKY_FEED_URL_RE.test(url);
-};
+	if (isBskyUrl(url)) {
+		if ((match = BSKY_POST_URL_RE.exec(url))) {
+			return { type: 'app.bsky.feed.post', author: match[1], rkey: match[2] };
+		}
 
-export const isBskyListUrl = (url: string) => {
-	return isAppUrl(url) && BSKY_LIST_URL_RE.test(url);
-};
+		if ((match = BSKY_FEED_URL_RE.exec(url))) {
+			return { type: 'app.bsky.feed.generator', author: match[1], rkey: match[2] };
+		}
 
-export const isAtpUri = (uri: string) => {
-	return uri.startsWith('at://');
-};
+		if ((match = BSKY_LIST_URL_RE.exec(url))) {
+			return { type: 'app.bsky.graph.list', author: match[1], rkey: match[2] };
+		}
+	}
 
-export const isAtpPostUri = (uri: string) => {
-	return isAtpUri(uri) && ATP_POST_URL_RE.test(uri);
-};
-
-export const isAtpFeedUri = (uri: string) => {
-	return isAtpUri(uri) && ATP_FEED_URL_RE.test(uri);
+	return null;
 };

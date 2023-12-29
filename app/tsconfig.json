@@ -19,6 +19,7 @@
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
 		"verbatimModuleSyntax": true,
+		"useDefineForClassFields": false,
 
 		"paths": {
 			"~/*": ["./*"]
