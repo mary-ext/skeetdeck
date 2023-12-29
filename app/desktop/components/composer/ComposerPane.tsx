@@ -982,7 +982,7 @@ const ComposerPane = () => {
 											<button
 												title="Remove embed"
 												onClick={() => {
-													draft.external = undefined;
+													draft.record = undefined;
 												}}
 												class={`${removeEmbedBtn} m-px`}
 											>
