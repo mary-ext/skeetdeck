@@ -15,6 +15,9 @@ import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 import { usePaneContext } from '../PaneContext.tsx';
 
 import EditIcon from '~/com/icons/baseline-edit.tsx';
+import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
+
+import ListOverflowAction from './actions/ListOverflowAction.tsx';
 
 const LazyImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
 const ListMembersPaneDialog = lazy(() => import('../dialogs/ListMembersPaneDialog.tsx'));
@@ -137,6 +140,12 @@ const ListHeader = (props: ListHeaderProps) => {
 								);
 							}
 						})()}
+
+						<ListOverflowAction list={list}>
+							<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
+								<MoreHorizIcon class="-mx-1.5 text-base" />
+							</button>
+						</ListOverflowAction>
 					</div>
 				</div>
 			</VirtualContainer>
