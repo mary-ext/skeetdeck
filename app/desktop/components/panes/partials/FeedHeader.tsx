@@ -18,6 +18,9 @@ import FavoriteOutlinedIcon from '~/com/icons/outline-favorite.tsx';
 
 import DefaultFeedAvatar from '~/com/assets/default-feed-avatar.svg?url';
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
+import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
+
+import FeedOverflowAction from './actions/FeedOverflowAction.tsx';
 
 const LazyImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
 
@@ -103,6 +106,14 @@ const FeedHeader = (props: FeedHeaderProps) => {
 							<FavoriteOutlinedIcon class="-mx-1.5 text-base" />
 						)}
 					</button>
+
+					<div class="grow"></div>
+
+					<FeedOverflowAction feed={feed}>
+						<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
+							<MoreHorizIcon class="-mx-1.5 text-base" />
+						</button>
+					</FeedOverflowAction>
 				</div>
 			</div>
 		);
