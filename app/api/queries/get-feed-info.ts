@@ -47,7 +47,7 @@ export const getFeedInfo = async (ctx: QC<ReturnType<typeof getFeedInfoKey>>) =>
 export const getInitialFeedInfo = (key: ReturnType<typeof getFeedInfoKey>) => {
 	const [, uid, uri] = key;
 
-	const list = getCachedFeed(uid, uri);
+	const feed = getCachedFeed(uid, uri);
 
-	return list;
+	return feed;
 };
