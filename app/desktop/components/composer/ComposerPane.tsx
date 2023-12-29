@@ -892,7 +892,7 @@ const ComposerPane = () => {
 									</div>
 
 									{/* Images */}
-									<div class="mb-2 mr-4 flex flex-wrap gap-3">
+									<div class="mb-2 mr-4 flex flex-wrap gap-3 empty:hidden">
 										<For each={images}>
 											{(image, index) => (
 												<div class="relative">
