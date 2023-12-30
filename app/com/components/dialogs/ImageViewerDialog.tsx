@@ -414,7 +414,7 @@ const ImageCarousel = (props: ImageCarouselProps) => {
 	return (
 		<div
 			ref={view}
-			class="relative flex h-full w-full touch-none overflow-hidden bg-black/75"
+			class="pointer-events-none relative flex h-full w-full touch-none overflow-hidden bg-black/75"
 			style={{ cursor: dragging() ? 'grabbing' : 'grab' }}
 		>
 			<div
@@ -439,7 +439,7 @@ const ImageCarousel = (props: ImageCarouselProps) => {
 								<img
 									src={image.fullsize}
 									alt={image.alt}
-									class="max-h-full max-w-full select-none"
+									class="pointer-events-auto max-h-full max-w-full select-none"
 									draggable={false}
 									onError={finish}
 									onLoad={finish}
