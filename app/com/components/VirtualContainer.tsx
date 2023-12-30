@@ -1,6 +1,5 @@
 import { type JSX, createSignal, onCleanup } from 'solid-js';
 
-import { scheduleIdleTask } from '~/utils/idle.ts';
 import { resizeObserver, scrollObserver } from '~/utils/intersection-observer.ts';
 
 export interface VirtualContainerProps {
@@ -34,7 +33,7 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 			// unmounting is cheap, but we don't need to immediately unmount it, say
 			// for scenarios where layout is still being figured out and we don't
 			// actually know where the virtual container is gonna end up.
-			scheduleIdleTask(() => {
+			requestIdleCallback(() => {
 				// bail out if it's no longer us.
 				if (entry !== nextEntry) {
 					return;
