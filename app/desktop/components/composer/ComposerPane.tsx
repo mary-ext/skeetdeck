@@ -124,6 +124,10 @@ const resolveRt = async (uid: DID, prelim: PreliminaryRichText) => {
 	}
 };
 
+class ComposeError extends Error {
+	name = 'ComposeError';
+}
+
 const ComposerPane = () => {
 	const queryClient = useQueryClient();
 	const context = useComposer();
@@ -208,7 +212,12 @@ const ComposerPane = () => {
 						const blob = img.blob;
 
 						setLog(logPending(`Uploading image #${++imgCount}`));
-						await uploadBlob(uid, blob);
+
+						try {
+							await uploadBlob(uid, blob);
+						} catch (err) {
+							throw new ComposeError(`Failed to upload image #${imgCount}`, { cause: err });
+						}
 					}
 
 					if (external) {
@@ -223,7 +232,12 @@ const ComposerPane = () => {
 
 						if (thumb && !getUploadedBlob(uid, thumb)) {
 							setLog(logPending(`Uploading link thumbnail #${linkCount}`));
-							await uploadBlob(uid, thumb);
+
+							try {
+								await uploadBlob(uid, thumb);
+							} catch (err) {
+								throw new ComposeError(`Failed to upload link thumbnail #${linkCount}`, { cause: err });
+							}
 						}
 
 						cache.set(external, meta);
@@ -465,7 +479,7 @@ const ComposerPane = () => {
 				}
 			}
 		} catch (err) {
-			setLog(logError(`Something went wrong, try again later.`));
+			setLog(logError(err instanceof ComposeError ? err.message : `Something went wrong, try again later.`));
 			console.error(err);
 
 			return;
