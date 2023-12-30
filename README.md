@@ -1,5 +1,8 @@
 # Langit
 
-Langit is an alternative web client for Bluesky.
+This monorepository contains the following projects:
 
-This is a temporary working repository, it'll be merged to the main Langit repository once the dust has settled.
+- Skeetdeck: a deck-based alternative Bluesky client
+- `bluesky-client`: lightweight API client for Bluesky.
+
+A mobile-based client may come later.
