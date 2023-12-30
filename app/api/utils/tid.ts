@@ -1,28 +1,22 @@
-let lastTimestamp: number = 0;
-let timestampCount: number = 0;
-let clockId: number | null = null;
+let lastTimestamp = 0;
 
 export const getCurrentTid = () => {
-	// JS does not have microsecond precision, instead, we append a counter to the timestamp to
-	// indicate if multiple timestamps were created within the same millisecond take max of current
-	// time & last timestamp to prevent TIDs moving backwards if system clock drifts backwards
+	// we need these two aspects, which Date.now() doesn't provide:
+	// - monotonically increasing time
+	// - microsecond precision
 
-	const time = Math.max(Date.now(), lastTimestamp);
+	// while `performance.timeOrigin + performance.now()` could be used here, they
+	// seem to have cross-browser differences, not sure on that yet.
 
-	if (time === lastTimestamp) {
-		timestampCount++;
-	}
-	lastTimestamp = time;
+	let now = Math.max(Date.now() * 1_000, lastTimestamp);
 
-	const timestamp = time * 1000 + timestampCount;
-
-	// the bottom 32 clock ids can be randomized & are not guaranteed to becollision resistant
-	// we use the same clockid for all tids coming from this machine
-	if (clockId === null) {
-		clockId = Math.floor(Math.random() * 32);
+	if (now === lastTimestamp) {
+		now += 1;
 	}
 
-	return `${s32encode(timestamp)}${s32encode(clockId).padStart(2, '2')}`;
+	const id = Math.floor(Math.random() * 32);
+
+	return s32encode(now) + s32encode(id).padStart(2, '2');
 };
 
 const S32_CHAR = '234567abcdefghijklmnopqrstuvwxyz';
