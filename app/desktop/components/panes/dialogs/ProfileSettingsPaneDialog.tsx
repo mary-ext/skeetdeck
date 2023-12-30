@@ -180,7 +180,7 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 				})()}
 
 				<fieldset disabled={profileMutation.isPending} class="flex min-h-0 grow flex-col overflow-y-auto">
-					<div class="relative mb-4 aspect-banner bg-muted-fg">
+					<div class="relative mb-4 aspect-banner w-full bg-muted-fg">
 						{(() => {
 							const $banner = banner();
 
