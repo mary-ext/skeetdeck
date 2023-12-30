@@ -62,6 +62,9 @@ export interface BasePaneConfig {
 
 export interface HomePaneConfig extends BasePaneConfig {
 	readonly type: typeof PANE_TYPE_HOME;
+	showReplies: 'follows' | boolean;
+	showReposts: boolean;
+	showQuotes: boolean;
 }
 
 export interface NotificationsPaneConfig extends BasePaneConfig {

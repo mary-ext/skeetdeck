@@ -15,6 +15,7 @@ import PaneBody from '../PaneBody.tsx';
 import PaneHeader from '../PaneHeader.tsx';
 
 import GenericPaneSettings from '../settings/GenericPaneSettings.tsx';
+import HomePaneSettings from '../settings/HomePaneSettings.tsx';
 
 const HomePane = () => {
 	const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);
@@ -35,12 +36,22 @@ const HomePane = () => {
 				</PaneHeader>
 
 				<PaneBody>
-					<TimelineList uid={pane.uid} params={{ type: 'home', algorithm: 'reverse-chronological' }} />
+					<TimelineList
+						uid={pane.uid}
+						params={{
+							type: 'home',
+							algorithm: 'reverse-chronological',
+							showReplies: pane.showReplies,
+							showReposts: pane.showReposts,
+							showQuotes: pane.showQuotes,
+						}}
+					/>
 				</PaneBody>
 			</Pane>
 
 			{isSettingsOpen() && (
 				<PaneAside onClose={() => setIsSettingsOpen(false)}>
+					<HomePaneSettings />
 					<GenericPaneSettings />
 				</PaneAside>
 			)}

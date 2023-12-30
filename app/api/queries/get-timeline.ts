@@ -35,6 +35,9 @@ const PALOMAR_SERVICE = 'https://palomar.bsky.social';
 export interface HomeTimelineParams {
 	type: 'home';
 	algorithm: 'reverse-chronological' | (string & {});
+	showReplies: 'follows' | boolean;
+	showReposts: boolean;
+	showQuotes: boolean;
 }
 
 export interface FeedTimelineParams {
@@ -145,10 +148,18 @@ export const getTimeline = async (
 	}
 
 	if (type === 'home') {
-		sliceFilter = createHomeSliceFilter(uid);
+		if (params.showReplies === 'follows') {
+			sliceFilter = createHomeSliceFilter(uid);
+		}
+
 		postFilter = combine([
 			createHiddenRepostFilter(timelineOpts?.filters),
 			createDuplicatePostFilter(items),
+
+			!params.showReplies && createHideRepliesFilter(),
+			!params.showQuotes && createHideQuotesFilter(),
+			!params.showReposts && createHideRepostsFilter(),
+
 			createInvalidReplyFilter(),
 			createLabelPostFilter(timelineOpts?.moderation),
 			createTempMutePostFilter(uid, timelineOpts?.filters),
@@ -350,8 +361,8 @@ const fetchPage = async (
 /// Timeline filters
 type FilterFn<T> = (data: T) => boolean;
 
-const combine = <T>(filters: Array<undefined | FilterFn<T>>): FilterFn<T> | undefined => {
-	const filtered = filters.filter((filter): filter is FilterFn<T> => filter !== undefined);
+const combine = <T>(filters: Array<undefined | false | FilterFn<T>>): FilterFn<T> | undefined => {
+	const filtered = filters.filter((filter): filter is FilterFn<T> => !!filter);
 	const len = filtered.length;
 
 	if (len === 1) {
@@ -375,6 +386,7 @@ const combine = <T>(filters: Array<undefined | FilterFn<T>>): FilterFn<T> | unde
 	};
 };
 
+//// Post filters
 const createDuplicatePostFilter = (slices: TimelineSlice[]): PostFilter => {
 	const map: Record<string, boolean> = {};
 
@@ -527,6 +539,31 @@ const createTempMutePostFilter = (uid: DID, prefs?: FilterPreferences): PostFilt
 	};
 };
 
+const createHideRepliesFilter = (): PostFilter => {
+	return (item) => {
+		return item.reply === undefined && (item.post.record as PostRecord).reply === undefined;
+	};
+};
+
+const createHideRepostsFilter = (): PostFilter => {
+	return (item) => {
+		return item.reason === undefined || item.reason.$type !== 'app.bsky.feed.defs#reasonRepost';
+	};
+};
+
+const createHideQuotesFilter = (): PostFilter => {
+	return (item) => {
+		const record = item.post.record as PostRecord;
+		const embed = record.embed;
+
+		return (
+			embed === undefined ||
+			(embed.$type !== 'app.bsky.embed.record' && embed.$type !== 'app.bsky.embed.recordWithMedia')
+		);
+	};
+};
+
+//// Slice filters
 const createFeedSliceFilter = (): SliceFilter | undefined => {
 	return (slice) => {
 		const items = slice.items;

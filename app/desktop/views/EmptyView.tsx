@@ -45,6 +45,9 @@ const createDefaultDeck = (uid: DID) => {
 					uid: uid,
 					size: SpecificPaneSize.INHERIT,
 					title: null,
+					showReplies: 'follows',
+					showReposts: true,
+					showQuotes: true,
 				},
 				{
 					type: PANE_TYPE_NOTIFICATIONS,

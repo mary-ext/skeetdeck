@@ -150,7 +150,17 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 							</div>
 
 							<div class="flex flex-col">
-								<button onClick={() => add<HomePaneConfig>({ type: PANE_TYPE_HOME })} class={columnItem}>
+								<button
+									onClick={() =>
+										add<HomePaneConfig>({
+											type: PANE_TYPE_HOME,
+											showReplies: 'follows',
+											showReposts: true,
+											showQuotes: true,
+										})
+									}
+									class={columnItem}
+								>
 									<HomeOutlinedIcon class="text-xl" />
 									<span>Home timeline</span>
 								</button>
