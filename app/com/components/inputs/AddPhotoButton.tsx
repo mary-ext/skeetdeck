@@ -19,7 +19,6 @@ import ImageCompressAlertDialog from '../dialogs/ImageCompressAlertDialog.tsx';
 export interface AddPhotoButtonProps {
 	exists: boolean;
 	title: string;
-	aspectRatio: number;
 	maxWidth: number;
 	maxHeight: number;
 	onPick: (blob: Blob | undefined) => void;
@@ -54,8 +53,8 @@ const AddPhotoButton = (props: AddPhotoButtonProps) => {
 		setLoading(true);
 
 		try {
-			const { aspectRatio, maxWidth, maxHeight } = props;
-			const result = await compressProfileImage(file, aspectRatio, maxWidth, maxHeight);
+			const { maxWidth, maxHeight } = props;
+			const result = await compressProfileImage(file, maxWidth, maxHeight);
 
 			if (result.before !== result.after) {
 				openModal(() => (

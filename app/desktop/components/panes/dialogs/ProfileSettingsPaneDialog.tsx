@@ -192,7 +192,6 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 						<AddPhotoButton
 							exists={!!banner()}
 							title="Add banner image"
-							aspectRatio={3 / 1}
 							maxWidth={3000}
 							maxHeight={1000}
 							onPick={setBanner}
@@ -211,7 +210,6 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 						<AddPhotoButton
 							exists={!!avatar()}
 							title="Add avatar image"
-							aspectRatio={1 / 1}
 							maxWidth={1000}
 							maxHeight={1000}
 							onPick={setAvatar}

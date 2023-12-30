@@ -39,15 +39,11 @@ export interface CompressProfileImageOptions {
 
 export const compressPostImage = async (blob: Blob): Promise<CompressResult> => {
 	const image = await getImageFromBlob(blob);
-	const origW = image.naturalWidth;
-	const origH = image.naturalHeight;
 
-	const { w, h } = getContainCrop(origW, origH, POST_MAX_WIDTH, POST_MAX_HEIGHT);
-
-	if (blob.size < MAX_SIZE && origW === w && origH === h) {
+	if (blob.size < MAX_SIZE) {
 		const ref: ImageResult = {
-			width: origW,
-			height: origH,
+			width: image.naturalWidth,
+			height: image.naturalHeight,
 			size: blob.size,
 		};
 
@@ -59,16 +55,7 @@ export const compressPostImage = async (blob: Blob): Promise<CompressResult> => 
 		};
 	}
 
-	const canvas = new OffscreenCanvas(w, h);
-	const ctx = canvas.getContext('2d');
-
-	if (!ctx) {
-		throw new Error(`Failed to compress image, unable to create canvas`);
-	}
-
-	ctx.imageSmoothingQuality = 'high';
-	ctx.drawImage(image, 0, 0, w, h);
-
+	const { canvas, w, h } = getResizedImage(image, POST_MAX_WIDTH, POST_MAX_HEIGHT, Crop.CONTAIN);
 	const large = blob.size > 1_500_000;
 
 	for (let q = large ? 90 : 100; q >= 70; q -= 10) {
@@ -88,8 +75,8 @@ export const compressPostImage = async (blob: Blob): Promise<CompressResult> => 
 					size: result.size,
 				},
 				before: {
-					width: image.width,
-					height: image.height,
+					width: image.naturalWidth,
+					height: image.naturalHeight,
 					size: blob.size,
 				},
 			};
@@ -101,20 +88,15 @@ export const compressPostImage = async (blob: Blob): Promise<CompressResult> => 
 
 export const compressProfileImage = async (
 	blob: Blob,
-	ratio: number,
 	maxW: number,
 	maxH: number,
 ): Promise<CompressResult> => {
 	const image = await getImageFromBlob(blob);
-	const origW = image.naturalWidth;
-	const origH = image.naturalHeight;
 
-	const { w, h, x, y } = getCoverCrop(origW, origH, maxW, maxH, ratio);
-
-	if (blob.size < MAX_SIZE && origW === w && origH === h) {
+	if (blob.size < MAX_SIZE) {
 		const ref: ImageResult = {
-			width: origW,
-			height: origH,
+			width: image.naturalWidth,
+			height: image.naturalHeight,
 			size: blob.size,
 		};
 
@@ -126,16 +108,7 @@ export const compressProfileImage = async (
 		};
 	}
 
-	const canvas = new OffscreenCanvas(w, h);
-	const ctx = canvas.getContext('2d');
-
-	if (!ctx) {
-		throw new Error(`Failed to compress image, unable to create canvas`);
-	}
-
-	ctx.imageSmoothingQuality = 'high';
-	ctx.drawImage(image, x, y);
-
+	const { canvas, w, h } = getResizedImage(image, maxW, maxH, Crop.COVER);
 	const large = blob.size > 1_500_000;
 
 	for (let q = large ? 90 : 100; q >= 70; q -= 10) {
@@ -155,8 +128,8 @@ export const compressProfileImage = async (
 					size: result.size,
 				},
 				before: {
-					width: image.width,
-					height: image.height,
+					width: image.naturalWidth,
+					height: image.naturalHeight,
 					size: blob.size,
 				},
 			};
@@ -193,43 +166,34 @@ export const getImageFromBlob = (blob: Blob): Promise<HTMLImageElement> => {
 	});
 };
 
-export const getContainCrop = (w: number, h: number, maxW: number, maxH: number) => {
-	if (w > maxW) {
-		h = ~~((h * maxW) / w);
-		w = maxW;
+const enum Crop {
+	CONTAIN,
+	COVER,
+	STRETCH,
+}
+
+export const getResizedImage = (img: HTMLImageElement, width: number, height: number, mode: Crop) => {
+	let w = img.naturalWidth;
+	let h = img.naturalHeight;
+
+	let scale = 1;
+	if (mode === Crop.COVER) {
+		scale = w < h ? width / w : height / h;
+	} else if (mode === Crop.CONTAIN) {
+		scale = w > h ? width / w : height / h;
 	}
 
-	if (h > maxH) {
-		w = ~~((w * maxH) / h);
-		h = maxH;
+	w = Math.floor(w * scale);
+	h = Math.floor(h * scale);
+
+	const canvas = new OffscreenCanvas(w, h);
+	const ctx = canvas.getContext('2d');
+
+	if (!ctx) {
+		throw new Error(`Failed to compress image, unable to create canvas`);
 	}
 
-	return { w, h };
-};
+	ctx.drawImage(img, 0, 0, w, h);
 
-export const getCoverCrop = (inW: number, inH: number, maxW: number, maxH: number, ratio: number) => {
-	const originalRatio = inW / inH;
-
-	let w = inW;
-	let h = inH;
-	if (originalRatio > ratio) {
-		w = inH * ratio;
-	} else if (originalRatio < ratio) {
-		h = inW / ratio;
-	}
-
-	if (w > maxW) {
-		h = ~~((h * maxW) / w);
-		w = maxW;
-	}
-
-	if (h > maxH) {
-		w = ~~((w * maxH) / h);
-		h = maxH;
-	}
-
-	const x = (w - inW) * 0.5;
-	const y = (h - inH) * 0.5;
-
-	return { w: w, h: h, x, y };
+	return { canvas, ctx, w, h };
 };
