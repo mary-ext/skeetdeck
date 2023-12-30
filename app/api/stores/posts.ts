@@ -14,18 +14,9 @@ const gc = new FinalizationRegistry<string>((id) => {
 	const ref = posts[id];
 
 	if (!ref || !ref.deref()) {
-		if (import.meta.env.VITE_GIT_BRANCH === 'canary') {
-			console.log(`removing post ${id}`);
-		}
-
 		delete posts[id];
 	}
 });
-
-if (import.meta.env.VITE_GIT_BRANCH === 'canary') {
-	// @ts-expect-error
-	window._posts = posts;
-}
 
 export class SignalizedPost {
 	readonly uid: DID;
