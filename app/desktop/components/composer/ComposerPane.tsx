@@ -203,7 +203,7 @@ const ComposerPane = () => {
 					const record = draft.record;
 
 					{
-						setLog(logPending(`Resolving rich text #${i}`));
+						setLog(logPending(`Resolving rich text #${i + 1}`));
 						await resolveRt(uid, rt);
 					}
 
