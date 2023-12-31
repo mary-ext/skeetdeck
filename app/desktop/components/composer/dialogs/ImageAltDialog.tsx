@@ -24,7 +24,7 @@ export interface ImageAltDialogProps {
 	image: ComposedImage;
 }
 
-const MAX_ALT_LENGTH = 1000;
+const MAX_ALT_LENGTH = 5000;
 
 const ImageAltDialog = (props: ImageAltDialogProps) => {
 	const image = props.image;
