@@ -3,6 +3,7 @@ import { createMemo, createSignal } from 'solid-js';
 import TextareaAutosize from 'solid-textarea-autosize';
 
 import { EOF_WS_RE } from '~/api/richtext/composer.ts';
+import { graphemeLen } from '~/api/richtext/intl.ts';
 
 import { formatLong } from '~/utils/intl/number.ts';
 import type { ComposedImage } from '~/utils/image.ts';
@@ -32,6 +33,10 @@ const ImageAltDialog = (props: ImageAltDialogProps) => {
 	const [text, setText] = createSignal(image.alt.value);
 	const actualText = createMemo(() => text().replace(EOF_WS_RE, ''));
 
+	const length = createMemo(() => {
+		return graphemeLen(actualText());
+	});
+
 	return (
 		<DialogOverlay>
 			<div class={/* @once */ DialogRoot({ size: 'md', fullHeight: true })}>
@@ -48,7 +53,7 @@ const ImageAltDialog = (props: ImageAltDialogProps) => {
 					<h1 class={/* @once */ DialogTitle()}>Edit image description</h1>
 
 					<button
-						disabled={actualText().length > MAX_ALT_LENGTH}
+						disabled={length() > MAX_ALT_LENGTH}
 						onClick={() => {
 							closeModal();
 							image.alt.value = actualText();
@@ -73,12 +78,10 @@ const ImageAltDialog = (props: ImageAltDialogProps) => {
 							<span
 								class={
 									'text-xs' +
-									(actualText().length > MAX_ALT_LENGTH
-										? ' font-bold text-red-500'
-										: ' font-normal text-muted-fg')
+									(length() > MAX_ALT_LENGTH ? ' font-bold text-red-500' : ' font-normal text-muted-fg')
 								}
 							>
-								{formatLong(actualText().length)}/{/* @once */ formatLong(MAX_ALT_LENGTH)}
+								{formatLong(length())}/{/* @once */ formatLong(MAX_ALT_LENGTH)}
 							</span>
 						</span>
 
