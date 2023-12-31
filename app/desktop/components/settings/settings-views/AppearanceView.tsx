@@ -5,6 +5,7 @@ import { PaneSize } from '~/desktop/globals/panes.ts';
 import { preferences } from '~/desktop/globals/settings.ts';
 
 import Radio from '~/com/components/inputs/Radio.tsx';
+import Checkbox from '~/com/components/inputs/Checkbox.tsx';
 
 const AppearanceView = () => {
 	const ui = preferences.ui;
@@ -59,6 +60,24 @@ const AppearanceView = () => {
 						<span>Large</span>
 						<Radio ref={paneSizeModel(PaneSize.LARGE)} name={columnSizeId} />
 					</label>
+				</div>
+
+				<hr class="mx-4 mb-2 mt-1 border-divider" />
+
+				<div class="px-4 py-3">
+					<label class="flex min-w-0 justify-between gap-4">
+						<span class="text-sm">Show grid UI for profile media</span>
+
+						<Checkbox
+							checked={ui.profileMediaGrid}
+							onChange={(ev) => {
+								const next = ev.target.checked;
+								ui.profileMediaGrid = next;
+							}}
+						/>
+					</label>
+
+					<p class="mr-6 text-de text-muted-fg">This preference will not affect feeds/lists panes</p>
 				</div>
 			</div>
 		</div>

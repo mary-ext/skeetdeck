@@ -1,8 +1,10 @@
 import { createSignal } from 'solid-js';
 
+import { preferences } from '../../../globals/settings.ts';
 import { ProfilePaneTab, type ProfilePaneConfig } from '../../../globals/panes.ts';
 
 import TimelineList from '~/com/components/lists/TimelineList.tsx';
+import TimelineGalleryList from '~/com/components/lists/TimelineGalleryList.tsx';
 import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel.tsx';
 
 import { IconButton } from '~/com/primitives/icon-button.ts';
@@ -22,6 +24,8 @@ const ProfilePane = () => {
 	const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);
 
 	const { pane } = usePaneContext<ProfilePaneConfig>();
+
+	const ui = preferences.ui;
 
 	return (
 		<>
@@ -56,10 +60,17 @@ const ProfilePane = () => {
 							/>
 						</TabbedPanelView>
 						<TabbedPanelView label="Media" value={ProfilePaneTab.MEDIA}>
-							<TimelineList
-								uid={pane.uid}
-								params={{ type: 'profile', actor: pane.profile.did, tab: 'media' }}
-							/>
+							{ui.profileMediaGrid ? (
+								<TimelineGalleryList
+									uid={pane.uid}
+									params={{ type: 'profile', actor: pane.profile.did, tab: 'media' }}
+								/>
+							) : (
+								<TimelineList
+									uid={pane.uid}
+									params={{ type: 'profile', actor: pane.profile.did, tab: 'media' }}
+								/>
+							)}
 						</TabbedPanelView>
 						<TabbedPanelView
 							label="Likes"

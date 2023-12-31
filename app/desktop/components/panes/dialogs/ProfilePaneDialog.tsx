@@ -12,6 +12,7 @@ import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 
 import TimelineList from '~/com/components/lists/TimelineList.tsx';
+import TimelineGalleryList from '~/com/components/lists/TimelineGalleryList.tsx';
 import ProfileHeader from '~/com/components/views/ProfileHeader.tsx';
 
 import { IconButton } from '~/com/primitives/icon-button.ts';
@@ -19,7 +20,7 @@ import { IconButton } from '~/com/primitives/icon-button.ts';
 import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add.tsx';
 
 import { type ProfilePaneConfig, PANE_TYPE_PROFILE, ProfilePaneTab } from '../../../globals/panes.ts';
-import { addPane } from '../../../globals/settings.ts';
+import { addPane, preferences } from '../../../globals/settings.ts';
 
 import { usePaneContext, usePaneModalState } from '../PaneContext.tsx';
 import PaneDialog from '../PaneDialog.tsx';
@@ -42,6 +43,8 @@ const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 
 	const { deck, pane, index } = usePaneContext();
 	const modal = usePaneModalState();
+
+	const ui = preferences.ui;
 
 	const profile = createQuery(() => {
 		const key = getProfileKey(pane.uid, actor);
@@ -161,10 +164,17 @@ const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 												/>
 											</TabbedPanelView>
 											<TabbedPanelView label="Media" value={ProfileTab.MEDIA}>
-												<TimelineList
-													uid={pane.uid}
-													params={{ type: 'profile', actor: actor, tab: 'media' }}
-												/>
+												{ui.profileMediaGrid ? (
+													<TimelineGalleryList
+														uid={pane.uid}
+														params={{ type: 'profile', actor: actor, tab: 'media' }}
+													/>
+												) : (
+													<TimelineList
+														uid={pane.uid}
+														params={{ type: 'profile', actor: actor, tab: 'media' }}
+													/>
+												)}
 											</TabbedPanelView>
 											<TabbedPanelView label="Likes" value={ProfileTab.LIKES} hidden={pane.uid !== data.did}>
 												<TimelineList

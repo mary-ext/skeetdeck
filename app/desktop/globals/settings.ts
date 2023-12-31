@@ -12,7 +12,7 @@ import type { SharedPreferencesObject } from '~/com/components/SharedPreferences
 import { type DeckConfig, type PaneConfig, PaneSize, SpecificPaneSize } from './panes.ts';
 
 export interface PreferencesSchema {
-	$version: 5;
+	$version: 6;
 	/** Used for cache-busting moderation filters */
 	rev: number;
 	/** Onboarding mode */
@@ -25,10 +25,12 @@ export interface PreferencesSchema {
 		theme: 'auto' | 'dark' | 'light';
 		/** Default pane size */
 		defaultPaneSize: PaneSize;
-		/** Warn if the media being posted contains no alt text */
+		/** Show grid UI for profile media */
+		profileMediaGrid: boolean;
 	};
 	/** Accessibility configuration */
 	a11y: {
+		/** Warn if the media being posted contains no alt text */
 		warnNoMediaAlt: boolean;
 	};
 	/** Content moderation */
@@ -46,13 +48,14 @@ const PREF_KEY = 'rantai_prefs';
 export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KEY, (version, prev) => {
 	if (version === 0) {
 		const object: PreferencesSchema = {
-			$version: 5,
+			$version: 6,
 			rev: 0,
 			onboarding: true,
 			decks: [],
 			ui: {
 				theme: 'auto',
 				defaultPaneSize: PaneSize.MEDIUM,
+				profileMediaGrid: true,
 			},
 			a11y: {
 				warnNoMediaAlt: true,
@@ -151,8 +154,13 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 				}
 			}
 		}
+	}
 
-		_prev.$version = 5;
+	if (version < 6) {
+		const _prev = prev as PreferencesSchema;
+
+		_prev.ui.profileMediaGrid = true;
+		_prev.$version = 6;
 	}
 
 	return prev;
