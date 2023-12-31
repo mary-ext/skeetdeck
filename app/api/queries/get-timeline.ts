@@ -148,9 +148,7 @@ export const getTimeline = async (
 	}
 
 	if (type === 'home') {
-		if (params.showReplies === 'follows') {
-			sliceFilter = createHomeSliceFilter(uid);
-		}
+		sliceFilter = createHomeSliceFilter(uid, params.showReplies === 'follows');
 
 		postFilter = combine([
 			createHiddenRepostFilter(timelineOpts?.filters),
@@ -589,7 +587,7 @@ const createFeedSliceFilter = (): SliceFilter | undefined => {
 	};
 };
 
-const createHomeSliceFilter = (uid: DID): SliceFilter | undefined => {
+const createHomeSliceFilter = (uid: DID, followsOnly: boolean): SliceFilter | undefined => {
 	return (slice) => {
 		const items = slice.items;
 		const first = items[0];
@@ -606,8 +604,8 @@ const createHomeSliceFilter = (uid: DID): SliceFilter | undefined => {
 			const pViewer = pAuthor.viewer;
 
 			if (
-				(rAuthor.did !== uid && (!rViewer.following.peek() || rViewer.muted.peek())) ||
-				(pAuthor.did !== uid && (!pViewer.following.peek() || pViewer.muted.peek()))
+				(rAuthor.did !== uid && ((followsOnly && !rViewer.following.peek()) || rViewer.muted.peek())) ||
+				(pAuthor.did !== uid && ((followsOnly && !pViewer.following.peek()) || pViewer.muted.peek()))
 			) {
 				return yankReposts(items);
 			}
