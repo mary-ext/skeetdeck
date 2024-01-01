@@ -1,4 +1,4 @@
-import { For, createMemo } from 'solid-js';
+import { type JSX } from 'solid-js';
 
 import { Key } from '@solid-primitives/keyed';
 
@@ -20,44 +20,47 @@ export interface FlattenedThreadProps {
 	maxDepth: number;
 }
 
+const getSlices = (root: SignalizedThread | UnionOf<'app.bsky.feed.defs#blockedPost'>, maxDepth: number) => {
+	const array: Array<SignalizedPost | UnionOf<'app.bsky.feed.defs#blockedPost'>> = [];
+
+	let overflowing = false;
+	let depth = 0;
+	let curr: typeof root | undefined = root;
+
+	while (curr) {
+		if (++depth > maxDepth) {
+			overflowing = true;
+			break;
+		}
+
+		if (curr.$type !== 'thread') {
+			array.push(curr);
+			break;
+		}
+
+		array.push(curr.post);
+		curr = curr.replies?.[0];
+	}
+
+	return {
+		overflowing: overflowing,
+		items: array,
+	};
+};
+
 const FlattenedThread = (props: FlattenedThreadProps) => {
 	const maxDepth = props.maxDepth;
 
 	return (
 		<Key each={props.replies} by={(v) => (v.$type === 'thread' ? v.post : v.uri)}>
 			{(children) => {
-				const slice = createMemo(() => {
-					const array: Array<SignalizedPost | UnionOf<'app.bsky.feed.defs#blockedPost'>> = [];
+				return (() => {
+					const { items, overflowing } = getSlices(children(), maxDepth);
+					const len = items.length;
 
-					let overflowing = false;
-					let depth = 0;
-					let curr: SignalizedThread | UnionOf<'app.bsky.feed.defs#blockedPost'> | undefined = children();
-
-					while (curr) {
-						if (++depth > maxDepth) {
-							overflowing = true;
-							break;
-						}
-
-						if (curr.$type !== 'thread') {
-							array.push(curr);
-							break;
-						}
-
-						array.push(curr.post);
-						curr = curr.replies?.[0];
-					}
-
-					return {
-						overflowing: overflowing,
-						items: array,
-					};
-				});
-
-				return (
-					<>
-						<For each={slice().items}>
-							{(item, idx) => {
+					return (
+						<>
+							{items.map((item, idx) => {
 								if ('$type' in item) {
 									if (item.$type === 'app.bsky.feed.defs#blockedPost') {
 										<div class="border-b border-divider p-3">
@@ -70,42 +73,29 @@ const FlattenedThread = (props: FlattenedThreadProps) => {
 
 								return (
 									<VirtualContainer estimateHeight={98.8}>
-										<Post
-											post={item}
-											interactive
-											prev
-											next={(() => {
-												const $slice = slice();
-												return $slice.overflowing || idx() !== $slice.items.length - 1;
-											})()}
-										/>
+										<Post post={item} interactive prev next={overflowing || idx !== len - 1} />
 									</VirtualContainer>
 								);
-							}}
-						</For>
+							})}
 
-						{slice().overflowing && (
-							<Link
-								to={(() => {
-									const items = slice().items;
-									const len = items.length;
-
-									return {
+							{overflowing && (
+								<Link
+									to={{
 										type: LINK_POST,
 										actor: getRepoId(items[len - 1].uri) as DID,
 										rkey: getRecordId(items[len - 1].uri),
-									};
-								})()}
-								class="flex h-10 w-full items-center gap-3 border-b border-divider px-4 hover:bg-secondary/10"
-							>
-								<div class="flex h-full w-10 justify-center">
-									<div class="mb-3 border-l-2 border-dashed border-divider" />
-								</div>
-								<span class="text-sm text-accent">Continue thread</span>
-							</Link>
-						)}
-					</>
-				);
+									}}
+									class="flex h-10 w-full items-center gap-3 border-b border-divider px-4 hover:bg-secondary/10"
+								>
+									<div class="flex h-full w-10 justify-center">
+										<div class="mb-3 border-l-2 border-dashed border-divider" />
+									</div>
+									<span class="text-sm text-accent">Continue thread</span>
+								</Link>
+							)}
+						</>
+					);
+				}) as unknown as JSX.Element;
 			}}
 		</Key>
 	);
