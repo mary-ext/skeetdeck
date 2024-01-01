@@ -1,4 +1,4 @@
-import { For, Match, Show, Suspense, Switch, createMemo, onMount } from 'solid-js';
+import { For, Match, Show, Suspense, Switch, createMemo, lazy, onMount } from 'solid-js';
 
 import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 import { createQuery } from '@pkg/solid-query';
@@ -17,6 +17,7 @@ import { SignalizedPost } from '~/api/stores/posts.ts';
 import { Button } from '~/com/primitives/button.ts';
 
 import CircularProgress from '~/com/components/CircularProgress.tsx';
+import Keyed from '~/com/components/Keyed.ts';
 import { LINK_POST, LINK_PROFILE, Link } from '~/com/components/Link.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 
@@ -30,8 +31,8 @@ import Post from '~/com/components/items/Post.tsx';
 import { usePaneContext } from '../PaneContext.tsx';
 import PaneDialog from '../PaneDialog.tsx';
 import PaneDialogHeader from '../PaneDialogHeader.tsx';
-import Keyed from '~/com/components/Keyed.ts';
-import FlattenedThread from '~/com/components/views/threads/FlattenedThread.tsx';
+
+const FlattenedThread = lazy(() => import('~/com/components/views/threads/FlattenedThread.tsx'));
 
 export interface ThreadPaneDialogProps {
 	/** Expected to be static */
