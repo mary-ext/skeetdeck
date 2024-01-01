@@ -3,8 +3,8 @@ import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 import type { DID, RefOf } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
 
-import { type ThreadPage, createThreadPage } from '../models/thread.ts';
-import { type SignalizedPost, getCachedPost } from '../stores/posts.ts';
+import { type SignalizedThread, createSignalizedThread, createPlaceholderThread } from '../models/threads.ts';
+import { getCachedPost } from '../stores/posts.ts';
 
 import _getDid from './_did.ts';
 
@@ -41,17 +41,20 @@ export const getPostThread = async (ctx: QC<ReturnType<typeof getPostThreadKey>>
 		case 'app.bsky.feed.defs#notFoundPost':
 			throw new Error(`Post not found`);
 		case 'app.bsky.feed.defs#threadViewPost':
-			return createThreadPage(uid, data.thread, depth, height);
+			return createSignalizedThread(uid, data.thread);
 	}
 };
 
-export const getInitialPostThread = (key: ReturnType<typeof getPostThreadKey>): ThreadPage | undefined => {
-	const [, uid, actor, rkey, depth, height] = key;
+export const getInitialPostThread = (
+	key: ReturnType<typeof getPostThreadKey>,
+): SignalizedThread | undefined => {
+	const [, uid, actor, rkey] = key;
 
 	const post = getCachedPost(uid, `at://${actor}/app.bsky.feed.post/${rkey}`);
 
 	if (post) {
-		const ancestors: SignalizedPost[] = [];
+		let r: SignalizedThread | undefined;
+		let p: SignalizedThread | undefined;
 
 		let current = post;
 		while (current) {
@@ -69,19 +72,15 @@ export const getInitialPostThread = (key: ReturnType<typeof getPostThreadKey>): 
 				break;
 			}
 
-			ancestors.unshift((current = parent));
+			if (p === undefined) {
+				r = p = createPlaceholderThread(parent, undefined);
+			} else {
+				p = p.parent = createPlaceholderThread(parent, undefined);
+			}
+
+			current = parent;
 		}
 
-		return {
-			post: post,
-			// @ts-expect-error
-			ancestors: ancestors,
-			descendants: [],
-
-			depth: depth,
-			height: height,
-		};
+		return createPlaceholderThread(post, r);
 	}
-
-	return;
 };

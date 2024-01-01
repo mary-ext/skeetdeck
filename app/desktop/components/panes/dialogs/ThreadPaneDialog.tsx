@@ -1,9 +1,11 @@
-import { For, Match, Show, Switch, createMemo, onMount } from 'solid-js';
+import { For, Match, Show, Suspense, Switch, createMemo, onMount } from 'solid-js';
 
 import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID, UnionOf } from '~/api/atp-schema.ts';
+import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
+
 import {
 	BlockedThreadError,
 	getInitialPostThread,
@@ -11,7 +13,6 @@ import {
 	getPostThreadKey,
 } from '~/api/queries/get-post-thread.ts';
 import { SignalizedPost } from '~/api/stores/posts.ts';
-import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
 import { Button } from '~/com/primitives/button.ts';
 
@@ -30,6 +31,7 @@ import { usePaneContext } from '../PaneContext.tsx';
 import PaneDialog from '../PaneDialog.tsx';
 import PaneDialogHeader from '../PaneDialogHeader.tsx';
 import Keyed from '~/com/components/Keyed.ts';
+import FlattenedThread from '~/com/components/views/threads/FlattenedThread.tsx';
 
 export interface ThreadPaneDialogProps {
 	/** Expected to be static */
@@ -113,20 +115,35 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 					<Match when={thread.data}>
 						{(data) => {
 							const ancestors = createMemo(() => {
-								const $ancestors = data().ancestors;
-								const overflow = $ancestors.length > MAX_ANCESTORS;
+								const array: (
+									| SignalizedPost
+									| UnionOf<'app.bsky.feed.defs#blockedPost'>
+									| UnionOf<'app.bsky.feed.defs#notFoundPost'>
+								)[] = [];
+
+								let overflowing = false;
+								let height = 0;
+								let curr = data().parent;
+								while (curr) {
+									if (++height > MAX_ANCESTORS) {
+										overflowing = true;
+										break;
+									}
+
+									if (curr.$type !== 'thread') {
+										array.push(curr);
+										break;
+									}
+
+									array.push(curr.post);
+									curr = curr.parent;
+								}
 
 								return {
-									overflowing: overflow,
-									items: overflow ? ($ancestors.slice(-MAX_ANCESTORS) as typeof $ancestors) : $ancestors,
+									overflowing: overflowing,
+									items: array.reverse(),
 								};
 							});
-
-							const focusRef = (node: HTMLElement) => {
-								onMount(() => {
-									node.scrollIntoView({ behavior: 'instant' });
-								});
-							};
 
 							return (
 								<>
@@ -234,7 +251,14 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 										}}
 									</For>
 
-									<div ref={focusRef} class="h-[calc(100%-0.75rem)] scroll-m-3">
+									<div
+										ref={(node: HTMLElement) => {
+											onMount(() => {
+												node.scrollIntoView({ behavior: 'instant' });
+											});
+										}}
+										class="h-[calc(100%-0.75rem)] scroll-m-3"
+									>
 										<VirtualContainer>
 											<Keyed key={data().post}>
 												<PermalinkPost post={data().post} />
@@ -243,84 +267,29 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 											<hr class="border-divider" />
 										</VirtualContainer>
 
-										<For each={data().descendants}>
-											{(slice) => {
-												let overflowing = false;
-												let items = slice.items;
-												let len = items.length;
-
-												if (len > MAX_DESCENDANTS) {
-													overflowing = true;
-													items = items.slice(0, MAX_DESCENDANTS) as any;
-													len = MAX_DESCENDANTS;
-												}
-
-												return (
-													<>
-														{items.map((item, idx) => {
-															if ('$type' in item) {
-																const type = item.$type;
-
-																if (type === 'app.bsky.feed.defs#blockedPost') {
-																	return (
-																		<div class="p-3">
-																			<EmbedRecordBlocked
-																				record={
-																					/* @once */ {
-																						$type: 'app.bsky.embed.record#viewBlocked',
-																						uri: item.uri,
-																						blocked: item.blocked,
-																						author: item.author,
-																					}
-																				}
-																			/>
-																		</div>
-																	);
-																}
-
-																return null;
-															}
-
-															return (
-																<VirtualContainer estimateHeight={98.8}>
-																	<Post post={item} interactive prev next={overflowing || idx !== len - 1} />
-																</VirtualContainer>
-															);
-														})}
-
-														{overflowing && (
-															<Link
-																to={{
-																	type: LINK_POST,
-																	actor: getRepoId(items[len - 1].uri) as DID,
-																	rkey: getRecordId(items[len - 1].uri),
-																}}
-																class="flex h-10 w-full items-center gap-3 border-b border-divider px-4 hover:bg-secondary/10"
-															>
-																<div class="flex h-full w-10 justify-center">
-																	<div class="mb-3 border-l-2 border-dashed border-divider" />
-																</div>
-																<span class="text-sm text-accent">Continue thread</span>
-															</Link>
-														)}
-													</>
-												);
-											}}
-										</For>
-
-										<Switch>
-											<Match when={thread.isPlaceholderData}>
+										<Suspense
+											fallback={
 												<div class="grid h-13 place-items-center">
 													<CircularProgress />
 												</div>
-											</Match>
+											}
+										>
+											<FlattenedThread replies={data().replies} maxDepth={MAX_DESCENDANTS} />
 
-											<Match when>
-												<div class="grid h-13 place-items-center">
-													<p class="text-sm text-muted-fg">End of thread</p>
-												</div>
-											</Match>
-										</Switch>
+											<Switch>
+												<Match when={thread.isPlaceholderData}>
+													<div class="grid h-13 place-items-center">
+														<CircularProgress />
+													</div>
+												</Match>
+
+												<Match when>
+													<div class="grid h-13 place-items-center">
+														<p class="text-sm text-muted-fg">End of thread</p>
+													</div>
+												</Match>
+											</Switch>
+										</Suspense>
 									</div>
 								</>
 							);

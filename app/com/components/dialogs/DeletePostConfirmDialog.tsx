@@ -3,7 +3,7 @@ import { type InfiniteData, useQueryClient, createMutation } from '@pkg/solid-qu
 import { multiagent } from '~/api/globals/agent.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
-import type { ThreadPage } from '~/api/models/thread.ts';
+import type { SignalizedThread } from '~/api/models/threads.ts';
 import { getPost, getPostKey } from '~/api/queries/get-post.ts';
 import type { getPostThreadKey } from '~/api/queries/get-post-thread.ts';
 import type { TimelinePage } from '~/api/queries/get-timeline.ts';
@@ -59,7 +59,7 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 					return data;
 				});
 
-				queryClient.setQueriesData<ThreadPage>({ queryKey: ['getPostThread'] }, (data) => {
+				queryClient.setQueriesData<SignalizedThread>({ queryKey: ['getPostThread'] }, (data) => {
 					if (data) {
 						const post = data.post;
 						const root = post.record.value.reply?.root.uri;

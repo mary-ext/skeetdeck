@@ -9,7 +9,7 @@ import { extractAppLink } from '~/api/utils/links.ts';
 import { getCurrentTid } from '~/api/utils/tid.ts';
 import { getCollectionId, isDid } from '~/api/utils/misc.ts';
 
-import type { ThreadPage } from '~/api/models/thread.ts';
+import type { SignalizedThread } from '~/api/models/threads.ts';
 import { getUploadedBlob, uploadBlob } from '~/api/mutations/upload-blob.ts';
 import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info.ts';
 import { type LinkMeta, getLinkMeta, getLinkMetaKey } from '~/api/queries/get-link-meta.ts';
@@ -17,7 +17,8 @@ import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/g
 import { getInitialPost, getPost, getPostKey } from '~/api/queries/get-post.ts';
 import { getResolvedHandle, getResolvedHandleKey } from '~/api/queries/get-resolved-handle.ts';
 import type { getTimelineLatestKey } from '~/api/queries/get-timeline.ts';
-import { producePostsInsert } from '~/api/updaters/insert-post.ts';
+import type { SignalizedPost } from '~/api/stores/posts.ts';
+import { produceThreadInsert } from '~/api/updaters/insert-post.ts';
 
 import { type PreliminaryRichText, finalizeRt, getRtLength } from '~/api/richtext/composer.ts';
 
@@ -74,7 +75,6 @@ import ThreadgateAction, {
 
 import ImageAltDialog from './dialogs/ImageAltDialog.tsx';
 import ImageAltReminderDialog from './dialogs/ImageAltReminderDialog.tsx';
-import type { SignalizedPost } from '~/api/stores/posts.ts';
 
 let cidPromise: Promise<typeof import('./utils/cid.ts')>;
 
@@ -528,9 +528,9 @@ const ComposerPane = () => {
 				}
 
 				if (posts.length > 0) {
-					const updatePostThread = producePostsInsert(posts, parentUri);
+					const updatePostThread = produceThreadInsert(posts, parentUri);
 
-					queryClient.setQueriesData<ThreadPage>(
+					queryClient.setQueriesData<SignalizedThread>(
 						{
 							queryKey: ['getPostThread', uid],
 						},

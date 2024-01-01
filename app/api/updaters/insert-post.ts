@@ -1,38 +1,52 @@
 import { produce } from '~/utils/immer.ts';
 
-import type { ThreadPage } from '../models/thread.ts';
+import { type SignalizedThread } from '../models/threads.ts';
 import { SignalizedPost } from '../stores/posts.ts';
 
-export const producePostsInsert = (posts: SignalizedPost[], parentUri: string) => {
-	const updatePostThread = produce((draft: ThreadPage) => {
-		const descendants = draft.descendants;
+export const produceThreadInsert = (posts: SignalizedPost[], parentUri: string) => {
+	let thread: SignalizedThread;
+
+	for (let i = posts.length - 1; i >= 0; i--) {
+		const post = posts[i];
+
+		thread = {
+			$type: 'thread',
+			parent: undefined,
+			post: post,
+			replies: thread! && [thread],
+		};
+	}
+
+	const updatePostThread_ = (draft: SignalizedThread) => {
+		const replies = draft.replies;
 
 		if (draft.post.uri === parentUri) {
-			// @ts-expect-error
-			descendants.unshift({ items: posts });
-			return;
+			if (replies) {
+				replies.unshift(thread);
+			} else {
+				draft.replies = [thread];
+			}
+
+			return true;
 		}
 
-		for (let i = 0, ilen = descendants.length; i < ilen; i++) {
-			const slice = descendants[i];
-			const items = slice.items;
+		if (replies) {
+			for (let i = 0, il = replies.length; i < il; i++) {
+				const reply = replies[i];
 
-			for (let j = 0, jlen = items.length; j < jlen; j++) {
-				const item = items[j];
-
-				// It's only at the end, but let's do this to make TS happy.
-				if (!(item instanceof SignalizedPost)) {
-					break;
-				}
-
-				// We found the post, break out of the loop entirely.
-				if (item.uri === parentUri) {
-					// @ts-expect-error
-					slice.items = items.slice(0, j + 1).concat(posts);
-					return;
+				if (reply.$type === 'thread') {
+					if (updatePostThread_(reply)) {
+						return true;
+					}
 				}
 			}
 		}
+
+		return false;
+	};
+
+	const updatePostThread = produce((draft: SignalizedThread) => {
+		updatePostThread_(draft);
 	});
 
 	return updatePostThread;

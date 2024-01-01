@@ -4,9 +4,8 @@ import { produce } from '~/utils/immer.ts';
 
 import type { UnionOf } from '../atp-schema.ts';
 
-import type { ThreadPage } from '../models/thread.ts';
+import type { SignalizedThread } from '../models/threads.ts';
 import type { TimelinePage } from '../queries/get-timeline.ts';
-import { SignalizedPost } from '../stores/posts.ts';
 
 export const producePostDelete = (postUri: string) => {
 	const updateTimeline = produce((draft: InfiniteData<TimelinePage>) => {
@@ -52,59 +51,61 @@ export const producePostDelete = (postUri: string) => {
 		}
 	});
 
-	const updatePostThread = produce((draft: ThreadPage) => {
-		const ancestors = draft.ancestors;
-		const descendants = draft.descendants;
+	const updatePostThreadNew_ = (draft: SignalizedThread) => {
+		// Search the parent
+		{
+			let curr = draft;
+			while (curr) {
+				const parent = curr.parent;
 
-		for (let i = 0, il = ancestors.length; i < il; i++) {
-			const item = ancestors[i];
-
-			if (!(item instanceof SignalizedPost)) {
-				continue;
-			}
-
-			if (item.uri === postUri) {
-				// Insert a notFound post here, so it doesn't look like the reply below
-				// it is a root post.
-				const notFoundPost: UnionOf<'app.bsky.feed.defs#notFoundPost'> = {
-					$type: 'app.bsky.feed.defs#notFoundPost',
-					notFound: true,
-					uri: postUri,
-				};
-
-				ancestors.splice(0, i + 1, notFoundPost);
-				// We're done, if it's in the ancestors then it can't be in descendants
-				return;
-			}
-		}
-
-		for (let i = 0, ilen = descendants.length; i < ilen; i++) {
-			const slice = descendants[i];
-			const items = slice.items;
-
-			for (let j = 0, jlen = items.length; j < jlen; j++) {
-				const item = items[j];
-
-				// notFoundPost and blockedPost are only at the end, so let's break
-				// anyway while we're at it.
-				if (!(item instanceof SignalizedPost)) {
+				if (!parent || parent.$type !== 'thread') {
 					break;
 				}
 
-				if (item.uri === postUri) {
-					// Remove the connecting replies as well because it's gonna look
-					// super-odd if they remain connected.
-					if (j === 0) {
-						descendants.splice(i, 1);
-					} else {
-						items.splice(j, jlen);
-					}
+				if (parent.post.uri === postUri) {
+					// Insert a notFound post here, so it doesn't look like the reply below
+					// it is a root post.
+					const notFoundPost: UnionOf<'app.bsky.feed.defs#notFoundPost'> = {
+						$type: 'app.bsky.feed.defs#notFoundPost',
+						notFound: true,
+						uri: postUri,
+					};
 
-					// We're done here, there can only be one descendant.
-					return;
+					curr.parent = notFoundPost;
+					return true;
+				}
+
+				curr = parent;
+			}
+		}
+
+		// Search the replies
+		const replies = draft.replies;
+
+		if (replies) {
+			for (let i = 0, il = replies.length; i < il; i++) {
+				const reply = replies[i];
+
+				if (reply.$type !== 'thread') {
+					continue;
+				}
+
+				if (reply.post.uri === postUri) {
+					replies.splice(i, 1);
+					return true;
+				}
+
+				if (updatePostThreadNew_(reply)) {
+					return true;
 				}
 			}
 		}
+
+		return false;
+	};
+
+	const updatePostThread = produce((draft: SignalizedThread) => {
+		updatePostThreadNew_(draft);
 	});
 
 	return [updateTimeline, updatePostThread] as const;
