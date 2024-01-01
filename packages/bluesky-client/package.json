@@ -6,7 +6,7 @@
 	"author": "externdefs",
 	"license": "MIT",
 	"repository": {
-		"url": "https://github.com/mary-ext/langit-next",
+		"url": "https://github.com/mary-ext/langit",
 		"directory": "packages/bluesky-client"
 	},
 	"files": [
