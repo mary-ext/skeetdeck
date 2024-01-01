@@ -16,8 +16,6 @@ import LanguageIcon from '~/com/icons/baseline-language.tsx';
 import PeopleIcon from '~/com/icons/baseline-people.tsx';
 import VisibilityIcon from '~/com/icons/baseline-visibility.tsx';
 
-import DonationDialog from '../DonationDialog.tsx';
-
 import {
 	type RouterState,
 	type View,
@@ -33,6 +31,8 @@ import {
 } from './settings-views/_router.tsx';
 import SettingsRouterView from './settings-views/SettingsRouterView.tsx';
 import CircularProgress from '~/com/components/CircularProgress.tsx';
+
+const DONATION_LINK = 'https://github.com/mary-ext/langit/wiki/Donation';
 
 const GIT_SOURCE = import.meta.env.VITE_GIT_SOURCE;
 const GIT_COMMIT = import.meta.env.VITE_GIT_COMMIT;
@@ -86,14 +86,9 @@ const SettingsDialog = () => {
 								</SideItem>
 							</div>
 							<div class="flex min-w-0 items-center gap-4 p-4">
-								<button
-									onClick={() => {
-										openModal(() => <DonationDialog />);
-									}}
-									class="text-sm text-accent hover:underline"
-								>
+								<a target="_blank" href={DONATION_LINK} class="text-sm text-accent hover:underline">
 									Donate
-								</button>
+								</a>
 								<div class="grow"></div>
 								<a target="_blank" href={GIT_SOURCE} class="font-mono text-xs text-muted-fg hover:underline">
 									{/* @once */ GIT_COMMIT ? `${GIT_BRANCH}/${GIT_COMMIT}` : `indev`}
