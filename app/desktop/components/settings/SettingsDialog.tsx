@@ -1,6 +1,6 @@
 import { type ComponentProps, type JSX, createSignal, Suspense } from 'solid-js';
 
-import { closeModal, openModal } from '~/com/globals/modals.tsx';
+import { closeModal } from '~/com/globals/modals.tsx';
 
 import { DialogRoot } from '~/com/primitives/dialog.ts';
 import { IconButton } from '~/com/primitives/icon-button.ts';
