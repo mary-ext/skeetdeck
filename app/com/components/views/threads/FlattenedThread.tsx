@@ -24,7 +24,7 @@ const FlattenedThread = (props: FlattenedThreadProps) => {
 	const maxDepth = props.maxDepth;
 
 	return (
-		<Key each={props.replies} by={(v) => (v.$type === 'thread' ? v.post : v.$type)}>
+		<Key each={props.replies} by={(v) => (v.$type === 'thread' ? v.post : v.uri)}>
 			{(children) => {
 				const slice = createMemo(() => {
 					const array: Array<SignalizedPost | UnionOf<'app.bsky.feed.defs#blockedPost'>> = [];
