@@ -17,7 +17,6 @@
 		"@pkg/solid-query": "workspace:^",
 		"@pkg/solid-use-gesture": "workspace:^",
 		"@solid-primitives/event-listener": "^2.3.0",
-		"@solid-primitives/keyed": "^1.2.0",
 		"@solidjs/router": "^0.8.4",
 		"@thisbeyond/solid-dnd": "^0.7.5",
 		"cborg": "^4.0.5",
