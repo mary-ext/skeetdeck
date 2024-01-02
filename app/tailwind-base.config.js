@@ -56,6 +56,9 @@ export default {
 			boxShadow: {
 				menu: 'rgba(var(--primary) / 0.2) 0px 0px 15px, rgba(var(--primary) / 0.15) 0px 0px 3px 1px',
 			},
+			dropShadow: {
+				DEFAULT: ['0 1px 2px rgb(0 0 0 / .3)', '0 1px 1px rgb(0 0 0 / .1)'],
+			},
 		},
 		colors: {
 			accent: {
