@@ -93,11 +93,6 @@ const GalleryItem = (props: GalleryItemProps) => {
 					classList={{ [`scale-110 blur`]: verdict() !== undefined }}
 				/>
 
-				<div class="absolute left-0 right-0 top-0 m-2 flex items-center justify-end gap-2 text-lg">
-					{verdict() !== undefined && <VisibilityIcon class="drop-shadow" />}
-					{multiple && <CheckboxMultipleBlankIcon class="drop-shadow" />}
-				</div>
-
 				{hasHover() && (
 					<div class="invisible absolute inset-0 grid place-items-center bg-black/50 group-hover:visible">
 						<div class="flex flex-col gap-1 font-medium">
@@ -112,6 +107,11 @@ const GalleryItem = (props: GalleryItemProps) => {
 						</div>
 					</div>
 				)}
+
+				<div class="absolute left-0 right-0 top-0 m-2 flex items-center justify-end gap-2 text-lg">
+					{verdict() !== undefined && <VisibilityIcon class="drop-shadow" />}
+					{multiple && <CheckboxMultipleBlankIcon class="drop-shadow" />}
+				</div>
 			</div>
 		);
 	}) as unknown as JSX.Element;
