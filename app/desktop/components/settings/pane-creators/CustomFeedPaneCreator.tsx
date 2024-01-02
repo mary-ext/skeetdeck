@@ -116,6 +116,9 @@ const CustomFeedPaneCreator = (props: PaneCreatorProps) => {
 								props.onAdd<CustomFeedPaneConfig>({
 									type: PANE_TYPE_FEED,
 									feed: { uri: feed.uri, name: feed.displayName },
+									showReplies: true,
+									showReposts: true,
+									showQuotes: true,
 									infoVisible: true,
 								});
 							}}

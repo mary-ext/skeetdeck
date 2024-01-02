@@ -89,6 +89,9 @@ export interface CustomFeedPaneConfig extends BasePaneConfig {
 		uri: string;
 		name: string;
 	};
+	showReplies: boolean;
+	showReposts: boolean;
+	showQuotes: boolean;
 	infoVisible: boolean;
 }
 
@@ -98,6 +101,8 @@ export interface CustomListPaneConfig extends BasePaneConfig {
 		uri: string;
 		name: string;
 	};
+	showReplies: boolean;
+	showQuotes: boolean;
 	infoVisible: boolean;
 }
 

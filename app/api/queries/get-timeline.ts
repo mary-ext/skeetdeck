@@ -43,11 +43,16 @@ export interface HomeTimelineParams {
 export interface FeedTimelineParams {
 	type: 'feed';
 	uri: string;
+	showReplies: boolean;
+	showReposts: boolean;
+	showQuotes: boolean;
 }
 
 export interface ListTimelineParams {
 	type: 'list';
 	uri: string;
+	showReplies: boolean;
+	showQuotes: boolean;
 }
 
 export interface ProfileTimelineParams {
@@ -165,7 +170,13 @@ export const getTimeline = async (
 	} else if (type === 'feed' || type === 'list') {
 		sliceFilter = createFeedSliceFilter();
 		postFilter = combine([
+			type === 'feed' && createHiddenRepostFilter(timelineOpts?.filters),
 			createDuplicatePostFilter(items),
+
+			!params.showReplies && createHideRepliesFilter(),
+			!params.showQuotes && createHideQuotesFilter(),
+			type === 'feed' && !params.showReposts && createHideQuotesFilter(),
+
 			createLanguagePostFilter(timelineOpts?.language),
 			createLabelPostFilter(timelineOpts?.moderation),
 			createTempMutePostFilter(uid, timelineOpts?.filters),

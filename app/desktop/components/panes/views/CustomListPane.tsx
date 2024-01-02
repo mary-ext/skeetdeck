@@ -21,6 +21,7 @@ import PaneAside from '../PaneAside.tsx';
 import PaneBody from '../PaneBody.tsx';
 import PaneHeader from '../PaneHeader.tsx';
 
+import CustomListPaneSettings from '../settings/CustomListPaneSettings.tsx';
 import GenericPaneSettings from '../settings/GenericPaneSettings.tsx';
 
 import ListHeader from '../partials/ListHeader.tsx';
@@ -57,7 +58,15 @@ const CustomListPane = () => {
 					}
 				})()}
 
-				<TimelineList uid={pane.uid} params={{ type: 'list', uri: pane.list.uri }} />
+				<TimelineList
+					uid={pane.uid}
+					params={{
+						type: 'list',
+						uri: pane.list.uri,
+						showReplies: pane.showReplies,
+						showQuotes: pane.showQuotes,
+					}}
+				/>
 			</PaneBody>
 		</Pane>,
 
@@ -65,6 +74,7 @@ const CustomListPane = () => {
 			if (isSettingsOpen()) {
 				return (
 					<PaneAside onClose={() => setIsSettingsOpen(false)}>
+						<CustomListPaneSettings />
 						<GenericPaneSettings />
 					</PaneAside>
 				);

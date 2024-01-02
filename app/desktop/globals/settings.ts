@@ -12,7 +12,7 @@ import type { SharedPreferencesObject } from '~/com/components/SharedPreferences
 import { type DeckConfig, type PaneConfig, PaneSize, SpecificPaneSize } from './panes.ts';
 
 export interface PreferencesSchema {
-	$version: 6;
+	$version: 7;
 	/** Used for cache-busting moderation filters */
 	rev: number;
 	/** Onboarding mode */
@@ -48,7 +48,7 @@ const PREF_KEY = 'rantai_prefs';
 export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KEY, (version, prev) => {
 	if (version === 0) {
 		const object: PreferencesSchema = {
-			$version: 6,
+			$version: 7,
 			rev: 0,
 			onboarding: true,
 			decks: [],
@@ -160,7 +160,31 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 		const _prev = prev as PreferencesSchema;
 
 		_prev.ui.profileMediaGrid = true;
-		_prev.$version = 6;
+	}
+
+	if (version < 7) {
+		const _prev = prev as PreferencesSchema;
+
+		const decks = _prev.decks;
+		for (let i = 0, il = decks.length; i < il; i++) {
+			const deck = decks[i];
+			const panes = deck.panes;
+
+			for (let j = 0, jl = panes.length; j < jl; j++) {
+				const pane = panes[j];
+
+				if (pane.type === 'list') {
+					pane.showReplies = true;
+					pane.showQuotes = true;
+				} else if (pane.type === 'feed') {
+					pane.showReplies = true;
+					pane.showQuotes = true;
+					pane.showReposts = true;
+				}
+			}
+		}
+
+		_prev.$version = 7;
 	}
 
 	return prev;

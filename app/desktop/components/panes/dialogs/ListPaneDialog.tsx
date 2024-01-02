@@ -83,6 +83,8 @@ const ListPaneDialog = (props: ListPaneDialogProps) => {
 												name: $list.name.value,
 												uri: $list.uri,
 											},
+											showReplies: true,
+											showQuotes: true,
 											infoVisible: true,
 										},
 										index() + 1,
@@ -110,7 +112,17 @@ const ListPaneDialog = (props: ListPaneDialogProps) => {
 
 							() => {
 								if ($list.purpose.value === 'app.bsky.graph.defs#curatelist') {
-									return <TimelineList uid={$list.uid} params={{ type: 'list', uri: $list.uri }} />;
+									return (
+										<TimelineList
+											uid={$list.uid}
+											params={{
+												type: 'list',
+												uri: $list.uri,
+												showReplies: true,
+												showQuotes: true,
+											}}
+										/>
+									);
 								}
 
 								return (

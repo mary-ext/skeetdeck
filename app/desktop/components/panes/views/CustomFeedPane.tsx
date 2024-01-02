@@ -22,6 +22,7 @@ import PaneAside from '../PaneAside.tsx';
 import PaneBody from '../PaneBody.tsx';
 import PaneHeader from '../PaneHeader.tsx';
 
+import CustomFeedPaneSettings from '../settings/CustomFeedPaneSettings.tsx';
 import GenericPaneSettings from '../settings/GenericPaneSettings.tsx';
 
 import FeedHeader from '../partials/FeedHeader.tsx';
@@ -59,12 +60,22 @@ const CustomFeedPane = () => {
 						}
 					})()}
 
-					<TimelineList uid={pane.uid} params={{ type: 'feed', uri: pane.feed.uri }} />
+					<TimelineList
+						uid={pane.uid}
+						params={{
+							type: 'feed',
+							uri: pane.feed.uri,
+							showReplies: pane.showReplies,
+							showReposts: pane.showReposts,
+							showQuotes: pane.showQuotes,
+						}}
+					/>
 				</PaneBody>
 			</Pane>
 
 			{isSettingsOpen() && (
 				<PaneAside onClose={() => setIsSettingsOpen(false)}>
+					<CustomFeedPaneSettings />
 					<GenericPaneSettings />
 				</PaneAside>
 			)}

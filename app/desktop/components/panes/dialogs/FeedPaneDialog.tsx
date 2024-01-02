@@ -75,6 +75,9 @@ const FeedPaneDialog = (props: FeedPaneDialogProps) => {
 												name: $feed.name.value,
 												uri: $feed.uri,
 											},
+											showReplies: true,
+											showReposts: true,
+											showQuotes: true,
 											infoVisible: true,
 										},
 										index() + 1,
@@ -96,7 +99,16 @@ const FeedPaneDialog = (props: FeedPaneDialogProps) => {
 
 				<hr class="border-divider" />
 
-				<TimelineList uid={pane.uid} params={{ type: 'feed', uri: uri }} />
+				<TimelineList
+					uid={pane.uid}
+					params={{
+						type: 'feed',
+						uri: uri,
+						showReplies: true,
+						showReposts: true,
+						showQuotes: true,
+					}}
+				/>
 			</div>
 		</PaneDialog>
 	);

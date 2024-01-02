@@ -105,6 +105,8 @@ const CustomListPaneCreator = (props: PaneCreatorProps) => {
 									props.onAdd<CustomListPaneConfig>({
 										type: PANE_TYPE_LIST,
 										list: { uri: list.uri, name: list.name },
+										showReplies: true,
+										showQuotes: true,
 										infoVisible: true,
 									});
 								}}
