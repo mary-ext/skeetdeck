@@ -16,9 +16,10 @@ import { openModal } from '../../globals/modals.tsx';
 import { LINK_POST, useLinking } from '../Link.tsx';
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 
+import ChatBubbleIcon from '../../icons/baseline-chat-bubble.tsx';
 import CheckboxMultipleBlankIcon from '../../icons/baseline-checkbox-multiple-blank.tsx';
 import FavoriteIcon from '../../icons/baseline-favorite.tsx';
-import ChatBubbleIcon from '../../icons/baseline-chat-bubble.tsx';
+import VisibilityIcon from '../../icons/baseline-visibility.tsx';
 
 const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
 
@@ -93,6 +94,7 @@ const GalleryItem = (props: GalleryItemProps) => {
 				/>
 
 				<div class="absolute left-0 right-0 top-0 m-2 flex items-center justify-end gap-2 text-lg">
+					{verdict() !== undefined && <VisibilityIcon class="drop-shadow" />}
 					{multiple && <CheckboxMultipleBlankIcon class="drop-shadow" />}
 				</div>
 
