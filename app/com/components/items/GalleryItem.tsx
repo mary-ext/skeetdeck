@@ -1,4 +1,4 @@
-import { createMemo, type JSX } from 'solid-js';
+import { createMemo, lazy, type JSX } from 'solid-js';
 
 import type { RefOf } from '~/api/atp-schema.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
@@ -8,20 +8,26 @@ import type { SignalizedPost } from '~/api/stores/posts.ts';
 import { getPostModDecision } from '~/api/moderation/decisions/post.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
+import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
 import { useMediaQuery } from '~/utils/media-query.ts';
 
-import { LINK_POST, Link } from '../Link.tsx';
+import { openModal } from '../../globals/modals.tsx';
+
+import { LINK_POST, useLinking } from '../Link.tsx';
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 
 import CheckboxMultipleBlankIcon from '../../icons/baseline-checkbox-multiple-blank.tsx';
 import FavoriteIcon from '../../icons/baseline-favorite.tsx';
 import ChatBubbleIcon from '../../icons/baseline-chat-bubble.tsx';
 
+const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
+
 export interface GalleryItemProps {
 	post: SignalizedPost;
 }
 
 const GalleryItem = (props: GalleryItemProps) => {
+	const linking = useLinking();
 	const hasHover = useMediaQuery('(hover: hover)');
 
 	return (() => {
@@ -56,10 +62,29 @@ const GalleryItem = (props: GalleryItemProps) => {
 		const img = images[0];
 		const multiple = images.length > 1;
 
+		const handleClick = (ev: MouseEvent | KeyboardEvent) => {
+			if (!isElementClicked(ev)) {
+				return;
+			}
+
+			if (ev.shiftKey) {
+				ev.preventDefault();
+
+				openModal(() => <ImageViewerDialog images={images!} active={0} />);
+				return;
+			}
+
+			const alt = isElementAltClicked(ev);
+			linking.navigate({ type: LINK_POST, actor: post.author.did, rkey: getRecordId(post.uri) }, alt);
+		};
+
 		return (
-			<Link
-				to={/* @once */ { type: LINK_POST, actor: post.author.did, rkey: getRecordId(post.uri) }}
-				class="group relative aspect-square w-full min-w-0 overflow-hidden bg-muted text-white"
+			<div
+				tabindex={0}
+				onClick={handleClick}
+				onAuxClick={handleClick}
+				onKeyDown={handleClick}
+				class="group relative aspect-square w-full min-w-0 cursor-pointer select-none overflow-hidden bg-muted text-white"
 			>
 				<img
 					src={img.thumb}
@@ -85,7 +110,7 @@ const GalleryItem = (props: GalleryItemProps) => {
 						</div>
 					</div>
 				)}
-			</Link>
+			</div>
 		);
 	}) as unknown as JSX.Element;
 };
