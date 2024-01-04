@@ -19,9 +19,7 @@ const FlattenedThread = (props: FlattenedThreadProps) => {
 	return (
 		<For
 			each={(() => {
-				const data = props.data;
-
-				const descendants = data.descendants;
+				const descendants = props.data.descendants;
 
 				const seen = new Set<string>();
 				const array: ThreadData['descendants'] = [];
@@ -38,7 +36,6 @@ const FlattenedThread = (props: FlattenedThreadProps) => {
 					}
 				}
 
-				console.log(descendants);
 				return array;
 			})()}
 		>
