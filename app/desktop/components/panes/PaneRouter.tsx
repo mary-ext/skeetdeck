@@ -9,6 +9,7 @@ import {
 	PANE_TYPE_NOTIFICATIONS,
 	PANE_TYPE_PROFILE,
 	PANE_TYPE_SEARCH,
+	PANE_TYPE_THREAD,
 } from '../../globals/panes.ts';
 
 export interface PaneRouterProps {
@@ -22,6 +23,7 @@ const components: Record<PaneType, Component> = {
 	[PANE_TYPE_NOTIFICATIONS]: lazy(() => import('./views/NotificationsPane.tsx')),
 	[PANE_TYPE_PROFILE]: lazy(() => import('./views/ProfilePane.tsx')),
 	[PANE_TYPE_SEARCH]: lazy(() => import('./views/SearchPane.tsx')),
+	[PANE_TYPE_THREAD]: lazy(() => import('./views/ThreadPane.tsx')),
 };
 
 const PaneRouter = (props: PaneRouterProps) => {
