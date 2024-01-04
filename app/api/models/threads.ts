@@ -71,7 +71,7 @@ const filterReplies = (x: UnwrapArray<Thread['replies']>): x is Thread | Blocked
 export interface BaseThreadItem {
 	parentUri: string;
 	depth: number;
-	hasNextSibling: boolean;
+	// hasNextSibling: boolean;
 }
 
 export interface PostThreadItem extends BaseThreadItem {
@@ -139,7 +139,14 @@ export const createThreadData = (uid: DID, data: Thread, maxDepth: number, maxHe
 		const walk = (parent: Post, replies: Thread['replies'] | undefined, depth: number): ThreadItem[] => {
 			if (depth >= maxDepth) {
 				if (parent.replyCount && parent.replyCount > 0) {
-					return [{ type: 'overflow', parentUri: parent.uri, depth: depth, hasNextSibling: false }];
+					return [
+						{
+							type: 'overflow',
+							parentUri: parent.uri,
+							depth: depth,
+							// hasNextSibling: false,
+						},
+					];
 				}
 
 				return [];
@@ -162,7 +169,7 @@ export const createThreadData = (uid: DID, data: Thread, maxDepth: number, maxHe
 							item: mergePost(uid, post),
 							parentUri: parent.uri,
 							depth: depth,
-							hasNextSibling: i !== il - 1,
+							// hasNextSibling: i !== il - 1,
 							isEnd: children.length === 0,
 						});
 
@@ -173,7 +180,7 @@ export const createThreadData = (uid: DID, data: Thread, maxDepth: number, maxHe
 							item: reply,
 							parentUri: parent.uri,
 							depth: depth,
-							hasNextSibling: i !== il - 1,
+							// hasNextSibling: i !== il - 1,
 						});
 					}
 				}

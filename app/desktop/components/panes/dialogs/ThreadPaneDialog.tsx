@@ -14,6 +14,8 @@ import {
 } from '~/api/queries/get-post-thread.ts';
 import { SignalizedPost } from '~/api/stores/posts.ts';
 
+import { preferences } from '../../../globals/settings.ts';
+
 import { Button } from '~/com/primitives/button.ts';
 
 import CircularProgress from '~/com/components/CircularProgress.tsx';
@@ -33,6 +35,7 @@ import PaneDialog from '../PaneDialog.tsx';
 import PaneDialogHeader from '../PaneDialogHeader.tsx';
 
 const FlattenedThread = lazy(() => import('~/com/components/views/threads/FlattenedThread.tsx'));
+const NestedThread = lazy(() => import('~/com/components/views/threads/NestedThread.tsx'));
 
 export interface ThreadPaneDialogProps {
 	/** Expected to be static */
@@ -48,6 +51,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 	const { actor, rkey } = props;
 
 	const { pane } = usePaneContext();
+	const ui = preferences.ui;
 
 	const thread = createQuery(() => {
 		const key = getPostThreadKey(pane.uid, actor, rkey, MAX_DESCENDANTS, MAX_ANCESTORS);
@@ -223,7 +227,11 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 												</div>
 											}
 										>
-											<FlattenedThread data={data()} />
+											{!ui.threadedReplies ? (
+												<FlattenedThread data={data()} />
+											) : (
+												<NestedThread data={data()} />
+											)}
 
 											<Switch>
 												<Match when={thread.isPlaceholderData}>

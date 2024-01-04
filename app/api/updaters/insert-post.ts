@@ -54,7 +54,7 @@ const createDescendants = (
 				item: post,
 				parentUri: par,
 				depth: depth + i,
-				hasNextSibling: hasSibling && i === 0,
+				// hasNextSibling: hasSibling && i === 0,
 				isEnd: end && i === il - 1,
 			});
 
@@ -69,7 +69,7 @@ const createDescendants = (
 			type: 'overflow',
 			parentUri: last.uri,
 			depth: maxDepth,
-			hasNextSibling: false,
+			// hasNextSibling: false,
 		});
 	}
 

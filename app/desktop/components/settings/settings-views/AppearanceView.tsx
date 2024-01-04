@@ -79,6 +79,22 @@ const AppearanceView = () => {
 
 					<p class="mr-6 text-de text-muted-fg">This preference will not affect feeds/lists panes</p>
 				</div>
+
+				<div class="px-4 py-3">
+					<label class="flex min-w-0 justify-between gap-4">
+						<span class="text-sm">Show thread replies in threaded form</span>
+
+						<Checkbox
+							checked={ui.threadedReplies}
+							onChange={(ev) => {
+								const next = ev.target.checked;
+								ui.threadedReplies = next;
+							}}
+						/>
+					</label>
+
+					<p class="mr-6 text-de text-muted-fg">This is an experimental feature.</p>
+				</div>
 			</div>
 		</div>
 	);
