@@ -36,7 +36,7 @@ const ProfilePaneCreator = (props: PaneCreatorProps) => {
 	};
 
 	return (
-		<div class={/* @once */ DialogBody({ padded: false, scrollable: true })}>
+		<div class={/* @once */ DialogBody({ padded: false, scrollable: true, class: 'flex flex-col' })}>
 			<div class="flex gap-4 p-4">
 				<SearchInput
 					onKeyDown={(ev) => {
