@@ -2,6 +2,7 @@ import { type JSX, For, Show, batch, createEffect, createMemo, createSignal, unt
 import { unwrap } from 'solid-js/store';
 
 import { createQuery, useQueryClient } from '@pkg/solid-query';
+import { makeEventListener } from '@solid-primitives/event-listener';
 
 import type { DID, Records, RefOf, UnionOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
@@ -149,6 +150,18 @@ const ComposerPane = () => {
 			queryFn: getPost,
 			initialData: () => getInitialPost(key),
 		};
+	});
+
+	const hasContents = createMemo(() => {
+		for (let i = 0, il = posts.length; i < il; i++) {
+			const draft = posts[i];
+
+			if (draft.images.length > 0 || getRtLength(draft.rt) > 0) {
+				return true;
+			}
+		}
+
+		return false;
 	});
 
 	const isSubmitDisabled = createMemo(() => {
@@ -589,6 +602,14 @@ const ComposerPane = () => {
 		// Remove threadgating if reply is set
 		if (state.reply) {
 			state.gate = { type: 'e' };
+		}
+	});
+
+	createEffect(() => {
+		if (hasContents()) {
+			makeEventListener(window, 'beforeunload', (ev) => {
+				ev.preventDefault();
+			});
 		}
 	});
 
