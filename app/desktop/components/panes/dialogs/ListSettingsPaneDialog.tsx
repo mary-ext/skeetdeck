@@ -196,6 +196,7 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 					})()}
 
 					<button
+						disabled
 						type="button"
 						onClick={() => {}}
 						class={
