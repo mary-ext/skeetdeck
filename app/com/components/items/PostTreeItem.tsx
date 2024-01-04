@@ -7,7 +7,7 @@ import { updatePostLike } from '~/api/mutations/like-post.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
 
-import { type PostLinking, LINK_POST, LINK_PROFILE, Link } from '../Link.tsx';
+import { type PostLinking, type ProfileLinking, LINK_POST, LINK_PROFILE, Link } from '../Link.tsx';
 import RichTextRenderer from '../RichTextRenderer.tsx';
 import TimeAgo from '../TimeAgo.tsx';
 
@@ -43,6 +43,11 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 	const author = post.author;
 	const record = post.record;
 
+	const authorPermalink: ProfileLinking = {
+		type: LINK_PROFILE,
+		actor: author.did,
+	};
+
 	const postPermalink: PostLinking = {
 		type: LINK_POST,
 		actor: author.did,
@@ -52,12 +57,16 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 	return (
 		<div class="flex min-w-0 gap-2">
 			<div class="relative flex shrink-0 flex-col items-center">
-				<div class="h-5 w-5 overflow-hidden rounded-full">
+				<Link
+					tabindex={-1}
+					to={authorPermalink}
+					class="h-5 w-5 overflow-hidden rounded-full bg-muted-fg hover:opacity-80"
+				>
 					{(() => {
 						const avatar = author.avatar.value;
 						return <img src={avatar || DefaultAvatar} class="h-full w-full object-cover" />;
 					})()}
-				</div>
+				</Link>
 
 				{hasChildren && <div class="absolute -bottom-2 left-2 top-6 grow border-l-2 border-divider" />}
 			</div>
@@ -65,7 +74,7 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 				<div class="mb-0.5 flex items-center justify-between gap-4">
 					<div class="flex items-center overflow-hidden text-sm text-muted-fg">
 						<Link
-							to={/* @once */ { type: LINK_PROFILE, actor: author.did }}
+							to={authorPermalink}
 							class="group flex max-w-full gap-1 overflow-hidden text-ellipsis whitespace-nowrap text-left"
 						>
 							{(() => {
