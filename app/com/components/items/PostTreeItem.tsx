@@ -68,7 +68,7 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 					})()}
 				</Link>
 
-				{hasChildren && <div class="absolute -bottom-2 left-2 top-6 grow border-l-2 border-divider" />}
+				{hasChildren && <div class="absolute -bottom-2 left-2 top-6 grow border-l-2 border-muted" />}
 			</div>
 			<div class="min-w-0 grow">
 				<div class="mb-0.5 flex items-center justify-between gap-4">

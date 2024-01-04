@@ -87,10 +87,10 @@ const renderLines = (depth: number /* , hasNextSibling: boolean */) => {
 	for (let i = 0; i < depth /* - 1 */; i++) {
 		nodes.push(
 			<div class="relative pl-5">
-				<div class="absolute -top-4 bottom-0 left-2 border-l-2 border-divider"></div>
+				<div class="absolute -top-4 bottom-0 left-2 border-l-2 border-muted"></div>
 
 				{i === depth - 1 && (
-					<div class="absolute right-0.5 top-[-16px] h-[26px] w-[10px] rounded-bl-[8px] border-b-2 border-l-2 border-divider"></div>
+					<div class="absolute right-0.5 top-[-16px] h-[26px] w-[10px] rounded-bl-[8px] border-b-2 border-l-2 border-muted"></div>
 				)}
 			</div>,
 		);
