@@ -34,7 +34,7 @@ export const produceThreadInsert = (posts: SignalizedPost[], parentUri: string) 
 const createDescendants = (
 	posts: SignalizedPost[],
 	parentUri: string,
-	hasSibling: boolean,
+	_hasSibling: boolean,
 	depth: number,
 	maxDepth: number,
 ) => {
