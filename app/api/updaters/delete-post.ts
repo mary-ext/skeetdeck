@@ -52,63 +52,6 @@ export const producePostDelete = (postUri: string) => {
 		}
 	});
 
-	// const updatePostThreadNew_ = (draft: SignalizedThread) => {
-	// 	// Search the parent
-	// 	{
-	// 		let curr = draft;
-	// 		while (curr) {
-	// 			const parent = curr.parent;
-
-	// 			if (!parent || parent.$type !== 'thread') {
-	// 				break;
-	// 			}
-
-	// 			if (parent.post.uri === postUri) {
-	// 				// Insert a notFound post here, so it doesn't look like the reply below
-	// 				// it is a root post.
-	// 				const notFoundPost: UnionOf<'app.bsky.feed.defs#notFoundPost'> = {
-	// 					$type: 'app.bsky.feed.defs#notFoundPost',
-	// 					notFound: true,
-	// 					uri: postUri,
-	// 				};
-
-	// 				curr.parent = notFoundPost;
-	// 				return true;
-	// 			}
-
-	// 			curr = parent;
-	// 		}
-	// 	}
-
-	// 	// Search the replies
-	// 	const replies = draft.replies;
-
-	// 	if (replies) {
-	// 		for (let i = 0, il = replies.length; i < il; i++) {
-	// 			const reply = replies[i];
-
-	// 			if (reply.$type !== 'thread') {
-	// 				continue;
-	// 			}
-
-	// 			if (reply.post.uri === postUri) {
-	// 				replies.splice(i, 1);
-	// 				return true;
-	// 			}
-
-	// 			if (updatePostThreadNew_(reply)) {
-	// 				return true;
-	// 			}
-	// 		}
-	// 	}
-
-	// 	return false;
-	// };
-
-	// const updatePostThread = produce((draft: SignalizedThread) => {
-	// 	updatePostThreadNew_(draft);
-	// });
-
 	const updatePostThread = produce((draft: ThreadData) => {
 		const ancestors = draft.ancestors;
 		const descendants = draft.descendants;
