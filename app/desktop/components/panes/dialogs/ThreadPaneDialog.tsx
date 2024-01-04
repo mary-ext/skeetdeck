@@ -1,4 +1,4 @@
-import { For, Match, Show, Suspense, Switch, lazy, onMount } from 'solid-js';
+import { For, Match, Show, Suspense, Switch, createMemo, lazy, onMount } from 'solid-js';
 
 import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 import { createQuery } from '@pkg/solid-query';
@@ -14,6 +14,7 @@ import {
 } from '~/api/queries/get-post-thread.ts';
 import { SignalizedPost } from '~/api/stores/posts.ts';
 
+import { SpecificPaneSize } from '../../../globals/panes.ts';
 import { preferences } from '../../../globals/settings.ts';
 
 import { Button } from '~/com/primitives/button.ts';
@@ -44,17 +45,25 @@ export interface ThreadPaneDialogProps {
 	rkey: string;
 }
 
-const MAX_ANCESTORS = 10;
-const MAX_DESCENDANTS = 4;
-
 const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 	const { actor, rkey } = props;
 
 	const { pane } = usePaneContext();
 	const ui = preferences.ui;
 
+	const size = createMemo(() => {
+		const $size = pane.size;
+
+		if ($size === SpecificPaneSize.INHERIT) {
+			return preferences.ui.defaultPaneSize;
+		}
+
+		return $size;
+	});
+
 	const thread = createQuery(() => {
-		const key = getPostThreadKey(pane.uid, actor, rkey, MAX_DESCENDANTS, MAX_ANCESTORS);
+		const isLarge = ui.threadedReplies && size() === SpecificPaneSize.LARGE;
+		const key = getPostThreadKey(pane.uid, actor, rkey, !isLarge ? 4 : 6, 10);
 
 		return {
 			queryKey: key,
