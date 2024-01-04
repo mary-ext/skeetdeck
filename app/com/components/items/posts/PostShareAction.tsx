@@ -26,7 +26,9 @@ const PostShareAction = (props: PostShareActionProps) => {
 		const post = props.post;
 		const author = post.author;
 
-		const url = `https://bsky.app/profile/${author.did}/post/${getRecordId(post.uri)}`;
+		const getPostUrl = () => {
+			return `https://bsky.app/profile/${author.handle.value}/post/${getRecordId(post.uri)}`;
+		};
 
 		const getPostText = () => {
 			const record = post.record.peek();
@@ -70,7 +72,7 @@ const PostShareAction = (props: PostShareActionProps) => {
 							<button
 								onClick={() => {
 									close();
-									navigator.clipboard.writeText(url);
+									navigator.clipboard.writeText(getPostUrl());
 								}}
 								class={/* @once */ MenuItem()}
 							>
@@ -82,7 +84,7 @@ const PostShareAction = (props: PostShareActionProps) => {
 								<button
 									onClick={() => {
 										close();
-										navigator.share({ url: url });
+										navigator.share({ url: getPostUrl() });
 									}}
 									class={/* @once */ MenuItem()}
 								>
