@@ -3,6 +3,7 @@
 
 interface ImportMetaEnv {
 	readonly VITE_BRAND_NAME: string;
+	readonly VITE_BRAND_VERSION: string;
 
 	readonly VITE_MODE: 'desktop' | 'mobile';
 

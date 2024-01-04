@@ -3,27 +3,29 @@ import { createContext, useContext } from 'solid-js';
 import type { DID } from '~/api/atp-schema.ts';
 
 // Root
-export const VIEW_ACCOUNTS = 0;
-export const VIEW_APPEARANCE = 1;
-export const VIEW_LANGAUGE = 2;
-export const VIEW_CONTENT_FILTERS = 3;
-export const VIEW_KEYWORD_FILTERS = 4;
-export const VIEW_ACCESSIBILITY = 5;
+export const VIEW_ABOUT = 0;
+export const VIEW_ACCOUNTS = 1;
+export const VIEW_APPEARANCE = 2;
+export const VIEW_LANGAUGE = 3;
+export const VIEW_CONTENT_FILTERS = 4;
+export const VIEW_KEYWORD_FILTERS = 5;
+export const VIEW_ACCESSIBILITY = 6;
 
 // Keyword filters
-export const VIEW_KEYWORD_FILTER_FORM = 6;
+export const VIEW_KEYWORD_FILTER_FORM = 7;
 
 // Content filters
-export const VIEW_HIDDEN_REPOSTERS = 7;
-export const VIEW_LABEL_CONFIG = 8;
-export const VIEW_SUBSCRIBED_LABELERS = 9;
-export const VIEW_TEMPORARY_MUTES = 10;
+export const VIEW_HIDDEN_REPOSTERS = 8;
+export const VIEW_LABEL_CONFIG = 9;
+export const VIEW_SUBSCRIBED_LABELERS = 10;
+export const VIEW_TEMPORARY_MUTES = 11;
 
 // Languages
-export const VIEW_ADDITIONAL_LANGUAGE = 11;
-export const VIEW_EXCLUDED_TRANSLATION = 12;
+export const VIEW_ADDITIONAL_LANGUAGE = 12;
+export const VIEW_EXCLUDED_TRANSLATION = 13;
 
 export type ViewType =
+	| typeof VIEW_ABOUT
 	| typeof VIEW_ACCESSIBILITY
 	| typeof VIEW_ACCOUNTS
 	| typeof VIEW_ADDITIONAL_LANGUAGE
@@ -40,6 +42,7 @@ export type ViewType =
 
 export type View =
 	// Root
+	| { type: typeof VIEW_ABOUT }
 	| { type: typeof VIEW_ACCOUNTS }
 	| { type: typeof VIEW_APPEARANCE }
 	| { type: typeof VIEW_LANGAUGE }

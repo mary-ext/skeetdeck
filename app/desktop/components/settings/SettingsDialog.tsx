@@ -7,11 +7,13 @@ import { IconButton } from '~/com/primitives/icon-button.ts';
 import { Interactive } from '~/com/primitives/interactive.ts';
 
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
+import CircularProgress from '~/com/components/CircularProgress.tsx';
 
 import AccessibilityIcon from '~/com/icons/baseline-accessibility.tsx';
 import CloseIcon from '~/com/icons/baseline-close.tsx';
 import ColorLensIcon from '~/com/icons/baseline-color-lens.tsx';
 import FilterAltIcon from '~/com/icons/baseline-filter-alt.tsx';
+import InfoIcon from '~/com/icons/baseline-info.tsx';
 import LanguageIcon from '~/com/icons/baseline-language.tsx';
 import PeopleIcon from '~/com/icons/baseline-people.tsx';
 import VisibilityIcon from '~/com/icons/baseline-visibility.tsx';
@@ -21,6 +23,7 @@ import {
 	type View,
 	type ViewType,
 	RouterContext,
+	VIEW_ABOUT,
 	VIEW_ACCESSIBILITY,
 	VIEW_ACCOUNTS,
 	VIEW_APPEARANCE,
@@ -30,7 +33,6 @@ import {
 	useViewRouter,
 } from './settings-views/_router.tsx';
 import SettingsRouterView from './settings-views/SettingsRouterView.tsx';
-import CircularProgress from '~/com/components/CircularProgress.tsx';
 
 const DONATION_LINK = 'https://github.com/mary-ext/langit/wiki/Donation';
 
@@ -84,14 +86,14 @@ const SettingsDialog = () => {
 								<SideItem to={VIEW_KEYWORD_FILTERS} icon={FilterAltIcon}>
 									Keyword filters
 								</SideItem>
+
+								<SideItem to={VIEW_ABOUT} icon={InfoIcon}>
+									About
+								</SideItem>
 							</div>
 							<div class="flex min-w-0 items-center gap-4 p-4">
 								<a target="_blank" href={DONATION_LINK} class="text-sm text-accent hover:underline">
 									Donate
-								</a>
-								<div class="grow"></div>
-								<a target="_blank" href={GIT_SOURCE} class="font-mono text-xs text-muted-fg hover:underline">
-									{/* @once */ GIT_COMMIT ? `${GIT_BRANCH}/${GIT_COMMIT}` : `indev`}
 								</a>
 							</div>
 						</div>

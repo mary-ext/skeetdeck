@@ -2,11 +2,13 @@ import { type Component, type JSX, lazy } from 'solid-js';
 
 import {
 	type ViewType,
+	VIEW_ABOUT,
 	VIEW_ACCESSIBILITY,
 	VIEW_ACCOUNTS,
 	VIEW_ADDITIONAL_LANGUAGE,
 	VIEW_APPEARANCE,
 	VIEW_CONTENT_FILTERS,
+	VIEW_EXCLUDED_TRANSLATION,
 	VIEW_HIDDEN_REPOSTERS,
 	VIEW_KEYWORD_FILTER_FORM,
 	VIEW_KEYWORD_FILTERS,
@@ -15,9 +17,9 @@ import {
 	VIEW_SUBSCRIBED_LABELERS,
 	VIEW_TEMPORARY_MUTES,
 	useViewRouter,
-	VIEW_EXCLUDED_TRANSLATION,
 } from './_router.tsx';
 
+const AboutView = lazy(() => import('./AboutView.tsx'));
 const AccessibilityView = lazy(() => import('./AccessibilityView.tsx'));
 const AccountsView = lazy(() => import('./AccountsView.tsx'));
 const AppearanceView = lazy(() => import('./AppearanceView.tsx'));
@@ -36,6 +38,7 @@ const AdditionalLanguageView = lazy(() => import('./languages/AdditionalLanguage
 const ExcludedTranslationView = lazy(() => import('./languages/ExcludedTranslationView.tsx'));
 
 const views: Record<ViewType, Component> = {
+	[VIEW_ABOUT]: AboutView,
 	[VIEW_ACCESSIBILITY]: AccessibilityView,
 	[VIEW_ACCOUNTS]: AccountsView,
 	[VIEW_APPEARANCE]: AppearanceView,
