@@ -66,7 +66,7 @@ const AppearanceView = () => {
 
 				<div class="px-4 py-3">
 					<label class="flex min-w-0 justify-between gap-4">
-						<span class="text-sm">Show grid UI for profile media</span>
+						<span class="text-sm">Show profile media in grid form</span>
 
 						<Checkbox
 							checked={ui.profileMediaGrid}
