@@ -1,118 +1,66 @@
-import { type Signal, For, createMemo, createSignal } from 'solid-js';
+import { For } from 'solid-js';
 
-import type { DID, UnionOf } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
-import type { SignalizedThread } from '~/api/models/threads.ts';
-import { SignalizedPost } from '~/api/stores/posts.ts';
-
-import { dequal } from '~/utils/dequal.ts';
+import type { ThreadData } from '~/api/models/threads.ts';
 
 import { Link, LINK_POST } from '../../Link.tsx';
 import { VirtualContainer } from '../../VirtualContainer.tsx';
 
-import EmbedRecordNotFound from '../../embeds/EmbedRecordNotFound.tsx';
+import EmbedRecordBlocked from '../../embeds/EmbedRecordBlocked.tsx';
 import Post from '../../items/Post.tsx';
 
 export interface FlattenedThreadProps {
-	replies: SignalizedThread['replies'];
-	/** Expected to be static */
-	maxDepth: number;
-}
-
-interface OverflowItem {
-	$type: 'overflow';
-	actor: DID;
-	rkey: string;
-}
-
-interface TreeInfo {
-	next: boolean;
+	data: ThreadData;
 }
 
 const FlattenedThread = (props: FlattenedThreadProps) => {
-	const maxDepth = props.maxDepth;
-
-	const wm = new WeakMap<SignalizedPost, Signal<TreeInfo>>();
-	const items = createMemo(() => {
-		const replies = props.replies;
-		let items: Array<SignalizedPost | OverflowItem | UnionOf<'app.bsky.feed.defs#blockedPost'>> = [];
-
-		if (replies) {
-			for (let i = 0, il = replies.length; i < il; i++) {
-				const root = replies[i];
-				const array: Array<SignalizedPost | OverflowItem | UnionOf<'app.bsky.feed.defs#blockedPost'>> = [];
-
-				let overflowing = false;
-				let depth = 0;
-				let curr: typeof root | undefined = root;
-
-				while (curr) {
-					if (++depth > maxDepth) {
-						const last = array[array.length - 1] as
-							| SignalizedPost
-							| UnionOf<'app.bsky.feed.defs#blockedPost'>;
-
-						const uri = last.uri;
-
-						overflowing = true;
-						array.push({
-							$type: 'overflow',
-							actor: getRepoId(uri) as DID,
-							rkey: getRecordId(uri),
-						});
-
-						break;
-					}
-
-					if (curr.$type !== 'thread') {
-						array.push(curr);
-						break;
-					}
-
-					array.push(curr.post);
-					curr = curr.replies?.[0];
-				}
-
-				for (let j = 0, jl = array.length; j < jl; j++) {
-					const item = array[j];
-
-					if (item instanceof SignalizedPost) {
-						const signal = wm.get(item);
-
-						const info: TreeInfo = { next: overflowing || j !== jl - 1 };
-
-						if (signal !== undefined) {
-							signal[1](info);
-						} else {
-							wm.set(item, createSignal(info, { equals: dequal }));
-						}
-					}
-				}
-
-				items = items.concat(array);
-			}
-		}
-
-		return items;
-	});
-
 	return (
-		<For each={items()}>
-			{(item) => {
-				if (item instanceof SignalizedPost) {
-					const [info] = wm.get(item)!;
+		<For
+			each={(() => {
+				const data = props.data;
+
+				const descendants = data.descendants;
+
+				const seen = new Set<string>();
+				const array: ThreadData['descendants'] = [];
+
+				for (let i = 0, il = descendants.length; i < il; i++) {
+					const x = descendants[i];
+					const parentUri = x.parentUri;
+
+					if (x.depth === 0 || !seen.has(parentUri)) {
+						seen.add(parentUri);
+						array.push(x);
+					} else if (x.type === 'post') {
+						seen.add(x.item.uri);
+					}
+				}
+
+				console.log(descendants);
+				return array;
+			})()}
+		>
+			{(x) => {
+				const type = x.type;
+
+				if (type === 'post') {
+					const post = x.item;
+					const hasNext = !x.isEnd;
 
 					return (
 						<VirtualContainer estimateHeight={98.8}>
-							<Post post={item} interactive prev next={info().next} />
+							<Post interactive post={post} prev next={hasNext} />
 						</VirtualContainer>
 					);
 				}
 
-				if (item.$type === 'overflow') {
-					const actor = item.actor;
-					const rkey = item.rkey;
+				if (type === 'overflow') {
+					const uri = x.parentUri;
+
+					const actor = getRepoId(uri) as DID;
+					const rkey = getRecordId(uri);
 
 					return (
 						<Link
@@ -127,10 +75,12 @@ const FlattenedThread = (props: FlattenedThreadProps) => {
 					);
 				}
 
-				if (item.$type === 'app.bsky.feed.defs#blockedPost') {
+				if (type === 'block') {
+					const record = x.item;
+
 					return (
 						<div class="border-b border-divider p-3">
-							<EmbedRecordNotFound />
+							<EmbedRecordBlocked record={record} />
 						</div>
 					);
 				}

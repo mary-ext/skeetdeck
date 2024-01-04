@@ -1,9 +1,9 @@
-import { For, Match, Show, Suspense, Switch, createMemo, lazy, onMount } from 'solid-js';
+import { For, Match, Show, Suspense, Switch, lazy, onMount } from 'solid-js';
 
 import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID, UnionOf } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
 import {
@@ -50,7 +50,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 	const { pane } = usePaneContext();
 
 	const thread = createQuery(() => {
-		const key = getPostThreadKey(pane.uid, actor, rkey, MAX_DESCENDANTS + 1, MAX_ANCESTORS + 1);
+		const key = getPostThreadKey(pane.uid, actor, rkey, MAX_DESCENDANTS, MAX_ANCESTORS);
 
 		return {
 			queryKey: key,
@@ -115,63 +115,17 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 
 					<Match when={thread.data}>
 						{(data) => {
-							const ancestors = createMemo(() => {
-								const array: (
-									| SignalizedPost
-									| UnionOf<'app.bsky.feed.defs#blockedPost'>
-									| UnionOf<'app.bsky.feed.defs#notFoundPost'>
-								)[] = [];
-
-								let overflowing = false;
-								let height = 0;
-								let curr = data().parent;
-								while (curr) {
-									if (++height > MAX_ANCESTORS) {
-										overflowing = true;
-										break;
-									}
-
-									if (curr.$type !== 'thread') {
-										array.push(curr);
-										break;
-									}
-
-									array.push(curr.post);
-									curr = curr.parent;
-								}
-
-								return {
-									overflowing: overflowing,
-									items: array.reverse(),
-								};
-							});
-
 							return (
 								<>
 									<Show
 										when={(() => {
 											if (thread.isPlaceholderData) {
-												const $ancestors = ancestors();
+												const ancestors = data().ancestors;
+												const first = ancestors.length > 0 && ancestors[0];
 
-												let post: SignalizedPost;
-
-												if ($ancestors.overflowing) {
-													return;
+												if (first && first instanceof SignalizedPost) {
+													return first.record.value.reply;
 												}
-
-												if ($ancestors.items.length > 0) {
-													const item = $ancestors.items[0];
-
-													if (!(item instanceof SignalizedPost)) {
-														return;
-													}
-
-													post = item;
-												} else {
-													post = data().post;
-												}
-
-												return post.record.value.reply;
 											}
 										})()}
 									>
@@ -186,69 +140,63 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 										</div>
 									</Show>
 
-									<Show
-										when={(() => {
-											const $ancestors = ancestors();
-											return $ancestors.overflowing && $ancestors.items[0];
-										})()}
-									>
-										{(item) => (
-											<Link
-												to={{
-													type: LINK_POST,
-													actor: getRepoId(item().uri) as DID,
-													rkey: getRecordId(item().uri),
-												}}
-												class="flex h-10 w-full items-center gap-3 px-4 hover:bg-secondary/10"
-											>
-												<div class="flex h-full w-10 justify-center">
-													<div class="mt-3 border-l-2 border-dashed border-divider" />
-												</div>
-												<span class="text-sm text-accent">Show parent post</span>
-											</Link>
-										)}
-									</Show>
-
-									<For each={ancestors().items}>
+									<For each={data().ancestors}>
 										{(item) => {
-											if ('$type' in item) {
-												const type = item.$type;
-
-												if (type === 'app.bsky.feed.defs#notFoundPost') {
-													return (
-														<div class="p-3">
-															<EmbedRecordNotFound />
-														</div>
-													);
-												}
-
-												if (type === 'app.bsky.feed.defs#blockedPost') {
-													return (
-														<div class="p-3">
-															<EmbedRecordBlocked
-																record={
-																	/* @once */ {
-																		$type: 'app.bsky.embed.record#viewBlocked',
-																		uri: item.uri,
-																		blocked: item.blocked,
-																		author: item.author,
-																	}
-																}
-															/>
-														</div>
-													);
-												}
-
-												return null;
+											if (item instanceof SignalizedPost) {
+												// Upwards scroll jank is a lot worse than downwards, so
+												// we can't set an estimate height here.
+												return (
+													<VirtualContainer>
+														<Post post={item} next prev interactive />
+													</VirtualContainer>
+												);
 											}
 
-											// Upwards scroll jank is a lot worse than downwards, so
-											// we can't set an estimate height here.
-											return (
-												<VirtualContainer>
-													<Post post={item} next prev interactive />
-												</VirtualContainer>
-											);
+											const type = item.$type;
+
+											if (type === 'overflow') {
+												const uri = item.uri;
+												const actor = getRepoId(uri) as DID;
+												const rkey = getRecordId(uri);
+
+												return (
+													<Link
+														to={{ type: LINK_POST, actor: actor, rkey: rkey }}
+														class="flex h-10 w-full items-center gap-3 px-4 hover:bg-secondary/10"
+													>
+														<div class="flex h-full w-10 justify-center">
+															<div class="mt-3 border-l-2 border-dashed border-divider" />
+														</div>
+														<span class="text-sm text-accent">Show parent post</span>
+													</Link>
+												);
+											}
+
+											if (type === 'app.bsky.feed.defs#notFoundPost') {
+												return (
+													<div class="p-3">
+														<EmbedRecordNotFound />
+													</div>
+												);
+											}
+
+											if (type === 'app.bsky.feed.defs#blockedPost') {
+												return (
+													<div class="p-3">
+														<EmbedRecordBlocked
+															record={
+																/* @once */ {
+																	uri: item.uri,
+																	blocked: item.blocked,
+																	author: item.author,
+																}
+															}
+														/>
+													</div>
+												);
+											}
+
+											return null;
 										}}
 									</For>
 
@@ -275,7 +223,7 @@ const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 												</div>
 											}
 										>
-											<FlattenedThread replies={data().replies} maxDepth={MAX_DESCENDANTS} />
+											<FlattenedThread data={data()} />
 
 											<Switch>
 												<Match when={thread.isPlaceholderData}>

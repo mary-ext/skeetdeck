@@ -1,13 +1,13 @@
 import { type JSX } from 'solid-js';
 
-import type { DID, UnionOf } from '~/api/atp-schema.ts';
+import type { DID, RefOf } from '~/api/atp-schema.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 
 import { LINK_POST, Link } from '../Link.tsx';
 
 import EmbedRecordNotFound from './EmbedRecordNotFound.tsx';
 
-type EmbeddedBlockedRecord = UnionOf<'app.bsky.embed.record#viewBlocked'>;
+type EmbeddedBlockedRecord = RefOf<'app.bsky.embed.record#viewBlocked'>;
 
 export interface EmbedRecordBlockedProps {
 	record: EmbeddedBlockedRecord;

@@ -3,7 +3,7 @@ import { type InfiniteData, useQueryClient, createMutation } from '@pkg/solid-qu
 import { multiagent } from '~/api/globals/agent.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
-import type { SignalizedThread } from '~/api/models/threads.ts';
+import type { ThreadData } from '~/api/models/threads.ts';
 import { getPost, getPostKey } from '~/api/queries/get-post.ts';
 import type { getPostThreadKey } from '~/api/queries/get-post-thread.ts';
 import type { TimelinePage } from '~/api/queries/get-timeline.ts';
@@ -50,37 +50,7 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 
 				closeModal();
 
-				// 1. Mutate all timeline and post thread queries
-				queryClient.setQueriesData<InfiniteData<TimelinePage>>({ queryKey: ['getTimeline'] }, (data) => {
-					if (data) {
-						return updateTimeline(data);
-					}
-
-					return data;
-				});
-
-				queryClient.setQueriesData<SignalizedThread>({ queryKey: ['getPostThread'] }, (data) => {
-					if (data) {
-						const post = data.post;
-						const root = post.record.value.reply?.root.uri;
-
-						// Our posts can be in 3 different places here:
-						// 1. the main URI is the root of our post.
-						// 3. the root URI is the root of our post.
-						// 2. the root URI is our post.
-						if (post.uri === rootUri || (root && (root === rootUri || root === postUri))) {
-							return updatePostThread(data);
-						}
-					}
-
-					return data;
-				});
-			},
-			onSuccess: () => {
-				// 2. Remove our cached post
-				removeCachedPost(did, postUri);
-
-				// 3. Reset any post thread queries that directly shows the post
+				// 1. Reset any post thread queries that directly shows the post
 				queryClient.resetQueries({
 					queryKey: ['getPostThread'],
 					predicate: (query) => {
@@ -89,6 +59,35 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 					},
 				});
 
+				// 2. Mutate all timeline and post thread queries
+				queryClient.setQueriesData<InfiniteData<TimelinePage>>({ queryKey: ['getTimeline'] }, (data) => {
+					if (data) {
+						return updateTimeline(data);
+					}
+
+					return data;
+				});
+
+				queryClient.setQueriesData<ThreadData>({ queryKey: ['getPostThread'] }, (data) => {
+					if (data) {
+						const post = data.post;
+						const root = post.record.value.reply?.root.uri;
+
+						// Our posts can be in 3 different places here:
+						// 1. the main URI is the root of our post.
+						// 3. the root URI is the root of our post.
+						if (post.uri === rootUri || (root && root === rootUri)) {
+							return updatePostThread(data);
+						}
+					}
+
+					return data;
+				});
+
+				// 3. Remove our cached post
+				removeCachedPost(did, postUri);
+			},
+			onSuccess: () => {
 				// 4. Re-fetch the parent post to get an accurate view over the reply count
 				if (parentUri) {
 					queryClient.fetchQuery({

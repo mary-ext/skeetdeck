@@ -4,8 +4,9 @@ import { produce } from '~/utils/immer.ts';
 
 import type { UnionOf } from '../atp-schema.ts';
 
-import type { SignalizedThread } from '../models/threads.ts';
+import type { ThreadData } from '../models/threads.ts';
 import type { TimelinePage } from '../queries/get-timeline.ts';
+import { SignalizedPost } from '../stores/posts.ts';
 
 export const producePostDelete = (postUri: string) => {
 	const updateTimeline = produce((draft: InfiniteData<TimelinePage>) => {
@@ -51,61 +52,134 @@ export const producePostDelete = (postUri: string) => {
 		}
 	});
 
-	const updatePostThreadNew_ = (draft: SignalizedThread) => {
-		// Search the parent
-		{
-			let curr = draft;
-			while (curr) {
-				const parent = curr.parent;
+	// const updatePostThreadNew_ = (draft: SignalizedThread) => {
+	// 	// Search the parent
+	// 	{
+	// 		let curr = draft;
+	// 		while (curr) {
+	// 			const parent = curr.parent;
 
-				if (!parent || parent.$type !== 'thread') {
-					break;
-				}
+	// 			if (!parent || parent.$type !== 'thread') {
+	// 				break;
+	// 			}
 
-				if (parent.post.uri === postUri) {
-					// Insert a notFound post here, so it doesn't look like the reply below
-					// it is a root post.
-					const notFoundPost: UnionOf<'app.bsky.feed.defs#notFoundPost'> = {
-						$type: 'app.bsky.feed.defs#notFoundPost',
-						notFound: true,
-						uri: postUri,
-					};
+	// 			if (parent.post.uri === postUri) {
+	// 				// Insert a notFound post here, so it doesn't look like the reply below
+	// 				// it is a root post.
+	// 				const notFoundPost: UnionOf<'app.bsky.feed.defs#notFoundPost'> = {
+	// 					$type: 'app.bsky.feed.defs#notFoundPost',
+	// 					notFound: true,
+	// 					uri: postUri,
+	// 				};
 
-					curr.parent = notFoundPost;
-					return true;
-				}
+	// 				curr.parent = notFoundPost;
+	// 				return true;
+	// 			}
 
-				curr = parent;
+	// 			curr = parent;
+	// 		}
+	// 	}
+
+	// 	// Search the replies
+	// 	const replies = draft.replies;
+
+	// 	if (replies) {
+	// 		for (let i = 0, il = replies.length; i < il; i++) {
+	// 			const reply = replies[i];
+
+	// 			if (reply.$type !== 'thread') {
+	// 				continue;
+	// 			}
+
+	// 			if (reply.post.uri === postUri) {
+	// 				replies.splice(i, 1);
+	// 				return true;
+	// 			}
+
+	// 			if (updatePostThreadNew_(reply)) {
+	// 				return true;
+	// 			}
+	// 		}
+	// 	}
+
+	// 	return false;
+	// };
+
+	// const updatePostThread = produce((draft: SignalizedThread) => {
+	// 	updatePostThreadNew_(draft);
+	// });
+
+	const updatePostThread = produce((draft: ThreadData) => {
+		const ancestors = draft.ancestors;
+		const descendants = draft.descendants;
+
+		// Search ancestors
+		for (let i = ancestors.length - 1; i >= 0; i--) {
+			const item = ancestors[i];
+
+			// If we encountered something else then there's nothing else upwards
+			if (!(item instanceof SignalizedPost)) {
+				break;
+			}
+
+			if (item.uri === postUri) {
+				// Insert a #notFoundPost here to make it clear it's been deleted.
+				const notFoundPost: UnionOf<'app.bsky.feed.defs#notFoundPost'> = {
+					$type: 'app.bsky.feed.defs#notFoundPost',
+					notFound: true,
+					uri: postUri,
+				};
+
+				ancestors.splice(0, i + 1, notFoundPost);
+
+				// We're done, if it's in ancestors then it's not in descendants
+				return;
 			}
 		}
 
-		// Search the replies
-		const replies = draft.replies;
+		// Search descendants
+		for (let i = 0, il = descendants.length; i < il; i++) {
+			const x = descendants[i];
 
-		if (replies) {
-			for (let i = 0, il = replies.length; i < il; i++) {
-				const reply = replies[i];
+			if (x.type === 'post' && x.item.uri === postUri) {
+				const parentUri = x.parentUri;
 
-				if (reply.$type !== 'thread') {
-					continue;
+				// We've found the post, now let's find where the rabbit-hole ends.
+				{
+					const depth = x.depth;
+					let amount = 1;
+
+					// Anything that's >depth is ours, we immediately break when it finds
+					// an item that isn't.
+					for (let j = i + 1; j < il; j++) {
+						const c = descendants[j];
+
+						if (c.depth <= depth) {
+							break;
+						}
+
+						amount++;
+					}
+
+					descendants.splice(i, amount);
 				}
 
-				if (reply.post.uri === postUri) {
-					replies.splice(i, 1);
-					return true;
+				// Next, we'll go to the parent and adjust the isEnd property.
+				{
+					const parent = i !== 0 && descendants[i - 1];
+
+					// If the previous item in descendants array isn't our parent, then it
+					// can be assumed that there's another reply in the parent, so we
+					// don't need to adjust anything.
+					if (parent && parent.type === 'post' && parent.item.uri === parentUri) {
+						parent.isEnd = i === descendants.length - 1 || descendants[i].parentUri !== parentUri;
+					}
 				}
 
-				if (updatePostThreadNew_(reply)) {
-					return true;
-				}
+				// We're done.
+				return;
 			}
 		}
-
-		return false;
-	};
-
-	const updatePostThread = produce((draft: SignalizedThread) => {
-		updatePostThreadNew_(draft);
 	});
 
 	return [updateTimeline, updatePostThread] as const;

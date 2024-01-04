@@ -3,21 +3,13 @@ import type { DID, RefOf, UnionOf } from '../atp-schema.ts';
 import { mergePost, type SignalizedPost } from '../stores/posts.ts';
 
 type Post = RefOf<'app.bsky.feed.defs#postView'>;
-type Thread = RefOf<'app.bsky.feed.defs#threadViewPost'>;
+type Thread = UnionOf<'app.bsky.feed.defs#threadViewPost'>;
+
+type NotFoundPost = UnionOf<'app.bsky.feed.defs#notFoundPost'>;
+type BlockedPost = UnionOf<'app.bsky.feed.defs#blockedPost'>;
 
 type UnwrapArray<T> = T extends (infer V)[] ? V : never;
 type ThreadReply = UnwrapArray<Thread['replies']>;
-
-export interface SignalizedThread {
-	$type: 'thread';
-	post: SignalizedPost;
-	parent:
-		| SignalizedThread
-		| UnionOf<'app.bsky.feed.defs#notFoundPost'>
-		| UnionOf<'app.bsky.feed.defs#blockedPost'>
-		| undefined;
-	replies: (SignalizedThread | UnionOf<'app.bsky.feed.defs#blockedPost'>)[] | undefined;
-}
 
 const TypeThreadView = 'app.bsky.feed.defs#threadViewPost';
 const TypeBlocked = 'app.bsky.feed.defs#blockedPost';
@@ -72,71 +64,143 @@ const collateReplies = (uid: DID, parent: Post) => {
 	};
 };
 
-export const createSignalizedThread = (uid: DID, thread: Thread): SignalizedThread => {
-	const { post, parent, replies } = thread;
+const filterReplies = (x: UnwrapArray<Thread['replies']>): x is Thread | BlockedPost => {
+	return x.$type === TypeThreadView || (x.$type === TypeBlocked && !!x.author.viewer!.blocking);
+};
 
-	let p: SignalizedThread['parent'];
-	let r: SignalizedThread['replies'];
+export interface BaseThreadItem {
+	parentUri: string;
+	depth: number;
+	hasNextSibling: boolean;
+}
 
-	// - #blockedPost should only be used if the user is blocking said author,
-	//   otherwise it should be replaced with #notFoundPost (or filtered out)
-	// - Sorting is completely done here at the moment.
+export interface PostThreadItem extends BaseThreadItem {
+	type: 'post';
+	item: SignalizedPost;
+	isEnd: boolean;
+}
 
-	if (parent) {
-		const type = parent.$type;
+export interface BlockedThreadItem extends BaseThreadItem {
+	type: 'block';
+	item: BlockedPost;
+}
 
-		if (type === TypeThreadView) {
-			p = createSignalizedThread(uid, parent);
-		} else if (type === TypeBlocked) {
-			p = parent.author.viewer!.blocking
-				? parent
-				: { $type: 'app.bsky.feed.defs#notFoundPost', uri: parent.uri, notFound: true };
-		} else {
-			p = parent;
+export interface OverflowThreadItem extends BaseThreadItem {
+	type: 'overflow';
+}
+
+export type ThreadItem = PostThreadItem | BlockedThreadItem | OverflowThreadItem;
+
+export interface AncestorOverflowItem {
+	$type: 'overflow';
+	uri: string;
+}
+
+export interface ThreadData {
+	post: SignalizedPost;
+	ancestors: (SignalizedPost | NotFoundPost | BlockedPost | AncestorOverflowItem)[];
+	descendants: ThreadItem[];
+	maxHeight: number;
+	maxDepth: number;
+}
+
+export const createThreadData = (uid: DID, data: Thread, maxDepth: number, maxHeight: number): ThreadData => {
+	/** This needs to be reversed! */
+	const ancestors: ThreadData['ancestors'] = [];
+	let descendants: ThreadData['descendants'];
+
+	// Walk upwards to get the ancestors
+	{
+		let parent = data.parent;
+		let height = 0;
+		while (parent) {
+			if (++height > maxHeight) {
+				const item = ancestors[ancestors.length - 1] as Exclude<
+					UnwrapArray<ThreadData['ancestors']>,
+					AncestorOverflowItem
+				>;
+
+				ancestors.push({ $type: 'overflow', uri: item.uri });
+				break;
+			}
+
+			if (parent.$type !== TypeThreadView) {
+				ancestors.push(parent);
+				break;
+			}
+
+			ancestors.push(mergePost(uid, parent.post));
+			parent = parent.parent;
 		}
 	}
 
-	if (replies) {
-		replies.sort(collateReplies(uid, post));
-
-		for (let i = 0, il = replies.length; i < il; i++) {
-			const reply = replies[i];
-			const type = reply.$type;
-
-			let child: UnwrapArray<SignalizedThread['replies']> | undefined;
-
-			if (type === TypeThreadView) {
-				child = createSignalizedThread(uid, reply);
-			} else if (type === TypeBlocked && reply.author.viewer!.blocking) {
-				child = reply;
-			}
-
-			if (child) {
-				if (r) {
-					r.push(child);
-				} else {
-					r = [child];
+	// Walk downwards to get the flattened descendants
+	{
+		const walk = (parent: Post, replies: Thread['replies'] | undefined, depth: number): ThreadItem[] => {
+			if (depth >= maxDepth) {
+				if (parent.replyCount && parent.replyCount > 0) {
+					return [{ type: 'overflow', parentUri: parent.uri, depth: depth, hasNextSibling: false }];
 				}
+
+				return [];
 			}
-		}
+
+			if (replies) {
+				const array: ThreadItem[] = [];
+				const items = replies.filter(filterReplies).sort(collateReplies(uid, parent));
+
+				for (let i = 0, il = items.length; i < il; i++) {
+					const reply = items[i];
+					const type = reply.$type;
+
+					if (type === TypeThreadView) {
+						const post = reply.post;
+						const children = walk(post, reply.replies, depth + 1);
+
+						array.push({
+							type: 'post',
+							item: mergePost(uid, post),
+							parentUri: parent.uri,
+							depth: depth,
+							hasNextSibling: i !== il - 1,
+							isEnd: children.length === 0,
+						});
+
+						push(array, children);
+					} else if (type === TypeBlocked) {
+						array.push({
+							type: 'block',
+							item: reply,
+							parentUri: parent.uri,
+							depth: depth,
+							hasNextSibling: i !== il - 1,
+						});
+					}
+				}
+
+				return array;
+			}
+
+			return [];
+		};
+
+		descendants = walk(data.post, data.replies, 0);
 	}
 
 	return {
-		$type: 'thread',
-		post: mergePost(uid, post),
-		parent: p,
-		replies: r,
+		post: mergePost(uid, data.post),
+
+		ancestors: ancestors.reverse(),
+		descendants: descendants,
+
+		maxHeight: maxHeight,
+		maxDepth: maxDepth,
 	};
 };
 
-export const createPlaceholderThread = (
-	post: SignalizedPost,
-	parent: SignalizedThread | undefined,
-): SignalizedThread => {
-	return {
-		$type: 'thread',
-		parent: parent,
-		post: post,
-		replies: undefined,
-	};
+const push = <T>(target: T[], source: T[]) => {
+	for (let i = 0, il = source.length; i < il; i++) {
+		const item = source[i];
+		target.push(item);
+	}
 };

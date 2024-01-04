@@ -9,7 +9,7 @@ import { extractAppLink } from '~/api/utils/links.ts';
 import { getCurrentTid } from '~/api/utils/tid.ts';
 import { getCollectionId, isDid } from '~/api/utils/misc.ts';
 
-import type { SignalizedThread } from '~/api/models/threads.ts';
+import type { ThreadData } from '~/api/models/threads.ts';
 import { getUploadedBlob, uploadBlob } from '~/api/mutations/upload-blob.ts';
 import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info.ts';
 import { type LinkMeta, getLinkMeta, getLinkMetaKey } from '~/api/queries/get-link-meta.ts';
@@ -530,7 +530,7 @@ const ComposerPane = () => {
 				if (posts.length > 0) {
 					const updatePostThread = produceThreadInsert(posts, parentUri);
 
-					queryClient.setQueriesData<SignalizedThread>(
+					queryClient.setQueriesData<ThreadData>(
 						{
 							queryKey: ['getPostThread', uid],
 						},

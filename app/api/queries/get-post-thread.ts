@@ -3,7 +3,7 @@ import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 import type { DID, RefOf } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
 
-import { type SignalizedThread, createSignalizedThread, createPlaceholderThread } from '../models/threads.ts';
+import { type ThreadData, createThreadData } from '../models/threads.ts';
 import { getCachedPost } from '../stores/posts.ts';
 
 import _getDid from './_did.ts';
@@ -41,27 +41,31 @@ export const getPostThread = async (ctx: QC<ReturnType<typeof getPostThreadKey>>
 		case 'app.bsky.feed.defs#notFoundPost':
 			throw new Error(`Post not found`);
 		case 'app.bsky.feed.defs#threadViewPost':
-			return createSignalizedThread(uid, data.thread);
+			return createThreadData(uid, data.thread, depth, height);
 	}
 };
 
-export const getInitialPostThread = (
-	key: ReturnType<typeof getPostThreadKey>,
-): SignalizedThread | undefined => {
-	const [, uid, actor, rkey] = key;
+export const getInitialPostThread = (key: ReturnType<typeof getPostThreadKey>): ThreadData | undefined => {
+	const [, uid, actor, rkey, maxDepth, maxHeight] = key;
 
 	const post = getCachedPost(uid, `at://${actor}/app.bsky.feed.post/${rkey}`);
 
 	if (post) {
-		let r: SignalizedThread | undefined;
-		let p: SignalizedThread | undefined;
+		/** This array needs to be reversed at the end */
+		const ancestors: ThreadData['ancestors'] = [];
 
-		let current = post;
-		while (current) {
-			const record = current.record.peek();
+		let curr = post;
+		let height = 0;
+		while (curr) {
+			const record = curr.record.peek();
 			const reply = record.reply;
 
 			if (!reply) {
+				break;
+			}
+
+			if (++height > maxHeight) {
+				ancestors.push({ $type: 'overflow', uri: curr.uri });
 				break;
 			}
 
@@ -72,15 +76,17 @@ export const getInitialPostThread = (
 				break;
 			}
 
-			if (p === undefined) {
-				r = p = createPlaceholderThread(parent, undefined);
-			} else {
-				p = p.parent = createPlaceholderThread(parent, undefined);
-			}
-
-			current = parent;
+			ancestors.push((curr = parent));
 		}
 
-		return createPlaceholderThread(post, r);
+		return {
+			post: post,
+
+			ancestors: ancestors.reverse(),
+			descendants: [],
+
+			maxHeight: maxHeight,
+			maxDepth: maxDepth,
+		};
 	}
 };
