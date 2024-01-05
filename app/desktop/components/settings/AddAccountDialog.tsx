@@ -4,6 +4,7 @@ import { createMutation } from '@pkg/solid-query';
 
 import { retrievePdsEndpoint } from '~/api/did.ts';
 import { multiagent } from '~/api/globals/agent.ts';
+import { DEFAULT_DATA_SERVERS } from '~/api/globals/defaults.ts';
 
 import { getProfile, getProfileKey } from '~/api/queries/get-profile.ts';
 
@@ -44,11 +45,16 @@ const AddAccountDialog = () => {
 
 			let $service = service();
 
-			// we don't know which PDS they are on, so let's find it.
 			if (!$service) {
-				$service = await retrievePdsEndpoint(queryClient, $identifier);
+				if ($identifier.includes('@')) {
+					// default to bsky.social if email address is used.
+					$service = DEFAULT_DATA_SERVERS[0].url;
+				} else {
+					// we don't know which PDS they are on, so let's find it.
+					$service = await retrievePdsEndpoint(queryClient, $identifier);
+				}
 			} else {
-				$service = `https://${$service}`;
+				$service = `https://${service}`;
 			}
 
 			const uid = await multiagent.login({
@@ -169,7 +175,11 @@ const AddAccountDialog = () => {
 								type="string"
 								required={isEmail()}
 								pattern="([a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*(?:\\.[a-zA-Z]+))"
-								placeholder={isEmail() ? `example.social` : `Leave blank for automatic provider detection`}
+								placeholder={
+									isEmail()
+										? `Leave blank to connect to bsky.social`
+										: `Leave blank for automatic provider detection`
+								}
 								class={/* @once */ Input()}
 							/>
 						</label>
