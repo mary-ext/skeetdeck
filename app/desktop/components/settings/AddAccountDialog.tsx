@@ -54,7 +54,7 @@ const AddAccountDialog = () => {
 					$service = await retrievePdsEndpoint(queryClient, $identifier);
 				}
 			} else {
-				$service = `https://${service}`;
+				$service = `https://${$service}`;
 			}
 
 			const uid = await multiagent.login({
