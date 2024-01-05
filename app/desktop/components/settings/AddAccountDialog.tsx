@@ -136,6 +136,7 @@ const AddAccountDialog = () => {
 								ref={model(identifier, setIdentifier)}
 								type="text"
 								required
+								title="Bluesky handle, DID, or email address"
 								pattern=".*\\S+.*"
 								placeholder="you.bsky.social"
 								autocomplete="username"
@@ -173,7 +174,7 @@ const AddAccountDialog = () => {
 							<input
 								ref={model(service, setService)}
 								type="string"
-								required={isEmail()}
+								title="Domain name for the provider"
 								pattern="([a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*(?:\\.[a-zA-Z]+))"
 								placeholder={
 									isEmail()
