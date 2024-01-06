@@ -56,9 +56,6 @@ importers:
       '@pkg/solid-freeze':
         specifier: workspace:^
         version: link:../packages/solid-freeze
-      '@pkg/solid-page-router':
-        specifier: workspace:^
-        version: link:../packages/solid-page-router
       '@pkg/solid-query':
         specifier: workspace:^
         version: link:../packages/solid-query
