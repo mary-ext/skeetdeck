@@ -1,8 +1,8 @@
 import { createRenderEffect, lazy } from 'solid-js';
 import { render } from 'solid-js/web';
 
+import { Router, configureRouter } from '@pkg/solid-page-router';
 import { QueryClientProvider } from '@pkg/solid-query';
-import { Router, useRoutes } from '@solidjs/router';
 
 import { useMediaQuery } from '~/utils/media-query.ts';
 
@@ -18,24 +18,24 @@ import { queryClient } from './globals/query.ts';
 
 import './styles/tailwind.css';
 
-const App = () => {
-	const Routes = useRoutes([
-		{
-			path: '/',
-			component: lazy(() => import('./views/Layout.tsx')),
-			children: [
-				{
-					path: '/',
-					component: lazy(() => import('./views/EmptyView.tsx')),
-				},
-				{
-					path: '/decks/:deck',
-					component: lazy(() => import('./views/DecksView.tsx')),
-				},
-			],
-		},
-	]);
+configureRouter([
+	{
+		path: '/',
+		component: lazy(() => import('./views/Layout.tsx')),
+		children: [
+			{
+				path: '/',
+				component: lazy(() => import('./views/EmptyView.tsx')),
+			},
+			{
+				path: '/decks/:deck',
+				component: lazy(() => import('./views/DecksView.tsx')),
+			},
+		],
+	},
+]);
 
+const App = () => {
 	createRenderEffect(() => {
 		const theme = preferences.ui.theme;
 
@@ -53,18 +53,16 @@ const App = () => {
 	});
 
 	return (
-		<Router>
-			<QueryClientProvider client={queryClient}>
-				<MetaProvider>
-					<SharedPreferences.Provider value={/* @once */ createSharedPreferencesObject()}>
-						<ComposerContextProvider>
-							<Routes />
-							<ModalProvider />
-						</ComposerContextProvider>
-					</SharedPreferences.Provider>
-				</MetaProvider>
-			</QueryClientProvider>
-		</Router>
+		<QueryClientProvider client={queryClient}>
+			<MetaProvider>
+				<SharedPreferences.Provider value={/* @once */ createSharedPreferencesObject()}>
+					<ComposerContextProvider>
+						<Router />
+						<ModalProvider />
+					</ComposerContextProvider>
+				</SharedPreferences.Provider>
+			</MetaProvider>
+		</QueryClientProvider>
 	);
 };
 

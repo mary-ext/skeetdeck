@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js';
 
-import { useNavigate } from '@solidjs/router';
+import { navigate } from '@pkg/solid-page-router';
 
 import { preferences } from '../../globals/settings.ts';
 
@@ -19,8 +19,6 @@ import { Input } from '~/com/primitives/input.ts';
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
 
 const AddDeckDialog = () => {
-	const navigate = useNavigate();
-
 	const [name, setName] = createSignal('');
 	const [emoji, setEmoji] = createSignal('⭐');
 

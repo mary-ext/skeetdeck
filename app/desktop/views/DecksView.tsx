@@ -1,6 +1,6 @@
 import { For, Show, Suspense, lazy } from 'solid-js';
 
-import { Navigate, useParams } from '@solidjs/router';
+import { type RouteComponentProps, Navigate } from '@pkg/solid-page-router';
 import { DragDropProvider, DragDropSensors, SortableProvider } from '@thisbeyond/solid-dnd';
 
 import { openModal } from '~/com/globals/modals.tsx';
@@ -23,8 +23,8 @@ import EditDeckDialog from '../components/settings/EditDeckDialog.tsx';
 
 const AddPaneDialog = lazy(() => import('../components/settings/AddPaneDialog.tsx'));
 
-const DecksView = () => {
-	const params = useParams<{ deck: string }>();
+const DecksView = (props: RouteComponentProps) => {
+	const params = props.params as { deck: string };
 
 	const deck = () => {
 		const deckId = params.deck;
@@ -34,7 +34,7 @@ const DecksView = () => {
 	};
 
 	return (
-		<Show when={deck()} keyed fallback={<Navigate href="/" />}>
+		<Show when={deck()} keyed fallback={<Navigate to="/" />}>
 			{(deck) => (
 				<div class="flex grow gap-1 overflow-x-auto bg-background-dark px-1">
 					<Title render={() => `Skeetdeck - ${deck.name}`} />

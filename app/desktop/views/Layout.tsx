@@ -2,7 +2,7 @@ import { For, Show, Suspense, lazy } from 'solid-js';
 
 import { offset } from '@floating-ui/dom';
 import { ShowFreeze } from '@pkg/solid-freeze';
-import { A, Outlet, useNavigate, useParams } from '@solidjs/router';
+import { type RouteComponentProps, location, navigate } from '@pkg/solid-page-router';
 
 import { multiagent } from '~/api/globals/agent.ts';
 import { getCurrentTid } from '~/api/utils/tid.ts';
@@ -56,9 +56,8 @@ const updateButton = Interactive({
 	class: `grid h-11 shrink-0 place-items-center text-lg text-green-600`,
 });
 
-const DashboardLayout = () => {
-	const params = useParams();
-	const navigate = useNavigate();
+const DashboardLayout = (props: RouteComponentProps) => {
+	const params = props.params as { deck: string | undefined };
 
 	const composer = useComposer();
 
@@ -157,22 +156,29 @@ const DashboardLayout = () => {
 					</button>
 
 					<For each={preferences.decks}>
-						{(deck) => (
-							<A
-								title={deck.name}
-								href={/* @once */ `/decks/${deck.id}`}
-								replace
-								class={
-									/* @once */ Interactive({
-										class: 'group relative grid h-11 shrink-0 place-items-center text-lg',
-									})
-								}
-								activeClass="is-active"
-							>
-								<div class="pointer-events-none absolute inset-0 hidden border-l-3 border-accent group-[.is-active]:block"></div>
-								<span>{deck.emoji}</span>
-							</A>
-						)}
+						{(deck) => {
+							const href = `/decks/${deck.id}`;
+
+							return (
+								<a
+									title={deck.name}
+									href={href}
+									class={
+										/* @once */ Interactive({
+											class: 'group relative grid h-11 shrink-0 place-items-center text-lg',
+										})
+									}
+									data-link="replace"
+								>
+									<div
+										class="pointer-events-none absolute inset-0 border-l-3 border-accent"
+										classList={{ [`hidden`]: location.pathname !== href }}
+									></div>
+
+									<span>{deck.emoji}</span>
+								</a>
+							);
+						}}
 					</For>
 				</div>
 
@@ -228,7 +234,7 @@ const DashboardLayout = () => {
 				<Outlet />
 			</Suspense> */}
 
-			<Outlet />
+			{props.children}
 		</div>
 	);
 };

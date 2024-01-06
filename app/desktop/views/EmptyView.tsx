@@ -1,6 +1,6 @@
 import { Match, Switch, batch } from 'solid-js';
 
-import { Navigate } from '@solidjs/router';
+import { Navigate } from '@pkg/solid-page-router';
 
 import type { DID } from '~/api/atp-schema.ts';
 import { getAccountData, multiagent } from '~/api/globals/agent.ts';
@@ -116,7 +116,7 @@ const IndexPage = () => {
 
 					<Match when={preferences.decks.length > 0}>
 						<Navigate
-							href={(() => {
+							to={(() => {
 								const deck = preferences.decks[0];
 								return `/decks/${deck.id}`;
 							})()}

@@ -9,9 +9,6 @@ overrides:
   string.prototype.matchall: npm:@nolyfill/string.prototype.matchall@latest
 
 patchedDependencies:
-  '@solidjs/router@0.8.4':
-    hash: 2juozfaksvcwbkonoaj2ws2ewm
-    path: patches/@solidjs__router@0.8.4.patch
   cborg@4.0.6:
     hash: dz6b6r6dc4jadjfng7vtgi53hy
     path: patches/cborg@4.0.6.patch
@@ -56,6 +53,9 @@ importers:
       '@pkg/solid-freeze':
         specifier: workspace:^
         version: link:../packages/solid-freeze
+      '@pkg/solid-page-router':
+        specifier: workspace:^
+        version: link:../packages/solid-page-router
       '@pkg/solid-query':
         specifier: workspace:^
         version: link:../packages/solid-query
@@ -65,9 +65,6 @@ importers:
       '@solid-primitives/event-listener':
         specifier: ^2.3.0
         version: 2.3.0(solid-js@1.8.8)
-      '@solidjs/router':
-        specifier: ^0.8.4
-        version: 0.8.4(patch_hash=2juozfaksvcwbkonoaj2ws2ewm)(solid-js@1.8.8)
       '@thisbeyond/solid-dnd':
         specifier: ^0.7.5
         version: 0.7.5(solid-js@1.8.8)
@@ -1947,15 +1944,6 @@ packages:
     dependencies:
       solid-js: 1.8.8
     dev: false
-
-  /@solidjs/router@0.8.4(patch_hash=2juozfaksvcwbkonoaj2ws2ewm)(solid-js@1.8.8):
-    resolution: {integrity: sha512-Gi/WVoVseGMKS1DBdT3pNAMgOzEOp6Q3dpgNd2mW9GUEnVocPmtyBjDvXwN6m7tjSGsqqfqJFXk7bm1hxabSRw==}
-    peerDependencies:
-      solid-js: ^1.5.3
-    dependencies:
-      solid-js: 1.8.8
-    dev: false
-    patched: true
 
   /@surma/rollup-plugin-off-main-thread@2.2.3:
     resolution: {integrity: sha512-lR8q/9W7hZpMWweNiAKU7NQerBnzQQLvi8qnTDU/fxItPhtZVMbPV3lbCwjhIlNBe9Bbr5V+KHshvWmVSG9cxQ==}
