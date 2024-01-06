@@ -1,0 +1,26 @@
+{
+	"private": true,
+	"type": "module",
+	"name": "@pkg/solid-page-router",
+	"version": "0.1.0",
+	"exports": {
+		".": {
+			"default": "./lib/index.tsx"
+		}
+	},
+	"scripts": {
+		"dev": "vite",
+		"unused:build": "rm -r types/; vite build && tsc"
+	},
+	"peerDependencies": {
+		"solid-js": "^1.8.5"
+	},
+	"devDependencies": {
+		"solid-js": "^1.8.8",
+		"vite": "^5.0.11",
+		"vite-plugin-solid": "^2.8.0"
+	},
+	"dependencies": {
+		"@pkg/solid-freeze": "workspace:^"
+	}
+}
