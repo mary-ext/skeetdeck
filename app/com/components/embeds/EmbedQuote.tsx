@@ -18,13 +18,13 @@ import EmbedImage from './EmbedImage.tsx';
 type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
 type PostRecord = Records['app.bsky.feed.post'];
 
-export interface EmbedRecordProps {
+export interface EmbedQuoteProps {
 	record: EmbeddedPostRecord;
 	/** Whether it should show a large UI for image embeds */
 	large?: boolean;
 }
 
-export interface EmbedRecordContentProps extends EmbedRecordProps {
+export interface EmbedQuoteContentProps extends EmbedQuoteProps {
 	mod: ModerationDecision | null;
 }
 
@@ -46,9 +46,9 @@ const getPostImages = (post: EmbeddedPostRecord) => {
 	}
 };
 
-const embedRecordInteractive = Interactive({ variant: 'muted', class: `w-full rounded-md` });
+const embedQuoteInteractive = Interactive({ variant: 'muted', class: `w-full rounded-md` });
 
-export const EmbedRecordContent = (props: EmbedRecordContentProps, interactive?: boolean) => {
+export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: boolean) => {
 	return (() => {
 		const post = props.record;
 		const large = props.large;
@@ -110,7 +110,7 @@ export const EmbedRecordContent = (props: EmbedRecordContentProps, interactive?:
 	}) as unknown as JSX.Element;
 };
 
-const EmbedRecord = (props: EmbedRecordProps) => {
+const EmbedQuote = (props: EmbedQuoteProps) => {
 	return (() => {
 		const post = props.record;
 		const author = post.author;
@@ -120,9 +120,9 @@ const EmbedRecord = (props: EmbedRecordProps) => {
 				{(mod) => (
 					<Link
 						to={{ type: LINK_POST, actor: author.did, rkey: getRecordId(post.uri) }}
-						class={embedRecordInteractive}
+						class={embedQuoteInteractive}
 					>
-						{/* @once */ EmbedRecordContent({ ...props, mod: mod }, true)}
+						{/* @once */ EmbedQuoteContent({ ...props, mod: mod }, true)}
 					</Link>
 				)}
 			</PostQuoteWarning>
@@ -130,4 +130,4 @@ const EmbedRecord = (props: EmbedRecordProps) => {
 	}) as unknown as JSX.Element;
 };
 
-export default EmbedRecord;
+export default EmbedQuote;

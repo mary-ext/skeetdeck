@@ -7,7 +7,7 @@ import EmbedFeed from './EmbedFeed.tsx';
 import EmbedImage from './EmbedImage.tsx';
 import EmbedLink from './EmbedLink.tsx';
 import EmbedList from './EmbedList.tsx';
-import EmbedRecord from './EmbedRecord.tsx';
+import EmbedQuote from './EmbedQuote.tsx';
 import EmbedRecordBlocked from './EmbedRecordBlocked.tsx';
 import EmbedRecordNotFound from './EmbedRecordNotFound.tsx';
 
@@ -89,7 +89,7 @@ const renderRecord = (
 		}
 
 		if (type === 'app.bsky.embed.record#viewRecord') {
-			return <EmbedRecord record={record} large={large()} />;
+			return <EmbedQuote record={record} large={large()} />;
 		}
 	}
 

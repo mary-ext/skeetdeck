@@ -25,7 +25,7 @@ import FavoriteIcon from '../../icons/baseline-favorite.tsx';
 import PersonIcon from '../../icons/baseline-person.tsx';
 import RepeatIcon from '../../icons/baseline-repeat.tsx';
 
-import EmbedRecord from '../embeds/EmbedRecord.tsx';
+import EmbedQuote from '../embeds/EmbedQuote.tsx';
 import Post from './Post.tsx';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
@@ -320,7 +320,7 @@ const renderAccessory = (
 						return (
 							// nice
 							<VirtualContainer estimateHeight={69.6} class="flex flex-col">
-								<EmbedRecord
+								<EmbedQuote
 									record={{
 										$type: 'app.bsky.embed.record#viewRecord',
 										uri: data().uri,

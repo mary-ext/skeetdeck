@@ -45,7 +45,7 @@ import EmojiFlyout from '~/com/components/emojis/EmojiFlyout.tsx';
 import { EmbedFeedContent } from '~/com/components/embeds/EmbedFeed.tsx';
 import { EmbedLinkContent } from '~/com/components/embeds/EmbedLink.tsx';
 import { EmbedListContent } from '~/com/components/embeds/EmbedList.tsx';
-import { EmbedRecordContent } from '~/com/components/embeds/EmbedRecord.tsx';
+import { EmbedQuoteContent } from '~/com/components/embeds/EmbedQuote.tsx';
 
 import AddIcon from '~/com/icons/baseline-add.tsx';
 import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down.tsx';
@@ -1305,7 +1305,7 @@ const EmbedRecord = (props: { uid: DID; uri: string }) => {
 				const record = data.record;
 
 				return (
-					<EmbedRecordContent
+					<EmbedQuoteContent
 						record={{
 							// @ts-expect-error
 							author: {
