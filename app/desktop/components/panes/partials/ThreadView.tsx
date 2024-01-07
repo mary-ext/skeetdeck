@@ -97,10 +97,12 @@ const ThreadView = (props: ThreadViewProps) => {
 							<Show
 								when={(() => {
 									if (thread.isPlaceholderData) {
-										const ancestors = data().ancestors;
-										const first = ancestors.length > 0 && ancestors[0];
+										const $data = data();
 
-										if (first && first instanceof SignalizedPost) {
+										const ancestors = $data.ancestors;
+										const first = ancestors.length > 0 ? ancestors[0] : $data.post;
+
+										if (first instanceof SignalizedPost) {
 											return first.record.value.reply;
 										}
 									}
