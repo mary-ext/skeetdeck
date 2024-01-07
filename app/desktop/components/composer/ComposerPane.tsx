@@ -895,6 +895,7 @@ const ComposerPane = () => {
 								<div class="flex shrink-0 flex-col items-center px-4">
 									<SwitchAccountAction value={context.author} onChange={(next) => (context.author = next)}>
 										<button
+											tabindex={index() === 0 ? 0 : -1}
 											disabled={multiagent.accounts.length < 2}
 											class="h-10 w-10 overflow-hidden rounded-full hover:opacity-80 disabled:pointer-events-none"
 										>
