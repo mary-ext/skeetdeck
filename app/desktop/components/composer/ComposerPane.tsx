@@ -29,6 +29,7 @@ import { preferences } from '~/desktop/globals/settings.ts';
 
 import { languageNames } from '~/utils/intl/display-names.ts';
 import { type PendingImage, compressPostImage } from '~/utils/image.ts';
+import { getUniqueId } from '~/utils/misc.ts';
 import { Signal, signal } from '~/utils/signals.ts';
 
 import { Button } from '~/com/primitives/button.ts';
@@ -130,6 +131,8 @@ class ComposeError extends Error {
 }
 
 const ComposerPane = () => {
+	const inputId = getUniqueId();
+
 	const queryClient = useQueryClient();
 	const context = useComposer();
 
@@ -649,7 +652,47 @@ const ComposerPane = () => {
 				<div class="shrink-0 bg-red-800 px-4 py-3 text-sm text-white">{log().m}</div>
 			)}
 
-			<fieldset class="flex min-w-0 grow flex-col gap-2 overflow-y-auto pb-4">
+			<fieldset
+				onKeyDown={(ev) => {
+					const key = ev.key;
+
+					if (ev.ctrlKey && (key === 'ArrowUp' || key === 'ArrowDown')) {
+						const target = ev.target;
+						const self = ev.currentTarget;
+
+						const closest = target.closest(`[data-targets~=${inputId}]`) as
+							| HTMLButtonElement
+							| HTMLTextAreaElement;
+
+						if (!closest) {
+							return;
+						}
+
+						ev.preventDefault();
+
+						const nodes = [
+							...self.querySelectorAll<HTMLButtonElement | HTMLTextAreaElement>(`[data-targets~=${inputId}]`),
+						].filter((node) => !node.disabled);
+
+						const pos = nodes.indexOf(closest);
+						const delta = key === 'ArrowUp' ? -1 : 1;
+
+						let nextPos = pos + delta;
+
+						if (nextPos < 0) {
+							nextPos = nodes.length - 1;
+						} else if (nextPos > nodes.length - 1) {
+							nextPos = 0;
+						}
+
+						const nextTarget = nodes[nextPos];
+						if (nextTarget) {
+							nextTarget.focus();
+						}
+					}
+				}}
+				class="flex min-w-0 grow flex-col gap-2 overflow-y-auto pb-4"
+			>
 				{state.reply !== undefined && (
 					<div>
 						<div class="flex items-center justify-between gap-4 px-4 pt-4">
@@ -909,6 +952,7 @@ const ComposerPane = () => {
 									<RichtextComposer
 										ref={(node) => {
 											textareaRef = node;
+											node.setAttribute('data-targets', inputId);
 										}}
 										uid={context.author}
 										value={draft.text}
@@ -1187,6 +1231,7 @@ const ComposerPane = () => {
 								posts.push(createPostState(preferences));
 							}}
 							class={/* @once */ Button({ variant: 'ghost', class: 'text-primary/85' })}
+							data-targets={inputId}
 						>
 							{/* Add some affordances to people attempting to click the plus button */}
 							<div class="absolute left-4 grid h-9 w-10 place-items-center">
