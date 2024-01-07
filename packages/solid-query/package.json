@@ -16,7 +16,7 @@
 		"solid-js": "^1.8.5"
 	},
 	"dependencies": {
-		"@tanstack/query-core": "^5.17.4"
+		"@tanstack/query-core": "5.15.5"
 	},
 	"devDependencies": {
 		"solid-js": "^1.8.8",

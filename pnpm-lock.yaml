@@ -177,8 +177,8 @@ importers:
   packages/solid-query:
     dependencies:
       '@tanstack/query-core':
-        specifier: ^5.17.4
-        version: 5.17.4
+        specifier: ^5.15.5
+        version: 5.15.5
     devDependencies:
       solid-js:
         specifier: ^1.8.8
@@ -1954,8 +1954,8 @@ packages:
       string.prototype.matchall: /@nolyfill/string.prototype.matchall@1.0.24
     dev: true
 
-  /@tanstack/query-core@5.17.4:
-    resolution: {integrity: sha512-1J2vINgJ6OH1/qgN/ouDjnRZc67TnKQ2mlIODKQr36Aa2vjMdH6Fb3pIbCRh5N6u95q6z1olp90n22eTlp9Ykg==}
+  /@tanstack/query-core@5.15.5:
+    resolution: {integrity: sha512-GDwVfu8RPswqVu27+zuIkZINru6CN++zzBbBK+OnAgzxK8N4Obdi+sG2P0EO8rJAOw0fLyQTsO4GCZ1djwaUCg==}
     dev: false
 
   /@thisbeyond/solid-dnd@0.7.5(solid-js@1.8.8):
