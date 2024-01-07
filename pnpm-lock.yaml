@@ -177,7 +177,7 @@ importers:
   packages/solid-query:
     dependencies:
       '@tanstack/query-core':
-        specifier: ^5.15.5
+        specifier: 5.15.5
         version: 5.15.5
     devDependencies:
       solid-js:
