@@ -139,7 +139,7 @@ const ThreadView = (props: ThreadViewProps) => {
 										return (
 											<Link
 												to={{ type: LINK_POST, actor: actor, rkey: rkey }}
-												class="flex h-10 w-full items-center gap-3 px-4 hover:bg-secondary/10"
+												class="flex h-10 w-full shrink-0 items-center gap-3 px-4 hover:bg-secondary/10"
 											>
 												<div class="flex h-full w-10 justify-center">
 													<div class="mt-3 border-l-2 border-dashed border-divider" />
