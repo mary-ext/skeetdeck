@@ -36,10 +36,6 @@ import SettingsRouterView from './settings-views/SettingsRouterView.tsx';
 
 const DONATION_LINK = 'https://github.com/mary-ext/langit/wiki/Donation';
 
-const GIT_SOURCE = import.meta.env.VITE_GIT_SOURCE;
-const GIT_COMMIT = import.meta.env.VITE_GIT_COMMIT;
-const GIT_BRANCH = import.meta.env.VITE_GIT_BRANCH;
-
 const SettingsDialog = () => {
 	const [view, setView] = createSignal<View>({ type: VIEW_ACCOUNTS });
 
