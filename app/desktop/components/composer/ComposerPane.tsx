@@ -609,6 +609,7 @@ const ComposerPane = () => {
 		if (hasContents()) {
 			makeEventListener(window, 'beforeunload', (ev) => {
 				ev.preventDefault();
+				context.open = true;
 			});
 		}
 	});
