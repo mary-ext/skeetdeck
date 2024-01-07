@@ -18,7 +18,7 @@ export interface NestedThreadProps {
 
 const NestedThread = (props: NestedThreadProps) => {
 	return (
-		<div class="flex flex-col gap-4 px-3 py-4">
+		<div class="flex flex-col gap-4 px-3 py-4 empty:hidden">
 			<For each={props.data.descendants}>
 				{(x) => {
 					return (
