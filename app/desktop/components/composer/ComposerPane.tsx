@@ -173,7 +173,7 @@ const ComposerPane = () => {
 			const draft = posts[i];
 			const length = getRtLength(draft.rt);
 
-			if (length > GRAPHEME_LIMIT || (draft.images.length < 1 && length < 1)) {
+			if (length > GRAPHEME_LIMIT || (!draft.external && draft.images.length < 1 && length < 1)) {
 				return true;
 			}
 		}
@@ -1180,7 +1180,7 @@ const ComposerPane = () => {
 						<button
 							disabled={(() => {
 								const last = posts[posts.length - 1];
-								return last.images.length === 0 && last.text.trim().length === 0;
+								return !last.external && last.images.length === 0 && last.text.trim().length === 0;
 							})()}
 							onClick={() => {
 								posts.push(createPostState(preferences));
