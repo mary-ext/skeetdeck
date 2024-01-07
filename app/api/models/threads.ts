@@ -1,6 +1,6 @@
 import type { DID, RefOf, UnionOf } from '../atp-schema.ts';
 
-import { mergePost, type SignalizedPost } from '../stores/posts.ts';
+import { mergePost, SignalizedPost } from '../stores/posts.ts';
 
 type Post = RefOf<'app.bsky.feed.defs#postView'>;
 type Thread = UnionOf<'app.bsky.feed.defs#threadViewPost'>;
@@ -115,12 +115,6 @@ export const createThreadData = (uid: DID, data: Thread, maxDepth: number, maxHe
 		let height = 0;
 		while (parent) {
 			if (++height > maxHeight) {
-				const item = ancestors[ancestors.length - 1] as Exclude<
-					UnwrapArray<ThreadData['ancestors']>,
-					AncestorOverflowItem
-				>;
-
-				ancestors.push({ $type: 'overflow', uri: item.uri });
 				break;
 			}
 
@@ -131,6 +125,14 @@ export const createThreadData = (uid: DID, data: Thread, maxDepth: number, maxHe
 
 			ancestors.push(mergePost(uid, parent.post));
 			parent = parent.parent;
+		}
+
+		if (height >= maxHeight) {
+			const last = ancestors[height - 1];
+
+			if (last instanceof SignalizedPost && last.record.value.reply) {
+				ancestors.push({ $type: 'overflow', uri: last.uri });
+			}
 		}
 	}
 
