@@ -90,7 +90,9 @@ const ApplyDraftDialog = (props: ApplyDraftDialogProps) => {
 				const shouldRemove = remove();
 
 				batch(() => {
-					if (draft.author in multiagent.accounts) {
+					const author = draft.author;
+
+					if (multiagent.accounts.some((x) => x.did === author)) {
 						context.author = draft.author;
 					}
 
