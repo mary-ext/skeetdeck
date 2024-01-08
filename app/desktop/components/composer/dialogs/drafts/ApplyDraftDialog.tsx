@@ -71,7 +71,7 @@ const ApplyDraftDialog = (props: ApplyDraftDialogProps) => {
 
 	return (
 		<ConfirmDialog
-			title={`Apply draft?`}
+			title={`Use draft?`}
 			unwrap
 			body={
 				<>
@@ -85,7 +85,7 @@ const ApplyDraftDialog = (props: ApplyDraftDialogProps) => {
 					</label>
 				</>
 			}
-			confirmation="Delete"
+			confirmation="Confirm"
 			onConfirm={() => {
 				const shouldRemove = remove();
 
