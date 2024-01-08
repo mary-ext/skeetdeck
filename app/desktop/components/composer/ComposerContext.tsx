@@ -3,7 +3,7 @@ import { createContext, useContext } from 'solid-js';
 import type { AtUri, DID } from '~/api/atp-schema.ts';
 import { systemLanguages } from '~/api/globals/platform.ts';
 
-import { type PreliminaryRichText, textToPrelimRt } from '~/api/richtext/composer.ts';
+import { type PreliminaryRichText, textToPrelimRt, getRtLength } from '~/api/richtext/composer.ts';
 
 import type { PreferencesSchema } from '~/desktop/globals/settings.ts';
 
@@ -108,4 +108,18 @@ export const createComposerState = (preferences: PreferencesSchema): ComposerSta
 		gate: { type: 'e' },
 		posts: [createPostState(preferences)],
 	};
+};
+
+export const isStateFilled = (state: ComposerState) => {
+	const posts = state.posts;
+
+	for (let i = 0, il = posts.length; i < il; i++) {
+		const draft = posts[i];
+
+		if (draft.images.length > 0 || getRtLength(draft.rt) > 0) {
+			return true;
+		}
+	}
+
+	return false;
 };

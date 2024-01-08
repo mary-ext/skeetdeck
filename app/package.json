@@ -20,6 +20,7 @@
 		"@solid-primitives/event-listener": "^2.3.0",
 		"@thisbeyond/solid-dnd": "^0.7.5",
 		"cborg": "^4.0.6",
+		"idb": "^8.0.0",
 		"immer": "^10.0.3",
 		"solid-floating-ui": "^0.2.1",
 		"solid-js": "^1.8.8",

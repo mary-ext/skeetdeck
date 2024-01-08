@@ -1,4 +1,4 @@
-import { type JSX, For, Show, batch, createEffect, createMemo, createSignal, untrack } from 'solid-js';
+import { type JSX, For, Show, batch, createEffect, createMemo, createSignal, untrack, lazy } from 'solid-js';
 import { unwrap } from 'solid-js/store';
 
 import { createQuery, useQueryClient } from '@pkg/solid-query';
@@ -63,7 +63,7 @@ import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 import SwitchAccountAction from '../flyouts/SwitchAccountAction.tsx';
 
-import { createComposerState, createPostState, useComposer } from './ComposerContext.tsx';
+import { createComposerState, createPostState, isStateFilled, useComposer } from './ComposerContext.tsx';
 import DummyPost from './DummyPost.tsx';
 import TagsInput from './TagInput.tsx';
 
@@ -77,6 +77,8 @@ import ThreadgateAction, {
 
 import ImageAltDialog from './dialogs/ImageAltDialog.tsx';
 import ImageAltReminderDialog from './dialogs/ImageAltReminderDialog.tsx';
+
+const ViewDraftsDialog = lazy(() => import('./dialogs/ViewDraftsDialog.tsx'));
 
 let cidPromise: Promise<typeof import('./utils/cid.ts')>;
 
@@ -155,17 +157,7 @@ const ComposerPane = () => {
 		};
 	});
 
-	const hasContents = createMemo(() => {
-		for (let i = 0, il = posts.length; i < il; i++) {
-			const draft = posts[i];
-
-			if (draft.images.length > 0 || getRtLength(draft.rt) > 0) {
-				return true;
-			}
-		}
-
-		return false;
-	});
+	const hasContents = createMemo(() => isStateFilled(state));
 
 	const isSubmitDisabled = createMemo(() => {
 		if (log().t === LogType.PENDING || (state.reply && !replying.data)) {
@@ -633,13 +625,24 @@ const ComposerPane = () => {
 				<div class="grow"></div>
 
 				{log().t !== LogType.PENDING ? (
-					<button
-						disabled={isSubmitDisabled()}
-						onClick={handleSubmitPrereq}
-						class={/* @once */ Button({ variant: 'primary', size: 'xs' })}
-					>
-						Post
-					</button>
+					<div class="contents">
+						<button
+							onClick={() => {
+								openModal(() => <ViewDraftsDialog />);
+							}}
+							class={/* @once */ Button({ variant: 'ghost', size: 'xs', class: 'text-primary/85' })}
+						>
+							Drafts
+						</button>
+
+						<button
+							disabled={isSubmitDisabled()}
+							onClick={handleSubmitPrereq}
+							class={/* @once */ Button({ variant: 'primary', size: 'xs' })}
+						>
+							Post
+						</button>
+					</div>
 				) : (
 					<>
 						<span class="px-2 text-de text-muted-fg">{log().m}</span>
