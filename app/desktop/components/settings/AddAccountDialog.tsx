@@ -35,18 +35,23 @@ const AddAccountDialog = () => {
 
 	const [advanced, setAdvanced] = createSignal(false);
 
-	const isEmail = createMemo(() => identifier().includes('@'));
+	const isEmail = createMemo(() => identifier().trim().indexOf('@') > 0);
 
 	const loginMutation = createMutation(() => ({
 		mutationKey: ['login'],
 		mutationFn: async () => {
-			const $identifier = identifier().trim();
-			const $password = password();
-
+			let $identifier = identifier().trim();
+			let $password = password();
 			let $service = service();
 
+			const isEmail = $identifier.indexOf('@') > 0;
+
+			if (!isEmail) {
+				$identifier = $identifier.replace(/^@/, '');
+			}
+
 			if (!$service) {
-				if ($identifier.includes('@')) {
+				if (isEmail) {
 					// default to bsky.social if email address is used.
 					$service = DEFAULT_DATA_SERVERS[0].url;
 				} else {
