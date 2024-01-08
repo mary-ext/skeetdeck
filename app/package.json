@@ -10,8 +10,8 @@
 	},
 	"dependencies": {
 		"@externdefs/bluesky-client": "workspace:*",
-		"@floating-ui/dom": "^1.5.3",
-		"@floating-ui/utils": "^0.1.6",
+		"@floating-ui/dom": "^1.5.4",
+		"@floating-ui/utils": "^0.2.1",
 		"@pkg/emoji-db": "workspace:^",
 		"@pkg/solid-freeze": "workspace:^",
 		"@pkg/solid-page-router": "workspace:^",
@@ -27,7 +27,7 @@
 		"solid-textarea-autosize": "^0.0.5"
 	},
 	"devDependencies": {
-		"@types/node": "^20.10.6",
+		"@types/node": "^20.10.7",
 		"autoprefixer": "^10.4.16",
 		"postcss": "^8.4.33",
 		"terser": "^5.26.0",
