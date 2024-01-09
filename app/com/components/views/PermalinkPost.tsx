@@ -15,9 +15,6 @@ import { LINK_LIST, LINK_POST_LIKED_BY, LINK_POST_REPOSTED_BY, LINK_PROFILE, Lin
 import RichTextRenderer from '../RichTextRenderer.tsx';
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 
-import PostEmbedWarning from '../moderation/PostEmbedWarning.tsx';
-import Embed from '../embeds/Embed.tsx';
-
 import AccountCheckIcon from '~/com/icons/baseline-account-check.tsx';
 import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble.tsx';
 import FavoriteIcon from '../../icons/baseline-favorite.tsx';
@@ -28,6 +25,8 @@ import RepeatIcon from '../../icons/baseline-repeat.tsx';
 import ShareIcon from '../../icons/baseline-share.tsx';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
+
+import Embed from '../embeds/Embed.tsx';
 
 import PostOverflowAction from '../items/posts/PostOverflowAction.tsx';
 import PostShareAction from '../items/posts/PostShareAction.tsx';
@@ -112,11 +111,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 				return null;
 			})()}
 
-			{post.embed.value && (
-				<PostEmbedWarning post={post} decision={decision()}>
-					<Embed embed={post.embed.value!} large />
-				</PostEmbedWarning>
-			)}
+			{post.embed.value && <Embed post={post} decision={decision} large />}
 
 			<div class="my-3 flex flex-wrap gap-1.5 text-sm empty:hidden">
 				{record().tags?.map((tag) => (

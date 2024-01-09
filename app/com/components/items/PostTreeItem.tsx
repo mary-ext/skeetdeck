@@ -21,7 +21,6 @@ import ShareIcon from '../../icons/baseline-share.tsx';
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import Embed from '../embeds/Embed.tsx';
-import PostEmbedWarning from '../moderation/PostEmbedWarning.tsx';
 import PostWarning from '../moderation/PostWarning.tsx';
 
 import PostOverflowAction from './posts/PostOverflowAction.tsx';
@@ -215,11 +214,7 @@ const PostContent = ({ post, permalink }: PostContentProps) => {
 						Show more
 					</Link>
 
-					{post.embed.value && (
-						<PostEmbedWarning post={post} decision={decision()}>
-							<Embed embed={post.embed.value!} />
-						</PostEmbedWarning>
-					)}
+					{post.embed.value && <Embed post={post} decision={decision} />}
 				</>
 			)}
 		</PostWarning>

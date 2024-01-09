@@ -22,10 +22,6 @@ import {
 import RichTextRenderer from '../RichTextRenderer.tsx';
 import TimeAgo from '../TimeAgo.tsx';
 
-import PostWarning from '../moderation/PostWarning.tsx';
-import PostEmbedWarning from '../moderation/PostEmbedWarning.tsx';
-import Embed from '../embeds/Embed.tsx';
-
 import FavoriteIcon from '../../icons/baseline-favorite.tsx';
 import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
 import RepeatIcon from '../../icons/baseline-repeat.tsx';
@@ -34,6 +30,9 @@ import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble.tsx';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
+
+import PostWarning from '../moderation/PostWarning.tsx';
+import Embed from '../embeds/Embed.tsx';
 
 import PostOverflowAction from './posts/PostOverflowAction.tsx';
 import PostShareAction from './posts/PostShareAction.tsx';
@@ -345,11 +344,7 @@ const PostContent = ({ post, postPermalink, timelineDid }: PostContentProps) => 
 						Show more
 					</Link>
 
-					{embed.value && (
-						<PostEmbedWarning post={post} decision={decision()}>
-							<Embed embed={embed.value} />
-						</PostEmbedWarning>
-					)}
+					{embed.value && <Embed post={post} decision={decision} />}
 				</>
 			)}
 		</PostWarning>

@@ -3,6 +3,12 @@ import { type Accessor, createMemo } from 'solid-js';
 import type { RefOf } from '~/api/atp-schema.ts';
 import { getCollectionId } from '~/api/utils/misc.ts';
 
+import type { ModerationDecision } from '~/api/moderation/action.ts';
+
+import type { SignalizedPost } from '~/api/stores/posts.ts';
+
+import PostEmbedWarning from '../moderation/PostEmbedWarning.tsx';
+
 import EmbedFeed from './EmbedFeed.tsx';
 import EmbedImage from './EmbedImage.tsx';
 import EmbedLink from './EmbedLink.tsx';
@@ -11,45 +17,52 @@ import EmbedQuote from './EmbedQuote.tsx';
 import EmbedRecordBlocked from './EmbedRecordBlocked.tsx';
 import EmbedRecordNotFound from './EmbedRecordNotFound.tsx';
 
-type BskyEmbed = NonNullable<RefOf<'app.bsky.feed.defs#postView'>['embed']>;
 type EmbeddedRecord = RefOf<'app.bsky.embed.record#view'>['record'];
 
 type EmbeddedImage = RefOf<'app.bsky.embed.images#viewImage'>;
 type EmbeddedLink = RefOf<'app.bsky.embed.external#viewExternal'>;
 
 export interface EmbedProps {
-	embed: BskyEmbed;
+	/** Expected to be static */
+	post: SignalizedPost;
+	decision: () => ModerationDecision | null;
 	/** Whether it should show a large UI for certain embeds */
 	large?: boolean;
 }
 
 const Embed = (props: EmbedProps) => {
+	const post = props.post;
+	const decision = props.decision;
+
 	const embeds = createMemo(() => {
-		const embed = props.embed;
-		const type = embed.$type;
+		const embed = post.embed.value;
 
 		let images: EmbeddedImage[] | undefined;
 		let link: EmbeddedLink | undefined;
 		let record: EmbeddedRecord | undefined;
 
-		if (type === 'app.bsky.embed.external#view') {
-			link = embed.external;
-		} else if (type === 'app.bsky.embed.images#view') {
-			images = embed.images;
-		} else if (type === 'app.bsky.embed.record#view') {
-			record = embed.record;
-		} else if (type === 'app.bsky.embed.recordWithMedia#view') {
-			const rec = embed.record.record;
+		if (embed) {
+			const type = embed.$type;
 
-			const media = embed.media;
-			const mediatype = media.$type;
+			if (type === 'app.bsky.embed.external#view') {
+				link = embed.external;
+			} else if (type === 'app.bsky.embed.images#view') {
+				images = embed.images;
+			} else if (type === 'app.bsky.embed.record#view') {
+				record = embed.record;
+			} else if (type === 'app.bsky.embed.recordWithMedia#view') {
+				const rec = embed.record.record;
 
-			record = rec;
+				const media = embed.media;
+				const mediatype = media.$type;
 
-			if (mediatype === 'app.bsky.embed.external#view') {
-				link = media.external;
-			} else if (mediatype === 'app.bsky.embed.images#view') {
-				images = media.images;
+				record = rec;
+
+				if (mediatype === 'app.bsky.embed.external#view') {
+					link = media.external;
+				} else if (mediatype === 'app.bsky.embed.images#view') {
+					images = media.images;
+				}
 			}
 		}
 
@@ -63,7 +76,11 @@ const Embed = (props: EmbedProps) => {
 
 				return [
 					link && <EmbedLink link={link} />,
-					images && <EmbedImage images={images} interactive />,
+					images && (
+						<PostEmbedWarning post={post} decision={decision()}>
+							<EmbedImage images={images} interactive />
+						</PostEmbedWarning>
+					),
 					record && renderRecord(record, () => props.large),
 				];
 			})()}

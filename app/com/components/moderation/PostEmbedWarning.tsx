@@ -42,7 +42,7 @@ const PostEmbedWarning = (props: PostEmbedWarningProps) => {
 			<button
 				disabled={!!forced}
 				onClick={() => setShow(!show())}
-				class="mt-3 flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider p-3 text-left hover:bg-secondary/30 disabled:pointer-events-none"
+				class="flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider p-3 text-left hover:bg-secondary/30 disabled:pointer-events-none"
 			>
 				<VisibilityIcon class="shrink-0 text-base text-muted-fg" />
 				<span class="grow text-sm">{title}</span>
