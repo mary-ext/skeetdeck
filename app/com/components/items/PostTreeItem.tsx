@@ -62,10 +62,7 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 					to={authorPermalink}
 					class="h-5 w-5 overflow-hidden rounded-full bg-muted-fg hover:opacity-80"
 				>
-					{(() => {
-						const avatar = author.avatar.value;
-						return <img src={avatar || DefaultAvatar} class="h-full w-full object-cover" />;
-					})()}
+					<img src={author.avatar.value || DefaultAvatar} class="h-full w-full object-cover" />
 				</Link>
 
 				{hasChildren && <div class="absolute -bottom-2 left-2 top-6 grow border-l-2 border-muted" />}
