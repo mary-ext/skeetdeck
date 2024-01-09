@@ -63,13 +63,13 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 
 				if (source.t === CauseLabel) {
 					Icon = VisibilityIcon;
-					title = renderLabelName(source.l.val);
+					title = `Quote contains ${renderLabelName(source.l.val)}`;
 				} else if (source.t === CauseMutedKeyword) {
 					Icon = FilterAltIcon;
 					title = source.n;
 				} else {
 					Icon = PersonOffIcon;
-					title = `Muted user`;
+					title = `Quote from muted user`;
 				}
 
 				return (
