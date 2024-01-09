@@ -12,7 +12,7 @@ const createProfileMuteMutation = (profile: SignalizedProfile) => {
 			const agent = await multiagent.connect(uid);
 
 			if (shouldMute) {
-				await agent.rpc.call('app.bsky.graph.unmuteActor', {
+				await agent.rpc.call('app.bsky.graph.muteActor', {
 					data: {
 						actor: profile.did,
 					},
@@ -20,7 +20,7 @@ const createProfileMuteMutation = (profile: SignalizedProfile) => {
 
 				return true;
 			} else {
-				await agent.rpc.call('app.bsky.graph.muteActor', {
+				await agent.rpc.call('app.bsky.graph.unmuteActor', {
 					data: {
 						actor: profile.did,
 					},
