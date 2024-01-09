@@ -138,7 +138,10 @@ const Post = (props: PostProps) => {
 									>
 										<span class="shrink-0 whitespace-pre">Replying to </span>
 										<span dir="auto" class="overflow-hidden text-ellipsis whitespace-nowrap">
-											{parent.author.displayName.value || parent.author.handle.value}
+											{(() => {
+												const author = parent.author;
+												return author.displayName.value || '@' + author.handle.value;
+											})()}
 										</span>
 									</Link>
 								</div>
