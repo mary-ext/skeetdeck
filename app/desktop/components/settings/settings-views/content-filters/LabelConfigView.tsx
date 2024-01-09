@@ -160,7 +160,7 @@ const LABEL_DEFS: LabelGroupDef[] = [
 		c: [
 			{
 				k: 'spam',
-				d: 'Low-quality mesasges',
+				d: 'Low-quality messages',
 			},
 		],
 	},
