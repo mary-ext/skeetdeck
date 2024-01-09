@@ -41,6 +41,7 @@ import ReplyAction from './posts/ReplyAction.tsx';
 import RepostAction from './posts/RepostAction.tsx';
 
 export interface PostProps {
+	/** Expected to be static */
 	post: SignalizedPost;
 	parent?: SignalizedPost;
 	reason?: SignalizedTimelineItem['reason'];
@@ -54,18 +55,14 @@ export interface PostProps {
 const Post = (props: PostProps) => {
 	const linking = useLinking();
 
-	const post = () => props.post;
+	const post = props.post;
 
-	const author = () => post().author;
-	const record = () => post().record.value;
+	const author = post.author;
+	const record = post.record;
+	const viewer = post.viewer;
 
-	const authorPermalink = (): ProfileLinking => {
-		return { type: LINK_PROFILE, actor: author().did };
-	};
-
-	const postPermalink = (): PostLinking => {
-		return { type: LINK_POST, actor: author().did, rkey: getRecordId(post().uri) };
-	};
+	const authorPermalink: ProfileLinking = { type: LINK_PROFILE, actor: author.did };
+	const postPermalink: PostLinking = { type: LINK_POST, actor: author.did, rkey: getRecordId(post.uri) };
 
 	const handleClick = (ev: MouseEvent | KeyboardEvent) => {
 		if (!props.interactive || !isElementClicked(ev)) {
@@ -73,7 +70,7 @@ const Post = (props: PostProps) => {
 		}
 
 		const alt = isElementAltClicked(ev);
-		linking.navigate(postPermalink(), alt);
+		linking.navigate(postPermalink, alt);
 	};
 
 	return (
@@ -148,13 +145,13 @@ const Post = (props: PostProps) => {
 							);
 						}
 
-						if (post().record.value.reply) {
+						if (record.value.reply) {
 							return (
 								<div class="-mt-1 mb-1 flex items-center gap-3 text-de text-muted-fg">
 									<div class="flex w-10 shrink-0 justify-end">
 										<ChatBubbleOutlinedIcon />
 									</div>
-									<Link to={postPermalink()} class="flex min-w-0 text-left font-medium hover:underline">
+									<Link to={postPermalink} class="flex min-w-0 text-left font-medium hover:underline">
 										Show full thread
 									</Link>
 								</div>
@@ -168,10 +165,10 @@ const Post = (props: PostProps) => {
 				<div class="flex shrink-0 flex-col items-center">
 					<Link
 						tabindex={-1}
-						to={authorPermalink()}
+						to={authorPermalink}
 						class="h-10 w-10 overflow-hidden rounded-full bg-muted-fg hover:opacity-80"
 					>
-						<img src={author().avatar.value || DefaultAvatar} class="h-full w-full" />
+						<img src={author.avatar.value || DefaultAvatar} class="h-full w-full" />
 					</Link>
 
 					{(() => {
@@ -185,25 +182,25 @@ const Post = (props: PostProps) => {
 					<div class="mb-0.5 flex items-center justify-between gap-4">
 						<div class="flex items-center overflow-hidden text-sm text-muted-fg">
 							<Link
-								to={authorPermalink()}
+								to={authorPermalink}
 								class="group flex max-w-full gap-1 overflow-hidden text-ellipsis whitespace-nowrap text-left"
 							>
-								{author().displayName.value && (
+								{author.displayName.value && (
 									<bdi class="overflow-hidden text-ellipsis group-hover:underline">
-										<span class="font-bold text-primary">{author().displayName.value}</span>
+										<span class="font-bold text-primary">{author.displayName.value}</span>
 									</bdi>
 								)}
 
 								<span class="block overflow-hidden text-ellipsis whitespace-nowrap">
-									@{author().handle.value}
+									@{author.handle.value}
 								</span>
 							</Link>
 
 							<span class="px-1">·</span>
 
-							<TimeAgo value={record().createdAt}>
+							<TimeAgo value={record.value.createdAt}>
 								{(relative, absolute) => (
-									<Link to={postPermalink()} title={absolute()} class="whitespace-nowrap hover:underline">
+									<Link to={postPermalink} title={absolute()} class="whitespace-nowrap hover:underline">
 										{relative()}
 									</Link>
 								)}
@@ -214,7 +211,7 @@ const Post = (props: PostProps) => {
 							if (props.interactive) {
 								return (
 									<div class="shrink-0">
-										<PostOverflowAction post={post()}>
+										<PostOverflowAction post={post}>
 											<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary/40">
 												<MoreHorizIcon />
 											</button>
@@ -232,7 +229,7 @@ const Post = (props: PostProps) => {
 							return (
 								<div class="mt-3 flex text-muted-fg">
 									<div class="min-w-0 grow basis-0">
-										<ReplyAction post={post()}>
+										<ReplyAction post={post}>
 											{(disabled) => (
 												<button class="group flex max-w-full items-end gap-0.5">
 													<div
@@ -242,7 +239,7 @@ const Post = (props: PostProps) => {
 														<ChatBubbleOutlinedIcon />
 													</div>
 													<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
-														{formatCompact(post().replyCount.value)}
+														{formatCompact(post.replyCount.value)}
 													</span>
 												</button>
 											)}
@@ -250,17 +247,17 @@ const Post = (props: PostProps) => {
 									</div>
 
 									<div class="min-w-0 grow basis-0">
-										<RepostAction post={post()}>
+										<RepostAction post={post}>
 											<button
 												class="group flex max-w-full grow basis-0 items-end gap-0.5"
-												classList={{ 'text-green-600': !!post().viewer.repost.value }}
+												classList={{ 'text-green-600': !!viewer.repost.value }}
 											>
 												<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40">
 													<RepeatIcon />
 												</div>
 
 												<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
-													{formatCompact(post().repostCount.value)}
+													{formatCompact(post.repostCount.value)}
 												</span>
 											</button>
 										</RepostAction>
@@ -268,22 +265,22 @@ const Post = (props: PostProps) => {
 
 									<div class="min-w-0 grow basis-0">
 										<button
-											onClick={() => updatePostLike(post(), !post().viewer.like.value)}
+											onClick={() => updatePostLike(post, !viewer.like.value)}
 											class="group flex max-w-full grow basis-0 items-end gap-0.5"
-											classList={{ 'is-active text-red-600': !!post().viewer.like.value }}
+											classList={{ 'is-active text-red-600': !!viewer.like.value }}
 										>
 											<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40">
 												<FavoriteOutlinedIcon class="group-[.is-active]:hidden" />
 												<FavoriteIcon class="hidden group-[.is-active]:block" />
 											</div>
 											<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
-												{formatCompact(post().likeCount.value)}
+												{formatCompact(post.likeCount.value)}
 											</span>
 										</button>
 									</div>
 
 									<div class="shrink-0">
-										<PostShareAction post={post()}>
+										<PostShareAction post={post}>
 											<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary/40">
 												<ShareIcon />
 											</button>
@@ -303,21 +300,23 @@ export default Post;
 
 // <PostContent />
 interface PostContentProps {
-	post: Accessor<SignalizedPost>;
-	postPermalink: Accessor<PostLinking>;
+	post: SignalizedPost;
+	postPermalink: PostLinking;
 	timelineDid: Accessor<DID | undefined>;
 }
 
 const PostContent = ({ post, postPermalink, timelineDid }: PostContentProps) => {
+	const embed = post.embed;
+
 	let content: HTMLDivElement | undefined;
 
 	return (
-		<PostWarning post={post()} timelineDid={timelineDid()}>
+		<PostWarning post={post} timelineDid={timelineDid()}>
 			{(decision) => (
 				<>
 					<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
 						<RichTextRenderer
-							item={post()}
+							item={post}
 							get={(item) => {
 								const record = item.record.value;
 								return { t: record.text, f: record.facets };
@@ -327,27 +326,25 @@ const PostContent = ({ post, postPermalink, timelineDid }: PostContentProps) => 
 
 					<Link
 						ref={(node) => {
-							node.style.display = post().$truncated !== false ? 'block' : 'none';
+							node.style.display = post.$truncated !== false ? 'block' : 'none';
 
 							createEffect(() => {
-								const $post = post();
 								const delta = content!.scrollHeight - content!.clientHeight;
+								const next = delta > 10 && !!post.record.value.text;
 
-								const next = delta > 10 && !!$post.record.value.text;
-
-								$post.$truncated = next;
+								post.$truncated = next;
 								node.style.display = next ? 'block' : 'none';
 							});
 						}}
-						to={postPermalink()}
+						to={postPermalink}
 						class="text-sm text-accent hover:underline"
 					>
 						Show more
 					</Link>
 
-					{post().embed.value && (
-						<PostEmbedWarning post={post()} decision={decision()}>
-							<Embed embed={post().embed.value!} />
+					{embed.value && (
+						<PostEmbedWarning post={post} decision={decision()}>
+							<Embed embed={embed.value} />
 						</PostEmbedWarning>
 					)}
 				</>
