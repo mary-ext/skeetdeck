@@ -80,11 +80,11 @@ const Notification = (props: NotificationProps) => {
 
 					return (
 						<Switch>
-							<Match when={post.data}>
+							<Match when={post.data} keyed>
 								{(post) => {
 									return (
 										<VirtualContainer estimateHeight={118.3}>
-											<Post interactive post={post()} highlight={!data.read} />
+											<Post interactive post={post} highlight={!data.read} />
 										</VirtualContainer>
 									);
 								}}
