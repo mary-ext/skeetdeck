@@ -96,7 +96,7 @@ const buildHtml = (rt: PreliminaryRichText) => {
 		} else if (type === 'escape') {
 			str += `<span class=opacity-50>` + escape(raw, false) + `</span>`;
 		} else if (type === 'mdlink') {
-			const className = segment.valid ? `text-accent` : ``;
+			const className = segment.valid ? `text-accent` : `text-red-500`;
 
 			str +=
 				`<span class=opacity-50>[</span>` +
