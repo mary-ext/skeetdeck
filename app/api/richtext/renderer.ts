@@ -67,3 +67,20 @@ export const isLinkValid = (uri: string, text: string) => {
 		normalized.startsWith(expectedHost)
 	);
 };
+
+export const safeUrlParse = (uri: string) => {
+	let url: URL;
+	let protocol: string;
+	try {
+		url = new URL(uri);
+		protocol = url.protocol;
+
+		if (protocol !== 'https:' && protocol !== 'http:') {
+			return null;
+		}
+	} catch {
+		return null;
+	}
+
+	return url;
+};

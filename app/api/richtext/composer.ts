@@ -4,7 +4,7 @@ import type { DID } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
 
 import { asciiLen, graphemeLen } from './intl.ts';
-import { toShortUrl } from './renderer.ts';
+import { isLinkValid, safeUrlParse, toShortUrl } from './renderer.ts';
 
 import type { Facet } from './types.ts';
 
@@ -27,6 +27,14 @@ interface LinkSegment {
 	uri: string;
 }
 
+interface MdLinkSegment {
+	type: 'mdlink';
+	raw: string;
+	text: string;
+	uri: string;
+	valid: boolean;
+}
+
 interface MentionSegment {
 	type: 'mention';
 	raw: string;
@@ -41,7 +49,13 @@ interface TagSegment {
 	tag: string;
 }
 
-export type PreliminarySegment = TextSegment | EscapeSegment | LinkSegment | MentionSegment | TagSegment;
+export type PreliminarySegment =
+	| TextSegment
+	| EscapeSegment
+	| LinkSegment
+	| MdLinkSegment
+	| MentionSegment
+	| TagSegment;
 
 export interface PreliminaryRichText {
 	segments: PreliminarySegment[];
@@ -54,6 +68,11 @@ const enum CharCode {
 	AT = 64,
 	TAG = 35,
 
+	OSQUARE = 91,
+	ESQUARE = 93,
+	OPAREN = 40,
+	EPAREN = 41,
+
 	NEWLINE = 10,
 	SPACE = 32,
 
@@ -62,7 +81,6 @@ const enum CharCode {
 
 	COMMA = 44,
 	DOT = 46,
-	EPAREN = 41,
 	SEMICOLON = 59,
 
 	H = 104,
@@ -75,6 +93,7 @@ const WS_RE = / +(?=\n)/g;
 export const EOF_WS_RE = /\s+$| +(?=\n)/g;
 
 const MENTION_RE = /[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]+)/y;
+const MDLINK_RE = /(.+?)\]\((.+?)\)/y;
 
 const ESCAPE_SEGMENT: EscapeSegment = { type: 'escape', raw: '\\', text: '' };
 
@@ -126,6 +145,28 @@ export const parseRt = (source: string): PreliminaryRichText => {
 			segments.push({ type: 'tag', raw: raw, text: raw, tag: tag });
 
 			continue;
+		} else if (look === CharCode.OSQUARE) {
+			MDLINK_RE.lastIndex = idx + 1;
+			const match = MDLINK_RE.exec(source);
+
+			if (!match) {
+				break jump;
+			}
+
+			const raw = '[' + match[0];
+			const text = match[1];
+			const uri = match[2];
+
+			const urlp = safeUrlParse(uri);
+
+			idx = idx + raw.length;
+			segments.push({ type: 'mdlink', raw: raw, text: text, uri: uri, valid: urlp !== null });
+
+			if (urlp) {
+				links.push(urlp.href);
+			}
+
+			continue;
 		}
 
 		jump: {
@@ -134,7 +175,7 @@ export const parseRt = (source: string): PreliminaryRichText => {
 			for (; end < len; end++) {
 				const char = c(end);
 
-				if (char === CharCode.AT || char === CharCode.TAG) {
+				if (char === CharCode.AT || char === CharCode.TAG || char === CharCode.OSQUARE) {
 					const prev = c(end - 1);
 
 					if (prev === CharCode.ESCAPE) {
@@ -159,8 +200,8 @@ export const parseRt = (source: string): PreliminaryRichText => {
 				// Auto-link detection
 				if (
 					char === CharCode.COLON &&
-					// we have 3 succeeding characters
-					len - end >= 4 &&
+					// we have 3 succeeding characters, beware that end is still on colon
+					len - end >= 3 + 1 &&
 					// the first two is //
 					c(end + 1) === CharCode.FSLASH &&
 					c(end + 2) === CharCode.FSLASH &&
@@ -304,7 +345,7 @@ export const finalizeRt = async (uid: DID, rt: PreliminaryRichText) => {
 
 		const type = segment.type;
 
-		if (type === 'link') {
+		if (type === 'link' || type === 'mdlink') {
 			facets.push({
 				index: index,
 				features: [{ $type: 'app.bsky.richtext.facet#link', uri: segment.uri }],
