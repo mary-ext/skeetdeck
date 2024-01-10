@@ -1,4 +1,5 @@
 import Banner from '~/com/assets/banner.jpg?url';
+import { registration } from '~/utils/service-worker.ts';
 
 const BRAND_NAME = import.meta.env.VITE_BRAND_NAME;
 const BRAND_VERSION = import.meta.env.VITE_BRAND_VERSION;
@@ -50,6 +51,25 @@ const AboutView = () => {
 					<br />
 					Licensed under MIT License
 				</p>
+
+				<hr class="my-4 border-divider" />
+
+				<div class="flex flex-wrap gap-4 text-de">
+					<button
+						title="Unregisters the service worker, this will reload the app."
+						disabled={!registration()}
+						onClick={() => {
+							const $registration = registration();
+
+							if ($registration) {
+								$registration.unregister().finally(() => location.reload());
+							}
+						}}
+						class="text-accent hover:underline disabled:pointer-events-none disabled:opacity-50"
+					>
+						Unregister service worker
+					</button>
+				</div>
 			</div>
 		</div>
 	);
