@@ -190,7 +190,7 @@ export const parseRt = (source: string): PreliminaryRichText => {
 						continue;
 					}
 
-					if (prev !== CharCode.SPACE && prev !== CharCode.NEWLINE) {
+					if (char !== CharCode.OSQUARE && prev !== CharCode.SPACE && prev !== CharCode.NEWLINE) {
 						continue;
 					}
 
