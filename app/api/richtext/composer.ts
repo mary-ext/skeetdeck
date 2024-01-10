@@ -4,7 +4,7 @@ import type { DID } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
 
 import { asciiLen, graphemeLen } from './intl.ts';
-import { isLinkValid, safeUrlParse, toShortUrl } from './renderer.ts';
+import { safeUrlParse, toShortUrl } from './renderer.ts';
 
 import type { Facet } from './types.ts';
 
@@ -93,7 +93,6 @@ const WS_RE = / +(?=\n)/g;
 export const EOF_WS_RE = /\s+$| +(?=\n)/g;
 
 const MENTION_RE = /[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]+)/y;
-const MDLINK_RE = /(.+?)\]\((.+?)\)/y;
 
 const ESCAPE_SEGMENT: EscapeSegment = { type: 'escape', raw: '\\', text: '' };
 
@@ -146,24 +145,57 @@ export const parseRt = (source: string): PreliminaryRichText => {
 
 			continue;
 		} else if (look === CharCode.OSQUARE) {
-			MDLINK_RE.lastIndex = idx + 1;
-			const match = MDLINK_RE.exec(source);
+			let textStart = idx + 1;
+			let textEnd = textStart;
 
-			if (!match) {
-				break jump;
+			{
+				// Loop until we find ]
+				for (; textEnd < len; textEnd++) {
+					const char = c(textEnd);
+
+					if (char === CharCode.ESQUARE) {
+						break;
+					}
+				}
+
+				// Check if the next characters are ] and (
+				if (c(textEnd) !== CharCode.ESQUARE || c(textEnd + 1) !== CharCode.OPAREN) {
+					break jump;
+				}
 			}
 
-			const raw = '[' + match[0];
-			const text = match[1];
-			const uri = match[2];
+			const text = source.slice(textStart, textEnd);
 
-			const urlp = safeUrlParse(uri);
+			// Account for ] and (
+			let urlStart = textEnd + 2;
+			let urlEnd = urlStart;
 
-			idx = idx + raw.length;
-			segments.push({ type: 'mdlink', raw: raw, text: text, uri: uri, valid: urlp !== null });
+			{
+				// Loop until we find )
+				for (; urlEnd < len; urlEnd++) {
+					const char = c(urlEnd);
 
-			if (urlp) {
-				links.push(urlp.href);
+					if (char === CharCode.EPAREN) {
+						break;
+					}
+				}
+
+				if (c(urlEnd) !== CharCode.EPAREN) {
+					break jump;
+				}
+			}
+
+			const uri = source.slice(urlStart, urlEnd);
+			const urip = safeUrlParse(uri);
+
+			// Account for )
+			const raw = source.slice(idx, urlEnd + 1);
+			idx = urlEnd + 1;
+
+			segments.push({ type: 'mdlink', raw: raw, text: text, uri: uri, valid: urip !== null });
+
+			if (urip) {
+				links.push(urip.href);
 			}
 
 			continue;
