@@ -329,8 +329,6 @@ export const finalizeRt = async (uid: DID, rt: PreliminaryRichText) => {
 	const agent = await multiagent.connect(uid);
 
 	const segments = rt.segments;
-
-	const text = getRtText(rt);
 	const facets: Facet[] = [];
 
 	let utf8Length = 0;
@@ -340,7 +338,7 @@ export const finalizeRt = async (uid: DID, rt: PreliminaryRichText) => {
 
 		const index = {
 			byteStart: utf8Length,
-			byteEnd: (utf8Length += getUtf8Length(text)),
+			byteEnd: (utf8Length += getUtf8Length(segment.text)),
 		};
 
 		const type = segment.type;
@@ -379,5 +377,5 @@ export const finalizeRt = async (uid: DID, rt: PreliminaryRichText) => {
 		}
 	}
 
-	return { text: text, facets: facets };
+	return { text: getRtText(rt), facets: facets };
 };
