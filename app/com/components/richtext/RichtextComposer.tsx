@@ -64,14 +64,45 @@ const findNodePosition = (node: Node, position: number): { node: Node; position:
 	return;
 };
 
-const createText = document.createTextNode.bind(document);
+const escape = (str: string, attr: boolean) => {
+	let escaped = '';
+	let last = 0;
 
-const createSpan = (text: string, className: string) => {
-	const span = document.createElement('span');
-	span.textContent = text;
-	span.className = className;
+	for (let idx = 0, len = str.length; idx < len; idx++) {
+		const char = str.charCodeAt(idx);
 
-	return span;
+		if (char === 38 || (attr ? char === 34 : char === 60)) {
+			escaped += str.substring(last, idx) + ('&#' + char + ';');
+			last = idx + 1;
+		}
+	}
+
+	return escaped + str.substring(last);
+};
+
+const buildHtml = (rt: PreliminaryRichText) => {
+	const segments = rt.segments;
+
+	let str = '';
+
+	for (let i = 0, ilen = segments.length; i < ilen; i++) {
+		const segment = segments[i];
+
+		const type = segment.type;
+		const raw = segment.raw;
+
+		const escaped = escape(raw, false);
+
+		if (type === 'link' || type === 'mention' || type === 'tag') {
+			str += `<span class=text-accent>` + escaped + `</span>`;
+		} else if (type === 'escape') {
+			str += `<span class=opacity-50>` + escaped + `</span>`;
+		} else {
+			str += escaped;
+		}
+	}
+
+	return str;
 };
 
 const enum Suggestion {
@@ -231,50 +262,11 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 
 	return (
 		<div class="group relative">
-			<div ref={renderer} class="absolute inset-0 z-0 whitespace-pre-wrap break-words pb-2 pr-4 text-base">
-				{(() => {
-					// const MAX_LEN = 300;
-
-					const nodes: JSX.Element = [];
-					const segments = props.rt.segments;
-
-					// let len = 0;
-
-					for (let i = 0, il = segments.length; i < il; i++) {
-						const segment = segments[i];
-
-						const orig = segment.orig;
-						const feature = segment.feature;
-
-						// const textLen = segment.text.length;
-
-						// if (len > MAX_LEN) {
-						// 	nodes.push(createSpan(orig, `bg-red-600 text-white`));
-						// } else if (len + textLen > MAX_LEN) {
-						// 	const x = textLen - (len + textLen - (orig.length - textLen) - MAX_LEN);
-						// 	const first = orig.slice(0, x);
-						// 	const second = orig.slice(x);
-
-						// 	if (feature) {
-						// 		nodes.push(createSpan(first, `text-accent`));
-						// 	} else {
-						// 		nodes.push(createText(first));
-						// 	}
-
-						// 	nodes.push(createSpan(second, `bg-red-600 text-white`));
-						// } else
-						if (feature) {
-							nodes.push(createSpan(orig, `text-accent`));
-						} else {
-							nodes.push(createText(orig));
-						}
-
-						// len += textLen;
-					}
-
-					return nodes;
-				})()}
-			</div>
+			<div
+				ref={renderer}
+				class="absolute inset-0 z-0 whitespace-pre-wrap break-words pb-2 pr-4 text-base"
+				innerHTML={buildHtml(props.rt)}
+			></div>
 
 			<TextareaAutosize
 				ref={(node) => {

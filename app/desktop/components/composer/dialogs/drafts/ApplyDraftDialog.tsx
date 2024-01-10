@@ -1,7 +1,7 @@
 import { batch, createSignal } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent.ts';
-import { type PreliminaryRichText, textToPrelimRt } from '~/api/richtext/composer.ts';
+import { type PreliminaryRichText, parseRt } from '~/api/richtext/composer.ts';
 
 import { modelChecked } from '~/utils/input.ts';
 import { signal } from '~/utils/signals.ts';
@@ -27,7 +27,7 @@ const hydratePostState = (state: SerializedPostState): PostState => {
 			const next = this.text;
 
 			if (cached !== (cached = next)) {
-				rt = textToPrelimRt(next);
+				rt = parseRt(next);
 			}
 
 			return rt;

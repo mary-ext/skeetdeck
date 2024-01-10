@@ -3,7 +3,7 @@ import { createContext, useContext } from 'solid-js';
 import type { AtUri, DID } from '~/api/atp-schema.ts';
 import { systemLanguages } from '~/api/globals/platform.ts';
 
-import { type PreliminaryRichText, textToPrelimRt, getRtLength } from '~/api/richtext/composer.ts';
+import { type PreliminaryRichText, parseRt, getRtLength } from '~/api/richtext/composer.ts';
 
 import type { PreferencesSchema } from '~/desktop/globals/settings.ts';
 
@@ -88,7 +88,7 @@ export const createPostState = (preferences: PreferencesSchema): PostState => {
 			const next = this.text;
 
 			if (cached !== (cached = next)) {
-				rt = textToPrelimRt(next);
+				rt = parseRt(next);
 			}
 
 			return rt;

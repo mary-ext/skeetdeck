@@ -17,14 +17,3 @@ export interface RichTextSegment {
 	mention?: MentionFeature;
 	tag?: TagFeature;
 }
-
-export interface PreliminaryFacet {
-	start: number;
-	end: number;
-	feature: LinkFeature | TagFeature | MentionFeature | UnresolvedMentionFeature;
-}
-
-export interface PreliminarySegment {
-	text: string;
-	feature: PreliminaryFacet['feature'];
-}
