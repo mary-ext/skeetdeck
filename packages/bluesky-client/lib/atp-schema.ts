@@ -659,29 +659,6 @@ export interface Queries {
 		};
 	};
 	/**
-	 * DEPRECATED: will be removed soon. Use a feed generator alternative.
-	 * @deprecated
-	 */
-	'app.bsky.unspecced.getPopular': {
-		params: {
-			/**
-			 * @default false
-			 */
-			includeNsfw?: boolean;
-			/**
-			 * Minimum: 1 \
-			 * Maximum: 100
-			 * @default 50
-			 */
-			limit?: number;
-			cursor?: string;
-		};
-		response: {
-			cursor?: string;
-			feed: RefOf<'app.bsky.feed.defs#feedViewPost'>[];
-		};
-	};
-	/**
 	 * An unspecced view of globally popular feed generators.
 	 */
 	'app.bsky.unspecced.getPopularFeedGenerators': {
@@ -798,6 +775,17 @@ export interface Queries {
 			did: DID;
 		};
 		response: RefOf<'com.atproto.admin.defs#accountView'>;
+	};
+	/**
+	 * Get details about some accounts.
+	 */
+	'com.atproto.admin.getAccountInfos': {
+		params: {
+			dids: DID[];
+		};
+		response: {
+			infos: RefOf<'com.atproto.admin.defs#accountView'>[];
+		};
 	};
 	/**
 	 * Get an admin view of invite codes.
@@ -957,6 +945,10 @@ export interface Queries {
 			 * Get subjects that were taken down
 			 */
 			takendown?: boolean;
+			/**
+			 * Get subjects in unresolved appealed status
+			 */
+			appealed?: boolean;
 			/**
 			 * Minimum: 1 \
 			 * Maximum: 100
@@ -2533,7 +2525,8 @@ export interface Objects {
 			| UnionOf<'com.atproto.admin.defs#modEventLabel'>
 			| UnionOf<'com.atproto.admin.defs#modEventAcknowledge'>
 			| UnionOf<'com.atproto.admin.defs#modEventEscalate'>
-			| UnionOf<'com.atproto.admin.defs#modEventMute'>;
+			| UnionOf<'com.atproto.admin.defs#modEventMute'>
+			| UnionOf<'com.atproto.admin.defs#modEventResolveAppeal'>;
 		subject:
 			| UnionOf<'com.atproto.admin.defs#repoView'>
 			| UnionOf<'com.atproto.admin.defs#repoViewNotFound'>
@@ -2575,7 +2568,15 @@ export interface Objects {
 		lastReviewedBy?: DID;
 		lastReviewedAt?: string;
 		lastReportedAt?: string;
+		/**
+		 * Timestamp referencing when the author of the subject appealed a moderation action
+		 */
+		lastAppealedAt?: string;
 		takendown?: boolean;
+		/**
+		 * True indicates that the a previously taken moderator action was appealed against, by the author of the content. False indicates last appeal was resolved by moderators.
+		 */
+		appealed?: boolean;
 		suspendUntil?: string;
 	};
 	'com.atproto.admin.defs#reportViewDetail': {
@@ -2621,6 +2622,7 @@ export interface Objects {
 		did: DID;
 		handle: Handle;
 		email?: string;
+		relatedRecords?: unknown[];
 		indexedAt: string;
 		invitedBy?: RefOf<'com.atproto.server.defs#inviteCode'>;
 		invites?: RefOf<'com.atproto.server.defs#inviteCode'>[];
@@ -2708,6 +2710,15 @@ export interface Objects {
 	'com.atproto.admin.defs#modEventReverseTakedown': {
 		/**
 		 * Describe reasoning behind the reversal.
+		 */
+		comment?: string;
+	};
+	/**
+	 * Resolve appeal on a subject
+	 */
+	'com.atproto.admin.defs#modEventResolveAppeal': {
+		/**
+		 * Describe resolution.
 		 */
 		comment?: string;
 	};
@@ -2838,6 +2849,7 @@ export interface Objects {
 		| 'com.atproto.moderation.defs#reasonSexual'
 		| 'com.atproto.moderation.defs#reasonRude'
 		| 'com.atproto.moderation.defs#reasonOther'
+		| 'com.atproto.moderation.defs#reasonAppeal'
 		| (string & {});
 	'com.atproto.moderation.defs#reasonSpam': 'com.atproto.moderation.defs#reasonSpam';
 	'com.atproto.moderation.defs#reasonViolation': 'com.atproto.moderation.defs#reasonViolation';
@@ -2845,6 +2857,7 @@ export interface Objects {
 	'com.atproto.moderation.defs#reasonSexual': 'com.atproto.moderation.defs#reasonSexual';
 	'com.atproto.moderation.defs#reasonRude': 'com.atproto.moderation.defs#reasonRude';
 	'com.atproto.moderation.defs#reasonOther': 'com.atproto.moderation.defs#reasonOther';
+	'com.atproto.moderation.defs#reasonAppeal': 'com.atproto.moderation.defs#reasonAppeal';
 	/**
 	 * Create a new record.
 	 */
