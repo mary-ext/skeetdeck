@@ -56,7 +56,7 @@ export const DialogHeader = (props: DialogHeaderProps = {}) => {
 export interface DialogTitleProps {}
 
 export const DialogTitle = (_props: DialogTitleProps = {}) => {
-	let cn = `grow text-base font-bold`;
+	let cn = `grow overflow-hidden text-ellipsis whitespace-nowrap text-base font-bold`;
 
 	return cn;
 };
