@@ -192,7 +192,7 @@ const Post = (props: PostProps) => {
 								<div
 									class={
 										/* @once */
-										`absolute -right-1 top-7 rounded-full bg-background ` +
+										`absolute right-0 top-6 rounded-full bg-background ` +
 										(verdict.a ? `text-red-500` : `text-muted-fg`)
 									}
 								>
