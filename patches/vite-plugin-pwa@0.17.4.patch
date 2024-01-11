@@ -1,0 +1,37 @@
+diff --git a/dist/client/build/register.js b/dist/client/build/register.js
+index 0dc588160b1a58778ebc02757d9757e45cb212e3..aef9ecfc0eee73fd8406bfa3025e38ba2468064c 100644
+--- a/dist/client/build/register.js
++++ b/dist/client/build/register.js
+@@ -7,6 +7,7 @@ function registerSW(options = {}) {
+   const {
+     immediate = false,
+     onNeedRefresh,
++    onBeginUpdate,
+     onOfflineReady,
+     onRegistered,
+     onRegisteredSW,
+@@ -71,6 +72,12 @@ function registerSW(options = {}) {
+         }
+       }
+       wb.register({ immediate }).then((r) => {
++        if (onBeginUpdate) {
++          r?.addEventListener('updatefound', () => {
++            onBeginUpdate();
++          });
++        }
++
+         if (onRegisteredSW)
+           onRegisteredSW("__SW__", r);
+         else
+diff --git a/types/index.d.ts b/types/index.d.ts
+index c2553517a12c98f4f7d1b0ef10a2dd203842d45e..694f29ec1ca485c3d620d3cd47517abdef7e17c1 100644
+--- a/types/index.d.ts
++++ b/types/index.d.ts
+@@ -1,6 +1,7 @@
+ export interface RegisterSWOptions {
+   immediate?: boolean
+   onNeedRefresh?: () => void
++  onBeginUpdate?: () => void
+   onOfflineReady?: () => void
+   /**
+    * Called only if `onRegisteredSW` is not provided.

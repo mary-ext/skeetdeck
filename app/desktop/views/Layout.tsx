@@ -19,7 +19,7 @@ import {
 } from '../globals/panes.ts';
 import { addPane, preferences } from '../globals/settings.ts';
 
-import { isUpdateReady, updateSW } from '~/utils/service-worker.ts';
+import { updateSW, updateStatus } from '~/utils/service-worker.ts';
 
 import { Interactive } from '~/com/primitives/interactive.ts';
 
@@ -53,7 +53,8 @@ const menuIconButton = Interactive({
 });
 
 const updateButton = Interactive({
-	class: `grid h-11 shrink-0 place-items-center text-lg text-green-600`,
+	variant: 'none',
+	class: `relative grid h-11 shrink-0 place-items-center overflow-hidden text-lg`,
 });
 
 const DashboardLayout = (props: RouteComponentProps) => {
@@ -182,21 +183,21 @@ const DashboardLayout = (props: RouteComponentProps) => {
 					</For>
 				</div>
 
-				{(() => {
-					if (isUpdateReady()) {
-						return (
-							<button
-								title={`${brandName} update is ready, click here to reload`}
-								onClick={() => {
-									updateSW();
-								}}
-								class={updateButton}
-							>
-								<SystemUpdateAltIcon />
-							</button>
-						);
-					}
-				})()}
+				{updateStatus() !== 0 && (
+					<button
+						title={`${brandName} update is ready, click here to reload`}
+						disabled={updateStatus() !== 2}
+						onClick={() => {
+							updateSW();
+						}}
+						class={
+							updateButton +
+							(updateStatus() === 2 ? ` bg-green-700 text-white hover:bg-green-900` : ` opacity-50`)
+						}
+					>
+						<SystemUpdateAltIcon />
+					</button>
+				)}
 
 				<button
 					title="Open application settings"

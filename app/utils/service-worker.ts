@@ -3,13 +3,16 @@ import { registerSW } from 'virtual:pwa-register';
 
 const REGISTER_SW = true;
 
-const [isUpdateReady, setIsUpdateReady] = createSignal(false);
+const [updateStatus, setUpdateStatus] = createSignal<0 | 1 | 2>(0);
 const [registration, setRegistration] = createSignal<ServiceWorkerRegistration>();
 
 const updateSW = REGISTER_SW
 	? registerSW({
 			onNeedRefresh() {
-				setIsUpdateReady(true);
+				setUpdateStatus(2);
+			},
+			onBeginUpdate() {
+				setUpdateStatus(1);
 			},
 			onRegisteredSW(_swScriptUrl, reg) {
 				setRegistration(reg);
@@ -17,4 +20,4 @@ const updateSW = REGISTER_SW
 		})
 	: () => {};
 
-export { isUpdateReady, updateSW, registration };
+export { updateStatus, updateSW, registration };

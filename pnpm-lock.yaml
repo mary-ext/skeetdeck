@@ -15,6 +15,9 @@ patchedDependencies:
   solid-textarea-autosize@0.0.5:
     hash: xoixqosplh7bmfbnvr4hschede
     path: patches/solid-textarea-autosize@0.0.5.patch
+  vite-plugin-pwa@0.17.4:
+    hash: ve5hypcrajivuvoyst6zln6qyq
+    path: patches/vite-plugin-pwa@0.17.4.patch
   workbox-precaching@7.0.0:
     hash: accbuubki4hhuii52le4znwv2y
     path: patches/workbox-precaching@7.0.0.patch
@@ -104,7 +107,7 @@ importers:
         version: 5.0.11(@types/node@20.10.7)(terser@5.26.0)
       vite-plugin-pwa:
         specifier: ^0.17.4
-        version: 0.17.4(vite@5.0.11)
+        version: 0.17.4(patch_hash=ve5hypcrajivuvoyst6zln6qyq)(vite@5.0.11)
       vite-plugin-solid:
         specifier: ^2.8.0
         version: 2.8.0(solid-js@1.8.8)(vite@5.0.11)
@@ -4181,7 +4184,7 @@ packages:
     resolution: {integrity: sha512-hGdgQozCsQJMyfK5urgFcWEqsSSrK63Awe0t/IMR0bZ0QMtnuaiHzThW81guu3qx9abLi99NEuiaN6P9gVYsNg==}
     dev: true
 
-  /vite-plugin-pwa@0.17.4(vite@5.0.11):
+  /vite-plugin-pwa@0.17.4(patch_hash=ve5hypcrajivuvoyst6zln6qyq)(vite@5.0.11):
     resolution: {integrity: sha512-j9iiyinFOYyof4Zk3Q+DtmYyDVBDAi6PuMGNGq6uGI0pw7E+LNm9e+nQ2ep9obMP/kjdWwzilqUrlfVRj9OobA==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
@@ -4197,6 +4200,7 @@ packages:
       - '@types/babel__core'
       - supports-color
     dev: true
+    patched: true
 
   /vite-plugin-solid@2.8.0(solid-js@1.8.8)(vite@5.0.11):
     resolution: {integrity: sha512-n5FAm7ZmTl94VWUoiJCgG7bouF2NlC9CA1wY/qbVnkFbYDWk++bFWyNoU48aLJ+lMtzNeYzJypJXOHzFKxL9xA==}
