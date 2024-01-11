@@ -10,6 +10,7 @@ import { formatCompact } from '~/utils/intl/number.ts';
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
+import GenericErrorView from '~/com/components/views/GenericErrorView.tsx';
 
 import TimelineList from '~/com/components/lists/TimelineList.tsx';
 import TimelineGalleryList from '~/com/components/lists/TimelineGalleryList.tsx';
@@ -188,6 +189,10 @@ const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 							</div>
 						);
 					}}
+				</Match>
+
+				<Match when={profile.error} keyed>
+					{(error) => <GenericErrorView error={error} onRetry={() => profile.refetch()} />}
 				</Match>
 
 				<Match when={profile.isLoading}>
