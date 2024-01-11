@@ -32,18 +32,20 @@ const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'))
 const MuteConfirmDialog = lazy(() => import('../dialogs/MuteConfirmDialog.tsx'));
 
 export interface ProfileHeaderProps {
+	/** Expected to be static */
 	profile: SignalizedProfile;
 }
 
 const ProfileHeader = (props: ProfileHeaderProps) => {
 	const { filters } = useSharedPreferences();
 
-	const profile = () => props.profile;
+	const profile = props.profile;
+	const viewer = profile.viewer;
 
 	return (
 		<div class="flex flex-col">
 			{(() => {
-				const banner = profile().banner.value;
+				const banner = profile.banner.value;
 
 				if (banner) {
 					return (
@@ -64,7 +66,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 			<div class="z-10 flex flex-col gap-3 p-4">
 				<div class="flex gap-2">
 					{(() => {
-						const avatar = profile().avatar.value;
+						const avatar = profile.avatar.value;
 
 						if (avatar) {
 							return (
@@ -88,53 +90,49 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 
 					<div class="grow" />
 
-					{(() => {
-						const $profile = profile();
-
-						if ($profile.did !== $profile.uid) {
-							return [
-								<ProfileOverflowAction profile={$profile}>
-									<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
-										<MoreHorizIcon class="-mx-1.5 text-base" />
-									</button>
-								</ProfileOverflowAction>,
-								(() => {
-									if (!$profile.viewer.blocking.value && !$profile.viewer.blockedBy.value) {
-										return <ProfileFollowButton profile={profile()} />;
-									}
-								}) as unknown as JSX.Element,
-							];
-						}
-
-						return [
-							<ProfileOverflowAction profile={$profile}>
-								<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
-									<MoreHorizIcon class="-mx-1.5 text-base" />
-								</button>
-							</ProfileOverflowAction>,
-							<Link
-								to={{ type: LINK_PROFILE_EDIT, profile: $profile }}
-								class={/* @once */ Button({ variant: 'primary' })}
-							>
-								Edit profile
-							</Link>,
-						];
-					})()}
+					{
+						/* @once */ profile.did !== profile.uid
+							? [
+									<ProfileOverflowAction profile={profile}>
+										<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
+											<MoreHorizIcon class="-mx-1.5 text-base" />
+										</button>
+									</ProfileOverflowAction>,
+									(() => {
+										if (!viewer.blocking.value && !viewer.blockedBy.value) {
+											return <ProfileFollowButton profile={profile} />;
+										}
+									}) as unknown as JSX.Element,
+								]
+							: [
+									<ProfileOverflowAction profile={profile}>
+										<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
+											<MoreHorizIcon class="-mx-1.5 text-base" />
+										</button>
+									</ProfileOverflowAction>,
+									<Link
+										to={{ type: LINK_PROFILE_EDIT, profile: profile }}
+										class={/* @once */ Button({ variant: 'primary' })}
+									>
+										Edit profile
+									</Link>,
+								]
+					}
 				</div>
 
 				<div>
 					<p dir="auto" class="overflow-hidden break-words text-xl font-bold empty:hidden">
-						{profile().displayName.value}
+						{profile.displayName.value}
 					</p>
 					<p class="flex min-w-0 items-center text-sm text-muted-fg">
-						<ProfileHandleAction profile={profile()}>
+						<ProfileHandleAction profile={profile}>
 							<button class="overflow-hidden text-ellipsis whitespace-nowrap text-left hover:underline">
-								{'@' + profile().handle.value}
+								{'@' + profile.handle.value}
 							</button>
 						</ProfileHandleAction>
 
 						{(() => {
-							if (profile().viewer.followedBy.value) {
+							if (viewer.followedBy.value) {
 								return (
 									<span class="ml-2 shrink-0 rounded bg-muted px-1 py-px text-xs font-medium text-primary">
 										Follows you
@@ -145,25 +143,22 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 					</p>
 				</div>
 
-				<div class="whitespace-pre-wrap break-words text-sm empty:hidden">{profile().description.value}</div>
+				<div class="whitespace-pre-wrap break-words text-sm empty:hidden">{profile.description.value}</div>
 
 				<div class="flex flex-wrap gap-4 text-sm">
-					<Link to={{ type: LINK_PROFILE_FOLLOWS, actor: profile().did }} class="hover:underline">
-						<span class="font-bold">{formatCompact(profile().followsCount.value)}</span>{' '}
+					<Link to={{ type: LINK_PROFILE_FOLLOWS, actor: profile.did }} class="hover:underline">
+						<span class="font-bold">{formatCompact(profile.followsCount.value)}</span>{' '}
 						<span class="text-muted-fg">Follows</span>
 					</Link>
 
-					<Link to={{ type: LINK_PROFILE_FOLLOWERS, actor: profile().did }} class="hover:underline">
-						<span class="font-bold">{formatCompact(profile().followersCount.value)}</span>{' '}
+					<Link to={{ type: LINK_PROFILE_FOLLOWERS, actor: profile.did }} class="hover:underline">
+						<span class="font-bold">{formatCompact(profile.followersCount.value)}</span>{' '}
 						<span class="text-muted-fg">Followers</span>
 					</Link>
 				</div>
 
 				{(() => {
-					const $profile = profile();
-					const viewer = $profile.viewer;
-
-					const isTemporarilyMuted = isProfileTempMuted(filters, $profile.did);
+					const isTemporarilyMuted = isProfileTempMuted(filters, profile.did);
 					if (isTemporarilyMuted !== null) {
 						return (
 							<div class="text-sm text-muted-fg">
@@ -172,7 +167,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 									<span class="font-bold">{formatAbsDateTime(isTemporarilyMuted)}</span>.{' '}
 									<button
 										onClick={() => {
-											openModal(() => <MuteConfirmDialog profile={$profile} filters={filters} />);
+											openModal(() => <MuteConfirmDialog profile={profile} filters={filters} />);
 										}}
 										class="text-accent hover:underline"
 									>
@@ -237,7 +232,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 									You've muted posts from this user.{' '}
 									<button
 										onClick={() => {
-											openModal(() => <MuteConfirmDialog profile={$profile} filters={filters} />);
+											openModal(() => <MuteConfirmDialog profile={profile} filters={filters} />);
 										}}
 										class="text-accent hover:underline"
 									>
