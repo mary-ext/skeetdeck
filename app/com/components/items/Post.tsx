@@ -1,4 +1,4 @@
-import { type Accessor, createEffect } from 'solid-js';
+import { type Accessor, createEffect, createMemo } from 'solid-js';
 
 import type { DID } from '~/api/atp-schema.ts';
 
@@ -7,6 +7,8 @@ import type { SignalizedTimelineItem } from '~/api/models/timeline.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
 import { updatePostLike } from '~/api/mutations/like-post.ts';
+
+import { getProfileModDecision } from '~/api/moderation/decisions/profile.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
@@ -20,14 +22,16 @@ import {
 	useLinking,
 } from '../Link.tsx';
 import RichTextRenderer from '../RichTextRenderer.tsx';
+import { useSharedPreferences } from '../SharedPreferences.tsx';
 import TimeAgo from '../TimeAgo.tsx';
 
+import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble.tsx';
+import ErrorIcon from '../../icons/baseline-error.tsx';
 import FavoriteIcon from '../../icons/baseline-favorite.tsx';
+import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
 import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
 import RepeatIcon from '../../icons/baseline-repeat.tsx';
 import ShareIcon from '../../icons/baseline-share.tsx';
-import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble.tsx';
-import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
@@ -62,6 +66,10 @@ const Post = (props: PostProps) => {
 
 	const authorPermalink: ProfileLinking = { type: LINK_PROFILE, actor: author.did };
 	const postPermalink: PostLinking = { type: LINK_POST, actor: author.did, rkey: getRecordId(post.uri) };
+
+	const profileVerdict = createMemo(() => {
+		return getProfileModDecision(author, useSharedPreferences());
+	});
 
 	const handleClick = (ev: MouseEvent | KeyboardEvent) => {
 		if (!props.interactive || !isElementClicked(ev)) {
@@ -164,14 +172,34 @@ const Post = (props: PostProps) => {
 			</div>
 
 			<div class="flex gap-3">
-				<div class="flex shrink-0 flex-col items-center">
+				<div class="relative flex shrink-0 flex-col items-center">
 					<Link
 						tabindex={-1}
 						to={authorPermalink}
-						class="h-10 w-10 overflow-hidden rounded-full bg-muted-fg hover:opacity-80"
+						class="h-10 w-10 overflow-hidden rounded-full hover:opacity-80"
 					>
-						<img src={author.avatar.value || DefaultAvatar} class="h-full w-full" />
+						<img
+							src={author.avatar.value || DefaultAvatar}
+							class="h-full w-full"
+							classList={{ [`blur`]: !!author.avatar.value && profileVerdict()?.b }}
+						/>
 					</Link>
+					{(() => {
+						const verdict = profileVerdict();
+
+						if (verdict?.a || verdict?.b) {
+							return (
+								<div
+									class={
+										`absolute -right-1 top-7 rounded-full bg-background ` +
+										(verdict.a ? `text-red-500` : `text-muted-fg`)
+									}
+								>
+									<ErrorIcon class="text-lg" />
+								</div>
+							);
+						}
+					})()}
 
 					{(() => {
 						if (props.next) {
