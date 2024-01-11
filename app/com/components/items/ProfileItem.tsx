@@ -1,10 +1,16 @@
-import { type JSX } from 'solid-js';
+import { type JSX, createMemo } from 'solid-js';
 
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
+import { getProfileModDecision } from '~/api/moderation/decisions/profile.ts';
+
 import { INTERACTION_TAGS, isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
 
+import { useSharedPreferences } from '../SharedPreferences.tsx';
+
 import ProfileFollowButton from '../ProfileFollowButton.tsx';
+
+import ErrorIcon from '../../icons/baseline-error.tsx';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
@@ -27,6 +33,12 @@ export const ProfileItem = (props: ProfileItemProps) => {
 
 	const onClick = props.onClick;
 
+	const verdict = createMemo(() => {
+		const decision = getProfileModDecision(profile(), useSharedPreferences());
+
+		return decision;
+	});
+
 	const handleClick = (ev: MouseEvent | KeyboardEvent) => {
 		if (!isElementClicked(ev, INTERACTION_TAGS)) {
 			return;
@@ -44,7 +56,32 @@ export const ProfileItem = (props: ProfileItemProps) => {
 			tabindex={0}
 			class="flex gap-3 px-4 py-3 hover:bg-secondary/10"
 		>
-			<img src={profile().avatar.value || DefaultAvatar} class="h-12 w-12 shrink-0 rounded-full" />
+			<div class="relative shrink-0">
+				<div class="h-12 w-12 overflow-hidden rounded-full">
+					<img
+						src={profile().avatar.value || DefaultAvatar}
+						class="h-full w-full object-cover"
+						classList={{ [`blur`]: !!profile().avatar.value && verdict()?.b }}
+					/>
+				</div>
+				{(() => {
+					const $verdict = verdict();
+
+					if ($verdict?.a || $verdict?.b) {
+						return (
+							<div
+								class={
+									/* @once */
+									`absolute right-0 top-8 rounded-full bg-background ` +
+									($verdict.a ? `text-red-500` : `text-muted-fg`)
+								}
+							>
+								<ErrorIcon class="text-xl" />
+							</div>
+						);
+					}
+				})()}
+			</div>
 
 			<div class="flex min-w-0 grow flex-col gap-1">
 				<div class="my-auto flex items-center justify-between gap-3">
