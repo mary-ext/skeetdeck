@@ -191,6 +191,7 @@ const Post = (props: PostProps) => {
 							return (
 								<div
 									class={
+										/* @once */
 										`absolute -right-1 top-7 rounded-full bg-background ` +
 										(verdict.a ? `text-red-500` : `text-muted-fg`)
 									}
