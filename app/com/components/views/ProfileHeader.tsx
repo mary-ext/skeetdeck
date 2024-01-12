@@ -66,7 +66,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 							onClick={() => {
 								openModal(() => <ImageViewerDialog images={[{ fullsize: banner }]} />);
 							}}
-							class="group aspect-banner bg-background"
+							class="group aspect-banner overflow-hidden bg-background"
 						>
 							<img
 								src={banner}
