@@ -16,7 +16,7 @@ import { closeModal } from '../../globals/modals.tsx';
 
 import { Button } from '../../primitives/button.ts';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog.ts';
-import { Select } from '~/com/primitives/select.ts';
+import { Select } from '../../primitives/select.ts';
 
 import DialogOverlay from './DialogOverlay.tsx';
 
