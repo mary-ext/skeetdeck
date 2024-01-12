@@ -1,17 +1,21 @@
-import { createEffect } from 'solid-js';
+import { createEffect, createMemo } from 'solid-js';
 
 import { getRecordId } from '~/api/utils/misc.ts';
 
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 import { updatePostLike } from '~/api/mutations/like-post.ts';
 
+import { getProfileModDecision } from '~/api/moderation/decisions/profile.ts';
+
 import { formatCompact } from '~/utils/intl/number.ts';
 
 import { type PostLinking, type ProfileLinking, LINK_POST, LINK_PROFILE, Link } from '../Link.tsx';
 import RichTextRenderer from '../RichTextRenderer.tsx';
+import { useSharedPreferences } from '../SharedPreferences.tsx';
 import TimeAgo from '../TimeAgo.tsx';
 
 import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble.tsx';
+import ErrorIcon from '../../icons/baseline-error.tsx';
 import FavoriteIcon from '../../icons/baseline-favorite.tsx';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
 import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
@@ -53,6 +57,10 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 		rkey: getRecordId(post.uri),
 	};
 
+	const profileVerdict = createMemo(() => {
+		return getProfileModDecision(author, useSharedPreferences());
+	});
+
 	return (
 		<div class="flex min-w-0 gap-2">
 			<div class="relative flex shrink-0 flex-col items-center">
@@ -65,6 +73,24 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 				</Link>
 
 				{hasChildren && <div class="absolute -bottom-2 left-2 top-6 grow border-l-2 border-muted" />}
+
+				{(() => {
+					const verdict = profileVerdict();
+
+					if (verdict) {
+						return (
+							<div
+								class={
+									/* @once */
+									`absolute -right-1 top-3 rounded-full bg-background ` +
+									(verdict.a ? `text-red-500` : `text-muted-fg`)
+								}
+							>
+								<ErrorIcon class="text-sm" />
+							</div>
+						);
+					}
+				})()}
 			</div>
 			<div class="min-w-0 grow">
 				<div class="mb-0.5 flex items-center justify-between gap-4">
