@@ -1,4 +1,4 @@
-import { batch } from 'solid-js';
+import { batch, createEffect, createRoot } from 'solid-js';
 
 import {
 	type AtpAccessJwt,
@@ -36,6 +36,11 @@ interface MultiagentStorage {
 	accounts: MultiagentAccountData[];
 }
 
+interface AgentInstance {
+	agent: Promise<Agent>;
+	cleanup: () => void;
+}
+
 export class MultiagentError extends Error {
 	constructor(message: string, options?: ErrorOptions) {
 		super(message, options);
@@ -46,7 +51,7 @@ export class MultiagentError extends Error {
 export class Multiagent {
 	store: MultiagentStorage;
 
-	#agents: Record<DID, Promise<Agent>> = {};
+	#agents: Record<DID, AgentInstance> = {};
 
 	constructor(name: string) {
 		const store = createReactiveLocalStorage<MultiagentStorage>(name, (version, prev) => {
@@ -104,7 +109,7 @@ export class Multiagent {
 	 * Login with a new account
 	 */
 	async login({ service, identifier, password }: MultiagentLoginOptions): Promise<DID> {
-		const agent = this.#createAgent(service);
+		const { agent, cleanup } = this.#createAgent(service);
 
 		try {
 			await agent.login({ identifier, password });
@@ -133,7 +138,8 @@ export class Multiagent {
 				}
 			});
 
-			this.#agents[did] = Promise.resolve(agent);
+			this.#agents[did]?.cleanup();
+			this.#agents[did] = { agent: Promise.resolve(agent), cleanup: cleanup };
 			return did;
 		} catch (err) {
 			throw new MultiagentError(`Failed to login`, { cause: err });
@@ -163,7 +169,7 @@ export class Multiagent {
 	 */
 	connect(did: DID): Promise<Agent> {
 		if (did in this.#agents) {
-			return this.#agents[did];
+			return this.#agents[did].agent;
 		}
 
 		const $accounts = this.store.accounts;
@@ -173,36 +179,68 @@ export class Multiagent {
 			return Promise.reject(new MultiagentError(`Invalid account`));
 		}
 
-		return (this.#agents[did] = new Promise((resolve, reject) => {
-			const agent = this.#createAgent(data.service);
+		const { agent, cleanup } = this.#createAgent(data.service);
 
+		const promise = new Promise<Agent>((resolve, reject) => {
 			agent.resumeSession(data.session).then(
 				() => {
 					resolve(agent);
 				},
 				(err) => {
+					cleanup();
+
 					delete this.#agents[did];
 					reject(new MultiagentError(`Failed to resume session`, { cause: err }));
 				},
 			);
-		}));
+		});
+
+		this.#agents[did] = { agent: promise, cleanup: cleanup };
+		return promise;
 	}
 
 	#createAgent(serviceUri: string) {
 		const $accounts = this.store.accounts!;
 		const agent = new Agent({ serviceUri: serviceUri });
 
+		let ignore = false;
+
 		agent.on('sessionUpdate', (session) => {
 			const did = session!.did;
 			const existing = $accounts.find((acc) => acc.did === did);
 
 			if (existing) {
+				ignore = true;
+
 				batch(() => {
 					Object.assign(existing.session, session);
 				});
+
+				ignore = false;
 			}
 		});
 
-		return agent;
+		return {
+			agent: agent,
+			cleanup: createRoot((dispose) => {
+				createEffect(() => {
+					const actual = agent.session;
+
+					const did = actual?.did;
+					const existing = $accounts.find((acc) => did && acc.did === did);
+
+					if (!ignore && existing) {
+						const expected = existing.session;
+
+						if (actual!.accessJwt !== expected.accessJwt || actual!.refreshJwt !== expected.refreshJwt) {
+							actual!.accessJwt = expected.accessJwt;
+							actual!.refreshJwt = expected.refreshJwt;
+						}
+					}
+				});
+
+				return dispose;
+			}),
+		};
 	}
 }
