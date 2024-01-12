@@ -20,7 +20,9 @@ import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
 
 import ListOverflowAction from './actions/ListOverflowAction.tsx';
 
-const LazyImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
+const ImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
+const SubscribeListDialog = lazy(() => import('~/com/components/dialogs/SubscribeListDialog.tsx'));
+
 const ListMembersPaneDialog = lazy(() => import('../dialogs/ListMembersPaneDialog.tsx'));
 const ListSettingsPaneDialog = lazy(() => import('../dialogs/ListSettingsPaneDialog.tsx'));
 
@@ -57,7 +59,7 @@ const ListHeader = (props: ListHeaderProps) => {
 								return (
 									<button
 										onClick={() => {
-											openModal(() => <LazyImageViewerDialog images={[{ fullsize: avatar }]} />);
+											openModal(() => <ImageViewerDialog images={[{ fullsize: avatar }]} />);
 										}}
 										class="group h-13 w-13 shrink-0 overflow-hidden rounded-md bg-background"
 									>
@@ -99,9 +101,17 @@ const ListHeader = (props: ListHeaderProps) => {
 					<div class="flex gap-2 empty:hidden">
 						{(() => {
 							if (isModList()) {
+								const viewer = list.viewer;
+								const isSubscribed = () => !!viewer.blocked.value || viewer.muted.value;
+
 								return (
-									<button onClick={() => {}} class={Button({ variant: 'primary' })}>
-										Subscribe list
+									<button
+										onClick={() => {
+											openModal(() => <SubscribeListDialog list={list} />);
+										}}
+										class={Button({ variant: !isSubscribed() ? 'primary' : 'outline' })}
+									>
+										{!isSubscribed() ? `Subscribe list` : `Unsubscribe list`}
 									</button>
 								);
 							}
