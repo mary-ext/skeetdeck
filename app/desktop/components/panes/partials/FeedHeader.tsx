@@ -69,7 +69,7 @@ const FeedHeader = (props: FeedHeaderProps) => {
 						})()}
 
 						<div class="flex min-w-0 grow flex-col">
-							<p class="break-words text-lg font-bold">{feed.name.value}</p>
+							<p class="overflow-hidden text-ellipsis break-words text-lg font-bold">{feed.name.value}</p>
 
 							<Link
 								to={/* @once */ { type: LINK_PROFILE, actor: creator.did }}
