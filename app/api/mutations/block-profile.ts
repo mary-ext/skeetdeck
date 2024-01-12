@@ -59,6 +59,11 @@ export const updateProfileBlock = (profile: SignalizedProfile, block: boolean) =
 	}
 
 	const promise = mutate(block);
+	const blockingUri = profile.viewer.blocking;
+
+	if (!!blockingUri.value !== block) {
+		blockingUri.value = block ? 'pending' : undefined;
+	}
 
 	return promise;
 };

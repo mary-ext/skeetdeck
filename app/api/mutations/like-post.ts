@@ -64,8 +64,10 @@ export const updatePostLike = (post: SignalizedPost, like: boolean) => {
 	const promise = mutate(like);
 	const likeUri = post.viewer.like;
 
-	post.likeCount.value += likeUri.value ? -1 : 1;
-	likeUri.value = like ? 'pending' : undefined;
+	if (!!likeUri.value !== like) {
+		post.likeCount.value += likeUri.value ? -1 : 1;
+		likeUri.value = like ? 'pending' : undefined;
+	}
 
 	return promise;
 };

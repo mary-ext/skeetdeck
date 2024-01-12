@@ -64,8 +64,10 @@ export const updateFeedLike = (feed: SignalizedFeed, like: boolean) => {
 	const promise = mutate(like);
 	const likeUri = feed.viewer.like;
 
-	feed.likeCount.value += likeUri.value ? -1 : 1;
-	likeUri.value = like ? 'pending' : undefined;
+	if (!!likeUri.value !== like) {
+		feed.likeCount.value += likeUri.value ? -1 : 1;
+		likeUri.value = like ? 'pending' : undefined;
+	}
 
 	return promise;
 };
