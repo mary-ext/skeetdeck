@@ -71,7 +71,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 							<img
 								src={banner}
 								class="h-full w-full object-cover group-hover:opacity-75"
-								classList={{ [`blur`]: verdict()?.b }}
+								classList={{ [`blur`]: verdict()?.m }}
 							/>
 						</button>
 					);
@@ -96,7 +96,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 									<img
 										src={avatar}
 										class="h-full w-full group-hover:opacity-75"
-										classList={{ [`blur`]: verdict()?.b }}
+										classList={{ [`blur`]: verdict()?.m }}
 									/>
 								</button>
 							);

@@ -61,13 +61,13 @@ export const ProfileItem = (props: ProfileItemProps) => {
 					<img
 						src={profile().avatar.value || DefaultAvatar}
 						class="h-full w-full object-cover"
-						classList={{ [`blur`]: !!profile().avatar.value && verdict()?.b }}
+						classList={{ [`blur`]: !!profile().avatar.value && verdict()?.m }}
 					/>
 				</div>
 				{(() => {
 					const $verdict = verdict();
 
-					if ($verdict?.a || $verdict?.b) {
+					if ($verdict && ($verdict.a || $verdict.b || $verdict.m)) {
 						return (
 							<div
 								class={
