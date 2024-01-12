@@ -7,6 +7,7 @@ import { openModal } from '~/com/globals/modals.tsx';
 import { Button } from '~/com/primitives/button.ts';
 
 import { LINK_PROFILE, Link } from '~/com/components/Link.tsx';
+import RichTextRenderer from '~/com/components/RichTextRenderer.tsx';
 import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
 
 import DefaultListAvatar from '~/com/assets/default-list-avatar.svg?url';
@@ -86,7 +87,14 @@ const ListHeader = (props: ListHeaderProps) => {
 						</div>
 					</div>
 
-					<p class="whitespace-pre-wrap break-words text-sm empty:hidden">{list.description.value}</p>
+					<p class="whitespace-pre-wrap break-words text-sm empty:hidden">
+						<RichTextRenderer
+							item={list}
+							get={(item) => {
+								return { t: item.description.value || '', f: item.descriptionFacets.value };
+							}}
+						/>
+					</p>
 
 					<div class="flex gap-2 empty:hidden">
 						{(() => {

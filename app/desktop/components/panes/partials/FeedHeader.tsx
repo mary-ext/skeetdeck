@@ -12,6 +12,7 @@ import { openModal } from '~/com/globals/modals.tsx';
 import { Button } from '~/com/primitives/button.ts';
 
 import { LINK_FEED_LIKED_BY, LINK_PROFILE, Link } from '~/com/components/Link.tsx';
+import RichTextRenderer from '~/com/components/RichTextRenderer.tsx';
 
 import FavoriteIcon from '~/com/icons/baseline-favorite.tsx';
 import FavoriteOutlinedIcon from '~/com/icons/outline-favorite.tsx';
@@ -83,7 +84,14 @@ const FeedHeader = (props: FeedHeaderProps) => {
 					</div>
 				</div>
 
-				<p class="whitespace-pre-wrap break-words text-sm empty:hidden">{feed.description.value}</p>
+				<p class="whitespace-pre-wrap break-words text-sm empty:hidden">
+					<RichTextRenderer
+						item={feed}
+						get={(item) => {
+							return { t: item.description.value || '', f: item.descriptionFacets.value };
+						}}
+					/>
+				</p>
 
 				<Link
 					to={{ type: LINK_FEED_LIKED_BY, actor: creator.did, rkey: getRecordId(feed.uri) }}
