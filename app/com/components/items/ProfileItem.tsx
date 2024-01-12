@@ -67,7 +67,7 @@ export const ProfileItem = (props: ProfileItemProps) => {
 				{(() => {
 					const $verdict = verdict();
 
-					if ($verdict && ($verdict.a || $verdict.b || $verdict.m)) {
+					if ($verdict) {
 						return (
 							<div
 								class={

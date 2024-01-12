@@ -181,13 +181,13 @@ const Post = (props: PostProps) => {
 						<img
 							src={author.avatar.value || DefaultAvatar}
 							class="h-full w-full"
-							classList={{ [`blur`]: !!author.avatar.value && profileVerdict()?.b }}
+							classList={{ [`blur`]: !!author.avatar.value && profileVerdict()?.m }}
 						/>
 					</Link>
 					{(() => {
 						const verdict = profileVerdict();
 
-						if (verdict?.a || verdict?.b) {
+						if (verdict) {
 							return (
 								<div
 									class={
