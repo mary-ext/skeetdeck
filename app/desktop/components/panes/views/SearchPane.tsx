@@ -17,6 +17,24 @@ import PaneHeader from '../PaneHeader.tsx';
 import GenericPaneSettings from '../settings/GenericPaneSettings.tsx';
 import SearchPaneSettings from '../settings/SearchPaneSettings.tsx';
 
+const augmentSearchQuery = (query: string, { did }: { did: string }) => {
+	// We don't want to replace substrings that are being "quoted" because those
+	// are exact string matches, so what we'll do here is to split them apart
+
+	// Even-indexed strings are unquoted, odd-indexed strings are quoted
+	const splits = query.split(/("(?:[^"\\]|\\.)*")/g);
+
+	return splits
+		.map((str, idx) => {
+			if (idx % 2 === 0) {
+				return str.replaceAll(/(^|\s)from:me(\s|$)/g, `$1${did}$2`);
+			}
+
+			return str;
+		})
+		.join('');
+};
+
 const SearchPane = () => {
 	const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);
 
@@ -36,7 +54,10 @@ const SearchPane = () => {
 				</PaneHeader>
 
 				<PaneBody>
-					<TimelineList uid={pane.uid} params={{ type: 'search', query: pane.query }} />
+					<TimelineList
+						uid={pane.uid}
+						params={{ type: 'search', query: augmentSearchQuery(pane.query, { did: pane.uid }) }}
+					/>
 				</PaneBody>
 			</Pane>
 
