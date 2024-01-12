@@ -8,16 +8,20 @@ import {
 } from '~/api/moderation/enums.ts';
 import type { ModerationFilterKeywordOpts } from '~/api/moderation/types.ts';
 
-import { createRadioModel, model } from '~/utils/input.ts';
+import { createRadioModel, model, modelChecked } from '~/utils/input.ts';
 import { getUniqueId } from '~/utils/misc.ts';
 
-import { bustRevisionCache, preferences } from '~/desktop/globals/settings.ts';
+import { openModal } from '~/com/globals/modals.tsx';
+
+import { bustRevisionCache, preferences } from '../../../../globals/settings.ts';
 
 import { Button } from '~/com/primitives/button.ts';
 import { IconButton } from '~/com/primitives/icon-button.ts';
 import { Input } from '~/com/primitives/input.ts';
 import { Interactive } from '~/com/primitives/interactive.ts';
 
+import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
+import Checkbox from '~/com/components/inputs/Checkbox.tsx';
 import Radio from '~/com/components/inputs/Radio.tsx';
 
 import AddIcon from '~/com/icons/baseline-add.tsx';
@@ -31,8 +35,6 @@ import {
 	VIEW_KEYWORD_FILTERS,
 	useViewRouter,
 } from '../_router.tsx';
-import { openModal } from '~/com/globals/modals.tsx';
-import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
 
 type KeywordState = [keyword: Signal<string>, whole: Signal<boolean>];
 
@@ -55,6 +57,7 @@ const KeywordFilterFormView = () => {
 
 	const [name, setName] = createSignal(conf ? conf.name : '');
 	const [pref, setPref] = createSignal(conf ? '' + conf.pref : '2');
+	const [noFollows, setNoFollows] = createSignal(conf ? conf.noFollows : false);
 
 	const [matchers, setMatchers] = createSignal<KeywordState[]>(
 		conf ? conf.matchers.map((m) => createKeywordState(m[0], m[1])) : [createKeywordState('', true)],
@@ -69,12 +72,14 @@ const KeywordFilterFormView = () => {
 			const $name = name();
 			const $pref = +pref() as KeywordPreference;
 			const $matchers = matchers().map<ModerationFilterKeywordOpts>(([kw, whole]) => [kw[0](), whole[0]()]);
+			const $noFollows = noFollows();
 			const $match = createRegexMatcher($matchers);
 
 			if (conf) {
 				conf.name = $name;
 				conf.pref = $pref;
 				conf.match = $match;
+				conf.noFollows = $noFollows;
 				conf.matchers = $matchers;
 			} else {
 				filters.push({
@@ -83,6 +88,7 @@ const KeywordFilterFormView = () => {
 					name: $name,
 					pref: $pref,
 					match: $match,
+					noFollows: $noFollows,
 					matchers: $matchers,
 				});
 			}
@@ -132,6 +138,14 @@ const KeywordFilterFormView = () => {
 						<span>Remove posts completely</span>
 						<Radio ref={prefModel('' + PreferenceHide)} name={id} />
 					</label>
+
+					<div class="mt-3">
+						<label class="flex min-w-0 justify-between gap-4">
+							<span class="text-sm">Don't filter posts from people I follow</span>
+
+							<Checkbox ref={modelChecked(noFollows, setNoFollows)} />
+						</label>
+					</div>
 				</div>
 
 				<div class="mt-4 flex flex-col gap-3 px-4">

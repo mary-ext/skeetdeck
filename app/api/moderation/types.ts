@@ -25,10 +25,11 @@ export interface ModerationLabelOpts {
 export type ModerationFilterKeywordOpts = [keyword: string, whole: boolean];
 
 export interface ModerationFiltersOpts {
-	// Only these 3 properties are ever used during actual filtering
+	// Only these properties are ever used during actual filtering
 	name: string;
 	pref: KeywordPreference;
 	match: string;
+	noFollows: boolean;
 
 	// These are used in the preferences UI
 	id: string;

@@ -24,10 +24,14 @@ export const getPostModDecision = (post: SignalizedPost, opts: SharedPreferences
 	const labels = post.labels.value;
 	const text = post.record.value.text;
 
-	const authorDid = post.author.did;
-	const isMuted = post.author.viewer.muted.value;
+	const author = post.author;
+	const viewer = author.viewer;
 
-	const key: unknown[] = [labels, text, isMuted, opts.rev];
+	const authorDid = author.did;
+	const isFollowing = viewer.following.value;
+	const isMuted = viewer.muted.value;
+
+	const key: unknown[] = [labels, text, isFollowing, isMuted, opts.rev];
 
 	let res = cached.get(post);
 
@@ -39,7 +43,7 @@ export const getPostModDecision = (post: SignalizedPost, opts: SharedPreferences
 		decideLabelModeration(accu, labels, authorDid, moderation);
 		decideMutedPermanentModeration(accu, isMuted);
 		decideMutedTemporaryModeration(accu, isProfileTempMuted(filters, authorDid));
-		decideMutedKeywordModeration(accu, text, PreferenceWarn, moderation);
+		decideMutedKeywordModeration(accu, text, isFollowing, PreferenceWarn, moderation);
 
 		cached.set(post, (res = { d: finalizeModeration(accu), c: key }));
 	}

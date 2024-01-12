@@ -207,6 +207,7 @@ const shouldAllowKeywordFilter = (filterPref: KeywordPreference, pref: KeywordPr
 export const decideMutedKeywordModeration = (
 	accu: ModerationCause[],
 	text: string,
+	following: boolean,
 	pref: KeywordPreference,
 	opts: ModerationOpts,
 ) => {
@@ -218,7 +219,7 @@ export const decideMutedKeywordModeration = (
 	for (let idx = 0, len = filters.length; idx < len; idx++) {
 		const filter = filters[idx];
 
-		if (!shouldAllowKeywordFilter(filter.pref, pref)) {
+		if (!shouldAllowKeywordFilter(filter.pref, pref) || (following && filter.noFollows)) {
 			continue;
 		}
 

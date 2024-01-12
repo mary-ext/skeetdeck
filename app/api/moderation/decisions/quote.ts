@@ -34,15 +34,19 @@ export const getQuoteModDecision = (quote: EmbeddedPostRecord, opts: SharedPrefe
 		const labels = quote.labels;
 		const text = (quote.value as PostRecord).text;
 
-		const authorDid = quote.author.did;
-		const isMuted = quote.author.viewer?.muted;
+		const author = quote.author;
+		const viewer = author.viewer;
+
+		const authorDid = author.did;
+		const isFollowing = !!viewer?.following;
+		const isMuted = !!viewer?.muted;
 
 		const accu: ModerationCause[] = [];
 
 		decideLabelModeration(accu, labels, authorDid, moderation);
 		decideMutedPermanentModeration(accu, isMuted);
 		decideMutedTemporaryModeration(accu, isProfileTempMuted(filters, authorDid));
-		decideMutedKeywordModeration(accu, text, PreferenceWarn, moderation);
+		decideMutedKeywordModeration(accu, text, isFollowing, PreferenceWarn, moderation);
 
 		cached.set(quote, (res = { d: finalizeModeration(accu), c: key }));
 	}

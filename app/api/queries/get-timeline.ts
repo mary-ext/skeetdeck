@@ -440,11 +440,17 @@ const createLabelPostFilter = (opts?: ModerationOpts): PostFilter | undefined =>
 
 	return (item) => {
 		const post = item.post;
-		const labels = post.labels;
+		const author = post.author;
 
 		const accu: ModerationCause[] = [];
-		decideLabelModeration(accu, labels, post.author.did, opts);
-		decideMutedKeywordModeration(accu, (post.record as PostRecord).text, PreferenceHide, opts);
+		decideLabelModeration(accu, post.labels, post.author.did, opts);
+		decideMutedKeywordModeration(
+			accu,
+			(post.record as PostRecord).text,
+			!!author.viewer?.following,
+			PreferenceHide,
+			opts,
+		);
 
 		const decision = finalizeModeration(accu);
 
