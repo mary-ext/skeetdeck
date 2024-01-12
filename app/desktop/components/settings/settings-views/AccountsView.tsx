@@ -37,7 +37,14 @@ const AccountsView = () => {
 				</button>
 			</div>
 			<div class="grow overflow-y-auto">
-				<For each={multiagent.accounts} fallback={<p class="px-4 py-3 text-sm">No accounts added yet.</p>}>
+				<For
+					each={multiagent.accounts}
+					fallback={
+						<div class="grid h-13 shrink-0 place-items-center">
+							<p class="text-sm text-muted-fg">No signed-in accounts</p>
+						</div>
+					}
+				>
 					{(account) => {
 						const did = account.did;
 
