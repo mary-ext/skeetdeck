@@ -143,19 +143,19 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 				<PostContent post={post} permalink={postPermalink} />
 
 				<div class="-mb-1.5 -ml-1 mt-1.5 flex items-center gap-1 text-muted-fg">
-					<button
-						onClick={() => updatePostLike(post, !post.viewer.like.value)}
-						class="group flex max-w-full basis-0 items-center gap-0.5"
-						classList={{ 'is-active text-red-600': !!post.viewer.like.value }}
-					>
-						<div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40">
-							<FavoriteOutlinedIcon class="group-[.is-active]:hidden" />
-							<FavoriteIcon class="hidden group-[.is-active]:block" />
-						</div>
-						<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
-							{formatCompact(post.likeCount.value)}
-						</span>
-					</button>
+					<ReplyAction post={post}>
+						{(disabled) => (
+							<button class="group flex max-w-full items-center gap-0.5">
+								<div
+									class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40 group-disabled:opacity-50"
+									classList={{ [`opacity-50`]: disabled }}
+								>
+									<ChatBubbleOutlinedIcon />
+								</div>
+								<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">Reply</span>
+							</button>
+						)}
+					</ReplyAction>
 
 					<RepostAction post={post}>
 						<button
@@ -172,19 +172,19 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 						</button>
 					</RepostAction>
 
-					<ReplyAction post={post}>
-						{(disabled) => (
-							<button class="group flex max-w-full items-center gap-0.5">
-								<div
-									class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40 group-disabled:opacity-50"
-									classList={{ [`opacity-50`]: disabled }}
-								>
-									<ChatBubbleOutlinedIcon />
-								</div>
-								<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">Reply</span>
-							</button>
-						)}
-					</ReplyAction>
+					<button
+						onClick={() => updatePostLike(post, !post.viewer.like.value)}
+						class="group flex max-w-full basis-0 items-center gap-0.5"
+						classList={{ 'is-active text-red-600': !!post.viewer.like.value }}
+					>
+						<div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40">
+							<FavoriteOutlinedIcon class="group-[.is-active]:hidden" />
+							<FavoriteIcon class="hidden group-[.is-active]:block" />
+						</div>
+						<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
+							{formatCompact(post.likeCount.value)}
+						</span>
+					</button>
 
 					<PostShareAction post={post}>
 						<button class="flex h-6 w-6 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary/40">
