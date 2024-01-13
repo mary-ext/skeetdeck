@@ -10,6 +10,7 @@ import { useMediaQuery } from '~/utils/media-query.ts';
 
 import ArrowLeftIcon from '../../icons/baseline-arrow-left.tsx';
 import CloseIcon from '../../icons/baseline-close.tsx';
+import { Interactive } from '~/com/primitives/interactive.ts';
 
 export interface EmbeddedImage {
 	fullsize: string;
@@ -21,8 +22,13 @@ export interface ImageViewerDialogProps {
 	images: EmbeddedImage[];
 }
 
+const iconButton = Interactive({
+	class: `grid h-8 w-8 place-items-center rounded-full bg-black/50 text-base text-white backdrop-blur`,
+});
+
 const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 	const [active, setActive] = createDerivedSignal(() => props.active || 0);
+	const [displayAlt, setDisplayAlt] = createSignal(true);
 
 	const isFine = useMediaQuery('(pointer: fine)');
 
@@ -62,11 +68,13 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 				onClose={() => closeModal()}
 			/>
 
-			<div class="pointer-events-none absolute bottom-0 right-0 p-4">
-				<div class="rounded-full bg-black/50 px-2 py-0.5 text-de text-white">{`${active() + 1} of ${
-					images().length
-				}`}</div>
-			</div>
+			{images().length > 1 && (
+				<div class="pointer-events-none absolute bottom-0 right-0 p-4">
+					<div class="rounded-full bg-black/50 px-2 py-0.5 text-de font-medium text-white backdrop-blur">
+						<span class="drop-shadow">{`${active() + 1} of ${images().length}`}</span>
+					</div>
+				</div>
+			)}
 
 			{(() => {
 				if (isFine()) {
@@ -74,26 +82,22 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 						(() => {
 							if (hasPrev()) {
 								return (
-									<button
-										title="Previous image"
-										onClick={() => setActive(active() - 1)}
-										class="fixed left-2.5 top-1/2 z-20 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-black text-base text-white hover:bg-secondary/40"
-									>
-										<ArrowLeftIcon />
-									</button>
+									<div class="fixed left-2.5 top-1/2 z-20 -translate-y-1/2">
+										<button title="Previous image" onClick={() => setActive(active() - 1)} class={iconButton}>
+											<ArrowLeftIcon />
+										</button>
+									</div>
 								);
 							}
 						}) as unknown as JSX.Element,
 						(() => {
 							if (hasNext()) {
 								return (
-									<button
-										title="Next image"
-										onClick={() => setActive(active() + 1)}
-										class="fixed right-2.5 top-1/2 z-20 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-black text-base text-white hover:bg-secondary/40"
-									>
-										<ArrowLeftIcon class="rotate-180" />
-									</button>
+									<div class="fixed right-2.5 top-1/2 z-20 -translate-y-1/2">
+										<button title="Next image" onClick={() => setActive(active() + 1)} class={iconButton}>
+											<ArrowLeftIcon class="rotate-180" />
+										</button>
+									</div>
 								);
 							}
 						}) as unknown as JSX.Element,
@@ -101,15 +105,42 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 				}
 			})()}
 
-			<button
-				title="Close viewer"
-				onClick={() => {
-					closeModal();
-				}}
-				class="fixed left-2.5 top-2.5 z-20 grid h-8 w-8 place-items-center rounded-full bg-black text-base text-white hover:bg-secondary/40"
-			>
-				<CloseIcon />
-			</button>
+			{(() => {
+				if (!displayAlt()) {
+					return;
+				}
+
+				const image = images()[active()];
+				const alt = image.alt;
+
+				if (alt) {
+					return (
+						<div class="absolute bottom-0 left-0 right-0 grid place-items-center">
+							<div class="m-4 max-h-44 max-w-120 overflow-y-auto rounded-md bg-black/50 px-3 py-2 text-sm text-white backdrop-blur">
+								<p class="whitespace-pre-wrap break-words drop-shadow">{alt}</p>
+							</div>
+						</div>
+					);
+				}
+			})()}
+
+			<div class="fixed left-2.5 top-2.5 z-20 flex gap-2">
+				<button
+					title="Close viewer"
+					onClick={() => {
+						closeModal();
+					}}
+					class={iconButton}
+				>
+					<CloseIcon class="drop-shadow" />
+				</button>
+
+				{images().some((image) => !!image.alt) && (
+					<button title="Toggle alternative text display" onClick={() => {}} class={iconButton}>
+						<span class="text-xs font-bold drop-shadow">ALT</span>
+					</button>
+				)}
+			</div>
 		</>
 	);
 };
@@ -435,16 +466,16 @@ const ImageCarousel = (props: ImageCarouselProps) => {
 				}}
 			>
 				<For each={images()}>
-					{(image) => {
+					{({ fullsize, alt }) => {
 						const finish = () => setLoading(($loading) => $loading - 1);
 
 						setLoading(($loading) => $loading + 1);
 
 						return (
-							<div class="flex h-full w-full shrink-0 items-center justify-center p-6">
+							<div class="relative flex h-full w-full shrink-0 items-center justify-center p-6">
 								<img
-									src={image.fullsize}
-									alt={image.alt}
+									src={fullsize}
+									alt={alt}
 									class="pointer-events-auto max-h-full max-w-full select-none"
 									draggable={false}
 									onError={finish}
