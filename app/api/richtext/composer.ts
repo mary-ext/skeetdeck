@@ -259,6 +259,7 @@ export const parseRt = (source: string): PreliminaryRichText => {
 							c(end - 4) === CharCode.H))
 				) {
 					const start = end - (secure ? 5 : 4);
+					let hasParen = false;
 
 					// Consume the :// we just had above
 					end = end + 3;
@@ -269,6 +270,9 @@ export const parseRt = (source: string): PreliminaryRichText => {
 
 						if (char === CharCode.SPACE || char === CharCode.NEWLINE) {
 							break;
+						} else if (char === CharCode.OPAREN) {
+							// We want to avoid trimming the closing parenthesis
+							hasParen = true;
 						}
 					}
 
@@ -282,7 +286,7 @@ export const parseRt = (source: string): PreliminaryRichText => {
 						}
 
 						// If we encounter a closing paren, save it but break out of the loop
-						if (char === CharCode.EPAREN) {
+						if (!hasParen && char === CharCode.EPAREN) {
 							end--;
 						}
 
