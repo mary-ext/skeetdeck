@@ -3,14 +3,18 @@ import { For, JSX, batch, createEffect, createMemo, createSignal, onCleanup, onM
 import { type Vector2, createGesture } from '@pkg/solid-use-gesture';
 import { makeEventListener } from '@solid-primitives/event-listener';
 
-import { closeModal } from '../../globals/modals.tsx';
-
 import { createDerivedSignal } from '~/utils/hooks.ts';
 import { useMediaQuery } from '~/utils/media-query.ts';
+import { clsx } from '~/utils/misc.ts';
+
+import { closeModal } from '../../globals/modals.tsx';
+
+import { Interactive } from '../../primitives/interactive.ts';
 
 import ArrowLeftIcon from '../../icons/baseline-arrow-left.tsx';
 import CloseIcon from '../../icons/baseline-close.tsx';
-import { Interactive } from '~/com/primitives/interactive.ts';
+import VisibilityIcon from '../../icons/baseline-visibility.tsx';
+import VisibilityOffIcon from '../../icons/baseline-visibility-off.tsx';
 
 export interface EmbeddedImage {
 	fullsize: string;
@@ -24,6 +28,10 @@ export interface ImageViewerDialogProps {
 
 const iconButton = Interactive({
 	class: `grid h-8 w-8 place-items-center rounded-full bg-black/50 text-base text-white backdrop-blur`,
+});
+
+const altButton = Interactive({
+	class: `group flex h-8 place-items-center rounded-full bg-black/50 px-2 text-base text-white backdrop-blur`,
 });
 
 const ImageViewerDialog = (props: ImageViewerDialogProps) => {
@@ -136,8 +144,14 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 				</button>
 
 				{images().some((image) => !!image.alt) && (
-					<button title="Toggle alternative text display" onClick={() => {}} class={iconButton}>
-						<span class="text-xs font-bold drop-shadow">ALT</span>
+					<button
+						title="Toggle alternative text display"
+						onClick={() => setDisplayAlt(!displayAlt())}
+						class={clsx([altButton, displayAlt() && `is-active`])}
+					>
+						<span class="pl-0.5 pr-2 text-xs font-bold drop-shadow">ALT</span>
+						<VisibilityOffIcon class="drop-shadow group-[.is-active]:hidden" />
+						<VisibilityIcon class="hidden drop-shadow group-[.is-active]:block" />
 					</button>
 				)}
 			</div>
