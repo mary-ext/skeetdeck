@@ -62,7 +62,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 				onClose={() => closeModal()}
 			/>
 
-			<div class="absolute bottom-0 right-0 p-4">
+			<div class="pointer-events-none absolute bottom-0 right-0 p-4">
 				<div class="rounded-full bg-black/50 px-2 py-0.5 text-de text-white">{`${active() + 1} of ${
 					images().length
 				}`}</div>
