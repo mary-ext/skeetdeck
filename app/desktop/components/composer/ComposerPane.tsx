@@ -682,10 +682,8 @@ const ComposerPane = () => {
 
 						let nextPos = pos + delta;
 
-						if (nextPos < 0) {
-							nextPos = nodes.length - 1;
-						} else if (nextPos > nodes.length - 1) {
-							nextPos = 0;
+						if (nextPos < 0 || nextPos > nodes.length - 1) {
+							return;
 						}
 
 						const nextTarget = nodes[nextPos];
