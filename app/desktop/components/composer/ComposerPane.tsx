@@ -675,7 +675,7 @@ const ComposerPane = () => {
 
 						const nodes = [
 							...self.querySelectorAll<HTMLButtonElement | HTMLTextAreaElement>(`[data-targets~=${inputId}]`),
-						].filter((node) => !node.disabled);
+						];
 
 						const pos = nodes.indexOf(closest);
 						const delta = key === 'ArrowUp' ? -1 : 1;
@@ -687,7 +687,7 @@ const ComposerPane = () => {
 						}
 
 						const nextTarget = nodes[nextPos];
-						if (nextTarget) {
+						if (nextTarget && !nextTarget.disabled) {
 							nextTarget.focus();
 						}
 					}
