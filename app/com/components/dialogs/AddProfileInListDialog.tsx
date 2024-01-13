@@ -18,6 +18,7 @@ import { getProfileKey } from '~/api/queries/get-profile.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
 import { createDerivedSignal } from '~/utils/hooks.ts';
+import { clsx } from '~/utils/misc.ts';
 
 import { closeModal, useModalState } from '../../globals/modals.tsx';
 
@@ -205,7 +206,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 													<p class="text-sm text-muted-fg">{purpose()}</p>
 												</div>
 
-												<CheckIcon class="text-xl text-accent" classList={{ [`invisible`]: !checked() }} />
+												<CheckIcon class={clsx([`text-xl text-accent`, !checked() && `invisible`])} />
 											</button>
 										);
 									}}

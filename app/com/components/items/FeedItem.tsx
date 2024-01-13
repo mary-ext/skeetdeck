@@ -4,6 +4,8 @@ import { getRecordId } from '~/api/utils/misc.ts';
 
 import type { SignalizedFeed } from '~/api/stores/feeds.ts';
 
+import { clsx } from '~/utils/misc.ts';
+
 import { Interactive } from '../../primitives/interactive.ts';
 
 import { LINK_FEED, Link } from '../Link.tsx';
@@ -21,7 +23,9 @@ const FeedItemContent = (props: FeedItemProps, interactive?: boolean) => {
 		const feed = props.feed;
 
 		return (
-			<div class="flex gap-3 px-4 py-3 text-left" classList={{ [`hover:bg-secondary/10`]: interactive }}>
+			<div
+				class={/* @once */ clsx([`flex gap-3 px-4 py-3 text-left`, interactive && `hover:bg-secondary/10`])}
+			>
 				<img src={feed.avatar.value || DefaultFeedAvatar} class="h-12 w-12 shrink-0 rounded-md" />
 
 				<div class="flex min-w-0 grow flex-col gap-1">

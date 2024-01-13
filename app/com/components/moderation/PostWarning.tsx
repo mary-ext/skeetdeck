@@ -9,6 +9,8 @@ import { FlagNoOverride } from '~/api/moderation/enums.ts';
 
 import { getPostModDecision } from '~/api/moderation/decisions/post.ts';
 
+import { clsx } from '~/utils/misc.ts';
+
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 
 import VisibilityIcon from '../../icons/baseline-visibility.tsx';
@@ -85,8 +87,10 @@ const PostWarning = (props: PostWarningProps) => {
 			<button
 				disabled={!!forced}
 				onClick={() => setShow(!show())}
-				class="mt-3 flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider p-3 text-left hover:bg-secondary/30 disabled:pointer-events-none"
-				classList={{ 'mb-3': show() }}
+				class={clsx([
+					`mt-3 flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider p-3 text-left hover:bg-secondary/30 disabled:pointer-events-none`,
+					show() && `mb-3`,
+				])}
 			>
 				<Icon class="shrink-0 text-base text-muted-fg" />
 				<span class="grow text-sm">{title}</span>

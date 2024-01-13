@@ -10,6 +10,7 @@ import { getPostModDecision } from '~/api/moderation/decisions/post.ts';
 import { formatCompact } from '~/utils/intl/number.ts';
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
 import { useMediaQuery } from '~/utils/media-query.ts';
+import { clsx } from '~/utils/misc.ts';
 
 import { openModal } from '../../globals/modals.tsx';
 
@@ -87,11 +88,7 @@ const GalleryItem = (props: GalleryItemProps) => {
 				onKeyDown={handleClick}
 				class="group relative aspect-square w-full min-w-0 cursor-pointer select-none overflow-hidden bg-muted text-white"
 			>
-				<img
-					src={img.thumb}
-					class="h-full w-full object-cover"
-					classList={{ [`scale-110 blur`]: verdict() !== undefined }}
-				/>
+				<img src={img.thumb} class={clsx([`h-full w-full object-cover`, verdict() && `scale-110 blur`])} />
 
 				{hasHover() && (
 					<div class="invisible absolute inset-0 grid place-items-center bg-black/50 group-hover:visible">

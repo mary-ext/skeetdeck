@@ -5,7 +5,7 @@ import { useFloating } from 'solid-floating-ui';
 
 import { graphemeLen } from '~/api/richtext/intl.ts';
 
-import { assert } from '~/utils/misc.ts';
+import { assert, clsx } from '~/utils/misc.ts';
 
 import { Interactive } from '~/com/primitives/interactive.ts';
 
@@ -146,8 +146,10 @@ const TagsInput = (props: TagsInputProps) => {
 				tabIndex={0}
 				type="text"
 				placeholder="#add tags"
-				class="min-w-0 grow rounded-md bg-transparent leading-6 outline-2 outline-transparent outline placeholder:text-muted-fg"
-				classList={{ [`hidden`]: tags.length >= limit }}
+				class={clsx([
+					`min-w-0 grow rounded-md bg-transparent leading-6 outline-2 outline-transparent outline placeholder:text-muted-fg`,
+					tags.length >= limit && `hidden`,
+				])}
 				onFocus={(ev) => {
 					const target = ev.currentTarget;
 					target.tabIndex = 0;

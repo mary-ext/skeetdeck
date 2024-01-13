@@ -10,6 +10,7 @@ import { getPostModDecision } from '~/api/moderation/decisions/post.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
 import { formatAbsDateTime } from '~/utils/intl/time.ts';
+import { clsx } from '~/utils/misc.ts';
 
 import { LINK_LIST, LINK_POST_LIKED_BY, LINK_POST_REPOSTED_BY, LINK_PROFILE, Link } from '../Link.tsx';
 import RichTextRenderer from '../RichTextRenderer.tsx';
@@ -47,7 +48,8 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 	const post = props.post;
 
 	const author = post.author;
-	const record = () => post.record.value;
+	const record = post.record;
+	const viewer = post.viewer;
 
 	const rkey = () => {
 		return getRecordId(post.uri);
@@ -114,7 +116,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 			{post.embed.value && <Embed post={post} decision={decision} large />}
 
 			<div class="my-3 flex flex-wrap gap-1.5 text-sm empty:hidden">
-				{record().tags?.map((tag) => (
+				{record.value.tags?.map((tag) => (
 					<div class="flex min-w-0 items-center gap-1 rounded-full bg-secondary/30 px-2 leading-6">
 						<PoundIcon />
 						<span class="overflow-hidden text-ellipsis whitespace-nowrap">{tag}</span>
@@ -123,7 +125,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 			</div>
 
 			<div class="my-3">
-				<span class="text-sm text-muted-fg">{formatAbsDateTime(record().createdAt)}</span>
+				<span class="text-sm text-muted-fg">{formatAbsDateTime(record.value.createdAt)}</span>
 			</div>
 
 			<hr class="border-divider" />
@@ -146,8 +148,12 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 				<ReplyAction post={post}>
 					{(disabled) => (
 						<button
-							class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40 disabled:pointer-events-none"
-							classList={{ [`opacity-50`]: disabled }}
+							class={
+								/* @once */ clsx([
+									`flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40 disabled:pointer-events-none`,
+									disabled && `opacity-50`,
+								])
+							}
 						>
 							<ChatBubbleOutlinedIcon />
 						</button>
@@ -156,10 +162,10 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 
 				<RepostAction post={post}>
 					<button
-						class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40"
-						classList={{
-							'text-green-600': !!post.viewer.repost.value,
-						}}
+						class={clsx([
+							`flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40`,
+							viewer.repost.value && `text-green-600`,
+						])}
 					>
 						<RepeatIcon />
 					</button>
@@ -167,8 +173,10 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 
 				<button
 					onClick={() => updatePostLike(post, !post.viewer.like.value)}
-					class="group flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40"
-					classList={{ 'is-active text-red-600': !!post.viewer.like.value }}
+					class={clsx([
+						`group flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40`,
+						viewer.like.value && `is-active text-red-600`,
+					])}
 				>
 					<FavoriteOutlinedIcon class="group-[.is-active]:hidden" />
 					<FavoriteIcon class="hidden group-[.is-active]:block" />

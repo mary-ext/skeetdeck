@@ -5,6 +5,8 @@ import { getRecordId } from '~/api/utils/misc.ts';
 
 import type { ModerationDecision } from '~/api/moderation/action.ts';
 
+import { clsx } from '~/utils/misc.ts';
+
 import { Interactive } from '../../primitives/interactive.ts';
 
 import { LINK_POST, Link } from '../Link.tsx';
@@ -64,8 +66,12 @@ export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: b
 
 		return (
 			<div
-				class="overflow-hidden rounded-md border border-divider text-left"
-				classList={{ [`hover:bg-secondary/10`]: interactive }}
+				class={
+					/* @once */ clsx([
+						`overflow-hidden rounded-md border border-divider text-left`,
+						interactive && `hover:bg-secondary/10`,
+					])
+				}
 			>
 				<div class="mx-3 mt-3 flex text-sm text-muted-fg">
 					<div class="mr-1 h-5 w-5 shrink-0 overflow-hidden rounded-full bg-muted-fg">

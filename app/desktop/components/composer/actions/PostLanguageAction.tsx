@@ -3,6 +3,7 @@ import { batch, type JSX } from 'solid-js';
 import { systemLanguages } from '~/api/globals/platform.ts';
 
 import { getNativeLanguageName, languageNames } from '~/utils/intl/display-names.ts';
+import { clsx } from '~/utils/misc.ts';
 
 import { openModal } from '~/com/globals/modals.tsx';
 
@@ -74,10 +75,10 @@ const PostLanguageAction = (props: PostLanguageActionProps) => {
 										</div>
 
 										<CheckIcon
-											class="text-xl text-accent"
-											classList={{
-												[`invisible`]: props.languages.length !== 1 || !props.languages.includes(code),
-											}}
+											class={clsx([
+												`text-xl text-accent`,
+												(props.languages.length !== 1 || !props.languages.includes(code)) && `invisible`,
+											])}
 										/>
 									</button>
 								))
@@ -94,11 +95,12 @@ const PostLanguageAction = (props: PostLanguageActionProps) => {
 								<span class="grow">Custom</span>
 
 								<CheckIcon
-									class="text-xl text-accent"
-									classList={{
-										[`invisible`]:
-											props.languages.length < 2 && props.languages.every((code) => available.includes(code)),
-									}}
+									class={clsx([
+										`text-xl text-accent`,
+										props.languages.length < 2 &&
+											props.languages.every((code) => available.includes(code)) &&
+											`invisible`,
+									])}
 								/>
 							</button>
 						</div>

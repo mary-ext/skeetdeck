@@ -11,6 +11,7 @@ import {
 
 import { createDebouncedValue, createDerivedSignal } from '~/utils/hooks.ts';
 import { model } from '~/utils/input.ts';
+import { clsx } from '~/utils/misc.ts';
 
 import SearchInput from '~/com/components/inputs/SearchInput.tsx';
 
@@ -168,8 +169,7 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 						<button
 							onClick={() => props.onAccept(item)}
 							onPointerOver={() => setSelection(index())}
-							class="cursor-pointer text-left text-sm"
-							classList={{ [`bg-secondary/30`]: index() === selection() }}
+							class={clsx([`cursor-pointer text-left text-sm`, index() === selection() && `bg-secondary/30`])}
 						>
 							{node}
 						</button>

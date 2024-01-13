@@ -8,7 +8,7 @@ import { getSide } from '@floating-ui/utils';
 import { PreferenceHide, PreferenceIgnore, PreferenceWarn } from '~/api/moderation/enums.ts';
 import type { ModerationLabelOpts } from '~/api/moderation/types.ts';
 
-import { assert } from '~/utils/misc.ts';
+import { assert, clsx } from '~/utils/misc.ts';
 
 import { bustRevisionCache, preferences } from '~/desktop/globals/settings.ts';
 
@@ -381,8 +381,10 @@ const LabelConfigFlyout = (props: LabelConfigFlyoutProps) => {
 							</div>
 
 							<CheckIcon
-								class="text-xl text-accent"
-								classList={{ [`invisible`]: props.multiple || value !== props.value }}
+								class={clsx([
+									`text-xl text-accent`,
+									(props.multiple || value !== props.value) && `invisible`,
+								])}
 							/>
 						</button>
 					);

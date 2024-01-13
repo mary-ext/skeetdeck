@@ -5,6 +5,7 @@ import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 import { getProfileModDecision } from '~/api/moderation/decisions/profile.ts';
 
 import { INTERACTION_TAGS, isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
+import { clsx } from '~/utils/misc.ts';
 
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 
@@ -60,8 +61,7 @@ export const ProfileItem = (props: ProfileItemProps) => {
 				<div class="h-12 w-12 overflow-hidden rounded-full">
 					<img
 						src={profile().avatar.value || DefaultAvatar}
-						class="h-full w-full object-cover"
-						classList={{ [`blur`]: !!profile().avatar.value && verdict()?.m }}
+						class={clsx([`h-full w-full object-cover`, profile().avatar.value && verdict()?.m && `blur`])}
 					/>
 				</div>
 				{(() => {

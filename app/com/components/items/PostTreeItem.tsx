@@ -8,6 +8,7 @@ import { updatePostLike } from '~/api/mutations/like-post.ts';
 import { getProfileModDecision } from '~/api/moderation/decisions/profile.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
+import { clsx } from '~/utils/misc.ts';
 
 import { type PostLinking, type ProfileLinking, LINK_POST, LINK_PROFILE, Link } from '../Link.tsx';
 import RichTextRenderer from '../RichTextRenderer.tsx';
@@ -45,6 +46,7 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 
 	const author = post.author;
 	const record = post.record;
+	const viewer = post.viewer;
 
 	const authorPermalink: ProfileLinking = {
 		type: LINK_PROFILE,
@@ -147,8 +149,12 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 						{(disabled) => (
 							<button class="group flex max-w-full items-center gap-0.5">
 								<div
-									class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40 group-disabled:opacity-50"
-									classList={{ [`opacity-50`]: disabled }}
+									class={
+										/* @once */ clsx([
+											`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40 group-disabled:opacity-50`,
+											disabled && `opacity-50`,
+										])
+									}
 								>
 									<ChatBubbleOutlinedIcon />
 								</div>
@@ -159,8 +165,10 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 
 					<RepostAction post={post}>
 						<button
-							class="group flex max-w-full basis-0 items-center gap-0.5"
-							classList={{ 'text-green-600': !!post.viewer.repost.value }}
+							class={clsx([
+								`group flex max-w-full basis-0 items-center gap-0.5`,
+								viewer.repost.value && `text-green-600`,
+							])}
 						>
 							<div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40">
 								<RepeatIcon />
@@ -174,8 +182,10 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 
 					<button
 						onClick={() => updatePostLike(post, !post.viewer.like.value)}
-						class="group flex max-w-full basis-0 items-center gap-0.5"
-						classList={{ 'is-active text-red-600': !!post.viewer.like.value }}
+						class={clsx([
+							`group flex max-w-full basis-0 items-center gap-0.5`,
+							viewer.like.value && `is-active text-red-600`,
+						])}
 					>
 						<div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40">
 							<FavoriteOutlinedIcon class="group-[.is-active]:hidden" />

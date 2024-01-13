@@ -12,6 +12,7 @@ import { getProfileModDecision } from '~/api/moderation/decisions/profile.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
+import { clsx } from '~/utils/misc.ts';
 
 import {
 	type PostLinking,
@@ -86,11 +87,11 @@ const Post = (props: PostProps) => {
 			onClick={handleClick}
 			onAuxClick={handleClick}
 			onKeyDown={handleClick}
-			class="relative border-divider px-4 outline-2 -outline-offset-2 outline-primary focus-visible:outline"
-			classList={{
-				'border-b': !props.next,
-				'hover:bg-secondary/10': props.interactive,
-			}}
+			class={clsx([
+				`relative border-divider px-4 outline-2 -outline-offset-2 outline-primary focus-visible:outline`,
+				!props.next && `border-b`,
+				props.interactive && `hover:bg-secondary/10`,
+			])}
 		>
 			{(() => {
 				if (props.highlight) {
@@ -180,8 +181,7 @@ const Post = (props: PostProps) => {
 					>
 						<img
 							src={author.avatar.value || DefaultAvatar}
-							class="h-full w-full"
-							classList={{ [`blur`]: !!author.avatar.value && profileVerdict()?.m }}
+							class={clsx([`h-full w-full`, !!author.avatar.value && profileVerdict()?.m && `blur`])}
 						/>
 					</Link>
 					{(() => {
@@ -264,8 +264,12 @@ const Post = (props: PostProps) => {
 											{(disabled) => (
 												<button class="group flex max-w-full items-end gap-0.5">
 													<div
-														class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40 group-disabled:opacity-50"
-														classList={{ [`opacity-50`]: disabled }}
+														class={
+															/* @once */ clsx([
+																`-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40 group-disabled:opacity-50`,
+																disabled && `opacity-50`,
+															])
+														}
 													>
 														<ChatBubbleOutlinedIcon />
 													</div>
@@ -280,8 +284,10 @@ const Post = (props: PostProps) => {
 									<div class="min-w-0 grow basis-0">
 										<RepostAction post={post}>
 											<button
-												class="group flex max-w-full grow basis-0 items-end gap-0.5"
-												classList={{ 'text-green-600': !!viewer.repost.value }}
+												class={clsx([
+													`group flex max-w-full grow basis-0 items-end gap-0.5`,
+													viewer.repost.value && `text-green-600`,
+												])}
 											>
 												<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40">
 													<RepeatIcon />
@@ -297,8 +303,10 @@ const Post = (props: PostProps) => {
 									<div class="min-w-0 grow basis-0">
 										<button
 											onClick={() => updatePostLike(post, !viewer.like.value)}
-											class="group flex max-w-full grow basis-0 items-end gap-0.5"
-											classList={{ 'is-active text-red-600': !!viewer.like.value }}
+											class={clsx([
+												`group flex max-w-full grow basis-0 items-end gap-0.5`,
+												viewer.like.value && `is-active text-red-600`,
+											])}
 										>
 											<div class="-my-1.5 -ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base group-hover:bg-secondary/40">
 												<FavoriteOutlinedIcon class="group-[.is-active]:hidden" />

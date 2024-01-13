@@ -24,3 +24,17 @@ export const mapDefined = <T, R>(array: T[], mapper: (value: T) => R | undefined
 
 	return mapped;
 };
+
+export const clsx = (arr: (string | 0 | false | undefined | null)[]): string => {
+	var res = '';
+	var tmp: any;
+
+	for (var i = 0, ilen = arr.length; i < ilen; i++) {
+		if ((tmp = arr[i])) {
+			res && (res += ' ');
+			res += tmp;
+		}
+	}
+
+	return res;
+};

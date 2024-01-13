@@ -29,7 +29,7 @@ import { preferences } from '~/desktop/globals/settings.ts';
 
 import { languageNames } from '~/utils/intl/display-names.ts';
 import { type PendingImage, compressPostImage } from '~/utils/image.ts';
-import { getUniqueId } from '~/utils/misc.ts';
+import { clsx, getUniqueId } from '~/utils/misc.ts';
 import { Signal, signal } from '~/utils/signals.ts';
 
 import { Button } from '~/com/primitives/button.ts';
@@ -1161,8 +1161,10 @@ const ComposerPane = () => {
 										<div class="grow px-2"></div>
 
 										<span
-											class="px-2 text-de text-muted-fg"
-											classList={{ 'text-red-600': length() > GRAPHEME_LIMIT }}
+											class={clsx([
+												`px-2 text-de text-muted-fg`,
+												length() > GRAPHEME_LIMIT && `text-red-600`,
+											])}
 										>
 											{GRAPHEME_LIMIT - length()}
 										</span>
@@ -1170,7 +1172,7 @@ const ComposerPane = () => {
 										{images.length > 0 && (
 											<ContentWarningAction labels={draft.labels}>
 												<button title="Add content warning..." class={toolbarIcon}>
-													<ShieldIcon classList={{ [`text-accent`]: draft.labels.length > 0 }} />
+													<ShieldIcon class={clsx([draft.labels.length > 0 && `text-accent`])} />
 												</button>
 											</ContentWarningAction>
 										)}

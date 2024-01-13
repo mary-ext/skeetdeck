@@ -1,5 +1,7 @@
 import { type ComponentProps, type JSX, createSignal, Suspense } from 'solid-js';
 
+import { clsx } from '~/utils/misc.ts';
+
 import { closeModal } from '~/com/globals/modals.tsx';
 
 import { DialogRoot } from '~/com/primitives/dialog.ts';
@@ -135,8 +137,7 @@ const SideItem = (props: { icon?: IconComponent; to: StandaloneViewType; childre
 			onClick={() => {
 				router.move({ type: props.to });
 			}}
-			class={sideItem}
-			classList={{ [`bg-secondary/20`]: router.current.type === props.to }}
+			class={clsx([sideItem, router.current.type === props.to && `bg-secondary/20`])}
 		>
 			{(() => {
 				const Icon = props.icon;

@@ -3,6 +3,8 @@ import type { JSX } from 'solid-js';
 import type { DID } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 
+import { clsx } from '~/utils/misc.ts';
+
 import { MenuItem, MenuRoot } from '~/com/primitives/menu.ts';
 
 import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout.tsx';
@@ -43,10 +45,7 @@ const SwitchAccountAction = (props: SwitchAccountActionProps) => {
 								</p>
 							</div>
 
-							<CheckIcon
-								class="text-xl text-accent"
-								classList={{ [`invisible`]: account.did !== props.value }}
-							/>
+							<CheckIcon class={clsx([`text-xl text-accent`, account.did !== props.value && `invisible`])} />
 						</button>
 					))}
 				</div>

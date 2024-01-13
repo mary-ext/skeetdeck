@@ -3,6 +3,7 @@ import { type Accessor, type JSX, For, Suspense, createSignal } from 'solid-js';
 import { createSortable, transformStyle } from '@thisbeyond/solid-dnd';
 
 import { signal } from '~/utils/signals.ts';
+import { clsx } from '~/utils/misc.ts';
 
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 
@@ -69,10 +70,10 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 			<PaneLinkingContextProvider>
 				<div
 					ref={sortable.ref}
-					class="relative"
-					classList={{
-						[`z-10 cursor-grabbing shadow-lg shadow-black`]: sortable.isActiveDraggable,
-					}}
+					class={clsx([
+						`relative`,
+						sortable.isActiveDraggable && `z-10 cursor-grabbing shadow-lg shadow-black`,
+					])}
 					style={transformStyle(sortable.transform)}
 				>
 					<div class="flex h-full" prop:inert={sortable.isActiveDraggable || modals().length > 0}>

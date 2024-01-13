@@ -20,6 +20,7 @@ import {
 import { addPane, preferences } from '../globals/settings.ts';
 
 import { updateSW, updateStatus } from '~/utils/service-worker.ts';
+import { clsx } from '~/utils/misc.ts';
 
 import { Interactive } from '~/com/primitives/interactive.ts';
 
@@ -172,8 +173,10 @@ const DashboardLayout = (props: RouteComponentProps) => {
 									data-link="replace"
 								>
 									<div
-										class="pointer-events-none absolute inset-0 border-l-3 border-accent"
-										classList={{ [`hidden`]: location.pathname !== href }}
+										class={clsx([
+											`pointer-events-none absolute inset-0 border-l-3 border-accent`,
+											location.pathname !== href && `hidden`,
+										])}
 									></div>
 
 									<span>{deck.emoji}</span>

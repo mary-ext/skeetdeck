@@ -1,5 +1,7 @@
 import { type JSX, batch } from 'solid-js';
 
+import { clsx } from '~/utils/misc.ts';
+
 import { MenuItem, MenuRoot } from '~/com/primitives/menu.ts';
 
 import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout.tsx';
@@ -39,10 +41,10 @@ const ContentWarningAction = (props: ContentWarningActionProps) => {
 							</div>
 
 							<CheckIcon
-								class="text-xl text-accent"
-								classList={{
-									[`invisible`]: value !== undefined ? !selected.includes(value) : selected.length !== 0,
-								}}
+								class={clsx([
+									`text-xl text-accent`,
+									(value !== undefined ? !selected.includes(value) : selected.length !== 0) && `invisible`,
+								])}
 							/>
 						</button>
 					);

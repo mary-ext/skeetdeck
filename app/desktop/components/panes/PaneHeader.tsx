@@ -2,6 +2,8 @@ import { type JSX } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent.ts';
 
+import { clsx } from '~/utils/misc.ts';
+
 import DragIndicatorIcon from '~/com/icons/baseline-drag-indicator.tsx';
 
 import { IconButton } from '~/com/primitives/icon-button.ts';
@@ -30,8 +32,10 @@ const PaneHeader = (props: PaneHeaderProps) => {
 
 	return (
 		<div
-			class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4"
-			classList={{ [`bg-secondary/30`]: sortable.isActiveDraggable }}
+			class={clsx([
+				`flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4`,
+				sortable.isActiveDraggable && `bg-secondary/30`,
+			])}
 		>
 			<button
 				{...sortable.dragActivators}

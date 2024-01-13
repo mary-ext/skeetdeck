@@ -11,6 +11,7 @@ import { getProfileModDecision } from '~/api/moderation/decisions/profile.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
 import { formatAbsDateTime } from '~/utils/intl/time.ts';
+import { clsx } from '~/utils/misc.ts';
 
 import { openModal } from '~/com/globals/modals.tsx';
 
@@ -70,8 +71,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 						>
 							<img
 								src={banner}
-								class="h-full w-full object-cover group-hover:opacity-75"
-								classList={{ [`blur`]: verdict()?.m }}
+								class={clsx([`h-full w-full object-cover group-hover:opacity-75`, verdict()?.m && `blur`])}
 							/>
 						</button>
 					);
@@ -95,8 +95,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 								>
 									<img
 										src={avatar}
-										class="h-full w-full group-hover:opacity-75"
-										classList={{ [`blur`]: verdict()?.m }}
+										class={clsx([`h-full w-full group-hover:opacity-75`, verdict()?.m && `blur`])}
 									/>
 								</button>
 							);

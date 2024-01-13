@@ -2,6 +2,8 @@ import { type JSX, For, children, createMemo } from 'solid-js';
 
 import { Freeze } from '@pkg/solid-freeze';
 
+import { clsx } from '~/utils/misc.ts';
+
 import Tab from './Tab.tsx';
 
 export interface TabbedPanelViewProps {
@@ -59,8 +61,10 @@ export const TabbedPanel = <T extends string | number>(props: TabbedPanelProps<T
 		<>
 			{!props.hideTabs && (
 				<div
-					class="box-content flex shrink-0 overflow-x-auto border-b border-divider"
-					classList={{ [`h-13`]: !props.dense, [`h-10`]: props.dense }}
+					class={clsx([
+						`box-content flex shrink-0 overflow-x-auto border-b border-divider`,
+						!props.dense ? `h-13` : `h-10`,
+					])}
 				>
 					<For each={panels.toArray() as unknown as TabbedPanelViewProps[]}>
 						{(panel) => (

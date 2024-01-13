@@ -22,7 +22,7 @@ import type { PreliminaryRichText } from '~/api/richtext/composer.ts';
 // import { graphemeLen } from '~/api/richtext/intl.ts';
 
 import { createDebouncedValue } from '~/utils/hooks.ts';
-import { assert } from '~/utils/misc.ts';
+import { assert, clsx } from '~/utils/misc.ts';
 
 import CircularProgress from '../CircularProgress.tsx';
 
@@ -477,8 +477,10 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 												// onMouseEnter={() => {
 												// 	setMenuSelection(index());
 												// }}
-												class="flex cursor-pointer items-center gap-4 px-4 py-2 hover:bg-secondary/30"
-												classList={{ 'bg-secondary/30': selected() }}
+												class={clsx([
+													`flex cursor-pointer items-center gap-4 px-4 py-2 hover:bg-secondary/30`,
+													selected() && `bg-secondary/30`,
+												])}
 											>
 												{node}
 											</li>

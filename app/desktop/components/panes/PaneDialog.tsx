@@ -1,4 +1,6 @@
-import { createMemo, type JSX } from 'solid-js';
+import { type JSX, createMemo } from 'solid-js';
+
+import { clsx } from '~/utils/misc.ts';
 
 import { preferences } from '../../globals/settings.ts';
 import { PaneSize, SpecificPaneSize } from '../../globals/panes.ts';
@@ -24,12 +26,12 @@ const PaneDialog = (props: PaneDialogProps) => {
 
 	return (
 		<div
-			class="flex h-full flex-col bg-background"
-			classList={{
-				[`w-84`]: size() === PaneSize.SMALL,
-				[`w-96`]: size() === PaneSize.MEDIUM,
-				[`w-120`]: size() === PaneSize.LARGE,
-			}}
+			class={clsx([
+				`flex h-full flex-col bg-background`,
+				size() === PaneSize.SMALL && `w-84`,
+				size() === PaneSize.MEDIUM && `w-96`,
+				size() === PaneSize.LARGE && `w-120`,
+			])}
 		>
 			{props.children}
 		</div>

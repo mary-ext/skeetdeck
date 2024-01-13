@@ -2,6 +2,8 @@ import { lazy } from 'solid-js';
 
 import type { RefOf } from '~/api/atp-schema.ts';
 
+import { clsx } from '~/utils/misc.ts';
+
 import { openModal } from '~/com/globals/modals.tsx';
 
 import ImageAltAction from './images/ImageAltAction.tsx';
@@ -84,13 +86,11 @@ const EmbedImage = (props: EmbedImageProps) => {
 							placeholder = undefined;
 						}
 					}}
-					class="h-full w-full object-cover text-[0px]"
-					classList={{
-						'cursor-pointer': interactive,
-						'scale-110': blur(),
-						blur: blur() && !borderless,
-						'blur-lg': blur() && borderless,
-					}}
+					class={clsx([
+						`h-full w-full object-cover text-[0px]`,
+						interactive && `cursor-pointer`,
+						blur() && `scale-110 ` + (!borderless ? `blur` : `blur-lg`),
+					])}
 				/>
 
 				{mode === RenderMode.STANDALONE_RATIO && <div ref={placeholder} class="h-screen w-screen"></div>}
@@ -111,10 +111,10 @@ const EmbedImage = (props: EmbedImageProps) => {
 
 	return (
 		<div
-			classList={{
-				'overflow-hidden rounded-md border border-divider': !borderless,
-				'max-w-full self-baseline': hasStandaloneImage(),
-			}}
+			class={clsx([
+				!borderless && `overflow-hidden rounded-md border border-divider`,
+				hasStandaloneImage() && `max-w-full self-baseline`,
+			])}
 		>
 			{(() => {
 				const images = props.images;
