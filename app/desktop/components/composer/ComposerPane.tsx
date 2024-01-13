@@ -91,7 +91,11 @@ const toolbarIcon = IconButton({ size: 'lg', class: 'text-primary/85 hover:text-
 
 const removeEmbedBtn = Interactive({
 	variant: 'none',
-	class: `absolute right-1 top-1 z-20 grid h-7 w-7 place-items-center rounded-full bg-black text-base text-white hover:bg-secondary`,
+	class: `absolute right-1 top-1 z-20 grid h-7 w-7 place-items-center rounded-full bg-background text-base text-primary hover:bg-secondary`,
+});
+
+const removeImageBtn = Interactive({
+	class: `absolute right-1 top-1 z-20 grid h-7 w-7 place-items-center rounded-full bg-black/50 text-base text-white backdrop-blur`,
 });
 
 const linkEmbedBtn = Interactive({
@@ -995,9 +999,9 @@ const ComposerPane = () => {
 																textareaRef!.focus();
 															}
 														}}
-														class={removeEmbedBtn}
+														class={removeImageBtn}
 													>
-														<CloseIcon />
+														<CloseIcon class="drop-shadow" />
 													</button>
 
 													<button
@@ -1007,9 +1011,13 @@ const ComposerPane = () => {
 																disableBackdropClose: true,
 															});
 														}}
-														class="absolute bottom-0 left-0 m-1 flex h-5 items-center rounded bg-black/70 px-1 text-xs font-medium text-white"
+														class={
+															/* @once */ Interactive({
+																class: `absolute bottom-0 left-0 m-1 flex h-5 items-center rounded bg-black/50 px-1 text-xs font-medium text-white backdrop-blur`,
+															})
+														}
 													>
-														<span>ALT</span>
+														<span class="drop-shadow">ALT</span>
 														{image.alt.value && <CheckIcon class="ml-1" />}
 													</button>
 												</div>
