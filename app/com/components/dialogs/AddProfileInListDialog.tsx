@@ -169,7 +169,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 							</button>
 						</div>
 
-						<div class={/* @once */ DialogBody({ padded: false, class: 'flex flex-col' })}>
+						<div class={/* @once */ DialogBody({ padded: false, scrollable: true, class: 'flex flex-col' })}>
 							<div ref={listEl} class="contents">
 								<For each={lists.data?.pages.flatMap((page) => page.lists)}>
 									{(list) => {
