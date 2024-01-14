@@ -95,6 +95,7 @@ const removeEmbedBtn = Interactive({
 });
 
 const removeImageBtn = Interactive({
+	variant: 'white',
 	class: `absolute right-1 top-1 z-20 grid h-7 w-7 place-items-center rounded-full bg-black/50 text-base text-white backdrop-blur`,
 });
 
@@ -1013,6 +1014,7 @@ const ComposerPane = () => {
 														}}
 														class={
 															/* @once */ Interactive({
+																variant: 'white',
 																class: `absolute bottom-0 left-0 m-1 flex h-5 items-center rounded bg-black/50 px-1 text-xs font-medium text-white backdrop-blur`,
 															})
 														}
