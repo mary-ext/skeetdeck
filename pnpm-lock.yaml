@@ -168,10 +168,6 @@ importers:
         version: 2.8.0(solid-js@1.8.10)(vite@5.0.11)
 
   packages/solid-page-router:
-    dependencies:
-      '@pkg/solid-freeze':
-        specifier: workspace:^
-        version: link:../solid-freeze
     devDependencies:
       solid-js:
         specifier: ^1.8.10
