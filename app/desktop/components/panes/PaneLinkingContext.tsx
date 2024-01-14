@@ -1,7 +1,6 @@
-import { type JSX, lazy, batch, createMemo } from 'solid-js';
+import { type JSX, lazy, batch } from 'solid-js';
 
 import {
-	type ExternalLinking,
 	type LinkingContextObject,
 	LINK_EXTERNAL,
 	LINK_FEED_LIKED_BY,
@@ -90,31 +89,21 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 	const linkContext: LinkingContextObject = {
 		navigate: navigate,
 		render(props) {
-			const isExternal = createMemo(() => {
-				return props.to.type === LINK_EXTERNAL && !props.disabled;
-			});
-
 			return (() => {
-				if (isExternal()) {
+				const to = props.to;
+
+				if (to.type === LINK_EXTERNAL && !props.disabled) {
+					const url = to.url;
+
 					return (
-						<a
-							{...props}
-							// @ts-expect-error
-							to={null}
-							href={(props.to as ExternalLinking).url}
-							target="_blank"
-							rel="noopener noreferrer nofollow"
-						/>
+						// @ts-expect-error
+						<a {...props} to={null} href={url} target="_blank" rel="noopener noreferrer nofollow" />
 					);
 				}
 
 				return (
-					<button
-						{...props}
-						// @ts-expect-error
-						to={null}
-						onClick={() => navigate(props.to, false)}
-					/>
+					// @ts-expect-error
+					<button {...props} to={null} onClick={() => navigate(props.to, false)} />
 				);
 			}) as unknown as JSX.Element;
 		},
