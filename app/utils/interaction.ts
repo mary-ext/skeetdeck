@@ -1,3 +1,5 @@
+export const isMac = /^Mac/i.test(navigator.platform);
+
 const EXCLUDED_TAGS = ['a', 'button', 'img', 'video', 'dialog'];
 export const INTERACTION_TAGS = ['a', 'button'];
 
@@ -34,5 +36,9 @@ export const isElementClicked = (ev: Event, excludedTags: string[] = EXCLUDED_TA
 };
 
 export const isElementAltClicked = (ev: MouseEvent | KeyboardEvent) => {
-	return ev.type === 'auxclick' || ev.ctrlKey;
+	return ev.type === 'auxclick' || isCtrlKeyPressed(ev);
+};
+
+export const isCtrlKeyPressed = (ev: MouseEvent | KeyboardEvent) => {
+	return isMac ? ev.metaKey : ev.ctrlKey;
 };

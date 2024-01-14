@@ -4,6 +4,8 @@ import { isLinkValid } from '~/api/richtext/renderer.ts';
 import { segmentRichText } from '~/api/richtext/segmentize.ts';
 import type { Facet, RichTextSegment } from '~/api/richtext/types.ts';
 
+import { isCtrlKeyPressed } from '~/utils/interaction.ts';
+
 import { type Linking, LINK_EXTERNAL, LINK_PROFILE, LINK_TAG, useLinking } from './Link.tsx';
 
 export interface RichTextReturn {
@@ -54,9 +56,9 @@ const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => 
 		let nav = ShouldLink.NO;
 
 		if (ev instanceof MouseEvent) {
-			nav = ev.ctrlKey || ev.button === 1 ? ShouldLink.WITH_ALT : ShouldLink.YES;
+			nav = isCtrlKeyPressed(ev) || ev.button === 1 ? ShouldLink.WITH_ALT : ShouldLink.YES;
 		} else if (ev instanceof KeyboardEvent && ev.key === 'Enter') {
-			nav = ev.ctrlKey ? ShouldLink.WITH_ALT : ShouldLink.YES;
+			nav = isCtrlKeyPressed(ev) ? ShouldLink.WITH_ALT : ShouldLink.YES;
 		}
 
 		if (nav !== ShouldLink.NO) {

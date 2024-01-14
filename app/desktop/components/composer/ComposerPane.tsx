@@ -29,6 +29,7 @@ import { preferences } from '~/desktop/globals/settings.ts';
 
 import { languageNames } from '~/utils/intl/display-names.ts';
 import { type PendingImage, compressPostImage } from '~/utils/image.ts';
+import { isMac } from '~/utils/interaction.ts';
 import { clsx, getUniqueId } from '~/utils/misc.ts';
 import { Signal, signal } from '~/utils/signals.ts';
 
@@ -664,7 +665,7 @@ const ComposerPane = () => {
 				onKeyDown={(ev) => {
 					const key = ev.key;
 
-					if (ev.ctrlKey && (key === 'ArrowUp' || key === 'ArrowDown')) {
+					if ((isMac ? ev.altKey : ev.ctrlKey) && (key === 'ArrowUp' || key === 'ArrowDown')) {
 						const target = ev.target;
 						const self = ev.currentTarget;
 

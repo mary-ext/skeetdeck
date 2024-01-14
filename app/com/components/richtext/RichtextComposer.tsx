@@ -22,6 +22,7 @@ import type { PreliminaryRichText } from '~/api/richtext/composer.ts';
 // import { graphemeLen } from '~/api/richtext/intl.ts';
 
 import { createDebouncedValue } from '~/utils/hooks.ts';
+import { isCtrlKeyPressed } from '~/utils/interaction.ts';
 import { assert, clsx } from '~/utils/misc.ts';
 
 import CircularProgress from '../CircularProgress.tsx';
@@ -382,8 +383,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 
 						return;
 					}
-
-					if (key === 'Enter' && ev.ctrlKey) {
+					if (key === 'Enter' && isCtrlKeyPressed(ev)) {
 						// There shouldn't be a need, but might as well.
 						ev.preventDefault();
 						props.onSubmit();
