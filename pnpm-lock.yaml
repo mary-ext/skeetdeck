@@ -89,6 +89,9 @@ importers:
       solid-textarea-autosize:
         specifier: ^0.0.5
         version: 0.0.5(patch_hash=xoixqosplh7bmfbnvr4hschede)(solid-js@1.8.10)
+      tldts:
+        specifier: ^6.1.2
+        version: 6.1.2
     devDependencies:
       '@types/node':
         specifier: ^20.11.0
@@ -4085,6 +4088,17 @@ packages:
     dependencies:
       any-promise: 1.3.0
     dev: true
+
+  /tldts-core@6.1.2:
+    resolution: {integrity: sha512-cFBCCSilkRe/7JkZrQlzqhWDE0r1irpEYRp5XiFLFGl8fTwN4eWqutyx9wfFaDfmVv7E7pQMUZnM1VHnOid5Vw==}
+    dev: false
+
+  /tldts@6.1.2:
+    resolution: {integrity: sha512-bmIVB9OKvYlNcEoCRpa2swYlLpAmhLvGlXMZ0pSzmbU+0S/LNZJwTzHB56Fom7m9XCVh+mf2RDyCTRgX6MRDjQ==}
+    hasBin: true
+    dependencies:
+      tldts-core: 6.1.2
+    dev: false
 
   /to-fast-properties@2.0.0:
     resolution: {integrity: sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==}

@@ -1,5 +1,9 @@
 import { type JSX, lazy, batch } from 'solid-js';
 
+import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
+
+import { openModal } from '~/com/globals/modals.tsx';
+
 import {
 	type LinkingContextObject,
 	LINK_EXTERNAL,
@@ -23,6 +27,8 @@ import {
 import { useComposer } from '../composer/ComposerContext.tsx';
 
 import { usePaneContext } from './PaneContext.tsx';
+
+const LinkWarningDialog = lazy(() => import('~/com/components/dialogs/LinkWarningDialog.tsx'));
 
 export interface PaneLinkingContextProps {
 	children: JSX.Element;
@@ -94,10 +100,19 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 
 				if (to.type === LINK_EXTERNAL && !props.disabled) {
 					const url = to.url;
+					const valid = to.valid;
 
 					return (
-						// @ts-expect-error
-						<a {...props} to={null} href={url} target="_blank" rel="noopener noreferrer nofollow" />
+						<a
+							{...props}
+							// @ts-expect-error
+							to={null}
+							href={url}
+							target="_blank"
+							rel="noopener noreferrer nofollow"
+							onClick={!valid ? handleInvalidLink : undefined}
+							onAuxClick={!valid ? handleInvalidLink : undefined}
+						/>
 					);
 				}
 
@@ -110,4 +125,33 @@ export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
 	};
 
 	return <LinkingContext.Provider value={linkContext}>{props.children}</LinkingContext.Provider>;
+};
+
+interface InvalidAnchorElement extends HTMLAnchorElement {
+	_ignored?: boolean;
+}
+
+const handleInvalidLink: JSX.EventHandler<HTMLAnchorElement, MouseEvent> = (ev) => {
+	const target = ev.currentTarget as InvalidAnchorElement;
+
+	if (target._ignored || !isElementClicked(ev)) {
+		return;
+	}
+
+	const alt = isElementAltClicked(ev);
+
+	ev.preventDefault();
+	openModal(() => (
+		<LinkWarningDialog
+			url={/* @once */ target.href}
+			onConfirm={() => {
+				try {
+					target._ignored = true;
+					target.dispatchEvent(new MouseEvent('click', { ctrlKey: alt, metaKey: alt }));
+				} finally {
+					target._ignored = false;
+				}
+			}}
+		/>
+	));
 };
