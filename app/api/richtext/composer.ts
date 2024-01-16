@@ -243,14 +243,14 @@ export const parseRt = (source: string): PreliminaryRichText => {
 			for (; end < len; end++) {
 				const char = c(end);
 
-				if (char === CharCode.ESCAPE) {
+				if (char === CharCode.ESCAPE || char === CharCode.OSQUARE) {
 					break;
 				}
 
-				if (char === CharCode.AT || char === CharCode.TAG || char === CharCode.OSQUARE) {
+				if (char === CharCode.AT || char === CharCode.TAG) {
 					const prev = c(end - 1);
 
-					if (char !== CharCode.OSQUARE && prev !== CharCode.SPACE && prev !== CharCode.NEWLINE) {
+					if (prev !== CharCode.SPACE && prev !== CharCode.NEWLINE) {
 						continue;
 					}
 
