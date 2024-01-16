@@ -1,7 +1,6 @@
 import type { JSX } from 'solid-js';
 
-import { isLinkValid } from '~/api/richtext/renderer.ts';
-import { segmentRichText } from '~/api/richtext/segmentize.ts';
+import { serializeRichText } from '~/api/richtext/utils.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
 import type { SignalizedPost } from '~/api/stores/posts.ts';
@@ -28,40 +27,6 @@ const PostShareAction = (props: PostShareActionProps) => {
 
 		const getPostUrl = () => {
 			return `https://bsky.app/profile/${author.handle.value}/post/${getRecordId(post.uri)}`;
-		};
-
-		const getPostText = () => {
-			const record = post.record.peek();
-
-			const text = record.text;
-			const facets = record.facets;
-
-			if (facets) {
-				const segments = segmentRichText(text, facets);
-
-				let result = '';
-
-				for (let idx = 0, len = segments.length; idx < len; idx++) {
-					const segment = segments[idx];
-
-					const text = segment.text;
-					const link = segment.link;
-
-					if (link) {
-						if (isLinkValid(link.uri, text)) {
-							result += link.uri;
-						} else {
-							result += `[${text}](${link.uri})`;
-						}
-					} else {
-						result += text;
-					}
-				}
-
-				return result;
-			} else {
-				return text;
-			}
 		};
 
 		if (import.meta.env.VITE_MODE === 'desktop') {
@@ -96,7 +61,11 @@ const PostShareAction = (props: PostShareActionProps) => {
 							<button
 								onClick={() => {
 									close();
-									navigator.clipboard.writeText(getPostText());
+
+									const record = post.record.value;
+									const serialized = serializeRichText(record.text, record.facets, true);
+
+									navigator.clipboard.writeText(serialized);
 								}}
 								class={/* @once */ MenuItem()}
 							>
