@@ -90,21 +90,21 @@ const buildHtml = (rt: PreliminaryRichText) => {
 		const segment = segments[i];
 
 		const type = segment.type;
-		const raw = segment.raw;
 
 		if (type === 'link' || type === 'mention' || type === 'tag') {
-			str += `<span class=text-accent>` + escape(raw, false) + `</span>`;
+			str += `<span class=text-accent>` + escape(segment.raw, false) + `</span>`;
 		} else if (type === 'escape') {
-			str += `<span class=opacity-50>` + escape(raw, false) + `</span>`;
+			str += `<span class=opacity-50>` + escape(segment.raw, false) + `</span>`;
 		} else if (type === 'mdlink') {
 			const className = segment.valid ? `text-accent` : `text-red-500`;
+			const [_0, label, _1, uri, _2] = segment.raw;
 
 			str +=
-				`<span class=opacity-50>[</span>` +
-				`<span class=${className}>${escape(segment.text, false)}</span>` +
-				`<span class=opacity-50>](${escape(segment.uri, false)})</span>`;
+				`<span class=opacity-50>${_0}</span>` +
+				`<span class=${className}>${escape(label, false)}</span>` +
+				`<span class=opacity-50>${_1}${escape(uri, false)}${_2}</span>`;
 		} else {
-			str += escape(raw, false);
+			str += escape(segment.raw, false);
 		}
 	}
 

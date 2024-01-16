@@ -29,7 +29,7 @@ interface LinkSegment {
 
 interface MdLinkSegment {
 	type: 'mdlink';
-	raw: string;
+	raw: [_0: string, label: string, _1: string, uri: string, _2: string];
 	text: string;
 	uri: string;
 	valid: boolean;
@@ -147,14 +147,28 @@ export const parseRt = (source: string): PreliminaryRichText => {
 		} else if (look === CharCode.OSQUARE) {
 			let textStart = idx + 1;
 			let textEnd = textStart;
+			let text = '';
+			let textRaw = '';
 
 			{
+				let flushed = textStart;
+
 				// Loop until we find ]
 				for (; textEnd < len; textEnd++) {
 					const char = c(textEnd);
 
 					if (char === CharCode.ESQUARE) {
 						break;
+					} else if (char === CharCode.ESCAPE) {
+						const next = c(textEnd + 1);
+
+						if (next === CharCode.ESQUARE || next === CharCode.ESCAPE) {
+							textRaw += source.slice(flushed, textEnd + 1);
+							text += source.slice(flushed, textEnd);
+
+							textEnd = flushed = textEnd + 1;
+							continue;
+						}
 					}
 				}
 
@@ -162,9 +176,10 @@ export const parseRt = (source: string): PreliminaryRichText => {
 				if (c(textEnd) !== CharCode.ESQUARE || c(textEnd + 1) !== CharCode.OPAREN) {
 					break jump;
 				}
-			}
 
-			const text = source.slice(textStart, textEnd);
+				textRaw += source.slice(flushed, textEnd);
+				text += source.slice(flushed, textEnd);
+			}
 
 			// Account for ] and (
 			let urlStart = textEnd + 2;
@@ -188,11 +203,15 @@ export const parseRt = (source: string): PreliminaryRichText => {
 			const uri = source.slice(urlStart, urlEnd);
 			const urip = safeUrlParse(uri);
 
-			// Account for )
-			const raw = source.slice(idx, urlEnd + 1);
 			idx = urlEnd + 1;
 
-			segments.push({ type: 'mdlink', raw: raw, text: text, uri: uri, valid: urip !== null });
+			segments.push({
+				type: 'mdlink',
+				raw: ['[', textRaw, '](', uri, ')'],
+				text: text,
+				uri: uri,
+				valid: urip !== null,
+			});
 
 			if (urip) {
 				links.push(urip.href);
