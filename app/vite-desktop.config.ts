@@ -42,9 +42,7 @@ export default defineConfig({
 		minify: 'terser',
 		sourcemap: true,
 		target: 'esnext',
-		modulePreload: {
-			polyfill: false,
-		},
+		modulePreload: false,
 		rollupOptions: {
 			output: {
 				chunkFileNames: 'assets/[hash].js',
