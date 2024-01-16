@@ -9,9 +9,9 @@ import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu.ts';
 
 import { Flyout } from '../../Flyout.tsx';
 
-import ContentCopyIcon from '~/com/icons/baseline-content-copy.tsx';
-import LinkIcon from '~/com/icons/baseline-link.tsx';
-import ShareIcon from '~/com/icons/baseline-share.tsx';
+import ContentCopyIcon from '../../../icons/baseline-content-copy.tsx';
+import LinkIcon from '../../../icons/baseline-link.tsx';
+import ShareIcon from '../../../icons/baseline-share.tsx';
 
 export interface PostShareActionProps {
 	post: SignalizedPost;
