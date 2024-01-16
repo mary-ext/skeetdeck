@@ -218,6 +218,23 @@ export const parseRt = (source: string): PreliminaryRichText => {
 			}
 
 			continue;
+		} else if (look === CharCode.ESCAPE) {
+			const next = c(idx + 1);
+
+			if (
+				next === CharCode.AT ||
+				next === CharCode.TAG ||
+				next === CharCode.OSQUARE ||
+				next === CharCode.ESCAPE
+			) {
+				const ch = source.charAt(idx + 1);
+
+				segments.push(ESCAPE_SEGMENT);
+				segments.push({ type: 'text', raw: ch, text: ch });
+
+				idx += 2;
+				continue;
+			}
 		}
 
 		jump: {
@@ -226,20 +243,12 @@ export const parseRt = (source: string): PreliminaryRichText => {
 			for (; end < len; end++) {
 				const char = c(end);
 
+				if (char === CharCode.ESCAPE) {
+					break;
+				}
+
 				if (char === CharCode.AT || char === CharCode.TAG || char === CharCode.OSQUARE) {
 					const prev = c(end - 1);
-
-					if (prev === CharCode.ESCAPE) {
-						// Commit the string early
-						const raw = source.slice(idx, end - 1);
-						const text = raw.replace(WS_RE, '');
-
-						idx = end;
-						segments.push({ type: 'text', raw: raw, text: text });
-						segments.push(ESCAPE_SEGMENT);
-
-						continue;
-					}
 
 					if (char !== CharCode.OSQUARE && prev !== CharCode.SPACE && prev !== CharCode.NEWLINE) {
 						continue;
