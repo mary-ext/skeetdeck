@@ -4,6 +4,6 @@ This monorepository contains the following projects:
 
 - `bluesky-client`: lightweight TypeScript API client for Bluesky
 - [Skeetdeck](https://skeetdeck.pages.dev): Alternative web client for Bluesky with a deck interface
-  ![](https://github.com/mary-ext/langit/assets/148872143/1103e084-7f68-4fc5-9f49-5ee80df8235f)
+  ![](https://github.com/mary-ext/langit/assets/148872143/9eb9b568-397c-4c60-835c-c5101c192a47)
 
 A mobile-oriented web client may come later.
