@@ -14,6 +14,9 @@ const updateSW = REGISTER_SW
 			onBeginUpdate() {
 				setUpdateStatus(1);
 			},
+			onOfflineReady() {
+				setUpdateStatus(0);
+			},
 			onRegisteredSW(_swScriptUrl, reg) {
 				setRegistration(reg);
 			},
