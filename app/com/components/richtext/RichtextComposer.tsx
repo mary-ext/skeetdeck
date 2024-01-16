@@ -35,8 +35,8 @@ export interface RichtextComposerProps {
 	value: string;
 	rt: PreliminaryRichText;
 	onChange: (next: string) => void;
-	onSubmit: () => void;
-	onImageDrop: (blob: File[]) => void;
+	onSubmit?: () => void;
+	onImageDrop?: (blob: File[]) => void;
 
 	minRows?: number;
 	placeholder?: string;
@@ -126,6 +126,10 @@ type SuggestionItem = MentionSuggestionItem;
 const RichtextComposer = (props: RichtextComposerProps) => {
 	let textarea: HTMLTextAreaElement | undefined;
 	let renderer: HTMLDivElement | undefined;
+
+	const onChange = props.onChange;
+	const onSubmit = props.onSubmit;
+	const onImageDrop = props.onImageDrop;
 
 	const [showDrop, setShowDrop] = createSignal(false);
 
@@ -243,7 +247,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 		const final = pre + text + post;
 		const cursor = $match.index + text.length;
 
-		props.onChange(final);
+		onChange(final);
 
 		textarea!.setSelectionRange(cursor, cursor);
 		textarea!.focus();
@@ -285,60 +289,72 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 				placeholder={props.placeholder}
 				minRows={props.minRows}
 				class="relative z-10 block w-full resize-none overflow-hidden bg-transparent pb-2 pr-4 text-base text-transparent caret-primary outline-none placeholder:text-muted-fg"
-				onPaste={(ev) => {
-					const items = ev.clipboardData?.items ?? [];
-					let images: File[] = [];
-
-					for (let idx = 0, len = items.length; idx < len; idx++) {
-						const item = items[idx];
-
-						if (item.kind === 'file' && item.type.startsWith('image/')) {
-							const blob = item.getAsFile();
-
-							if (blob) {
-								images.push(blob);
-							}
-						}
-					}
-
-					if (images.length > 0) {
-						ev.preventDefault();
-						props.onImageDrop(images);
-					}
-				}}
-				onDragOver={(ev) => {
-					const dataTransfer = ev.dataTransfer;
-					if (dataTransfer && dataTransfer.types.includes('Files')) {
-						setShowDrop(true);
-					}
-				}}
-				onDragLeave={() => {
-					setShowDrop(false);
-				}}
-				onDrop={(ev) => {
-					const dataTransfer = ev.dataTransfer;
-					if (dataTransfer && dataTransfer.types.includes('Files')) {
-						const files = dataTransfer.files;
-
+				onPaste={
+					onImageDrop &&
+					((ev) => {
+						const items = ev.clipboardData?.items ?? [];
 						let images: File[] = [];
-						for (let idx = 0, len = files.length; idx < len; idx++) {
-							const file = files[idx];
 
-							if (file.type.startsWith('image/')) {
-								images.push(file);
+						for (let idx = 0, len = items.length; idx < len; idx++) {
+							const item = items[idx];
+
+							if (item.kind === 'file' && item.type.startsWith('image/')) {
+								const blob = item.getAsFile();
+
+								if (blob) {
+									images.push(blob);
+								}
 							}
 						}
 
 						if (images.length > 0) {
 							ev.preventDefault();
-							props.onImageDrop(images);
+							onImageDrop(images);
 						}
-					}
+					})
+				}
+				onDragOver={
+					onImageDrop &&
+					((ev) => {
+						const dataTransfer = ev.dataTransfer;
+						if (dataTransfer && dataTransfer.types.includes('Files')) {
+							setShowDrop(true);
+						}
+					})
+				}
+				onDragLeave={
+					onImageDrop &&
+					(() => {
+						setShowDrop(false);
+					})
+				}
+				onDrop={
+					onImageDrop &&
+					((ev) => {
+						const dataTransfer = ev.dataTransfer;
+						if (dataTransfer && dataTransfer.types.includes('Files')) {
+							const files = dataTransfer.files;
 
-					setShowDrop(false);
-				}}
+							let images: File[] = [];
+							for (let idx = 0, len = files.length; idx < len; idx++) {
+								const file = files[idx];
+
+								if (file.type.startsWith('image/')) {
+									images.push(file);
+								}
+							}
+
+							if (images.length > 0) {
+								ev.preventDefault();
+								onImageDrop(images);
+							}
+						}
+
+						setShowDrop(false);
+					})
+				}
 				onInput={(ev) => {
-					props.onChange(ev.target.value);
+					onChange(ev.target.value);
 					setMenuSelection(undefined);
 				}}
 				onKeyDown={(ev) => {
@@ -383,10 +399,10 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 
 						return;
 					}
-					if (key === 'Enter' && isCtrlKeyPressed(ev)) {
-						// There shouldn't be a need, but might as well.
+
+					if (onSubmit && key === 'Enter' && isCtrlKeyPressed(ev)) {
 						ev.preventDefault();
-						props.onSubmit();
+						onSubmit();
 
 						return;
 					}
@@ -394,7 +410,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 			/>
 
 			{(() => {
-				if (showDrop()) {
+				if (onImageDrop && showDrop()) {
 					return (
 						<div class="pointer-events-none absolute inset-0 border-2 border-dashed border-accent"></div>
 					);
