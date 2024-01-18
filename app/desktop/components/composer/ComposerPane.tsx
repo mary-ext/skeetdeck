@@ -662,6 +662,7 @@ const ComposerPane = () => {
 			)}
 
 			<fieldset
+				disabled={log().t === LogType.PENDING}
 				onKeyDown={(ev) => {
 					const key = ev.key;
 
@@ -962,6 +963,7 @@ const ComposerPane = () => {
 											textareaRef = node;
 											node.setAttribute('data-targets', inputId);
 										}}
+										type="post"
 										uid={context.author}
 										value={draft.text}
 										rt={draft.rt}
