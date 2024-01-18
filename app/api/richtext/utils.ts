@@ -3,6 +3,9 @@ import { segmentRichText } from './segmentize.ts';
 
 import type { Facet } from './types.ts';
 
+const MDLINK_ESCAPE_RE = /([\\\]])/g;
+const ESCAPE_RE = /([@#\[\\])/g;
+
 export const serializeRichText = (text: string, facets: Facet[] | undefined, loose: boolean) => {
 	const segments = segmentRichText(text, facets);
 
@@ -13,13 +16,16 @@ export const serializeRichText = (text: string, facets: Facet[] | undefined, loo
 
 		const text = segment.text;
 		const link = segment.link;
+		const tag = segment.tag;
+		const mention = segment.mention;
 
 		if (link) {
 			const uri = link.uri;
-
-			result += isLinkValid(link.uri, text) ? uri : loose ? `[${text}](${uri})` : text;
-		} else {
+			result += isLinkValid(uri, text) ? uri : `[${text.replace(MDLINK_ESCAPE_RE, '\\$1')}](${uri})`;
+		} else if (loose || tag || mention) {
 			result += text;
+		} else {
+			result += text.replace(ESCAPE_RE, '\\$1');
 		}
 	}
 
