@@ -1,4 +1,4 @@
-import { createSignal as signal } from 'solid-js';
+import { createMemo, createSignal as signal } from 'solid-js';
 
 import { createMutation, useQueryClient } from '@pkg/solid-query';
 
@@ -10,12 +10,17 @@ import { uploadBlob } from '~/api/mutations/upload-blob.ts';
 import { getListInfoKey } from '~/api/queries/get-list-info.ts';
 import type { SignalizedList } from '~/api/stores/lists.ts';
 
+import { finalizeRt, getRtLength, parseRt } from '~/api/richtext/composer.ts';
+import { serializeRichText } from '~/api/richtext/utils.ts';
+
 import { model } from '~/utils/input.ts';
+import { clsx } from '~/utils/misc.ts';
 
 import { Button } from '~/com/primitives/button.ts';
 import { Input } from '~/com/primitives/input.ts';
 import { Interactive } from '~/com/primitives/interactive.ts';
-import { Textarea } from '~/com/primitives/textarea.ts';
+
+import RichtextComposer from '~/com/components/richtext/RichtextComposer.tsx';
 
 import AddPhotoButton from '~/com/components/inputs/AddPhotoButton.tsx';
 import BlobImage from '~/com/components/BlobImage.tsx';
@@ -37,6 +42,12 @@ const listRecordType = 'app.bsky.graph.list';
 
 type ListRecord = Records[typeof listRecordType];
 
+const MAX_DESC_LENGTH = 300;
+
+const serializeListDescription = (list: SignalizedList) => {
+	return serializeRichText(list.description.value || '', list.descriptionFacets.value, false);
+};
+
 const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 	const queryClient = useQueryClient();
 
@@ -47,7 +58,12 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 
 	const [avatar, setAvatar] = signal<Blob | string | undefined>(list.avatar.value || undefined);
 	const [name, setName] = signal(list.name.value || '');
-	const [desc, setDesc] = signal(list.description.value || '');
+	const [desc, setDesc] = signal(serializeListDescription(list));
+
+	const rt = createMemo(() => parseRt(desc()));
+	const length = () => getRtLength(rt());
+
+	const isDescriptionOver = () => length() > MAX_DESC_LENGTH;
 
 	const listMutation = createMutation(() => ({
 		mutationFn: async () => {
@@ -58,7 +74,7 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 
 			const $avatar = avatar();
 			const $name = name();
-			const $description = desc();
+			const $rt = rt();
 
 			const agent = await multiagent.connect(uid);
 
@@ -80,6 +96,8 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 
 			// 2. Merge our changes
 			{
+				const { text, facets } = await finalizeRt(uid, $rt);
+
 				prev.avatar =
 					$avatar === undefined
 						? undefined
@@ -88,8 +106,8 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 							: prev.avatar;
 
 				prev.name = $name;
-				prev.description = $description;
-				prev.descriptionFacets = undefined;
+				prev.description = text;
+				prev.descriptionFacets = facets;
 
 				await agent.rpc.call('com.atproto.repo.putRecord', {
 					data: {
@@ -138,7 +156,7 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 				})()}
 
 				<fieldset disabled={listMutation.isPending} class="flex min-h-0 grow flex-col overflow-y-auto">
-					<div class="relative mx-4 mt-4 aspect-square h-24 w-24 overflow-hidden rounded-md bg-muted-fg">
+					<div class="relative mx-4 mt-4 aspect-square h-24 w-24 shrink-0 overflow-hidden rounded-md bg-muted-fg">
 						{(() => {
 							const $avatar = avatar();
 
@@ -164,10 +182,24 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 					<label class="mx-4 mt-4 block">
 						<span class="mb-2 flex items-center justify-between gap-2 text-sm font-medium leading-6 text-primary">
 							<span>Description</span>
-							<span class="text-xs font-normal text-muted-fg">{desc().length}/300</span>
+							<span
+								class={clsx([
+									`text-xs`,
+									!isDescriptionOver() ? `font-normal text-muted-fg` : `font-bold text-red-500`,
+								])}
+							>
+								{length()}/{MAX_DESC_LENGTH}
+							</span>
 						</span>
 
-						<textarea ref={model(desc, setDesc)} class={/* @once */ Textarea()} rows={4} />
+						<RichtextComposer
+							type="textarea"
+							uid={list.uid}
+							value={desc()}
+							rt={rt()}
+							onChange={setDesc}
+							minRows={4}
+						/>
 					</label>
 
 					<div class="mt-4 grow border-b border-divider"></div>

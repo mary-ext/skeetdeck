@@ -2,7 +2,6 @@ import {
 	type JSX,
 	For,
 	Match,
-	Show,
 	Switch,
 	createEffect,
 	createMemo,
@@ -32,6 +31,7 @@ import DefaultUserAvatar from '../../assets/default-user-avatar.svg?url';
 export interface RichtextComposerProps {
 	ref?: HTMLTextAreaElement | ((el: HTMLTextAreaElement) => void);
 
+	type: 'post' | 'textarea';
 	uid: DID;
 
 	value: string;
@@ -128,6 +128,8 @@ type SuggestionItem = MentionSuggestionItem;
 const RichtextComposer = (props: RichtextComposerProps) => {
 	let textarea: HTMLTextAreaElement | undefined;
 	let renderer: HTMLDivElement | undefined;
+
+	const type = props.type;
 
 	const onChange = props.onChange;
 	const onSubmit = props.onSubmit;
@@ -266,10 +268,25 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 	});
 
 	return (
-		<div class="group relative">
+		<fieldset
+			class={
+				/* @once */ clsx([
+					`group relative disabled:opacity-50`,
+					type === 'post' && `text-base`,
+					type === 'textarea' &&
+						`rounded-md border border-input text-sm outline-2 -outline-offset-1 outline-accent focus-within:outline`,
+				])
+			}
+		>
 			<div
 				ref={renderer}
-				class="absolute inset-0 z-0 whitespace-pre-wrap break-words pb-2 pr-4 text-base"
+				class={
+					/* @once */ clsx([
+						`absolute inset-0 z-0 whitespace-pre-wrap break-words`,
+						type === 'post' && `pb-2 pr-4`,
+						type === 'textarea' && `px-3 py-[0.45rem]`,
+					])
+				}
 				innerHTML={buildHtml(props.rt)}
 			></div>
 
@@ -283,7 +300,13 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 				value={props.value}
 				placeholder={props.placeholder}
 				minRows={props.minRows}
-				class="relative z-10 block w-full resize-none overflow-hidden bg-transparent pb-2 pr-4 text-base text-transparent caret-primary outline-none placeholder:text-muted-fg"
+				class={
+					/* @once */ clsx([
+						`relative z-10 block w-full resize-none overflow-hidden bg-transparent text-transparent caret-primary outline-none placeholder:text-muted-fg`,
+						type === 'post' && `pb-2 pr-4`,
+						type === 'textarea' && `px-3 py-[0.45rem]`,
+					])
+				}
 				onPaste={
 					onImageDrop &&
 					((ev) => {
@@ -503,7 +526,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 					</Switch>
 				</ul>
 			)}
-		</div>
+		</fieldset>
 	);
 };
 
