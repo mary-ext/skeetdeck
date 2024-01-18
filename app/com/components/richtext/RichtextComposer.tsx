@@ -27,6 +27,8 @@ import { assert, clsx } from '~/utils/misc.ts';
 
 import CircularProgress from '../CircularProgress.tsx';
 
+import DefaultUserAvatar from '../../assets/default-user-avatar.svg?url';
+
 export interface RichtextComposerProps {
 	ref?: HTMLTextAreaElement | ((el: HTMLTextAreaElement) => void);
 
@@ -451,16 +453,16 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 											node = (
 												<div class="contents">
 													<div class="h-9 w-9 shrink-0 overflow-hidden rounded-full bg-muted-fg">
-														<Show when={user.avatar} keyed>
-															{(avatar) => <img src={avatar} class="h-full w-full" />}
-														</Show>
+														<img src={/* @once */ user.avatar || DefaultUserAvatar} class="h-full w-full" />
 													</div>
 
 													<div class="flex grow flex-col text-sm">
 														<span class="line-clamp-1 break-all font-bold">
-															{user.displayName || user.handle}
+															{/* @once */ user.displayName || user.handle}
 														</span>
-														<span class="line-clamp-1 shrink-0 break-all text-muted-fg">@{user.handle}</span>
+														<span class="line-clamp-1 shrink-0 break-all text-muted-fg">
+															@{/* @once */ user.handle}
+														</span>
 													</div>
 												</div>
 											);
