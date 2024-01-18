@@ -96,11 +96,13 @@ const MENTION_RE = /[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]{2,})/y;
 
 const ESCAPE_SEGMENT: EscapeSegment = { type: 'escape', raw: '\\', text: '' };
 
+const charCodeAt = String.prototype.charCodeAt;
+
 export const parseRt = (source: string): PreliminaryRichText => {
 	const segments: PreliminarySegment[] = [];
 	const links: string[] = [];
 
-	const c = String.prototype.charCodeAt.bind(source);
+	const c = charCodeAt.bind(source);
 
 	let tmp: number;
 	let secure: boolean = false;
