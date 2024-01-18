@@ -43,7 +43,7 @@ export const getPostModDecision = (post: SignalizedPost, opts: SharedPreferences
 		decideLabelModeration(accu, labels, authorDid, moderation);
 		decideMutedPermanentModeration(accu, isMuted);
 		decideMutedTemporaryModeration(accu, isProfileTempMuted(filters, authorDid));
-		decideMutedKeywordModeration(accu, text, isFollowing, PreferenceWarn, moderation);
+		decideMutedKeywordModeration(accu, text, !!isFollowing, PreferenceWarn, moderation);
 
 		cached.set(post, (res = { d: finalizeModeration(accu), c: key }));
 	}
