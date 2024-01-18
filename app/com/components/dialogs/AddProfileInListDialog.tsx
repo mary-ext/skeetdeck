@@ -1,24 +1,31 @@
-import { For, createEffect } from 'solid-js';
-import { unwrap } from 'solid-js/store';
-
-import { createInfiniteQuery, createMutation, createQuery, useQueryClient } from '@pkg/solid-query';
-
-import type { Records } from '~/api/atp-schema.ts';
-import { multiagent } from '~/api/globals/agent.ts';
-import { ListPurposeLabels } from '~/api/display.ts';
-import { getCurrentDate, getRecordId } from '~/api/utils/misc.ts';
+import { For, createEffect, createMemo } from 'solid-js';
 
 import {
-	getProfileInListKey,
-	getProfileInList,
-	type ProfileExistsResult,
-} from '~/api/queries/get-profile-in-list.ts';
+	type InfiniteData,
+	createInfiniteQuery,
+	createMutation,
+	createQuery,
+	useQueryClient,
+} from '@pkg/solid-query';
+
+import type { Records, UnionOf } from '~/api/atp-schema.ts';
+import { multiagent } from '~/api/globals/agent.ts';
+import { ListPurposeLabels } from '~/api/display.ts';
+import { getCurrentTid } from '~/api/utils/tid.ts';
+import { getCurrentDate, getRecordId } from '~/api/utils/misc.ts';
+
+import type { ListMembersPage } from '~/api/queries/get-list-members.ts';
+import {
+	type ListMembership,
+	getListMemberships,
+	getListMembershipsKey,
+} from '~/api/queries/get-list-memberships.ts';
 import { getProfileLists, getProfileListsKey } from '~/api/queries/get-profile-lists.ts';
-import { getProfileKey } from '~/api/queries/get-profile.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
 import { createDerivedSignal } from '~/utils/hooks.ts';
-import { clsx } from '~/utils/misc.ts';
+import { produce } from '~/utils/immer.ts';
+import { chunked, clsx, mapDefined } from '~/utils/misc.ts';
 
 import { closeModal, useModalState } from '../../globals/modals.tsx';
 
@@ -53,6 +60,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 	const { close, disableBackdropClose } = useModalState();
 
 	const profile = props.profile;
+	const did = profile.did;
 	const uid = profile.uid;
 
 	const lists = createInfiniteQuery(() => {
@@ -64,80 +72,146 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 		};
 	});
 
+	const memberships = createQuery(() => {
+		// Memberships is expensive to query, because we have to crawl through the
+		// user's entire listitem collection.
+		return {
+			queryKey: getListMembershipsKey(uid),
+			queryFn: getListMemberships,
+			staleTime: 1_000 * 60 * 5, // 5 minutes
+			gcTime: 1_000 * 60 * 10, // 10 minutes
+		};
+	});
+
 	const listMutation = createMutation(() => ({
 		mutationFn: async () => {
-			const btns = Array.from(listEl!.querySelectorAll<HTMLButtonElement>(':scope > button'));
+			const deletions: UnionOf<'com.atproto.repo.applyWrites#delete'>[] = [];
+			const creations: UnionOf<'com.atproto.repo.applyWrites#create'>[] = [];
 
-			const did = profile.did;
 			const date = getCurrentDate();
+
+			const a = new Set(prevListUris());
+			const b = new Set(listUris());
+
+			const removals = difference(a, b);
+			const additions = difference(b, a);
+
+			const $memberships = memberships.data!;
+
+			for (let i = 0, il = $memberships.length; i < il; i++) {
+				const item = $memberships[i];
+
+				if (item.actor === did && removals.has(item.listUri)) {
+					deletions.push({
+						$type: 'com.atproto.repo.applyWrites#delete',
+						collection: 'app.bsky.graph.listitem',
+						rkey: getRecordId(item.itemUri),
+					});
+				}
+			}
+
+			for (const listUri of additions) {
+				const record: Records['app.bsky.graph.listitem'] = {
+					list: listUri,
+					subject: did,
+					createdAt: date,
+				};
+
+				creations.push({
+					$type: 'com.atproto.repo.applyWrites#create',
+					collection: 'app.bsky.graph.listitem',
+					rkey: getCurrentTid(),
+					value: record,
+				});
+			}
 
 			const agent = await multiagent.connect(uid);
 
-			const promises = btns.map(async (btn) => {
-				const result = (btn as any).$data as ProfileExistsResult;
-
-				if (!result) {
-					return;
-				}
-
-				const listUri = result.list;
-				const itemUri = result.exists.peek();
-
-				const bool = btn.getAttribute('aria-pressed')! === 'true';
-
-				if (bool === !!itemUri) {
-					return;
-				}
-
-				if (itemUri) {
-					await agent.rpc.call('com.atproto.repo.deleteRecord', {
-						data: {
-							collection: 'app.bsky.graph.listitem',
-							repo: uid,
-							rkey: getRecordId(itemUri),
-						},
-					});
-
-					result.exists.value = undefined;
-				} else {
-					const record: Records['app.bsky.graph.listitem'] = {
-						list: listUri,
-						subject: did,
-						createdAt: date,
-					};
-
-					const response = await agent.rpc.call('com.atproto.repo.createRecord', {
-						data: {
-							collection: 'app.bsky.graph.listitem',
-							repo: uid,
-							record: record,
-						},
-					});
-
-					result.exists.value = response.data.uri;
-				}
+			const writes = [...creations, ...deletions];
+			const promises = chunked(writes, 10).map((chunk) => {
+				return agent.rpc.call('com.atproto.repo.applyWrites', {
+					data: {
+						repo: uid,
+						writes: chunk,
+					},
+				});
 			});
 
 			await Promise.allSettled(promises);
 
-			// we need to wait for the AppView to settle in, so let's add a delay here
-			// ref: https://github.com/bluesky-social/social-app/blob/bb22ebd58866f4b14f8fa07a27b0ccdc9d06595a/src/state/queries/list-memberships.ts#L138
-			setTimeout(() => {
-				queryClient.invalidateQueries({
-					exact: true,
-					queryKey: getProfileKey(uid, did),
-				});
-
-				queryClient.invalidateQueries({
-					exact: true,
-					queryKey: getProfileKey(uid, profile.handle.peek()),
-				});
-			}, 1_000);
+			return { creations, removals };
 		},
-		onSuccess: () => {
+		onSuccess({ creations, removals }) {
 			close();
+
+			// 1. Update memberships data
+			queryClient.setQueryData<ListMembership[]>(getListMembershipsKey(uid), (prev) => {
+				if (prev) {
+					const next = mapDefined(prev, (item) => {
+						return item.actor !== uid || !removals.has(item.listUri) ? item : undefined;
+					});
+
+					for (let i = 0, il = creations.length; i < il; i++) {
+						const cr = creations[i];
+
+						next.push({
+							actor: did,
+							itemUri: `at://${uid}/app.bsky.graph.listitem/${cr.rkey!}`,
+							listUri: (cr.value as Records['app.bsky.graph.listitem']).list,
+						});
+					}
+
+					return next;
+				}
+
+				return prev;
+			});
+
+			// 2. Remove user from removed lists
+			for (const listUri of removals) {
+				queryClient.setQueriesData<InfiniteData<ListMembersPage>>(
+					{ queryKey: ['getListMembers', uid, listUri] },
+					(prev) => {
+						if (prev) {
+							return produce(prev, (draft) => {
+								const pages = draft.pages;
+
+								for (let i = 0, ilen = pages.length; i < ilen; i++) {
+									const page = pages[i];
+									const members = page.members;
+
+									for (let j = 0, jlen = members.length; j < jlen; j++) {
+										const member = members[j];
+
+										if (member.profile.did === did) {
+											members.splice(j, 1);
+											return;
+										}
+									}
+								}
+							});
+						}
+
+						return prev;
+					},
+				);
+			}
 		},
 	}));
+
+	const prevListUris = createMemo((): string[] => {
+		const $memberships = memberships.data;
+
+		if ($memberships) {
+			return mapDefined($memberships, (item) => {
+				return item.actor === did ? item.listUri : undefined;
+			});
+		}
+
+		return [];
+	});
+
+	const [listUris, setListUris] = createDerivedSignal(prevListUris);
 
 	createEffect(() => {
 		disableBackdropClose.value = listMutation.isPending;
@@ -173,27 +247,25 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 							<div ref={listEl} class="contents">
 								<For each={lists.data?.pages.flatMap((page) => page.lists)}>
 									{(list) => {
-										const result = createQuery(() => {
-											return {
-												queryKey: getProfileInListKey(uid, profile.did, list.uri),
-												queryFn: getProfileInList,
-											};
-										});
-
-										const [checked, setChecked] = createDerivedSignal(() => !!result.data?.exists.value);
-
-										const purpose = () => {
-											const raw = list.purpose.value;
-											return raw in ListPurposeLabels ? ListPurposeLabels[raw] : `Unknown list`;
-										};
+										const listUri = list.uri;
+										const index = createMemo(() => listUris().indexOf(listUri));
 
 										return (
 											<button
-												disabled={!result.data}
-												aria-pressed={checked()}
-												onClick={() => setChecked(!checked())}
-												// @ts-expect-error
-												prop:$data={unwrap(result.data)}
+												disabled={!memberships.data}
+												aria-pressed={index() !== -1}
+												onClick={() => {
+													const $index = index();
+													const $listUris = listUris().slice();
+
+													if ($index === -1) {
+														$listUris.push(listUri);
+													} else {
+														$listUris.splice($index, 1);
+													}
+
+													setListUris($listUris);
+												}}
 												class={listItem}
 											>
 												<img
@@ -203,10 +275,15 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 
 												<div class="min-w-0 grow">
 													<p class="break-words text-sm font-bold">{list.name.value}</p>
-													<p class="text-sm text-muted-fg">{purpose()}</p>
+													<p class="text-sm text-muted-fg">
+														{(() => {
+															const raw = list.purpose.value;
+															return raw in ListPurposeLabels ? ListPurposeLabels[raw] : `Unknown list`;
+														})()}
+													</p>
 												</div>
 
-												<CheckIcon class={clsx([`text-xl text-accent`, !checked() && `invisible`])} />
+												<CheckIcon class={clsx([`text-xl text-accent`, index() === -1 && `invisible`])} />
 											</button>
 										);
 									}}
@@ -216,7 +293,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 							{(() => {
 								if (lists.isFetching) {
 									return (
-										<div class="grid h-13 place-items-center">
+										<div class="grid h-13 shrink-0 place-items-center">
 											<CircularProgress />
 										</div>
 									);
@@ -263,3 +340,13 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 };
 
 export default AddProfileInListDialog;
+
+const difference = <T,>(a: Set<T>, b: Set<T>): Set<T> => {
+	const set = new Set(a);
+
+	for (const x of b) {
+		set.delete(x);
+	}
+
+	return set;
+};

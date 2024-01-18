@@ -5,12 +5,12 @@ import { type InfiniteData, createInfiniteQuery, useQueryClient } from '@pkg/sol
 import { multiagent } from '~/api/globals/agent.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
+import { type ListMembersPage, getListMembers, getListMembersKey } from '~/api/queries/get-list-members.ts';
 import {
-	type ListMembersPage,
-	type SelfListMember,
-	getListMembers,
-	getListMembersKey,
-} from '~/api/queries/get-list-members.ts';
+	type ListMembership,
+	findMembership,
+	getListMembershipsKey,
+} from '~/api/queries/get-list-memberships.ts';
 import type { SignalizedList } from '~/api/stores/lists.ts';
 
 import { produce } from '~/utils/immer.ts';
@@ -40,6 +40,7 @@ export interface ListMembersListProps {
 
 const ListMembersList = (props: ListMembersListProps) => {
 	const list = props.list;
+	const onClick = props.onClick;
 
 	const members = createInfiniteQuery(() => {
 		return {
@@ -50,37 +51,26 @@ const ListMembersList = (props: ListMembersListProps) => {
 		};
 	});
 
+	const isOwner = list.uid === list.creator.did;
+
 	return [
 		<div>
 			<For each={members.data?.pages.flatMap((page) => page.members)}>
 				{(member) => {
-					if ('uri' in member) {
-						if (!member.profile) {
-							return (
-								<div class="flex items-center gap-3 px-4 py-3 text-sm">
-									<div class="h-12 w-12 shrink-0 rounded-full bg-muted-fg"></div>
-
-									<div class="text-muted-fg">
-										<p>This user no longer exists</p>
-										<p>{/* @once */ member.subject}</p>
-									</div>
-								</div>
-							);
-						}
-
+					if (isOwner) {
 						return (
-							<OwnedListItem
+							<ListItem
 								profile={/* @once */ member.profile}
 								itemUri={/* @once */ member.uri}
 								listUri={/* @once */ list.uri}
-								onClick={props.onClick}
+								onClick={onClick}
 							/>
 						);
 					}
 
 					return (
 						<VirtualContainer estimateHeight={88}>
-							<ProfileItem profile={/* @once */ member.profile} onClick={props.onClick} />
+							<ProfileItem profile={/* @once */ member.profile} onClick={onClick} />
 						</VirtualContainer>
 					);
 				}}
@@ -127,12 +117,12 @@ const ListMembersList = (props: ListMembersListProps) => {
 export default ListMembersList;
 
 /** All of the props are expected to be static */
-interface OwnedListItemProps extends Pick<ProfileItemProps, 'profile' | 'onClick'> {
+interface ListItemProps extends Pick<ProfileItemProps, 'profile' | 'onClick'> {
 	itemUri: string;
 	listUri: string;
 }
 
-const OwnedListItem = (props: OwnedListItemProps) => {
+const ListItem = (props: ListItemProps) => {
 	const { profile, itemUri, listUri } = props;
 
 	const queryClient = useQueryClient();
@@ -152,12 +142,28 @@ const OwnedListItem = (props: OwnedListItemProps) => {
 						for (let j = 0, jlen = members.length; j < jlen; j++) {
 							const member = members[j];
 
-							if ((member as SelfListMember).uri === itemUri) {
+							if (member.uri === itemUri) {
 								members.splice(j, 1);
+								return;
 							}
 						}
 					}
 				});
+			}
+
+			return prev;
+		});
+
+		queryClient.setQueryData<ListMembership[]>(getListMembershipsKey(uid), (prev) => {
+			if (prev) {
+				const index = findMembership(prev, listUri, profile.did);
+
+				if (index !== null) {
+					const next = prev.slice();
+					next.splice(index, 1);
+
+					return next;
+				}
 			}
 
 			return prev;
