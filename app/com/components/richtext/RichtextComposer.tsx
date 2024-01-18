@@ -512,7 +512,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 												// 	setMenuSelection(index());
 												// }}
 												class={clsx([
-													`flex cursor-pointer items-center gap-4 px-4 py-2 hover:bg-secondary/30`,
+													`flex cursor-pointer items-center gap-4 px-3 py-2 hover:bg-secondary/30`,
 													selected() && `bg-secondary/30`,
 												])}
 											>
