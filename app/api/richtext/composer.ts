@@ -92,7 +92,7 @@ const enum CharCode {
 const WS_RE = / +(?=\n)/g;
 export const EOF_WS_RE = /\s+$| +(?=\n)/g;
 
-const MENTION_RE = /[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]+)/y;
+const MENTION_RE = /[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]{2,})/y;
 
 const ESCAPE_SEGMENT: EscapeSegment = { type: 'escape', raw: '\\', text: '' };
 
