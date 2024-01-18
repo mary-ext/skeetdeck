@@ -143,7 +143,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 		const $cursor = inputCursor();
 
 		if ($cursor == null) {
-			return '';
+			return null;
 		}
 
 		const $val = debouncedValue();
@@ -152,6 +152,10 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 
 	const matchedCompletion = createMemo(() => {
 		const $candidate = candidateMatch();
+
+		if ($candidate === null) {
+			return;
+		}
 
 		let match: RegExpExecArray | null;
 		let type: Suggestion;
