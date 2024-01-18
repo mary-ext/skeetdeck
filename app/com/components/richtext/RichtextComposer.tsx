@@ -239,20 +239,9 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 			assert(false, `expected type`);
 		}
 
-		const $value = props.value;
-
-		const pre = $value.slice(0, $match.index);
-		const post = $value.slice($match.index + $match.length);
-
-		const final = pre + text + post;
-		const cursor = $match.index + text.length;
-
-		onChange(final);
-
-		textarea!.setSelectionRange(cursor, cursor);
 		textarea!.focus();
-
-		handleInputSelection();
+		textarea!.setSelectionRange($match.index, $match.index + $match.length);
+		document.execCommand('insertText', false, text);
 	};
 
 	const handleInputSelection = () => {
