@@ -409,7 +409,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 			{matchedCompletion() && (
 				<ul
 					ref={setFloating}
-					class="absolute z-40 hidden w-full max-w-sm overflow-auto rounded-md border border-divider bg-background shadow-lg shadow-black group-focus-within:block sm:w-max"
+					class="absolute z-40 hidden w-full max-w-sm overflow-auto rounded-md border border-divider bg-background shadow-md group-focus-within:block sm:w-max"
 					style={{
 						'max-width': 'calc(100% - 12px)',
 						'min-width': `180px`,
