@@ -23,6 +23,7 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 				if (modal.depth > 0) {
 					return (
 						<button
+							type="button"
 							title="Go back to previous dialog"
 							disabled={props.disabled}
 							onClick={modal.close}
@@ -34,6 +35,7 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 				} else {
 					return (
 						<button
+							type="button"
 							title="Close dialog"
 							disabled={props.disabled}
 							onClick={modal.close}
