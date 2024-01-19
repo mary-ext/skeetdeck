@@ -128,7 +128,6 @@ export const getTimeline = async (
 ) => {
 	const [, uid, params, limit] = ctx.queryKey;
 	const pageParam = ctx.pageParam;
-	const signal = ctx.signal;
 
 	const timelineOpts = ctx.meta?.timelineOpts;
 
@@ -196,7 +195,7 @@ export const getTimeline = async (
 	}
 
 	while (cursor !== null && count < limit) {
-		const timeline = await fetchPage(agent, params, limit, cursor, signal);
+		const timeline = await fetchPage(agent, params, limit, cursor, ctx);
 
 		const feed = timeline.feed;
 		const result =
@@ -258,7 +257,7 @@ export const getTimelineLatest = async (ctx: QC<ReturnType<typeof getTimelineLat
 
 	const agent = await multiagent.connect(uid);
 
-	const timeline = await fetchPage(agent, params, 1, undefined, ctx.signal);
+	const timeline = await fetchPage(agent, params, 1, undefined, ctx);
 	const feed = timeline.feed;
 
 	return { cid: feed.length > 0 ? feed[0].post.cid : undefined };
@@ -270,13 +269,23 @@ const fetchPage = async (
 	params: TimelineParams,
 	limit: number,
 	cursor: string | undefined,
-	signal?: AbortSignal,
+	context: QC,
 ): Promise<TimelineResponse> => {
 	const type = params.type;
+	const signal = context.signal;
+
+	let headers: Record<string, string> | undefined;
+	if (context.meta?.timelineOpts) {
+		const prefs = context.meta.timelineOpts.language;
+		const langs = resolveLanguages(prefs.languages, prefs.useSystemLanguages);
+
+		headers = { ['accept-language']: langs.join(',') };
+	}
 
 	if (type === 'home') {
 		const response = await agent.rpc.get('app.bsky.feed.getTimeline', {
 			signal: signal,
+			headers: headers,
 			params: {
 				algorithm: params.algorithm,
 				cursor: cursor,
@@ -288,6 +297,7 @@ const fetchPage = async (
 	} else if (type === 'feed') {
 		const response = await agent.rpc.get('app.bsky.feed.getFeed', {
 			signal: signal,
+			headers: headers,
 			params: {
 				feed: params.uri,
 				cursor: cursor,
@@ -299,6 +309,7 @@ const fetchPage = async (
 	} else if (type === 'list') {
 		const response = await agent.rpc.get('app.bsky.feed.getListFeed', {
 			signal: signal,
+			headers: headers,
 			params: {
 				list: params.uri,
 				cursor: cursor,
@@ -311,6 +322,7 @@ const fetchPage = async (
 		if (params.tab === 'likes') {
 			const response = await agent.rpc.get('app.bsky.feed.getActorLikes', {
 				signal: signal,
+				headers: headers,
 				params: {
 					actor: params.actor,
 					cursor: cursor,
@@ -322,6 +334,7 @@ const fetchPage = async (
 		} else {
 			const response = await agent.rpc.get('app.bsky.feed.getAuthorFeed', {
 				signal: signal,
+				headers: headers,
 				params: {
 					actor: params.actor,
 					cursor: cursor,
@@ -342,6 +355,7 @@ const fetchPage = async (
 
 		const skeleton = await palomar.rpc.get('app.bsky.unspecced.searchPostsSkeleton', {
 			signal: signal,
+			headers: headers,
 			params: {
 				q: params.query,
 				cursor: cursor,
@@ -464,13 +478,9 @@ const createLanguagePostFilter = (prefs?: LanguagePreferences): PostFilter | und
 	}
 
 	const allowUnspecified = prefs.allowUnspecified;
-	let languages = prefs.languages;
+	const languages = resolveLanguages(prefs.languages, prefs.useSystemLanguages);
 
-	if (prefs.useSystemLanguages) {
-		languages = languages ? systemLanguages.concat(languages) : systemLanguages;
-	}
-
-	if (!languages || languages.length < 1) {
+	if (languages.length < 1) {
 		return;
 	}
 
@@ -674,4 +684,9 @@ const yankReposts = (items: SignalizedTimelineItem[]): TimelineSlice[] | false =
 	}
 
 	return slices;
+};
+
+//// Miscellaneous
+const resolveLanguages = (langs: string[], system: boolean) => {
+	return system ? systemLanguages.concat(langs) : langs;
 };
