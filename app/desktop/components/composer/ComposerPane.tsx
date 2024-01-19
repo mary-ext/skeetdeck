@@ -1202,7 +1202,7 @@ const ComposerPane = () => {
 											<button
 												class={
 													/* @once */ Interactive({
-														class: `flex h-9 min-w-0 items-center rounded-md px-2 text-sm text-primary/85 hover:text-primary`,
+														class: `flex h-9 min-w-0 items-center rounded-md px-2 text-sm text-primary/85 hover:text-primary disabled:opacity-50`,
 													})
 												}
 											>
