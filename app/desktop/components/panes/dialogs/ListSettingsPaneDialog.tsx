@@ -1,20 +1,31 @@
-import { createMemo, createSignal as signal } from 'solid-js';
+import { batch, createEffect, createMemo, createSignal as signal } from 'solid-js';
 
 import { createMutation, useQueryClient } from '@pkg/solid-query';
 
-import type { Records } from '~/api/atp-schema.ts';
+import type { Records, UnionOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
 import { uploadBlob } from '~/api/mutations/upload-blob.ts';
 import { getListInfoKey } from '~/api/queries/get-list-info.ts';
+import {
+	type ListMembership,
+	getListMemberships,
+	getListMembershipsKey,
+	listMembershipsOptions,
+} from '~/api/queries/get-list-memberships.ts';
 import type { SignalizedList } from '~/api/stores/lists.ts';
 
 import { finalizeRt, getRtLength, parseRt } from '~/api/richtext/composer.ts';
 import { serializeRichText } from '~/api/richtext/utils.ts';
 
 import { model } from '~/utils/input.ts';
-import { clsx } from '~/utils/misc.ts';
+import { chunked, clsx, mapDefined } from '~/utils/misc.ts';
+
+import { openModal } from '~/com/globals/modals.tsx';
+
+import { PANE_TYPE_LIST } from '../../../globals/panes.ts';
+import { preferences } from '../../../globals/settings.ts';
 
 import { Button } from '~/com/primitives/button.ts';
 import { Input } from '~/com/primitives/input.ts';
@@ -22,6 +33,7 @@ import { Interactive } from '~/com/primitives/interactive.ts';
 
 import RichtextComposer from '~/com/components/richtext/RichtextComposer.tsx';
 
+import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
 import AddPhotoButton from '~/com/components/inputs/AddPhotoButton.tsx';
 import BlobImage from '~/com/components/BlobImage.tsx';
 
@@ -56,6 +68,9 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 
 	const list = props.list;
 
+	const listUri = list.uri;
+	const uid = list.uid;
+
 	const [avatar, setAvatar] = signal<Blob | string | undefined>(list.avatar.value || undefined);
 	const [name, setName] = signal(list.name.value || '');
 	const [desc, setDesc] = signal(serializeListDescription(list));
@@ -69,8 +84,6 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 		mutationFn: async () => {
 			let prev: ListRecord;
 			let swap: string | undefined;
-
-			const uid = list.uid;
 
 			const $avatar = avatar();
 			const $name = name();
@@ -113,14 +126,14 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 					data: {
 						repo: uid,
 						collection: listRecordType,
-						rkey: getRecordId(list.uri),
+						rkey: getRecordId(listUri),
 						swapRecord: swap,
 						record: prev,
 					},
 				});
 
 				await queryClient.invalidateQueries({
-					queryKey: getListInfoKey(list.uid, list.uri),
+					queryKey: getListInfoKey(uid, listUri),
 				});
 			}
 		},
@@ -129,22 +142,125 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 		},
 	}));
 
+	const listDeleteMutation = createMutation(() => ({
+		mutationFn: async () => {
+			const memberships = await queryClient.fetchQuery({
+				queryKey: getListMembershipsKey(uid),
+				queryFn: getListMemberships,
+				...listMembershipsOptions,
+			});
+
+			const agent = await multiagent.connect(uid);
+
+			// 1. Remove all list items first
+			{
+				const itemUris = mapDefined(memberships, (x) => {
+					return x.listUri === listUri ? x.itemUri : undefined;
+				});
+
+				const writes = itemUris.map((uri): UnionOf<'com.atproto.repo.applyWrites#delete'> => {
+					return {
+						$type: 'com.atproto.repo.applyWrites#delete',
+						collection: 'app.bsky.graph.listitem',
+						rkey: getRecordId(uri),
+					};
+				});
+
+				const promises = chunked(writes, 10).map((chunk) => {
+					return agent.rpc.call('com.atproto.repo.applyWrites', {
+						data: {
+							repo: uid,
+							writes: chunk,
+						},
+					});
+				});
+
+				try {
+					await Promise.all(promises);
+				} catch (err) {
+					// We don't know which ones are still valid, so we have to invalidate
+					// these queries to prevent stales.
+					queryClient.invalidateQueries({
+						queryKey: getListMembershipsKey(uid),
+						exact: true,
+					});
+
+					queryClient.invalidateQueries({
+						queryKey: ['getListMembers', uid, listUri],
+					});
+
+					throw err;
+				}
+			}
+
+			// 2. Remove the list
+			{
+				await agent.rpc.call('com.atproto.repo.deleteRecord', {
+					data: {
+						repo: uid,
+						collection: 'app.bsky.graph.list',
+						rkey: getRecordId(listUri),
+					},
+				});
+			}
+		},
+		onSuccess: () => {
+			batch(() => {
+				close();
+
+				// 1. Remove all columns with this list
+				const decks = preferences.decks;
+				for (let i = 0, il = decks.length; i < il; i++) {
+					const deck = decks[i];
+					const panes = deck.panes;
+
+					for (let j = panes.length - 1; j >= 0; j--) {
+						const pane = panes[j];
+
+						if (pane.type === PANE_TYPE_LIST && pane.list.uri === listUri) {
+							panes.splice(j, 1);
+						}
+					}
+				}
+
+				// 2. Update memberships data
+				queryClient.setQueryData<ListMembership[]>(getListMembershipsKey(uid), (prev) => {
+					if (prev) {
+						return prev.filter((x) => x.listUri !== listUri);
+					}
+
+					return prev;
+				});
+			});
+		},
+	}));
+
 	const handleSubmit = (ev: SubmitEvent) => {
 		ev.preventDefault();
+		listDeleteMutation.reset();
 		listMutation.mutate();
 	};
+
+	const handleDelete = () => {
+		listMutation.reset();
+		listDeleteMutation.mutate();
+	};
+
+	createEffect(() => {
+		disableBackdropClose.value = listMutation.isPending;
+	});
 
 	return (
 		<PaneDialog>
 			<form onSubmit={handleSubmit} class="contents">
-				<PaneDialogHeader title="Edit list" disabled={(disableBackdropClose.value = listMutation.isPending)}>
+				<PaneDialogHeader title="Edit list" disabled={disableBackdropClose.value}>
 					<button type="submit" class={/* @once */ Button({ variant: 'primary', size: 'xs' })}>
 						Save
 					</button>
 				</PaneDialogHeader>
 
 				{(() => {
-					const error = false;
+					const error = listMutation.error || listDeleteMutation.error;
 
 					if (error) {
 						return (
@@ -155,7 +271,7 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 					}
 				})()}
 
-				<fieldset disabled={listMutation.isPending} class="flex min-h-0 grow flex-col overflow-y-auto">
+				<fieldset disabled={disableBackdropClose.value} class="flex min-h-0 grow flex-col overflow-y-auto">
 					<div class="relative mx-4 mt-4 aspect-square h-24 w-24 shrink-0 overflow-hidden rounded-md bg-muted-fg">
 						{(() => {
 							const $avatar = avatar();
@@ -228,9 +344,21 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 					})()}
 
 					<button
-						disabled
 						type="button"
-						onClick={() => {}}
+						onClick={() => {
+							openModal(() => (
+								<ConfirmDialog
+									title="Delete list?"
+									body={
+										<>
+											<b>{list.name.value}</b> will be deleted, this can't be undone.
+										</>
+									}
+									confirmation="Delete"
+									onConfirm={handleDelete}
+								/>
+							));
+						}}
 						class={
 							/* @once */ Interactive({
 								variant: 'danger',

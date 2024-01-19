@@ -19,6 +19,7 @@ import {
 	type ListMembership,
 	getListMemberships,
 	getListMembershipsKey,
+	listMembershipsOptions,
 } from '~/api/queries/get-list-memberships.ts';
 import { getProfileLists, getProfileListsKey } from '~/api/queries/get-profile-lists.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
@@ -71,13 +72,10 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 	});
 
 	const memberships = createQuery(() => {
-		// Memberships is expensive to query, because we have to crawl through the
-		// user's entire listitem collection.
 		return {
 			queryKey: getListMembershipsKey(uid),
 			queryFn: getListMemberships,
-			staleTime: 1_000 * 60 * 5, // 5 minutes
-			gcTime: 1_000 * 60 * 10, // 10 minutes
+			...listMembershipsOptions,
 		};
 	});
 

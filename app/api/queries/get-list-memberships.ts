@@ -6,6 +6,13 @@ import { multiagent } from '../globals/agent.ts';
 const PAGE_LIMIT = 1_000;
 const PAGE_SIZE = 100;
 
+// Memberships is expensive to query, because we have to crawl through the
+// user's entire listitem collection.
+export const listMembershipsOptions = {
+	staleTime: 1_000 * 60 * 5, // 5 minutes
+	gcTime: 1_000 * 60 * 10, // 10 minutes
+};
+
 export interface ListMembership {
 	actor: DID;
 	itemUri: string;
