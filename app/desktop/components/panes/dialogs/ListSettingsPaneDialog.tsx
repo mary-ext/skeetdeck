@@ -253,7 +253,7 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 	};
 
 	createEffect(() => {
-		disableBackdropClose.value = listMutation.isPending;
+		disableBackdropClose.value = listMutation.isPending || listDeleteMutation.isPending;
 	});
 
 	return (
