@@ -54,8 +54,6 @@ const listItem = Interactive({
 });
 
 const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
-	let listEl: HTMLDivElement | undefined;
-
 	const queryClient = useQueryClient();
 	const { close, disableBackdropClose } = useModalState();
 
@@ -244,51 +242,46 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 						</div>
 
 						<div class={/* @once */ DialogBody({ padded: false, scrollable: true, class: 'flex flex-col' })}>
-							<div ref={listEl} class="contents">
-								<For each={lists.data?.pages.flatMap((page) => page.lists)}>
-									{(list) => {
-										const listUri = list.uri;
-										const index = createMemo(() => listUris().indexOf(listUri));
+							<For each={lists.data?.pages.flatMap((page) => page.lists)}>
+								{(list) => {
+									const listUri = list.uri;
+									const index = createMemo(() => listUris().indexOf(listUri));
 
-										return (
-											<button
-												disabled={!memberships.data}
-												aria-pressed={index() !== -1}
-												onClick={() => {
-													const $index = index();
-													const $listUris = listUris().slice();
+									return (
+										<button
+											disabled={!memberships.data}
+											aria-pressed={index() !== -1}
+											onClick={() => {
+												const $index = index();
+												const $listUris = listUris().slice();
 
-													if ($index === -1) {
-														$listUris.push(listUri);
-													} else {
-														$listUris.splice($index, 1);
-													}
+												if ($index === -1) {
+													$listUris.push(listUri);
+												} else {
+													$listUris.splice($index, 1);
+												}
 
-													setListUris($listUris);
-												}}
-												class={listItem}
-											>
-												<img
-													src={list.avatar.value || DefaultListAvatar}
-													class="h-9 w-9 shrink-0 rounded-md"
-												/>
+												setListUris($listUris);
+											}}
+											class={listItem}
+										>
+											<img src={list.avatar.value || DefaultListAvatar} class="h-9 w-9 shrink-0 rounded-md" />
 
-												<div class="min-w-0 grow">
-													<p class="break-words text-sm font-bold">{list.name.value}</p>
-													<p class="text-sm text-muted-fg">
-														{(() => {
-															const raw = list.purpose.value;
-															return raw in ListPurposeLabels ? ListPurposeLabels[raw] : `Unknown list`;
-														})()}
-													</p>
-												</div>
+											<div class="min-w-0 grow">
+												<p class="break-words text-sm font-bold">{list.name.value}</p>
+												<p class="text-sm text-muted-fg">
+													{(() => {
+														const raw = list.purpose.value;
+														return raw in ListPurposeLabels ? ListPurposeLabels[raw] : `Unknown list`;
+													})()}
+												</p>
+											</div>
 
-												<CheckIcon class={clsx([`text-xl text-accent`, index() === -1 && `invisible`])} />
-											</button>
-										);
-									}}
-								</For>
-							</div>
+											<CheckIcon class={clsx([`text-xl text-accent`, index() === -1 && `invisible`])} />
+										</button>
+									);
+								}}
+							</For>
 
 							{(() => {
 								if (lists.isFetching) {
