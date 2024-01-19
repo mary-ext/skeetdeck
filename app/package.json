@@ -22,7 +22,7 @@
 		"cborg": "4.0.7",
 		"idb": "^8.0.0",
 		"immer": "^10.0.3",
-		"solid-floating-ui": "^0.3.0",
+		"solid-floating-ui": "^0.2.1",
 		"solid-js": "^1.8.11",
 		"solid-textarea-autosize": "^0.0.5",
 		"tldts": "^6.1.2"
