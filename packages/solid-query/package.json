@@ -19,8 +19,8 @@
 		"@tanstack/query-core": "5.15.5"
 	},
 	"devDependencies": {
-		"solid-js": "^1.8.10",
+		"solid-js": "^1.8.11",
 		"vite": "^5.0.11",
-		"vite-plugin-solid": "^2.8.0"
+		"vite-plugin-solid": "^2.8.2"
 	}
 }
