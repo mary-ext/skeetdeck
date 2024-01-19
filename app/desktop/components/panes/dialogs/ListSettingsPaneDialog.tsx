@@ -176,7 +176,13 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 				});
 
 				try {
-					await Promise.all(promises);
+					const results = await Promise.allSettled(promises);
+
+					for (const result of results) {
+						if (result.status === 'rejected') {
+							throw new Error(result.reason);
+						}
+					}
 				} catch (err) {
 					// We don't know which ones are still valid, so we have to invalidate
 					// these queries to prevent stales.
