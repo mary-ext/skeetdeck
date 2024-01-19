@@ -271,10 +271,10 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 		<fieldset
 			class={
 				/* @once */ clsx([
-					`group relative disabled:opacity-50`,
+					`group relative`,
 					type === 'post' && `text-base`,
 					type === 'textarea' &&
-						`rounded-md border border-input text-sm outline-2 -outline-offset-1 outline-accent focus-within:outline`,
+						`rounded-md border border-input text-sm outline-2 -outline-offset-1 outline-accent focus-within:outline disabled:opacity-50`,
 				])
 			}
 		>

@@ -92,12 +92,12 @@ const toolbarIcon = IconButton({ size: 'lg', class: 'text-primary/85 hover:text-
 
 const removeEmbedBtn = Interactive({
 	variant: 'none',
-	class: `absolute right-1 top-1 z-20 grid h-7 w-7 place-items-center rounded-full bg-background text-base text-primary hover:bg-secondary`,
+	class: `absolute right-1 top-1 z-20 grid h-7 w-7 place-items-center rounded-full bg-background text-base text-primary hover:bg-secondary disabled:opacity-50`,
 });
 
 const removeImageBtn = Interactive({
 	variant: 'white',
-	class: `absolute right-1 top-1 z-20 grid h-7 w-7 place-items-center rounded-full bg-black/50 text-base text-white backdrop-blur`,
+	class: `absolute right-1 top-1 z-20 grid h-7 w-7 place-items-center rounded-full bg-black/50 text-base text-white backdrop-blur disabled:opacity-50`,
 });
 
 const linkEmbedBtn = Interactive({
