@@ -45,7 +45,7 @@ const FeedList = (props: FeedListProps) => {
 		() => {
 			if (feeds.isFetching) {
 				return (
-					<div class="grid h-13 place-items-center">
+					<div class="grid h-13 shrink-0 place-items-center">
 						<CircularProgress />
 					</div>
 				);
