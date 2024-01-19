@@ -1018,7 +1018,7 @@ const ComposerPane = () => {
 														class={
 															/* @once */ Interactive({
 																variant: 'white',
-																class: `absolute bottom-0 left-0 m-1 flex h-5 items-center rounded bg-black/50 px-1 text-xs font-medium text-white backdrop-blur`,
+																class: `absolute bottom-0 left-0 m-1 flex h-5 items-center rounded bg-black/50 px-1 text-xs font-medium text-white backdrop-blur disabled:opacity-50`,
 															})
 														}
 													>
