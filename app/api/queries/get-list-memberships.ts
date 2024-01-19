@@ -38,7 +38,7 @@ export const getListMemberships = async (ctx: QC<ReturnType<typeof getListMember
 		const items = data.records;
 
 		for (let j = 0, jl = items.length; j < jl; j++) {
-			const item = items[i];
+			const item = items[j];
 			const record = item.value as Records['app.bsky.graph.listitem'];
 
 			memberships.push({ actor: record.subject, listUri: record.list, itemUri: item.uri });
