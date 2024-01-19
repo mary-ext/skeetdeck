@@ -135,7 +135,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 				});
 			});
 
-			await Promise.allSettled(promises);
+			await Promise.all(promises);
 
 			return { creations, removals };
 		},
