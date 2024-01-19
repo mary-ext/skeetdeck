@@ -186,37 +186,54 @@ export const parseRt = (source: string): PreliminaryRichText => {
 			// Account for ] and (
 			let urlStart = textEnd + 2;
 			let urlEnd = urlStart;
+			let url = '';
+			let urlRaw = '';
 
 			{
+				let flushed = urlStart;
+
 				// Loop until we find )
 				for (; urlEnd < len; urlEnd++) {
 					const char = c(urlEnd);
 
 					if (char === CharCode.EPAREN) {
 						break;
+					} else if (char === CharCode.ESCAPE) {
+						const next = c(urlEnd + 1);
+
+						if (next === CharCode.EPAREN || next === CharCode.ESCAPE) {
+							urlRaw += source.slice(flushed, urlEnd + 1);
+							url += source.slice(flushed, urlEnd);
+
+							urlEnd = flushed = urlEnd + 1;
+							continue;
+						}
 					}
 				}
 
+				// Check if the next characters are ] and (
 				if (c(urlEnd) !== CharCode.EPAREN) {
 					break jump;
 				}
+
+				urlRaw += source.slice(flushed, urlEnd);
+				url += source.slice(flushed, urlEnd);
 			}
 
-			const uri = source.slice(urlStart, urlEnd);
-			const urip = safeUrlParse(uri);
+			const urlp = safeUrlParse(url);
 
 			idx = urlEnd + 1;
 
 			segments.push({
 				type: 'mdlink',
-				raw: ['[', textRaw, '](', uri, ')'],
+				raw: ['[', textRaw, '](', urlRaw, ')'],
 				text: text,
-				uri: uri,
-				valid: urip !== null,
+				uri: url,
+				valid: urlp !== null,
 			});
 
-			if (urip) {
-				links.push(urip.href);
+			if (urlp) {
+				links.push(urlp.href);
 			}
 
 			continue;
