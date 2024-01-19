@@ -120,7 +120,7 @@ const CustomListPaneCreator = (props: PaneCreatorProps) => {
 
 									<div class="min-w-0 grow">
 										<p class="overflow-hidden text-ellipsis font-bold">{/* @once */ list.name}</p>
-										<p class="text-muted-fg">{/* @once */ `by ${list.creator.handle}`}</p>
+										<p class="text-muted-fg">{/* @once */ `by @${list.creator.handle}`}</p>
 									</div>
 								</div>
 
