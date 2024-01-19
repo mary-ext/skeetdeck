@@ -5,7 +5,7 @@ import { createIcon } from './_icon.tsx';
 // Feather icon created by Austin Andrews
 const CheckboxMultipleBlankIcon = createIcon([
 	[
-		'M22,16A2,2 0 0,1 20,18H8C6.89,18 6,17.1 6,16V4C6,2.89 6.89,2 8,2H20A2,2 0 0,1 22,4V16M16,20V22H4A2,2 0 0,1 2,20V7H4V20H16Z',
+		'M22 16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2h12a2 2 0 0 1 2 2v12m-6 4v2H4a2 2 0 0 1-2-2V7h2v13h12Z',
 	],
 ]);
 
