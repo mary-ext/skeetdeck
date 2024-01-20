@@ -331,10 +331,12 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 						}
 					})
 				}
-				onDragOver={
+				onDragEnter={
 					onImageDrop &&
 					((ev) => {
 						const dataTransfer = ev.dataTransfer;
+
+						ev.preventDefault();
 						if (dataTransfer && dataTransfer.types.includes('Files')) {
 							setShowDrop(true);
 						}
@@ -342,8 +344,15 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 				}
 				onDragLeave={
 					onImageDrop &&
-					(() => {
+					((ev) => {
+						ev.preventDefault();
 						setShowDrop(false);
+					})
+				}
+				onDragOver={
+					onImageDrop &&
+					((ev) => {
+						ev.preventDefault();
 					})
 				}
 				onDrop={
@@ -363,11 +372,11 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 							}
 
 							if (images.length > 0) {
-								ev.preventDefault();
 								onImageDrop(images);
 							}
 						}
 
+						ev.preventDefault();
 						setShowDrop(false);
 					})
 				}
