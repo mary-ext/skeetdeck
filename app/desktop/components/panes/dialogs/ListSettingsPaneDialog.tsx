@@ -1,6 +1,6 @@
 import { batch, createEffect, createMemo, createSignal as signal } from 'solid-js';
 
-import { createMutation, useQueryClient } from '@pkg/solid-query';
+import { type InfiniteData, createMutation, useQueryClient } from '@pkg/solid-query';
 
 import type { Records, UnionOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
@@ -209,12 +209,58 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 					},
 				});
 			}
+
+			try {
+				// 1. Update memberships data
+				queryClient.setQueryData<ListMembership[]>(getListMembershipsKey(uid), (prev) => {
+					if (prev) {
+						return prev.filter((x) => x.listUri !== listUri);
+					}
+
+					return prev;
+				});
+
+				// 2. Reset any queries showing the list info
+				queryClient.resetQueries({
+					exact: true,
+					queryKey: getListInfoKey(uid, listUri),
+				});
+
+				const { produce } = await import('~/utils/immer.ts');
+
+				// 3. Remove list from listing
+				queryClient.setQueriesData<InfiniteData<{ lists: SignalizedList[] }>>(
+					{ queryKey: ['getProfileLists', uid, uid] },
+					(prev) => {
+						if (prev) {
+							return produce(prev, (data) => {
+								const pages = data.pages;
+								for (let i = 0, il = pages.length; i < il; i++) {
+									const page = pages[i];
+									const lists = page.lists;
+
+									for (let j = 0, jl = lists.length; j < jl; j++) {
+										const list = lists[j];
+
+										if (list.uri === listUri) {
+											lists.splice(j, 1);
+											return;
+										}
+									}
+								}
+							});
+						}
+
+						return prev;
+					},
+				);
+			} catch {}
 		},
 		onSuccess: () => {
 			batch(() => {
 				close();
 
-				// 1. Remove all columns with this list
+				// 4. Remove all columns with this list
 				const decks = preferences.decks;
 				for (let i = 0, il = decks.length; i < il; i++) {
 					const deck = decks[i];
@@ -228,15 +274,6 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 						}
 					}
 				}
-
-				// 2. Update memberships data
-				queryClient.setQueryData<ListMembership[]>(getListMembershipsKey(uid), (prev) => {
-					if (prev) {
-						return prev.filter((x) => x.listUri !== listUri);
-					}
-
-					return prev;
-				});
 			});
 		},
 	}));
