@@ -1,4 +1,4 @@
-import { batch, createEffect, createMemo, createSignal as signal } from 'solid-js';
+import { batch, createEffect, createMemo, lazy, createSignal as signal } from 'solid-js';
 
 import { type InfiniteData, createMutation, useQueryClient } from '@pkg/solid-query';
 
@@ -43,7 +43,7 @@ import { usePaneContext, usePaneModalState } from '../PaneContext.tsx';
 import PaneDialog from '../PaneDialog.tsx';
 import PaneDialogHeader from '../PaneDialogHeader.tsx';
 
-import ListMembersPaneDialog from './ListMembersPaneDialog.tsx';
+const ListMembersPaneDialog = lazy(() => import('./ListMembersPaneDialog.tsx'));
 
 export interface ListSettingsPaneDialogProps {
 	/** Expected to be static */
