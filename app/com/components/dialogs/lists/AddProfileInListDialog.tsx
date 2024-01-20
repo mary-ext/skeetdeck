@@ -27,6 +27,7 @@ import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 import { createDerivedSignal } from '~/utils/hooks.ts';
 import { produce } from '~/utils/immer.ts';
 import { chunked, clsx, mapDefined } from '~/utils/misc.ts';
+import { difference } from '~/utils/sets.ts';
 
 import { closeModal, useModalState } from '../../../globals/modals.tsx';
 
@@ -331,13 +332,3 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 };
 
 export default AddProfileInListDialog;
-
-const difference = <T,>(a: Set<T>, b: Set<T>): Set<T> => {
-	const set = new Set(a);
-
-	for (const x of b) {
-		set.delete(x);
-	}
-
-	return set;
-};

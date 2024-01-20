@@ -1,4 +1,4 @@
-import type { JSX } from 'solid-js';
+import { type JSX, lazy } from 'solid-js';
 
 import { getRecordId } from '~/api/utils/misc.ts';
 
@@ -11,8 +11,11 @@ import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu.ts';
 import ReportDialog from '~/com/components/dialogs/ReportDialog.tsx';
 import { Flyout } from '~/com/components/Flyout.tsx';
 
+import DeleteIcon from '~/com/icons/baseline-delete.tsx';
 import LaunchIcon from '~/com/icons/baseline-launch.tsx';
 import ReportIcon from '~/com/icons/baseline-report.tsx';
+
+const PruneListOrphanDialog = lazy(() => import('~/com/components/dialogs/lists/PruneListOrphanDialog.tsx'));
 
 export interface FeedOverflowActionProps {
 	list: SignalizedList;
@@ -23,6 +26,8 @@ const ListOverflowAction = (props: FeedOverflowActionProps) => {
 	return (() => {
 		const list = props.list;
 		const creator = list.creator;
+
+		const isOwner = list.uid === creator.did;
 
 		return (
 			<Flyout button={props.children} placement="bottom-end">
@@ -37,6 +42,19 @@ const ListOverflowAction = (props: FeedOverflowActionProps) => {
 							<LaunchIcon class={/* @once */ MenuItemIcon()} />
 							<span>Open in Bluesky app</span>
 						</a>
+
+						{isOwner && (
+							<button
+								onClick={() => {
+									close();
+									openModal(() => <PruneListOrphanDialog list={list} />);
+								}}
+								class={/* @once */ MenuItem()}
+							>
+								<DeleteIcon class={/* @once */ MenuItemIcon()} />
+								<span>Prune orphan members</span>
+							</button>
+						)}
 
 						<button
 							onClick={() => {

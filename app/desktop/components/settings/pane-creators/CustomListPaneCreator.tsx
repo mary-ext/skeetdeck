@@ -17,12 +17,13 @@ import FilterBar from '~/com/components/inputs/FilterBar.tsx';
 import type { PaneCreatorProps } from './types.ts';
 
 import DefaultListAvatar from '~/com/assets/default-list-avatar.svg?url';
+import AddIcon from '~/com/icons/baseline-add.tsx';
 
 type List = RefOf<'app.bsky.graph.defs#listView'>;
 
 const listItem = Interactive({
 	variant: 'muted',
-	class: 'flex w-full cursor-pointer flex-col gap-3 px-4 py-3 text-left text-sm',
+	class: `flex w-full cursor-pointer flex-col gap-3 px-4 py-3 text-left text-sm`,
 });
 
 const CustomListPaneCreator = (props: PaneCreatorProps) => {
@@ -97,6 +98,24 @@ const CustomListPaneCreator = (props: PaneCreatorProps) => {
 			)}
 
 			<div>
+				{(() => {
+					if (filter() === props.uid) {
+						return (
+							<button
+								class={
+									/* @once */ Interactive({
+										variant: 'muted',
+										class: `flex w-full items-center gap-3 px-4 py-3 text-left text-sm`,
+									})
+								}
+							>
+								<AddIcon class="text-lg" />
+								<span>Create user list</span>
+							</button>
+						);
+					}
+				})()}
+
 				<For each={lists.data?.pages.flatMap((page) => page.lists)}>
 					{(list) => (
 						<VirtualContainer estimateHeight={88}>
