@@ -123,8 +123,8 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 
 				if (alt) {
 					return (
-						<div class="absolute bottom-0 left-0 right-0 grid place-items-center">
-							<div class="m-4 max-h-44 max-w-120 overflow-y-auto rounded-md bg-black/50 px-3 py-2 text-sm text-white backdrop-blur">
+						<div class="pointer-events-none absolute bottom-0 left-0 right-0 grid place-items-center">
+							<div class="pointer-events-auto m-4 max-h-44 max-w-120 overflow-y-auto rounded-md bg-black/50 px-3 py-2 text-sm text-white backdrop-blur">
 								<p class="whitespace-pre-wrap break-words drop-shadow">{alt}</p>
 							</div>
 						</div>
