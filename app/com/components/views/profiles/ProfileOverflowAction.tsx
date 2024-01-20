@@ -19,7 +19,7 @@ import RepeatIcon from '../../../icons/baseline-repeat.tsx';
 import ReportIcon from '../../../icons/baseline-report.tsx';
 import VolumeOffIcon from '../../../icons/baseline-volume-off.tsx';
 
-const AddProfileInListDialog = lazy(() => import('../../dialogs/AddProfileInListDialog.tsx'));
+const AddProfileInListDialog = lazy(() => import('../../dialogs/lists/AddProfileInListDialog.tsx'));
 const BlockConfirmDialog = lazy(() => import('../../dialogs/BlockConfirmDialog.tsx'));
 const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog.tsx'));
 const ReportDialog = lazy(() => import('../../dialogs/ReportDialog.tsx'));

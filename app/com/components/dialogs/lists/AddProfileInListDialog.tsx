@@ -28,21 +28,21 @@ import { createDerivedSignal } from '~/utils/hooks.ts';
 import { produce } from '~/utils/immer.ts';
 import { chunked, clsx, mapDefined } from '~/utils/misc.ts';
 
-import { closeModal, useModalState } from '../../globals/modals.tsx';
+import { closeModal, useModalState } from '../../../globals/modals.tsx';
 
 import { Button } from '~/com/primitives/button.ts';
-import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog.ts';
-import { IconButton } from '../../primitives/icon-button.ts';
+import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog.ts';
+import { IconButton } from '../../../primitives/icon-button.ts';
 import { Interactive, loadMoreBtn } from '~/com/primitives/interactive.ts';
 
-import GenericErrorView from '../views/GenericErrorView.tsx';
-import CircularProgress from '../CircularProgress.tsx';
-import DialogOverlay from './DialogOverlay.tsx';
+import GenericErrorView from '../../views/GenericErrorView.tsx';
+import CircularProgress from '../../CircularProgress.tsx';
+import DialogOverlay from '../DialogOverlay.tsx';
 
-import CloseIcon from '../../icons/baseline-close.tsx';
-import CheckIcon from '../../icons/baseline-check.tsx';
+import CloseIcon from '../../../icons/baseline-close.tsx';
+import CheckIcon from '../../../icons/baseline-check.tsx';
 
-import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';
+import DefaultListAvatar from '../../../assets/default-list-avatar.svg?url';
 
 export interface AddProfileInListDialogProps {
 	/** Expected to be static */

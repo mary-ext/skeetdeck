@@ -21,7 +21,7 @@ import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
 import ListOverflowAction from './actions/ListOverflowAction.tsx';
 
 const ImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
-const SubscribeListDialog = lazy(() => import('~/com/components/dialogs/SubscribeListDialog.tsx'));
+const SubscribeListDialog = lazy(() => import('~/com/components/dialogs/lists/SubscribeListDialog.tsx'));
 
 const ListMembersPaneDialog = lazy(() => import('../dialogs/ListMembersPaneDialog.tsx'));
 const ListSettingsPaneDialog = lazy(() => import('../dialogs/ListSettingsPaneDialog.tsx'));
