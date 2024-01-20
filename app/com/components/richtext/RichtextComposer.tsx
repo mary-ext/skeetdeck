@@ -430,7 +430,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 			{(() => {
 				if (onImageDrop && showDrop()) {
 					return (
-						<div class="pointer-events-none absolute inset-0 border-2 border-dashed border-accent"></div>
+						<div class="pointer-events-none absolute inset-0 mb-2 mr-4 rounded border-2 border-dashed border-accent"></div>
 					);
 				}
 			})()}
