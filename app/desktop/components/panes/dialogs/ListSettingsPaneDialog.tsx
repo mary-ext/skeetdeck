@@ -278,8 +278,8 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 		},
 	}));
 
-	const handleSubmit = (ev: SubmitEvent) => {
-		ev.preventDefault();
+	const handleSubmit = (ev?: Event) => {
+		ev?.preventDefault();
 		listDeleteMutation.reset();
 		listMutation.mutate();
 	};
@@ -357,6 +357,7 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 							value={desc()}
 							rt={rt()}
 							onChange={setDesc}
+							onSubmit={handleSubmit}
 							minRows={4}
 						/>
 					</label>
