@@ -220,15 +220,9 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 					return prev;
 				});
 
-				// 2. Reset any queries showing the list info
-				queryClient.resetQueries({
-					exact: true,
-					queryKey: getListInfoKey(uid, listUri),
-				});
-
 				const { produce } = await import('~/utils/immer.ts');
 
-				// 3. Remove list from listing
+				// 32 Remove list from listing
 				queryClient.setQueriesData<InfiniteData<{ lists: SignalizedList[] }>>(
 					{ queryKey: ['getProfileLists', uid, uid] },
 					(prev) => {
@@ -260,7 +254,7 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 			batch(() => {
 				close();
 
-				// 4. Remove all columns with this list
+				// 3. Remove all columns with this list
 				const decks = preferences.decks;
 				for (let i = 0, il = decks.length; i < il; i++) {
 					const deck = decks[i];
@@ -274,6 +268,12 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 						}
 					}
 				}
+
+				// 4. Reset any queries showing the list info
+				queryClient.resetQueries({
+					exact: true,
+					queryKey: getListInfoKey(uid, listUri),
+				});
 			});
 		},
 	}));
