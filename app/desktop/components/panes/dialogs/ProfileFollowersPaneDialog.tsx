@@ -10,6 +10,7 @@ import {
 	getProfileFollowersKey,
 } from '~/api/queries/get-profile-followers.ts';
 
+import { ProfileFollowAccessory } from '~/com/components/items/ProfileItem.tsx';
 import ProfileList from '~/com/components/lists/ProfileList.tsx';
 import { LINK_PROFILE, useLinking } from '~/com/components/Link.tsx';
 
@@ -59,6 +60,7 @@ const ProfileFollowersPaneDialog = (props: ProfileFollowersPaneDialogProps) => {
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<ProfileList
+					asideAccessory={ProfileFollowAccessory}
 					profiles={followers.data?.pages.flatMap((page) => page.profiles)}
 					fetching={followers.isFetching}
 					error={followers.error}
