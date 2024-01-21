@@ -19,7 +19,7 @@
 		"noFallthroughCasesInSwitch": true,
 		"verbatimModuleSyntax": true,
 		"stripInternal": true,
-		"useDefineForClassFields": false
+		"useDefineForClassFields": false,
 	},
-	"include": ["src", "lib"]
+	"include": ["src", "lib"],
 }

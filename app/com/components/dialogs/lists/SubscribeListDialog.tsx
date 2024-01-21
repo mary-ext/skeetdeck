@@ -10,7 +10,13 @@ import { getUniqueId } from '~/utils/misc.ts';
 import { closeModal } from '../../../globals/modals.tsx';
 
 import { Button } from '../../../primitives/button.ts';
-import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog.ts';
+import {
+	DialogActions,
+	DialogBody,
+	DialogHeader,
+	DialogRoot,
+	DialogTitle,
+} from '../../../primitives/dialog.ts';
 
 import ConfirmDialog from '../ConfirmDialog.tsx';
 import DialogOverlay from '../DialogOverlay.tsx';

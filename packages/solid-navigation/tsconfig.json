@@ -24,6 +24,6 @@
 		"stripInternal": true,
 		"useDefineForClassFields": false,
 
-		"types": ["dom-navigation"]
-	}
+		"types": ["dom-navigation"],
+	},
 }

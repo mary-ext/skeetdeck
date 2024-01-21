@@ -22,9 +22,9 @@
 		"useDefineForClassFields": false,
 
 		"paths": {
-			"~/*": ["./*"]
-		}
+			"~/*": ["./*"],
+		},
 	},
 	"include": ["api", "com", "desktop", "mobile", "utils", "env.d.ts"],
-	"references": [{ "path": "./tsconfig.node.json" }]
+	"references": [{ "path": "./tsconfig.node.json" }],
 }
