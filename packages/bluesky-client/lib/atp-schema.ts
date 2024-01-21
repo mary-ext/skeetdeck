@@ -861,6 +861,14 @@ export interface Queries {
 		};
 	};
 	/**
+	 * Get list of all communication templates.
+	 */
+	'com.atproto.admin.listCommunicationTemplates': {
+		response: {
+			communicationTemplates: RefOf<'com.atproto.admin.defs#communicationTemplateView'>[];
+		};
+	};
+	/**
 	 * List moderation events related to a subject.
 	 */
 	'com.atproto.admin.queryModerationEvents': {
@@ -1119,6 +1127,7 @@ export interface Queries {
 	'com.atproto.server.describeServer': {
 		response: {
 			inviteCodeRequired?: boolean;
+			phoneVerificationRequired?: boolean;
 			availableUserDomains: string[];
 			links?: RefOf<'com.atproto.server.describeServer#links'>;
 		};
@@ -1403,11 +1412,43 @@ export interface Procedures {
 		};
 	};
 	/**
+	 * Administrative action to create a new, re-usable communication (email for now) template.
+	 */
+	'com.atproto.admin.createCommunicationTemplate': {
+		data: {
+			/**
+			 * Name of the template.
+			 */
+			name: string;
+			/**
+			 * Content of the template, markdown supported, can contain variable placeholders.
+			 */
+			contentMarkdown: string;
+			/**
+			 * Subject of the message, used in emails.
+			 */
+			subject: string;
+			/**
+			 * DID of the user who is creating the template.
+			 */
+			createdBy?: DID;
+		};
+		response: RefOf<'com.atproto.admin.defs#communicationTemplateView'>;
+	};
+	/**
 	 * Delete a user account as an administrator.
 	 */
 	'com.atproto.admin.deleteAccount': {
 		data: {
 			did: DID;
+		};
+	};
+	/**
+	 * Delete a communication template.
+	 */
+	'com.atproto.admin.deleteCommunicationTemplate': {
+		data: {
+			id: string;
 		};
 	};
 	/**
@@ -1506,6 +1547,35 @@ export interface Procedures {
 			did: DID;
 			handle: Handle;
 		};
+	};
+	/**
+	 * Administrative action to update an existing communication template. Allows passing partial fields to patch specific fields only.
+	 */
+	'com.atproto.admin.updateCommunicationTemplate': {
+		data: {
+			/**
+			 * ID of the template to be updated.
+			 */
+			id: string;
+			/**
+			 * Name of the template.
+			 */
+			name?: string;
+			/**
+			 * Content of the template, markdown supported, can contain variable placeholders.
+			 */
+			contentMarkdown?: string;
+			/**
+			 * Subject of the message, used in emails.
+			 */
+			subject?: string;
+			/**
+			 * DID of the user who is updating the template.
+			 */
+			updatedBy?: DID;
+			disabled?: boolean;
+		};
+		response: RefOf<'com.atproto.admin.defs#communicationTemplateView'>;
 	};
 	/**
 	 * Update the service-specific admin status of a subject (account, record, or blob).
@@ -1728,6 +1798,8 @@ export interface Procedures {
 			handle: Handle;
 			did?: DID;
 			inviteCode?: string;
+			verificationCode?: string;
+			verificationPhone?: string;
 			password?: string;
 			recoveryKey?: string;
 			plcOp?: unknown;
@@ -1971,6 +2043,14 @@ export interface Procedures {
 			did: DID;
 		};
 		data: Blob;
+	};
+	/**
+	 * Request a verification code to be sent to the supplied phone number
+	 */
+	'com.atproto.temp.requestPhoneVerification': {
+		data: {
+			phoneNumber: string;
+		};
 	};
 	/**
 	 * Transfer an account.
@@ -2784,6 +2864,28 @@ export interface Objects {
 		 * Additional comment about the outgoing comm.
 		 */
 		comment?: string;
+	};
+	'com.atproto.admin.defs#communicationTemplateView': {
+		id: string;
+		/**
+		 * Name of the template.
+		 */
+		name: string;
+		/**
+		 * Content of the template, can contain markdown and variable placeholders.
+		 */
+		subject?: string;
+		/**
+		 * Subject of the message, used in emails.
+		 */
+		contentMarkdown: string;
+		disabled: boolean;
+		/**
+		 * DID of the user who last updated the template.
+		 */
+		lastUpdatedBy: DID;
+		createdAt: string;
+		updatedAt: string;
 	};
 	/**
 	 * Metadata tag on an atproto resource (eg, repo or record).
