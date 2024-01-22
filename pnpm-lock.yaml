@@ -185,15 +185,15 @@ importers:
   packages/solid-query:
     dependencies:
       '@tanstack/query-core':
-        specifier: 5.15.5
-        version: 5.15.5
+        specifier: 5.17.19
+        version: 5.17.19
     devDependencies:
       solid-js:
         specifier: ^1.8.11
         version: 1.8.11
       vite:
         specifier: ^5.0.12
-        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.5)(terser@5.27.0)
+        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)
       vite-plugin-solid:
         specifier: ^2.8.2
         version: 2.8.2(solid-js@1.8.11)(vite@5.0.12)
@@ -1976,8 +1976,8 @@ packages:
       string.prototype.matchall: /@nolyfill/string.prototype.matchall@1.0.24
     dev: true
 
-  /@tanstack/query-core@5.15.5:
-    resolution: {integrity: sha512-GDwVfu8RPswqVu27+zuIkZINru6CN++zzBbBK+OnAgzxK8N4Obdi+sG2P0EO8rJAOw0fLyQTsO4GCZ1djwaUCg==}
+  /@tanstack/query-core@5.17.19:
+    resolution: {integrity: sha512-Lzw8FUtnLCc9Jwz0sw9xOjZB+/mCCmJev38v2wHMUl/ioXNIhnNWeMxu0NKUjIhAd62IRB3eAtvxAGDJ55UkyA==}
     dev: false
 
   /@thisbeyond/solid-dnd@0.7.5(solid-js@1.8.11):
@@ -4251,11 +4251,47 @@ packages:
       merge-anything: 5.1.7
       solid-js: 1.8.11
       solid-refresh: 0.6.3(solid-js@1.8.11)
-      vite: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.5)(terser@5.27.0)
+      vite: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)
       vitefu: 0.2.5(vite@5.0.12)
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /vite@5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju):
+    resolution: {integrity: sha512-4hsnEkG3q0N4Tzf1+t6NdN9dg/L3BM+q8SWgbSPnJvrgH2kgdyzfVJwbR1ic69/4uMJJ/3dqDZZE5/WwqW8U1w==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': ^18.0.0 || >=20.0.0
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      esbuild: 0.19.11
+      postcss: 8.4.33
+      rollup: 4.9.6
+    optionalDependencies:
+      fsevents: 2.3.3
+    dev: true
+    patched: true
 
   /vite@5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.5)(terser@5.27.0):
     resolution: {integrity: sha512-4hsnEkG3q0N4Tzf1+t6NdN9dg/L3BM+q8SWgbSPnJvrgH2kgdyzfVJwbR1ic69/4uMJJ/3dqDZZE5/WwqW8U1w==}
@@ -4303,7 +4339,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.5)(terser@5.27.0)
+      vite: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)
     dev: true
 
   /webidl-conversions@4.0.2:
