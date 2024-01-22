@@ -46,11 +46,15 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 				});
 			},
 			onMutate: () => {
+				closeModal();
+			},
+			onSuccess: () => {
 				const [updateTimeline, updatePostThread] = producePostDelete(postUri);
 
-				closeModal();
+				// 1. Remove our cached post
+				removeCachedPost(did, postUri);
 
-				// 1. Reset any post thread queries that directly shows the post
+				// 2. Reset any post thread queries that directly shows the post
 				queryClient.resetQueries({
 					queryKey: ['getPostThread'],
 					predicate: (query) => {
@@ -59,7 +63,7 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 					},
 				});
 
-				// 2. Mutate all timeline and post thread queries
+				// 3. Mutate all timeline and post thread queries
 				queryClient.setQueriesData<InfiniteData<TimelinePage>>({ queryKey: ['getTimeline'] }, (data) => {
 					if (data) {
 						return updateTimeline(data);
@@ -84,10 +88,6 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 					return data;
 				});
 
-				// 3. Remove our cached post
-				removeCachedPost(did, postUri);
-			},
-			onSuccess: () => {
 				// 4. Re-fetch the parent post to get an accurate view over the reply count
 				if (parentUri) {
 					queryClient.fetchQuery({
