@@ -174,7 +174,13 @@ const ComposerPane = () => {
 			const draft = posts[i];
 			const length = getRtLength(draft.rt);
 
-			if (length > GRAPHEME_LIMIT || (!draft.external && draft.images.length < 1 && length < 1)) {
+			// allow user to post if:
+			// - the length doesn't go beyond the grapheme limit
+			// - any of these conditions matches:
+			//   - the length is over 0
+			//   - it has an image
+			//   - it has an external embed
+			if (!(length <= GRAPHEME_LIMIT && (length > 0 || draft.images.length > 0 || draft.external))) {
 				return true;
 			}
 		}
