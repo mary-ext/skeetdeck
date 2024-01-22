@@ -12,6 +12,10 @@ export const searchProfilesTypeaheadKey = (uid: DID, query: string, limit = 30) 
 export const searchProfilesTypeahead = async (ctx: QC<ReturnType<typeof searchProfilesTypeaheadKey>>) => {
 	const [, uid, query, limit] = ctx.queryKey;
 
+	if (query === '' || query.includes(':') || query.includes('"')) {
+		return [];
+	}
+
 	const agent = await multiagent.connect(uid);
 
 	const response = await agent.rpc.get('app.bsky.actor.searchActorsTypeahead', {

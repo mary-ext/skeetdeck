@@ -1,6 +1,6 @@
 import { type JSX, For, createMemo, createSignal } from 'solid-js';
 
-import { createQuery, keepPreviousData } from '@pkg/solid-query';
+import { createQuery } from '@pkg/solid-query';
 
 import type { DID, RefOf } from '~/api/atp-schema.ts';
 
@@ -14,6 +14,7 @@ import { model } from '~/utils/input.ts';
 import { clsx } from '~/utils/misc.ts';
 
 import SearchInput from '~/com/components/inputs/SearchInput.tsx';
+import CircularProgress from '~/com/components/CircularProgress.tsx';
 
 export const SUGGESTION_SEARCH_POSTS = 0;
 export const SUGGESTION_PROFILE = 1;
@@ -47,10 +48,8 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 		const $debouncedSearch = debouncedSearch().trim();
 
 		return {
-			enabled: $debouncedSearch.length > 0 && !$debouncedSearch.includes(':'),
 			queryKey: searchProfilesTypeaheadKey(props.uid, $debouncedSearch, 5),
 			queryFn: searchProfilesTypeahead,
-			placeholderData: keepPreviousData,
 		};
 	});
 
@@ -86,10 +85,10 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 				type: SUGGESTION_SEARCH_POSTS,
 				query: $search,
 			});
-		}
 
-		if ($profileSuggestions && $search) {
-			items = items.concat($profileSuggestions);
+			if ($profileSuggestions) {
+				items = items.concat($profileSuggestions);
+			}
 		}
 
 		return items;
@@ -130,17 +129,18 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 					}}
 				/>
 			</div>
-			<For each={suggestions()} fallback={<p class="px-4 py-3 text-sm text-muted-fg">Start searching...</p>}>
+			<For each={suggestions()}>
 				{(item, index) => {
+					const type = item.type;
 					let node: JSX.Element;
 
-					if (item.type === SUGGESTION_SEARCH_POSTS) {
+					if (type === SUGGESTION_SEARCH_POSTS) {
 						node = (
 							<p class="overflow-hidden text-ellipsis whitespace-nowrap px-4 py-3">
 								Search posts matching <strong>{/* @once */ item.query}</strong>
 							</p>
 						);
-					} else if (item.type === SUGGESTION_PROFILE) {
+					} else if (type === SUGGESTION_PROFILE) {
 						const profile = item.profile;
 
 						node = (
@@ -176,6 +176,20 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 					);
 				}}
 			</For>
+
+			{(() => {
+				if (profileSuggestions.isFetching) {
+					return (
+						<div class="grid h-14 place-items-center">
+							<CircularProgress />
+						</div>
+					);
+				}
+
+				if (suggestions().length === 0) {
+					return <p class="px-4 py-3 text-sm text-muted-fg">Start searching...</p>;
+				}
+			})()}
 		</div>
 	);
 };
