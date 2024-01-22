@@ -1,4 +1,4 @@
-import { batch, createEffect, createMemo, lazy, createSignal as signal } from 'solid-js';
+import { createEffect, createMemo, lazy, createSignal as signal } from 'solid-js';
 
 import { type InfiniteData, createMutation, useQueryClient } from '@pkg/solid-query';
 
