@@ -14,7 +14,7 @@ import {
 	getListMembershipsKey,
 	listMembershipsOptions,
 } from '~/api/queries/get-list-memberships.ts';
-import type { SignalizedList } from '~/api/stores/lists.ts';
+import { type SignalizedList, removeCachedList } from '~/api/stores/lists.ts';
 
 import { finalizeRt, getRtLength, parseRt } from '~/api/richtext/composer.ts';
 import { serializeRichText } from '~/api/richtext/utils.ts';
@@ -209,20 +209,47 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 					},
 				});
 			}
+		},
+		onSuccess: async () => {
+			close();
 
-			try {
-				// 1. Update memberships data
-				queryClient.setQueryData<ListMembership[]>(getListMembershipsKey(uid), (prev) => {
-					if (prev) {
-						return prev.filter((x) => x.listUri !== listUri);
+			// 1. Remove all columns with this list
+			const decks = preferences.decks;
+			for (let i = 0, il = decks.length; i < il; i++) {
+				const deck = decks[i];
+				const panes = deck.panes;
+
+				for (let j = panes.length - 1; j >= 0; j--) {
+					const pane = panes[j];
+
+					if (pane.type === PANE_TYPE_LIST && pane.list.uri === listUri) {
+						panes.splice(j, 1);
 					}
+				}
+			}
 
-					return prev;
-				});
+			// 2. Update memberships data
+			queryClient.setQueryData<ListMembership[]>(getListMembershipsKey(uid), (prev) => {
+				if (prev) {
+					return prev.filter((x) => x.listUri !== listUri);
+				}
 
+				return prev;
+			});
+
+			// 3. Remove cached list
+			removeCachedList(uid, listUri);
+
+			// 4. Reset any queries showing the list info
+			queryClient.resetQueries({
+				exact: true,
+				queryKey: getListInfoKey(uid, listUri),
+			});
+
+			// 5. Remove list from listing
+			{
 				const { produce } = await import('~/utils/immer.ts');
 
-				// 32 Remove list from listing
 				queryClient.setQueriesData<InfiniteData<{ lists: SignalizedList[] }>>(
 					{ queryKey: ['getProfileLists', uid, uid] },
 					(prev) => {
@@ -248,33 +275,7 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 						return prev;
 					},
 				);
-			} catch {}
-		},
-		onSuccess: () => {
-			batch(() => {
-				close();
-
-				// 3. Remove all columns with this list
-				const decks = preferences.decks;
-				for (let i = 0, il = decks.length; i < il; i++) {
-					const deck = decks[i];
-					const panes = deck.panes;
-
-					for (let j = panes.length - 1; j >= 0; j--) {
-						const pane = panes[j];
-
-						if (pane.type === PANE_TYPE_LIST && pane.list.uri === listUri) {
-							panes.splice(j, 1);
-						}
-					}
-				}
-
-				// 4. Reset any queries showing the list info
-				queryClient.resetQueries({
-					exact: true,
-					queryKey: getListInfoKey(uid, listUri),
-				});
-			});
+			}
 		},
 	}));
 

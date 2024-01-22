@@ -64,6 +64,18 @@ export const getCachedList = (uid: DID, uri: string) => {
 	return ref && ref.deref();
 };
 
+export const removeCachedList = (uid: DID, uri: string) => {
+	const id = createListId(uid, uri);
+
+	const ref = lists[id];
+	const val = ref?.deref();
+
+	if (val) {
+		gc.unregister(val);
+		delete lists[id];
+	}
+};
+
 export const mergeList = (uid: DID, list: List, key?: number) => {
 	let id = createListId(uid, list.uri);
 
