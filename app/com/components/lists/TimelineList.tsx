@@ -64,7 +64,8 @@ const TimelineList = (props: TimelineListProps) => {
 			},
 			refetchInterval: (query) => {
 				if (!isTimelineStale($timeline, query.state.data)) {
-					return 30_000;
+					// 30 seconds, or 3 minutes
+					return !document.hidden ? 30_000 : 3 * 60_000;
 				}
 
 				return false;
