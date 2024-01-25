@@ -617,6 +617,28 @@ export interface Queries {
 		};
 	};
 	/**
+	 * Enumerates public relationships between one account, and a list of other accounts
+	 */
+	'app.bsky.graph.getRelationships': {
+		params: {
+			actor: string;
+			/**
+			 * Maximum array length: 30
+			 */
+			others?: string[];
+		};
+		response: {
+			actor?: DID;
+			relationships: (
+				| UnionOf<'app.bsky.graph.defs#relationship'>
+				| UnionOf<'app.bsky.graph.defs#notFoundActor'>
+			)[];
+		};
+		errors: {
+			ActorNotFound: {};
+		};
+	};
+	/**
 	 * Get suggested follows related to a given actor.
 	 */
 	'app.bsky.graph.getSuggestedFollowsByActor': {
@@ -675,6 +697,14 @@ export interface Queries {
 		response: {
 			cursor?: string;
 			feeds: RefOf<'app.bsky.feed.defs#generatorView'>[];
+		};
+	};
+	/**
+	 * Get a list of suggestions (feeds and users) tagged with categories
+	 */
+	'app.bsky.unspecced.getTaggedSuggestions': {
+		response: {
+			suggestions: RefOf<'app.bsky.unspecced.getTaggedSuggestions#suggestion'>[];
 		};
 	};
 	/**
@@ -2509,6 +2539,27 @@ export interface Objects {
 		muted?: boolean;
 		blocked?: AtUri;
 	};
+	/**
+	 * indicates that a handle or DID could not be resolved
+	 */
+	'app.bsky.graph.defs#notFoundActor': {
+		actor: string;
+		notFound: boolean;
+	};
+	/**
+	 * lists the bi-directional graph relationships between one actor (not indicated in the object), and the target actors (the DID included in the object)
+	 */
+	'app.bsky.graph.defs#relationship': {
+		did: DID;
+		/**
+		 * if the actor follows this DID, this is the AT-URI of the follow record
+		 */
+		following?: AtUri;
+		/**
+		 * if the actor is followed by this DID, contains the AT-URI of the follow record
+		 */
+		followedBy?: AtUri;
+	};
 	'app.bsky.notification.listNotifications#notification': {
 		uri: AtUri;
 		cid: CID;
@@ -2571,6 +2622,11 @@ export interface Objects {
 	};
 	'app.bsky.unspecced.defs#skeletonSearchActor': {
 		did: DID;
+	};
+	'app.bsky.unspecced.getTaggedSuggestions#suggestion': {
+		tag: string;
+		subjectType: 'actor' | 'feed' | (string & {});
+		subject: string;
 	};
 	'com.atproto.admin.defs#statusAttr': {
 		applied: boolean;
