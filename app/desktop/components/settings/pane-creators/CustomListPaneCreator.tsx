@@ -1,9 +1,11 @@
-import { For, Match, Switch, createSignal } from 'solid-js';
+import { For, Match, Switch, createSignal, lazy } from 'solid-js';
 
-import { createInfiniteQuery } from '@pkg/solid-query';
+import { createInfiniteQuery, useQueryClient } from '@pkg/solid-query';
 
 import type { DID, RefOf } from '~/api/atp-schema.ts';
 import { multiagent, renderAccountName } from '~/api/globals/agent.ts';
+
+import { openModal } from '~/com/globals/modals.tsx';
 
 import { type CustomListPaneConfig, PANE_TYPE_LIST } from '../../../globals/panes.ts';
 
@@ -19,6 +21,8 @@ import type { PaneCreatorProps } from './types.ts';
 import DefaultListAvatar from '~/com/assets/default-list-avatar.svg?url';
 import AddIcon from '~/com/icons/baseline-add.tsx';
 
+const AddListDialog = lazy(() => import('~/com/components/dialogs/lists/AddListDialog.tsx'));
+
 type List = RefOf<'app.bsky.graph.defs#listView'>;
 
 const listItem = Interactive({
@@ -26,11 +30,17 @@ const listItem = Interactive({
 	class: `flex w-full cursor-pointer flex-col gap-3 px-4 py-3 text-left text-sm`,
 });
 
+const getCurationListKey = (uid: DID, filter: DID) => {
+	return ['getProfileCurationLists', uid, filter, 30] as const;
+};
+
 const CustomListPaneCreator = (props: PaneCreatorProps) => {
 	const [filter, setFilter] = createSignal<DID>(props.uid);
 
+	const queryClient = useQueryClient();
+
 	const lists = createInfiniteQuery(() => ({
-		queryKey: ['getProfileCurationLists', props.uid, filter(), 30] as const,
+		queryKey: getCurationListKey(props.uid, filter()),
 		queryFn: async (ctx) => {
 			const [, uid, actor, limit] = ctx.queryKey;
 
@@ -80,6 +90,21 @@ const CustomListPaneCreator = (props: PaneCreatorProps) => {
 		initialPageParam: undefined as { key: string | null; remaining: List[] } | undefined,
 	}));
 
+	const openAddList = () => {
+		openModal(() => (
+			<AddListDialog
+				uid={props.uid}
+				type="app.bsky.graph.defs#curatelist"
+				onSubmit={() => {
+					queryClient.resetQueries({
+						exact: true,
+						queryKey: getCurationListKey(props.uid, filter()),
+					});
+				}}
+			/>
+		));
+	};
+
 	return (
 		<div class={/* @once */ DialogBody({ padded: false, scrollable: true })}>
 			{multiagent.accounts.length > 1 && (
@@ -102,6 +127,7 @@ const CustomListPaneCreator = (props: PaneCreatorProps) => {
 					if (filter() === props.uid) {
 						return (
 							<button
+								onClick={openAddList}
 								class={
 									/* @once */ Interactive({
 										variant: 'muted',
