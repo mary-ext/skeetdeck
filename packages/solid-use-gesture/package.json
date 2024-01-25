@@ -19,8 +19,8 @@
 		"@use-gesture/core": "^10.3.0"
 	},
 	"devDependencies": {
-		"solid-js": "^1.8.11",
+		"solid-js": "^1.8.12",
 		"vite": "^5.0.12",
-		"vite-plugin-solid": "^2.8.2"
+		"vite-plugin-solid": "^2.9.1"
 	}
 }
