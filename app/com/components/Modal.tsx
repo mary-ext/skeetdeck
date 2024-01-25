@@ -54,19 +54,25 @@ const Modal = (props: ModalProps) => {
 					});
 				}}
 				onClick={(ev) => {
-					const onClose = props.onClose;
+					if (ev.target === ev.currentTarget) {
+						const onClose = props.onClose;
 
-					if (onClose && ev.target === ev.currentTarget) {
-						onClose();
+						if (onClose) {
+							onClose();
+						}
 					}
 				}}
 				onCancel={(ev) => {
-					const onClose = props.onClose;
+					// https://github.com/mdn/content/issues/31910
+					if (ev.target === ev.currentTarget) {
+						console.log(ev);
+						const onClose = props.onClose;
 
-					ev.preventDefault();
+						ev.preventDefault();
 
-					if (onClose) {
-						onClose();
+						if (onClose) {
+							onClose();
+						}
 					}
 				}}
 				class="m-0 h-full max-h-none w-full max-w-none overflow-hidden bg-transparent backdrop:bg-transparent"
