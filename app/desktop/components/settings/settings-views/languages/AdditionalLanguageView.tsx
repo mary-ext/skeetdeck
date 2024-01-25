@@ -1,4 +1,4 @@
-import { For, JSX, createMemo, createSignal } from 'solid-js';
+import { type JSX, For, createMemo, createSignal } from 'solid-js';
 
 import { systemLanguages } from '~/api/globals/platform.ts';
 

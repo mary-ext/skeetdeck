@@ -1,4 +1,4 @@
-import { For, JSX, batch, createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js';
+import { type JSX, For, batch, createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js';
 
 import { type Vector2, createGesture } from '@pkg/solid-use-gesture';
 import { makeEventListener } from '@solid-primitives/event-listener';

@@ -1,4 +1,4 @@
-import { For, JSX } from 'solid-js';
+import { type JSX, For } from 'solid-js';
 
 import { useQueryClient } from '@pkg/solid-query';
 

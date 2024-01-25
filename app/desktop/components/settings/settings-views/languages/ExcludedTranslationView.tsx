@@ -1,4 +1,4 @@
-import { For, JSX, createMemo, createSignal } from 'solid-js';
+import { type JSX, For, createMemo, createSignal } from 'solid-js';
 
 import { getNativeLanguageName, languageNames, languageNamesStrict } from '~/utils/intl/display-names.ts';
 import { CODE2S } from '~/utils/intl/languages.ts';
