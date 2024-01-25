@@ -1,7 +1,7 @@
 import type { JSX } from 'solid-js';
 
 import type { UnionOf } from '~/api/atp-schema.ts';
-import { ListPurposeLabels } from '~/api/display.ts';
+import { renderListPurpose } from '~/api/display.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
 import { Interactive } from '../../primitives/interactive.ts';
@@ -23,8 +23,7 @@ export const EmbedListContent = (props: EmbedListProps) => {
 		const list = props.list;
 		const creator = list.creator;
 
-		const rawPurpose = list.purpose;
-		const purpose = rawPurpose in ListPurposeLabels ? ListPurposeLabels[rawPurpose] : `Unknown list`;
+		const purpose = renderListPurpose(list.purpose);
 
 		return (
 			<div class="flex gap-3 rounded-md border border-divider p-3 text-left text-sm">

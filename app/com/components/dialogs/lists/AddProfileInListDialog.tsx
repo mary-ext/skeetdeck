@@ -10,7 +10,7 @@ import {
 
 import type { Records, UnionOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
-import { ListPurposeLabels } from '~/api/display.ts';
+import { renderListPurpose } from '~/api/display.ts';
 import { getCurrentTid } from '~/api/utils/tid.ts';
 import { getCurrentDate, getRecordId } from '~/api/utils/misc.ts';
 
@@ -269,10 +269,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 											<div class="min-w-0 grow">
 												<p class="break-words text-sm font-bold">{list.name.value}</p>
 												<p class="text-sm text-muted-fg">
-													{(() => {
-														const raw = list.purpose.value;
-														return raw in ListPurposeLabels ? ListPurposeLabels[raw] : `Unknown list`;
-													})()}
+													{renderListPurpose(list.purpose.value)}
 												</p>
 											</div>
 
