@@ -1,18 +1,18 @@
 import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down.tsx';
 
-export interface SelectItem {
-	value: string;
+export interface SelectItem<T extends string = string> {
+	value: T;
 	label: string;
 }
 
-export interface SelectInputProps<T extends SelectItem> {
-	value: string;
+export interface SelectInputProps<T extends string> {
+	value: T;
 	disabled?: boolean;
-	options: (T | null | undefined | false)[];
+	options: (SelectItem<T> | null | undefined | false)[];
 	onChange: (next: string) => void;
 }
 
-const SelectInput = <T extends SelectItem>(props: SelectInputProps<T>) => {
+const SelectInput = <T extends string>(props: SelectInputProps<T>) => {
 	const onChange = props.onChange;
 
 	return (
