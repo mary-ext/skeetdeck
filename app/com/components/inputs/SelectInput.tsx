@@ -9,7 +9,7 @@ export interface SelectInputProps<T extends SelectItem> {
 	value: string;
 	disabled?: boolean;
 	options: (T | null | undefined | false)[];
-	onChange?: (next: string) => void;
+	onChange: (next: string) => void;
 }
 
 const SelectInput = <T extends SelectItem>(props: SelectInputProps<T>) => {
@@ -19,13 +19,10 @@ const SelectInput = <T extends SelectItem>(props: SelectInputProps<T>) => {
 		<fieldset disabled={props.disabled} class="relative inline-block h-max disabled:opacity-50">
 			<select
 				value={props.value}
-				onChange={
-					onChange &&
-					((ev) => {
-						const target = ev.target;
-						onChange(target.value);
-					})
-				}
+				onChange={(ev) => {
+					const target = ev.target;
+					onChange(target.value);
+				}}
 				class="h-9 w-full appearance-none rounded-md border border-input bg-background px-3 pr-8 text-sm text-primary outline-2 -outline-offset-1 outline-accent outline-none focus:outline"
 			>
 				{props.options.map((item) => (item ? <option value={item.value}>{item.label}</option> : null))}
