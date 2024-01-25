@@ -298,7 +298,11 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 		<PaneDialog>
 			<form onSubmit={handleSubmit} class="contents">
 				<PaneDialogHeader title="Edit list" disabled={disableBackdropClose.value}>
-					<button type="submit" class={/* @once */ Button({ variant: 'primary', size: 'xs' })}>
+					<button
+						type="submit"
+						disabled={isDescriptionOver()}
+						class={/* @once */ Button({ variant: 'primary', size: 'xs' })}
+					>
 						Save
 					</button>
 				</PaneDialogHeader>
