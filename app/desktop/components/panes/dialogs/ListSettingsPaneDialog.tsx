@@ -281,6 +281,11 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 
 	const handleSubmit = (ev?: Event) => {
 		ev?.preventDefault();
+
+		if (isDescriptionOver()) {
+			return;
+		}
+
 		listDeleteMutation.reset();
 		listMutation.mutate();
 	};
