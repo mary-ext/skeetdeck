@@ -7,7 +7,8 @@ export interface SelectItem {
 
 export interface SelectInputProps<T extends SelectItem> {
 	value: string;
-	options: T[];
+	disabled?: boolean;
+	options: (T | null | undefined | false)[];
 	onChange?: (next: string) => void;
 }
 
@@ -15,7 +16,7 @@ const SelectInput = <T extends SelectItem>(props: SelectInputProps<T>) => {
 	const onChange = props.onChange;
 
 	return (
-		<div class="relative h-max grow">
+		<fieldset disabled={props.disabled} class="relative inline-block h-max disabled:opacity-50">
 			<select
 				value={props.value}
 				onChange={
@@ -25,17 +26,15 @@ const SelectInput = <T extends SelectItem>(props: SelectInputProps<T>) => {
 						onChange(target.value);
 					})
 				}
-				class="w-full appearance-none rounded-md border border-input bg-background px-3 py-2 pr-8 text-sm text-primary outline-2 -outline-offset-1 outline-accent outline-none focus:outline disabled:opacity-50"
+				class="h-9 w-full appearance-none rounded-md border border-input bg-background px-3 pr-8 text-sm text-primary outline-2 -outline-offset-1 outline-accent outline-none focus:outline"
 			>
-				{props.options.map((item) => (
-					<option value={item.value}>{item.label}</option>
-				))}
+				{props.options.map((item) => (item ? <option value={item.value}>{item.label}</option> : null))}
 			</select>
 
 			<div class="pointer-events-none absolute inset-y-0 right-0 mr-px grid place-items-center px-2">
 				<ArrowDropDownIcon class="text-lg" />
 			</div>
-		</div>
+		</fieldset>
 	);
 };
 

@@ -16,8 +16,8 @@ import { closeModal } from '../../globals/modals.tsx';
 
 import { Button } from '../../primitives/button.ts';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog.ts';
-import { Select } from '../../primitives/select.ts';
 
+import SelectInput from '../inputs/SelectInput.tsx';
 import DialogOverlay from './DialogOverlay.tsx';
 
 import TakingActionNotice from '../views/TakingActionNotice.tsx';
@@ -188,20 +188,20 @@ const renderMuteConfirmDialog = (
 								return (
 									<label>
 										<span class="mr-4 text-sm">Duration:</span>
-										<select
+										<SelectInput
 											value={duration()}
-											onChange={(el) => setDuration(el.currentTarget.value)}
-											class={/* @once */ Select()}
-										>
-											{!forceTempMute && <option value={-1}>Indefinite</option>}
-											<option value={1 * 60 * 60 * 1_000}>1 hour</option>
-											<option value={6 * 60 * 60 * 1_000}>6 hour</option>
-											<option value={12 * 60 * 60 * 1_000}>12 hour</option>
-											<option value={1 * 24 * 60 * 60 * 1_000}>1 day</option>
-											<option value={3 * 24 * 60 * 60 * 1_000}>3 days</option>
-											<option value={7 * 24 * 60 * 60 * 1_000}>7 days</option>
-											<option value={14 * 24 * 60 * 60 * 1_000}>14 days</option>
-										</select>
+											onChange={setDuration}
+											options={[
+												!forceTempMute && { value: '' + -1, label: 'Indefinite ' },
+												{ value: '' + 1 * 60 * 60 * 1_000, label: '1 hour' },
+												{ value: '' + 6 * 60 * 60 * 1_000, label: '6 hour' },
+												{ value: '' + 12 * 60 * 60 * 1_000, label: '12 hour' },
+												{ value: '' + 1 * 24 * 60 * 60 * 1_000, label: '1 day' },
+												{ value: '' + 3 * 24 * 60 * 60 * 1_000, label: '3 days' },
+												{ value: '' + 7 * 24 * 60 * 60 * 1_000, label: '7 days' },
+												{ value: '' + 14 * 24 * 60 * 60 * 1_000, label: '14 days' },
+											]}
+										/>
 									</label>
 								);
 							}

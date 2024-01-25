@@ -1,4 +1,4 @@
-import { type Component, For, Match, Show, Switch, createSignal } from 'solid-js';
+import { type Component, Match, Show, Switch, createSignal } from 'solid-js';
 
 import type { DID } from '~/api/atp-schema.ts';
 import { getAccountHandle, multiagent } from '~/api/globals/agent.ts';
@@ -7,7 +7,6 @@ import { getCurrentTid } from '~/api/utils/tid.ts';
 import { FILTER_ALL } from '~/api/queries/get-notifications.ts';
 
 import { createDerivedSignal } from '~/utils/hooks.ts';
-import { model } from '~/utils/input.ts';
 
 import { closeModal } from '~/com/globals/modals.tsx';
 
@@ -29,9 +28,9 @@ import {
 import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
 import { IconButton } from '~/com/primitives/icon-button.ts';
 import { Interactive } from '~/com/primitives/interactive.ts';
-import { Select } from '~/com/primitives/select.ts';
 
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
+import SelectInput from '~/com/components/inputs/SelectInput.tsx';
 
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
 import CloseIcon from '~/com/icons/baseline-close.tsx';
@@ -136,17 +135,19 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 					<Match when={type() === undefined}>
 						<div class={/* @once */ DialogBody({ padded: false })}>
 							<div class="flex items-center justify-between gap-4 p-4">
-								<p class="text-base font-bold leading-5">Choose one</p>
+								<p class="grow text-base font-bold leading-5">Choose one</p>
 
-								<select
-									ref={model(() => user() || '', setUser)}
+								<SelectInput
 									disabled={multiagent.accounts.length < 2}
-									class={/* @once */ Select()}
-								>
-									<For each={multiagent.accounts}>
-										{(account) => <option value={account.did}>{'@' + account.session.handle}</option>}
-									</For>
-								</select>
+									value={user() || ''}
+									onChange={setUser}
+									options={multiagent.accounts.map((account) => ({
+										value: account.did,
+										get label() {
+											return '@' + account.session.handle;
+										},
+									}))}
+								/>
 							</div>
 
 							<div class="flex flex-col">
