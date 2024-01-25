@@ -1,6 +1,6 @@
 import { Suspense, createEffect, createResource, createSignal, onMount, useTransition } from 'solid-js';
 
-import { SkinTone, type Emoji } from '@pkg/emoji-db';
+import type { Emoji, SkinTone } from '@pkg/emoji-db';
 
 import SearchInput from '../inputs/SearchInput.tsx';
 import { Flyout, offset } from '../Flyout.tsx';
