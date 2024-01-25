@@ -42,7 +42,7 @@ export const EmbedLinkContent = (props: EmbedLinkProps) => {
 
 				<div class="flex min-w-0 flex-col justify-center gap-0.5 p-3 text-sm">
 					<p class="overflow-hidden text-ellipsis text-muted-fg">{/* @once */ getDomain(uri)}</p>
-					<p class="line-clamp-2 empty:hidden">{title}</p>
+					<p class="line-clamp-2 break-words empty:hidden">{title}</p>
 				</div>
 			</div>
 		);
