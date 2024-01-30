@@ -36,10 +36,9 @@ import TableLargeAddIcon from '~/com/icons/baseline-table-large-add.tsx';
 
 import { useComposer } from '../components/composer/ComposerContext.tsx';
 
-import AddDeckDialog from '../components/settings/AddDeckDialog.tsx';
-
 const ComposerPane = lazy(() => import('../components/composer/ComposerPane.tsx'));
 
+const AddDeckDialog = lazy(() => import('../components/settings/AddDeckDialog.tsx'));
 const SettingsDialog = lazy(() => import('../components/settings/SettingsDialog.tsx'));
 
 const SearchFlyout = lazy(() => import('../components/flyouts/SearchFlyout.tsx'));
