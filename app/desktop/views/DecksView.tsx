@@ -1,4 +1,4 @@
-import { For, Show, Suspense, lazy } from 'solid-js';
+import { For, Show, Suspense, batch, lazy } from 'solid-js';
 
 import { type RouteComponentProps, Navigate } from '@pkg/solid-page-router';
 import { DragDropProvider, DragDropSensors, SortableProvider } from '@thisbeyond/solid-dnd';
@@ -47,7 +47,9 @@ const DecksView = (props: RouteComponentProps) => {
 								const toIndex = panes.findIndex((pane) => pane.id === droppable.id);
 
 								if (fromIndex !== toIndex) {
-									panes.splice(toIndex, 0, ...panes.splice(fromIndex, 1));
+									batch(() => {
+										panes.splice(toIndex, 0, ...panes.splice(fromIndex, 1));
+									});
 								}
 							}
 						}}
