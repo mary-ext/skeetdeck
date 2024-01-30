@@ -1,4 +1,4 @@
-import { Show } from 'solid-js';
+import { Show, batch } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent.ts';
 
@@ -6,7 +6,8 @@ import { getUniqueId } from '~/utils/misc.ts';
 
 import { openModal } from '~/com/globals/modals.tsx';
 
-import { SpecificPaneSize } from '../../../globals/panes.ts';
+import { type PaneConfig, SpecificPaneSize } from '../../../globals/panes.ts';
+import { preferences } from '../../../globals/settings.ts';
 
 import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
 import Checkbox from '~/com/components/inputs/Checkbox.tsx';
@@ -16,12 +17,14 @@ import { Interactive } from '~/com/primitives/interactive.ts';
 
 import AccountSwitchIcon from '~/com/icons/baseline-account-switch.tsx';
 import DeleteIcon from '~/com/icons/baseline-delete.tsx';
+import SwapVertIcon from '~/com/icons/baseline-swap-vert.tsx';
 
 import { usePaneContext } from '../PaneContext.tsx';
 import SwitchAccountAction from '../../flyouts/SwitchAccountAction.tsx';
+import SwitchDeckAction from '../../flyouts/SwitchDeckAction.tsx';
 
 const GenericPaneSettings = () => {
-	const { pane, deletePane } = usePaneContext();
+	const { deck, pane, deletePane } = usePaneContext();
 
 	const id = getUniqueId();
 
@@ -117,6 +120,38 @@ const GenericPaneSettings = () => {
 						<span class="text-sm">Switch accounts</span>
 					</button>
 				</SwitchAccountAction>
+			</Show>
+
+			<Show when={preferences.decks.length > 1}>
+				<SwitchDeckAction
+					value={deck.id}
+					onChange={(next) => {
+						batch(() => {
+							const a = deck.panes;
+							const b = next.panes;
+
+							const index = a.findIndex((x) => x.id === pane.id);
+
+							if (index !== -1) {
+								a.splice(index, 1);
+							}
+
+							b.push(pane as PaneConfig);
+						});
+					}}
+				>
+					<button
+						class={
+							/* @once */ Interactive({
+								variant: 'muted',
+								class: 'flex items-center gap-4 border-b border-divider p-4',
+							})
+						}
+					>
+						<SwapVertIcon class="text-lg" />
+						<span class="text-sm">Move to another deck</span>
+					</button>
+				</SwitchDeckAction>
 			</Show>
 
 			<button
