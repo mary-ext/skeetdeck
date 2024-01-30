@@ -102,7 +102,12 @@ const NotificationsPane = () => {
 					return;
 				}
 
-				await updateNotificationsSeen(pane.uid, new Date(date));
+				// AppView v2 changed the unread logic slightly, it's no longer <=seenAt
+				// but rather <seenAt, so we'll set the seenAt to +1
+				const seen = new Date(date);
+				seen.setMilliseconds(seen.getMilliseconds() + 1);
+
+				await updateNotificationsSeen(pane.uid, seen);
 			},
 			onSuccess: () => {
 				queryClient.setQueryData<NotificationsLatestResult>(getNotificationsLatestKey(pane.uid), (data) => {
