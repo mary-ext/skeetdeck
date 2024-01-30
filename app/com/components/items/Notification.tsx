@@ -78,25 +78,22 @@ const Notification = (props: NotificationProps) => {
 						};
 					});
 
-					return (
-						<Switch>
-							<Match when={post.data} keyed>
-								{(post) => {
-									return (
-										<VirtualContainer estimateHeight={118.3}>
-											<Post interactive post={post} highlight={!data.read} />
-										</VirtualContainer>
-									);
-								}}
-							</Match>
+					return (() => {
+						const $post = post.data;
+						if ($post) {
+							return (
+								<VirtualContainer estimateHeight={118.3}>
+									<Post interactive post={$post} highlight={!data.read} />
+								</VirtualContainer>
+							);
+						}
 
-							<Match when>
-								<div class="grid place-items-center border-b border-divider p-3" style="height: 118.3px">
-									<CircularProgress />
-								</div>
-							</Match>
-						</Switch>
-					);
+						return (
+							<div class="grid place-items-center border-b border-divider p-3" style="height: 118.3px">
+								<CircularProgress />
+							</div>
+						);
+					}) as unknown as JSX.Element;
 				}}
 			</Match>
 
@@ -310,49 +307,46 @@ const renderAccessory = (
 			};
 		});
 
-		return (
-			<Switch>
-				<Match when={post.data}>
-					{(data) => {
-						const author = () => data().author;
-						const record = () => data().record.value;
+		return (() => {
+			const $post = post.data;
+			if ($post) {
+				const author = $post.author;
+				const record = () => $post.record.value;
 
-						return (
-							// nice
-							<VirtualContainer estimateHeight={69.6} class="flex flex-col">
-								<EmbedQuote
-									record={{
-										$type: 'app.bsky.embed.record#viewRecord',
-										uri: data().uri,
-										// @ts-expect-error
-										cid: null,
-										// @ts-expect-error
-										indexedAt: null,
-										author: {
-											did: author().did,
-											avatar: author().avatar.value,
-											handle: author().handle.value,
-											displayName: author().displayName.value,
-										},
-										embeds: data().embed.value ? [data().embed.value!] : [],
-										value: {
-											createdAt: record().createdAt,
-											text: record().text,
-										},
-									}}
-								/>
-							</VirtualContainer>
-						);
-					}}
-				</Match>
+				return (
+					// nice
+					<VirtualContainer estimateHeight={69.6} class="flex flex-col">
+						<EmbedQuote
+							record={{
+								$type: 'app.bsky.embed.record#viewRecord',
+								uri: $post.uri,
+								// @ts-expect-error
+								cid: null,
+								// @ts-expect-error
+								indexedAt: null,
+								author: {
+									did: author.did,
+									avatar: author.avatar.value,
+									handle: author.handle.value,
+									displayName: author.displayName.value,
+								},
+								embeds: $post.embed.value ? [$post.embed.value!] : [],
+								value: {
+									createdAt: record().createdAt,
+									text: record().text,
+								},
+							}}
+						/>
+					</VirtualContainer>
+				);
+			}
 
-				<Match when>
-					<div class="grid place-items-center rounded-md border border-divider p-3" style="height: 69.6px">
-						<CircularProgress />
-					</div>
-				</Match>
-			</Switch>
-		);
+			return (
+				<div class="grid place-items-center rounded-md border border-divider p-3" style="height: 69.6px">
+					<CircularProgress />
+				</div>
+			);
+		}) as unknown as JSX.Element;
 	}
 
 	return null;
