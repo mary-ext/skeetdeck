@@ -36,10 +36,12 @@ configureRouter([
 ]);
 
 const App = () => {
+	const documentElement = document.documentElement;
+
 	createRenderEffect(() => {
 		const theme = preferences.ui.theme;
 
-		const cl = document.documentElement.classList;
+		const cl = documentElement.classList;
 
 		if (theme === 'auto') {
 			const isDark = useMediaQuery('(prefers-color-scheme: dark)');
@@ -50,6 +52,12 @@ const App = () => {
 		} else {
 			cl.toggle('is-dark', theme === 'dark');
 		}
+	});
+
+	createRenderEffect(() => {
+		const scale = preferences.ui.scale;
+
+		documentElement.style.fontSize = scale !== null ? `${scale * 16}px` : '';
 	});
 
 	return (

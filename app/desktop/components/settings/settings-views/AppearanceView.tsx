@@ -62,6 +62,36 @@ const AppearanceView = () => {
 					</label>
 				</div>
 
+				<div class="px-4 py-3">
+					<label class="flex min-w-0 justify-between gap-4">
+						<span class="text-sm">Custom UI font scaling</span>
+
+						<Checkbox
+							checked={ui.scale !== null}
+							onChange={(ev) => {
+								const next = ev.target.checked;
+								ui.scale = next ? 1 : null;
+							}}
+						/>
+					</label>
+
+					<fieldset disabled={ui.scale === null} class="flex items-center gap-4 pt-3">
+						<input
+							type="range"
+							value={ui.scale ?? 1}
+							min={0.8}
+							max={1.2}
+							step={0.1}
+							onInput={(ev) => {
+								const next = ev.target.valueAsNumber;
+								ui.scale = next;
+							}}
+							class="grow"
+						/>
+						<span class="w-10 text-right text-sm">{`${Math.round((ui.scale ?? 1) * 100)}%`}</span>
+					</fieldset>
+				</div>
+
 				<hr class="mx-4 mb-2 mt-1 border-divider" />
 
 				<div class="px-4 py-3">

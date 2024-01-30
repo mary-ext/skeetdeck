@@ -12,7 +12,7 @@ import type { SharedPreferencesObject } from '~/com/components/SharedPreferences
 import { type DeckConfig, type PaneConfig, PaneSize, SpecificPaneSize } from './panes.ts';
 
 export interface PreferencesSchema {
-	$version: 9;
+	$version: 10;
 	/** Used for cache-busting moderation filters */
 	rev: number;
 	/** Onboarding mode */
@@ -23,6 +23,8 @@ export interface PreferencesSchema {
 	ui: {
 		/** Application theme */
 		theme: 'auto' | 'dark' | 'light';
+		/** Application font size */
+		scale: number | null;
 		/** Default pane size */
 		defaultPaneSize: PaneSize;
 		/** Show grid UI for profile media */
@@ -50,12 +52,13 @@ const PREF_KEY = 'rantai_prefs';
 export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KEY, (version, prev) => {
 	if (version === 0) {
 		const object: PreferencesSchema = {
-			$version: 9,
+			$version: 10,
 			rev: 0,
 			onboarding: true,
 			decks: [],
 			ui: {
 				theme: 'auto',
+				scale: null,
 				defaultPaneSize: PaneSize.MEDIUM,
 				profileMediaGrid: true,
 				threadedReplies: false,
@@ -202,8 +205,13 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 			const filter = filters[i];
 			filter.noFollows = false;
 		}
+	}
 
-		_prev.$version = 9;
+	if (version < 10) {
+		const _prev = prev as PreferencesSchema;
+
+		_prev.ui.scale = null;
+		_prev.$version = 10;
 	}
 
 	return prev;
