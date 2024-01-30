@@ -16,18 +16,13 @@ import { clsx } from '~/utils/misc.ts';
 import SearchInput from '~/com/components/inputs/SearchInput.tsx';
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 
-export const SUGGESTION_SEARCH_POSTS = 0;
-export const SUGGESTION_PROFILE = 1;
-
-export type SuggestionType = typeof SUGGESTION_SEARCH_POSTS | typeof SUGGESTION_PROFILE;
-
 export interface SearchPostsSuggestionItem {
-	type: typeof SUGGESTION_SEARCH_POSTS;
+	type: 'search';
 	query: string;
 }
 
 export interface ProfileSuggestionItem {
-	type: typeof SUGGESTION_PROFILE;
+	type: 'profile';
 	id: DID;
 	profile: RefOf<'app.bsky.actor.defs#profileViewBasic'>;
 }
@@ -39,7 +34,7 @@ export interface SearchFlyoutProps {
 	onAccept: (item: SuggestionItem) => void;
 }
 
-export const SearchFlyout = (props: SearchFlyoutProps) => {
+const SearchFlyout = (props: SearchFlyoutProps) => {
 	const [search, setSearch] = createSignal('');
 
 	const debouncedSearch = createDebouncedValue(search, 500);
@@ -66,7 +61,7 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 				if (mapping.has(profile.did)) {
 					next.push(mapping.get(profile.did)!);
 				} else {
-					next.push({ type: SUGGESTION_PROFILE, id: profile.did, profile: profile });
+					next.push({ type: 'profile', id: profile.did, profile: profile });
 				}
 			}
 		}
@@ -82,7 +77,7 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 
 		if ($search) {
 			items.push({
-				type: SUGGESTION_SEARCH_POSTS,
+				type: 'search',
 				query: $search,
 			});
 
@@ -134,13 +129,13 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 					const type = item.type;
 					let node: JSX.Element;
 
-					if (type === SUGGESTION_SEARCH_POSTS) {
+					if (type === 'search') {
 						node = (
 							<p class="overflow-hidden text-ellipsis whitespace-nowrap px-4 py-3">
 								Search posts matching <strong>{/* @once */ item.query}</strong>
 							</p>
 						);
-					} else if (type === SUGGESTION_PROFILE) {
+					} else if (type === 'profile') {
 						const profile = item.profile;
 
 						node = (
@@ -193,3 +188,5 @@ export const SearchFlyout = (props: SearchFlyoutProps) => {
 		</div>
 	);
 };
+
+export default SearchFlyout;

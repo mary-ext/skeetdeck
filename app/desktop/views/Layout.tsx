@@ -36,16 +36,13 @@ import TableLargeAddIcon from '~/com/icons/baseline-table-large-add.tsx';
 
 import { useComposer } from '../components/composer/ComposerContext.tsx';
 
-import {
-	SUGGESTION_PROFILE,
-	SUGGESTION_SEARCH_POSTS,
-	SearchFlyout,
-} from '../components/flyouts/SearchFlyout.tsx';
 import AddDeckDialog from '../components/settings/AddDeckDialog.tsx';
 
 const ComposerPane = lazy(() => import('../components/composer/ComposerPane.tsx'));
 
 const SettingsDialog = lazy(() => import('../components/settings/SettingsDialog.tsx'));
+
+const SearchFlyout = lazy(() => import('../components/flyouts/SearchFlyout.tsx'));
 
 const brandName = import.meta.env.VITE_BRAND_NAME;
 
@@ -112,13 +109,13 @@ const DashboardLayout = (props: RouteComponentProps) => {
 													navigate(`/decks/${deck.id}`);
 												}
 
-												if (item.type === SUGGESTION_SEARCH_POSTS) {
+												if (item.type === 'search') {
 													addPane<SearchPaneConfig>(deck, {
 														type: PANE_TYPE_SEARCH,
 														query: item.query,
 														uid: $uid,
 													});
-												} else if (item.type === SUGGESTION_PROFILE) {
+												} else if (item.type === 'profile') {
 													addPane<ProfilePaneConfig>(deck, {
 														type: PANE_TYPE_PROFILE,
 														profile: {
