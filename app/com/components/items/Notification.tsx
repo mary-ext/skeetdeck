@@ -26,6 +26,7 @@ import PersonIcon from '../../icons/baseline-person.tsx';
 import RepeatIcon from '../../icons/baseline-repeat.tsx';
 
 import EmbedQuote from '../embeds/EmbedQuote.tsx';
+import GenericErrorView from '../views/GenericErrorView.tsx';
 import Post from './Post.tsx';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
@@ -85,6 +86,14 @@ const Notification = (props: NotificationProps) => {
 								<VirtualContainer estimateHeight={118.3}>
 									<Post interactive post={$post} highlight={!data.read} />
 								</VirtualContainer>
+							);
+						}
+
+						if (post.isError) {
+							return (
+								<div class="border-b border-divider">
+									<GenericErrorView error={post.error} onRetry={() => post.refetch()} />
+								</div>
 							);
 						}
 
@@ -338,6 +347,14 @@ const renderAccessory = (
 							}}
 						/>
 					</VirtualContainer>
+				);
+			}
+
+			if (post.isError) {
+				return (
+					<div class="rounded-md border border-divider">
+						<GenericErrorView error={post.error} onRetry={() => post.refetch()} />
+					</div>
 				);
 			}
 
