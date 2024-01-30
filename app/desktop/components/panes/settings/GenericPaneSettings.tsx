@@ -9,11 +9,12 @@ import { openModal } from '~/com/globals/modals.tsx';
 import { type PaneConfig, SpecificPaneSize } from '../../../globals/panes.ts';
 import { preferences } from '../../../globals/settings.ts';
 
+import { Input } from '~/com/primitives/input.ts';
+import { Interactive } from '~/com/primitives/interactive.ts';
+
 import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
 import Checkbox from '~/com/components/inputs/Checkbox.tsx';
 import Radio from '~/com/components/inputs/Radio.tsx';
-import { Input } from '~/com/primitives/input.ts';
-import { Interactive } from '~/com/primitives/interactive.ts';
 
 import AccountSwitchIcon from '~/com/icons/baseline-account-switch.tsx';
 import DeleteIcon from '~/com/icons/baseline-delete.tsx';
