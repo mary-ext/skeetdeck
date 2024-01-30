@@ -138,7 +138,7 @@ const GenericPaneSettings = () => {
 				}
 			>
 				<DeleteIcon class="text-lg" />
-				<span class="text-sm">Delete this column</span>
+				<span class="text-sm">Delete column</span>
 			</button>
 		</div>
 	);
