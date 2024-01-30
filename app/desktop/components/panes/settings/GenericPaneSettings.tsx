@@ -1,4 +1,4 @@
-import { Show, batch } from 'solid-js';
+import { batch } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent.ts';
 
@@ -83,7 +83,7 @@ const GenericPaneSettings = () => {
 					/>
 				</label>
 
-				<Show when={pane.title !== null}>
+				{pane.title !== null && (
 					<div class="p-4 pt-0">
 						<input
 							class={/* @once */ Input()}
@@ -103,10 +103,10 @@ const GenericPaneSettings = () => {
 							}}
 						/>
 					</div>
-				</Show>
+				)}
 			</div>
 
-			<Show when={multiagent.accounts.length > 1}>
+			{multiagent.accounts.length > 1 && (
 				<SwitchAccountAction value={pane.uid} onChange={(next) => (pane.uid = next)}>
 					<button
 						class={
@@ -120,9 +120,9 @@ const GenericPaneSettings = () => {
 						<span class="text-sm">Switch accounts</span>
 					</button>
 				</SwitchAccountAction>
-			</Show>
+			)}
 
-			<Show when={preferences.decks.length > 1}>
+			{preferences.decks.length > 1 && (
 				<SwitchDeckAction
 					value={deck.id}
 					onChange={(next) => {
@@ -152,7 +152,7 @@ const GenericPaneSettings = () => {
 						<span class="text-sm">Move to another deck</span>
 					</button>
 				</SwitchDeckAction>
-			</Show>
+			)}
 
 			<button
 				onClick={() => {
