@@ -14,8 +14,8 @@ import Radio from '~/com/components/inputs/Radio.tsx';
 import { Input } from '~/com/primitives/input.ts';
 import { Interactive } from '~/com/primitives/interactive.ts';
 
+import AccountSwitchIcon from '~/com/icons/baseline-account-switch.tsx';
 import DeleteIcon from '~/com/icons/baseline-delete.tsx';
-import SyncAltIcon from '~/com/icons/baseline-sync-alt.tsx';
 
 import { usePaneContext } from '../PaneContext.tsx';
 import SwitchAccountAction from '../../flyouts/SwitchAccountAction.tsx';
@@ -113,7 +113,7 @@ const GenericPaneSettings = () => {
 							})
 						}
 					>
-						<SyncAltIcon class="text-lg" />
+						<AccountSwitchIcon class="text-lg" />
 						<span class="text-sm">Switch accounts</span>
 					</button>
 				</SwitchAccountAction>
