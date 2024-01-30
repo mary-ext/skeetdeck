@@ -1,6 +1,8 @@
-import { For, Show, Suspense, lazy } from 'solid-js';
+import { For, Show, Suspense, batch, lazy } from 'solid-js';
 
 import { offset } from '@floating-ui/dom';
+import { DragDropProvider, DragDropSensors, SortableProvider, createSortable } from '@thisbeyond/solid-dnd';
+
 import { ShowFreeze } from '@pkg/solid-freeze';
 import { type RouteComponentProps, location, navigate } from '@pkg/solid-page-router';
 
@@ -35,6 +37,7 @@ import SystemUpdateAltIcon from '~/com/icons/baseline-system-update-alt.tsx';
 import TableLargeAddIcon from '~/com/icons/baseline-table-large-add.tsx';
 
 import { useComposer } from '../components/composer/ComposerContext.tsx';
+import { ConstrainXDragAxis } from '../utils/dnd.ts';
 
 const ComposerPane = lazy(() => import('../components/composer/ComposerPane.tsx'));
 
@@ -44,6 +47,10 @@ const SettingsDialog = lazy(() => import('../components/settings/SettingsDialog.
 const SearchFlyout = lazy(() => import('../components/flyouts/SearchFlyout.tsx'));
 
 const brandName = import.meta.env.VITE_BRAND_NAME;
+
+const deckButton = Interactive({
+	class: `group relative grid h-11 shrink-0 select-none place-items-center text-lg`,
+});
 
 const menuIconButton = Interactive({
 	class: `grid h-11 shrink-0 place-items-center text-lg disabled:opacity-50`,
@@ -58,6 +65,7 @@ const DashboardLayout = (props: RouteComponentProps) => {
 	const params = props.params as { deck: string | undefined };
 
 	const composer = useComposer();
+	const decks = preferences.decks;
 
 	return (
 		<div class="flex h-screen w-screen overflow-hidden">
@@ -94,17 +102,17 @@ const DashboardLayout = (props: RouteComponentProps) => {
 												const $deck = params.deck;
 												const $uid = uid();
 
-												let deck = preferences.decks.find((deck) => deck.id === $deck);
+												let deck = decks.find((deck) => deck.id === $deck);
 
 												if (!deck) {
-													preferences.decks.push({
+													decks.push({
 														id: getCurrentTid(),
 														name: 'New deck',
 														emoji: '⭐',
 														panes: [],
 													});
 
-													deck = preferences.decks.at(-1)!;
+													deck = decks.at(-1)!;
 													navigate(`/decks/${deck.id}`);
 												}
 
@@ -153,33 +161,56 @@ const DashboardLayout = (props: RouteComponentProps) => {
 						<TableLargeAddIcon class="mx-auto" />
 					</button>
 
-					<For each={preferences.decks}>
-						{(deck) => {
-							const href = `/decks/${deck.id}`;
+					<DragDropProvider
+						onDragEnd={({ draggable, droppable }) => {
+							if (draggable && droppable) {
+								const fromIndex = decks.findIndex((deck) => deck.id === draggable.id);
+								const toIndex = decks.findIndex((deck) => deck.id === droppable.id);
 
-							return (
-								<a
-									title={deck.name}
-									href={href}
-									class={
-										/* @once */ Interactive({
-											class: 'group relative grid h-11 shrink-0 place-items-center text-lg',
-										})
-									}
-									data-link="replace"
-								>
-									<div
-										class={clsx([
-											`pointer-events-none absolute inset-0 border-l-3 border-accent`,
-											location.pathname !== href && `hidden`,
-										])}
-									></div>
-
-									<span>{deck.emoji}</span>
-								</a>
-							);
+								if (fromIndex !== toIndex) {
+									batch(() => {
+										decks.splice(toIndex, 0, ...decks.splice(fromIndex, 1));
+									});
+								}
+							}
 						}}
-					</For>
+					>
+						<DragDropSensors />
+						<ConstrainXDragAxis enabled />
+
+						<SortableProvider ids={decks.map((deck) => deck.id)}>
+							<For each={preferences.decks}>
+								{(deck) => {
+									const id = deck.id;
+
+									const sortable = createSortable(id);
+									const href = `/decks/${id}`;
+
+									return (
+										<div ref={sortable} class={clsx([sortable.isActiveDraggable && `z-10 cursor-grabbing`])}>
+											<a
+												title={deck.name}
+												href={href}
+												class={deckButton}
+												data-link="replace"
+												draggable="false"
+												inert={sortable.isActiveDraggable}
+											>
+												<div
+													class={clsx([
+														`pointer-events-none absolute inset-0 border-l-3 border-accent`,
+														location.pathname !== href && `hidden`,
+													])}
+												></div>
+
+												<span>{deck.emoji}</span>
+											</a>
+										</div>
+									);
+								}}
+							</For>
+						</SortableProvider>
+					</DragDropProvider>
 				</div>
 
 				{updateStatus() !== 0 && (
