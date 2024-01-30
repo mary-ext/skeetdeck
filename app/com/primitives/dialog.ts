@@ -23,7 +23,7 @@ export const DialogRoot = (props: DialogRootProps = {}) => {
 	if (maxHeight === 'sm') {
 		cn += ` max-h-141`;
 	} else if (maxHeight === 'md') {
-		cn += ` max-h-[680px]`;
+		cn += ` max-h-170`;
 	}
 
 	if (fullHeight) {

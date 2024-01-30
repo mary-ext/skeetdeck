@@ -36,7 +36,7 @@ export const EmbedLinkContent = (props: EmbedLinkProps) => {
 				{thumb && (
 					<BlobImage
 						src={thumb}
-						class="aspect-square w-[86px] shrink-0 border-r border-divider object-cover"
+						class="aspect-square w-21.5 shrink-0 border-r border-divider object-cover"
 					/>
 				)}
 

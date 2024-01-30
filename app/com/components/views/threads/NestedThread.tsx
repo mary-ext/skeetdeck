@@ -90,7 +90,7 @@ const renderLines = (depth: number /* , hasNextSibling: boolean */) => {
 				<div class="absolute -top-4 bottom-0 left-2 border-l-2 border-muted"></div>
 
 				{i === depth - 1 && (
-					<div class="absolute right-0.5 top-[-16px] h-[26px] w-[10px] rounded-bl-[8px] border-b-2 border-l-2 border-muted"></div>
+					<div class="absolute right-0.5 top-[-1rem] h-[1.625rem] w-[0.625rem] rounded-bl-[0.5rem] border-b-2 border-l-2 border-muted"></div>
 				)}
 			</div>,
 		);
@@ -99,8 +99,8 @@ const renderLines = (depth: number /* , hasNextSibling: boolean */) => {
 	// if (depth > 0) {
 	// 	nodes.push(
 	// 		<div class="relative w-5 shrink-0">
-	// 			<div class="absolute right-0.5 top-[-16px] h-[26px] w-[9px] rounded-bl-[8px] border-b-2 border-l-2 border-divider"></div>
-	// 			{hasNextSibling && <div class="absolute bottom-0 top-0 left-[9px] border-l-2 border-divider"></div>}
+	// 			<div class="absolute right-0.5 top-[-1rem] h-[1.625rem] w-[0.5625rem] rounded-bl-[0.5rem] border-b-2 border-l-2 border-divider"></div>
+	// 			{hasNextSibling && <div class="absolute bottom-0 top-0 left-[0.5625rem] border-l-2 border-divider"></div>}
 	// 		</div>,
 	// 	);
 	// }

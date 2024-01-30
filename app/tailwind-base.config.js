@@ -16,6 +16,7 @@ export default {
 				7.5: '1.875rem',
 				13: '3.25rem',
 				17: '4.24rem',
+				21.5: '5.375rem',
 				30: '7.5rem',
 				84: '21rem',
 				120: '30rem',
@@ -32,6 +33,7 @@ export default {
 			},
 			maxHeight: {
 				141: '35.25rem',
+				170: '42.5rem',
 				'50vh': '50vh',
 			},
 			flexGrow: {
