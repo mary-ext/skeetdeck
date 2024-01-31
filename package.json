@@ -14,7 +14,8 @@
 			"workbox-precaching@7.0.0": "patches/workbox-precaching@7.0.0.patch",
 			"cborg@4.0.7": "patches/cborg@4.0.6.patch",
 			"vite-plugin-pwa@0.17.4": "patches/vite-plugin-pwa@0.17.4.patch",
-			"vite@5.0.12": "patches/vite@5.0.12.patch"
+			"vite@5.0.12": "patches/vite@5.0.12.patch",
+			"solid-js@1.8.12": "patches/solid-js@1.8.12.patch"
 		},
 		"overrides": {
 			"hasown": "npm:@nolyfill/hasown@latest",
