@@ -79,30 +79,27 @@ const Notification = (props: NotificationProps) => {
 						};
 					});
 
-					return (() => {
-						const $post = post.data;
-						if ($post) {
-							return (
+					return (
+						<Switch>
+							<Match when={post.data} keyed>
 								<VirtualContainer estimateHeight={118.3}>
-									<Post interactive post={$post} highlight={!data.read} />
+									<Post interactive post={post.data!} highlight={!data.read} />
 								</VirtualContainer>
-							);
-						}
+							</Match>
 
-						if (post.isError) {
-							return (
+							<Match when={post.error}>
 								<div class="border-b border-divider">
-									<GenericErrorView error={post.error} onRetry={() => post.refetch()} />
+									<GenericErrorView error={post.error!} onRetry={() => post.refetch()} />
 								</div>
-							);
-						}
+							</Match>
 
-						return (
-							<div class="grid place-items-center border-b border-divider p-3" style="height: 118.3px">
-								<CircularProgress />
-							</div>
-						);
-					}) as unknown as JSX.Element;
+							<Match when>
+								<div class="grid place-items-center border-b border-divider p-3" style="height: 118.3px">
+									<CircularProgress />
+								</div>
+							</Match>
+						</Switch>
+					);
 				}}
 			</Match>
 
@@ -316,54 +313,55 @@ const renderAccessory = (
 			};
 		});
 
-		return (() => {
-			const $post = post.data;
-			if ($post) {
-				const author = $post.author;
-				const record = () => $post.record.value;
+		return (
+			<Switch>
+				<Match when={post.data} keyed>
+					{(data) => {
+						const author = data.author;
+						const record = () => data.record.value;
 
-				return (
-					// nice
-					<VirtualContainer estimateHeight={69.6} class="flex flex-col">
-						<EmbedQuote
-							record={{
-								$type: 'app.bsky.embed.record#viewRecord',
-								uri: $post.uri,
-								// @ts-expect-error
-								cid: null,
-								// @ts-expect-error
-								indexedAt: null,
-								author: {
-									did: author.did,
-									avatar: author.avatar.value,
-									handle: author.handle.value,
-									displayName: author.displayName.value,
-								},
-								embeds: $post.embed.value ? [$post.embed.value!] : [],
-								value: {
-									createdAt: record().createdAt,
-									text: record().text,
-								},
-							}}
-						/>
-					</VirtualContainer>
-				);
-			}
+						return (
+							// nice
+							<VirtualContainer estimateHeight={69.6} class="flex flex-col">
+								<EmbedQuote
+									record={{
+										$type: 'app.bsky.embed.record#viewRecord',
+										uri: data.uri,
+										// @ts-expect-error
+										cid: null,
+										// @ts-expect-error
+										indexedAt: null,
+										author: {
+											did: author.did,
+											avatar: author.avatar.value,
+											handle: author.handle.value,
+											displayName: author.displayName.value,
+										},
+										embeds: data.embed.value ? [data.embed.value!] : [],
+										value: {
+											createdAt: record().createdAt,
+											text: record().text,
+										},
+									}}
+								/>
+							</VirtualContainer>
+						);
+					}}
+				</Match>
 
-			if (post.isError) {
-				return (
+				<Match when={post.error}>
 					<div class="rounded-md border border-divider">
 						<GenericErrorView error={post.error} onRetry={() => post.refetch()} />
 					</div>
-				);
-			}
+				</Match>
 
-			return (
-				<div class="grid place-items-center rounded-md border border-divider p-3" style="height: 69.6px">
-					<CircularProgress />
-				</div>
-			);
-		}) as unknown as JSX.Element;
+				<Match when>
+					<div class="grid place-items-center rounded-md border border-divider p-3" style="height: 69.6px">
+						<CircularProgress />
+					</div>
+				</Match>
+			</Switch>
+		);
 	}
 
 	return null;
