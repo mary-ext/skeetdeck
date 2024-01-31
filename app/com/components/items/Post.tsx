@@ -56,6 +56,10 @@ export interface PostProps {
 	timelineDid?: DID;
 }
 
+const formatCount = (num: number) => {
+	return num > 0 ? formatCompact(num) : null;
+};
+
 const Post = (props: PostProps) => {
 	const linking = useLinking();
 
@@ -274,7 +278,7 @@ const Post = (props: PostProps) => {
 														<ChatBubbleOutlinedIcon />
 													</div>
 													<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
-														{formatCompact(post.replyCount.value)}
+														{formatCount(post.replyCount.value)}
 													</span>
 												</button>
 											)}
@@ -294,7 +298,7 @@ const Post = (props: PostProps) => {
 												</div>
 
 												<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
-													{formatCompact(post.repostCount.value)}
+													{formatCount(post.repostCount.value)}
 												</span>
 											</button>
 										</RepostAction>
@@ -313,7 +317,7 @@ const Post = (props: PostProps) => {
 												<FavoriteIcon class="hidden group-[.is-active]:block" />
 											</div>
 											<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
-												{formatCompact(post.likeCount.value)}
+												{formatCount(post.likeCount.value)}
 											</span>
 										</button>
 									</div>
