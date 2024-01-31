@@ -48,10 +48,10 @@ importers:
         specifier: workspace:*
         version: link:../packages/bluesky-client
       '@floating-ui/dom':
-        specifier: ^1.5.4
+        specifier: 1.5.4
         version: 1.5.4
       '@floating-ui/utils':
-        specifier: ^0.2.1
+        specifier: 0.2.1
         version: 0.2.1
       '@pkg/emoji-db':
         specifier: workspace:^
@@ -112,7 +112,7 @@ importers:
         specifier: ^5.0.12
         version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.6)(terser@5.27.0)
       vite-plugin-pwa:
-        specifier: ^0.17.4
+        specifier: 0.17.4
         version: 0.17.4(patch_hash=ve5hypcrajivuvoyst6zln6qyq)(vite@5.0.12)
       vite-plugin-solid:
         specifier: ^2.9.1
@@ -1737,15 +1737,15 @@ packages:
     engines: {node: '>=12.4.0'}
     dev: true
 
-  /@nolyfill/shared@1.0.24:
-    resolution: {integrity: sha512-TGCpg3k5N7jj9AgU/1xFw9K1g4AC1vEE5ZFkW77oPNNLzprxT17PvFaNr/lr3BkkT5fJ5LNMntaTIq+pyWaeEA==}
+  /@nolyfill/shared@1.0.28:
+    resolution: {integrity: sha512-UJTshFMDgugBcYXGLopbL1enYpGREOEfjUMQKLPLeJqWfbfElGtYbGbUcucCENa7cicGo3M5u/DnPiZe/PYQyw==}
     dev: true
 
-  /@nolyfill/string.prototype.matchall@1.0.24:
-    resolution: {integrity: sha512-SkuI/OiXNBKGakbtRsuaLHTrKbf+wNWNCACk+6116dqwmVXOg1O+XzjZRqFuzS1ml5gEJ0XTkaST89LXuevv1g==}
+  /@nolyfill/string.prototype.matchall@1.0.28:
+    resolution: {integrity: sha512-k74WKi7WmtRV847QWlY1ndg6XU1loeAyO9+NVoXrd7RL5lEjBtovp4CPZkifipBMBrZrZu2WwrQqkGrvLNZYpw==}
     engines: {node: '>=12.4.0'}
     dependencies:
-      '@nolyfill/shared': 1.0.24
+      '@nolyfill/shared': 1.0.28
     dev: true
 
   /@pkgjs/parseargs@0.11.0:
@@ -1936,7 +1936,7 @@ packages:
       ejs: 3.1.9
       json5: 2.2.3
       magic-string: 0.25.9
-      string.prototype.matchall: /@nolyfill/string.prototype.matchall@1.0.24
+      string.prototype.matchall: /@nolyfill/string.prototype.matchall@1.0.28
     dev: true
 
   /@tanstack/query-core@5.17.19:
