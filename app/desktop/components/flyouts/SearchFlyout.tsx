@@ -100,7 +100,7 @@ const SearchFlyout = (props: SearchFlyoutProps) => {
 				<SearchInput
 					ref={(node) => {
 						model(search, setSearch)(node);
-						node.focus();
+						setTimeout(() => node.focus(), 0);
 					}}
 					onKeyDown={(ev) => {
 						const key = ev.key;
