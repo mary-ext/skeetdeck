@@ -880,7 +880,9 @@ const ComposerPane = () => {
 							draft.external;
 							draft.record;
 
-							textareaRef.focus();
+							setTimeout(() => {
+								textareaRef.focus();
+							}, 0);
 						});
 
 						createEffect(() => {
