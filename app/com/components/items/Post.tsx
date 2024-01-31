@@ -277,7 +277,7 @@ const Post = (props: PostProps) => {
 													>
 														<ChatBubbleOutlinedIcon />
 													</div>
-													<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
+													<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de empty:hidden">
 														{formatCount(post.replyCount.value)}
 													</span>
 												</button>
@@ -297,7 +297,7 @@ const Post = (props: PostProps) => {
 													<RepeatIcon />
 												</div>
 
-												<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
+												<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de empty:hidden">
 													{formatCount(post.repostCount.value)}
 												</span>
 											</button>
@@ -316,7 +316,7 @@ const Post = (props: PostProps) => {
 												<FavoriteOutlinedIcon class="group-[.is-active]:hidden" />
 												<FavoriteIcon class="hidden group-[.is-active]:block" />
 											</div>
-											<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
+											<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de empty:hidden">
 												{formatCount(post.likeCount.value)}
 											</span>
 										</button>
