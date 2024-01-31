@@ -45,7 +45,7 @@
 		"prepublishOnly": "npm run build:schema && tsc && npm run build:lib"
 	},
 	"devDependencies": {
-		"@tiptap/core": "^2.1.16",
+		"@tiptap/core": "^2.2.0",
 		"fast-glob": "^3.3.2",
 		"graphemer": "^1.4.0",
 		"mkdist": "^1.4.0"
