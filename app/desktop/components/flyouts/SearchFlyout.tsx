@@ -98,8 +98,10 @@ const SearchFlyout = (props: SearchFlyoutProps) => {
 		<div class="flex w-96 flex-col overflow-hidden rounded-lg bg-background pb-2 shadow-menu">
 			<div class="p-4 pb-2">
 				<SearchInput
-					ref={model(search, setSearch)}
-					autofocus
+					ref={(node) => {
+						model(search, setSearch)(node);
+						node.focus();
+					}}
 					onKeyDown={(ev) => {
 						const key = ev.key;
 
