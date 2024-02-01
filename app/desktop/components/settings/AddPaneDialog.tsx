@@ -16,11 +16,13 @@ import {
 	type NotificationsPaneConfig,
 	type PaneConfig,
 	type PaneType,
+	type SludgePaneConfig,
 	PANE_TYPE_FEED,
 	PANE_TYPE_HOME,
 	PANE_TYPE_LIST,
 	PANE_TYPE_NOTIFICATIONS,
 	PANE_TYPE_PROFILE,
+	PANE_TYPE_SLUDGE,
 	SpecificPaneSize,
 	labelizePaneType,
 } from '../../globals/panes.ts';
@@ -164,6 +166,18 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 								>
 									<HomeOutlinedIcon class="text-xl" />
 									<span>Home timeline</span>
+								</button>
+
+								<button
+									onClick={() =>
+										add<SludgePaneConfig>({
+											type: PANE_TYPE_SLUDGE,
+										})
+									}
+									class={columnItem}
+								>
+									<HomeOutlinedIcon class="text-xl" />
+									<span>Sludge</span>
 								</button>
 
 								<button onClick={() => setType(PANE_TYPE_LIST)} class={columnItem}>

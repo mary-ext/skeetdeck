@@ -7,6 +7,7 @@ export const PANE_TYPE_FEED = 'feed';
 export const PANE_TYPE_LIST = 'list';
 export const PANE_TYPE_SEARCH = 'search';
 export const PANE_TYPE_THREAD = 'thread';
+export const PANE_TYPE_SLUDGE = 'sludge';
 
 export type PaneType =
 	| typeof PANE_TYPE_HOME
@@ -15,7 +16,8 @@ export type PaneType =
 	| typeof PANE_TYPE_FEED
 	| typeof PANE_TYPE_LIST
 	| typeof PANE_TYPE_SEARCH
-	| typeof PANE_TYPE_THREAD;
+	| typeof PANE_TYPE_THREAD
+	| typeof PANE_TYPE_SLUDGE;
 
 export const labelizePaneType = (type: PaneType) => {
 	switch (type) {
@@ -31,6 +33,8 @@ export const labelizePaneType = (type: PaneType) => {
 			return 'User List';
 		case PANE_TYPE_THREAD:
 			return 'Thread';
+		case PANE_TYPE_SLUDGE:
+			return 'Sludge';
 		default:
 			return 'N/A';
 	}
@@ -123,6 +127,10 @@ export interface ThreadPaneConfig extends BasePaneConfig {
 	};
 }
 
+export interface SludgePaneConfig extends BasePaneConfig {
+	readonly type: typeof PANE_TYPE_SLUDGE;
+}
+
 export type PaneConfig =
 	| HomePaneConfig
 	| NotificationsPaneConfig
@@ -130,7 +138,8 @@ export type PaneConfig =
 	| CustomFeedPaneConfig
 	| CustomListPaneConfig
 	| SearchPaneConfig
-	| ThreadPaneConfig;
+	| ThreadPaneConfig
+	| SludgePaneConfig;
 
 export interface DeckConfig {
 	readonly id: string;
