@@ -7,7 +7,7 @@ import {
 	replaceEqualDeep,
 } from '@tanstack/query-core';
 
-import { type Accessor, createEffect, createMemo, createSignal, onCleanup } from 'solid-js';
+import { type Accessor, createEffect, createSignal, onCleanup, untrack } from 'solid-js';
 
 import type { QueryClient } from './QueryClient.ts';
 import { useQueryClient } from './QueryClientProvider.tsx';
@@ -33,16 +33,18 @@ function getResult<TResult = MutationState>(
 
 export function useMutationState<TResult = MutationState>(
 	options: Accessor<MutationStateOptions<TResult>> = () => ({}),
-	queryClient?: Accessor<QueryClient>,
+	queryClient?: QueryClient,
 ): Accessor<Array<TResult>> {
-	const client = createMemo(() => useQueryClient(queryClient?.()));
-	const mutationCache = createMemo(() => client().getMutationCache());
+	const client = useQueryClient(queryClient);
+	const mutationCache = client.getMutationCache();
 
-	const [result, setResult] = createSignal(getResult(mutationCache(), options()));
+	const initialOptions = untrack(options);
+	const [result, setResult] = createSignal(getResult(mutationCache, initialOptions));
 
 	createEffect(() => {
-		const unsubscribe = mutationCache().subscribe(() => {
-			const nextResult = replaceEqualDeep(result(), getResult(mutationCache(), options()));
+		const unsubscribe = mutationCache.subscribe(() => {
+			const nextResult = replaceEqualDeep(result(), getResult(mutationCache, options()));
+
 			if (result() !== nextResult) {
 				setResult(nextResult);
 			}
