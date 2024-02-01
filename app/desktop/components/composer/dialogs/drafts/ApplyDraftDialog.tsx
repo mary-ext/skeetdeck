@@ -1,7 +1,6 @@
 import { batch, createSignal } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent.ts';
-import { type PreliminaryRichText, parseRt } from '~/api/richtext/composer.ts';
 
 import { modelChecked } from '~/utils/input.ts';
 import { signal } from '~/utils/signals.ts';
@@ -18,20 +17,8 @@ export interface ApplyDraftDialogProps {
 }
 
 const hydratePostState = (state: SerializedPostState): PostState => {
-	let cached: string;
-	let rt: PreliminaryRichText;
-
 	return {
 		text: state.text,
-		get rt() {
-			const next = this.text;
-
-			if (cached !== (cached = next)) {
-				rt = parseRt(next);
-			}
-
-			return rt;
-		},
 		external: state.external,
 		record: state.record,
 		images: state.images.map((img) => {
@@ -44,6 +31,8 @@ const hydratePostState = (state: SerializedPostState): PostState => {
 		tags: [...state.tags],
 		labels: [...state.labels],
 		languages: [...state.languages],
+
+		_parsed: null,
 	};
 };
 

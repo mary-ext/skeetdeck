@@ -64,9 +64,11 @@ import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 import SwitchAccountAction from '../flyouts/SwitchAccountAction.tsx';
 
-import { createComposerState, createPostState, isStateFilled, useComposer } from './ComposerContext.tsx';
+import { createComposerState, createPostState, useComposer } from './ComposerContext.tsx';
 import DummyPost from './DummyPost.tsx';
 import TagsInput from './TagInput.tsx';
+
+import { getPostRt, isStateFilled } from './utils/state.ts';
 
 import ContentWarningAction from './actions/ContentWarningAction.tsx';
 import PostLanguageAction from './actions/PostLanguageAction.tsx';
@@ -172,7 +174,7 @@ const ComposerPane = () => {
 
 		for (let i = 0, il = posts.length; i < il; i++) {
 			const draft = posts[i];
-			const length = getRtLength(draft.rt);
+			const length = getRtLength(getPostRt(draft));
 
 			// allow user to post if:
 			// - the length doesn't go beyond the grapheme limit
@@ -217,7 +219,7 @@ const ComposerPane = () => {
 				for (let i = 0, il = posts.length; i < il; i++) {
 					const draft = posts[i];
 
-					const rt = draft.rt;
+					const rt = getPostRt(draft);
 					const images = draft.images;
 					const external = draft.external;
 					const record = draft.record;
@@ -332,7 +334,7 @@ const ComposerPane = () => {
 						const rkey = getCurrentTid();
 						const uri = `at://${uid}/app.bsky.feed.post/${rkey}`;
 
-						const rt = RESOLVED_RT.get(draft.rt)!;
+						const rt = RESOLVED_RT.get(getPostRt(draft))!;
 
 						let embed: PostRecord['embed'] | undefined;
 
@@ -780,7 +782,7 @@ const ComposerPane = () => {
 						const images = draft.images;
 						const tags = draft.tags;
 
-						const length = createMemo(() => getRtLength(draft.rt));
+						const length = createMemo(() => getRtLength(getPostRt(draft)));
 
 						const addImagesRaw = (imgs: Array<{ blob: Blob; ratio: { width: number; height: number } }>) => {
 							batch(() => {
@@ -974,7 +976,7 @@ const ComposerPane = () => {
 										type="post"
 										uid={context.author}
 										value={draft.text}
-										rt={draft.rt}
+										rt={getPostRt(draft)}
 										placeholder={
 											index() === 0
 												? !state.reply
@@ -1081,7 +1083,7 @@ const ComposerPane = () => {
 										<For
 											each={
 												draft.images.length < 1 && !draft.external && !draft.record
-													? draft.rt.links
+													? getPostRt(draft).links
 													: undefined
 											}
 										>

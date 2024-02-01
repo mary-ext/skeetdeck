@@ -22,7 +22,9 @@ import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
 import PlaylistAddCheckIcon from '~/com/icons/baseline-playlist-add-check.tsx';
 
 import { type ComposerDraft, getDraftDb, type SerializedImage } from '../utils/draft-db.ts';
-import { isStateFilled, useComposer } from '../ComposerContext.tsx';
+import { useComposer } from '../ComposerContext.tsx';
+
+import { isStateFilled } from '../utils/state.ts';
 
 import ApplyDraftDialog from './drafts/ApplyDraftDialog.tsx';
 import DeleteDraftDialog from './drafts/DeleteDraftDialog.tsx';

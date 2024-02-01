@@ -3,7 +3,7 @@ import { createContext, useContext } from 'solid-js';
 import type { AtUri, DID } from '~/api/atp-schema.ts';
 import { systemLanguages } from '~/api/globals/platform.ts';
 
-import { type PreliminaryRichText, parseRt, getRtLength } from '~/api/richtext/composer.ts';
+import type { PreliminaryRichText } from '~/api/richtext/composer.ts';
 
 import type { PreferencesSchema } from '~/desktop/globals/settings.ts';
 
@@ -30,15 +30,21 @@ export interface GateStateCustom {
 
 export type GateState = GateStateEveryone | GateStateMentionedOnly | GateStateFollowedOnly | GateStateCustom;
 
+export interface ParsedPost {
+	t: string;
+	r: PreliminaryRichText;
+}
+
 export interface PostState {
 	text: string;
-	rt: PreliminaryRichText;
 	external: string | undefined;
 	record: AtUri | undefined;
 	images: ComposedImage[];
 	tags: string[];
 	labels: string[];
 	languages: string[];
+
+	_parsed: ParsedPost | null;
 }
 
 export interface ComposerState {
@@ -79,26 +85,16 @@ export const getComposerLanguage = (preferences: PreferencesSchema) => {
 };
 
 export const createPostState = (preferences: PreferencesSchema): PostState => {
-	let cached: string;
-	let rt: PreliminaryRichText;
-
 	return {
 		text: '',
-		get rt() {
-			const next = this.text;
-
-			if (cached !== (cached = next)) {
-				rt = parseRt(next);
-			}
-
-			return rt;
-		},
 		external: undefined,
 		record: undefined,
 		images: [],
 		tags: [],
 		labels: [],
 		languages: getComposerLanguage(preferences),
+
+		_parsed: null,
 	};
 };
 
@@ -108,18 +104,4 @@ export const createComposerState = (preferences: PreferencesSchema): ComposerSta
 		gate: { type: 'e' },
 		posts: [createPostState(preferences)],
 	};
-};
-
-export const isStateFilled = (state: ComposerState) => {
-	const posts = state.posts;
-
-	for (let i = 0, il = posts.length; i < il; i++) {
-		const draft = posts[i];
-
-		if (draft.images.length > 0 || getRtLength(draft.rt) > 0) {
-			return true;
-		}
-	}
-
-	return false;
 };
