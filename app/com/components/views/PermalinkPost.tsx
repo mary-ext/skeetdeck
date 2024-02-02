@@ -70,13 +70,13 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 			<div class="relative mb-3 flex items-center gap-3 text-sm text-muted-fg">
 				<Link
 					to={{ type: LINK_PROFILE, actor: author.did }}
-					class="group pointer-events-none inline-flex max-w-full items-center overflow-hidden text-left"
+					class="pointer-events-none inline-flex max-w-full items-center overflow-hidden text-left"
 				>
-					<div class="pointer-events-auto z-2 mr-3 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-muted-fg">
+					<div class="pointer-events-auto z-2 mr-3 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-muted-fg hover:opacity-80">
 						<img src={author.avatar.value || DefaultAvatar} class="h-full w-full" />
 					</div>
 
-					<span class="pointer-events-auto block max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+					<span class="group pointer-events-auto block max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
 						<bdi class="overflow-hidden text-ellipsis group-hover:underline">
 							<span class="font-bold text-primary">{author.displayName.value}</span>
 						</bdi>
