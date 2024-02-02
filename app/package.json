@@ -28,7 +28,7 @@
 		"tldts": "^6.1.4"
 	},
 	"devDependencies": {
-		"@types/node": "^20.11.13",
+		"@types/node": "^20.11.16",
 		"autoprefixer": "^10.4.17",
 		"postcss": "^8.4.33",
 		"terser": "^5.27.0",

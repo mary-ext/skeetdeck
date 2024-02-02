@@ -100,8 +100,8 @@ importers:
         version: 6.1.4
     devDependencies:
       '@types/node':
-        specifier: ^20.11.13
-        version: 20.11.13
+        specifier: ^20.11.16
+        version: 20.11.16
       autoprefixer:
         specifier: ^10.4.17
         version: 10.4.17(postcss@8.4.33)
@@ -113,7 +113,7 @@ importers:
         version: 5.27.0
       vite:
         specifier: ^5.0.12
-        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.13)(terser@5.27.0)
+        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.16)(terser@5.27.0)
       vite-plugin-pwa:
         specifier: 0.17.4
         version: 0.17.4(patch_hash=ve5hypcrajivuvoyst6zln6qyq)(vite@5.0.12)
@@ -124,8 +124,8 @@ importers:
   packages/bluesky-client:
     devDependencies:
       '@tiptap/core':
-        specifier: ^2.2.0
-        version: 2.2.0
+        specifier: ^2.2.1
+        version: 2.2.1
       fast-glob:
         specifier: ^3.3.2
         version: 3.3.2
@@ -140,7 +140,7 @@ importers:
     devDependencies:
       vite:
         specifier: ^5.0.12
-        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.13)(terser@5.27.0)
+        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.16)(terser@5.27.0)
 
   packages/solid-freeze:
     devDependencies:
@@ -149,7 +149,7 @@ importers:
         version: 1.8.12(patch_hash=njqsan44jnihxixy5xky5dg3ea)
       vite:
         specifier: ^5.0.12
-        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.13)(terser@5.27.0)
+        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.16)(terser@5.27.0)
       vite-plugin-solid:
         specifier: ^2.9.1
         version: 2.9.1(solid-js@1.8.12)(vite@5.0.12)
@@ -168,7 +168,7 @@ importers:
         version: 1.8.12(patch_hash=njqsan44jnihxixy5xky5dg3ea)
       vite:
         specifier: ^5.0.12
-        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.13)(terser@5.27.0)
+        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.16)(terser@5.27.0)
       vite-plugin-solid:
         specifier: ^2.9.1
         version: 2.9.1(solid-js@1.8.12)(vite@5.0.12)
@@ -180,7 +180,7 @@ importers:
         version: 1.8.12(patch_hash=njqsan44jnihxixy5xky5dg3ea)
       vite:
         specifier: ^5.0.12
-        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.13)(terser@5.27.0)
+        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.16)(terser@5.27.0)
       vite-plugin-solid:
         specifier: ^2.9.1
         version: 2.9.1(solid-js@1.8.12)(vite@5.0.12)
@@ -196,7 +196,7 @@ importers:
         version: 1.8.12(patch_hash=njqsan44jnihxixy5xky5dg3ea)
       vite:
         specifier: ^5.0.12
-        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.13)(terser@5.27.0)
+        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.16)(terser@5.27.0)
       vite-plugin-solid:
         specifier: ^2.9.1
         version: 2.9.1(solid-js@1.8.12)(vite@5.0.12)
@@ -212,7 +212,7 @@ importers:
         version: 1.8.12(patch_hash=njqsan44jnihxixy5xky5dg3ea)
       vite:
         specifier: ^5.0.12
-        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.13)(terser@5.27.0)
+        version: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.16)(terser@5.27.0)
       vite-plugin-solid:
         specifier: ^2.9.1
         version: 2.9.1(solid-js@1.8.12)(vite@5.0.12)
@@ -315,8 +315,8 @@ packages:
       semver: 6.3.1
     dev: true
 
-  /@babel/helper-create-class-features-plugin@7.23.9(@babel/core@7.23.9):
-    resolution: {integrity: sha512-B2L9neXTIyPQoXDm+NtovPvG6VOLWnaXu3BIeVDWwdKFgG30oNa6CqVGiJPDWQwIAK49t9gnQI9c6K6RzabiKw==}
+  /@babel/helper-create-class-features-plugin@7.23.10(@babel/core@7.23.9):
+    resolution: {integrity: sha512-2XpP2XhkXzgxecPNEEK8Vz8Asj9aRxt08oKOqtiZoqV2UGZ5T+EkyP9sXQ9nwMxBIG34a7jmasVqoMop7VdPUw==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0
@@ -807,7 +807,7 @@ packages:
       '@babel/core': ^7.0.0-0
     dependencies:
       '@babel/core': 7.23.9
-      '@babel/helper-create-class-features-plugin': 7.23.9(@babel/core@7.23.9)
+      '@babel/helper-create-class-features-plugin': 7.23.10(@babel/core@7.23.9)
       '@babel/helper-plugin-utils': 7.22.5
     dev: true
 
@@ -818,7 +818,7 @@ packages:
       '@babel/core': ^7.12.0
     dependencies:
       '@babel/core': 7.23.9
-      '@babel/helper-create-class-features-plugin': 7.23.9(@babel/core@7.23.9)
+      '@babel/helper-create-class-features-plugin': 7.23.10(@babel/core@7.23.9)
       '@babel/helper-plugin-utils': 7.22.5
       '@babel/plugin-syntax-class-static-block': 7.14.5(@babel/core@7.23.9)
     dev: true
@@ -1135,7 +1135,7 @@ packages:
       '@babel/core': ^7.0.0-0
     dependencies:
       '@babel/core': 7.23.9
-      '@babel/helper-create-class-features-plugin': 7.23.9(@babel/core@7.23.9)
+      '@babel/helper-create-class-features-plugin': 7.23.10(@babel/core@7.23.9)
       '@babel/helper-plugin-utils': 7.22.5
     dev: true
 
@@ -1147,7 +1147,7 @@ packages:
     dependencies:
       '@babel/core': 7.23.9
       '@babel/helper-annotate-as-pure': 7.22.5
-      '@babel/helper-create-class-features-plugin': 7.23.9(@babel/core@7.23.9)
+      '@babel/helper-create-class-features-plugin': 7.23.10(@babel/core@7.23.9)
       '@babel/helper-plugin-utils': 7.22.5
       '@babel/plugin-syntax-private-property-in-object': 7.14.5(@babel/core@7.23.9)
     dev: true
@@ -1940,8 +1940,8 @@ packages:
       solid-js: 1.8.12(patch_hash=njqsan44jnihxixy5xky5dg3ea)
     dev: false
 
-  /@tiptap/core@2.2.0:
-    resolution: {integrity: sha512-ped7XlQ9k5VyE2xUwyRegn1yVF/CAsaF+riBUBJ9+71/gSo2mCZ+6gQvee+LVN1+rD1qN/vWgKhKNDVaU+VaFg==}
+  /@tiptap/core@2.2.1:
+    resolution: {integrity: sha512-9G6N2d5q4M5i/elK61qu28uO5MBDKEbStQnHuVKNe+LVNpb6xZal1AcIilmq1FVeuCUh3kYl3cFH3nBQOXtZUw==}
     peerDependencies:
       '@tiptap/pm': ^2.0.0
     dev: true
@@ -1992,8 +1992,8 @@ packages:
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
     dev: true
 
-  /@types/node@20.11.13:
-    resolution: {integrity: sha512-5G4zQwdiQBSWYTDAH1ctw2eidqdhMJaNsiIDKHFr55ihz5Trl2qqR8fdrT732yPBho5gkNxXm67OxWFBqX9aPg==}
+  /@types/node@20.11.16:
+    resolution: {integrity: sha512-gKb0enTmRCzXSSUJDq6/sPcqrfCv2mkkG6Jt/clpn5eiCbKTY+SgZUxo+p8ZKMof5dCp9vHQUAB7wOUTod22wQ==}
     dependencies:
       undici-types: 5.26.5
     dev: true
@@ -2001,7 +2001,7 @@ packages:
   /@types/resolve@1.17.1:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
     dependencies:
-      '@types/node': 20.11.13
+      '@types/node': 20.11.16
     dev: true
 
   /@types/trusted-types@2.0.7:
@@ -2089,7 +2089,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.22.3
-      caniuse-lite: 1.0.30001581
+      caniuse-lite: 1.0.30001582
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -2193,8 +2193,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001581
-      electron-to-chromium: 1.4.651
+      caniuse-lite: 1.0.30001582
+      electron-to-chromium: 1.4.654
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.22.3)
     dev: true
@@ -2217,13 +2217,13 @@ packages:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
     dependencies:
       browserslist: 4.22.3
-      caniuse-lite: 1.0.30001581
+      caniuse-lite: 1.0.30001582
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
     dev: true
 
-  /caniuse-lite@1.0.30001581:
-    resolution: {integrity: sha512-whlTkwhqV2tUmP3oYhtNfaWGYHDdS3JYFQBKXxcUR9qqPWsRhFHhoISO2Xnl/g0xyKzht9mI1LZpiNWfMzHixQ==}
+  /caniuse-lite@1.0.30001582:
+    resolution: {integrity: sha512-vsJG3V5vgfduaQGVxL53uSX/HUzxyr2eA8xCo36OLal7sRcSZbibJtLeh0qja4sFOr/QQGt4opB4tOy+eOgAxg==}
     dev: true
 
   /cborg@4.0.7(patch_hash=dz6b6r6dc4jadjfng7vtgi53hy):
@@ -2536,8 +2536,8 @@ packages:
       jake: 10.8.7
     dev: true
 
-  /electron-to-chromium@1.4.651:
-    resolution: {integrity: sha512-jjks7Xx+4I7dslwsbaFocSwqBbGHQmuXBJUK9QBZTIrzPq3pzn6Uf2szFSP728FtLYE3ldiccmlkOM/zhGKCpA==}
+  /electron-to-chromium@1.4.654:
+    resolution: {integrity: sha512-hjfFa+Vj4WGLRVTlCQa+IivBkpcp+boGxMQfusOC/me5Y5NfU4wX7wyw+K9p8Cw4tl0BVIZGH2n7y/jMc3w4pg==}
     dev: true
 
   /emoji-regex@8.0.0:
@@ -2741,7 +2741,7 @@ packages:
     dependencies:
       dir-glob: 3.0.1
       fast-glob: 3.3.2
-      ignore: 5.3.0
+      ignore: 5.3.1
       merge2: 1.4.1
       slash: 4.0.0
     dev: true
@@ -2776,8 +2776,8 @@ packages:
     resolution: {integrity: sha512-l//qvlAKGmQO31Qn7xdzagVPPaHTxXx199MhrAFuVBTPqydcPYBWjkrbv4Y0ktB+GmWOiwHl237UUOrLmQxLvw==}
     dev: false
 
-  /ignore@5.3.0:
-    resolution: {integrity: sha512-g7dmpshy+gD7mh88OC9NwSGTKoc3kyLAZQRU1mt53Aw/vnvfXnbC+F/7F7QoYVKbV+KNvJx8wArewKy1vXMtlg==}
+  /ignore@5.3.1:
+    resolution: {integrity: sha512-5Fytz/IraMjqpwfd34ke28PTVMjZjJG2MPn5t7OE4eUCUNf8BAa7b5WUS9/Qvr6mwOQS7Mk6vdsMno5he+T8Xw==}
     engines: {node: '>= 4'}
     dev: true
 
@@ -2883,7 +2883,7 @@ packages:
     resolution: {integrity: sha512-KWYVV1c4i+jbMpaBC+U++4Va0cp8OisU185o73T1vo99hqi7w8tSJfUXYswwqqrjzwxa6KpRK54WhPvwf5w6PQ==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 20.11.13
+      '@types/node': 20.11.16
       merge-stream: 2.0.0
       supports-color: 7.2.0
     dev: true
@@ -4181,7 +4181,7 @@ packages:
       debug: 4.3.4
       fast-glob: 3.3.2
       pretty-bytes: 6.1.1
-      vite: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.13)(terser@5.27.0)
+      vite: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.16)(terser@5.27.0)
       workbox-build: 7.0.0
       workbox-window: 7.0.0
     transitivePeerDependencies:
@@ -4206,13 +4206,13 @@ packages:
       merge-anything: 5.1.7
       solid-js: 1.8.12(patch_hash=njqsan44jnihxixy5xky5dg3ea)
       solid-refresh: 0.6.3(solid-js@1.8.12)
-      vite: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.13)(terser@5.27.0)
+      vite: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.16)(terser@5.27.0)
       vitefu: 0.2.5(vite@5.0.12)
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite@5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.13)(terser@5.27.0):
+  /vite@5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.16)(terser@5.27.0):
     resolution: {integrity: sha512-4hsnEkG3q0N4Tzf1+t6NdN9dg/L3BM+q8SWgbSPnJvrgH2kgdyzfVJwbR1ic69/4uMJJ/3dqDZZE5/WwqW8U1w==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -4240,7 +4240,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.11.13
+      '@types/node': 20.11.16
       esbuild: 0.19.12
       postcss: 8.4.33
       rollup: 4.9.6
@@ -4258,7 +4258,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.13)(terser@5.27.0)
+      vite: 5.0.12(patch_hash=r67w2bbxxfozh3nebstpfdj7ju)(@types/node@20.11.16)(terser@5.27.0)
     dev: true
 
   /webidl-conversions@4.0.2:
