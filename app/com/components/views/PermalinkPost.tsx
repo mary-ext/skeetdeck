@@ -7,6 +7,7 @@ import { updatePostLike } from '~/api/mutations/like-post.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 
 import { getPostModDecision } from '~/api/moderation/decisions/post.ts';
+import { getProfileModDecision } from '~/api/moderation/decisions/profile.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
 import { formatAbsDateTime } from '~/utils/intl/time.ts';
@@ -16,12 +17,13 @@ import { LINK_LIST, LINK_POST_LIKED_BY, LINK_POST_REPOSTED_BY, LINK_PROFILE, Lin
 import RichTextRenderer from '../RichTextRenderer.tsx';
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 
-import AccountCheckIcon from '~/com/icons/baseline-account-check.tsx';
+import AccountCheckIcon from '../../icons/baseline-account-check.tsx';
 import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble.tsx';
+import ErrorIcon from '../../icons/baseline-error.tsx';
 import FavoriteIcon from '../../icons/baseline-favorite.tsx';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
 import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
-import PoundIcon from '~/com/icons/baseline-pound.tsx';
+import PoundIcon from '../../icons/baseline-pound.tsx';
 import RepeatIcon from '../../icons/baseline-repeat.tsx';
 import ShareIcon from '../../icons/baseline-share.tsx';
 
@@ -55,13 +57,17 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 		return getRecordId(post.uri);
 	};
 
+	const profileVerdict = createMemo(() => {
+		return getProfileModDecision(author, useSharedPreferences());
+	});
+
 	const decision = createMemo(() => {
 		return getPostModDecision(post, preferences);
 	});
 
 	return (
 		<div class="px-4 pt-3">
-			<div class="mb-3 flex items-center gap-3 text-sm text-muted-fg">
+			<div class="relative mb-3 flex items-center gap-3 text-sm text-muted-fg">
 				<Link
 					to={{ type: LINK_PROFILE, actor: author.did }}
 					class="group pointer-events-none inline-flex max-w-full items-center overflow-hidden text-left"
@@ -85,6 +91,24 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 						</button>
 					</PostOverflowAction>
 				</div>
+
+				{(() => {
+					const verdict = profileVerdict();
+
+					if (verdict) {
+						return (
+							<div
+								class={
+									/* @once */
+									`absolute left-7 top-7 z-10 rounded-full bg-background ` +
+									(verdict.a ? `text-red-500` : `text-muted-fg`)
+								}
+							>
+								<ErrorIcon class="text-lg" />
+							</div>
+						);
+					}
+				})()}
 			</div>
 
 			<div class="mt-3 overflow-hidden whitespace-pre-wrap break-words text-base empty:hidden">
