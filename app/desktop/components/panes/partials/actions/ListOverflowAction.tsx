@@ -8,13 +8,13 @@ import { openModal } from '~/com/globals/modals.tsx';
 
 import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu.ts';
 
-import ReportDialog from '~/com/components/dialogs/ReportDialog.tsx';
 import { Flyout } from '~/com/components/Flyout.tsx';
 
 import DeleteIcon from '~/com/icons/baseline-delete.tsx';
 import LaunchIcon from '~/com/icons/baseline-launch.tsx';
 import ReportIcon from '~/com/icons/baseline-report.tsx';
 
+const ReportDialog = lazy(() => import('~/com/components/dialogs/ReportDialog.tsx'));
 const PruneListOrphanDialog = lazy(() => import('~/com/components/dialogs/lists/PruneListOrphanDialog.tsx'));
 
 export interface FeedOverflowActionProps {

@@ -1,4 +1,4 @@
-import type { JSX } from 'solid-js';
+import { type JSX, lazy } from 'solid-js';
 
 import { getRecordId } from '~/api/utils/misc.ts';
 
@@ -8,11 +8,12 @@ import { openModal } from '~/com/globals/modals.tsx';
 
 import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu.ts';
 
-import ReportDialog from '~/com/components/dialogs/ReportDialog.tsx';
 import { Flyout } from '~/com/components/Flyout.tsx';
 
 import LaunchIcon from '~/com/icons/baseline-launch.tsx';
 import ReportIcon from '~/com/icons/baseline-report.tsx';
+
+const ReportDialog = lazy(() => import('~/com/components/dialogs/ReportDialog.tsx'));
 
 export interface FeedOverflowActionProps {
 	feed: SignalizedFeed;
