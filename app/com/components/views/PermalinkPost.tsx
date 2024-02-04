@@ -6,8 +6,8 @@ import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 import { updatePostLike } from '~/api/mutations/like-post.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 
-import { getPostModDecision } from '~/api/moderation/decisions/post.ts';
-import { getProfileModDecision } from '~/api/moderation/decisions/profile.ts';
+import { getPostModDecision } from '../../moderation/post.ts';
+import { getProfileModDecision } from '../../moderation/profile.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
 import { formatAbsDateTime } from '~/utils/intl/time.ts';

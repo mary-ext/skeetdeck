@@ -5,7 +5,7 @@ import { getRecordId } from '~/api/utils/misc.ts';
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 import { updatePostLike } from '~/api/mutations/like-post.ts';
 
-import { getProfileModDecision } from '~/api/moderation/decisions/profile.ts';
+import { getProfileModDecision } from '../../moderation/profile.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
 import { clsx } from '~/utils/misc.ts';

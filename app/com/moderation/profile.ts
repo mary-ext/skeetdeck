@@ -1,5 +1,3 @@
-// @todo: move this to ~/com as it's now making use of SharedPreferences
-
 import { sequal } from '~/utils/dequal.ts';
 
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
@@ -9,9 +7,9 @@ import {
 	type ModerationDecision,
 	decideLabelModeration,
 	finalizeModeration,
-} from '../action.ts';
+} from '~/api/moderation/action.ts';
 
-import { type SharedPreferencesObject } from '~/com/components/SharedPreferences.tsx';
+import { type SharedPreferencesObject } from '../components/SharedPreferences.tsx';
 
 type ModerationResult = { d: ModerationDecision | null; c: unknown[] };
 const cached = new WeakMap<SignalizedProfile, ModerationResult>();

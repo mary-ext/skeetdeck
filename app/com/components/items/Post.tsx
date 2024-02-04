@@ -8,7 +8,7 @@ import { getRecordId } from '~/api/utils/misc.ts';
 
 import { updatePostLike } from '~/api/mutations/like-post.ts';
 
-import { getProfileModDecision } from '~/api/moderation/decisions/profile.ts';
+import { getProfileModDecision } from '../../moderation/profile.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';

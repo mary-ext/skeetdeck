@@ -7,7 +7,7 @@ import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
 import { CauseLabel } from '~/api/moderation/action.ts';
-import { getProfileModDecision } from '~/api/moderation/decisions/profile.ts';
+import { getProfileModDecision } from '../../moderation/profile.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
 import { formatAbsDateTime } from '~/utils/intl/time.ts';

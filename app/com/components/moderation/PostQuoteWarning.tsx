@@ -6,7 +6,7 @@ import { renderLabelName } from '~/api/display.ts';
 import { type ModerationDecision, CauseLabel, CauseMutedKeyword } from '~/api/moderation/action.ts';
 import { FlagNoOverride } from '~/api/moderation/enums.ts';
 
-import { getQuoteModDecision } from '~/api/moderation/decisions/quote.ts';
+import { getQuoteModDecision } from '../../moderation/quote.ts';
 
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 

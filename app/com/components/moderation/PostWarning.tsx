@@ -7,7 +7,7 @@ import type { SignalizedPost } from '~/api/stores/posts.ts';
 import { CauseLabel, CauseMutedKeyword, type ModerationDecision } from '~/api/moderation/action.ts';
 import { FlagNoOverride } from '~/api/moderation/enums.ts';
 
-import { getPostModDecision } from '~/api/moderation/decisions/post.ts';
+import { getPostModDecision } from '../../moderation/post.ts';
 
 import { clsx } from '~/utils/misc.ts';
 

@@ -1,8 +1,6 @@
-// @todo: move this to ~/com as it's now making use of SharedPreferences
-
 import { sequal } from '~/utils/dequal.ts';
 
-import type { Records, UnionOf } from '../../atp-schema.ts';
+import type { Records, UnionOf } from '~/api/atp-schema.ts';
 
 import {
 	type ModerationCause,
@@ -12,10 +10,10 @@ import {
 	decideMutedPermanentModeration,
 	decideMutedTemporaryModeration,
 	finalizeModeration,
-} from '../action.ts';
-import { PreferenceWarn } from '../enums.ts';
+} from '~/api/moderation/action.ts';
+import { PreferenceWarn } from '~/api/moderation/enums.ts';
 
-import { type SharedPreferencesObject, isProfileTempMuted } from '~/com/components/SharedPreferences.tsx';
+import { type SharedPreferencesObject, isProfileTempMuted } from '../components/SharedPreferences.tsx';
 
 type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
 type PostRecord = Records['app.bsky.feed.post'];

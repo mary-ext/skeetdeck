@@ -5,7 +5,7 @@ import { getRecordId } from '~/api/utils/misc.ts';
 
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 
-import { getPostModDecision } from '~/api/moderation/decisions/post.ts';
+import { getPostModDecision } from '../../moderation/post.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';

@@ -2,7 +2,7 @@ import { type JSX, createMemo } from 'solid-js';
 
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
-import { getProfileModDecision } from '~/api/moderation/decisions/profile.ts';
+import { getProfileModDecision } from '../../moderation/profile.ts';
 
 import { INTERACTION_TAGS, isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
 import { clsx } from '~/utils/misc.ts';
