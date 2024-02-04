@@ -1,12 +1,18 @@
-import { createSignal } from 'solid-js';
+import { createMemo, createSignal } from 'solid-js';
 
 import { createMutation } from '@pkg/solid-query';
+
+import TextareaAutosize from 'solid-textarea-autosize';
 
 import type { AtUri, DID, RefOf, UnionOf } from '~/api/atp-schema.ts';
 import { getAccountHandle, multiagent } from '~/api/globals/agent.ts';
 
+import { EOF_WS_RE } from '~/api/richtext/composer.ts';
+import { graphemeLen } from '~/api/richtext/intl.ts';
+
+import { formatLong } from '~/utils/intl/number.ts';
+import { createRadioModel } from '~/utils/input.ts';
 import { getUniqueId } from '~/utils/misc.ts';
-import { createRadioModel, model } from '~/utils/input.ts';
 
 import { closeModal, useModalState } from '../../globals/modals.tsx';
 
@@ -108,7 +114,7 @@ export interface ReportDialogProps {
 
 const DMCA_LINK = 'https://blueskyweb.xyz/support/copyright';
 
-const MAX_DESCRIPTION_LENGTH = 300;
+const MAX_DESCRIPTION_LENGTH = 2000;
 
 const enum ReportStep {
 	CHOOSE,
@@ -128,6 +134,9 @@ const ReportDialog = (props: ReportDialogProps) => {
 
 	const [type, setType] = createSignal<ReportOption>();
 	const [reason, setReason] = createSignal('');
+
+	const actualReason = createMemo(() => reason().replace(EOF_WS_RE, ''));
+	const length = createMemo(() => graphemeLen(actualReason()));
 
 	const formId = getUniqueId();
 
@@ -275,19 +284,19 @@ const ReportDialog = (props: ReportDialogProps) => {
 										<span>Any additional details?</span>
 
 										<span
-											class={
-												'text-xs' +
-												(reason().length > MAX_DESCRIPTION_LENGTH ? ' font-bold text-red-500' : '')
-											}
+											class={'text-xs' + (length() > MAX_DESCRIPTION_LENGTH ? ' font-bold text-red-500' : '')}
 										>
-											{reason().length}/{MAX_DESCRIPTION_LENGTH}
+											{`${formatLong(length())}/${formatLong(MAX_DESCRIPTION_LENGTH)}`}
 										</span>
 									</span>
 
-									<textarea
-										ref={model(reason, setReason)}
-										autofocus
-										rows={6}
+									<TextareaAutosize
+										ref={(node) => {
+											setTimeout(() => node.focus(), 0);
+										}}
+										value={reason()}
+										onInput={(ev) => setReason(ev.target.value)}
+										minRows={6}
 										class={/* @once */ Textarea()}
 									/>
 								</label>
@@ -318,7 +327,7 @@ const ReportDialog = (props: ReportDialogProps) => {
 				<div class={/* @once */ DialogActions()}>
 					<button
 						disabled={
-							(step() === ReportStep.EXPLAIN && reason().length > MAX_DESCRIPTION_LENGTH) ||
+							(step() === ReportStep.EXPLAIN && length() > MAX_DESCRIPTION_LENGTH) ||
 							(step() === ReportStep.CHOOSE && !type())
 						}
 						onClick={() => {
