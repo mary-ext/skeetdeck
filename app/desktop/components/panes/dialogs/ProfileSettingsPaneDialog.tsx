@@ -1,7 +1,9 @@
-import { createSignal as signal } from 'solid-js';
+import { createMemo, createSignal as signal } from 'solid-js';
 
 import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 import { createMutation, useQueryClient } from '@pkg/solid-query';
+
+import TextareaAutosize from 'solid-textarea-autosize';
 
 import type { Records, UnionOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
@@ -10,6 +12,10 @@ import { uploadBlob } from '~/api/mutations/upload-blob.ts';
 import { getProfileKey } from '~/api/queries/get-profile.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
+import { EOF_WS_RE } from '~/api/richtext/composer.ts';
+import { graphemeLen } from '~/api/richtext/intl.ts';
+
+import { formatLong } from '~/utils/intl/number.ts';
 import { model } from '~/utils/input.ts';
 import { mapDefined } from '~/utils/misc.ts';
 
@@ -18,17 +24,19 @@ import { Input } from '~/com/primitives/input.ts';
 import { Textarea } from '~/com/primitives/textarea.ts';
 
 import AddPhotoButton from '~/com/components/inputs/AddPhotoButton.tsx';
+import Checkbox from '~/com/components/inputs/Checkbox.tsx';
 import BlobImage from '~/com/components/BlobImage.tsx';
 
 import { usePaneModalState } from '../PaneContext.tsx';
 import PaneDialog from '../PaneDialog.tsx';
 import PaneDialogHeader from '../PaneDialogHeader.tsx';
-import Checkbox from '~/com/components/inputs/Checkbox.tsx';
 
 export interface ProfileSettingsPaneDialogProps {
 	/** Expected to be static */
 	profile: SignalizedProfile;
 }
+
+const MAX_DESC_LENGTH = 300;
 
 const NoUnauthenticatedLabel = '!no-unauthenticated';
 
@@ -48,6 +56,9 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 	const [name, setName] = signal(prof.displayName.value || '');
 	const [desc, setDesc] = signal(prof.description.value || '');
 
+	const actualDesc = createMemo(() => desc().replace(EOF_WS_RE, ''));
+	const length = createMemo(() => graphemeLen(actualDesc()));
+
 	const [labels, setLabels] = signal(
 		mapDefined(prof.labels.value, (x) => (x.src === prof.did ? x.val : undefined)),
 	);
@@ -62,7 +73,7 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 			const $avatar = avatar();
 			const $banner = banner();
 			const $name = name();
-			const $description = desc();
+			const $description = actualDesc();
 			const $labels = labels();
 
 			const agent = await multiagent.connect(uid);
@@ -162,7 +173,11 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 					title="Edit profile"
 					disabled={(disableBackdropClose.value = profileMutation.isPending)}
 				>
-					<button type="submit" class={/* @once */ Button({ variant: 'primary', size: 'xs' })}>
+					<button
+						type="submit"
+						disabled={length() > MAX_DESC_LENGTH}
+						class={/* @once */ Button({ variant: 'primary', size: 'xs' })}
+					>
 						Save
 					</button>
 				</PaneDialogHeader>
@@ -224,10 +239,22 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 					<label class="mx-4 mt-4 block">
 						<span class="mb-2 flex items-center justify-between gap-2 text-sm font-medium leading-6 text-primary">
 							<span>Description</span>
-							<span class="text-xs font-normal text-muted-fg">{desc().length}/300</span>
+							<span
+								class={
+									'text-xs' +
+									(length() > MAX_DESC_LENGTH ? ' font-bold text-red-500' : ' font-normal text-muted-fg')
+								}
+							>
+								{formatLong(length())}/{/* @once */ formatLong(MAX_DESC_LENGTH)}
+							</span>
 						</span>
 
-						<textarea ref={model(desc, setDesc)} class={/* @once */ Textarea()} rows={4} />
+						<TextareaAutosize
+							value={desc()}
+							onInput={(ev) => setDesc(ev.target.value)}
+							minRows={4}
+							class={/* @once */ Textarea()}
+						/>
 					</label>
 
 					<hr class="mt-4 border-divider" />
