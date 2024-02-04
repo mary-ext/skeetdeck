@@ -318,7 +318,7 @@ const ReportDialog = (props: ReportDialogProps) => {
 					if ($step === ReportStep.FINISHED) {
 						return (
 							<div class={dialogBody}>
-								<p class="px-4 text-sm">Thanks for reporting, your report has been submitted successfully.</p>
+								<p class="px-4 text-sm">Thanks for your report, we'll look into it promptly.</p>
 							</div>
 						);
 					}

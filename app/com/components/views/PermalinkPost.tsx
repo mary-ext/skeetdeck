@@ -1,4 +1,4 @@
-import { type JSX, createMemo, createSignal } from 'solid-js';
+import { type JSX, createMemo, createSignal, lazy } from 'solid-js';
 
 import type { DID, Records, RefOf } from '~/api/atp-schema.ts';
 import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
@@ -8,6 +8,9 @@ import type { SignalizedPost } from '~/api/stores/posts.ts';
 
 import { getPostModDecision } from '../../moderation/post.ts';
 import { getProfileModDecision } from '../../moderation/profile.ts';
+import { isPostModerated } from '../../moderation/utils.ts';
+
+import { openModal } from '../../globals/modals.tsx';
 
 import { formatCompact } from '~/utils/intl/number.ts';
 import { formatAbsDateTime } from '~/utils/intl/time.ts';
@@ -37,6 +40,8 @@ import RepostAction from '../items/posts/RepostAction.tsx';
 import ReplyAction from '../items/posts/ReplyAction.tsx';
 
 import PostTranslation, { needTranslation } from './posts/PostTranslation.tsx';
+
+const AppealLabelDialog = lazy(() => import('../dialogs/AppealLabelDialog.tsx'));
 
 export interface PermalinkPostProps {
 	/** Expected to be static */
@@ -110,6 +115,25 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 					}
 				})()}
 			</div>
+
+			{isPostModerated(post) ? (
+				<div class="mt-3 rounded border border-divider px-3 py-2 text-sm">
+					<p>Content warning has been applied by moderators.</p>
+					<button
+						onClick={() => {
+							openModal(() => (
+								<AppealLabelDialog
+									uid={/* @once */ post.uid}
+									report={/* @once */ { type: 'post', uri: post.uri, cid: post.cid.value }}
+								/>
+							));
+						}}
+						class="text-accent hover:underline"
+					>
+						Appeal this decision
+					</button>
+				</div>
+			) : null}
 
 			<div class="mt-3 overflow-hidden whitespace-pre-wrap break-words text-base empty:hidden">
 				<RichTextRenderer
