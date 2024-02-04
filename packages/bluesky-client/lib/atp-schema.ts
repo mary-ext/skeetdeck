@@ -708,28 +708,6 @@ export interface Queries {
 		};
 	};
 	/**
-	 * DEPRECATED: a skeleton of a timeline. Unspecced and will be unavailable soon.
-	 * @deprecated
-	 */
-	'app.bsky.unspecced.getTimelineSkeleton': {
-		params: {
-			/**
-			 * Minimum: 1 \
-			 * Maximum: 100
-			 * @default 50
-			 */
-			limit?: number;
-			cursor?: string;
-		};
-		response: {
-			cursor?: string;
-			feed: RefOf<'app.bsky.feed.defs#skeletonFeedPost'>[];
-		};
-		errors: {
-			UnknownFeed: {};
-		};
-	};
-	/**
 	 * Backend Actors (profile) search, returns only skeleton.
 	 */
 	'app.bsky.unspecced.searchActorsSkeleton': {
@@ -1360,6 +1338,16 @@ export interface Queries {
 		response: {
 			cursor?: string;
 			repos: RefOf<'com.atproto.sync.listRepos#repo'>[];
+		};
+	};
+	/**
+	 * Check accounts location in signup queue.
+	 */
+	'com.atproto.temp.checkSignupQueue': {
+		response: {
+			activated: boolean;
+			placeInQueue?: number;
+			estimatedTimeMs?: number;
 		};
 	};
 	/**
@@ -2180,6 +2168,7 @@ export interface Objects {
 		| UnionOf<'app.bsky.actor.defs#personalDetailsPref'>
 		| UnionOf<'app.bsky.actor.defs#feedViewPref'>
 		| UnionOf<'app.bsky.actor.defs#threadViewPref'>
+		| UnionOf<'app.bsky.actor.defs#interestsPref'>
 	)[];
 	'app.bsky.actor.defs#adultContentPref': {
 		/**
@@ -2236,6 +2225,15 @@ export interface Objects {
 		 * Show followed users at the top of all replies.
 		 */
 		prioritizeFollowedUsers?: boolean;
+	};
+	'app.bsky.actor.defs#interestsPref': {
+		/**
+		 * A list of tags which describe the account owner's interests gathered during onboarding. \
+		 * Maximum array length: 100 \
+		 * Maximum string length: 640 \
+		 * Maximum grapheme length: 64
+		 */
+		tags: string[];
 	};
 	'app.bsky.embed.external': {
 		external: RefOf<'app.bsky.embed.external#external'>;
