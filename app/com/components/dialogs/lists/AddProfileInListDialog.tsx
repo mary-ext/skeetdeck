@@ -268,9 +268,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 
 											<div class="min-w-0 grow">
 												<p class="break-words text-sm font-bold">{list.name.value}</p>
-												<p class="text-sm text-muted-fg">
-													{renderListPurpose(list.purpose.value)}
-												</p>
+												<p class="text-sm text-muted-fg">{renderListPurpose(list.purpose.value)}</p>
 											</div>
 
 											<CheckIcon class={clsx([`text-xl text-accent`, index() === -1 && `invisible`])} />
