@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { type JSX, createSignal } from 'solid-js';
 
 import type { SearchPaneConfig } from '../../../globals/panes.ts';
 
@@ -40,35 +40,37 @@ const SearchPane = () => {
 
 	const { pane } = usePaneContext<SearchPaneConfig>();
 
-	return (
-		<>
-			<Pane>
-				<PaneHeader title={pane.query} subtitle="Search">
-					<button
-						title="Column settings"
-						onClick={() => setIsSettingsOpen(!isSettingsOpen())}
-						class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
-					>
-						<SettingsIcon class="place-self-center" />
-					</button>
-				</PaneHeader>
+	return [
+		<Pane>
+			<PaneHeader title={pane.query} subtitle="Search">
+				<button
+					title="Column settings"
+					onClick={() => setIsSettingsOpen(!isSettingsOpen())}
+					class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
+				>
+					<SettingsIcon class="place-self-center" />
+				</button>
+			</PaneHeader>
 
-				<PaneBody>
-					<TimelineList
-						uid={pane.uid}
-						params={{ type: 'search', query: augmentSearchQuery(pane.query, { did: pane.uid }) }}
-					/>
-				</PaneBody>
-			</Pane>
+			<PaneBody>
+				<TimelineList
+					uid={pane.uid}
+					params={{ type: 'search', query: augmentSearchQuery(pane.query, { did: pane.uid }) }}
+				/>
+			</PaneBody>
+		</Pane>,
 
-			{isSettingsOpen() && (
-				<PaneAside onClose={() => setIsSettingsOpen(false)}>
-					<SearchPaneSettings />
-					<GenericPaneSettings />
-				</PaneAside>
-			)}
-		</>
-	);
+		() => {
+			if (isSettingsOpen()) {
+				return (
+					<PaneAside onClose={() => setIsSettingsOpen(false)}>
+						<SearchPaneSettings />
+						<GenericPaneSettings />
+					</PaneAside>
+				);
+			}
+		},
+	] as unknown as JSX.Element;
 };
 
 export default SearchPane;

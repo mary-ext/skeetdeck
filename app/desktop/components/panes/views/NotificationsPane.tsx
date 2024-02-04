@@ -1,4 +1,4 @@
-import { For, Match, Switch, createEffect, createSignal } from 'solid-js';
+import { type JSX, For, Match, Switch, createEffect, createSignal } from 'solid-js';
 
 import {
 	type InfiniteData,
@@ -143,132 +143,134 @@ const NotificationsPane = () => {
 		return next;
 	}, 0 as const);
 
-	return (
-		<>
-			<Pane>
-				<PaneHeader title={pane.title || 'Notifications'}>
-					<button
-						title="Mark notifications as read"
-						onClick={() => read.mutate()}
-						disabled={
-							read.isPending ||
-							notifications.isLoading ||
-							notifications.isRefetching ||
-							!notifications.data?.pages[0].date
-						}
-						class={/* @once */ IconButton({ color: 'muted' })}
-					>
-						<CheckAllIcon />
-					</button>
+	return [
+		<Pane>
+			<PaneHeader title={pane.title || 'Notifications'}>
+				<button
+					title="Mark notifications as read"
+					onClick={() => read.mutate()}
+					disabled={
+						read.isPending ||
+						notifications.isLoading ||
+						notifications.isRefetching ||
+						!notifications.data?.pages[0].date
+					}
+					class={/* @once */ IconButton({ color: 'muted' })}
+				>
+					<CheckAllIcon />
+				</button>
 
-					<button
-						title="Column settings"
-						onClick={() => setIsSettingsOpen(!isSettingsOpen())}
-						class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
-					>
-						<SettingsIcon class="place-self-center" />
-					</button>
-				</PaneHeader>
+				<button
+					title="Column settings"
+					onClick={() => setIsSettingsOpen(!isSettingsOpen())}
+					class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
+				>
+					<SettingsIcon class="place-self-center" />
+				</button>
+			</PaneHeader>
 
-				<PaneBody>
-					<Switch>
-						<Match when={read.isPending || notifications.isRefetching}>
-							<div class="grid h-13 shrink-0 place-items-center border-b border-divider">
-								<CircularProgress />
+			<PaneBody>
+				<Switch>
+					<Match when={read.isPending || notifications.isRefetching}>
+						<div class="grid h-13 shrink-0 place-items-center border-b border-divider">
+							<CircularProgress />
+						</div>
+					</Match>
+
+					<Match when={!notifications.isLoading && isNotificationsStale(notifications.data, latest.data)}>
+						<button onClick={refetchNotifications} class={loadNewBtn}>
+							Show new notifications
+						</button>
+					</Match>
+				</Switch>
+
+				<div>
+					<For
+						each={(() => {
+							const mask = pane.mask;
+
+							return notifications.data?.pages
+								.flatMap((page) => page.slices)
+								.filter((slice) => {
+									const flag = REASONS[slice.type];
+									return flag !== undefined && (flag & mask) !== 0;
+								});
+						})()}
+						fallback={(() => {
+							if (!notifications.isLoading) {
+								return (
+									<div class="border-b border-divider p-4">
+										<p class="text-center text-sm text-muted-fg">Nothing here but crickets...</p>
+									</div>
+								);
+							}
+						})()}
+					>
+						{(slice) => {
+							return <Notification uid={pane.uid} data={slice} />;
+						}}
+					</For>
+				</div>
+
+				<Switch>
+					<Match when={notifications.isFetchingNextPage || notifications.isLoading}>
+						<div class="grid h-13 shrink-0 place-items-center">
+							<CircularProgress />
+						</div>
+					</Match>
+
+					<Match when={notifications.error}>
+						{(err) => (
+							<div class="flex flex-col items-center px-4 py-6 text-sm text-muted-fg">
+								<p>Something went wrong</p>
+								<p class="mb-4">{'' + err()}</p>
+
+								<button
+									onClick={() => {
+										if (notifications.isRefetchError || notifications.isLoadingError) {
+											notifications.refetch();
+										} else {
+											notifications.fetchNextPage();
+										}
+									}}
+									class={/* @once */ Button({ variant: 'primary' })}
+								>
+									Reload
+								</button>
 							</div>
-						</Match>
+						)}
+					</Match>
 
-						<Match when={!notifications.isLoading && isNotificationsStale(notifications.data, latest.data)}>
-							<button onClick={refetchNotifications} class={loadNewBtn}>
-								Show new notifications
-							</button>
-						</Match>
-					</Switch>
-
-					<div>
-						<For
-							each={(() => {
-								const mask = pane.mask;
-
-								return notifications.data?.pages
-									.flatMap((page) => page.slices)
-									.filter((slice) => {
-										const flag = REASONS[slice.type];
-										return flag !== undefined && (flag & mask) !== 0;
-									});
-							})()}
-							fallback={(() => {
-								if (!notifications.isLoading) {
-									return (
-										<div class="border-b border-divider p-4">
-											<p class="text-center text-sm text-muted-fg">Nothing here but crickets...</p>
-										</div>
-									);
-								}
-							})()}
+					<Match when={notifications.hasNextPage}>
+						<button
+							disabled={notifications.isRefetching}
+							onClick={() => notifications.fetchNextPage()}
+							class={loadMoreBtn}
 						>
-							{(slice) => {
-								return <Notification uid={pane.uid} data={slice} />;
-							}}
-						</For>
-					</div>
+							Show more notifications
+						</button>
+					</Match>
 
-					<Switch>
-						<Match when={notifications.isFetchingNextPage || notifications.isLoading}>
-							<div class="grid h-13 shrink-0 place-items-center">
-								<CircularProgress />
-							</div>
-						</Match>
+					<Match when={notifications.data}>
+						<div class="grid h-13 shrink-0 place-items-center">
+							<p class="text-sm text-muted-fg">End of list</p>
+						</div>
+					</Match>
+				</Switch>
+			</PaneBody>
+		</Pane>,
 
-						<Match when={notifications.error}>
-							{(err) => (
-								<div class="flex flex-col items-center px-4 py-6 text-sm text-muted-fg">
-									<p>Something went wrong</p>
-									<p class="mb-4">{'' + err()}</p>
-
-									<button
-										onClick={() => {
-											if (notifications.isRefetchError || notifications.isLoadingError) {
-												notifications.refetch();
-											} else {
-												notifications.fetchNextPage();
-											}
-										}}
-										class={/* @once */ Button({ variant: 'primary' })}
-									>
-										Reload
-									</button>
-								</div>
-							)}
-						</Match>
-
-						<Match when={notifications.hasNextPage}>
-							<button
-								disabled={notifications.isRefetching}
-								onClick={() => notifications.fetchNextPage()}
-								class={loadMoreBtn}
-							>
-								Show more notifications
-							</button>
-						</Match>
-
-						<Match when={notifications.data}>
-							<div class="grid h-13 shrink-0 place-items-center">
-								<p class="text-sm text-muted-fg">End of list</p>
-							</div>
-						</Match>
-					</Switch>
-				</PaneBody>
-			</Pane>
-
-			{isSettingsOpen() && (
-				<PaneAside onClose={() => setIsSettingsOpen(false)}>
-					<NotificationsPaneSettings />
-					<GenericPaneSettings />
-				</PaneAside>
-			)}
-		</>
-	);
+		() => {
+			if (isSettingsOpen()) {
+				return (
+					<PaneAside onClose={() => setIsSettingsOpen(false)}>
+						<NotificationsPaneSettings />
+						<GenericPaneSettings />
+					</PaneAside>
+				);
+			}
+		},
+	] as unknown as JSX.Element;
 };
 
 export default NotificationsPane;

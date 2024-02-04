@@ -1,4 +1,4 @@
-import { createMemo, createSignal } from 'solid-js';
+import { type JSX, createMemo, createSignal } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
@@ -51,31 +51,33 @@ const ThreadPane = () => {
 		};
 	});
 
-	return (
-		<>
-			<Pane>
-				<PaneHeader title="Thread">
-					<button
-						title="Column settings"
-						onClick={() => setIsSettingsOpen(!isSettingsOpen())}
-						class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
-					>
-						<SettingsIcon class="place-self-center" />
-					</button>
-				</PaneHeader>
+	return [
+		<Pane>
+			<PaneHeader title="Thread">
+				<button
+					title="Column settings"
+					onClick={() => setIsSettingsOpen(!isSettingsOpen())}
+					class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
+				>
+					<SettingsIcon class="place-self-center" />
+				</button>
+			</PaneHeader>
 
-				<PaneBody>
-					<ThreadView actor={pane.thread.actor} thread={thread} />
-				</PaneBody>
-			</Pane>
+			<PaneBody>
+				<ThreadView actor={pane.thread.actor} thread={thread} />
+			</PaneBody>
+		</Pane>,
 
-			{isSettingsOpen() && (
-				<PaneAside onClose={() => setIsSettingsOpen(false)}>
-					<GenericPaneSettings />
-				</PaneAside>
-			)}
-		</>
-	);
+		() => {
+			if (isSettingsOpen()) {
+				return (
+					<PaneAside onClose={() => setIsSettingsOpen(false)}>
+						<GenericPaneSettings />
+					</PaneAside>
+				);
+			}
+		},
+	] as unknown as JSX.Element;
 };
 
 export default ThreadPane;
