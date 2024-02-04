@@ -2,7 +2,7 @@
 	"type": "module",
 	"name": "@externdefs/bluesky-client",
 	"description": "Lightweight API client for Bluesky/AT Protocol",
-	"version": "0.3.12",
+	"version": "0.3.13",
 	"author": "externdefs",
 	"license": "MIT",
 	"repository": {
