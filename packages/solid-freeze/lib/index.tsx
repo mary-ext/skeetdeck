@@ -35,13 +35,15 @@ export const useSuspend = (freeze: () => boolean) => {
 export const Freeze = (props: FreezeProps) => {
 	const suspend = useSuspend(() => props.freeze);
 
-	return (
-		<Suspense
-			fallback={props.fallback}
-			// @ts-expect-error
-			children={[suspend, props.children]}
-		/>
-	);
+	return Suspense({
+		get fallback() {
+			return props.fallback;
+		},
+		// @ts-expect-error
+		get children() {
+			return [suspend, props.children];
+		},
+	});
 };
 
 export interface ShowFreezeProps {
