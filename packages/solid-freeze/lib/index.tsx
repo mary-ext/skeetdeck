@@ -1,4 +1,4 @@
-import { type JSX, Suspense, createMemo, createResource } from 'solid-js';
+import { type JSX, type Resource, Suspense, createMemo, createResource } from 'solid-js';
 
 export interface FreezeProps {
 	freeze: boolean;
@@ -10,7 +10,7 @@ type Deferred = Promise<undefined> & { r: (value: undefined) => void };
 
 const identity = <T,>(value: T): T => value;
 
-export const useSuspend = (freeze: () => boolean) => {
+export const useSuspend = (freeze: () => boolean): Resource<void> => {
 	const promise = createMemo((prev: Deferred | undefined) => {
 		if (freeze()) {
 			if (prev) {
