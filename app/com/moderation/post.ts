@@ -56,7 +56,7 @@ export const getPostModDecision = (post: SignalizedPost, opts: SharedPreferences
 };
 
 // Include image alt text as part of the text filters...
-const unwrapImageAlt = (embed: Post['embed']): string => {
+export const unwrapImageAlt = (embed: Post['embed']): string => {
 	let str = '';
 	let images: RefOf<'app.bsky.embed.images#viewImage'>[] | undefined;
 

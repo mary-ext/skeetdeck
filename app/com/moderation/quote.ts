@@ -14,6 +14,7 @@ import {
 import { PreferenceWarn } from '~/api/moderation/enums.ts';
 
 import { type SharedPreferencesObject, isProfileTempMuted } from '../components/SharedPreferences.tsx';
+import { unwrapImageAlt } from './post.ts';
 
 type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
 type PostRecord = Records['app.bsky.feed.post'];
@@ -30,7 +31,7 @@ export const getQuoteModDecision = (quote: EmbeddedPostRecord, opts: SharedPrefe
 		const { moderation, filters } = opts;
 
 		const labels = quote.labels;
-		const text = (quote.value as PostRecord).text;
+		const text = (quote.value as PostRecord).text + unwrapImageAlt(quote.embeds?.[0]);
 
 		const author = quote.author;
 		const viewer = author.viewer;
