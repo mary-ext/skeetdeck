@@ -1,9 +1,12 @@
 import { createSignal } from 'solid-js';
 import { render } from 'solid-js/web';
 
-import { createRouter } from '../lib';
+import { createRouter } from '../lib/index.tsx';
 
 import './styles.css';
+
+// `@types/dom-navigation` isn't declaring one.
+declare var navigation: Navigation;
 
 const HomeView = () => {
 	return (
@@ -41,6 +44,8 @@ const CounterView = () => {
 				<button onClick={() => setCount(count() - 1)}>Decrement</button>
 			</div>
 
+			<pre>{/* @once */ JSON.stringify(navigation.currentEntry!.getState())}</pre>
+
 			<div>
 				<button
 					onClick={() => {
@@ -55,6 +60,18 @@ const CounterView = () => {
 					}}
 				>
 					Replace about view
+				</button>
+
+				<button
+					onClick={() => {
+						navigation.updateCurrentEntry({
+							state: {
+								rand: Math.random(),
+							},
+						});
+					}}
+				>
+					Replace search params
 				</button>
 			</div>
 		</div>
@@ -118,4 +135,4 @@ const App = () => {
 	);
 };
 
-render(() => <App />, document.getElementById('root'));
+render(() => <App />, document.getElementById('root')!);

@@ -1,14 +1,6 @@
 /* @refresh reload */
 
-import {
-	type Component,
-	For,
-	createSignal,
-	createSelector,
-	createEffect,
-	createContext,
-	useContext,
-} from 'solid-js';
+import { type Component, For, createSignal, createSelector, createContext, useContext } from 'solid-js';
 
 import { Freeze } from '@pkg/solid-freeze';
 
@@ -35,17 +27,18 @@ export interface RouterOptions {
 
 export interface NavigateOptions {
 	replace?: boolean;
+	info?: unknown;
 	state?: unknown;
 }
 
 interface MatchedRoute {
-	key?: string;
+	id: string | undefined;
 	route: RouteDefinition;
 	params: Record<string, string>;
 }
 
 export interface MatchedRouteState extends MatchedRoute {
-	key: string;
+	id: string;
 }
 
 interface RouterState {
@@ -70,10 +63,10 @@ export const createRouter = (opts: RouterOptions) => {
 
 		const renderView = (matched: MatchedRouteState) => {
 			const Component = matched.route.component;
-			const key = matched.key;
+			const id = matched.id;
 
 			return (
-				<Freeze freeze={!isActive(key)}>
+				<Freeze freeze={!isActive(id)}>
 					<RouteContext.Provider value={matched}>
 						<Component />
 					</RouteContext.Provider>
@@ -123,15 +116,15 @@ export const createRouter = (opts: RouterOptions) => {
 
 			const params = match.groups!;
 
-			let key: string | undefined;
+			let id: string | undefined;
 			if (route.single) {
-				key = '@' + route.path;
+				id = '@' + route.path;
 				for (const param in params) {
-					key += '\0' + params[param];
+					id += '\0' + params[param];
 				}
 			}
 
-			return { key, route, params };
+			return { id, route, params };
 		}
 
 		return null;
@@ -146,14 +139,14 @@ export const createRouter = (opts: RouterOptions) => {
 		const matched = _matchRoute(pathname);
 
 		if (matched) {
-			const nextKey = matched.key || currentEntry.id;
+			const nextKey = matched.id || currentEntry.id;
 
 			const matchedState: MatchedRouteState = {
 				...matched,
-				key: nextKey,
+				id: nextKey,
 			};
 
-			const isSingle = !!matched.key;
+			const isSingle = !!matched.id;
 			const next: Record<string, MatchedRouteState> = { [nextKey]: matchedState };
 
 			setState({
@@ -207,14 +200,14 @@ export const createRouter = (opts: RouterOptions) => {
 		evt.intercept({
 			async handler() {
 				const nextEntry = navigation.currentEntry!;
-				const nextKey = matched.key || nextEntry.id;
+				const nextKey = matched.id || nextEntry.id;
 
 				const matchedState: MatchedRouteState = {
 					...matched,
-					key: nextKey,
+					id: nextKey,
 				};
 
-				if (!matched.key) {
+				if (!matched.id) {
 					if (type === 'push' || type === 'replace') {
 						views[nextKey] = matchedState;
 					} else if (type === 'traverse') {
