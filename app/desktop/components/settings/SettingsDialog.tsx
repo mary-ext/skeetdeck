@@ -36,7 +36,7 @@ import {
 } from './settings-views/_router.tsx';
 import SettingsRouterView from './settings-views/SettingsRouterView.tsx';
 
-const DONATION_LINK = 'https://github.com/mary-ext/langit/wiki/Donation';
+const DONATION_LINK = 'https://mary.my.id/donate.html';
 
 const SettingsDialog = () => {
 	const [view, setView] = createSignal<View>({ type: VIEW_ACCOUNTS });
