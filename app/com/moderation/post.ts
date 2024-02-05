@@ -1,5 +1,7 @@
 import { sequal } from '~/utils/dequal.ts';
 
+import type { RefOf } from '~/api/atp-schema.ts';
+
 import type { SignalizedPost } from '~/api/stores/posts.ts';
 
 import {
@@ -15,12 +17,14 @@ import { PreferenceWarn } from '~/api/moderation/enums.ts';
 
 import { type SharedPreferencesObject, isProfileTempMuted } from '../components/SharedPreferences.tsx';
 
+type Post = RefOf<'app.bsky.feed.defs#postView'>;
+
 type ModerationResult = { d: ModerationDecision | null; c: unknown[] };
 const cached = new WeakMap<SignalizedPost, ModerationResult>();
 
 export const getPostModDecision = (post: SignalizedPost, opts: SharedPreferencesObject) => {
 	const labels = post.labels.value;
-	const text = post.record.value.text;
+	const text = post.record.value.text + unwrapImageAlt(post.embed.value);
 
 	const author = post.author;
 	const viewer = author.viewer;
@@ -29,7 +33,7 @@ export const getPostModDecision = (post: SignalizedPost, opts: SharedPreferences
 	const isFollowing = viewer.following.value;
 	const isMuted = viewer.muted.value;
 
-	const key: unknown[] = [labels, text, isFollowing, isMuted, opts.rev];
+	const key: unknown[] = [opts.rev, labels, text, isFollowing, isMuted];
 
 	let res = cached.get(post);
 
@@ -47,4 +51,29 @@ export const getPostModDecision = (post: SignalizedPost, opts: SharedPreferences
 	}
 
 	return res.d;
+};
+
+// Include image alt text as part of the text filters...
+const unwrapImageAlt = (embed: Post['embed']): string => {
+	let str = '';
+	let images: RefOf<'app.bsky.embed.images#viewImage'>[] | undefined;
+
+	if (embed) {
+		if (embed.$type === 'app.bsky.embed.images#view') {
+			images = embed.images;
+		} else if (
+			embed.$type === 'app.bsky.embed.recordWithMedia#view' &&
+			embed.media.$type === 'app.bsky.embed.images#view'
+		) {
+			images = embed.media.images;
+		}
+	}
+
+	if (images) {
+		for (let i = 0, il = images.length; i < il; i++) {
+			str += ' ' + images[i].alt;
+		}
+	}
+
+	return str;
 };
