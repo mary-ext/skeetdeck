@@ -92,6 +92,11 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 						const value = ev.target.value;
 						start(() => setSearch(value));
 					}}
+					onKeyDown={(ev) => {
+						if (ev.key === 'Enter') {
+							ev.preventDefault();
+						}
+					}}
 				/>
 
 				<Flyout
