@@ -49,6 +49,14 @@ const CounterView = () => {
 			<div>
 				<button
 					onClick={() => {
+						navigate(Routes.COUNTER);
+					}}
+				>
+					Push counter view
+				</button>
+
+				<button
+					onClick={() => {
 						navigate(Routes.ABOUT);
 					}}
 				>
@@ -71,7 +79,7 @@ const CounterView = () => {
 						});
 					}}
 				>
-					Replace search params
+					Update current entry
 				</button>
 			</div>
 		</div>
