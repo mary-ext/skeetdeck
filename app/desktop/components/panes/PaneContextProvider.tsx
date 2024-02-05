@@ -89,13 +89,7 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 								},
 								disableBackdropClose: modal.disableBackdropClose,
 								close: () => {
-									const next = modals().slice();
-									const index = next.indexOf(modal);
-
-									if (index !== -1) {
-										next.splice(index, 1);
-										setModals(next);
-									}
+									setModals(modals().toSpliced(index(), 1));
 								},
 								reset: resetModals,
 							};

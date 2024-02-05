@@ -300,10 +300,7 @@ const removeItem = <T,>(array: T[], item: T): T[] => {
 	const index = array.indexOf(item);
 
 	if (index !== -1) {
-		const clone = array.slice();
-		clone.splice(index, 1);
-
-		return clone;
+		return array.toSpliced(index, 1);
 	}
 
 	return array;

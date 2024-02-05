@@ -41,24 +41,20 @@ export const createRadioModel = <T>(getter: Accessor<T>, setter: (next: T) => vo
 export const createMultipleChoiceModel = <T>(getter: Accessor<T[]>, setter: (next: T[]) => void) => {
 	return (value: T) => {
 		return (node: HTMLInputElement) => {
+			const n = node as typeof node & { _idx: number };
+
 			createEffect(() => {
-				node.checked = getter().includes(value);
+				n.checked = (n._idx = getter().indexOf(value)) !== -1;
 			});
 
 			node.addEventListener('input', () => {
-				const next = node.checked;
-				const array = getter().slice();
+				const index = n._idx;
+				const array = getter();
 
-				if (next) {
-					array.push(value);
-					setter(array);
+				if (index === -1) {
+					setter([...array, value]);
 				} else {
-					const index = array.indexOf(value);
-
-					if (index !== -1) {
-						array.splice(index, 1);
-						setter(array);
-					}
+					setter(array.toSpliced(index, 1));
 				}
 			});
 		};

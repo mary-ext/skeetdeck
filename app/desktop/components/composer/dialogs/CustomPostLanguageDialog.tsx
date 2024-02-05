@@ -76,10 +76,7 @@ const CustomPostLanguageDialog = (props: CustomPostLanguageDialogProps) => {
 								<button
 									title={`Remove this language`}
 									onClick={() => {
-										const next = languages().slice();
-										next.splice(index(), 1);
-
-										setLanguages(next);
+										setLanguages(languages().toSpliced(index(), 1));
 									}}
 									class={/* @once */ IconButton({ edge: 'right' })}
 								>

@@ -50,10 +50,8 @@ export const MetaProvider = (props: MetaProviderProps) => {
 
 			// 2. Add a cleanup that would remove our node on unmount
 			onCleanup(() => {
-				const next = titles().slice();
-
-				next.splice(next.indexOf(node), 1);
-				setTitles(next);
+				const array = titles();
+				setTitles(array.toSpliced(array.indexOf(node), 1));
 			});
 		},
 	};

@@ -252,15 +252,13 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 											aria-pressed={index() !== -1}
 											onClick={() => {
 												const $index = index();
-												const $listUris = listUris().slice();
+												const $listUris = listUris();
 
 												if ($index === -1) {
-													$listUris.push(listUri);
+													setListUris([...$listUris, listUri]);
 												} else {
-													$listUris.splice($index, 1);
+													setListUris($listUris.toSpliced($index, 1));
 												}
-
-												setListUris($listUris);
 											}}
 											class={listItem}
 										>

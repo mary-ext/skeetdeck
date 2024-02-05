@@ -182,10 +182,7 @@ const KeywordFilterFormView = () => {
 									type="button"
 									title="Remove this phrase"
 									onClick={() => {
-										const next = matchers().slice();
-										next.splice(index(), 1);
-
-										setMatchers(next);
+										setMatchers(matchers().toSpliced(index(), 1));
 									}}
 									class={/* @once */ Button({ variant: 'outline' })}
 								>
