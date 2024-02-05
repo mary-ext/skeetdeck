@@ -11,7 +11,7 @@ import { updatePostLike } from '~/api/mutations/like-post.ts';
 import { getProfileModDecision } from '../../moderation/profile.ts';
 
 import { formatCompact } from '~/utils/intl/number.ts';
-import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
+import { isElementClicked } from '~/utils/interaction.ts';
 import { clsx } from '~/utils/misc.ts';
 
 import {
@@ -77,15 +77,13 @@ const Post = (props: PostProps) => {
 			return;
 		}
 
-		const alt = isElementAltClicked(ev);
-		linking.navigate(postPermalink, alt);
+		linking.navigate(postPermalink);
 	};
 
 	return (
 		<div
 			tabindex={props.interactive ? 0 : undefined}
 			onClick={handleClick}
-			onAuxClick={handleClick}
 			onKeyDown={handleClick}
 			class={clsx([
 				`relative border-divider px-4 outline-2 -outline-offset-2 outline-primary focus-visible:outline`,
