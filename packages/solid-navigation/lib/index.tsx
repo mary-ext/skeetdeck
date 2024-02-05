@@ -173,6 +173,11 @@ export const createRouter = (opts: RouterOptions) => {
 
 		const type = evt.navigationType;
 
+		if (type === 'push' && destination.url === currentEntry.url) {
+			evt.preventDefault();
+			return;
+		}
+
 		const url = new URL(destination.url);
 		const pathname = url.pathname;
 
