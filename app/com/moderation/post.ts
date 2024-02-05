@@ -24,7 +24,6 @@ const cached = new WeakMap<SignalizedPost, ModerationResult>();
 
 export const getPostModDecision = (post: SignalizedPost, opts: SharedPreferencesObject) => {
 	const labels = post.labels.value;
-	const text = post.record.value.text + unwrapImageAlt(post.embed.value);
 
 	const author = post.author;
 	const viewer = author.viewer;
@@ -33,7 +32,7 @@ export const getPostModDecision = (post: SignalizedPost, opts: SharedPreferences
 	const isFollowing = viewer.following.value;
 	const isMuted = viewer.muted.value;
 
-	const key: unknown[] = [opts.rev, labels, text, isFollowing, isMuted];
+	const key: unknown[] = [opts.rev, labels, isFollowing, isMuted];
 
 	let res = cached.get(post);
 
@@ -41,6 +40,9 @@ export const getPostModDecision = (post: SignalizedPost, opts: SharedPreferences
 		const { moderation, filters } = opts;
 
 		const accu: ModerationCause[] = [];
+
+		// Text and image alt generally doesn't change, so we're putting it inside.
+		const text = post.record.value.text + unwrapImageAlt(post.embed.value);
 
 		decideLabelModeration(accu, labels, authorDid, moderation);
 		decideMutedPermanentModeration(accu, isMuted);
