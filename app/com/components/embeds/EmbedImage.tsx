@@ -53,10 +53,8 @@ const EmbedImage = (props: EmbedImageProps) => {
 		// simplified ratios instead.
 
 		// so what we'll do here is to just have an empty <div> sized to the device
-		// screen width and height, and then remove it after the image has loaded.
-		// there's theoretically no issue with keeping the <div> around though.
-
-		let placeholder: HTMLDivElement | undefined;
+		// screen width and height. there's no issue with keeping the <div> around,
+		// so we'll do just that.
 
 		let cn: string | undefined;
 		let ratio: string | undefined;
@@ -80,12 +78,6 @@ const EmbedImage = (props: EmbedImageProps) => {
 							openModal(() => <LazyImageViewerDialog images={images()} active={index} />);
 						}
 					}}
-					onLoad={() => {
-						if (placeholder) {
-							placeholder.remove();
-							placeholder = undefined;
-						}
-					}}
 					class={clsx([
 						`h-full w-full object-cover text-[0px]`,
 						interactive && `cursor-pointer`,
@@ -93,7 +85,7 @@ const EmbedImage = (props: EmbedImageProps) => {
 					])}
 				/>
 
-				{mode === RenderMode.STANDALONE_RATIO && <div ref={placeholder} class="h-screen w-screen"></div>}
+				{mode === RenderMode.STANDALONE_RATIO && <div class="h-screen w-screen"></div>}
 
 				{interactive && alt && (
 					<ImageAltAction alt={alt}>
