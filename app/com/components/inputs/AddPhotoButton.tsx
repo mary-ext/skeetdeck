@@ -36,7 +36,7 @@ const buttonOffset: Middleware = {
 
 		return {
 			x: x,
-			y: y - reference.height * 0.25 * multi,
+			y: y + 9 + 4 - reference.height * 0.5 * multi,
 		};
 	},
 };
@@ -108,18 +108,20 @@ const AddPhotoButton = (props: AddPhotoButtonProps) => {
 
 			const buttonClass = Interactive({
 				variant: 'white',
-				class: `absolute left-1/2 top-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-black/50 text-lg text-white backdrop-blur disabled:opacity-50`,
+				class: `grid h-10 w-10 place-items-center rounded-full bg-black/50 text-lg text-white backdrop-blur disabled:opacity-50`,
 			});
 
 			const button = (
-				<button
-					type="button"
-					title={props.title}
-					onClick={!shouldDisplayFlyout ? handleButtonClick : undefined}
-					class={buttonClass}
-				>
-					<AddPhotoAlternateIcon class="drop-shadow" />
-				</button>
+				<label class="absolute inset-0 grid place-items-center">
+					<button
+						type="button"
+						title={props.title}
+						onClick={!shouldDisplayFlyout ? handleButtonClick : undefined}
+						class={buttonClass}
+					>
+						<AddPhotoAlternateIcon class="drop-shadow" />
+					</button>
+				</label>
 			);
 
 			if (shouldDisplayFlyout) {
