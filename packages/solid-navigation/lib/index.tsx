@@ -118,7 +118,7 @@ export const createRouter = (opts: RouterOptions) => {
 
 			let id: string | undefined;
 			if (route.single) {
-				id = '@' + route.path;
+				id = '@' + idx;
 				for (const param in params) {
 					id += '\0' + params[param];
 				}
