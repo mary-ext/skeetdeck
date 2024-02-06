@@ -5,8 +5,9 @@ import { getSide } from '@floating-ui/utils';
 
 import { compressProfileImage } from '~/utils/image.ts';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '../../globals/modals.tsx';
 
+import { Interactive } from '../../primitives/interactive.ts';
 import { MenuItem, MenuRoot } from '../../primitives/menu.ts';
 
 import { Flyout, offsetlessMiddlewares } from '../Flyout.tsx';
@@ -105,14 +106,19 @@ const AddPhotoButton = (props: AddPhotoButtonProps) => {
 
 			const shouldDisplayFlyout = isDesktop && exists;
 
+			const buttonClass = Interactive({
+				variant: 'white',
+				class: `absolute left-1/2 top-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-black/50 text-lg text-white backdrop-blur disabled:opacity-50`,
+			});
+
 			const button = (
 				<button
 					type="button"
 					title={props.title}
 					onClick={!shouldDisplayFlyout ? handleButtonClick : undefined}
-					class="absolute inset-0 grid w-full place-items-center bg-black/80 opacity-0 hover:opacity-100 focus-visible:opacity-100 disabled:pointer-events-none"
+					class={buttonClass}
 				>
-					<AddPhotoAlternateIcon class="text-2xl" />
+					<AddPhotoAlternateIcon class="drop-shadow" />
 				</button>
 			);
 
