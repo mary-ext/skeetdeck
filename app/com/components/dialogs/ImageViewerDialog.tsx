@@ -27,11 +27,11 @@ export interface ImageViewerDialogProps {
 }
 
 const iconButton = Interactive({
-	class: `grid h-8 w-8 place-items-center rounded-full bg-black/50 text-base text-white backdrop-blur`,
+	class: `pointer-events-auto grid h-8 w-8 place-items-center rounded-full bg-black/50 text-base text-white backdrop-blur`,
 });
 
 const altButton = Interactive({
-	class: `group flex h-8 place-items-center rounded-full bg-black/50 px-2 text-base text-white backdrop-blur`,
+	class: `group pointer-events-auto flex h-8 place-items-center rounded-full bg-black/50 px-2 text-base text-white backdrop-blur`,
 });
 
 const ImageViewerDialog = (props: ImageViewerDialogProps) => {
@@ -75,14 +75,6 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 				onActiveChange={setActive}
 				onClose={() => closeModal()}
 			/>
-
-			{images().length > 1 && (
-				<div class="pointer-events-none absolute bottom-0 right-0 p-4">
-					<div class="rounded-full bg-black/50 px-2 py-0.5 text-de font-medium text-white backdrop-blur">
-						<span class="drop-shadow">{`${active() + 1} of ${images().length}`}</span>
-					</div>
-				</div>
-			)}
 
 			{(() => {
 				if (isFine()) {
@@ -132,7 +124,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 				}
 			})()}
 
-			<div class="fixed left-2.5 top-2.5 z-20 flex gap-2">
+			<div class="pointer-events-none fixed inset-x-0 top-0 z-20 flex h-13 items-center gap-2 px-2">
 				<button
 					title="Close viewer"
 					onClick={() => {
@@ -153,6 +145,14 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 						<VisibilityOffIcon class="drop-shadow group-[.is-active]:hidden" />
 						<VisibilityIcon class="hidden drop-shadow group-[.is-active]:block" />
 					</button>
+				)}
+
+				<div class="grow"></div>
+
+				{images().length > 1 && (
+					<div class="rounded-full bg-black/50 px-2 py-0.5 text-de font-medium text-white backdrop-blur">
+						<span class="drop-shadow">{`${active() + 1} of ${images().length}`}</span>
+					</div>
 				)}
 			</div>
 		</>
