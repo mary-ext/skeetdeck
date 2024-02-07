@@ -62,7 +62,7 @@ export const TabbedPanel = <T extends string | number>(props: TabbedPanelProps<T
 			{!props.hideTabs && (
 				<div
 					class={clsx([
-						`box-content flex shrink-0 overflow-x-auto border-b border-divider`,
+						`flex shrink-0 overflow-x-auto border-b border-divider`,
 						!props.dense ? `h-13` : `h-10`,
 					])}
 				>
