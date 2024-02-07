@@ -99,7 +99,7 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 					<div class="flex items-center overflow-hidden text-sm text-muted-fg">
 						<Link
 							to={authorPermalink}
-							class="group flex max-w-full gap-1 overflow-hidden text-ellipsis whitespace-nowrap text-left"
+							class="group flex max-w-full gap-1 overflow-hidden text-ellipsis whitespace-nowrap"
 						>
 							{(() => {
 								const displayName = author.displayName.value;

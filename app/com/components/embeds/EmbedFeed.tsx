@@ -23,7 +23,7 @@ export const EmbedFeedContent = (props: EmbedFeedProps) => {
 		const creator = feed.creator;
 
 		return (
-			<div class="flex gap-3 rounded-md border border-divider p-3 text-left text-sm">
+			<div class="flex gap-3 rounded-md border border-divider p-3 text-sm">
 				<img
 					src={/* @once */ feed.avatar || DefaultFeedAvatar}
 					class="mt-0.5 h-9 w-9 rounded-md object-cover"

@@ -1,6 +1,6 @@
 import { type JSX, lazy, batch } from 'solid-js';
 
-import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
+import { isCtrlKeyPressed, isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
 
 import { openModal } from '~/com/globals/modals.tsx';
 
@@ -98,7 +98,7 @@ export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {
 			return (() => {
 				const to = props.to;
 
-				if (to.type === LINK_EXTERNAL && !props.disabled) {
+				if (to.type === LINK_EXTERNAL) {
 					const url = to.url;
 					const valid = to.valid;
 
@@ -117,14 +117,27 @@ export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {
 				}
 
 				return (
-					// @ts-expect-error
-					<button {...props} to={null} onClick={() => navigate(props.to, false)} />
+					<span
+						role="button"
+						tabindex={0}
+						{...props}
+						// @ts-expect-error
+						to={null}
+						onClick={(ev) => navigate(to, isCtrlKeyPressed(ev))}
+						onAuxClick={(ev) => ev.button === 1 && navigate(to, true)}
+						onKeyDown={(ev) => isEnterPressed(ev) && navigate(to, isCtrlKeyPressed(ev))}
+					/>
 				);
 			}) as unknown as JSX.Element;
 		},
 	};
 
 	return <LinkingContext.Provider value={linkContext}>{props.children}</LinkingContext.Provider>;
+};
+
+const isEnterPressed = (ev: KeyboardEvent) => {
+	const key = ev.key;
+	return key === 'Enter' || key === 'Space';
 };
 
 interface InvalidAnchorElement extends HTMLAnchorElement {

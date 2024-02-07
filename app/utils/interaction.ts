@@ -1,9 +1,9 @@
 export const isMac = /^Mac/i.test(navigator.platform);
 
-const EXCLUDED_TAGS = ['a', 'button', 'img', 'video', 'dialog'];
-export const INTERACTION_TAGS = ['a', 'button'];
+const DEFAULT_EXCLUSION = 'a, button, img, video, dialog, [role=button]';
+export const INTERACTION_TAGS = 'a, button, [role=button]';
 
-export const isElementClicked = (ev: Event, excludedTags: string[] = EXCLUDED_TAGS) => {
+export const isElementClicked = (ev: Event, exclusion = DEFAULT_EXCLUSION) => {
 	const target = ev.currentTarget as HTMLElement;
 	const path = ev.composedPath() as HTMLElement[];
 
@@ -17,13 +17,12 @@ export const isElementClicked = (ev: Event, excludedTags: string[] = EXCLUDED_TA
 
 	for (let idx = 0, len = path.length; idx < len; idx++) {
 		const node = path[idx];
-		const tag = node.localName;
 
 		if (node == target) {
 			break;
 		}
 
-		if (excludedTags.includes(tag)) {
+		if (node.matches(exclusion)) {
 			return false;
 		}
 	}

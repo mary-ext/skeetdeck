@@ -22,7 +22,7 @@ const ListItemContent = (props: ListItemProps) => {
 		const list = props.list;
 
 		return (
-			<div class="flex gap-3 px-4 py-3 text-left">
+			<div class="flex gap-3 px-4 py-3">
 				<img src={list.avatar.value || DefaultListAvatar} class="h-12 w-12 shrink-0 rounded-md" />
 
 				<div class="flex min-w-0 grow flex-col gap-1">

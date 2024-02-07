@@ -225,7 +225,7 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 								to={{ type: LINK_PROFILE, actor: did }}
 								class={
 									/* @once */ Interactive({
-										class: `-m-1 flex min-w-0 items-center rounded p-1 text-left text-sm`,
+										class: `-m-1 flex min-w-0 items-center rounded p-1 text-sm`,
 									})
 								}
 							>
@@ -271,7 +271,7 @@ const renderText = (data: FollowNotificationSlice | LikeNotificationSlice | Repo
 			<Link
 				to={{ type: LINK_PROFILE, actor: author.did }}
 				dir="auto"
-				class="inline-block overflow-hidden text-left align-top font-bold hover:underline"
+				class="inline-block overflow-hidden align-top font-bold hover:underline"
 			>
 				{author.displayName?.trim() || `@${author.handle}`}
 			</Link>,

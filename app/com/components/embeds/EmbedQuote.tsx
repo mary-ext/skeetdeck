@@ -68,7 +68,7 @@ export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: b
 			<div
 				class={
 					/* @once */ clsx([
-						`overflow-hidden rounded-md border border-divider text-left`,
+						`overflow-hidden rounded-md border border-divider`,
 						interactive && `hover:bg-secondary/10`,
 					])
 				}

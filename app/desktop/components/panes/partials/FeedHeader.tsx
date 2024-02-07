@@ -73,7 +73,7 @@ const FeedHeader = (props: FeedHeaderProps) => {
 
 							<Link
 								to={/* @once */ { type: LINK_PROFILE, actor: creator.did }}
-								class="group mt-1 flex items-center text-left"
+								class="group mt-1 flex items-center"
 							>
 								<img src={creator.avatar.value || DefaultUserAvatar} class="mr-2 h-5 w-5 rounded-full" />
 								<span class="mr-1 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold empty:hidden group-hover:underline">
@@ -97,7 +97,7 @@ const FeedHeader = (props: FeedHeaderProps) => {
 
 					<Link
 						to={{ type: LINK_FEED_LIKED_BY, actor: creator.did, rkey: getRecordId(feed.uri) }}
-						class="text-left text-sm text-muted-fg hover:underline"
+						class="text-sm text-muted-fg hover:underline"
 					>
 						Liked by {formatCompact(feed.likeCount.value)} users
 					</Link>
