@@ -25,15 +25,9 @@ export interface RouterOptions {
 	routes: RouteDefinition[];
 }
 
-export interface NavigateOptions {
-	replace?: boolean;
-	info?: unknown;
-	state?: unknown;
-}
-
 interface MatchedRoute {
 	id: string | undefined;
-	route: RouteDefinition;
+	def: RouteDefinition;
 	params: Record<string, string>;
 }
 
@@ -62,7 +56,7 @@ export const createRouter = (opts: RouterOptions) => {
 		const isActive = createSelector(() => state().active);
 
 		const renderView = (matched: MatchedRouteState) => {
-			const Component = matched.route.component;
+			const Component = matched.def.component;
 			const id = matched.id;
 
 			return (
@@ -80,10 +74,6 @@ export const createRouter = (opts: RouterOptions) => {
 				<For each={Object.values(state().singles)}>{renderView}</For>
 			</>
 		);
-	};
-
-	const navigate = (to: string, options?: NavigateOptions) => {
-		return navigation.navigate(to, { history: options?.replace ? 'replace' : 'push', state: options?.state });
 	};
 
 	const getMatchedRoute = () => {
@@ -124,7 +114,7 @@ export const createRouter = (opts: RouterOptions) => {
 				}
 			}
 
-			return { id, route, params };
+			return { id: id, def: route, params: params };
 		}
 
 		return null;
@@ -237,27 +227,23 @@ export const createRouter = (opts: RouterOptions) => {
 	// 	console.log(state());
 	// });
 
-	return { RouterView, getMatchedRoute, navigate, useParams };
+	return { RouterView, getMatchedRoute, useParams };
 };
 
-const PATTERN_RE = /(:([\w]+))/g;
+const buildPathRegex = (path: string) => {
+	let source =
+		'^' +
+		path
+			.replace(/\/*\*?$/, '')
+			.replace(/^\/*/, '/')
+			.replace(/[\\.*+^${}|()[\]]/g, '\\$&')
+			.replace(/\/:([\w-]+)(\?)?/g, '/$2(?<$1>[^\\/]+)$2');
 
-const buildPathRegex = (pattern: string) => {
-	const splat = pattern.split(PATTERN_RE);
+	source += path.endsWith('*')
+		? path === '*' || path === '/*'
+			? '(?<$>.*)$'
+			: '(?:\\/(?<$>.+)|\\/*)$'
+		: '(?:(?=\\/|$))';
 
-	let re = escapeRegex(splat[0]);
-	for (let idx = 1, len = splat.length; idx < len; idx += 3) {
-		const name = splat[idx + 1];
-		const rest = splat[idx + 2];
-
-		re += `(?<${name})${escapeRegex(rest)}`;
-	}
-
-	return new RegExp(`^${re}$`, 'i');
-};
-
-const ESCAPE_RE = /[.*+?^${}()|[\]\\]/g;
-
-const escapeRegex = (str: string) => {
-	return str.replace(ESCAPE_RE, '\\$&');
+	return new RegExp(source, 'i');
 };

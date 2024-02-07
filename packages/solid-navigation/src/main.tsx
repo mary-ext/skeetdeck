@@ -8,6 +8,20 @@ import './styles.css';
 // `@types/dom-navigation` isn't declaring one.
 declare var navigation: Navigation;
 
+interface NavigateOptions {
+	replace?: boolean;
+	info?: unknown;
+	state?: unknown;
+}
+
+const navigate = (to: string, options?: NavigateOptions) => {
+	return navigation.navigate(to, {
+		history: options?.replace ? 'replace' : 'push',
+		state: options?.state,
+		info: options?.info,
+	});
+};
+
 const HomeView = () => {
 	return (
 		<div class="home-view">
@@ -117,7 +131,7 @@ const Routes = {
 	ABOUT: '/about',
 };
 
-const { RouterView, navigate } = createRouter({
+const { RouterView } = createRouter({
 	routes: [
 		{
 			path: Routes.HOME,
