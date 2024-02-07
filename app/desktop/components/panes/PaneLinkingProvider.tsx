@@ -30,7 +30,7 @@ import { usePaneContext } from './PaneContext.tsx';
 
 const LinkWarningDialog = lazy(() => import('~/com/components/dialogs/LinkWarningDialog.tsx'));
 
-export interface PaneLinkingContextProps {
+export interface PaneLinkingProviderProps {
 	children: JSX.Element;
 }
 
@@ -49,7 +49,7 @@ const PaneDialogs = {
 	[LINK_PROFILE_LISTS]: lazy(() => import('./dialogs/ProfileListsPaneDialog.tsx')),
 };
 
-export const PaneLinkingContextProvider = (props: PaneLinkingContextProps) => {
+export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {
 	const { pane, openModal } = usePaneContext();
 	const composer = useComposer();
 

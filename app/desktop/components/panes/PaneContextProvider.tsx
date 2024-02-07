@@ -9,7 +9,7 @@ import CircularProgress from '~/com/components/CircularProgress.tsx';
 
 import type { BasePaneConfig, DeckConfig } from '../../globals/panes.ts';
 
-import { PaneLinkingContextProvider } from './PaneLinkingContext.tsx';
+import { PaneLinkingProvider } from './PaneLinkingProvider.tsx';
 
 import {
 	type PaneContextObject,
@@ -67,7 +67,7 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 
 	return (
 		<PaneContext.Provider value={paneContext}>
-			<PaneLinkingContextProvider>
+			<PaneLinkingProvider>
 				<div
 					ref={sortable.ref}
 					class={clsx([
@@ -120,7 +120,7 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 						}}
 					</For>
 				</div>
-			</PaneLinkingContextProvider>
+			</PaneLinkingProvider>
 		</PaneContext.Provider>
 	);
 };
