@@ -4,8 +4,6 @@ import { isLinkValid } from '~/api/richtext/renderer.ts';
 import { segmentRichText } from '~/api/richtext/segmentize.ts';
 import type { Facet, RichTextSegment } from '~/api/richtext/types.ts';
 
-import { isCtrlKeyPressed } from '~/utils/interaction.ts';
-
 import { type Linking, LINK_EXTERNAL, LINK_PROFILE, LINK_TAG, useLinking } from './Link.tsx';
 
 export interface RichTextReturn {
@@ -46,31 +44,6 @@ const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => 
 		return [{ text: text, to: undefined }];
 	});
 
-	const navigateLink = (ev: MouseEvent | KeyboardEvent) => {
-		const enum ShouldLink {
-			NO,
-			YES,
-			WITH_ALT,
-		}
-
-		let nav = ShouldLink.NO;
-
-		if (ev instanceof MouseEvent) {
-			nav = isCtrlKeyPressed(ev) || ev.button === 1 ? ShouldLink.WITH_ALT : ShouldLink.YES;
-		} else if (ev instanceof KeyboardEvent && ev.key === 'Enter') {
-			nav = isCtrlKeyPressed(ev) ? ShouldLink.WITH_ALT : ShouldLink.YES;
-		}
-
-		if (nav !== ShouldLink.NO) {
-			const target = ev.currentTarget as any;
-			const to = target.$to as Linking | undefined;
-
-			if (to) {
-				linking.navigate(to, nav === ShouldLink.WITH_ALT);
-			}
-		}
-	};
-
 	const render = () => {
 		const ui = segments();
 		const nodes: JSX.Element = [];
@@ -79,32 +52,11 @@ const RichTextRenderer = <T extends object>(props: RichTextRendererProps<T>) => 
 			const { text, to } = ui[idx];
 
 			if (to) {
-				let link: JSX.Element;
-
-				// @todo: should probably stop using <button> on PaneLinkingContext
-				// because it hasn't been fun smoothing out the differences between <a>
-				// and <button> elements, let's just use <span> instead?
-				if (import.meta.env.VITE_MODE === 'desktop' && to.type !== LINK_EXTERNAL) {
-					link = (
-						<a
-							role="link"
-							tabindex={0}
-							// @ts-expect-error
-							prop:$to={to}
-							onClick={navigateLink}
-							onKeyDown={navigateLink}
-							class="cursor-pointer text-accent hover:underline"
-						>
-							{text}
-						</a>
-					);
-				} else {
-					link = linking.render({
-						to: to,
-						children: text,
-						class: 'text-accent hover:underline',
-					});
-				}
+				const link: JSX.Element = linking.render({
+					to: to,
+					children: text,
+					class: 'text-accent hover:underline',
+				});
 
 				nodes.push(link);
 			} else {
