@@ -7,6 +7,8 @@ import { getProfileModDecision } from '../../moderation/profile.ts';
 import { INTERACTION_TAGS, isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
 import { clsx } from '~/utils/misc.ts';
 
+import { Interactive } from '../../primitives/interactive.ts';
+
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 
 import ProfileFollowButton from '../ProfileFollowButton.tsx';
@@ -26,6 +28,12 @@ export interface ProfileItemProps {
 	/** Expected to be static */
 	onClick?: (profile: SignalizedProfile, alt: boolean, ev: Event) => void;
 }
+
+const profileItem = Interactive({
+	variant: 'muted',
+	class: `flex gap-3 px-4 py-3`,
+	userSelect: true,
+});
 
 export const ProfileItem = (props: ProfileItemProps) => {
 	const profile = () => props.profile;
@@ -50,12 +58,12 @@ export const ProfileItem = (props: ProfileItemProps) => {
 
 	return (
 		<div
+			role="button"
 			onClick={onClick && handleClick}
 			onAuxClick={onClick && handleClick}
 			onKeyDown={onClick && handleClick}
-			role="button"
 			tabindex={0}
-			class="flex gap-3 px-4 py-3 hover:bg-secondary/10"
+			class={profileItem}
 		>
 			<div class="relative shrink-0">
 				<div class="h-12 w-12 overflow-hidden rounded-full">
