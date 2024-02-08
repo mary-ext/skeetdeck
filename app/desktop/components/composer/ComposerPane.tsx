@@ -93,7 +93,7 @@ const MAX_EXTERNAL_TAGS_LIMIT = 8;
 const toolbarIcon = IconButton({ size: 'lg', class: 'text-primary/85 hover:text-primary' });
 
 const removeEmbedBtn = Interactive({
-	variant: 'none',
+	variant: 'white',
 	class: `absolute right-1 top-1 z-20 grid h-7 w-7 place-items-center rounded-full bg-background text-base text-primary hover:bg-secondary disabled:opacity-50`,
 });
 
