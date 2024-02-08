@@ -162,6 +162,7 @@ const ComposerPane = () => {
 			queryKey: key,
 			queryFn: getPost,
 			initialData: () => getInitialPost(key),
+			initialDataUpdatedAt: 0,
 		};
 	});
 
