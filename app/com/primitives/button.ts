@@ -7,7 +7,7 @@ export interface ButtonProps {
 export const Button = (props: ButtonProps = {}) => {
 	const { class: className, size = 'sm', variant = 'outline' } = props;
 
-	let cn = `inline-flex items-center rounded-md text-sm font-medium outline-2 -outline-offset-1 outline-primary focus-visible:outline disabled:pointer-events-none disabled:opacity-50`;
+	let cn = `inline-flex select-none items-center rounded-md text-sm font-medium outline-2 -outline-offset-1 outline-primary focus-visible:outline disabled:pointer-events-none disabled:opacity-50`;
 
 	if (size === 'xs') {
 		cn += ` h-8 px-4 leading-none`;
