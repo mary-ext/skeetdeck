@@ -268,10 +268,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 							}
 
 							children.push(
-								<Link
-									to={{ type: LINK_LIST, actor: actor, rkey: rkey }}
-									class="font-bold hover:underline"
-								>
+								<Link to={{ type: LINK_LIST, actor: actor, rkey: rkey }} class="font-bold hover:underline">
 									{/* @once */ list.name}
 								</Link>,
 							);

@@ -23,9 +23,7 @@ const FeedItemContent = (props: FeedItemProps, interactive?: boolean) => {
 		const feed = props.feed;
 
 		return (
-			<div
-				class={/* @once */ clsx([`flex gap-3 px-4 py-3`, interactive && `hover:bg-secondary/10`])}
-			>
+			<div class={/* @once */ clsx([`flex gap-3 px-4 py-3`, interactive && `hover:bg-secondary/10`])}>
 				<img src={feed.avatar.value || DefaultFeedAvatar} class="h-12 w-12 shrink-0 rounded-md" />
 
 				<div class="flex min-w-0 grow flex-col gap-1">
