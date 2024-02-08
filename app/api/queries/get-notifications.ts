@@ -1,8 +1,9 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
 import type { DID, RefOf } from '../atp-schema.ts';
-
 import { multiagent } from '../globals/agent.ts';
+
+import { wrapInfiniteQuery } from '../utils/query.ts';
 
 import { type NotificationSlice, createNotificationSlices } from '../models/notifications.ts';
 
@@ -44,56 +45,56 @@ const MAX_ATTEMPTS = 3;
 export const getNotificationsKey = (uid: DID, limit: number = 25) => {
 	return ['getNotifications', uid, limit] as const;
 };
-export const getNotifications = async (
-	ctx: QC<ReturnType<typeof getNotificationsKey>, string | null | undefined>,
-) => {
-	const [, uid, limit] = ctx.queryKey;
+export const getNotifications = wrapInfiniteQuery(
+	async (ctx: QC<ReturnType<typeof getNotificationsKey>, string | null | undefined>) => {
+		const [, uid, limit] = ctx.queryKey;
 
-	const agent = await multiagent.connect(uid);
+		const agent = await multiagent.connect(uid);
 
-	let attempts = 0;
+		let attempts = 0;
 
-	let cursor: string | null | undefined = ctx.pageParam;
-	let items: Notification[] = [];
+		let cursor: string | null | undefined = ctx.pageParam;
+		let items: Notification[] = [];
 
-	let slices: NotificationSlice[];
-	let cid: string | undefined;
-	let date: string | undefined;
+		let slices: NotificationSlice[];
+		let cid: string | undefined;
+		let date: string | undefined;
 
-	while (true) {
-		slices = createNotificationSlices(items);
+		while (true) {
+			slices = createNotificationSlices(items);
 
-		// Give up after several attempts, or if we've reached the requested limit
-		if (++attempts >= MAX_ATTEMPTS || cursor === null || slices.length > limit) {
-			break;
+			// Give up after several attempts, or if we've reached the requested limit
+			if (++attempts >= MAX_ATTEMPTS || cursor === null || slices.length > limit) {
+				break;
+			}
+
+			const response = await agent.rpc.get('app.bsky.notification.listNotifications', {
+				signal: ctx.signal,
+				params: {
+					cursor: cursor,
+					limit: limit,
+				},
+			});
+
+			const data = response.data;
+			const notifications = data.notifications;
+
+			cursor = data.cursor || null;
+			items = items.concat(notifications);
+			cid ||= notifications.length > 0 ? notifications[0].cid : undefined;
+			date ||= notifications.length > 0 ? notifications[0].indexedAt : undefined;
 		}
 
-		const response = await agent.rpc.get('app.bsky.notification.listNotifications', {
-			signal: ctx.signal,
-			params: {
-				cursor: cursor,
-				limit: limit,
-			},
-		});
+		const page: NotificationsPage = {
+			cursor: cursor,
+			slices: slices,
+			cid: cid,
+			date: date,
+		};
 
-		const data = response.data;
-		const notifications = data.notifications;
-
-		cursor = data.cursor || null;
-		items = items.concat(notifications);
-		cid ||= notifications.length > 0 ? notifications[0].cid : undefined;
-		date ||= notifications.length > 0 ? notifications[0].indexedAt : undefined;
-	}
-
-	const page: NotificationsPage = {
-		cursor: cursor,
-		slices: slices,
-		cid: cid,
-		date: date,
-	};
-
-	return page;
-};
+		return page;
+	},
+);
 
 export interface NotificationsLatestResult {
 	cid: string | undefined;
