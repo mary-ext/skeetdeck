@@ -756,7 +756,10 @@ const ComposerPane = () => {
 											<p class="text-muted-fg">{/* @once */ '' + error}</p>
 
 											<div class="mt-3">
-												<button class={/* @once */ Button({ variant: 'outline', size: 'xs' })}>
+												<button
+													onClick={() => replying.refetch()}
+													class={/* @once */ Button({ variant: 'outline', size: 'xs' })}
+												>
 													Try again
 												</button>
 											</div>
