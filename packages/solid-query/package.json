@@ -19,7 +19,7 @@
 		"@tanstack/query-core": "5.17.19"
 	},
 	"devDependencies": {
-		"solid-js": "^1.8.12",
+		"solid-js": "^1.8.14",
 		"vite": "^5.0.12",
 		"vite-plugin-solid": "^2.9.1"
 	}
