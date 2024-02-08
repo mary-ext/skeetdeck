@@ -1,4 +1,9 @@
-import { type InfiniteData, type QueryClient, type QueryKey } from '@pkg/solid-query';
+import {
+	type InfiniteData,
+	type QueryClient,
+	type QueryFunctionContext,
+	type QueryKey,
+} from '@pkg/solid-query';
 
 export const resetInfiniteData = (client: QueryClient, key: QueryKey) => {
 	client.setQueryData<InfiniteData<unknown>>(key, (data) => {
@@ -11,4 +16,24 @@ export const resetInfiniteData = (client: QueryClient, key: QueryKey) => {
 
 		return data;
 	});
+};
+
+const errorMap = new WeakMap<WeakKey, { pageParam: any; direction: 'forward' | 'backward' }>();
+
+export const wrapInfiniteQuery = <C extends QueryFunctionContext<any, any>, R>(
+	fn: (ctx: C) => Promise<R>,
+) => {
+	return async (ctx: C): Promise<R> => {
+		try {
+			return await fn(ctx);
+		} catch (err) {
+			errorMap.set(err as any, { pageParam: ctx.pageParam, direction: ctx.direction });
+			throw err;
+		}
+	};
+};
+
+export const getQueryErrorInfo = (err: unknown) => {
+	const info = errorMap.get(err as any);
+	return info;
 };

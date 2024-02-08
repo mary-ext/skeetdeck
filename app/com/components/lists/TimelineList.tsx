@@ -3,7 +3,7 @@ import { For, Match, Switch, createEffect, createMemo } from 'solid-js';
 import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@pkg/solid-query';
 
 import type { DID } from '~/api/atp-schema.ts';
-import { resetInfiniteData } from '~/api/utils/query.ts';
+import { getQueryErrorInfo, resetInfiniteData } from '~/api/utils/query.ts';
 
 import {
 	type TimelineLatestResult,
@@ -155,7 +155,9 @@ const TimelineList = (props: TimelineListProps) => {
 
 							<button
 								onClick={() => {
-									if (timeline.isRefetchError || timeline.isLoadingError) {
+									const info = getQueryErrorInfo(err());
+
+									if (timeline.isLoadingError || (timeline.isRefetchError && info?.pageParam === undefined)) {
 										timeline.refetch();
 									} else {
 										timeline.fetchNextPage();

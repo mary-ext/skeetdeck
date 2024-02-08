@@ -8,7 +8,7 @@ import {
 	createMutation,
 } from '@pkg/solid-query';
 
-import { resetInfiniteData } from '~/api/utils/query.ts';
+import { getQueryErrorInfo, resetInfiniteData } from '~/api/utils/query.ts';
 
 import { updateNotificationsSeen } from '~/api/mutations/update-notifications-seen.ts';
 import {
@@ -227,7 +227,12 @@ const NotificationsPane = () => {
 
 								<button
 									onClick={() => {
-										if (notifications.isRefetchError || notifications.isLoadingError) {
+										const info = getQueryErrorInfo(err());
+
+										if (
+											notifications.isLoadingError ||
+											(notifications.isRefetchError && info?.pageParam === undefined)
+										) {
 											notifications.refetch();
 										} else {
 											notifications.fetchNextPage();

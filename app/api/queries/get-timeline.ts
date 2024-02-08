@@ -7,6 +7,8 @@ import type { DID, Records, ResponseOf } from '../atp-schema.ts';
 import { multiagent } from '../globals/agent.ts';
 import { systemLanguages } from '../globals/platform.ts';
 
+import { wrapInfiniteQuery } from '../utils/query.ts';
+
 import {
 	type ModerationCause,
 	decideLabelModeration,
@@ -123,113 +125,113 @@ const countPosts = (slices: TimelineSlice[], limit?: number) => {
 export const getTimelineKey = (uid: DID, params: TimelineParams, limit = MAX_POSTS) => {
 	return ['getTimeline', uid, params, limit] as const;
 };
-export const getTimeline = async (
-	ctx: QC<ReturnType<typeof getTimelineKey>, TimelinePageCursor | undefined>,
-) => {
-	const [, uid, params, limit] = ctx.queryKey;
-	const pageParam = ctx.pageParam;
+export const getTimeline = wrapInfiniteQuery(
+	async (ctx: QC<ReturnType<typeof getTimelineKey>, TimelinePageCursor | undefined>) => {
+		const [, uid, params, limit] = ctx.queryKey;
+		const pageParam = ctx.pageParam;
 
-	const timelineOpts = ctx.meta?.timelineOpts;
+		const timelineOpts = ctx.meta?.timelineOpts;
 
-	const type = params.type;
+		const type = params.type;
 
-	const agent = await multiagent.connect(uid);
+		const agent = await multiagent.connect(uid);
 
-	let empty = 0;
-	let cid: string | undefined;
+		let empty = 0;
+		let cid: string | undefined;
 
-	let cursor: string | null | undefined;
-	let items: TimelineSlice[] = [];
-	let count = 0;
+		let cursor: string | null | undefined;
+		let items: TimelineSlice[] = [];
+		let count = 0;
 
-	let sliceFilter: SliceFilter | undefined | null;
-	let postFilter: PostFilter | undefined;
+		let sliceFilter: SliceFilter | undefined | null;
+		let postFilter: PostFilter | undefined;
 
-	if (pageParam) {
-		cursor = pageParam.key;
-		items = pageParam.remaining;
-		count = countPosts(items);
-	}
-
-	if (type === 'home') {
-		sliceFilter = createHomeSliceFilter(uid, params.showReplies === 'follows');
-
-		postFilter = combine([
-			createHiddenRepostFilter(timelineOpts?.filters),
-			createDuplicatePostFilter(items),
-
-			!params.showReplies && createHideRepliesFilter(),
-			!params.showQuotes && createHideQuotesFilter(),
-			!params.showReposts && createHideRepostsFilter(),
-
-			createInvalidReplyFilter(),
-			createLabelPostFilter(timelineOpts?.moderation),
-			createTempMutePostFilter(uid, timelineOpts?.filters),
-		]);
-	} else if (type === 'feed' || type === 'list') {
-		sliceFilter = createFeedSliceFilter();
-		postFilter = combine([
-			type === 'feed' && createHiddenRepostFilter(timelineOpts?.filters),
-			createDuplicatePostFilter(items),
-
-			!params.showReplies && createHideRepliesFilter(),
-			!params.showQuotes && createHideQuotesFilter(),
-			type === 'feed' && !params.showReposts && createHideQuotesFilter(),
-
-			createLanguagePostFilter(timelineOpts?.language),
-			createLabelPostFilter(timelineOpts?.moderation),
-			createTempMutePostFilter(uid, timelineOpts?.filters),
-		]);
-	} else if (type === 'profile') {
-		postFilter = createLabelPostFilter(timelineOpts?.moderation);
-
-		if (params.tab === 'posts') {
-			const did = await _getDid(agent, params.actor);
-			sliceFilter = createProfileSliceFilter(did);
-			postFilter = combine([createInvalidReplyFilter(), createLabelPostFilter(timelineOpts?.moderation)]);
-		} else if (params.tab === 'likes' || params.tab === 'media') {
-			sliceFilter = null;
+		if (pageParam) {
+			cursor = pageParam.key;
+			items = pageParam.remaining;
+			count = countPosts(items);
 		}
-	} else {
-		postFilter = createLabelPostFilter(timelineOpts?.moderation);
-	}
 
-	while (cursor !== null && count < limit) {
-		const timeline = await fetchPage(agent, params, limit, cursor, ctx);
+		if (type === 'home') {
+			sliceFilter = createHomeSliceFilter(uid, params.showReplies === 'follows');
 
-		const feed = timeline.feed;
-		const result =
-			sliceFilter !== null
-				? createTimelineSlices(uid, feed, sliceFilter, postFilter)
-				: createUnjoinedSlices(uid, feed, postFilter);
+			postFilter = combine([
+				createHiddenRepostFilter(timelineOpts?.filters),
+				createDuplicatePostFilter(items),
 
-		cursor = timeline.cursor || null;
-		empty = result.length > 0 ? 0 : empty + 1;
-		items = items.concat(result);
+				!params.showReplies && createHideRepliesFilter(),
+				!params.showQuotes && createHideQuotesFilter(),
+				!params.showReposts && createHideRepostsFilter(),
 
-		count += countPosts(result);
+				createInvalidReplyFilter(),
+				createLabelPostFilter(timelineOpts?.moderation),
+				createTempMutePostFilter(uid, timelineOpts?.filters),
+			]);
+		} else if (type === 'feed' || type === 'list') {
+			sliceFilter = createFeedSliceFilter();
+			postFilter = combine([
+				type === 'feed' && createHiddenRepostFilter(timelineOpts?.filters),
+				createDuplicatePostFilter(items),
 
-		cid ||= timeline.cid || (feed.length > 0 ? feed[0].post.cid : undefined);
+				!params.showReplies && createHideRepliesFilter(),
+				!params.showQuotes && createHideQuotesFilter(),
+				type === 'feed' && !params.showReposts && createHideQuotesFilter(),
 
-		if (empty >= MAX_EMPTY) {
-			break;
+				createLanguagePostFilter(timelineOpts?.language),
+				createLabelPostFilter(timelineOpts?.moderation),
+				createTempMutePostFilter(uid, timelineOpts?.filters),
+			]);
+		} else if (type === 'profile') {
+			postFilter = createLabelPostFilter(timelineOpts?.moderation);
+
+			if (params.tab === 'posts') {
+				const did = await _getDid(agent, params.actor);
+				sliceFilter = createProfileSliceFilter(did);
+				postFilter = combine([createInvalidReplyFilter(), createLabelPostFilter(timelineOpts?.moderation)]);
+			} else if (params.tab === 'likes' || params.tab === 'media') {
+				sliceFilter = null;
+			}
+		} else {
+			postFilter = createLabelPostFilter(timelineOpts?.moderation);
 		}
-	}
 
-	// we're still slicing by the amount of slices and not amount of posts
-	const spliced = countPosts(items, limit) + 1;
+		while (cursor !== null && count < limit) {
+			const timeline = await fetchPage(agent, params, limit, cursor, ctx);
 
-	const slices = items.slice(0, spliced);
-	const remaining = items.slice(spliced);
+			const feed = timeline.feed;
+			const result =
+				sliceFilter !== null
+					? createTimelineSlices(uid, feed, sliceFilter, postFilter)
+					: createUnjoinedSlices(uid, feed, postFilter);
 
-	const page: TimelinePage = {
-		cursor: cursor || remaining.length > 0 ? { key: cursor || null, remaining: remaining } : undefined,
-		cid: cid,
-		slices: slices,
-	};
+			cursor = timeline.cursor || null;
+			empty = result.length > 0 ? 0 : empty + 1;
+			items = items.concat(result);
 
-	return page;
-};
+			count += countPosts(result);
+
+			cid ||= timeline.cid || (feed.length > 0 ? feed[0].post.cid : undefined);
+
+			if (empty >= MAX_EMPTY) {
+				break;
+			}
+		}
+
+		// we're still slicing by the amount of slices and not amount of posts
+		const spliced = countPosts(items, limit) + 1;
+
+		const slices = items.slice(0, spliced);
+		const remaining = items.slice(spliced);
+
+		const page: TimelinePage = {
+			cursor: cursor || remaining.length > 0 ? { key: cursor || null, remaining: remaining } : undefined,
+			cid: cid,
+			slices: slices,
+		};
+
+		return page;
+	},
+);
 
 /// Latest feed query
 export const getTimelineLatestKey = (uid: DID, params: TimelineParams) => {
