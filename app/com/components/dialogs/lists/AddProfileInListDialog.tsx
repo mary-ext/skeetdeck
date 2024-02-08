@@ -160,7 +160,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 			queryClient.setQueryData<ListMembership[]>(getListMembershipsKey(uid), (prev) => {
 				if (prev) {
 					const next = mapDefined(prev, (item) => {
-						return item.actor !== uid || !removals.has(item.listUri) ? item : undefined;
+						return item.actor !== did || !removals.has(item.listUri) ? item : undefined;
 					});
 
 					for (let i = 0, il = creations.length; i < il; i++) {
