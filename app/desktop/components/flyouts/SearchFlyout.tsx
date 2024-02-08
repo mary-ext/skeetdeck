@@ -16,6 +16,8 @@ import { clsx } from '~/utils/misc.ts';
 import SearchInput from '~/com/components/inputs/SearchInput.tsx';
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 
+import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
+
 export interface SearchPostsSuggestionItem {
 	type: 'search';
 	query: string;
@@ -143,11 +145,7 @@ const SearchFlyout = (props: SearchFlyoutProps) => {
 						node = (
 							<div class="flex items-center gap-4 px-4 py-2">
 								<div class="h-9 w-9 shrink-0 overflow-hidden rounded-full bg-muted-fg">
-									{
-										/* @once */ profile.avatar && (
-											<img src={/* @once */ profile.avatar} class="h-full w-full" />
-										)
-									}
+									<img src={/* @once */ profile.avatar || DefaultUserAvatar} class="h-full w-full" />
 								</div>
 
 								<div class="flex min-w-0 grow flex-col text-sm">
