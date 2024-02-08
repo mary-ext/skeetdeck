@@ -2,10 +2,11 @@ export interface InteractiveProps {
 	class?: string;
 	variant?: 'default' | 'muted' | 'white' | 'danger' | 'none';
 	offset?: boolean;
+	userSelect?: boolean;
 }
 
 export const Interactive = (props: InteractiveProps) => {
-	const { class: className, variant = 'default', offset = true } = props;
+	const { class: className, variant = 'default', offset = true, userSelect = false } = props;
 
 	let cn = `outline-2 focus-visible:outline disabled:pointer-events-none`;
 
@@ -21,6 +22,10 @@ export const Interactive = (props: InteractiveProps) => {
 
 	if (offset) {
 		cn += ` -outline-offset-2`;
+	}
+
+	if (!userSelect) {
+		cn += ` select-none`;
 	}
 
 	if (className) {
