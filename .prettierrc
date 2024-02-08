@@ -8,5 +8,13 @@
 	"bracketSpacing": true,
 	"plugins": ["prettier-plugin-tailwindcss"],
 	"tailwindConfig": "./app/tailwind-base.config.js",
-	"tailwindFunctions": ["tw"]
+	"tailwindFunctions": ["tw"],
+	"overrides": [
+		{
+			"files": ["tsconfig.json", "jsconfig.json"],
+			"options": {
+				"parser": "jsonc"
+			}
+		}
+	]
 }
