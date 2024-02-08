@@ -313,10 +313,9 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 										<GenericErrorView
 											error={lists.error}
 											onRetry={() => {
-												if (lists.isRefetchError || lists.isLoadingError) {
+												if (lists.isLoadingError) {
 													lists.refetch();
 												} else {
-													// @ts-expect-error
 													lists.fetchNextPage();
 												}
 											}}
