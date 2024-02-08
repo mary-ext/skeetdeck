@@ -19,6 +19,7 @@ import RepeatIcon from '../../../icons/baseline-repeat.tsx';
 import RepeatOffIcon from '../../../icons/baseline-repeat-off.tsx';
 import ReportIcon from '../../../icons/baseline-report.tsx';
 import VolumeOffIcon from '../../../icons/baseline-volume-off.tsx';
+import VolumeUpIcon from '../../../icons/baseline-volume-up.tsx';
 
 const AddProfileInListDialog = lazy(() => import('../../dialogs/lists/AddProfileInListDialog.tsx'));
 const BlockConfirmDialog = lazy(() => import('../../dialogs/BlockConfirmDialog.tsx'));
@@ -132,7 +133,10 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 									}}
 									class={/* @once */ MenuItem()}
 								>
-									<VolumeOffIcon class={/* @once */ MenuItemIcon()} />
+									{(() => {
+										const Icon = !isMuted() ? VolumeOffIcon : VolumeUpIcon;
+										return <Icon class={/* @once */ MenuItemIcon()} />;
+									})()}
 									<span class="overflow-hidden text-ellipsis whitespace-nowrap">
 										{isMuted() ? `Unmute @${profile.handle.value}` : `Mute @${profile.handle.value}`}
 									</span>
