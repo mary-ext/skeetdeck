@@ -36,7 +36,7 @@ const FeedHeader = (props: FeedHeaderProps) => {
 
 		if (!feed) {
 			return (
-				<div class="p-4" style="height:172px">
+				<div class="shrink-0 p-4" style="height:172px">
 					<div class="h-13 w-13 shrink-0 rounded-md bg-secondary/20"></div>
 				</div>
 			);
