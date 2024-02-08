@@ -1,6 +1,11 @@
 import { type JSX, lazy, batch } from 'solid-js';
 
-import { isCtrlKeyPressed, isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
+import {
+	hasSelectionRange,
+	isCtrlKeyPressed,
+	isElementAltClicked,
+	isElementClicked,
+} from '~/utils/interaction.ts';
 
 import { openModal } from '~/com/globals/modals.tsx';
 
@@ -123,7 +128,7 @@ export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {
 						{...props}
 						// @ts-expect-error
 						to={null}
-						onClick={(ev) => navigate(to, isCtrlKeyPressed(ev))}
+						onClick={(ev) => !hasSelectionRange() && navigate(to, isCtrlKeyPressed(ev))}
 						onAuxClick={(ev) => ev.button === 1 && navigate(to, true)}
 						onKeyDown={(ev) => isEnterPressed(ev) && navigate(to, isCtrlKeyPressed(ev))}
 					/>
