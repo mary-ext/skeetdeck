@@ -56,6 +56,20 @@ const listItem = Interactive({
 	class: `flex min-w-0 items-center gap-3 px-4 py-3 text-left disabled:opacity-50`,
 });
 
+const isSetEqual = <T,>(a: Set<T>, b: Set<T>): boolean => {
+	if (a.size !== b.size) {
+		return false;
+	}
+
+	for (const val of a) {
+		if (!b.has(val)) {
+			return false;
+		}
+	}
+
+	return true;
+};
+
 const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 	const queryClient = useQueryClient();
 	const { close, disableBackdropClose } = useModalState();
@@ -217,6 +231,8 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 
 	const [listUris, setListUris] = createDerivedSignal(prevListUris);
 
+	const isEqual = createMemo(() => isSetEqual(new Set(prevListUris()), new Set(listUris())));
+
 	createEffect(() => {
 		disableBackdropClose.value = listMutation.isPending;
 	});
@@ -238,6 +254,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 							<h1 class={/* @once */ DialogTitle()}>Add to list</h1>
 
 							<button
+								disabled={isEqual()}
 								onClick={() => {
 									listMutation.mutate();
 								}}
