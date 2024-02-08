@@ -116,19 +116,6 @@ const ListHeader = (props: ListHeaderProps) => {
 								);
 							}
 
-							if (list.uid === list.creator.did) {
-								return (
-									<button
-										onClick={() => {
-											openPaneModal(() => <ListSettingsPaneDialog list={list} />);
-										}}
-										class={/* @once */ Button({ variant: 'outline' })}
-									>
-										Edit list
-									</button>
-								);
-							}
-
 							return (
 								<button
 									onClick={() => {
@@ -143,21 +130,19 @@ const ListHeader = (props: ListHeaderProps) => {
 
 						<div class="grow"></div>
 
-						{(() => {
-							if (isModList() && list.uid === list.creator.uid) {
-								return (
-									<button
-										title="Edit this list"
-										onClick={() => {
-											openPaneModal(() => <ListSettingsPaneDialog list={list} />);
-										}}
-										class={/* @once */ Button({ variant: 'outline' })}
-									>
-										<EditIcon class="-mx-1.5 text-base" />
-									</button>
-								);
-							}
-						})()}
+						{
+							/* @once */ list.uid === list.creator.uid && (
+								<button
+									title="Edit this list"
+									onClick={() => {
+										openPaneModal(() => <ListSettingsPaneDialog list={list} />);
+									}}
+									class={/* @once */ Button({ variant: 'outline' })}
+								>
+									<EditIcon class="-mx-1.5 text-base" />
+								</button>
+							)
+						}
 
 						<ListOverflowAction list={list}>
 							<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
