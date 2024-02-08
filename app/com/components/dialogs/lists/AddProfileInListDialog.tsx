@@ -21,6 +21,7 @@ import {
 	getListMembershipsKey,
 	listMembershipsOptions,
 } from '~/api/queries/get-list-memberships.ts';
+import { getProfileKey } from '~/api/queries/get-profile.ts';
 import { getProfileLists, getProfileListsKey } from '~/api/queries/get-profile-lists.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
@@ -193,6 +194,12 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 					},
 				);
 			}
+
+			// 3. Invalidate profile data of said user (if user's being put on an active mute/block list)
+			queryClient.invalidateQueries({
+				queryKey: getProfileKey(uid, did),
+				exact: true,
+			});
 		},
 	}));
 
