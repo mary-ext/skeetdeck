@@ -62,6 +62,9 @@ importers:
       '@pkg/solid-freeze':
         specifier: workspace:^
         version: link:../packages/solid-freeze
+      '@pkg/solid-navigation':
+        specifier: workspace:^
+        version: link:../packages/solid-navigation
       '@pkg/solid-page-router':
         specifier: workspace:^
         version: link:../packages/solid-page-router
@@ -99,6 +102,12 @@ importers:
         specifier: ^6.1.4
         version: 6.1.4
     devDependencies:
+      '@types/dom-close-watcher':
+        specifier: ^1.0.0
+        version: 1.0.0
+      '@types/dom-navigation':
+        specifier: ^1.0.3
+        version: 1.0.3
       '@types/node':
         specifier: ^20.11.16
         version: 20.11.16
@@ -1978,6 +1987,10 @@ packages:
     resolution: {integrity: sha512-WXCyOcRtH37HAUkpXhUduaxdm82b4GSlyTqajXviN4EfiuPgNYR109xMCKvpl6zPIpua0DGlMEDCq+g8EdoheQ==}
     dependencies:
       '@babel/types': 7.23.9
+    dev: true
+
+  /@types/dom-close-watcher@1.0.0:
+    resolution: {integrity: sha512-7pL0By56sVVGMSJ3HdSY+u08Id0ljStCaf1VnGFxwfpuNdA0HMz0sl2J24eSi9M6ptl9ySkVK35jF75Fn8trUg==}
     dev: true
 
   /@types/dom-navigation@1.0.3:

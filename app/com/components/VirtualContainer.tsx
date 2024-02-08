@@ -9,6 +9,46 @@ export interface VirtualContainerProps {
 }
 
 export const VirtualContainer = (props: VirtualContainerProps) => {
+	if (import.meta.env.VITE_MODE === 'mobile') {
+		let height = props.estimateHeight;
+
+		let visible = false;
+		let first = true;
+
+		return (
+			<article
+				class={props.class}
+				style={{
+					'content-visibility': 'auto',
+					'contain-intrinsic-height': `${height ? height + 'px' : ''}`,
+				}}
+				prop:oncontentvisibilityautostatechange={(ev) => {
+					const target = ev.target;
+					if (target === ev.currentTarget) {
+						const prev = visible;
+						const next = !ev.skipped;
+
+						if ((prev && !next) || (first && !prev && next)) {
+							const rect = ev.target.getBoundingClientRect();
+							const nextHeight = Math.trunc(rect.height * 1000) / 1000;
+
+							if (height !== nextHeight) {
+								height = nextHeight;
+								target.style.setProperty('contain-intrinsic-height', `${height}px`);
+							}
+
+							first = false;
+						}
+
+						visible = next;
+					}
+				}}
+			>
+				{props.children}
+			</article>
+		);
+	}
+
 	let entry: IntersectionObserverEntry | undefined;
 	let height: number | undefined;
 
@@ -83,3 +123,17 @@ const startMeasure = (node: HTMLElement) => {
 		resizeObserver.unobserve(node);
 	});
 };
+
+declare class ContentVisibilityAutoStateChangeEvent extends Event {
+	readonly target: HTMLElement;
+	readonly currentTarget: HTMLElement;
+	readonly skipped: boolean;
+}
+
+declare module 'solid-js' {
+	namespace JSX {
+		interface ExplicitProperties {
+			oncontentvisibilityautostatechange: (ev: ContentVisibilityAutoStateChangeEvent) => void;
+		}
+	}
+}

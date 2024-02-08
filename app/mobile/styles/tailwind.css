@@ -1,0 +1,11 @@
+@import '~/com/styles/theme.css';
+
+@config '../../tailwind-mobile.config.js';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+	@apply bg-background-dark;
+}

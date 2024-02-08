@@ -4,6 +4,7 @@
 	"name": "app",
 	"scripts": {
 		"dev:desktop": "vite -c vite-desktop.config.ts",
+		"dev:mobile": "vite -c vite-mobile.config.ts",
 		"build:desktop": "vite build -c vite-desktop.config.ts",
 		"preview:desktop": "vite preview -c vite-desktop.config.ts",
 		"lint": "tsc"
@@ -14,6 +15,7 @@
 		"@floating-ui/utils": "^0.2.1",
 		"@pkg/emoji-db": "workspace:^",
 		"@pkg/solid-freeze": "workspace:^",
+		"@pkg/solid-navigation": "workspace:^",
 		"@pkg/solid-page-router": "workspace:^",
 		"@pkg/solid-query": "workspace:^",
 		"@pkg/solid-use-gesture": "workspace:^",
@@ -28,6 +30,8 @@
 		"tldts": "^6.1.4"
 	},
 	"devDependencies": {
+		"@types/dom-close-watcher": "^1.0.0",
+		"@types/dom-navigation": "^1.0.3",
 		"@types/node": "^20.11.16",
 		"autoprefixer": "^10.4.17",
 		"postcss": "^8.4.33",
