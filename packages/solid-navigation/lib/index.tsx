@@ -219,6 +219,7 @@ export const createRouter = (opts: RouterOptions) => {
 				}
 
 				setState({ active: nextKey, views: views, singles: singles });
+				await Promise.resolve();
 			},
 		});
 	});
