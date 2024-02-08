@@ -2,7 +2,7 @@ import { type JSX, createMemo, lazy } from 'solid-js';
 
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '../../../globals/modals.tsx';
 
 import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu.ts';
 
@@ -16,6 +16,7 @@ import ListBoxOutlinedIcon from '../../../icons/outline-list-box.tsx';
 import PlaylistAddIcon from '../../../icons/baseline-playlist-add.tsx';
 import PoundIcon from '../../../icons/baseline-pound.tsx';
 import RepeatIcon from '../../../icons/baseline-repeat.tsx';
+import RepeatOffIcon from '../../../icons/baseline-repeat-off.tsx';
 import ReportIcon from '../../../icons/baseline-report.tsx';
 import VolumeOffIcon from '../../../icons/baseline-volume-off.tsx';
 
@@ -82,7 +83,10 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 									}}
 									class={/* @once */ MenuItem()}
 								>
-									<RepeatIcon class={/* @once */ MenuItemIcon()} />
+									{(() => {
+										const Icon = !isRepostHidden() ? RepeatOffIcon : RepeatIcon;
+										return <Icon class={/* @once */ MenuItemIcon()} />;
+									})()}
 									<span>{isRepostHidden() ? `Turn on reposts` : `Turn off reposts`}</span>
 								</button>
 							)}
