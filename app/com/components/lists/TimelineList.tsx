@@ -19,7 +19,8 @@ import CircularProgress from '../CircularProgress.tsx';
 import { useSharedPreferences } from '../SharedPreferences.tsx';
 import { VirtualContainer } from '../VirtualContainer.tsx';
 
-import { Button } from '../../primitives/button.ts';
+import GenericErrorView from '../views/GenericErrorView.tsx';
+
 import { loadMoreBtn, loadNewBtn } from '../../primitives/interactive.ts';
 
 import Post from '../items/Post.tsx';
@@ -149,25 +150,19 @@ const TimelineList = (props: TimelineListProps) => {
 
 				<Match when={timeline.error}>
 					{(err) => (
-						<div class="flex flex-col items-center px-4 py-6 text-sm text-muted-fg">
-							<p>Something went wrong</p>
-							<p class="mb-4">{'' + err()}</p>
+						<GenericErrorView
+							padded
+							error={err()}
+							onRetry={() => {
+								const info = getQueryErrorInfo(err());
 
-							<button
-								onClick={() => {
-									const info = getQueryErrorInfo(err());
-
-									if (timeline.isLoadingError || (timeline.isRefetchError && info?.pageParam === undefined)) {
-										timeline.refetch();
-									} else {
-										timeline.fetchNextPage();
-									}
-								}}
-								class={/* @once */ Button({ variant: 'primary' })}
-							>
-								Reload
-							</button>
-						</div>
+								if (timeline.isLoadingError || (timeline.isRefetchError && info?.pageParam === undefined)) {
+									timeline.refetch();
+								} else {
+									timeline.fetchNextPage();
+								}
+							}}
+						/>
 					)}
 				</Match>
 

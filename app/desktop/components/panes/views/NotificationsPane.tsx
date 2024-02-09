@@ -222,6 +222,7 @@ const NotificationsPane = () => {
 					<Match when={notifications.error}>
 						{(err) => (
 							<GenericErrorView
+								padded
 								error={err()}
 								onRetry={() => {
 									const info = getQueryErrorInfo(err());
