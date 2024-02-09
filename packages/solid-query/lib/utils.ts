@@ -1,4 +1,4 @@
-import { type Owner, createMemo, runWithOwner } from 'solid-js';
+import { createSignal } from 'solid-js';
 
 export function shouldThrowError<T extends (...args: Array<any>) => boolean>(
 	throwError: boolean | T | undefined,
@@ -12,19 +12,17 @@ export function shouldThrowError<T extends (...args: Array<any>) => boolean>(
 	return !!throwError;
 }
 
-interface MemoizedObject<T> {
-	s: () => T;
-	h: { [key: string | symbol]: () => unknown };
-	o: Owner | null;
-}
+export const createStateObject = <T extends Record<string, any>>(obj: T): T => {
+	const state = {} as T;
 
-export const memoHandlers: ProxyHandler<MemoizedObject<any>> = {
-	get(r, key) {
-		const memo = (r.h[key] ||= runWithOwner(r.o, () => {
-			const s = r.s;
-			return createMemo(() => s()[key]);
-		})!);
+	for (const key in obj) {
+		const [value, setValue] = createSignal(obj[key]);
 
-		return memo();
-	},
+		Object.defineProperty(state, key, {
+			get: value,
+			set: (next) => setValue(typeof next === 'function' ? () => next : next),
+		});
+	}
+
+	return state;
 };
