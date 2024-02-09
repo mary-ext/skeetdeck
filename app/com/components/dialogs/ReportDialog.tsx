@@ -217,147 +217,156 @@ const ReportDialog = (props: ReportDialogProps) => {
 					</div>
 				</div>
 
-				{(() => {
-					const $step = step();
+				<form
+					onSubmit={(ev) => {
+						const $step = step();
 
-					const dialogBody = DialogBody({ class: `flex flex-col py-4`, scrollable: true, padded: false });
+						ev.preventDefault();
 
-					if ($step === ReportStep.CHOOSE) {
-						const typeModel = createRadioModel(type, setType);
-
-						return (
-							<div class={dialogBody}>
-								<div class="px-4 pb-3">
-									<p class="font-bold">What's happening?</p>
-									<p class="text-sm text-muted-fg">Select the option that applies for this content</p>
-								</div>
-
-								<div>
-									{REPORT_OPTIONS.map((option) => {
-										if (!(option.label & mask)) {
-											return;
-										}
-
-										return (
-											<label class="block px-4 py-3">
-												<div class="flex min-w-0 justify-between gap-4">
-													<span class="text-sm">{/* @once */ option.name}</span>
-
-													<Radio ref={typeModel(option)} name={formId} />
-												</div>
-												<p class="mr-6 text-de text-muted-fg">{/* @once */ option.desc}</p>
-											</label>
-										);
-									})}
-								</div>
-
-								{mask & ReportType.PROFILE ? (
-									<p class="px-4 pt-3 text-sm text-muted-fg">
-										For other issues, please report the specific posts.
-									</p>
-								) : null}
-
-								{mask & ReportType.POST ? (
-									<p class="px-4 pt-3 text-sm text-muted-fg">
-										For copyright violations,{' '}
-										<a href={DMCA_LINK} target="_blank" class="text-accent hover:underline">
-											click here
-										</a>
-										.
-									</p>
-								) : null}
-							</div>
-						);
-					}
-
-					if ($step === ReportStep.EXPLAIN) {
-						const $type = type()!;
-
-						return (
-							<div class={dialogBody}>
-								<p class="px-4 text-sm">
-									You're reporting for <span class="font-bold">{/* @once */ $type.name}</span>.
-								</p>
-
-								<label class="block px-4 pt-3">
-									<span class="mb-2 flex items-center justify-between gap-2 text-sm leading-6 text-muted-fg">
-										<span>Any additional details?</span>
-
-										<span
-											class={'text-xs' + (length() > MAX_DESCRIPTION_LENGTH ? ' font-bold text-red-500' : '')}
-										>
-											{`${formatLong(length())}/${formatLong(MAX_DESCRIPTION_LENGTH)}`}
-										</span>
-									</span>
-
-									<TextareaAutosize
-										ref={(node) => {
-											setTimeout(() => node.focus(), 0);
-										}}
-										value={reason()}
-										onInput={(ev) => setReason(ev.target.value)}
-										minRows={6}
-										class={/* @once */ Textarea()}
-									/>
-								</label>
-
-								{(() => {
-									if (mutation.error) {
-										return (
-											<div class="px-4 pt-4 text-sm text-red-500">
-												<p>Something went wrong, please try again later.</p>
-												<p>{'' + mutation.error}</p>
-											</div>
-										);
-									}
-								})()}
-							</div>
-						);
-					}
-
-					if ($step === ReportStep.FINISHED) {
-						return (
-							<div class={dialogBody}>
-								<p class="px-4 text-sm">Thanks for your report, we'll look into it promptly.</p>
-							</div>
-						);
-					}
-				})()}
-
-				<div class={/* @once */ DialogActions()}>
-					<button
-						disabled={
-							(step() === ReportStep.EXPLAIN && length() > MAX_DESCRIPTION_LENGTH) ||
-							(step() === ReportStep.CHOOSE && !type())
+						if ($step === ReportStep.CHOOSE) {
+							setStep(ReportStep.EXPLAIN);
+						} else if ($step === ReportStep.EXPLAIN) {
+							mutation.mutate();
+						} else {
+							closeModal();
 						}
-						onClick={() => {
-							const $step = step();
+					}}
+					class="contents"
+				>
+					{(() => {
+						const $step = step();
 
-							if ($step === ReportStep.CHOOSE) {
-								setStep(ReportStep.EXPLAIN);
-							} else if ($step === ReportStep.EXPLAIN) {
-								mutation.mutate();
-							} else {
-								closeModal();
+						const dialogBody = DialogBody({ class: `flex flex-col py-4`, scrollable: true, padded: false });
+
+						if ($step === ReportStep.CHOOSE) {
+							const typeModel = createRadioModel(type, setType);
+
+							return (
+								<div class={dialogBody}>
+									<div class="px-4 pb-3">
+										<p class="font-bold">What's happening?</p>
+										<p class="text-sm text-muted-fg">Select the option that applies for this content</p>
+									</div>
+
+									<div>
+										{REPORT_OPTIONS.map((option) => {
+											if (!(option.label & mask)) {
+												return;
+											}
+
+											return (
+												<label class="block px-4 py-3">
+													<div class="flex min-w-0 justify-between gap-4">
+														<span class="text-sm">{/* @once */ option.name}</span>
+
+														<Radio ref={typeModel(option)} name={formId} />
+													</div>
+													<p class="mr-6 text-de text-muted-fg">{/* @once */ option.desc}</p>
+												</label>
+											);
+										})}
+									</div>
+
+									{mask & ReportType.PROFILE ? (
+										<p class="px-4 pt-3 text-sm text-muted-fg">
+											For other issues, please report the specific posts.
+										</p>
+									) : null}
+
+									{mask & ReportType.POST ? (
+										<p class="px-4 pt-3 text-sm text-muted-fg">
+											For copyright violations,{' '}
+											<a href={DMCA_LINK} target="_blank" class="text-accent hover:underline">
+												click here
+											</a>
+											.
+										</p>
+									) : null}
+								</div>
+							);
+						}
+
+						if ($step === ReportStep.EXPLAIN) {
+							const $type = type()!;
+
+							return (
+								<div class={dialogBody}>
+									<p class="px-4 text-sm">
+										You're reporting for <span class="font-bold">{/* @once */ $type.name}</span>.
+									</p>
+
+									<label class="block px-4 pt-3">
+										<span class="mb-2 flex items-center justify-between gap-2 text-sm leading-6 text-muted-fg">
+											<span>Any additional details?</span>
+
+											<span
+												class={
+													'text-xs' + (length() > MAX_DESCRIPTION_LENGTH ? ' font-bold text-red-500' : '')
+												}
+											>
+												{`${formatLong(length())}/${formatLong(MAX_DESCRIPTION_LENGTH)}`}
+											</span>
+										</span>
+
+										<TextareaAutosize
+											ref={(node) => {
+												setTimeout(() => node.focus(), 0);
+											}}
+											value={reason()}
+											onInput={(ev) => setReason(ev.target.value)}
+											minRows={6}
+											class={/* @once */ Textarea()}
+										/>
+									</label>
+
+									{(() => {
+										if (mutation.error) {
+											return (
+												<div class="px-4 pt-4 text-sm text-red-500">
+													<p>Something went wrong, please try again later.</p>
+													<p>{'' + mutation.error}</p>
+												</div>
+											);
+										}
+									})()}
+								</div>
+							);
+						}
+
+						if ($step === ReportStep.FINISHED) {
+							return (
+								<div class={dialogBody}>
+									<p class="px-4 text-sm">Thanks for your report, we'll look into it promptly.</p>
+								</div>
+							);
+						}
+					})()}
+
+					<div class={/* @once */ DialogActions()}>
+						<button
+							type="submit"
+							disabled={
+								(step() === ReportStep.EXPLAIN && length() > MAX_DESCRIPTION_LENGTH) ||
+								(step() === ReportStep.CHOOSE && !type())
 							}
-						}}
-						class={/* @once */ Button({ variant: 'primary' })}
-					>
-						{(() => {
-							const $step = step();
+							class={/* @once */ Button({ variant: 'primary' })}
+						>
+							{(() => {
+								const $step = step();
 
-							if ($step === ReportStep.EXPLAIN) {
-								return `Submit`;
-							}
+								if ($step === ReportStep.EXPLAIN) {
+									return `Submit`;
+								}
 
-							if ($step === ReportStep.FINISHED) {
-								return `Close`;
-							}
+								if ($step === ReportStep.FINISHED) {
+									return `Close`;
+								}
 
-							return `Next`;
-						})()}
-					</button>
-				</div>
+								return `Next`;
+							})()}
+						</button>
+					</div>
+				</form>
 			</fieldset>
 		</DialogOverlay>
 	);
