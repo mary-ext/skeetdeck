@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 
-import type { UnionOf } from '~/api/atp-schema.ts';
+import type { RefOf } from '~/api/atp-schema.ts';
 import { renderListPurpose } from '~/api/display.ts';
 import { getRecordId } from '~/api/utils/misc.ts';
 
@@ -10,18 +10,22 @@ import { LINK_LIST, Link } from '../Link.tsx';
 
 import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';
 
-type EmbeddedList = UnionOf<'app.bsky.graph.defs#listView'>;
+type ListView = RefOf<'app.bsky.graph.defs#listView'>;
+type ListViewBasic = RefOf<'app.bsky.graph.defs#listViewBasic'>;
 
 export interface EmbedListProps {
-	list: EmbeddedList;
+	list: ListView;
+}
+
+export interface EmbedListContentProps {
+	list: ListView | ListViewBasic;
 }
 
 const embedListInteractive = Interactive({ variant: 'muted', class: `w-full rounded-md` });
 
-export const EmbedListContent = (props: EmbedListProps) => {
+export const EmbedListContent = (props: EmbedListContentProps) => {
 	return (() => {
 		const list = props.list;
-		const creator = list.creator;
 
 		const purpose = renderListPurpose(list.purpose);
 
@@ -34,7 +38,9 @@ export const EmbedListContent = (props: EmbedListProps) => {
 
 				<div>
 					<p class="font-bold">{/* @once */ list.name}</p>
-					<p class="text-muted-fg">{/* @once */ `${purpose} by @${creator.handle}`}</p>
+					<p class="text-muted-fg">{
+						/* @once */ `${purpose}${'creator' in list ? ` by ${list.creator.handle}` : ``}`
+					}</p>
 				</div>
 			</div>
 		);
