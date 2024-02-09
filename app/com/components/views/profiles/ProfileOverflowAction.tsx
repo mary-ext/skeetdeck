@@ -147,7 +147,9 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								<button
 									onClick={() => {
 										close();
-										openModal(() => <BlockConfirmDialog profile={profile} />);
+										openModal(() => (
+											<BlockConfirmDialog uid={/* @once */ profile.uid} did={/* @once */ profile.did} />
+										));
 									}}
 									class={/* @once */ MenuItem()}
 								>
