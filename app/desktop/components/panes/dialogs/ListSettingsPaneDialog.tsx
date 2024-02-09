@@ -4,7 +4,7 @@ import { type InfiniteData, createMutation, useQueryClient } from '@pkg/solid-qu
 
 import type { Records, UnionOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
-import { getRecordId } from '~/api/utils/misc.ts';
+import { formatQueryError, getRecordId } from '~/api/utils/misc.ts';
 
 import { uploadBlob } from '~/api/mutations/upload-blob.ts';
 import { getListInfoKey } from '~/api/queries/get-list-info.ts';
@@ -313,11 +313,12 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 				</PaneDialogHeader>
 
 				{(() => {
-					const error = listMutation.error || listDeleteMutation.error;
-
-					if (error) {
+					if (listMutation.isError || listDeleteMutation.isError) {
 						return (
-							<div title={'' + error} class="shrink-0 bg-red-500 px-4 py-3 text-sm text-white">
+							<div
+								title={formatQueryError(listMutation.error || listDeleteMutation.error)}
+								class="shrink-0 bg-red-500 px-4 py-3 text-sm text-white"
+							>
 								Something went wrong, try again later.
 							</div>
 						);

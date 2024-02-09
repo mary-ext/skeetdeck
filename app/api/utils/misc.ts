@@ -1,3 +1,5 @@
+import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
+
 import type { DID } from '../atp-schema.ts';
 
 export const isDid = (value: string): value is DID => {
@@ -47,4 +49,17 @@ export const followAbortSignal = (signals: (AbortSignal | undefined)[]) => {
 	}
 
 	return own;
+};
+
+export const formatXRPCError = (err: XRPCError): string => {
+	const name = err.error;
+	return (name ? name + ': ' : '') + err.message;
+};
+
+export const formatQueryError = (err: unknown): string => {
+	if (err instanceof XRPCError) {
+		return formatXRPCError(err);
+	}
+
+	return '' + err;
 };

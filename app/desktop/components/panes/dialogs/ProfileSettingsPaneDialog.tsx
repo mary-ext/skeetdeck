@@ -7,6 +7,7 @@ import TextareaAutosize from 'solid-textarea-autosize';
 
 import type { Records, UnionOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
+import { formatQueryError } from '~/api/utils/misc.ts';
 
 import { uploadBlob } from '~/api/mutations/upload-blob.ts';
 import { getProfileKey } from '~/api/queries/get-profile.ts';
@@ -183,11 +184,12 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 				</PaneDialogHeader>
 
 				{(() => {
-					const error = false;
-
-					if (error) {
+					if (profileMutation.isError) {
 						return (
-							<div title={'' + error} class="shrink-0 bg-red-500 px-4 py-3 text-sm text-white">
+							<div
+								title={formatQueryError(profileMutation.error)}
+								class="shrink-0 bg-red-500 px-4 py-3 text-sm text-white"
+							>
 								Something went wrong, try again later.
 							</div>
 						);

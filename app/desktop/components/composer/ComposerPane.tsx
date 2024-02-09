@@ -8,7 +8,7 @@ import type { DID, Records, RefOf, UnionOf } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
 import { extractAppLink } from '~/api/utils/links.ts';
 import { getCurrentTid } from '~/api/utils/tid.ts';
-import { getCollectionId, isDid } from '~/api/utils/misc.ts';
+import { formatQueryError, getCollectionId, isDid } from '~/api/utils/misc.ts';
 
 import type { ThreadData } from '~/api/models/threads.ts';
 import { getUploadedBlob, uploadBlob } from '~/api/mutations/upload-blob.ts';
@@ -743,7 +743,6 @@ const ComposerPane = () => {
 								return <DummyPost post={data} />;
 							}
 
-							const error = replying.error;
 							return (
 								<div class="flex min-w-0 gap-3 px-4 pt-3">
 									<div class="flex shrink-0 flex-col items-center">
@@ -751,10 +750,10 @@ const ComposerPane = () => {
 										<div class="-mb-4 mt-2 grow border-l-2 border-divider" />
 									</div>
 
-									{error ? (
+									{replying.isError ? (
 										<div class="flex min-w-0 grow flex-col text-sm">
 											<p class="">Failed to retrieve reply</p>
-											<p class="text-muted-fg">{/* @once */ '' + error}</p>
+											<p class="text-muted-fg">{/* @once */ formatQueryError(replying.error)}</p>
 
 											<div class="mt-3">
 												<button
@@ -1299,7 +1298,7 @@ const EmbedExternal = (props: { url: string }) => {
 			return (
 				<div class="rounded-md border border-divider p-3 text-sm">
 					<p class="font-bold">Error adding link card</p>
-					<p class="text-de text-muted-fg">{/* @once */ '' + error}</p>
+					<p class="text-de text-muted-fg">{/* @once */ formatQueryError(error)}</p>
 				</div>
 			);
 		}
@@ -1448,7 +1447,7 @@ const EmbedRecord = (props: { uid: DID; uri: string }) => {
 			return (
 				<div class="rounded-md border border-divider p-3 text-sm">
 					<p class="font-bold">Error adding embed</p>
-					<p class="text-de text-muted-fg">{/* @once */ '' + error}</p>
+					<p class="text-de text-muted-fg">{/* @once */ formatQueryError(error)}</p>
 				</div>
 			);
 		}

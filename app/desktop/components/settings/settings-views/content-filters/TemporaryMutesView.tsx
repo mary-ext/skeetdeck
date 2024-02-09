@@ -5,6 +5,7 @@ import { createQuery } from '@pkg/solid-query';
 
 import type { DID } from '~/api/atp-schema.ts';
 import { multiagent } from '~/api/globals/agent.ts';
+import { formatQueryError } from '~/api/utils/misc.ts';
 
 import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile.ts';
 
@@ -207,7 +208,7 @@ const TemporaryMutesView = () => {
 													<div class="text-muted-fg">
 														<p>Unable to retrieve this user</p>
 														<p>{did}</p>
-														<p>{/* @once */ '' + error}</p>
+														<p>{/* @once */ formatQueryError(error)}</p>
 													</div>
 												</div>
 											);
