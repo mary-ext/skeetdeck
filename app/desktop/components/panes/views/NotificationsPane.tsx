@@ -24,9 +24,9 @@ import {
 import type { NotificationsPaneConfig } from '../../../globals/panes.ts';
 
 import Notification from '~/com/components/items/Notification.tsx';
+import GenericErrorView from '~/com/components/views/GenericErrorView.tsx';
 import CircularProgress from '~/com/components/CircularProgress.tsx';
 
-import { Button } from '~/com/primitives/button.ts';
 import { IconButton } from '~/com/primitives/icon-button.ts';
 import { loadMoreBtn, loadNewBtn } from '~/com/primitives/interactive.ts';
 
@@ -221,28 +221,21 @@ const NotificationsPane = () => {
 
 					<Match when={notifications.error}>
 						{(err) => (
-							<div class="flex flex-col items-center px-4 py-6 text-sm text-muted-fg">
-								<p>Something went wrong</p>
-								<p class="mb-4">{'' + err()}</p>
+							<GenericErrorView
+								error={err()}
+								onRetry={() => {
+									const info = getQueryErrorInfo(err());
 
-								<button
-									onClick={() => {
-										const info = getQueryErrorInfo(err());
-
-										if (
-											notifications.isLoadingError ||
-											(notifications.isRefetchError && info?.pageParam === undefined)
-										) {
-											notifications.refetch();
-										} else {
-											notifications.fetchNextPage();
-										}
-									}}
-									class={/* @once */ Button({ variant: 'primary' })}
-								>
-									Reload
-								</button>
-							</div>
+									if (
+										notifications.isLoadingError ||
+										(notifications.isRefetchError && info?.pageParam === undefined)
+									) {
+										notifications.refetch();
+									} else {
+										notifications.fetchNextPage();
+									}
+								}}
+							/>
 						)}
 					</Match>
 
