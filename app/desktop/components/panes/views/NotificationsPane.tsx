@@ -198,7 +198,7 @@ const NotificationsPane = () => {
 						})()}
 						fallback={(() => {
 							return (() => {
-								if (!notifications.isPending) {
+								if (notifications.data) {
 									return (
 										<div class="border-b border-divider p-4">
 											<p class="text-center text-sm text-muted-fg">Nothing here but crickets...</p>
