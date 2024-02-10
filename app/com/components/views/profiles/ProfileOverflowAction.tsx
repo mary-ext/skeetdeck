@@ -22,7 +22,7 @@ import VolumeOffIcon from '../../../icons/baseline-volume-off.tsx';
 import VolumeUpIcon from '../../../icons/baseline-volume-up.tsx';
 
 const AddProfileInListDialog = lazy(() => import('../../dialogs/lists/AddProfileInListDialog.tsx'));
-const BlockConfirmDialog = lazy(() => import('../../dialogs/BlockConfirmDialog.tsx'));
+const BlockConfirmDialog = lazy(() => import('../../dialogs/BlockConfirmDialog'));
 const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog.tsx'));
 const ReportDialog = lazy(() => import('../../dialogs/ReportDialog.tsx'));
 

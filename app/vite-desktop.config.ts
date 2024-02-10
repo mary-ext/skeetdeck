@@ -51,6 +51,7 @@ export default defineConfig({
 		},
 	},
 	resolve: {
+		extensions: ['.desktop.ts', '.desktop.tsx', '.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json'],
 		alias: {
 			'~': path.join(__dirname, '.'),
 		},
