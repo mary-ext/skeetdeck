@@ -29,12 +29,7 @@ import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import DeleteIcon from '~/com/icons/baseline-delete';
 import FormatLetterMatchesIcon from '~/com/icons/baseline-format-letter-matches';
 
-import {
-	type ViewParams,
-	VIEW_KEYWORD_FILTER_FORM,
-	VIEW_KEYWORD_FILTERS,
-	useViewRouter,
-} from '../_router';
+import { type ViewParams, VIEW_KEYWORD_FILTER_FORM, VIEW_KEYWORD_FILTERS, useViewRouter } from '../_router';
 
 type KeywordState = [keyword: Signal<string>, whole: Signal<boolean>];
 

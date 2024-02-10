@@ -4,10 +4,7 @@ import { createQuery } from '@pkg/solid-query';
 
 import type { DID, RefOf } from '~/api/atp-schema';
 
-import {
-	searchProfilesTypeahead,
-	searchProfilesTypeaheadKey,
-} from '~/api/queries/search-profiles-typeahead';
+import { searchProfilesTypeahead, searchProfilesTypeaheadKey } from '~/api/queries/search-profiles-typeahead';
 
 import { createDebouncedValue, createDerivedSignal } from '~/utils/hooks';
 import { model } from '~/utils/input';

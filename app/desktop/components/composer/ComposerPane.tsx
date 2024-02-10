@@ -72,11 +72,7 @@ import { getPostRt, isStateFilled } from './utils/state';
 
 import ContentWarningAction from './actions/ContentWarningAction';
 import PostLanguageAction from './actions/PostLanguageAction';
-import ThreadgateAction, {
-	buildGateRules,
-	renderGateAlt,
-	renderGateIcon,
-} from './actions/ThreadgateAction';
+import ThreadgateAction, { buildGateRules, renderGateAlt, renderGateIcon } from './actions/ThreadgateAction';
 
 import ImageAltDialog from './dialogs/ImageAltDialog';
 import ImageAltReminderDialog from './dialogs/ImageAltReminderDialog';

@@ -21,13 +21,7 @@ import { difference } from '~/utils/sets';
 import { closeModal, useModalState } from '../../../globals/modals';
 
 import { Button } from '../../../primitives/button';
-import {
-	DialogActions,
-	DialogBody,
-	DialogHeader,
-	DialogRoot,
-	DialogTitle,
-} from '../../../primitives/dialog';
+import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog';
 
 import DialogOverlay from '../DialogOverlay';
 

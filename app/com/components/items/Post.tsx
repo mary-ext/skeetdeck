@@ -14,14 +14,7 @@ import { formatCompact } from '~/utils/intl/number';
 import { isElementClicked } from '~/utils/interaction';
 import { clsx } from '~/utils/misc';
 
-import {
-	type PostLinking,
-	type ProfileLinking,
-	LINK_PROFILE,
-	LINK_POST,
-	Link,
-	useLinking,
-} from '../Link';
+import { type PostLinking, type ProfileLinking, LINK_PROFILE, LINK_POST, Link, useLinking } from '../Link';
 import RichTextRenderer from '../RichTextRenderer';
 import { useSharedPreferences } from '../SharedPreferences';
 import TimeAgo from '../TimeAgo';
