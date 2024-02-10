@@ -1,5 +1,7 @@
 import { type JSX, createMemo, lazy } from 'solid-js';
 
+import { multiagent } from '~/api/globals/agent';
+
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
 import { openModal } from '../../../globals/modals';
@@ -18,6 +20,8 @@ import PoundIcon from '../../../icons/baseline-pound';
 import RepeatIcon from '../../../icons/baseline-repeat';
 import RepeatOffIcon from '../../../icons/baseline-repeat-off';
 import ReportIcon from '../../../icons/baseline-report';
+import VisibilityIcon from '../../../icons/baseline-visibility';
+import VisibilityOffIcon from '../../../icons/baseline-visibility-off';
 import VolumeOffIcon from '../../../icons/baseline-volume-off';
 import VolumeUpIcon from '../../../icons/baseline-volume-up';
 
@@ -25,6 +29,7 @@ const AddProfileInListDialog = lazy(() => import('../../dialogs/lists/AddProfile
 const BlockConfirmDialog = lazy(() => import('../../dialogs/BlockConfirmDialog'));
 const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog'));
 const ReportDialog = lazy(() => import('../../dialogs/ReportDialog'));
+const SilenceConfirmDialog = lazy(() => import('../../dialogs/SilenceConfirmDialog'));
 
 export interface ProfileOverflowActionProps {
 	profile: SignalizedProfile;
@@ -40,9 +45,10 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 		const did = profile.did;
 
 		const isSelf = profile.uid === did;
+		const isOwnAccount = createMemo(() => multiagent.accounts.some((account) => account.did === did));
 
 		const isTempMuted = () => isProfileTempMuted(filters, did);
-		const isMuted = () => profile.viewer.muted.value || isTempMuted();
+		const isMuted = () => profile.viewer.muted.value;
 		const isBlocked = () => profile.viewer.blocking.value;
 
 		const isRepostHidden = createMemo(() => {
@@ -144,6 +150,30 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 									</span>
 								</button>
 							)}
+
+							{(() => {
+								if (!isOwnAccount()) {
+									return (
+										<button
+											onClick={() => {
+												close();
+												openModal(() => <SilenceConfirmDialog profile={profile} />);
+											}}
+											class={/* @once */ MenuItem()}
+										>
+											{(() => {
+												const Icon = !isMuted() ? VisibilityOffIcon : VisibilityIcon;
+												return <Icon class={/* @once */ MenuItemIcon()} />;
+											})()}
+											<span>
+												{!isTempMuted()
+													? `Silence @${profile.handle.value}`
+													: `Unsilence @${profile.handle.value}`}
+											</span>
+										</button>
+									);
+								}
+							})()}
 
 							{!isSelf && (
 								<button

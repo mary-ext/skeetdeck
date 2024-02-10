@@ -1,11 +1,15 @@
-import { createMemo, createSignal } from 'solid-js';
+import { batch, createMemo, createSignal } from 'solid-js';
+
+import { useQueryClient, type InfiniteData } from '@pkg/solid-query';
 
 import type { SignalizedProfile } from '~/api/stores/profiles';
+import type { TimelinePage, getTimelineKey } from '~/api/queries/get-timeline';
+import { produceTimelineFilter } from '~/api/updaters/timeline-filter';
 
 import { closeModal } from '../../globals/modals';
 
 import DialogOverlay from './DialogOverlay';
-import { isProfileTempMuted, useSharedPreferences } from '../SharedPreferences';
+import { isProfileTempMuted, useBustRevCache, useSharedPreferences } from '../SharedPreferences';
 
 import { Button } from '../../primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
@@ -17,15 +21,61 @@ export interface SilenceConfirmDialogProps {
 }
 
 const SilenceConfirmDialog = (props: SilenceConfirmDialogProps) => {
+	const queryClient = useQueryClient();
+	const bustRev = useBustRevCache();
+
 	const profile = props.profile;
 	const did = profile.did;
+	const uid = profile.uid;
 
 	const { filters } = useSharedPreferences();
 
 	const [duration, setDuration] = createSignal(1 * 24 * 60 * 60 * 1_000);
 	const silenced = createMemo(() => isProfileTempMuted(filters, did) !== null);
 
-	const handleConfirm = () => {};
+	const handleConfirm = () => {
+		const tempMutes = filters.tempMutes;
+
+		closeModal();
+
+		if (silenced()) {
+			batch(() => {
+				delete tempMutes[did];
+				bustRev();
+			});
+		} else {
+			const $duration = duration();
+
+			if (Number.isNaN($duration) || $duration < 1) {
+				return;
+			}
+
+			const updateTimeline = produceTimelineFilter(did);
+
+			batch(() => {
+				tempMutes[did] = Date.now() + $duration;
+				bustRev();
+			});
+
+			queryClient.setQueriesData<InfiniteData<TimelinePage>>(
+				{
+					predicate: (query) => {
+						const [t, u, p] = query.queryKey as ReturnType<typeof getTimelineKey>;
+
+						// Do not try to filter user's own feed
+						return t === 'getTimeline' && u === uid && (p.type !== 'profile' || p.actor !== did);
+					},
+				},
+				(data) => {
+					if (!data) {
+						return data;
+					}
+
+					return updateTimeline(data);
+				},
+			);
+		}
+	};
 
 	return (
 		<DialogOverlay>
@@ -57,7 +107,7 @@ const SilenceConfirmDialog = (props: SilenceConfirmDialogProps) => {
 									<span class="mr-4 text-sm">Duration:</span>
 									<SelectInput
 										value={'' + duration()}
-										onChange={setDuration}
+										onChange={(next) => setDuration(+next)}
 										options={[
 											{ value: '' + 1 * 60 * 60 * 1_000, label: '1 hour' },
 											{ value: '' + 6 * 60 * 60 * 1_000, label: '6 hour' },
@@ -80,13 +130,7 @@ const SilenceConfirmDialog = (props: SilenceConfirmDialogProps) => {
 					<button onClick={closeModal} class={/* @once */ Button({ variant: 'ghost' })}>
 						Cancel
 					</button>
-					<button
-						onClick={() => {
-							closeModal();
-							handleConfirm();
-						}}
-						class={/* @once */ Button({ variant: 'primary' })}
-					>
+					<button onClick={handleConfirm} class={/* @once */ Button({ variant: 'primary' })}>
 						{!silenced() ? `Silence` : `Unsilence`}
 					</button>
 				</div>
