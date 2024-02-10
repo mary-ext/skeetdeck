@@ -50,14 +50,10 @@ const PaneHeader = (props: PaneHeaderProps) => {
 					{pane.title || props.title}
 				</p>
 				<p class="overflow-hidden text-ellipsis whitespace-nowrap text-xs text-muted-fg">
-					{props.subtitle && (
-						<span>
-							<span>{props.subtitle}</span>
-							<span class="px-1">•</span>
-						</span>
-					)}
-
-					<span>{account()}</span>
+					{(() => {
+						const subtitle = props.subtitle;
+						return (subtitle ? subtitle + ' • ' : '') + account();
+					})()}
 				</p>
 			</div>
 
