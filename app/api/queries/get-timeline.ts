@@ -3,7 +3,7 @@ import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
 import { assert, mapDefined } from '~/utils/misc';
 
-import type { DID, Records, ResponseOf } from '../atp-schema';
+import type { DID, Records, RefOf, ResponseOf } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 import { systemLanguages } from '../globals/platform';
 
@@ -454,19 +454,44 @@ const createLabelPostFilter = (opts?: ModerationOpts): PostFilter | undefined =>
 		return;
 	}
 
+	const unwrapImageAlt = (embed: PostRecord['embed']) => {
+		let str = '';
+		let images: RefOf<'app.bsky.embed.images#image'>[] | undefined;
+
+		if (embed) {
+			if (embed.$type === 'app.bsky.embed.images') {
+				images = embed.images;
+			} else if (
+				embed.$type === 'app.bsky.embed.recordWithMedia' &&
+				embed.media.$type === 'app.bsky.embed.images'
+			) {
+				images = embed.media.images;
+			}
+		}
+
+		if (images) {
+			for (let i = 0, il = images.length; i < il; i++) {
+				str += ' ' + images[i].alt;
+			}
+		}
+
+		return str;
+	};
+
 	return (item) => {
 		const post = item.post;
+
 		const author = post.author;
+		const record = post.record as PostRecord;
+
+		const isFollowing = !!author.viewer?.following;
+		const text = record.text + unwrapImageAlt(record.embed);
+
+		record.embed;
 
 		const accu: ModerationCause[] = [];
 		decideLabelModeration(accu, post.labels, post.author.did, opts);
-		decideMutedKeywordModeration(
-			accu,
-			(post.record as PostRecord).text,
-			!!author.viewer?.following,
-			PreferenceHide,
-			opts,
-		);
+		decideMutedKeywordModeration(accu, text, isFollowing, PreferenceHide, opts);
 
 		const decision = finalizeModeration(accu);
 
