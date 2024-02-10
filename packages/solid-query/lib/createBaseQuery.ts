@@ -1,10 +1,11 @@
 import { type QueryKey, type QueryObserver, type QueryObserverResult } from '@tanstack/query-core';
 
-import { batch, createMemo, createRenderEffect, on, onCleanup, untrack } from 'solid-js';
+import { createMemo, createRenderEffect, on, onCleanup, untrack } from 'solid-js';
 
 import type { QueryClient } from './QueryClient.ts';
 import { useQueryClient } from './QueryClientProvider.tsx';
 
+import { schedule } from './scheduler.ts';
 import type { CreateBaseQueryOptions, QueryAccessor } from './types.ts';
 import { createStateObject } from './utils.ts';
 
@@ -41,7 +42,7 @@ export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryK
 
 	onCleanup(
 		observer.subscribe((next) => {
-			batch(() => Object.assign(result, next));
+			schedule(() => Object.assign(result, next));
 		}),
 	);
 
