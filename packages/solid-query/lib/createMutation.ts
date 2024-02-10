@@ -1,6 +1,6 @@
 import { type DefaultError, MutationObserver } from '@tanstack/query-core';
 
-import { createMemo, createRenderEffect, on, onCleanup, untrack } from 'solid-js';
+import { batch, createMemo, createRenderEffect, on, onCleanup, untrack } from 'solid-js';
 
 import type { QueryClient } from './QueryClient.ts';
 import { useQueryClient } from './QueryClientProvider.tsx';
@@ -46,10 +46,12 @@ export function createMutation<TData = unknown, TError = DefaultError, TVariable
 
 	onCleanup(
 		observer.subscribe((next) => {
-			Object.assign(result, {
-				...next,
-				mutate: mutate,
-				mutateAsync: result.mutate,
+			batch(() => {
+				Object.assign(result, {
+					...next,
+					mutate: mutate,
+					mutateAsync: result.mutate,
+				});
 			});
 		}),
 	);

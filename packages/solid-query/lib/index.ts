@@ -1,6 +1,3 @@
-// Side Effects
-import './setBatchUpdatesFn.ts';
-
 // Re-export core
 export * from '@tanstack/query-core';
 
