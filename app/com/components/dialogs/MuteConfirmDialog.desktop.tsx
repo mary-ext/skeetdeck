@@ -105,7 +105,7 @@ const MuteConfirmDialog = (props: MuteConfirmDialogProps) => {
 							Taking action as <b class="text-primary">{'@' + getAccountHandle(uid())}</b>
 						</span>
 
-						<SwitchAccountAction value={uid()} onChange={setUid}>
+						<SwitchAccountAction value={uid()} exclude={[did]} onChange={setUid}>
 							<button class="text-accent hover:underline">Change</button>
 						</SwitchAccountAction>
 					</div>
