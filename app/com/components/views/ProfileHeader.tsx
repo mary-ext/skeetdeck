@@ -178,7 +178,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 						return (
 							<div class="text-sm text-muted-fg">
 								<p>
-									You've temporarily muted posts from this user until{' '}
+									You've silenced posts from this user until{' '}
 									<span class="font-bold">{formatAbsDateTime(isTemporarilyMuted)}</span>.{' '}
 									<button
 										onClick={() => {

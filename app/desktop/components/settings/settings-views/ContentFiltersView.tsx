@@ -48,7 +48,7 @@ const ContentFiltersView = () => {
 
 				<fieldset disabled={!multiagent.active} class="contents">
 					<button onClick={() => router.move({ type: VIEW_TEMPORARY_MUTES })} class={selectItem}>
-						<span>Temporarily muted users</span>
+						<span>Silenced users</span>
 						<ChevronRightIcon class="text-xl text-muted-fg" />
 					</button>
 
