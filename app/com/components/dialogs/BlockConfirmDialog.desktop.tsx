@@ -85,7 +85,7 @@ const BlockConfirmDialog = (props: BlockConfirmDialogProps) => {
 								</div>
 
 								<div class={/* @once */ DialogActions()}>
-									<button onClick={closeModal} class={/* @once */ Button({ variant: 'ghost' })}>
+									<button onClick={closeModal} class={/* @once */ Button({ variant: 'primary' })}>
 										Dismiss
 									</button>
 								</div>
