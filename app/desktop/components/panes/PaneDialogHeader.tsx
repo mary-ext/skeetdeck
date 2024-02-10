@@ -52,11 +52,9 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 					{props.title}
 				</p>
 
-				{props.subtitle && (
-					<p class="overflow-hidden text-ellipsis whitespace-nowrap text-xs text-muted-fg">
-						{props.subtitle}
-					</p>
-				)}
+				<p class="overflow-hidden text-ellipsis whitespace-nowrap text-xs text-muted-fg empty:hidden">
+					{props.subtitle}
+				</p>
 			</div>
 
 			<fieldset disabled={props.disabled} class="flex min-w-0 shrink-0 empty:hidden">
