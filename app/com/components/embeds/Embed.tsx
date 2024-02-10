@@ -75,11 +75,17 @@ const Embed = (props: EmbedProps) => {
 				const { images, link, record } = embeds();
 
 				return [
-					link && <EmbedLink link={link} />,
-					images && (
-						<PostEmbedWarning post={post} decision={decision()}>
-							<EmbedImage images={images} interactive />
-						</PostEmbedWarning>
+					(link || images) && (
+						<PostEmbedWarning
+							post={post}
+							decision={decision()}
+							children={(() => {
+								return [
+									link && <EmbedLink link={link} />,
+									images && <EmbedImage images={images} interactive />,
+								];
+							})()}
+						/>
 					),
 					record && renderRecord(record, () => props.large),
 				];
