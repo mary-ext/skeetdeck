@@ -1,3 +1,5 @@
+import './notifyManager.ts';
+
 // Re-export core
 export * from '@tanstack/query-core';
 
