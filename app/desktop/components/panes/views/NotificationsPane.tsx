@@ -197,13 +197,15 @@ const NotificationsPane = () => {
 								});
 						})()}
 						fallback={(() => {
-							if (!notifications.isLoading) {
-								return (
-									<div class="border-b border-divider p-4">
-										<p class="text-center text-sm text-muted-fg">Nothing here but crickets...</p>
-									</div>
-								);
-							}
+							return (() => {
+								if (!notifications.isPending) {
+									return (
+										<div class="border-b border-divider p-4">
+											<p class="text-center text-sm text-muted-fg">Nothing here but crickets...</p>
+										</div>
+									);
+								}
+							}) as unknown as JSX.Element;
 						})()}
 					>
 						{(slice) => {
