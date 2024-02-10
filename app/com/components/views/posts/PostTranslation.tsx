@@ -65,14 +65,6 @@ const PostTranslation = (props: PostTranslationProps) => {
 	return (
 		<div class="mt-3">
 			{(() => {
-				if (trans.isLoading) {
-					return (
-						<div class="grid place-items-center p-2">
-							<CircularProgress />
-						</div>
-					);
-				}
-
 				if (trans.isError) {
 					return (
 						<div class="flex flex-col items-center gap-2 p-2">
@@ -100,6 +92,12 @@ const PostTranslation = (props: PostTranslationProps) => {
 						</>
 					);
 				}
+
+				return (
+					<div class="grid place-items-center p-2">
+						<CircularProgress />
+					</div>
+				);
 			})()}
 		</div>
 	);
