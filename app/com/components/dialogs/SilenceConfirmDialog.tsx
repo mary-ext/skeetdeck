@@ -1,7 +1,5 @@
 import { createMemo, createSignal } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema';
-
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
 import { closeModal } from '../../globals/modals';
