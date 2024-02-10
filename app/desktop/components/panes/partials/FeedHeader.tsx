@@ -24,7 +24,7 @@ import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 
 import FeedOverflowAction from './actions/FeedOverflowAction';
 
-const LazyImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
+const LazyImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog'));
 
 export interface FeedHeaderProps {
 	feed?: SignalizedFeed;

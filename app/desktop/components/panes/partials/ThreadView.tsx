@@ -26,8 +26,8 @@ import EmbedRecordBlocked from '~/com/components/embeds/EmbedRecordBlocked';
 import EmbedRecordNotFound from '~/com/components/embeds/EmbedRecordNotFound';
 import Post from '~/com/components/items/Post';
 
-const FlattenedThread = lazy(() => import('~/com/components/views/threads/FlattenedThread.tsx'));
-const NestedThread = lazy(() => import('~/com/components/views/threads/NestedThread.tsx'));
+const FlattenedThread = lazy(() => import('~/com/components/views/threads/FlattenedThread'));
+const NestedThread = lazy(() => import('~/com/components/views/threads/NestedThread'));
 
 export interface ThreadViewProps {
 	actor: DID;

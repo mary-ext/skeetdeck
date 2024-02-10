@@ -43,7 +43,7 @@ import { usePaneContext, usePaneModalState } from '../PaneContext';
 import PaneDialog from '../PaneDialog';
 import PaneDialogHeader from '../PaneDialogHeader';
 
-const ListMembersPaneDialog = lazy(() => import('./ListMembersPaneDialog.tsx'));
+const ListMembersPaneDialog = lazy(() => import('./ListMembersPaneDialog'));
 
 export interface ListSettingsPaneDialogProps {
 	/** Expected to be static */

@@ -19,8 +19,8 @@ import EditIcon from '~/com/icons/baseline-edit';
 import { Button } from '~/com/primitives/button';
 import { IconButton } from '~/com/primitives/icon-button';
 
-const EditDeckDialog = lazy(() => import('../components/settings/EditDeckDialog.tsx'));
-const AddPaneDialog = lazy(() => import('../components/settings/AddPaneDialog.tsx'));
+const EditDeckDialog = lazy(() => import('../components/settings/EditDeckDialog'));
+const AddPaneDialog = lazy(() => import('../components/settings/AddPaneDialog'));
 
 const DecksView = (props: RouteComponentProps) => {
 	const params = props.params as { deck: string };

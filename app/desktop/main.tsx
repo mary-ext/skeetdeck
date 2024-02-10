@@ -21,15 +21,15 @@ import './styles/tailwind.css';
 configureRouter([
 	{
 		path: '/',
-		component: lazy(() => import('./views/Layout.tsx')),
+		component: lazy(() => import('./views/Layout')),
 		children: [
 			{
 				path: '/',
-				component: lazy(() => import('./views/EmptyView.tsx')),
+				component: lazy(() => import('./views/EmptyView')),
 			},
 			{
 				path: '/decks/:deck',
-				component: lazy(() => import('./views/DecksView.tsx')),
+				component: lazy(() => import('./views/DecksView')),
 			},
 		],
 	},

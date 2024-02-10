@@ -41,7 +41,7 @@ import ReplyAction from '../items/posts/ReplyAction';
 
 import PostTranslation, { needTranslation } from './posts/PostTranslation';
 
-const AppealLabelDialog = lazy(() => import('../dialogs/AppealLabelDialog.tsx'));
+const AppealLabelDialog = lazy(() => import('../dialogs/AppealLabelDialog'));
 
 export interface PermalinkPostProps {
 	/** Expected to be static */

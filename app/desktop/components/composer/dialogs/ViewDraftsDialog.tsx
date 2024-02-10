@@ -31,7 +31,7 @@ import DeleteDraftDialog from './drafts/DeleteDraftDialog';
 import RenameDraftDialog from './drafts/RenameDraftDialog';
 import SaveDraftDialog from './drafts/SaveDraftDialog';
 
-const ImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
+const ImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog'));
 
 interface DraftsListResponse {
 	cursor: string | undefined;

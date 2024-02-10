@@ -21,10 +21,10 @@ import ReportIcon from '../../../icons/baseline-report';
 import VolumeOffIcon from '../../../icons/baseline-volume-off';
 import VolumeUpIcon from '../../../icons/baseline-volume-up';
 
-const AddProfileInListDialog = lazy(() => import('../../dialogs/lists/AddProfileInListDialog.tsx'));
+const AddProfileInListDialog = lazy(() => import('../../dialogs/lists/AddProfileInListDialog'));
 const BlockConfirmDialog = lazy(() => import('../../dialogs/BlockConfirmDialog'));
 const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog'));
-const ReportDialog = lazy(() => import('../../dialogs/ReportDialog.tsx'));
+const ReportDialog = lazy(() => import('../../dialogs/ReportDialog'));
 
 export interface ProfileOverflowActionProps {
 	profile: SignalizedProfile;

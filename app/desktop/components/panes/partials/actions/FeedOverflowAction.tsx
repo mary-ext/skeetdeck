@@ -13,7 +13,7 @@ import { Flyout } from '~/com/components/Flyout';
 import LaunchIcon from '~/com/icons/baseline-launch';
 import ReportIcon from '~/com/icons/baseline-report';
 
-const ReportDialog = lazy(() => import('~/com/components/dialogs/ReportDialog.tsx'));
+const ReportDialog = lazy(() => import('~/com/components/dialogs/ReportDialog'));
 
 export interface FeedOverflowActionProps {
 	feed: SignalizedFeed;

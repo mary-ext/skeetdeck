@@ -7,7 +7,7 @@ import { Flyout } from '../Flyout';
 
 import type { PickedEmoji } from './utils/database';
 
-const EmojiPicker = lazy(() => import('./EmojiPicker.tsx'));
+const EmojiPicker = lazy(() => import('./EmojiPicker'));
 
 export interface EmojiFlyoutProps {
 	children: JSX.Element;

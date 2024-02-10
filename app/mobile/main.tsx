@@ -16,7 +16,7 @@ import { SharedPreferences } from '~/com/components/SharedPreferences';
 
 import './styles/tailwind.css';
 
-const Root = lazy(() => import('./views/_root.tsx'));
+const Root = lazy(() => import('./views/_root'));
 
 const App = () => {
 	createRenderEffect(() => {

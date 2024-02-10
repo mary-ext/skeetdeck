@@ -17,13 +17,13 @@ export interface PaneRouterProps {
 }
 
 const components: Record<PaneType, Component> = {
-	[PANE_TYPE_FEED]: lazy(() => import('./views/CustomFeedPane.tsx')),
-	[PANE_TYPE_LIST]: lazy(() => import('./views/CustomListPane.tsx')),
-	[PANE_TYPE_HOME]: lazy(() => import('./views/HomePane.tsx')),
-	[PANE_TYPE_NOTIFICATIONS]: lazy(() => import('./views/NotificationsPane.tsx')),
-	[PANE_TYPE_PROFILE]: lazy(() => import('./views/ProfilePane.tsx')),
-	[PANE_TYPE_SEARCH]: lazy(() => import('./views/SearchPane.tsx')),
-	[PANE_TYPE_THREAD]: lazy(() => import('./views/ThreadPane.tsx')),
+	[PANE_TYPE_FEED]: lazy(() => import('./views/CustomFeedPane')),
+	[PANE_TYPE_LIST]: lazy(() => import('./views/CustomListPane')),
+	[PANE_TYPE_HOME]: lazy(() => import('./views/HomePane')),
+	[PANE_TYPE_NOTIFICATIONS]: lazy(() => import('./views/NotificationsPane')),
+	[PANE_TYPE_PROFILE]: lazy(() => import('./views/ProfilePane')),
+	[PANE_TYPE_SEARCH]: lazy(() => import('./views/SearchPane')),
+	[PANE_TYPE_THREAD]: lazy(() => import('./views/ThreadPane')),
 };
 
 const PaneRouter = (props: PaneRouterProps) => {

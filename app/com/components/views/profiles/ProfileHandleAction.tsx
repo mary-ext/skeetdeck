@@ -11,7 +11,7 @@ import { Flyout, offsetlessMiddlewares } from '../../Flyout';
 import ContentCopyIcon from '../../../icons/baseline-content-copy';
 import HistoryIcon from '../../../icons/baseline-history';
 
-const HandleHistoryDialog = lazy(() => import('../../dialogs/HandleHistoryDialog.tsx'));
+const HandleHistoryDialog = lazy(() => import('../../dialogs/HandleHistoryDialog'));
 
 export interface ProfileHandleActionProps {
 	profile: SignalizedProfile;

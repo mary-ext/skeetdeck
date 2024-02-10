@@ -18,7 +18,7 @@ export const { RouterView, getMatchedRoute, useParams } = createRouter({
 	routes: [
 		{
 			path: '/',
-			component: lazy(() => import('~/mobile/views/Home.tsx')),
+			component: lazy(() => import('~/mobile/views/Home')),
 			single: true,
 			meta: {
 				name: 'Home',
@@ -27,7 +27,7 @@ export const { RouterView, getMatchedRoute, useParams } = createRouter({
 		},
 		{
 			path: '/explore',
-			component: lazy(() => import('~/mobile/views/Explore.tsx')),
+			component: lazy(() => import('~/mobile/views/Explore')),
 			single: true,
 			meta: {
 				name: 'Explore',
@@ -36,7 +36,7 @@ export const { RouterView, getMatchedRoute, useParams } = createRouter({
 		},
 		{
 			path: '/notifications',
-			component: lazy(() => import('~/mobile/views/Notifications.tsx')),
+			component: lazy(() => import('~/mobile/views/Notifications')),
 			single: true,
 			meta: {
 				name: 'Notifications',
@@ -45,21 +45,21 @@ export const { RouterView, getMatchedRoute, useParams } = createRouter({
 		},
 		{
 			path: '/:ident',
-			component: lazy(() => import('~/mobile/views/Profile.tsx')),
+			component: lazy(() => import('~/mobile/views/Profile')),
 			validate: (params) => {
 				return isValidHandleOrDid(params.ident);
 			},
 		},
 		{
 			path: '/:ident/:post',
-			component: lazy(() => import('~/mobile/views/Thread.tsx')),
+			component: lazy(() => import('~/mobile/views/Thread')),
 			validate: (params) => {
 				return isValidHandleOrDid(params.ident) && isValidTid(params.post);
 			},
 		},
 		{
 			path: '*',
-			component: lazy(() => import('~/mobile/views/NotFound.tsx')),
+			component: lazy(() => import('~/mobile/views/NotFound')),
 			meta: {
 				name: 'NotFound',
 			},

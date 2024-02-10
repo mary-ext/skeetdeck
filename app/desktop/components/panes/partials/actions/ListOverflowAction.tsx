@@ -14,8 +14,8 @@ import DeleteIcon from '~/com/icons/baseline-delete';
 import LaunchIcon from '~/com/icons/baseline-launch';
 import ReportIcon from '~/com/icons/baseline-report';
 
-const ReportDialog = lazy(() => import('~/com/components/dialogs/ReportDialog.tsx'));
-const PruneListOrphanDialog = lazy(() => import('~/com/components/dialogs/lists/PruneListOrphanDialog.tsx'));
+const ReportDialog = lazy(() => import('~/com/components/dialogs/ReportDialog'));
+const PruneListOrphanDialog = lazy(() => import('~/com/components/dialogs/lists/PruneListOrphanDialog'));
 
 export interface FeedOverflowActionProps {
 	list: SignalizedList;

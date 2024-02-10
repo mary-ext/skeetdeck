@@ -22,7 +22,7 @@ import CheckboxMultipleBlankIcon from '../../icons/baseline-checkbox-multiple-bl
 import FavoriteIcon from '../../icons/baseline-favorite';
 import VisibilityIcon from '../../icons/baseline-visibility';
 
-const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
+const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog'));
 
 export interface GalleryItemProps {
 	post: SignalizedPost;

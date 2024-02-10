@@ -20,11 +20,11 @@ import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 
 import ListOverflowAction from './actions/ListOverflowAction';
 
-const ImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
-const SubscribeListDialog = lazy(() => import('~/com/components/dialogs/lists/SubscribeListDialog.tsx'));
+const ImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog'));
+const SubscribeListDialog = lazy(() => import('~/com/components/dialogs/lists/SubscribeListDialog'));
 
-const ListMembersPaneDialog = lazy(() => import('../dialogs/ListMembersPaneDialog.tsx'));
-const ListSettingsPaneDialog = lazy(() => import('../dialogs/ListSettingsPaneDialog.tsx'));
+const ListMembersPaneDialog = lazy(() => import('../dialogs/ListMembersPaneDialog'));
+const ListSettingsPaneDialog = lazy(() => import('../dialogs/ListSettingsPaneDialog'));
 
 export interface ListHeaderProps {
 	list?: SignalizedList;

@@ -21,7 +21,7 @@ import NotificationsOutlinedIcon from '~/com/icons/outline-notifications';
 
 import { MobileLinkingProvider } from './root/MobileLinkingProvider';
 
-const LoggedOutView = lazy(() => import('./LoggedOut.tsx'));
+const LoggedOutView = lazy(() => import('./LoggedOut'));
 
 interface RootProps {
 	children?: JSX.Element;

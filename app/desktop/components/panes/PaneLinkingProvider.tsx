@@ -33,25 +33,25 @@ import { useComposer } from '../composer/ComposerContext';
 
 import { usePaneContext } from './PaneContext';
 
-const LinkWarningDialog = lazy(() => import('~/com/components/dialogs/LinkWarningDialog.tsx'));
+const LinkWarningDialog = lazy(() => import('~/com/components/dialogs/LinkWarningDialog'));
 
 export interface PaneLinkingProviderProps {
 	children: JSX.Element;
 }
 
 const PaneDialogs = {
-	[LINK_FEED]: lazy(() => import('./dialogs/FeedPaneDialog.tsx')),
-	[LINK_FEED_LIKED_BY]: lazy(() => import('./dialogs/FeedLikedByPaneDialog.tsx')),
-	[LINK_LIST]: lazy(() => import('./dialogs/ListPaneDialog.tsx')),
-	[LINK_POST]: lazy(() => import('./dialogs/ThreadPaneDialog.tsx')),
-	[LINK_POST_LIKED_BY]: lazy(() => import('./dialogs/PostLikedByPaneDialog.tsx')),
-	[LINK_POST_REPOSTED_BY]: lazy(() => import('./dialogs/PostRepostedByPaneDialog.tsx')),
-	[LINK_PROFILE]: lazy(() => import('./dialogs/ProfilePaneDialog.tsx')),
-	[LINK_PROFILE_FEEDS]: lazy(() => import('./dialogs/ProfileFeedsPaneDialog.tsx')),
-	[LINK_PROFILE_EDIT]: lazy(() => import('./dialogs/ProfileSettingsPaneDialog.tsx')),
-	[LINK_PROFILE_FOLLOWERS]: lazy(() => import('./dialogs/ProfileFollowersPaneDialog.tsx')),
-	[LINK_PROFILE_FOLLOWS]: lazy(() => import('./dialogs/ProfileFollowsPaneDialog.tsx')),
-	[LINK_PROFILE_LISTS]: lazy(() => import('./dialogs/ProfileListsPaneDialog.tsx')),
+	[LINK_FEED]: lazy(() => import('./dialogs/FeedPaneDialog')),
+	[LINK_FEED_LIKED_BY]: lazy(() => import('./dialogs/FeedLikedByPaneDialog')),
+	[LINK_LIST]: lazy(() => import('./dialogs/ListPaneDialog')),
+	[LINK_POST]: lazy(() => import('./dialogs/ThreadPaneDialog')),
+	[LINK_POST_LIKED_BY]: lazy(() => import('./dialogs/PostLikedByPaneDialog')),
+	[LINK_POST_REPOSTED_BY]: lazy(() => import('./dialogs/PostRepostedByPaneDialog')),
+	[LINK_PROFILE]: lazy(() => import('./dialogs/ProfilePaneDialog')),
+	[LINK_PROFILE_FEEDS]: lazy(() => import('./dialogs/ProfileFeedsPaneDialog')),
+	[LINK_PROFILE_EDIT]: lazy(() => import('./dialogs/ProfileSettingsPaneDialog')),
+	[LINK_PROFILE_FOLLOWERS]: lazy(() => import('./dialogs/ProfileFollowersPaneDialog')),
+	[LINK_PROFILE_FOLLOWS]: lazy(() => import('./dialogs/ProfileFollowsPaneDialog')),
+	[LINK_PROFILE_LISTS]: lazy(() => import('./dialogs/ProfileListsPaneDialog')),
 };
 
 export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {

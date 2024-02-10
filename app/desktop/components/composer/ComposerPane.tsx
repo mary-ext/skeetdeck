@@ -81,7 +81,7 @@ import ThreadgateAction, {
 import ImageAltDialog from './dialogs/ImageAltDialog';
 import ImageAltReminderDialog from './dialogs/ImageAltReminderDialog';
 
-const ViewDraftsDialog = lazy(() => import('./dialogs/ViewDraftsDialog.tsx'));
+const ViewDraftsDialog = lazy(() => import('./dialogs/ViewDraftsDialog'));
 
 let cidPromise: Promise<typeof import('./utils/cid.ts')>;
 
@@ -435,7 +435,7 @@ const ComposerPane = () => {
 
 						// No need to calculate CID for the last post
 						if (i !== il - 1) {
-							const { serializeRecordCid } = await (cidPromise ||= import('./utils/cid.ts'));
+							const { serializeRecordCid } = await (cidPromise ||= import('./utils/cid'));
 
 							const serialized = await serializeRecordCid(record);
 

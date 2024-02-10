@@ -8,7 +8,7 @@ import { openModal } from '~/com/globals/modals';
 
 import ImageAltAction from './images/ImageAltAction';
 
-const LazyImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
+const LazyImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog'));
 
 type EmbeddedImage = RefOf<'app.bsky.embed.images#viewImage'>;
 

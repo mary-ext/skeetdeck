@@ -19,23 +19,23 @@ import {
 	useViewRouter,
 } from './_router';
 
-const AboutView = lazy(() => import('./AboutView.tsx'));
-const AccessibilityView = lazy(() => import('./AccessibilityView.tsx'));
-const AccountsView = lazy(() => import('./AccountsView.tsx'));
-const AppearanceView = lazy(() => import('./AppearanceView.tsx'));
-const ContentFiltersView = lazy(() => import('./ContentFiltersView.tsx'));
-const KeywordFiltersView = lazy(() => import('./KeywordFiltersView.tsx'));
-const LanguageView = lazy(() => import('./LanguageView.tsx'));
+const AboutView = lazy(() => import('./AboutView'));
+const AccessibilityView = lazy(() => import('./AccessibilityView'));
+const AccountsView = lazy(() => import('./AccountsView'));
+const AppearanceView = lazy(() => import('./AppearanceView'));
+const ContentFiltersView = lazy(() => import('./ContentFiltersView'));
+const KeywordFiltersView = lazy(() => import('./KeywordFiltersView'));
+const LanguageView = lazy(() => import('./LanguageView'));
 
-const HiddenRepostersView = lazy(() => import('./content-filters/HiddenRepostersView.tsx'));
-const LabelConfigView = lazy(() => import('./content-filters/LabelConfigView.tsx'));
-const SubscribedLabelersView = lazy(() => import('./content-filters/SubscribedLabelersView.tsx'));
-const TemporaryMutesView = lazy(() => import('./content-filters/TemporaryMutesView.tsx'));
+const HiddenRepostersView = lazy(() => import('./content-filters/HiddenRepostersView'));
+const LabelConfigView = lazy(() => import('./content-filters/LabelConfigView'));
+const SubscribedLabelersView = lazy(() => import('./content-filters/SubscribedLabelersView'));
+const TemporaryMutesView = lazy(() => import('./content-filters/TemporaryMutesView'));
 
-const KeywordFilterFormView = lazy(() => import('./keyword-filters/KeywordFilterFormView.tsx'));
+const KeywordFilterFormView = lazy(() => import('./keyword-filters/KeywordFilterFormView'));
 
-const AdditionalLanguageView = lazy(() => import('./languages/AdditionalLanguageView.tsx'));
-const ExcludedTranslationView = lazy(() => import('./languages/ExcludedTranslationView.tsx'));
+const AdditionalLanguageView = lazy(() => import('./languages/AdditionalLanguageView'));
+const ExcludedTranslationView = lazy(() => import('./languages/ExcludedTranslationView'));
 
 const views: Record<ViewType, Component> = {
 	[VIEW_ABOUT]: AboutView,

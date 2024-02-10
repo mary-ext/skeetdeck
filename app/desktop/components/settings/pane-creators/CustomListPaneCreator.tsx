@@ -21,7 +21,7 @@ import type { PaneCreatorProps } from './types';
 import DefaultListAvatar from '~/com/assets/default-list-avatar.svg?url';
 import AddIcon from '~/com/icons/baseline-add';
 
-const AddListDialog = lazy(() => import('~/com/components/dialogs/lists/AddListDialog.tsx'));
+const AddListDialog = lazy(() => import('~/com/components/dialogs/lists/AddListDialog'));
 
 type List = RefOf<'app.bsky.graph.defs#listView'>;
 

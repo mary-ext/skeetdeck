@@ -21,9 +21,9 @@ import VisibilityOffIcon from '../../../icons/baseline-visibility-off';
 import VolumeOffIcon from '../../../icons/baseline-volume-off';
 import VolumeUpIcon from '../../../icons/baseline-volume-up';
 
-const DeletePostConfirmDialog = lazy(() => import('../../dialogs/DeletePostConfirmDialog.tsx'));
+const DeletePostConfirmDialog = lazy(() => import('../../dialogs/DeletePostConfirmDialog'));
 const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog'));
-const ReportDialog = lazy(() => import('../../dialogs/ReportDialog.tsx'));
+const ReportDialog = lazy(() => import('../../dialogs/ReportDialog'));
 const SilenceConfirmDialog = lazy(() => import('../../dialogs/SilenceConfirmDialog'));
 
 export interface PostOverflowActionProps {

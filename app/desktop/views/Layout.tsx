@@ -39,12 +39,12 @@ import TableLargeAddIcon from '~/com/icons/baseline-table-large-add';
 import { useComposer } from '../components/composer/ComposerContext';
 import { ConstrainXDragAxis } from '../utils/dnd';
 
-const ComposerPane = lazy(() => import('../components/composer/ComposerPane.tsx'));
+const ComposerPane = lazy(() => import('../components/composer/ComposerPane'));
 
-const AddDeckDialog = lazy(() => import('../components/settings/AddDeckDialog.tsx'));
-const SettingsDialog = lazy(() => import('../components/settings/SettingsDialog.tsx'));
+const AddDeckDialog = lazy(() => import('../components/settings/AddDeckDialog'));
+const SettingsDialog = lazy(() => import('../components/settings/SettingsDialog'));
 
-const SearchFlyout = lazy(() => import('../components/flyouts/SearchFlyout.tsx'));
+const SearchFlyout = lazy(() => import('../components/flyouts/SearchFlyout'));
 
 const brandName = import.meta.env.VITE_BRAND_NAME;
 

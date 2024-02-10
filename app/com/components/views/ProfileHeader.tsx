@@ -30,7 +30,7 @@ import ProfileFollowButton from '../ProfileFollowButton';
 import ProfileOverflowAction from './profiles/ProfileOverflowAction';
 import ProfileHandleAction from './profiles/ProfileHandleAction';
 
-const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
+const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog'));
 const MuteConfirmDialog = lazy(() => import('../dialogs/MuteConfirmDialog'));
 const SilenceConfirmDialog = lazy(() => import('../dialogs/SilenceConfirmDialog'));
 
