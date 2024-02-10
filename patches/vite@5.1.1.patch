@@ -1,8 +1,8 @@
-diff --git a/dist/node/chunks/dep-9A4-l-43.js b/dist/node/chunks/dep-9A4-l-43.js
-index 990f7c7945986bd26f0b9dac5794b28a235df1c7..4e6691a931619a037ca9137baa0bc71a37c987dd 100644
---- a/dist/node/chunks/dep-9A4-l-43.js
-+++ b/dist/node/chunks/dep-9A4-l-43.js
-@@ -66991,7 +66991,7 @@ async function resolveBuildPlugins(config) {
+diff --git a/dist/node/chunks/dep-94_H5fT6.js b/dist/node/chunks/dep-94_H5fT6.js
+index 5c8b0a0f68a580efc1ff2d63f53ad0c1f6526818..3b299680defdef73dc2472f4ded739a1a0fab8d5 100644
+--- a/dist/node/chunks/dep-94_H5fT6.js
++++ b/dist/node/chunks/dep-94_H5fT6.js
+@@ -66707,7 +66707,7 @@ async function resolveBuildPlugins(config) {
              ...(config.isWorker ? [webWorkerPostPlugin()] : []),
          ],
          post: [
