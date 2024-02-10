@@ -17,13 +17,7 @@ import { openModal } from '~/com/globals/modals';
 
 import { Button } from '../../primitives/button';
 
-import {
-	LINK_LIST,
-	LINK_PROFILE_EDIT,
-	LINK_PROFILE_FOLLOWERS,
-	LINK_PROFILE_FOLLOWS,
-	Link,
-} from '../Link';
+import { LINK_LIST, LINK_PROFILE_EDIT, LINK_PROFILE_FOLLOWERS, LINK_PROFILE_FOLLOWS, Link } from '../Link';
 import { isProfileTempMuted, useSharedPreferences } from '../SharedPreferences';
 
 import ErrorIcon from '../../icons/baseline-error';
@@ -37,7 +31,8 @@ import ProfileOverflowAction from './profiles/ProfileOverflowAction';
 import ProfileHandleAction from './profiles/ProfileHandleAction';
 
 const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
-const MuteConfirmDialog = lazy(() => import('../dialogs/MuteConfirmDialog.tsx'));
+const MuteConfirmDialog = lazy(() => import('../dialogs/MuteConfirmDialog'));
+const SilenceConfirmDialog = lazy(() => import('../dialogs/SilenceConfirmDialog'));
 
 export interface ProfileHeaderProps {
 	/** Expected to be static */
@@ -187,7 +182,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 									<span class="font-bold">{formatAbsDateTime(isTemporarilyMuted)}</span>.{' '}
 									<button
 										onClick={() => {
-											openModal(() => <MuteConfirmDialog profile={profile} filters={filters} />);
+											openModal(() => <SilenceConfirmDialog profile={profile} />);
 										}}
 										class="text-accent hover:underline"
 									>
@@ -252,7 +247,9 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 									You've muted posts from this user.{' '}
 									<button
 										onClick={() => {
-											openModal(() => <MuteConfirmDialog profile={profile} filters={filters} />);
+											openModal(() => (
+												<MuteConfirmDialog uid={/* @once */ profile.uid} did={/* @once */ profile.did} />
+											));
 										}}
 										class="text-accent hover:underline"
 									>

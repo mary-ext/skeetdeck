@@ -20,10 +20,9 @@ import { IconButton } from '~/com/primitives/icon-button';
 import { loadMoreBtn } from '~/com/primitives/interactive';
 
 import CircularProgress from '~/com/components/CircularProgress';
-import { useSharedPreferences } from '~/com/components/SharedPreferences';
 import { VirtualContainer } from '~/com/components/VirtualContainer';
 
-import MuteConfirmDialog from '~/com/components/dialogs/MuteConfirmDialog';
+import SilenceConfirmDialog from '~/com/components/dialogs/SilenceConfirmDialog';
 import ProfileItem, { type ProfileItemAccessory } from '~/com/components/items/ProfileItem';
 
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
@@ -112,7 +111,7 @@ const TemporaryMutesView = () => {
 					<ArrowLeftIcon />
 				</button>
 
-				<h2 class="grow text-base font-bold">Temporarily muted users</h2>
+				<h2 class="grow text-base font-bold">Silenced users</h2>
 			</div>
 			<div class="flex grow flex-col overflow-y-auto">
 				<SuspenseList revealOrder="forwards" tail="collapsed">
@@ -138,17 +137,9 @@ const TemporaryMutesView = () => {
 								render: (profile) => {
 									return (
 										<button
-											title={
-												!muted.value ? `Temporarily mute this user` : `Remove temporary mute from this user`
-											}
+											title={!muted.value ? `Silence this user` : `Unsilence this user`}
 											onClick={() => {
-												openModal(() => (
-													<MuteConfirmDialog
-														profile={profile}
-														filters={/* @once */ useSharedPreferences().filters}
-														forceTempMute
-													/>
-												));
+												openModal(() => <SilenceConfirmDialog profile={profile} />);
 											}}
 											class={
 												'grid h-9 w-9 place-items-center rounded-full border border-input text-xl outline-2 outline-primary focus-visible:outline disabled:pointer-events-none' +
@@ -173,7 +164,7 @@ const TemporaryMutesView = () => {
 									if (date) {
 										return (
 											<p class="text-sm text-muted-fg">
-												Muted until <span class="font-bold">{/* @once */ formatAbsDateTime(date)}</span>
+												Silenced until <span class="font-bold">{/* @once */ formatAbsDateTime(date)}</span>
 											</p>
 										);
 									}

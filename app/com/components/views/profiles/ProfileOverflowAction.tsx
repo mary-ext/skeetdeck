@@ -23,7 +23,7 @@ import VolumeUpIcon from '../../../icons/baseline-volume-up';
 
 const AddProfileInListDialog = lazy(() => import('../../dialogs/lists/AddProfileInListDialog.tsx'));
 const BlockConfirmDialog = lazy(() => import('../../dialogs/BlockConfirmDialog'));
-const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog.tsx'));
+const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog'));
 const ReportDialog = lazy(() => import('../../dialogs/ReportDialog.tsx'));
 
 export interface ProfileOverflowActionProps {
@@ -129,7 +129,9 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								<button
 									onClick={() => {
 										close();
-										openModal(() => <MuteConfirmDialog profile={profile} filters={filters} />);
+										openModal(() => (
+											<MuteConfirmDialog uid={/* @once */ profile.uid} did={/* @once */ profile.did} />
+										));
 									}}
 									class={/* @once */ MenuItem()}
 								>

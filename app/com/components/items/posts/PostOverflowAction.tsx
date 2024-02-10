@@ -1,7 +1,9 @@
-import { type JSX, lazy } from 'solid-js';
+import { type JSX, lazy, createMemo } from 'solid-js';
+
+import { multiagent } from '~/api/globals/agent.ts';
+import { getRecordId } from '~/api/utils/misc';
 
 import type { SignalizedPost } from '~/api/stores/posts';
-import { getRecordId } from '~/api/utils/misc';
 
 import { openModal } from '../../../globals/modals';
 
@@ -14,11 +16,15 @@ import DeleteIcon from '../../../icons/baseline-delete';
 import LaunchIcon from '../../../icons/baseline-launch';
 import ReportIcon from '../../../icons/baseline-report';
 import TranslateIcon from '../../../icons/baseline-translate';
+import VisibilityIcon from '../../../icons/baseline-visibility';
+import VisibilityOffIcon from '../../../icons/baseline-visibility-off';
 import VolumeOffIcon from '../../../icons/baseline-volume-off';
+import VolumeUpIcon from '../../../icons/baseline-volume-up';
 
 const DeletePostConfirmDialog = lazy(() => import('../../dialogs/DeletePostConfirmDialog.tsx'));
-const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog.tsx'));
+const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog'));
 const ReportDialog = lazy(() => import('../../dialogs/ReportDialog.tsx'));
+const SilenceConfirmDialog = lazy(() => import('../../dialogs/SilenceConfirmDialog'));
 
 export interface PostOverflowActionProps {
 	post: SignalizedPost;
@@ -35,10 +41,13 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 		const post = props.post;
 		const author = post.author;
 
-		const isSameAuthor = post.uid === post.author.did;
+		const authorDid = author.did;
+
+		const isSameAuthor = post.uid === authorDid;
+		const isOwnAccount = createMemo(() => multiagent.accounts.some((account) => account.did === authorDid));
 
 		const isTempMuted = () => isProfileTempMuted(filters, author.did);
-		const isMuted = () => author.viewer.muted.value || isTempMuted();
+		const isMuted = () => author.viewer.muted.value;
 
 		if (import.meta.env.VITE_MODE === 'desktop') {
 			return (
@@ -85,14 +94,45 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 								<button
 									onClick={() => {
 										close();
-										openModal(() => <MuteConfirmDialog profile={author} filters={filters} />);
+										openModal(() => (
+											<MuteConfirmDialog uid={/* @once */ author.uid} did={/* @once */ author.did} />
+										));
 									}}
 									class={/* @once */ MenuItem()}
 								>
-									<VolumeOffIcon class={/* @once */ MenuItemIcon()} />
-									<span>{isMuted() ? `Unmute @${author.handle.value}` : `Mute @${author.handle.value}`}</span>
+									{(() => {
+										const Icon = !isMuted() ? VolumeOffIcon : VolumeUpIcon;
+										return <Icon class={/* @once */ MenuItemIcon()} />;
+									})()}
+									<span>
+										{!isMuted() ? `Mute @${author.handle.value}` : `Unmute @${author.handle.value}`}
+									</span>
 								</button>
 							)}
+
+							{(() => {
+								if (!isOwnAccount()) {
+									return (
+										<button
+											onClick={() => {
+												close();
+												openModal(() => <SilenceConfirmDialog profile={author} />);
+											}}
+											class={/* @once */ MenuItem()}
+										>
+											{(() => {
+												const Icon = !isMuted() ? VisibilityOffIcon : VisibilityIcon;
+												return <Icon class={/* @once */ MenuItemIcon()} />;
+											})()}
+											<span>
+												{!isTempMuted()
+													? `Silence @${author.handle.value}`
+													: `Unsilence @${author.handle.value}`}
+											</span>
+										</button>
+									);
+								}
+							})()}
 
 							<button
 								onClick={() => {
