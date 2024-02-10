@@ -2,21 +2,21 @@ import { createMemo } from 'solid-js';
 
 import { createInfiniteQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema';
 
 import {
 	getInitialProfileFollowers,
 	getProfileFollowers,
 	getProfileFollowersKey,
-} from '~/api/queries/get-profile-followers.ts';
+} from '~/api/queries/get-profile-followers';
 
-import { ProfileFollowAccessory } from '~/com/components/items/ProfileItem.tsx';
-import ProfileList from '~/com/components/lists/ProfileList.tsx';
-import { LINK_PROFILE, useLinking } from '~/com/components/Link.tsx';
+import { ProfileFollowAccessory } from '~/com/components/items/ProfileItem';
+import ProfileList from '~/com/components/lists/ProfileList';
+import { LINK_PROFILE, useLinking } from '~/com/components/Link';
 
-import { usePaneContext } from '../PaneContext.tsx';
-import PaneDialog from '../PaneDialog.tsx';
-import PaneDialogHeader from '../PaneDialogHeader.tsx';
+import { usePaneContext } from '../PaneContext';
+import PaneDialog from '../PaneDialog';
+import PaneDialogHeader from '../PaneDialogHeader';
 
 export interface ProfileFollowersPaneDialogProps {
 	/** Expected to be static */

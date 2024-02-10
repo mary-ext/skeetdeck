@@ -1,4 +1,4 @@
-import { createIcon } from './_icon.tsx';
+import { createIcon } from './_icon';
 
 const VolumeOffIcon = createIcon([
 	[

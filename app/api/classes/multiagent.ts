@@ -9,7 +9,7 @@ import {
 import type { DID } from '@externdefs/bluesky-client/atp-schema';
 import { decodeJwt } from '@externdefs/bluesky-client/jwt';
 
-import { createReactiveLocalStorage } from '~/utils/storage.ts';
+import { createReactiveLocalStorage } from '~/utils/storage';
 
 export interface MultiagentLoginOptions extends AtpLoginOptions {
 	service: string;

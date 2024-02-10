@@ -1,22 +1,22 @@
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema';
 
-import type { SignalizedProfile } from '~/api/stores/profiles.ts';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 
-import { dequal } from '~/utils/dequal.ts';
+import { dequal } from '~/utils/dequal';
 
-import { closeModal } from '../../globals/modals.tsx';
+import { closeModal } from '../../globals/modals';
 
-import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog.ts';
-import { IconButton } from '../../primitives/icon-button.ts';
+import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
+import { IconButton } from '../../primitives/icon-button';
 
-import GenericErrorView from '../views/GenericErrorView.tsx';
-import CircularProgress from '../CircularProgress.tsx';
-import DialogOverlay from './DialogOverlay.tsx';
+import GenericErrorView from '../views/GenericErrorView';
+import CircularProgress from '../CircularProgress';
+import DialogOverlay from './DialogOverlay';
 
-import CloseIcon from '../../icons/baseline-close.tsx';
-import { formatAbsDateTime } from '~/utils/intl/time.ts';
+import CloseIcon from '../../icons/baseline-close';
+import { formatAbsDateTime } from '~/utils/intl/time';
 
 export interface HandleHistoryDialogProps {
 	/** Expected to be static */

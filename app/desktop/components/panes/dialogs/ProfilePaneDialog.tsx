@@ -2,30 +2,30 @@ import { Match, Switch, createSignal } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
-import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile.ts';
+import type { DID } from '~/api/atp-schema';
+import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';
 
-import { formatCompact } from '~/utils/intl/number.ts';
+import { formatCompact } from '~/utils/intl/number';
 
-import CircularProgress from '~/com/components/CircularProgress.tsx';
-import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel.tsx';
-import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
-import GenericErrorView from '~/com/components/views/GenericErrorView.tsx';
+import CircularProgress from '~/com/components/CircularProgress';
+import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel';
+import { VirtualContainer } from '~/com/components/VirtualContainer';
+import GenericErrorView from '~/com/components/views/GenericErrorView';
 
-import TimelineList from '~/com/components/lists/TimelineList.tsx';
-import TimelineGalleryList from '~/com/components/lists/TimelineGalleryList.tsx';
-import ProfileHeader from '~/com/components/views/ProfileHeader.tsx';
+import TimelineList from '~/com/components/lists/TimelineList';
+import TimelineGalleryList from '~/com/components/lists/TimelineGalleryList';
+import ProfileHeader from '~/com/components/views/ProfileHeader';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add.tsx';
+import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
 
-import { type ProfilePaneConfig, PANE_TYPE_PROFILE, ProfilePaneTab } from '../../../globals/panes.ts';
-import { addPane, preferences } from '../../../globals/settings.ts';
+import { type ProfilePaneConfig, PANE_TYPE_PROFILE, ProfilePaneTab } from '../../../globals/panes';
+import { addPane, preferences } from '../../../globals/settings';
 
-import { usePaneContext, usePaneModalState } from '../PaneContext.tsx';
-import PaneDialog from '../PaneDialog.tsx';
-import PaneDialogHeader from '../PaneDialogHeader.tsx';
+import { usePaneContext, usePaneModalState } from '../PaneContext';
+import PaneDialog from '../PaneDialog';
+import PaneDialogHeader from '../PaneDialogHeader';
 
 export interface ProfilePaneDialogProps {
 	/** Expected to be static */

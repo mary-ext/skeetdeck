@@ -2,17 +2,17 @@ import { type JSX, For } from 'solid-js';
 
 import { createInfiniteQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema';
 
-import { getProfileFeeds, getProfileFeedsKey } from '~/api/queries/get-profile-feeds.ts';
+import { getProfileFeeds, getProfileFeedsKey } from '~/api/queries/get-profile-feeds';
 
-import { loadMoreBtn } from '../../primitives/interactive.ts';
+import { loadMoreBtn } from '../../primitives/interactive';
 
-import GenericErrorView from '../views/GenericErrorView.tsx';
-import CircularProgress from '../CircularProgress.tsx';
-import { VirtualContainer } from '../VirtualContainer.tsx';
+import GenericErrorView from '../views/GenericErrorView';
+import CircularProgress from '../CircularProgress';
+import { VirtualContainer } from '../VirtualContainer';
 
-import FeedItem from '../items/FeedItem.tsx';
+import FeedItem from '../items/FeedItem';
 
 export interface FeedListProps {
 	uid: DID;

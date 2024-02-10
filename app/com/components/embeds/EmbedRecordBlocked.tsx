@@ -1,11 +1,11 @@
 import { type JSX } from 'solid-js';
 
-import type { DID, RefOf } from '~/api/atp-schema.ts';
-import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
+import type { DID, RefOf } from '~/api/atp-schema';
+import { getRecordId, getRepoId } from '~/api/utils/misc';
 
-import { LINK_POST, Link } from '../Link.tsx';
+import { LINK_POST, Link } from '../Link';
 
-import EmbedRecordNotFound from './EmbedRecordNotFound.tsx';
+import EmbedRecordNotFound from './EmbedRecordNotFound';
 
 type EmbeddedBlockedRecord = RefOf<'app.bsky.embed.record#viewBlocked'>;
 

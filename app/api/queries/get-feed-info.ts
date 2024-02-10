@@ -1,10 +1,10 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID, RefOf } from '../atp-schema.ts';
-import { multiagent } from '../globals/agent.ts';
-import { createBatchedFetch } from '../utils/batch-fetch.ts';
+import type { DID, RefOf } from '../atp-schema';
+import { multiagent } from '../globals/agent';
+import { createBatchedFetch } from '../utils/batch-fetch';
 
-import { getCachedFeed, mergeFeed } from '../stores/feeds.ts';
+import { getCachedFeed, mergeFeed } from '../stores/feeds';
 
 type Feed = RefOf<'app.bsky.feed.defs#generatorView'>;
 type Query = [uid: DID, uri: string];

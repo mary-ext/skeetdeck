@@ -1,22 +1,22 @@
 import { createSignal } from 'solid-js';
 
-import { getCurrentTid } from '~/api/utils/tid.ts';
+import { getCurrentTid } from '~/api/utils/tid';
 
-import { closeModal } from '~/com/globals/modals.tsx';
+import { closeModal } from '~/com/globals/modals';
 
-import { preferences } from '~/desktop/globals/settings.ts';
+import { preferences } from '~/desktop/globals/settings';
 
-import { model, modelChecked } from '~/utils/input.ts';
+import { model, modelChecked } from '~/utils/input';
 
-import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
-import Checkbox from '~/com/components/inputs/Checkbox.tsx';
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
+import Checkbox from '~/com/components/inputs/Checkbox';
 
-import { Button } from '~/com/primitives/button.ts';
-import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
-import { Input } from '~/com/primitives/input.ts';
+import { Button } from '~/com/primitives/button';
+import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
+import { Input } from '~/com/primitives/input';
 
-import { type GateState, useComposer, createComposerState } from '../../ComposerContext.tsx';
-import { type ComposerDraft, getDraftDb } from '../../utils/draft-db.ts';
+import { type GateState, useComposer, createComposerState } from '../../ComposerContext';
+import { type ComposerDraft, getDraftDb } from '../../utils/draft-db';
 
 const serializeGateState = (state: GateState): GateState => {
 	const type = state.type;

@@ -1,17 +1,17 @@
 import type { JSX } from 'solid-js';
 
-import { getRecordId } from '~/api/utils/misc.ts';
+import { getRecordId } from '~/api/utils/misc';
 
-import { updatePostRepost } from '~/api/mutations/repost-post.ts';
-import type { SignalizedPost } from '~/api/stores/posts.ts';
+import { updatePostRepost } from '~/api/mutations/repost-post';
+import type { SignalizedPost } from '~/api/stores/posts';
 
-import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu.ts';
+import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
 
-import { Flyout } from '../../Flyout.tsx';
-import { LINK_QUOTE, useLinking } from '../../Link.tsx';
+import { Flyout } from '../../Flyout';
+import { LINK_QUOTE, useLinking } from '../../Link';
 
-import FormatQuoteIcon from '~/com/icons/baseline-format-quote.tsx';
-import RepeatIcon from '../../../icons/baseline-repeat.tsx';
+import FormatQuoteIcon from '~/com/icons/baseline-format-quote';
+import RepeatIcon from '../../../icons/baseline-repeat';
 
 export interface RepostActionProps {
 	post: SignalizedPost;

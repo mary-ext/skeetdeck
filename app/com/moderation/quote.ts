@@ -1,6 +1,6 @@
-import { sequal } from '~/utils/dequal.ts';
+import { sequal } from '~/utils/dequal';
 
-import type { Records, UnionOf } from '~/api/atp-schema.ts';
+import type { Records, UnionOf } from '~/api/atp-schema';
 
 import {
 	type ModerationCause,
@@ -10,11 +10,11 @@ import {
 	decideMutedPermanentModeration,
 	decideMutedTemporaryModeration,
 	finalizeModeration,
-} from '~/api/moderation/action.ts';
-import { PreferenceWarn } from '~/api/moderation/enums.ts';
+} from '~/api/moderation/action';
+import { PreferenceWarn } from '~/api/moderation/enums';
 
-import { type SharedPreferencesObject, isProfileTempMuted } from '../components/SharedPreferences.tsx';
-import { unwrapImageAlt } from './post.ts';
+import { type SharedPreferencesObject, isProfileTempMuted } from '../components/SharedPreferences';
+import { unwrapImageAlt } from './post';
 
 type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
 type PostRecord = Records['app.bsky.feed.post'];

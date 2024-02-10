@@ -1,7 +1,7 @@
 import '@pkg/solid-query';
 
-import type { ModerationOpts } from './moderation/types.ts';
-import type { FilterPreferences, LanguagePreferences } from './types.ts';
+import type { ModerationOpts } from './moderation/types';
+import type { FilterPreferences, LanguagePreferences } from './types';
 
 declare module '@pkg/solid-query' {
 	interface Register {

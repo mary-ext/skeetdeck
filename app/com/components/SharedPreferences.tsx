@@ -2,10 +2,10 @@
 
 import { createContext, useContext } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema.ts';
-import type { FilterPreferences, LanguagePreferences, TranslationPreferences } from '~/api/types.ts';
+import type { DID } from '~/api/atp-schema';
+import type { FilterPreferences, LanguagePreferences, TranslationPreferences } from '~/api/types';
 
-import type { ModerationOpts } from '~/api/moderation/types.ts';
+import type { ModerationOpts } from '~/api/moderation/types';
 
 export interface SharedPreferencesObject {
 	/** Used as a cache-busting mechanism */

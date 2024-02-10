@@ -1,14 +1,14 @@
 import { type JSX } from 'solid-js';
 
-import { multiagent } from '~/api/globals/agent.ts';
+import { multiagent } from '~/api/globals/agent';
 
-import { clsx } from '~/utils/misc.ts';
+import { clsx } from '~/utils/misc';
 
-import DragIndicatorIcon from '~/com/icons/baseline-drag-indicator.tsx';
+import DragIndicatorIcon from '~/com/icons/baseline-drag-indicator';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import { usePaneContext } from './PaneContext.tsx';
+import { usePaneContext } from './PaneContext';
 
 export interface PaneHeaderProps {
 	title: string;

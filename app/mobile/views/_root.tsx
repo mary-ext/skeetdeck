@@ -2,24 +2,24 @@ import { type JSX, createMemo, lazy, Suspense } from 'solid-js';
 
 import type { MatchedRouteState } from '@pkg/solid-navigation';
 
-import { multiagent } from '~/api/globals/agent.ts';
+import { multiagent } from '~/api/globals/agent';
 
-import { getMatchedRoute } from '../globals/router.ts';
+import { getMatchedRoute } from '../globals/router';
 
-import { getEntryAt } from '../utils/router.ts';
+import { getEntryAt } from '../utils/router';
 
-import CircularProgress from '~/com/components/CircularProgress.tsx';
+import CircularProgress from '~/com/components/CircularProgress';
 
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { Interactive } from '~/com/primitives/interactive';
 
-import ExploreIcon from '~/com/icons/baseline-explore.tsx';
-import ExploreOutlinedIcon from '~/com/icons/outline-explore.tsx';
-import HomeIcon from '~/com/icons/baseline-home.tsx';
-import HomeOutlinedIcon from '~/com/icons/outline-home.tsx';
-import NotificationsIcon from '~/com/icons/baseline-notifications.tsx';
-import NotificationsOutlinedIcon from '~/com/icons/outline-notifications.tsx';
+import ExploreIcon from '~/com/icons/baseline-explore';
+import ExploreOutlinedIcon from '~/com/icons/outline-explore';
+import HomeIcon from '~/com/icons/baseline-home';
+import HomeOutlinedIcon from '~/com/icons/outline-home';
+import NotificationsIcon from '~/com/icons/baseline-notifications';
+import NotificationsOutlinedIcon from '~/com/icons/outline-notifications';
 
-import { MobileLinkingProvider } from './root/MobileLinkingProvider.tsx';
+import { MobileLinkingProvider } from './root/MobileLinkingProvider';
 
 const LoggedOutView = lazy(() => import('./LoggedOut.tsx'));
 

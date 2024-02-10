@@ -1,9 +1,9 @@
 import { type DidDocument, Agent, getPdsEndpoint } from '@externdefs/bluesky-client/agent';
 import type { QueryClient } from '@pkg/solid-query';
 
-import type { DID } from './atp-schema.ts';
-import { APPVIEW_URL } from './globals/defaults.ts';
-import { isDid } from './utils/misc.ts';
+import type { DID } from './atp-schema';
+import { APPVIEW_URL } from './globals/defaults';
+import { isDid } from './utils/misc';
 
 const HOST_RE = /^([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]+))$/;
 

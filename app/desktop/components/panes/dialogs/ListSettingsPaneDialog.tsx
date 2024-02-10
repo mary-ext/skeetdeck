@@ -2,46 +2,46 @@ import { createEffect, createMemo, lazy, createSignal as signal } from 'solid-js
 
 import { type InfiniteData, createMutation, useQueryClient } from '@pkg/solid-query';
 
-import type { Records, UnionOf } from '~/api/atp-schema.ts';
-import { multiagent } from '~/api/globals/agent.ts';
-import { formatQueryError, getRecordId } from '~/api/utils/misc.ts';
+import type { Records, UnionOf } from '~/api/atp-schema';
+import { multiagent } from '~/api/globals/agent';
+import { formatQueryError, getRecordId } from '~/api/utils/misc';
 
-import { uploadBlob } from '~/api/mutations/upload-blob.ts';
-import { getListInfoKey } from '~/api/queries/get-list-info.ts';
+import { uploadBlob } from '~/api/mutations/upload-blob';
+import { getListInfoKey } from '~/api/queries/get-list-info';
 import {
 	type ListMembership,
 	getListMemberships,
 	getListMembershipsKey,
 	listMembershipsOptions,
-} from '~/api/queries/get-list-memberships.ts';
-import { type SignalizedList, removeCachedList } from '~/api/stores/lists.ts';
+} from '~/api/queries/get-list-memberships';
+import { type SignalizedList, removeCachedList } from '~/api/stores/lists';
 
-import { finalizeRt, getRtLength, parseRt } from '~/api/richtext/composer.ts';
-import { serializeRichText } from '~/api/richtext/utils.ts';
+import { finalizeRt, getRtLength, parseRt } from '~/api/richtext/composer';
+import { serializeRichText } from '~/api/richtext/utils';
 
-import { model } from '~/utils/input.ts';
-import { chunked, clsx, mapDefined } from '~/utils/misc.ts';
+import { model } from '~/utils/input';
+import { chunked, clsx, mapDefined } from '~/utils/misc';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '~/com/globals/modals';
 
-import { PANE_TYPE_LIST } from '../../../globals/panes.ts';
-import { preferences } from '../../../globals/settings.ts';
+import { PANE_TYPE_LIST } from '../../../globals/panes';
+import { preferences } from '../../../globals/settings';
 
-import { Button } from '~/com/primitives/button.ts';
-import { Input } from '~/com/primitives/input.ts';
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { Button } from '~/com/primitives/button';
+import { Input } from '~/com/primitives/input';
+import { Interactive } from '~/com/primitives/interactive';
 
-import RichtextComposer from '~/com/components/richtext/RichtextComposer.tsx';
+import RichtextComposer from '~/com/components/richtext/RichtextComposer';
 
-import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
-import AddPhotoButton from '~/com/components/inputs/AddPhotoButton.tsx';
-import BlobImage from '~/com/components/BlobImage.tsx';
+import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
+import AddPhotoButton from '~/com/components/inputs/AddPhotoButton';
+import BlobImage from '~/com/components/BlobImage';
 
-import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 
-import { usePaneContext, usePaneModalState } from '../PaneContext.tsx';
-import PaneDialog from '../PaneDialog.tsx';
-import PaneDialogHeader from '../PaneDialogHeader.tsx';
+import { usePaneContext, usePaneModalState } from '../PaneContext';
+import PaneDialog from '../PaneDialog';
+import PaneDialogHeader from '../PaneDialogHeader';
 
 const ListMembersPaneDialog = lazy(() => import('./ListMembersPaneDialog.tsx'));
 

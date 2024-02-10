@@ -1,9 +1,9 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID } from '../atp-schema.ts';
-import { multiagent } from '../globals/agent.ts';
+import type { DID } from '../atp-schema';
+import { multiagent } from '../globals/agent';
 
-import { getCachedProfile, mergeProfile } from '../stores/profiles.ts';
+import { getCachedProfile, mergeProfile } from '../stores/profiles';
 
 export const getProfileFollowsKey = (uid: DID, actor: string, limit = 25) => {
 	return ['getProfileFollows', uid, actor, limit] as const;

@@ -1,16 +1,16 @@
 import { createInfiniteQuery, createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema';
 
-import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info.ts';
-import { getLikes, getLikesKey } from '~/api/queries/get-likes.ts';
+import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info';
+import { getLikes, getLikesKey } from '~/api/queries/get-likes';
 
-import ProfileList from '~/com/components/lists/ProfileList.tsx';
-import { LINK_PROFILE, useLinking } from '~/com/components/Link.tsx';
+import ProfileList from '~/com/components/lists/ProfileList';
+import { LINK_PROFILE, useLinking } from '~/com/components/Link';
 
-import { usePaneContext } from '../PaneContext.tsx';
-import PaneDialog from '../PaneDialog.tsx';
-import PaneDialogHeader from '../PaneDialogHeader.tsx';
+import { usePaneContext } from '../PaneContext';
+import PaneDialog from '../PaneDialog';
+import PaneDialogHeader from '../PaneDialogHeader';
 
 export interface FeedLikedByPaneDialogProps {
 	/** Expected to be static */

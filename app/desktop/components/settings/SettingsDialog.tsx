@@ -1,24 +1,24 @@
 import { type ComponentProps, type JSX, createSignal, Suspense } from 'solid-js';
 
-import { clsx } from '~/utils/misc.ts';
+import { clsx } from '~/utils/misc';
 
-import { closeModal } from '~/com/globals/modals.tsx';
+import { closeModal } from '~/com/globals/modals';
 
-import { DialogRoot } from '~/com/primitives/dialog.ts';
-import { IconButton } from '~/com/primitives/icon-button.ts';
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { DialogRoot } from '~/com/primitives/dialog';
+import { IconButton } from '~/com/primitives/icon-button';
+import { Interactive } from '~/com/primitives/interactive';
 
-import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
-import CircularProgress from '~/com/components/CircularProgress.tsx';
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
+import CircularProgress from '~/com/components/CircularProgress';
 
-import AccessibilityIcon from '~/com/icons/baseline-accessibility.tsx';
-import CloseIcon from '~/com/icons/baseline-close.tsx';
-import ColorLensIcon from '~/com/icons/baseline-color-lens.tsx';
-import FilterAltIcon from '~/com/icons/baseline-filter-alt.tsx';
-import InfoIcon from '~/com/icons/baseline-info.tsx';
-import LanguageIcon from '~/com/icons/baseline-language.tsx';
-import PeopleIcon from '~/com/icons/baseline-people.tsx';
-import VisibilityIcon from '~/com/icons/baseline-visibility.tsx';
+import AccessibilityIcon from '~/com/icons/baseline-accessibility';
+import CloseIcon from '~/com/icons/baseline-close';
+import ColorLensIcon from '~/com/icons/baseline-color-lens';
+import FilterAltIcon from '~/com/icons/baseline-filter-alt';
+import InfoIcon from '~/com/icons/baseline-info';
+import LanguageIcon from '~/com/icons/baseline-language';
+import PeopleIcon from '~/com/icons/baseline-people';
+import VisibilityIcon from '~/com/icons/baseline-visibility';
 
 import {
 	type RouterState,
@@ -33,8 +33,8 @@ import {
 	VIEW_KEYWORD_FILTERS,
 	VIEW_LANGAUGE,
 	useViewRouter,
-} from './settings-views/_router.tsx';
-import SettingsRouterView from './settings-views/SettingsRouterView.tsx';
+} from './settings-views/_router';
+import SettingsRouterView from './settings-views/SettingsRouterView';
 
 const DONATION_LINK = 'https://mary.my.id/donate.html';
 

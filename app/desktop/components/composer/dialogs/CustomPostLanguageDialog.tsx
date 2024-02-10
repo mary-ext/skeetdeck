@@ -1,21 +1,21 @@
 import { type JSX, For, createMemo, createSignal, batch } from 'solid-js';
 
-import { getNativeLanguageName, languageNames, languageNamesStrict } from '~/utils/intl/display-names.ts';
-import { CODE2S } from '~/utils/intl/languages.ts';
-import { model } from '~/utils/input.ts';
+import { getNativeLanguageName, languageNames, languageNamesStrict } from '~/utils/intl/display-names';
+import { CODE2S } from '~/utils/intl/languages';
+import { model } from '~/utils/input';
 
-import { closeModal } from '~/com/globals/modals.tsx';
+import { closeModal } from '~/com/globals/modals';
 
-import { Button } from '~/com/primitives/button.ts';
-import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
-import { IconButton } from '~/com/primitives/icon-button.ts';
+import { Button } from '~/com/primitives/button';
+import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
-import SearchInput from '~/com/components/inputs/SearchInput.tsx';
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
+import SearchInput from '~/com/components/inputs/SearchInput';
 
-import AddIcon from '~/com/icons/baseline-add.tsx';
-import CloseIcon from '~/com/icons/baseline-close.tsx';
-import DeleteIcon from '~/com/icons/baseline-delete.tsx';
+import AddIcon from '~/com/icons/baseline-add';
+import CloseIcon from '~/com/icons/baseline-close';
+import DeleteIcon from '~/com/icons/baseline-delete';
 
 export interface CustomPostLanguageDialogProps {
 	languages: string[];

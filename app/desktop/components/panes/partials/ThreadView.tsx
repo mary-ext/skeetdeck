@@ -3,28 +3,28 @@ import { For, Match, Show, Suspense, Switch, lazy, onMount } from 'solid-js';
 import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 import { type CreateQueryResult } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
-import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
+import type { DID } from '~/api/atp-schema';
+import { getRecordId, getRepoId } from '~/api/utils/misc';
 
-import type { ThreadData } from '~/api/models/threads.ts';
-import { BlockedThreadError } from '~/api/queries/get-post-thread.ts';
-import { SignalizedPost } from '~/api/stores/posts.ts';
+import type { ThreadData } from '~/api/models/threads';
+import { BlockedThreadError } from '~/api/queries/get-post-thread';
+import { SignalizedPost } from '~/api/stores/posts';
 
-import { preferences } from '../../../globals/settings.ts';
+import { preferences } from '../../../globals/settings';
 
-import { Button } from '~/com/primitives/button.ts';
+import { Button } from '~/com/primitives/button';
 
-import CircularProgress from '~/com/components/CircularProgress.tsx';
-import Keyed from '~/com/components/Keyed.ts';
-import { LINK_POST, LINK_PROFILE, Link } from '~/com/components/Link.tsx';
-import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
+import CircularProgress from '~/com/components/CircularProgress';
+import Keyed from '~/com/components/Keyed';
+import { LINK_POST, LINK_PROFILE, Link } from '~/com/components/Link';
+import { VirtualContainer } from '~/com/components/VirtualContainer';
 
-import GenericErrorView from '~/com/components/views/GenericErrorView.tsx';
-import PermalinkPost from '~/com/components/views/PermalinkPost.tsx';
+import GenericErrorView from '~/com/components/views/GenericErrorView';
+import PermalinkPost from '~/com/components/views/PermalinkPost';
 
-import EmbedRecordBlocked from '~/com/components/embeds/EmbedRecordBlocked.tsx';
-import EmbedRecordNotFound from '~/com/components/embeds/EmbedRecordNotFound.tsx';
-import Post from '~/com/components/items/Post.tsx';
+import EmbedRecordBlocked from '~/com/components/embeds/EmbedRecordBlocked';
+import EmbedRecordNotFound from '~/com/components/embeds/EmbedRecordNotFound';
+import Post from '~/com/components/items/Post';
 
 const FlattenedThread = lazy(() => import('~/com/components/views/threads/FlattenedThread.tsx'));
 const NestedThread = lazy(() => import('~/com/components/views/threads/NestedThread.tsx'));

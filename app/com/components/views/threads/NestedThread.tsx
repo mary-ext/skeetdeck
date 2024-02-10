@@ -1,16 +1,16 @@
 import { type JSX, For } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema.ts';
-import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
+import type { DID } from '~/api/atp-schema';
+import { getRecordId, getRepoId } from '~/api/utils/misc';
 
-import type { ThreadData, ThreadItem } from '~/api/models/threads.ts';
+import type { ThreadData, ThreadItem } from '~/api/models/threads';
 
-import { LINK_POST, Link } from '../../Link.tsx';
-import { VirtualContainer } from '../../VirtualContainer.tsx';
+import { LINK_POST, Link } from '../../Link';
+import { VirtualContainer } from '../../VirtualContainer';
 
-import ArrowLeftIcon from '../../../icons/baseline-arrow-left.tsx';
+import ArrowLeftIcon from '../../../icons/baseline-arrow-left';
 
-import PostTreeItem from '../../items/PostTreeItem.tsx';
+import PostTreeItem from '../../items/PostTreeItem';
 
 export interface NestedThreadProps {
 	data: ThreadData;

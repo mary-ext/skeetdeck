@@ -1,24 +1,24 @@
 import { type JSX, createSignal } from 'solid-js';
 
-import { preferences } from '../../../globals/settings.ts';
-import { ProfilePaneTab, type ProfilePaneConfig } from '../../../globals/panes.ts';
+import { preferences } from '../../../globals/settings';
+import { ProfilePaneTab, type ProfilePaneConfig } from '../../../globals/panes';
 
-import TimelineList from '~/com/components/lists/TimelineList.tsx';
-import TimelineGalleryList from '~/com/components/lists/TimelineGalleryList.tsx';
-import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel.tsx';
+import TimelineList from '~/com/components/lists/TimelineList';
+import TimelineGalleryList from '~/com/components/lists/TimelineGalleryList';
+import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import SettingsIcon from '~/com/icons/baseline-settings.tsx';
+import SettingsIcon from '~/com/icons/baseline-settings';
 
-import { usePaneContext } from '../PaneContext.tsx';
-import Pane from '../Pane.tsx';
-import PaneAside from '../PaneAside.tsx';
-import PaneBody from '../PaneBody.tsx';
-import PaneHeader from '../PaneHeader.tsx';
+import { usePaneContext } from '../PaneContext';
+import Pane from '../Pane';
+import PaneAside from '../PaneAside';
+import PaneBody from '../PaneBody';
+import PaneHeader from '../PaneHeader';
 
-import GenericPaneSettings from '../settings/GenericPaneSettings.tsx';
-import ProfilePaneTabSettings from '../settings/ProfilePaneTabSettings.tsx';
+import GenericPaneSettings from '../settings/GenericPaneSettings';
+import ProfilePaneTabSettings from '../settings/ProfilePaneTabSettings';
 
 const ProfilePane = () => {
 	const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);

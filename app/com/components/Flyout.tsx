@@ -6,9 +6,9 @@ import { type Middleware, autoUpdate, flip, shift, size } from '@floating-ui/dom
 import { type Placement, getSide } from '@floating-ui/utils';
 import { useFloating } from 'solid-floating-ui';
 
-import { assert } from '~/utils/misc.ts';
+import { assert } from '~/utils/misc';
 
-import Modal from './Modal.tsx';
+import Modal from './Modal';
 
 export interface MenuContentProps {
 	ref: (el: HTMLElement) => void;

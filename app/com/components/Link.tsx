@@ -1,7 +1,7 @@
 import { type JSX, createContext, useContext } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema.ts';
-import type { SignalizedProfile } from '~/api/stores/profiles.ts';
+import type { DID } from '~/api/atp-schema';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 
 export const LINK_EXTERNAL = 0;
 export const LINK_FEED = 1;

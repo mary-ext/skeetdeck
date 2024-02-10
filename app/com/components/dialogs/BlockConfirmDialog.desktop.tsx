@@ -2,29 +2,29 @@ import { createEffect, createSignal } from 'solid-js';
 
 import { type InfiniteData, createQuery, useQueryClient } from '@pkg/solid-query';
 
-import type { RefOf } from '~/api/atp-schema.ts';
-import { getAccountHandle, multiagent } from '~/api/globals/agent.ts';
-import { formatQueryError } from '~/api/utils/misc.ts';
+import type { RefOf } from '~/api/atp-schema';
+import { getAccountHandle, multiagent } from '~/api/globals/agent';
+import { formatQueryError } from '~/api/utils/misc';
 
-import { updateProfileBlock } from '~/api/mutations/block-profile.ts';
-import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile.ts';
-import type { TimelinePage, getTimelineKey } from '~/api/queries/get-timeline.ts';
-import type { SignalizedProfile } from '~/api/stores/profiles.ts';
-import { produceTimelineFilter } from '~/api/updaters/timeline-filter.ts';
+import { updateProfileBlock } from '~/api/mutations/block-profile';
+import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';
+import type { TimelinePage, getTimelineKey } from '~/api/queries/get-timeline';
+import type { SignalizedProfile } from '~/api/stores/profiles';
+import { produceTimelineFilter } from '~/api/updaters/timeline-filter';
 
-import { closeModal } from '../../globals/modals.tsx';
+import { closeModal } from '../../globals/modals';
 
-import CircularProgress from '../CircularProgress.tsx';
-import DialogOverlay from './DialogOverlay.tsx';
+import CircularProgress from '../CircularProgress';
+import DialogOverlay from './DialogOverlay';
 
-import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog.ts';
-import { Button } from '../../primitives/button.ts';
+import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
+import { Button } from '../../primitives/button';
 
-import { EmbedListContent } from '../embeds/EmbedList.tsx';
+import { EmbedListContent } from '../embeds/EmbedList';
 
-import SwitchAccountAction from '~/desktop/components/flyouts/SwitchAccountAction.tsx';
+import SwitchAccountAction from '~/desktop/components/flyouts/SwitchAccountAction';
 
-import type { BlockConfirmDialogProps } from './BlockConfirmDialog.tsx';
+import type { BlockConfirmDialogProps } from './BlockConfirmDialog';
 
 type ListViewBasic = RefOf<'app.bsky.graph.defs#listViewBasic'>;
 

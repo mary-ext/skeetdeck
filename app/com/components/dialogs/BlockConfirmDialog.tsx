@@ -1,11 +1,11 @@
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema';
 
-import { closeModal } from '../../globals/modals.tsx';
+import { closeModal } from '../../globals/modals';
 
-import DialogOverlay from './DialogOverlay.tsx';
+import DialogOverlay from './DialogOverlay';
 
-import { DialogActions, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog.ts';
-import { Button } from '../../primitives/button.ts';
+import { DialogActions, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
+import { Button } from '../../primitives/button';
 
 export interface BlockConfirmDialogProps {
 	/** Expected to be static */

@@ -2,19 +2,19 @@ import { type JSX, For, createMemo, createSignal } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID, RefOf } from '~/api/atp-schema.ts';
+import type { DID, RefOf } from '~/api/atp-schema';
 
 import {
 	searchProfilesTypeahead,
 	searchProfilesTypeaheadKey,
-} from '~/api/queries/search-profiles-typeahead.ts';
+} from '~/api/queries/search-profiles-typeahead';
 
-import { createDebouncedValue, createDerivedSignal } from '~/utils/hooks.ts';
-import { model } from '~/utils/input.ts';
-import { clsx } from '~/utils/misc.ts';
+import { createDebouncedValue, createDerivedSignal } from '~/utils/hooks';
+import { model } from '~/utils/input';
+import { clsx } from '~/utils/misc';
 
-import SearchInput from '~/com/components/inputs/SearchInput.tsx';
-import CircularProgress from '~/com/components/CircularProgress.tsx';
+import SearchInput from '~/com/components/inputs/SearchInput';
+import CircularProgress from '~/com/components/CircularProgress';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 

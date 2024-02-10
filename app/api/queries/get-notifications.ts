@@ -1,11 +1,11 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID, RefOf } from '../atp-schema.ts';
-import { multiagent } from '../globals/agent.ts';
+import type { DID, RefOf } from '../atp-schema';
+import { multiagent } from '../globals/agent';
 
-import { wrapInfiniteQuery } from '../utils/query.ts';
+import { wrapInfiniteQuery } from '../utils/query';
 
-import { type NotificationSlice, createNotificationSlices } from '../models/notifications.ts';
+import { type NotificationSlice, createNotificationSlices } from '../models/notifications';
 
 type Notification = RefOf<'app.bsky.notification.listNotifications#notification'>;
 

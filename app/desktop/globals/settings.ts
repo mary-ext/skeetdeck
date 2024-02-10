@@ -1,15 +1,15 @@
-import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults.ts';
-import { PreferenceWarn } from '~/api/moderation/enums.ts';
-import type { ModerationOpts } from '~/api/moderation/types.ts';
-import type { FilterPreferences, LanguagePreferences, TranslationPreferences } from '~/api/types.ts';
+import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults';
+import { PreferenceWarn } from '~/api/moderation/enums';
+import type { ModerationOpts } from '~/api/moderation/types';
+import type { FilterPreferences, LanguagePreferences, TranslationPreferences } from '~/api/types';
 
-import { getCurrentTid } from '~/api/utils/tid.ts';
+import { getCurrentTid } from '~/api/utils/tid';
 
-import { createReactiveLocalStorage } from '~/utils/storage.ts';
+import { createReactiveLocalStorage } from '~/utils/storage';
 
-import type { SharedPreferencesObject } from '~/com/components/SharedPreferences.tsx';
+import type { SharedPreferencesObject } from '~/com/components/SharedPreferences';
 
-import { type DeckConfig, type PaneConfig, PaneSize, SpecificPaneSize } from './panes.ts';
+import { type DeckConfig, type PaneConfig, PaneSize, SpecificPaneSize } from './panes';
 
 export interface PreferencesSchema {
 	$version: 9;

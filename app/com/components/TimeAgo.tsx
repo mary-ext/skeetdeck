@@ -1,6 +1,6 @@
 import { type Accessor, type JSX, createSignal, createRenderEffect } from 'solid-js';
 
-import { formatAbsDateTime, formatReltime } from '~/utils/intl/time.ts';
+import { formatAbsDateTime, formatReltime } from '~/utils/intl/time';
 
 export interface TimeAgoProps {
 	value: string | number;

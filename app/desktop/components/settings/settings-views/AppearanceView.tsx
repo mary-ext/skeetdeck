@@ -1,11 +1,11 @@
-import { createRadioModel } from '~/utils/input.ts';
-import { getUniqueId } from '~/utils/misc.ts';
+import { createRadioModel } from '~/utils/input';
+import { getUniqueId } from '~/utils/misc';
 
-import { PaneSize } from '~/desktop/globals/panes.ts';
-import { preferences } from '~/desktop/globals/settings.ts';
+import { PaneSize } from '~/desktop/globals/panes';
+import { preferences } from '~/desktop/globals/settings';
 
-import Radio from '~/com/components/inputs/Radio.tsx';
-import Checkbox from '~/com/components/inputs/Checkbox.tsx';
+import Radio from '~/com/components/inputs/Radio';
+import Checkbox from '~/com/components/inputs/Checkbox';
 
 const AppearanceView = () => {
 	const ui = preferences.ui;

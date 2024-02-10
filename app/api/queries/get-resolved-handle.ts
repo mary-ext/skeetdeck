@@ -1,9 +1,9 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID } from '../atp-schema.ts';
-import { multiagent } from '../globals/agent.ts';
+import type { DID } from '../atp-schema';
+import { multiagent } from '../globals/agent';
 
-import { isDid } from '../utils/misc.ts';
+import { isDid } from '../utils/misc';
 
 export const getResolvedHandleKey = (uid: DID, actor: string) => {
 	return ['getResolvedHandle', uid, actor] as const;

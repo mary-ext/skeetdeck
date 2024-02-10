@@ -1,11 +1,11 @@
 import { type InfiniteData } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
-import { produce } from '~/utils/immer.ts';
+import type { DID } from '~/api/atp-schema';
+import { produce } from '~/utils/immer';
 
-import type { TimelineSlice } from '~/api/models/timeline.ts';
+import type { TimelineSlice } from '~/api/models/timeline';
 
-import type { TimelinePage, TimelinePageCursor } from '~/api/queries/get-timeline.ts';
+import type { TimelinePage, TimelinePageCursor } from '~/api/queries/get-timeline';
 
 export const produceTimelineFilter = (did: DID) => {
 	const isSliceMatching = (slice: TimelineSlice) => {

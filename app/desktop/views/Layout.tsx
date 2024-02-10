@@ -6,11 +6,11 @@ import { DragDropProvider, DragDropSensors, SortableProvider, createSortable } f
 import { ShowFreeze } from '@pkg/solid-freeze';
 import { type RouteComponentProps, location, navigate } from '@pkg/solid-page-router';
 
-import { multiagent } from '~/api/globals/agent.ts';
-import { getCurrentTid } from '~/api/utils/tid.ts';
+import { multiagent } from '~/api/globals/agent';
+import { getCurrentTid } from '~/api/utils/tid';
 
-import { openModal } from '~/com/globals/modals.tsx';
-import { Title } from '~/com/lib/meta.tsx';
+import { openModal } from '~/com/globals/modals';
+import { Title } from '~/com/lib/meta';
 
 import {
 	type ProfilePaneConfig,
@@ -18,26 +18,26 @@ import {
 	PANE_TYPE_SEARCH,
 	PANE_TYPE_PROFILE,
 	ProfilePaneTab,
-} from '../globals/panes.ts';
-import { addPane, preferences } from '../globals/settings.ts';
+} from '../globals/panes';
+import { addPane, preferences } from '../globals/settings';
 
-import { updateSW, updateStatus } from '~/utils/service-worker.ts';
-import { clsx } from '~/utils/misc.ts';
+import { updateSW, updateStatus } from '~/utils/service-worker';
+import { clsx } from '~/utils/misc';
 
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { Interactive } from '~/com/primitives/interactive';
 
-import CircularProgress from '~/com/components/CircularProgress.tsx';
-import { Flyout } from '~/com/components/Flyout.tsx';
-import Keyed from '~/com/components/Keyed.ts';
+import CircularProgress from '~/com/components/CircularProgress';
+import { Flyout } from '~/com/components/Flyout';
+import Keyed from '~/com/components/Keyed';
 
-import FeatherIcon from '~/com/icons/baseline-feather.tsx';
-import SearchIcon from '~/com/icons/baseline-search.tsx';
-import SettingsIcon from '~/com/icons/baseline-settings.tsx';
-import SystemUpdateAltIcon from '~/com/icons/baseline-system-update-alt.tsx';
-import TableLargeAddIcon from '~/com/icons/baseline-table-large-add.tsx';
+import FeatherIcon from '~/com/icons/baseline-feather';
+import SearchIcon from '~/com/icons/baseline-search';
+import SettingsIcon from '~/com/icons/baseline-settings';
+import SystemUpdateAltIcon from '~/com/icons/baseline-system-update-alt';
+import TableLargeAddIcon from '~/com/icons/baseline-table-large-add';
 
-import { useComposer } from '../components/composer/ComposerContext.tsx';
-import { ConstrainXDragAxis } from '../utils/dnd.ts';
+import { useComposer } from '../components/composer/ComposerContext';
+import { ConstrainXDragAxis } from '../utils/dnd';
 
 const ComposerPane = lazy(() => import('../components/composer/ComposerPane.tsx'));
 

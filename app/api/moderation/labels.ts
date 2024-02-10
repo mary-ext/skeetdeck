@@ -5,8 +5,8 @@ import {
 	FlagNoOverride,
 	PreferenceHide,
 	PreferenceWarn,
-} from './enums.ts';
-import type { LabelDefinitionMap } from './types.ts';
+} from './enums';
+import type { LabelDefinitionMap } from './types';
 
 // const LabelSystem = 'system';
 // const LabelLegal = 'legal';

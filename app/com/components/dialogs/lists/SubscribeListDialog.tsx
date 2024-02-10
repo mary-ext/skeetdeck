@@ -1,26 +1,26 @@
 import { type JSX, createSignal } from 'solid-js';
 
-import { subscribeListBlock } from '~/api/mutations/subscribe-list-block.ts';
-import { subscribeListMute } from '~/api/mutations/subscribe-list-mute.ts';
-import type { SignalizedList } from '~/api/stores/lists.ts';
+import { subscribeListBlock } from '~/api/mutations/subscribe-list-block';
+import { subscribeListMute } from '~/api/mutations/subscribe-list-mute';
+import type { SignalizedList } from '~/api/stores/lists';
 
-import { createRadioModel } from '~/utils/input.ts';
-import { getUniqueId } from '~/utils/misc.ts';
+import { createRadioModel } from '~/utils/input';
+import { getUniqueId } from '~/utils/misc';
 
-import { closeModal } from '../../../globals/modals.tsx';
+import { closeModal } from '../../../globals/modals';
 
-import { Button } from '../../../primitives/button.ts';
+import { Button } from '../../../primitives/button';
 import {
 	DialogActions,
 	DialogBody,
 	DialogHeader,
 	DialogRoot,
 	DialogTitle,
-} from '../../../primitives/dialog.ts';
+} from '../../../primitives/dialog';
 
-import ConfirmDialog from '../ConfirmDialog.tsx';
-import DialogOverlay from '../DialogOverlay.tsx';
-import Radio from '../../inputs/Radio.tsx';
+import ConfirmDialog from '../ConfirmDialog';
+import DialogOverlay from '../DialogOverlay';
+import Radio from '../../inputs/Radio';
 
 export interface SubscribeListDialogProps {
 	list: SignalizedList;

@@ -2,21 +2,21 @@ import { createSignal } from 'solid-js';
 
 import { navigate } from '@pkg/solid-page-router';
 
-import { preferences } from '../../globals/settings.ts';
+import { preferences } from '../../globals/settings';
 
-import { getCurrentTid } from '~/api/utils/tid.ts';
+import { getCurrentTid } from '~/api/utils/tid';
 
-import { closeModal } from '~/com/globals/modals.tsx';
-import { model } from '~/utils/input.ts';
+import { closeModal } from '~/com/globals/modals';
+import { model } from '~/utils/input';
 
-import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
-import EmojiFlyout from '~/com/components/emojis/EmojiFlyout.tsx';
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
+import EmojiFlyout from '~/com/components/emojis/EmojiFlyout';
 
-import { Button } from '~/com/primitives/button.ts';
-import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
-import { Input } from '~/com/primitives/input.ts';
+import { Button } from '~/com/primitives/button';
+import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
+import { Input } from '~/com/primitives/input';
 
-import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 
 const AddDeckDialog = () => {
 	const [name, setName] = createSignal('');

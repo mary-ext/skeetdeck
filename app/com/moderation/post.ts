@@ -1,8 +1,8 @@
-import { sequal } from '~/utils/dequal.ts';
+import { sequal } from '~/utils/dequal';
 
-import type { RefOf } from '~/api/atp-schema.ts';
+import type { RefOf } from '~/api/atp-schema';
 
-import type { SignalizedPost } from '~/api/stores/posts.ts';
+import type { SignalizedPost } from '~/api/stores/posts';
 
 import {
 	type ModerationCause,
@@ -12,10 +12,10 @@ import {
 	decideMutedPermanentModeration,
 	decideMutedTemporaryModeration,
 	finalizeModeration,
-} from '~/api/moderation/action.ts';
-import { PreferenceWarn } from '~/api/moderation/enums.ts';
+} from '~/api/moderation/action';
+import { PreferenceWarn } from '~/api/moderation/enums';
 
-import { type SharedPreferencesObject, isProfileTempMuted } from '../components/SharedPreferences.tsx';
+import { type SharedPreferencesObject, isProfileTempMuted } from '../components/SharedPreferences';
 
 type Post = RefOf<'app.bsky.feed.defs#postView'>;
 

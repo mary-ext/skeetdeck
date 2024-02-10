@@ -2,24 +2,24 @@ import { For, Match, Switch, createSignal, lazy } from 'solid-js';
 
 import { createInfiniteQuery, useQueryClient } from '@pkg/solid-query';
 
-import type { DID, RefOf } from '~/api/atp-schema.ts';
-import { multiagent, renderAccountName } from '~/api/globals/agent.ts';
+import type { DID, RefOf } from '~/api/atp-schema';
+import { multiagent, renderAccountName } from '~/api/globals/agent';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '~/com/globals/modals';
 
-import { type CustomListPaneConfig, PANE_TYPE_LIST } from '../../../globals/panes.ts';
+import { type CustomListPaneConfig, PANE_TYPE_LIST } from '../../../globals/panes';
 
-import { DialogBody } from '~/com/primitives/dialog.ts';
-import { Interactive, loadMoreBtn } from '~/com/primitives/interactive.ts';
+import { DialogBody } from '~/com/primitives/dialog';
+import { Interactive, loadMoreBtn } from '~/com/primitives/interactive';
 
-import CircularProgress from '~/com/components/CircularProgress.tsx';
-import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
-import FilterBar from '~/com/components/inputs/FilterBar.tsx';
+import CircularProgress from '~/com/components/CircularProgress';
+import { VirtualContainer } from '~/com/components/VirtualContainer';
+import FilterBar from '~/com/components/inputs/FilterBar';
 
-import type { PaneCreatorProps } from './types.ts';
+import type { PaneCreatorProps } from './types';
 
 import DefaultListAvatar from '~/com/assets/default-list-avatar.svg?url';
-import AddIcon from '~/com/icons/baseline-add.tsx';
+import AddIcon from '~/com/icons/baseline-add';
 
 const AddListDialog = lazy(() => import('~/com/components/dialogs/lists/AddListDialog.tsx'));
 

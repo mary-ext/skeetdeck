@@ -1,14 +1,14 @@
 import type { JSX } from 'solid-js';
 
-import { getRecordId } from '~/api/utils/misc.ts';
+import { getRecordId } from '~/api/utils/misc';
 
-import type { SignalizedFeed } from '~/api/stores/feeds.ts';
+import type { SignalizedFeed } from '~/api/stores/feeds';
 
-import { clsx } from '~/utils/misc.ts';
+import { clsx } from '~/utils/misc';
 
-import { Interactive } from '../../primitives/interactive.ts';
+import { Interactive } from '../../primitives/interactive';
 
-import { LINK_FEED, Link } from '../Link.tsx';
+import { LINK_FEED, Link } from '../Link';
 
 import DefaultFeedAvatar from '../../assets/default-feed-avatar.svg?url';
 

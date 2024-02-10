@@ -2,13 +2,13 @@ import { Suspense, createEffect, createResource, createSignal, onMount, useTrans
 
 import type { Emoji, SkinTone } from '@pkg/emoji-db';
 
-import SearchInput from '../inputs/SearchInput.tsx';
-import { Flyout, offset } from '../Flyout.tsx';
+import SearchInput from '../inputs/SearchInput';
+import { Flyout, offset } from '../Flyout';
 
-import { Interactive } from '../../primitives/interactive.ts';
+import { Interactive } from '../../primitives/interactive';
 
-import { type PickedEmoji, type SummarizedEmoji, getEmojiDb, summarizeEmojis } from './utils/database.ts';
-import { detectEmojiSupportLevel } from './utils/support.ts';
+import { type PickedEmoji, type SummarizedEmoji, getEmojiDb, summarizeEmojis } from './utils/database';
+import { detectEmojiSupportLevel } from './utils/support';
 
 const EMOJI_GROUPS: [group: number, emoji: string, name: string][] = [
 	[0, '😀', 'Smileys & emoticons'],

@@ -2,24 +2,24 @@ import { type JSX, batch } from 'solid-js';
 
 import { type Middleware } from '@floating-ui/dom';
 
-import { renderLabelGroupName, renderLabelName } from '~/api/display.ts';
+import { renderLabelGroupName, renderLabelName } from '~/api/display';
 import { getSide } from '@floating-ui/utils';
 
-import { PreferenceHide, PreferenceIgnore, PreferenceWarn } from '~/api/moderation/enums.ts';
-import type { ModerationLabelOpts } from '~/api/moderation/types.ts';
+import { PreferenceHide, PreferenceIgnore, PreferenceWarn } from '~/api/moderation/enums';
+import type { ModerationLabelOpts } from '~/api/moderation/types';
 
-import { assert, clsx } from '~/utils/misc.ts';
+import { assert, clsx } from '~/utils/misc';
 
-import { bustRevisionCache, preferences } from '~/desktop/globals/settings.ts';
+import { bustRevisionCache, preferences } from '~/desktop/globals/settings';
 
-import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout.tsx';
+import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
-import { Interactive } from '~/com/primitives/interactive.ts';
-import { MenuItem, MenuRoot } from '~/com/primitives/menu.ts';
+import { IconButton } from '~/com/primitives/icon-button';
+import { Interactive } from '~/com/primitives/interactive';
+import { MenuItem, MenuRoot } from '~/com/primitives/menu';
 
-import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down.tsx';
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
+import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 
 import {
 	type ViewParams,
@@ -27,8 +27,8 @@ import {
 	VIEW_LABEL_CONFIG,
 	VIEW_SUBSCRIBED_LABELERS,
 	useViewRouter,
-} from '../_router.tsx';
-import CheckIcon from '~/com/icons/baseline-check.tsx';
+} from '../_router';
+import CheckIcon from '~/com/icons/baseline-check';
 
 interface LabelDef {
 	/** Label ID */

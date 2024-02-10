@@ -2,20 +2,20 @@ import { For, Match, Switch, createSignal } from 'solid-js';
 
 import { createInfiniteQuery } from '@pkg/solid-query';
 
-import type { DID, ResponseOf } from '~/api/atp-schema.ts';
-import { multiagent, renderAccountName } from '~/api/globals/agent.ts';
+import type { DID, ResponseOf } from '~/api/atp-schema';
+import { multiagent, renderAccountName } from '~/api/globals/agent';
 
-import { type CustomFeedPaneConfig, PANE_TYPE_FEED } from '../../../globals/panes.ts';
+import { type CustomFeedPaneConfig, PANE_TYPE_FEED } from '../../../globals/panes';
 
-import { DialogBody } from '~/com/primitives/dialog.ts';
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { DialogBody } from '~/com/primitives/dialog';
+import { Interactive } from '~/com/primitives/interactive';
 
-import CircularProgress from '~/com/components/CircularProgress.tsx';
-import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
-import SearchInput from '~/com/components/inputs/SearchInput.tsx';
-import FilterBar from '~/com/components/inputs/FilterBar.tsx';
+import CircularProgress from '~/com/components/CircularProgress';
+import { VirtualContainer } from '~/com/components/VirtualContainer';
+import SearchInput from '~/com/components/inputs/SearchInput';
+import FilterBar from '~/com/components/inputs/FilterBar';
 
-import type { PaneCreatorProps } from './types.ts';
+import type { PaneCreatorProps } from './types';
 
 import DefaultFeedAvatar from '~/com/assets/default-feed-avatar.svg?url';
 

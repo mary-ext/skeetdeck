@@ -1,18 +1,18 @@
 import { For, batch, createEffect, createMemo, createSignal } from 'solid-js';
 
-import type { AtUri } from '~/api/atp-schema.ts';
-import { multiagent } from '~/api/globals/agent.ts';
+import type { AtUri } from '~/api/atp-schema';
+import { multiagent } from '~/api/globals/agent';
 
-import { preferences } from '../globals/settings.ts';
+import { preferences } from '../globals/settings';
 
-import { useEntryState } from '../utils/router.ts';
+import { useEntryState } from '../utils/router';
 
-import TimelineList from '~/com/components/lists/TimelineList.tsx';
-import Tab from '~/com/components/Tab.tsx';
+import TimelineList from '~/com/components/lists/TimelineList';
+import Tab from '~/com/components/Tab';
 
-import ViewHeader from '../components/ViewHeader.tsx';
+import ViewHeader from '../components/ViewHeader';
 
-import ValidatedKeepAlive from '../components/ValidatedKeepAlive.tsx';
+import ValidatedKeepAlive from '../components/ValidatedKeepAlive';
 
 const HomeView = () => {
 	const [state, setState] = useEntryState<{ uri?: AtUri }>();

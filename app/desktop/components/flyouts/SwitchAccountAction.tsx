@@ -1,16 +1,16 @@
 import type { JSX } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema.ts';
-import { multiagent } from '~/api/globals/agent.ts';
+import type { DID } from '~/api/atp-schema';
+import { multiagent } from '~/api/globals/agent';
 
-import { clsx } from '~/utils/misc.ts';
+import { clsx } from '~/utils/misc';
 
-import { MenuItem, MenuRoot } from '~/com/primitives/menu.ts';
+import { MenuItem, MenuRoot } from '~/com/primitives/menu';
 
-import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout.tsx';
+import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
-import CheckIcon from '~/com/icons/baseline-check.tsx';
+import CheckIcon from '~/com/icons/baseline-check';
 
 export interface SwitchAccountActionProps {
 	value?: DID | undefined;

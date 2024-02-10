@@ -1,28 +1,28 @@
 import { type JSX, lazy } from 'solid-js';
 
-import { getRecordId } from '~/api/utils/misc.ts';
+import { getRecordId } from '~/api/utils/misc';
 
-import { updateFeedLike } from '~/api/mutations/like-feed.ts';
-import type { SignalizedFeed } from '~/api/stores/feeds.ts';
+import { updateFeedLike } from '~/api/mutations/like-feed';
+import type { SignalizedFeed } from '~/api/stores/feeds';
 
-import { formatCompact } from '~/utils/intl/number.ts';
+import { formatCompact } from '~/utils/intl/number';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '~/com/globals/modals';
 
-import { Button } from '~/com/primitives/button.ts';
+import { Button } from '~/com/primitives/button';
 
-import { LINK_FEED_LIKED_BY, LINK_PROFILE, Link } from '~/com/components/Link.tsx';
-import RichTextRenderer from '~/com/components/RichTextRenderer.tsx';
-import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
+import { LINK_FEED_LIKED_BY, LINK_PROFILE, Link } from '~/com/components/Link';
+import RichTextRenderer from '~/com/components/RichTextRenderer';
+import { VirtualContainer } from '~/com/components/VirtualContainer';
 
-import FavoriteIcon from '~/com/icons/baseline-favorite.tsx';
-import FavoriteOutlinedIcon from '~/com/icons/outline-favorite.tsx';
+import FavoriteIcon from '~/com/icons/baseline-favorite';
+import FavoriteOutlinedIcon from '~/com/icons/outline-favorite';
 
 import DefaultFeedAvatar from '~/com/assets/default-feed-avatar.svg?url';
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
-import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
+import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 
-import FeedOverflowAction from './actions/FeedOverflowAction.tsx';
+import FeedOverflowAction from './actions/FeedOverflowAction';
 
 const LazyImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
 

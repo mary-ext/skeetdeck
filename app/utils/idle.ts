@@ -1,4 +1,4 @@
-import { Queue } from './stack.ts';
+import { Queue } from './stack';
 
 export type IdleCallback = () => void;
 

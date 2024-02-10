@@ -1,8 +1,8 @@
 import Database, { type Emoji, type EmojiSkin, type SkinTone } from '@pkg/emoji-db';
 
-import { mapDefined } from '~/utils/misc.ts';
+import { mapDefined } from '~/utils/misc';
 
-import { hasZwj, isEmojiSupported } from './support.ts';
+import { hasZwj, isEmojiSupported } from './support';
 
 let db: Database;
 export const getEmojiDb = () => {

@@ -1,12 +1,12 @@
 import { type JSX, createSignal } from 'solid-js';
 import { createMutable } from 'solid-js/store';
 
-import { multiagent } from '~/api/globals/agent.ts';
+import { multiagent } from '~/api/globals/agent';
 
-import { preferences } from '~/desktop/globals/settings.ts';
-import { createDerivedSignal } from '~/utils/hooks.ts';
+import { preferences } from '~/desktop/globals/settings';
+import { createDerivedSignal } from '~/utils/hooks';
 
-import { type ComposerContextState, createComposerState, ComposerContext } from './ComposerContext.tsx';
+import { type ComposerContextState, createComposerState, ComposerContext } from './ComposerContext';
 
 export interface ComposerContextProviderProps {
 	children: JSX.Element;

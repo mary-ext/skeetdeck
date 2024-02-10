@@ -1,6 +1,6 @@
 import { type JSX, createSignal, onCleanup } from 'solid-js';
 
-import { resizeObserver, scrollObserver } from '~/utils/intersection-observer.ts';
+import { resizeObserver, scrollObserver } from '~/utils/intersection-observer';
 
 export interface VirtualContainerProps {
 	estimateHeight?: number;

@@ -2,23 +2,23 @@ import { type JSX, For } from 'solid-js';
 
 import { useQueryClient } from '@pkg/solid-query';
 
-import type { MultiagentAccountData } from '~/api/classes/multiagent.ts';
+import type { MultiagentAccountData } from '~/api/classes/multiagent';
 import { multiagent } from '~/api/globals/agent.js';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '~/com/globals/modals';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
-import { MenuItem, MenuRoot } from '~/com/primitives/menu.ts';
+import { IconButton } from '~/com/primitives/icon-button';
+import { MenuItem, MenuRoot } from '~/com/primitives/menu';
 
-import { Flyout } from '~/com/components/Flyout.tsx';
-import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
+import { Flyout } from '~/com/components/Flyout';
+import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
 
-import AddIcon from '~/com/icons/baseline-add.tsx';
-import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
+import AddIcon from '~/com/icons/baseline-add';
+import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
-import AddAccountDialog from '../AddAccountDialog.tsx';
+import AddAccountDialog from '../AddAccountDialog';
 
 const AccountsView = () => {
 	return (

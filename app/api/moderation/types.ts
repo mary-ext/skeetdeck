@@ -1,6 +1,6 @@
-import type { DID, RefOf } from '../atp-schema.ts';
+import type { DID, RefOf } from '../atp-schema';
 
-import type { KeywordPreference } from './enums.ts';
+import type { KeywordPreference } from './enums';
 
 export type Label = RefOf<'com.atproto.label.defs#label'>;
 

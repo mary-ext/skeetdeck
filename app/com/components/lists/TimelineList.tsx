@@ -2,8 +2,8 @@ import { For, Match, Switch, createEffect, createMemo } from 'solid-js';
 
 import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
-import { getQueryErrorInfo, resetInfiniteData } from '~/api/utils/query.ts';
+import type { DID } from '~/api/atp-schema';
+import { getQueryErrorInfo, resetInfiniteData } from '~/api/utils/query';
 
 import {
 	type TimelineLatestResult,
@@ -13,17 +13,17 @@ import {
 	getTimelineKey,
 	getTimelineLatest,
 	getTimelineLatestKey,
-} from '~/api/queries/get-timeline.ts';
+} from '~/api/queries/get-timeline';
 
-import CircularProgress from '../CircularProgress.tsx';
-import { useSharedPreferences } from '../SharedPreferences.tsx';
-import { VirtualContainer } from '../VirtualContainer.tsx';
+import CircularProgress from '../CircularProgress';
+import { useSharedPreferences } from '../SharedPreferences';
+import { VirtualContainer } from '../VirtualContainer';
 
-import GenericErrorView from '../views/GenericErrorView.tsx';
+import GenericErrorView from '../views/GenericErrorView';
 
-import { loadMoreBtn, loadNewBtn } from '../../primitives/interactive.ts';
+import { loadMoreBtn, loadNewBtn } from '../../primitives/interactive';
 
-import Post from '../items/Post.tsx';
+import Post from '../items/Post';
 
 export interface TimelineListProps {
 	uid: DID;

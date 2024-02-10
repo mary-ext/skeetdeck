@@ -1,21 +1,21 @@
 import { type JSX, createSignal } from 'solid-js';
 
-import type { SearchPaneConfig } from '../../../globals/panes.ts';
+import type { SearchPaneConfig } from '../../../globals/panes';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import TimelineList from '~/com/components/lists/TimelineList.tsx';
+import TimelineList from '~/com/components/lists/TimelineList';
 
-import SettingsIcon from '~/com/icons/baseline-settings.tsx';
+import SettingsIcon from '~/com/icons/baseline-settings';
 
-import { usePaneContext } from '../PaneContext.tsx';
-import Pane from '../Pane.tsx';
-import PaneAside from '../PaneAside.tsx';
-import PaneBody from '../PaneBody.tsx';
-import PaneHeader from '../PaneHeader.tsx';
+import { usePaneContext } from '../PaneContext';
+import Pane from '../Pane';
+import PaneAside from '../PaneAside';
+import PaneBody from '../PaneBody';
+import PaneHeader from '../PaneHeader';
 
-import GenericPaneSettings from '../settings/GenericPaneSettings.tsx';
-import SearchPaneSettings from '../settings/SearchPaneSettings.tsx';
+import GenericPaneSettings from '../settings/GenericPaneSettings';
+import SearchPaneSettings from '../settings/SearchPaneSettings';
 
 const augmentSearchQuery = (query: string, { did }: { did: string }) => {
 	// We don't want to replace substrings that are being "quoted" because those

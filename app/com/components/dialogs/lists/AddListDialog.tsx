@@ -2,32 +2,32 @@ import { createEffect, createMemo, createSignal } from 'solid-js';
 
 import { createMutation } from '@pkg/solid-query';
 
-import type { DID, Records, RefOf } from '~/api/atp-schema.ts';
-import { multiagent } from '~/api/globals/agent.ts';
-import { getCurrentDate } from '~/api/utils/misc.ts';
-import { ListPurposeLabels } from '~/api/display.ts';
+import type { DID, Records, RefOf } from '~/api/atp-schema';
+import { multiagent } from '~/api/globals/agent';
+import { getCurrentDate } from '~/api/utils/misc';
+import { ListPurposeLabels } from '~/api/display';
 
-import { uploadBlob } from '~/api/mutations/upload-blob.ts';
+import { uploadBlob } from '~/api/mutations/upload-blob';
 
-import { finalizeRt, getRtLength, parseRt } from '~/api/richtext/composer.ts';
+import { finalizeRt, getRtLength, parseRt } from '~/api/richtext/composer';
 
-import { model } from '~/utils/input.ts';
-import { clsx } from '~/utils/misc.ts';
+import { model } from '~/utils/input';
+import { clsx } from '~/utils/misc';
 
-import { closeModal, useModalState } from '../../../globals/modals.tsx';
+import { closeModal, useModalState } from '../../../globals/modals';
 
-import { Button } from '../../../primitives/button.ts';
-import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog.ts';
-import { IconButton } from '../../../primitives/icon-button.ts';
-import { Input } from '../../../primitives/input.ts';
+import { Button } from '../../../primitives/button';
+import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog';
+import { IconButton } from '../../../primitives/icon-button';
+import { Input } from '../../../primitives/input';
 
-import AddPhotoButton from '../../inputs/AddPhotoButton.tsx';
-import SelectInput from '../../inputs/SelectInput.tsx';
-import RichtextComposer from '../../richtext/RichtextComposer.tsx';
-import BlobImage from '../../BlobImage.tsx';
-import DialogOverlay from '../DialogOverlay.tsx';
+import AddPhotoButton from '../../inputs/AddPhotoButton';
+import SelectInput from '../../inputs/SelectInput';
+import RichtextComposer from '../../richtext/RichtextComposer';
+import BlobImage from '../../BlobImage';
+import DialogOverlay from '../DialogOverlay';
 
-import CloseIcon from '../../../icons/baseline-close.tsx';
+import CloseIcon from '../../../icons/baseline-close';
 
 type ListPurpose = RefOf<'app.bsky.graph.defs#listPurpose'>;
 type ListRecord = Records['app.bsky.graph.list'];

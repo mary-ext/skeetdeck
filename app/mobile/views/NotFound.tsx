@@ -1,5 +1,5 @@
-import { Button } from '~/com/primitives/button.ts';
-import { getEntryAt } from '../utils/router.ts';
+import { Button } from '~/com/primitives/button';
+import { getEntryAt } from '../utils/router';
 
 const NotFoundView = () => {
 	return (

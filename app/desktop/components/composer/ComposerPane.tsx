@@ -4,82 +4,82 @@ import { unwrap } from 'solid-js/store';
 import { createQuery, useQueryClient } from '@pkg/solid-query';
 import { makeEventListener } from '@solid-primitives/event-listener';
 
-import type { DID, Records, RefOf, UnionOf } from '~/api/atp-schema.ts';
-import { multiagent } from '~/api/globals/agent.ts';
-import { extractAppLink } from '~/api/utils/links.ts';
-import { getCurrentTid } from '~/api/utils/tid.ts';
-import { formatQueryError, getCollectionId, isDid } from '~/api/utils/misc.ts';
+import type { DID, Records, RefOf, UnionOf } from '~/api/atp-schema';
+import { multiagent } from '~/api/globals/agent';
+import { extractAppLink } from '~/api/utils/links';
+import { getCurrentTid } from '~/api/utils/tid';
+import { formatQueryError, getCollectionId, isDid } from '~/api/utils/misc';
 
-import type { ThreadData } from '~/api/models/threads.ts';
-import { getUploadedBlob, uploadBlob } from '~/api/mutations/upload-blob.ts';
-import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info.ts';
-import { type LinkMeta, getLinkMeta, getLinkMetaKey } from '~/api/queries/get-link-meta.ts';
-import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/get-list-info.ts';
-import { getInitialPost, getPost, getPostKey } from '~/api/queries/get-post.ts';
-import { getResolvedHandle, getResolvedHandleKey } from '~/api/queries/get-resolved-handle.ts';
-import type { getTimelineLatestKey } from '~/api/queries/get-timeline.ts';
-import type { SignalizedPost } from '~/api/stores/posts.ts';
-import { produceThreadInsert } from '~/api/updaters/insert-post.ts';
+import type { ThreadData } from '~/api/models/threads';
+import { getUploadedBlob, uploadBlob } from '~/api/mutations/upload-blob';
+import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info';
+import { type LinkMeta, getLinkMeta, getLinkMetaKey } from '~/api/queries/get-link-meta';
+import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/get-list-info';
+import { getInitialPost, getPost, getPostKey } from '~/api/queries/get-post';
+import { getResolvedHandle, getResolvedHandleKey } from '~/api/queries/get-resolved-handle';
+import type { getTimelineLatestKey } from '~/api/queries/get-timeline';
+import type { SignalizedPost } from '~/api/stores/posts';
+import { produceThreadInsert } from '~/api/updaters/insert-post';
 
-import { type PreliminaryRichText, finalizeRt, getRtLength } from '~/api/richtext/composer.ts';
+import { type PreliminaryRichText, finalizeRt, getRtLength } from '~/api/richtext/composer';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '~/com/globals/modals';
 
-import { preferences } from '~/desktop/globals/settings.ts';
+import { preferences } from '~/desktop/globals/settings';
 
-import { languageNames } from '~/utils/intl/display-names.ts';
-import { type PendingImage, compressPostImage } from '~/utils/image.ts';
-import { isMac } from '~/utils/interaction.ts';
-import { clsx, getUniqueId } from '~/utils/misc.ts';
-import { Signal, signal } from '~/utils/signals.ts';
+import { languageNames } from '~/utils/intl/display-names';
+import { type PendingImage, compressPostImage } from '~/utils/image';
+import { isMac } from '~/utils/interaction';
+import { clsx, getUniqueId } from '~/utils/misc';
+import { Signal, signal } from '~/utils/signals';
 
-import { Button } from '~/com/primitives/button.ts';
-import { IconButton } from '~/com/primitives/icon-button.ts';
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { Button } from '~/com/primitives/button';
+import { IconButton } from '~/com/primitives/icon-button';
+import { Interactive } from '~/com/primitives/interactive';
 
-import CircularProgress from '~/com/components/CircularProgress.tsx';
-import RichtextComposer from '~/com/components/richtext/RichtextComposer.tsx';
-import BlobImage from '~/com/components/BlobImage.tsx';
+import CircularProgress from '~/com/components/CircularProgress';
+import RichtextComposer from '~/com/components/richtext/RichtextComposer';
+import BlobImage from '~/com/components/BlobImage';
 
-import ImageCompressAlertDialog from '~/com/components/dialogs/ImageCompressAlertDialog.tsx';
-import EmojiFlyout from '~/com/components/emojis/EmojiFlyout.tsx';
+import ImageCompressAlertDialog from '~/com/components/dialogs/ImageCompressAlertDialog';
+import EmojiFlyout from '~/com/components/emojis/EmojiFlyout';
 
-import { EmbedFeedContent } from '~/com/components/embeds/EmbedFeed.tsx';
-import { EmbedLinkContent } from '~/com/components/embeds/EmbedLink.tsx';
-import { EmbedListContent } from '~/com/components/embeds/EmbedList.tsx';
-import { EmbedQuoteContent } from '~/com/components/embeds/EmbedQuote.tsx';
+import { EmbedFeedContent } from '~/com/components/embeds/EmbedFeed';
+import { EmbedLinkContent } from '~/com/components/embeds/EmbedLink';
+import { EmbedListContent } from '~/com/components/embeds/EmbedList';
+import { EmbedQuoteContent } from '~/com/components/embeds/EmbedQuote';
 
-import AddIcon from '~/com/icons/baseline-add.tsx';
-import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down.tsx';
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
-import CheckIcon from '~/com/icons/baseline-check.tsx';
-import CloseIcon from '~/com/icons/baseline-close.tsx';
-import EmojiEmotionsIcon from '~/com/icons/baseline-emoji-emotions.tsx';
-import ImageIcon from '~/com/icons/baseline-image.tsx';
-import LanguageIcon from '~/com/icons/baseline-language.tsx';
-import LinkIcon from '~/com/icons/baseline-link.tsx';
-import ShieldIcon from '~/com/icons/baseline-shield.tsx';
+import AddIcon from '~/com/icons/baseline-add';
+import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+import CheckIcon from '~/com/icons/baseline-check';
+import CloseIcon from '~/com/icons/baseline-close';
+import EmojiEmotionsIcon from '~/com/icons/baseline-emoji-emotions';
+import ImageIcon from '~/com/icons/baseline-image';
+import LanguageIcon from '~/com/icons/baseline-language';
+import LinkIcon from '~/com/icons/baseline-link';
+import ShieldIcon from '~/com/icons/baseline-shield';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
-import SwitchAccountAction from '../flyouts/SwitchAccountAction.tsx';
+import SwitchAccountAction from '../flyouts/SwitchAccountAction';
 
-import { createComposerState, createPostState, useComposer } from './ComposerContext.tsx';
-import DummyPost from './DummyPost.tsx';
-import TagsInput from './TagInput.tsx';
+import { createComposerState, createPostState, useComposer } from './ComposerContext';
+import DummyPost from './DummyPost';
+import TagsInput from './TagInput';
 
-import { getPostRt, isStateFilled } from './utils/state.ts';
+import { getPostRt, isStateFilled } from './utils/state';
 
-import ContentWarningAction from './actions/ContentWarningAction.tsx';
-import PostLanguageAction from './actions/PostLanguageAction.tsx';
+import ContentWarningAction from './actions/ContentWarningAction';
+import PostLanguageAction from './actions/PostLanguageAction';
 import ThreadgateAction, {
 	buildGateRules,
 	renderGateAlt,
 	renderGateIcon,
-} from './actions/ThreadgateAction.tsx';
+} from './actions/ThreadgateAction';
 
-import ImageAltDialog from './dialogs/ImageAltDialog.tsx';
-import ImageAltReminderDialog from './dialogs/ImageAltReminderDialog.tsx';
+import ImageAltDialog from './dialogs/ImageAltDialog';
+import ImageAltReminderDialog from './dialogs/ImageAltReminderDialog';
 
 const ViewDraftsDialog = lazy(() => import('./dialogs/ViewDraftsDialog.tsx'));
 

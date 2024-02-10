@@ -1,8 +1,8 @@
 import type { ComponentProps } from 'solid-js';
 
-import { Input } from '~/com/primitives/input.ts';
+import { Input } from '~/com/primitives/input';
 
-import SearchIcon from '~/com/icons/baseline-search.tsx';
+import SearchIcon from '~/com/icons/baseline-search';
 
 export type SearchInputProps = ComponentProps<'input'>;
 

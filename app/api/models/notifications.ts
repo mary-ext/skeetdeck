@@ -1,6 +1,6 @@
-import type { Records, RefOf } from '../atp-schema.ts';
+import type { Records, RefOf } from '../atp-schema';
 
-import { getCollectionId } from '../utils/misc.ts';
+import { getCollectionId } from '../utils/misc';
 
 type Notification = RefOf<'app.bsky.notification.listNotifications#notification'>;
 

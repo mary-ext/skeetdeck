@@ -1,5 +1,5 @@
 import Banner from '~/com/assets/banner.jpg?url';
-import { registration } from '~/utils/service-worker.ts';
+import { registration } from '~/utils/service-worker';
 
 const BRAND_NAME = import.meta.env.VITE_BRAND_NAME;
 const BRAND_VERSION = import.meta.env.VITE_BRAND_VERSION;

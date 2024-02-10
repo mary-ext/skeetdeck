@@ -3,16 +3,16 @@ import { render } from 'solid-js/web';
 
 import { QueryClientProvider } from '@pkg/solid-query';
 
-import { MetaProvider } from '~/com/lib/meta.tsx';
-import { ModalProvider } from '~/com/globals/modals.tsx';
+import { MetaProvider } from '~/com/lib/meta';
+import { ModalProvider } from '~/com/globals/modals';
 
-import { useMediaQuery } from '~/utils/media-query.ts';
+import { useMediaQuery } from '~/utils/media-query';
 
-import { createSharedPreferencesObject, preferences } from './globals/settings.ts';
-import { queryClient } from './globals/query.ts';
-import { RouterView } from './globals/router.ts';
+import { createSharedPreferencesObject, preferences } from './globals/settings';
+import { queryClient } from './globals/query';
+import { RouterView } from './globals/router';
 
-import { SharedPreferences } from '~/com/components/SharedPreferences.tsx';
+import { SharedPreferences } from '~/com/components/SharedPreferences';
 
 import './styles/tailwind.css';
 

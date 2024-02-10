@@ -4,24 +4,24 @@ import { createMutation } from '@pkg/solid-query';
 
 import TextareaAutosize from 'solid-textarea-autosize';
 
-import type { AtUri, DID, UnionOf } from '~/api/atp-schema.ts';
-import { getAccountHandle, multiagent } from '~/api/globals/agent.ts';
+import type { AtUri, DID, UnionOf } from '~/api/atp-schema';
+import { getAccountHandle, multiagent } from '~/api/globals/agent';
 
-import { EOF_WS_RE } from '~/api/richtext/composer.ts';
-import { graphemeLen } from '~/api/richtext/intl.ts';
+import { EOF_WS_RE } from '~/api/richtext/composer';
+import { graphemeLen } from '~/api/richtext/intl';
 
-import { formatLong } from '~/utils/intl/number.ts';
+import { formatLong } from '~/utils/intl/number';
 
-import { closeModal, useModalState } from '../../globals/modals.tsx';
+import { closeModal, useModalState } from '../../globals/modals';
 
-import { Button } from '../../primitives/button.ts';
-import { DialogActions, DialogBody, DialogHeader, DialogRoot } from '../../primitives/dialog.ts';
-import { IconButton } from '../../primitives/icon-button.ts';
-import { Textarea } from '../../primitives/textarea.ts';
+import { Button } from '../../primitives/button';
+import { DialogActions, DialogBody, DialogHeader, DialogRoot } from '../../primitives/dialog';
+import { IconButton } from '../../primitives/icon-button';
+import { Textarea } from '../../primitives/textarea';
 
-import DialogOverlay from './DialogOverlay.tsx';
+import DialogOverlay from './DialogOverlay';
 
-import CloseIcon from '../../icons/baseline-close.tsx';
+import CloseIcon from '../../icons/baseline-close';
 
 export type ReportMessage =
 	| { type: 'feed'; uri: AtUri; cid: string }

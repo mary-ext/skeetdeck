@@ -1,8 +1,8 @@
 import { type DBSchema, type IDBPDatabase, openDB } from 'idb';
 
-import type { AtUri, DID } from '~/api/atp-schema.ts';
+import type { AtUri, DID } from '~/api/atp-schema';
 
-import type { GateState } from '../ComposerContext.tsx';
+import type { GateState } from '../ComposerContext';
 
 export interface SerializedImage {
 	blob: Blob;

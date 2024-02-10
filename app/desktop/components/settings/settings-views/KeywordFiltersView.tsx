@@ -1,15 +1,15 @@
 import { For } from 'solid-js';
 
-import { PreferenceHide, PreferenceIgnore, PreferenceWarn } from '~/api/moderation/enums.ts';
+import { PreferenceHide, PreferenceIgnore, PreferenceWarn } from '~/api/moderation/enums';
 
-import { preferences } from '~/desktop/globals/settings.ts';
+import { preferences } from '~/desktop/globals/settings';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { IconButton } from '~/com/primitives/icon-button';
+import { Interactive } from '~/com/primitives/interactive';
 
-import AddIcon from '~/com/icons/baseline-add.tsx';
+import AddIcon from '~/com/icons/baseline-add';
 
-import { VIEW_KEYWORD_FILTER_FORM, useViewRouter } from './_router.tsx';
+import { VIEW_KEYWORD_FILTER_FORM, useViewRouter } from './_router';
 
 const selectItem = Interactive({
 	variant: 'muted',

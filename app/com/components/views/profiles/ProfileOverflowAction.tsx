@@ -1,25 +1,25 @@
 import { type JSX, createMemo, lazy } from 'solid-js';
 
-import type { SignalizedProfile } from '~/api/stores/profiles.ts';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 
-import { openModal } from '../../../globals/modals.tsx';
+import { openModal } from '../../../globals/modals';
 
-import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu.ts';
+import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
 
-import { Flyout } from '../../Flyout.tsx';
-import { LINK_PROFILE_FEEDS, LINK_PROFILE_LISTS, useLinking } from '../../Link.tsx';
-import { isProfileTempMuted, useSharedPreferences } from '../../SharedPreferences.tsx';
+import { Flyout } from '../../Flyout';
+import { LINK_PROFILE_FEEDS, LINK_PROFILE_LISTS, useLinking } from '../../Link';
+import { isProfileTempMuted, useSharedPreferences } from '../../SharedPreferences';
 
-import BlockIcon from '../../../icons/baseline-block.tsx';
-import LaunchIcon from '../../../icons/baseline-launch.tsx';
-import ListBoxOutlinedIcon from '../../../icons/outline-list-box.tsx';
-import PlaylistAddIcon from '../../../icons/baseline-playlist-add.tsx';
-import PoundIcon from '../../../icons/baseline-pound.tsx';
-import RepeatIcon from '../../../icons/baseline-repeat.tsx';
-import RepeatOffIcon from '../../../icons/baseline-repeat-off.tsx';
-import ReportIcon from '../../../icons/baseline-report.tsx';
-import VolumeOffIcon from '../../../icons/baseline-volume-off.tsx';
-import VolumeUpIcon from '../../../icons/baseline-volume-up.tsx';
+import BlockIcon from '../../../icons/baseline-block';
+import LaunchIcon from '../../../icons/baseline-launch';
+import ListBoxOutlinedIcon from '../../../icons/outline-list-box';
+import PlaylistAddIcon from '../../../icons/baseline-playlist-add';
+import PoundIcon from '../../../icons/baseline-pound';
+import RepeatIcon from '../../../icons/baseline-repeat';
+import RepeatOffIcon from '../../../icons/baseline-repeat-off';
+import ReportIcon from '../../../icons/baseline-report';
+import VolumeOffIcon from '../../../icons/baseline-volume-off';
+import VolumeUpIcon from '../../../icons/baseline-volume-up';
 
 const AddProfileInListDialog = lazy(() => import('../../dialogs/lists/AddProfileInListDialog.tsx'));
 const BlockConfirmDialog = lazy(() => import('../../dialogs/BlockConfirmDialog'));

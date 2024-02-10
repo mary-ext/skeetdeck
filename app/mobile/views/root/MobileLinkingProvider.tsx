@@ -7,7 +7,7 @@ import {
 	LINK_EXTERNAL,
 	LINK_POST,
 	LINK_PROFILE,
-} from '~/com/components/Link.tsx';
+} from '~/com/components/Link';
 
 export interface MobileLinkingProviderProps {
 	children: JSX.Element;

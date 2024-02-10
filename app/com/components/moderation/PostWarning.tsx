@@ -1,21 +1,21 @@
 import { type Component, type ComponentProps, type JSX, createMemo, createSignal } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema.ts';
-import { renderLabelName } from '~/api/display.ts';
-import type { SignalizedPost } from '~/api/stores/posts.ts';
+import type { DID } from '~/api/atp-schema';
+import { renderLabelName } from '~/api/display';
+import type { SignalizedPost } from '~/api/stores/posts';
 
-import { CauseLabel, CauseMutedKeyword, type ModerationDecision } from '~/api/moderation/action.ts';
-import { FlagNoOverride } from '~/api/moderation/enums.ts';
+import { CauseLabel, CauseMutedKeyword, type ModerationDecision } from '~/api/moderation/action';
+import { FlagNoOverride } from '~/api/moderation/enums';
 
-import { getPostModDecision } from '../../moderation/post.ts';
+import { getPostModDecision } from '../../moderation/post';
 
-import { clsx } from '~/utils/misc.ts';
+import { clsx } from '~/utils/misc';
 
-import { useSharedPreferences } from '../SharedPreferences.tsx';
+import { useSharedPreferences } from '../SharedPreferences';
 
-import VisibilityIcon from '../../icons/baseline-visibility.tsx';
-import FilterAltIcon from '../../icons/baseline-filter-alt.tsx';
-import PersonOffIcon from '../../icons/baseline-person-off.tsx';
+import VisibilityIcon from '../../icons/baseline-visibility';
+import FilterAltIcon from '../../icons/baseline-filter-alt';
+import PersonOffIcon from '../../icons/baseline-person-off';
 
 export interface PostWarningProps {
 	post: SignalizedPost;

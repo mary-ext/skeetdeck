@@ -1,19 +1,19 @@
-import { systemLanguages } from '~/api/globals/platform.ts';
+import { systemLanguages } from '~/api/globals/platform';
 
-import { getNativeLanguageName, languageNames, languageNamesStrict } from '~/utils/intl/display-names.ts';
-import { CODE2S } from '~/utils/intl/languages.ts';
-import { mapDefined } from '~/utils/misc.ts';
+import { getNativeLanguageName, languageNames, languageNamesStrict } from '~/utils/intl/display-names';
+import { CODE2S } from '~/utils/intl/languages';
+import { mapDefined } from '~/utils/misc';
 
-import { preferences } from '~/desktop/globals/settings.ts';
+import { preferences } from '~/desktop/globals/settings';
 
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { Interactive } from '~/com/primitives/interactive';
 
-import Checkbox from '~/com/components/inputs/Checkbox.tsx';
-import SelectInput, { type SelectItem } from '~/com/components/inputs/SelectInput.tsx';
+import Checkbox from '~/com/components/inputs/Checkbox';
+import SelectInput, { type SelectItem } from '~/com/components/inputs/SelectInput';
 
-import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 
-import { VIEW_ADDITIONAL_LANGUAGE, VIEW_EXCLUDED_TRANSLATION, useViewRouter } from './_router.tsx';
+import { VIEW_ADDITIONAL_LANGUAGE, VIEW_EXCLUDED_TRANSLATION, useViewRouter } from './_router';
 
 const selectItem = Interactive({
 	class: `flex items-center justify-between gap-4 px-4 py-3 text-left text-sm`,

@@ -1,7 +1,7 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID } from '../atp-schema.ts';
-import { multiagent } from '../globals/agent.ts';
+import type { DID } from '../atp-schema';
+import { multiagent } from '../globals/agent';
 
 // @todo: should this be committed to global store?
 // perhaps it would be better off not to.

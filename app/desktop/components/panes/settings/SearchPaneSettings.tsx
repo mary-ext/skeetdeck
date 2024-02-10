@@ -1,12 +1,12 @@
 import TextareaAutoresize from 'solid-textarea-autosize';
 
-import type { SearchPaneConfig } from '../../../globals/panes.ts';
+import type { SearchPaneConfig } from '../../../globals/panes';
 
-import { Textarea } from '~/com/primitives/textarea.ts';
+import { Textarea } from '~/com/primitives/textarea';
 
-import SearchIcon from '~/com/icons/baseline-search.tsx';
+import SearchIcon from '~/com/icons/baseline-search';
 
-import { usePaneContext } from '../PaneContext.tsx';
+import { usePaneContext } from '../PaneContext';
 
 const SearchPaneSettings = () => {
 	const { pane } = usePaneContext<SearchPaneConfig>();

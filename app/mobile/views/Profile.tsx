@@ -1,4 +1,4 @@
-import ViewHeader from '../components/ViewHeader.tsx';
+import ViewHeader from '../components/ViewHeader';
 
 const ProfileView = () => {
 	return (

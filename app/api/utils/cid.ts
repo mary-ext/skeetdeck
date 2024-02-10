@@ -1,5 +1,5 @@
-import * as varint from './varint.ts';
-import * as base32 from './base32.ts';
+import * as varint from './varint';
+import * as base32 from './base32';
 
 export const CBOR_CODE = 0x71;
 

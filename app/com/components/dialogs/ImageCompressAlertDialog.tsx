@@ -1,13 +1,13 @@
-import { formatBytes } from '~/utils/intl/bytes.ts';
-import type { PendingImage } from '~/utils/image.ts';
+import { formatBytes } from '~/utils/intl/bytes';
+import type { PendingImage } from '~/utils/image';
 
-import { closeModal } from '~/com/globals/modals.tsx';
+import { closeModal } from '~/com/globals/modals';
 
-import { Button } from '~/com/primitives/button.ts';
-import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
+import { Button } from '~/com/primitives/button';
+import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
 
-import DialogOverlay from './DialogOverlay.tsx';
-import BlobImage from '../BlobImage.tsx';
+import DialogOverlay from './DialogOverlay';
+import BlobImage from '../BlobImage';
 
 export interface ImageCompressAlertDialogProps {
 	images: PendingImage[];

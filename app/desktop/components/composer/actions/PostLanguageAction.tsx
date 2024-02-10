@@ -1,21 +1,21 @@
 import { batch, type JSX } from 'solid-js';
 
-import { systemLanguages } from '~/api/globals/platform.ts';
+import { systemLanguages } from '~/api/globals/platform';
 
-import { getNativeLanguageName, languageNames } from '~/utils/intl/display-names.ts';
-import { clsx } from '~/utils/misc.ts';
+import { getNativeLanguageName, languageNames } from '~/utils/intl/display-names';
+import { clsx } from '~/utils/misc';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '~/com/globals/modals';
 
-import { preferences } from '~/desktop/globals/settings.ts';
+import { preferences } from '~/desktop/globals/settings';
 
-import { MenuItem, MenuRoot } from '~/com/primitives/menu.ts';
+import { MenuItem, MenuRoot } from '~/com/primitives/menu';
 
-import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout.tsx';
+import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
 
-import CheckIcon from '~/com/icons/baseline-check.tsx';
+import CheckIcon from '~/com/icons/baseline-check';
 
-import CustomPostLanguageDialog from '../dialogs/CustomPostLanguageDialog.tsx';
+import CustomPostLanguageDialog from '../dialogs/CustomPostLanguageDialog';
 
 export interface PostLanguageActionProps {
 	languages: string[];

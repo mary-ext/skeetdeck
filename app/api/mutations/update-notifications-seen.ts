@@ -1,5 +1,5 @@
-import type { DID } from '../atp-schema.ts';
-import { multiagent } from '../globals/agent.ts';
+import type { DID } from '../atp-schema';
+import { multiagent } from '../globals/agent';
 
 export const updateNotificationsSeen = async (uid: DID, date = new Date()) => {
 	const agent = await multiagent.connect(uid);

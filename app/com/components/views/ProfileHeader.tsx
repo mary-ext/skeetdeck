@@ -1,21 +1,21 @@
 import { type JSX, lazy, createMemo } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema.ts';
-import { renderLabelName } from '~/api/display.ts';
-import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
+import type { DID } from '~/api/atp-schema';
+import { renderLabelName } from '~/api/display';
+import { getRecordId, getRepoId } from '~/api/utils/misc';
 
-import type { SignalizedProfile } from '~/api/stores/profiles.ts';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 
-import { CauseLabel } from '~/api/moderation/action.ts';
-import { getProfileModDecision } from '../../moderation/profile.ts';
+import { CauseLabel } from '~/api/moderation/action';
+import { getProfileModDecision } from '../../moderation/profile';
 
-import { formatCompact } from '~/utils/intl/number.ts';
-import { formatAbsDateTime } from '~/utils/intl/time.ts';
-import { clsx } from '~/utils/misc.ts';
+import { formatCompact } from '~/utils/intl/number';
+import { formatAbsDateTime } from '~/utils/intl/time';
+import { clsx } from '~/utils/misc';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '~/com/globals/modals';
 
-import { Button } from '../../primitives/button.ts';
+import { Button } from '../../primitives/button';
 
 import {
 	LINK_LIST,
@@ -23,18 +23,18 @@ import {
 	LINK_PROFILE_FOLLOWERS,
 	LINK_PROFILE_FOLLOWS,
 	Link,
-} from '../Link.tsx';
-import { isProfileTempMuted, useSharedPreferences } from '../SharedPreferences.tsx';
+} from '../Link';
+import { isProfileTempMuted, useSharedPreferences } from '../SharedPreferences';
 
-import ErrorIcon from '../../icons/baseline-error.tsx';
-import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
-import VisibilityIcon from '../../icons/baseline-visibility.tsx';
+import ErrorIcon from '../../icons/baseline-error';
+import MoreHorizIcon from '../../icons/baseline-more-horiz';
+import VisibilityIcon from '../../icons/baseline-visibility';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
-import ProfileFollowButton from '../ProfileFollowButton.tsx';
-import ProfileOverflowAction from './profiles/ProfileOverflowAction.tsx';
-import ProfileHandleAction from './profiles/ProfileHandleAction.tsx';
+import ProfileFollowButton from '../ProfileFollowButton';
+import ProfileOverflowAction from './profiles/ProfileOverflowAction';
+import ProfileHandleAction from './profiles/ProfileHandleAction';
 
 const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
 const MuteConfirmDialog = lazy(() => import('../dialogs/MuteConfirmDialog.tsx'));

@@ -1,5 +1,5 @@
-import { formatQueryError } from '~/api/utils/misc.ts';
-import { Button } from '../../primitives/button.ts';
+import { formatQueryError } from '~/api/utils/misc';
+import { Button } from '../../primitives/button';
 
 export interface GenericErrorViewProps {
 	padded?: boolean;

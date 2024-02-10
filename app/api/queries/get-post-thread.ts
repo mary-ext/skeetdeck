@@ -1,12 +1,12 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID, RefOf } from '../atp-schema.ts';
-import { multiagent } from '../globals/agent.ts';
+import type { DID, RefOf } from '../atp-schema';
+import { multiagent } from '../globals/agent';
 
-import { type ThreadData, createThreadData } from '../models/threads.ts';
-import { getCachedPost } from '../stores/posts.ts';
+import { type ThreadData, createThreadData } from '../models/threads';
+import { getCachedPost } from '../stores/posts';
 
-import _getDid from './_did.ts';
+import _getDid from './_did';
 
 export class BlockedThreadError extends Error {
 	constructor(public view: RefOf<'app.bsky.feed.defs#blockedPost'>) {

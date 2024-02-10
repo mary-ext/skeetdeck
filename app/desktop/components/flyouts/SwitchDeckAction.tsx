@@ -1,15 +1,15 @@
 import type { JSX } from 'solid-js';
 
-import { clsx } from '~/utils/misc.ts';
+import { clsx } from '~/utils/misc';
 
-import type { DeckConfig } from '../../globals/panes.ts';
-import { preferences } from '../../globals/settings.ts';
+import type { DeckConfig } from '../../globals/panes';
+import { preferences } from '../../globals/settings';
 
-import { MenuItem, MenuRoot } from '~/com/primitives/menu.ts';
+import { MenuItem, MenuRoot } from '~/com/primitives/menu';
 
-import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout.tsx';
+import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
 
-import CheckIcon from '~/com/icons/baseline-check.tsx';
+import CheckIcon from '~/com/icons/baseline-check';
 
 export interface SwitchDeckActionProps {
 	value?: string;

@@ -1,9 +1,9 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID } from '../atp-schema.ts';
-import { multiagent } from '../globals/agent.ts';
+import type { DID } from '../atp-schema';
+import { multiagent } from '../globals/agent';
 
-import { mergeList } from '../stores/lists.ts';
+import { mergeList } from '../stores/lists';
 
 export const getProfileListsKey = (uid: DID, actor: string, limit: number = 30) => {
 	return ['getProfileLists', uid, actor, limit] as const;

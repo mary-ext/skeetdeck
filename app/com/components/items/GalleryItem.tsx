@@ -1,26 +1,26 @@
 import { createMemo, lazy, type JSX } from 'solid-js';
 
-import type { RefOf } from '~/api/atp-schema.ts';
-import { getRecordId } from '~/api/utils/misc.ts';
+import type { RefOf } from '~/api/atp-schema';
+import { getRecordId } from '~/api/utils/misc';
 
-import type { SignalizedPost } from '~/api/stores/posts.ts';
+import type { SignalizedPost } from '~/api/stores/posts';
 
-import { getPostModDecision } from '../../moderation/post.ts';
+import { getPostModDecision } from '../../moderation/post';
 
-import { formatCompact } from '~/utils/intl/number.ts';
-import { isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
-import { useMediaQuery } from '~/utils/media-query.ts';
-import { clsx } from '~/utils/misc.ts';
+import { formatCompact } from '~/utils/intl/number';
+import { isElementAltClicked, isElementClicked } from '~/utils/interaction';
+import { useMediaQuery } from '~/utils/media-query';
+import { clsx } from '~/utils/misc';
 
-import { openModal } from '../../globals/modals.tsx';
+import { openModal } from '../../globals/modals';
 
-import { LINK_POST, useLinking } from '../Link.tsx';
-import { useSharedPreferences } from '../SharedPreferences.tsx';
+import { LINK_POST, useLinking } from '../Link';
+import { useSharedPreferences } from '../SharedPreferences';
 
-import ChatBubbleIcon from '../../icons/baseline-chat-bubble.tsx';
-import CheckboxMultipleBlankIcon from '../../icons/baseline-checkbox-multiple-blank.tsx';
-import FavoriteIcon from '../../icons/baseline-favorite.tsx';
-import VisibilityIcon from '../../icons/baseline-visibility.tsx';
+import ChatBubbleIcon from '../../icons/baseline-chat-bubble';
+import CheckboxMultipleBlankIcon from '../../icons/baseline-checkbox-multiple-blank';
+import FavoriteIcon from '../../icons/baseline-favorite';
+import VisibilityIcon from '../../icons/baseline-visibility';
 
 const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
 

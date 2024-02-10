@@ -1,14 +1,14 @@
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema';
 
-import { getProfile, getProfileKey } from '~/api/queries/get-profile.ts';
+import { getProfile, getProfileKey } from '~/api/queries/get-profile';
 
-import FeedList from '~/com/components/lists/FeedList.tsx';
+import FeedList from '~/com/components/lists/FeedList';
 
-import { usePaneContext } from '../PaneContext.tsx';
-import PaneDialog from '../PaneDialog.tsx';
-import PaneDialogHeader from '../PaneDialogHeader.tsx';
+import { usePaneContext } from '../PaneContext';
+import PaneDialog from '../PaneDialog';
+import PaneDialogHeader from '../PaneDialogHeader';
 
 export interface ProfileFeedsPaneDialogProps {
 	/** Expected to be static */

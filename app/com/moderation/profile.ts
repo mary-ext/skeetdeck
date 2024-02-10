@@ -1,15 +1,15 @@
-import { sequal } from '~/utils/dequal.ts';
+import { sequal } from '~/utils/dequal';
 
-import type { SignalizedProfile } from '~/api/stores/profiles.ts';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 
 import {
 	type ModerationCause,
 	type ModerationDecision,
 	decideLabelModeration,
 	finalizeModeration,
-} from '~/api/moderation/action.ts';
+} from '~/api/moderation/action';
 
-import { type SharedPreferencesObject } from '../components/SharedPreferences.tsx';
+import { type SharedPreferencesObject } from '../components/SharedPreferences';
 
 type ModerationResult = { d: ModerationDecision | null; c: unknown[] };
 const cached = new WeakMap<SignalizedProfile, ModerationResult>();

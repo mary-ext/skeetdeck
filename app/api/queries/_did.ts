@@ -1,7 +1,7 @@
 import type { Agent } from '@externdefs/bluesky-client/agent';
 
-import type { DID } from '../atp-schema.ts';
-import { isDid } from '../utils/misc.ts';
+import type { DID } from '../atp-schema';
+import { isDid } from '../utils/misc';
 
 const _getDid = async (agent: Agent, actor: string, signal?: AbortSignal) => {
 	let did: DID;

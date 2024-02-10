@@ -5,32 +5,32 @@ import { createMutation, useQueryClient } from '@pkg/solid-query';
 
 import TextareaAutosize from 'solid-textarea-autosize';
 
-import type { Records, UnionOf } from '~/api/atp-schema.ts';
-import { multiagent } from '~/api/globals/agent.ts';
-import { formatQueryError } from '~/api/utils/misc.ts';
+import type { Records, UnionOf } from '~/api/atp-schema';
+import { multiagent } from '~/api/globals/agent';
+import { formatQueryError } from '~/api/utils/misc';
 
-import { uploadBlob } from '~/api/mutations/upload-blob.ts';
-import { getProfileKey } from '~/api/queries/get-profile.ts';
-import type { SignalizedProfile } from '~/api/stores/profiles.ts';
+import { uploadBlob } from '~/api/mutations/upload-blob';
+import { getProfileKey } from '~/api/queries/get-profile';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 
-import { EOF_WS_RE } from '~/api/richtext/composer.ts';
-import { graphemeLen } from '~/api/richtext/intl.ts';
+import { EOF_WS_RE } from '~/api/richtext/composer';
+import { graphemeLen } from '~/api/richtext/intl';
 
-import { formatLong } from '~/utils/intl/number.ts';
-import { model } from '~/utils/input.ts';
-import { mapDefined } from '~/utils/misc.ts';
+import { formatLong } from '~/utils/intl/number';
+import { model } from '~/utils/input';
+import { mapDefined } from '~/utils/misc';
 
-import { Button } from '~/com/primitives/button.ts';
-import { Input } from '~/com/primitives/input.ts';
-import { Textarea } from '~/com/primitives/textarea.ts';
+import { Button } from '~/com/primitives/button';
+import { Input } from '~/com/primitives/input';
+import { Textarea } from '~/com/primitives/textarea';
 
-import AddPhotoButton from '~/com/components/inputs/AddPhotoButton.tsx';
-import Checkbox from '~/com/components/inputs/Checkbox.tsx';
-import BlobImage from '~/com/components/BlobImage.tsx';
+import AddPhotoButton from '~/com/components/inputs/AddPhotoButton';
+import Checkbox from '~/com/components/inputs/Checkbox';
+import BlobImage from '~/com/components/BlobImage';
 
-import { usePaneModalState } from '../PaneContext.tsx';
-import PaneDialog from '../PaneDialog.tsx';
-import PaneDialogHeader from '../PaneDialogHeader.tsx';
+import { usePaneModalState } from '../PaneContext';
+import PaneDialog from '../PaneDialog';
+import PaneDialogHeader from '../PaneDialogHeader';
 
 export interface ProfileSettingsPaneDialogProps {
 	/** Expected to be static */

@@ -1,18 +1,18 @@
 import { type Component, type ComponentProps, type JSX, createMemo, createSignal } from 'solid-js';
 
-import type { UnionOf } from '~/api/atp-schema.ts';
-import { renderLabelName } from '~/api/display.ts';
+import type { UnionOf } from '~/api/atp-schema';
+import { renderLabelName } from '~/api/display';
 
-import { type ModerationDecision, CauseLabel, CauseMutedKeyword } from '~/api/moderation/action.ts';
-import { FlagNoOverride } from '~/api/moderation/enums.ts';
+import { type ModerationDecision, CauseLabel, CauseMutedKeyword } from '~/api/moderation/action';
+import { FlagNoOverride } from '~/api/moderation/enums';
 
-import { getQuoteModDecision } from '../../moderation/quote.ts';
+import { getQuoteModDecision } from '../../moderation/quote';
 
-import { useSharedPreferences } from '../SharedPreferences.tsx';
+import { useSharedPreferences } from '../SharedPreferences';
 
-import VisibilityIcon from '../../icons/baseline-visibility.tsx';
-import FilterAltIcon from '../../icons/baseline-filter-alt.tsx';
-import PersonOffIcon from '../../icons/baseline-person-off.tsx';
+import VisibilityIcon from '../../icons/baseline-visibility';
+import FilterAltIcon from '../../icons/baseline-filter-alt';
+import PersonOffIcon from '../../icons/baseline-person-off';
 
 type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
 

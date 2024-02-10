@@ -1,6 +1,6 @@
-import type { DID } from '../atp-schema.ts';
+import type { DID } from '../atp-schema';
 
-import { type MultiagentAccountData, Multiagent } from '../classes/multiagent.ts';
+import { type MultiagentAccountData, Multiagent } from '../classes/multiagent';
 
 export const multiagent = new Multiagent('accs');
 

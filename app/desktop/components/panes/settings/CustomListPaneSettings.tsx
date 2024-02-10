@@ -1,10 +1,10 @@
-import Checkbox from '~/com/components/inputs/Checkbox.tsx';
+import Checkbox from '~/com/components/inputs/Checkbox';
 
-import { modelChecked } from '~/utils/input.ts';
+import { modelChecked } from '~/utils/input';
 
-import type { CustomListPaneConfig } from '~/desktop/globals/panes.ts';
+import type { CustomListPaneConfig } from '~/desktop/globals/panes';
 
-import { usePaneContext } from '../PaneContext.tsx';
+import { usePaneContext } from '../PaneContext';
 
 const CustomListPaneSettings = () => {
 	const { pane } = usePaneContext<CustomListPaneConfig>();

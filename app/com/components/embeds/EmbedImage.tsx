@@ -1,12 +1,12 @@
 import { lazy } from 'solid-js';
 
-import type { RefOf } from '~/api/atp-schema.ts';
+import type { RefOf } from '~/api/atp-schema';
 
-import { clsx } from '~/utils/misc.ts';
+import { clsx } from '~/utils/misc';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '~/com/globals/modals';
 
-import ImageAltAction from './images/ImageAltAction.tsx';
+import ImageAltAction from './images/ImageAltAction';
 
 const LazyImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog.tsx'));
 

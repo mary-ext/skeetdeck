@@ -1,10 +1,10 @@
-import type { Records } from '../atp-schema.ts';
-import { multiagent } from '../globals/agent.ts';
+import type { Records } from '../atp-schema';
+import { multiagent } from '../globals/agent';
 
-import type { SignalizedList } from '../stores/lists.ts';
+import type { SignalizedList } from '../stores/lists';
 
-import { getCurrentDate, getRecordId } from '../utils/misc.ts';
-import { createToggleMutation } from '../utils/toggle-mutation.ts';
+import { getCurrentDate, getRecordId } from '../utils/misc';
+import { createToggleMutation } from '../utils/toggle-mutation';
 
 const blockRecordType = 'app.bsky.graph.listblock';
 

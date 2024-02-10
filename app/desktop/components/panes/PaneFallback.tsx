@@ -1,6 +1,6 @@
-import CircularProgress from '~/com/components/CircularProgress.tsx';
+import CircularProgress from '~/com/components/CircularProgress';
 
-import Pane from './Pane.tsx';
+import Pane from './Pane';
 
 const PaneFallback = () => {
 	return (

@@ -3,18 +3,18 @@ import { type JSX, For, batch, createEffect, createMemo, createSignal, onCleanup
 import { type Vector2, createGesture } from '@pkg/solid-use-gesture';
 import { makeEventListener } from '@solid-primitives/event-listener';
 
-import { createDerivedSignal } from '~/utils/hooks.ts';
-import { useMediaQuery } from '~/utils/media-query.ts';
-import { clsx } from '~/utils/misc.ts';
+import { createDerivedSignal } from '~/utils/hooks';
+import { useMediaQuery } from '~/utils/media-query';
+import { clsx } from '~/utils/misc';
 
-import { closeModal } from '../../globals/modals.tsx';
+import { closeModal } from '../../globals/modals';
 
-import { Interactive } from '../../primitives/interactive.ts';
+import { Interactive } from '../../primitives/interactive';
 
-import ArrowLeftIcon from '../../icons/baseline-arrow-left.tsx';
-import CloseIcon from '../../icons/baseline-close.tsx';
-import VisibilityIcon from '../../icons/baseline-visibility.tsx';
-import VisibilityOffIcon from '../../icons/baseline-visibility-off.tsx';
+import ArrowLeftIcon from '../../icons/baseline-arrow-left';
+import CloseIcon from '../../icons/baseline-close';
+import VisibilityIcon from '../../icons/baseline-visibility';
+import VisibilityOffIcon from '../../icons/baseline-visibility-off';
 
 export interface EmbeddedImage {
 	fullsize: string;

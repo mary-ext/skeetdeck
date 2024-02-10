@@ -1,20 +1,20 @@
 import { type JSX, lazy } from 'solid-js';
 
-import type { SignalizedPost } from '~/api/stores/posts.ts';
-import { getRecordId } from '~/api/utils/misc.ts';
+import type { SignalizedPost } from '~/api/stores/posts';
+import { getRecordId } from '~/api/utils/misc';
 
-import { openModal } from '../../../globals/modals.tsx';
+import { openModal } from '../../../globals/modals';
 
-import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu.ts';
+import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
 
-import { Flyout } from '../../Flyout.tsx';
-import { isProfileTempMuted, useSharedPreferences } from '../../SharedPreferences.tsx';
+import { Flyout } from '../../Flyout';
+import { isProfileTempMuted, useSharedPreferences } from '../../SharedPreferences';
 
-import DeleteIcon from '../../../icons/baseline-delete.tsx';
-import LaunchIcon from '../../../icons/baseline-launch.tsx';
-import ReportIcon from '../../../icons/baseline-report.tsx';
-import TranslateIcon from '../../../icons/baseline-translate.tsx';
-import VolumeOffIcon from '../../../icons/baseline-volume-off.tsx';
+import DeleteIcon from '../../../icons/baseline-delete';
+import LaunchIcon from '../../../icons/baseline-launch';
+import ReportIcon from '../../../icons/baseline-report';
+import TranslateIcon from '../../../icons/baseline-translate';
+import VolumeOffIcon from '../../../icons/baseline-volume-off';
 
 const DeletePostConfirmDialog = lazy(() => import('../../dialogs/DeletePostConfirmDialog.tsx'));
 const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog.tsx'));

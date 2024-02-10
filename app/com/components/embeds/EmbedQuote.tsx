@@ -1,21 +1,21 @@
 import { type JSX } from 'solid-js';
 
-import type { Records, UnionOf } from '~/api/atp-schema.ts';
-import { getRecordId } from '~/api/utils/misc.ts';
+import type { Records, UnionOf } from '~/api/atp-schema';
+import { getRecordId } from '~/api/utils/misc';
 
-import type { ModerationDecision } from '~/api/moderation/action.ts';
+import type { ModerationDecision } from '~/api/moderation/action';
 
-import { clsx } from '~/utils/misc.ts';
+import { clsx } from '~/utils/misc';
 
-import { Interactive } from '../../primitives/interactive.ts';
+import { Interactive } from '../../primitives/interactive';
 
-import { LINK_POST, Link } from '../Link.tsx';
-import TimeAgo from '../TimeAgo.tsx';
+import { LINK_POST, Link } from '../Link';
+import TimeAgo from '../TimeAgo';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
-import PostQuoteWarning from '../moderation/PostQuoteWarning.tsx';
-import EmbedImage from './EmbedImage.tsx';
+import PostQuoteWarning from '../moderation/PostQuoteWarning';
+import EmbedImage from './EmbedImage';
 
 type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
 type PostRecord = Records['app.bsky.feed.post'];

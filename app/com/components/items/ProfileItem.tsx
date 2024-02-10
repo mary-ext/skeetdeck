@@ -1,19 +1,19 @@
 import { type JSX, createMemo } from 'solid-js';
 
-import type { SignalizedProfile } from '~/api/stores/profiles.ts';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 
-import { getProfileModDecision } from '../../moderation/profile.ts';
+import { getProfileModDecision } from '../../moderation/profile';
 
-import { INTERACTION_TAGS, isElementAltClicked, isElementClicked } from '~/utils/interaction.ts';
-import { clsx } from '~/utils/misc.ts';
+import { INTERACTION_TAGS, isElementAltClicked, isElementClicked } from '~/utils/interaction';
+import { clsx } from '~/utils/misc';
 
-import { Interactive } from '../../primitives/interactive.ts';
+import { Interactive } from '../../primitives/interactive';
 
-import { useSharedPreferences } from '../SharedPreferences.tsx';
+import { useSharedPreferences } from '../SharedPreferences';
 
-import ProfileFollowButton from '../ProfileFollowButton.tsx';
+import ProfileFollowButton from '../ProfileFollowButton';
 
-import ErrorIcon from '../../icons/baseline-error.tsx';
+import ErrorIcon from '../../icons/baseline-error';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 

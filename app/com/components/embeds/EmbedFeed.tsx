@@ -1,11 +1,11 @@
 import type { JSX } from 'solid-js';
 
-import type { UnionOf } from '~/api/atp-schema.ts';
-import { getRecordId } from '~/api/utils/misc.ts';
+import type { UnionOf } from '~/api/atp-schema';
+import { getRecordId } from '~/api/utils/misc';
 
-import { Interactive } from '../../primitives/interactive.ts';
+import { Interactive } from '../../primitives/interactive';
 
-import { LINK_FEED, Link } from '../Link.tsx';
+import { LINK_FEED, Link } from '../Link';
 
 import DefaultFeedAvatar from '../../assets/default-feed-avatar.svg?url';
 

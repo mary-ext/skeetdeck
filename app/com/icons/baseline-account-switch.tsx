@@ -1,4 +1,4 @@
-import { createIcon } from './_icon.tsx';
+import { createIcon } from './_icon';
 
 // Material Design Icons by Pictogrammers
 // Licensed under Apache-2.0 license

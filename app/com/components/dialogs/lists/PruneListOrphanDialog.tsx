@@ -2,34 +2,34 @@ import { createEffect, createMemo } from 'solid-js';
 
 import { createInfiniteQuery, createMutation, createQuery } from '@pkg/solid-query';
 
-import type { UnionOf } from '~/api/atp-schema.ts';
-import { multiagent } from '~/api/globals/agent.ts';
-import { getRecordId } from '~/api/utils/misc.ts';
+import type { UnionOf } from '~/api/atp-schema';
+import { multiagent } from '~/api/globals/agent';
+import { getRecordId } from '~/api/utils/misc';
 
-import { getListMembers, getListMembersKey } from '~/api/queries/get-list-members.ts';
+import { getListMembers, getListMembersKey } from '~/api/queries/get-list-members';
 import {
 	getListMemberships,
 	getListMembershipsKey,
 	listMembershipsOptions,
 	type ListMembership,
-} from '~/api/queries/get-list-memberships.ts';
-import type { SignalizedList } from '~/api/stores/lists.ts';
+} from '~/api/queries/get-list-memberships';
+import type { SignalizedList } from '~/api/stores/lists';
 
-import { chunked, mapDefined } from '~/utils/misc.ts';
-import { difference } from '~/utils/sets.ts';
+import { chunked, mapDefined } from '~/utils/misc';
+import { difference } from '~/utils/sets';
 
-import { closeModal, useModalState } from '../../../globals/modals.tsx';
+import { closeModal, useModalState } from '../../../globals/modals';
 
-import { Button } from '../../../primitives/button.ts';
+import { Button } from '../../../primitives/button';
 import {
 	DialogActions,
 	DialogBody,
 	DialogHeader,
 	DialogRoot,
 	DialogTitle,
-} from '../../../primitives/dialog.ts';
+} from '../../../primitives/dialog';
 
-import DialogOverlay from '../DialogOverlay.tsx';
+import DialogOverlay from '../DialogOverlay';
 
 export interface PruneListOrphanDialogProps {
 	/** Expected to be static */

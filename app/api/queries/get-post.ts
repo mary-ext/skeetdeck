@@ -1,12 +1,12 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID, RefOf } from '../atp-schema.ts';
-import { multiagent } from '../globals/agent.ts';
-import { createBatchedFetch } from '../utils/batch-fetch.ts';
+import type { DID, RefOf } from '../atp-schema';
+import { multiagent } from '../globals/agent';
+import { createBatchedFetch } from '../utils/batch-fetch';
 
-import { getCachedPost, mergePost, type SignalizedPost } from '../stores/posts.ts';
+import { getCachedPost, mergePost, type SignalizedPost } from '../stores/posts';
 
-import _getDid from './_did.ts';
+import _getDid from './_did';
 
 type Post = RefOf<'app.bsky.feed.defs#postView'>;
 type Query = [uid: DID, uri: string];

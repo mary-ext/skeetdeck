@@ -2,11 +2,11 @@ import { Match, Switch, batch } from 'solid-js';
 
 import { Navigate } from '@pkg/solid-page-router';
 
-import type { DID } from '~/api/atp-schema.ts';
-import { getAccountData, multiagent } from '~/api/globals/agent.ts';
-import { getCurrentTid } from '~/api/utils/tid.ts';
+import type { DID } from '~/api/atp-schema';
+import { getAccountData, multiagent } from '~/api/globals/agent';
+import { getCurrentTid } from '~/api/utils/tid';
 
-import { FILTER_ALL } from '~/api/queries/get-notifications.ts';
+import { FILTER_ALL } from '~/api/queries/get-notifications';
 
 import {
 	PANE_TYPE_HOME,
@@ -14,13 +14,13 @@ import {
 	PANE_TYPE_PROFILE,
 	ProfilePaneTab,
 	SpecificPaneSize,
-} from '../globals/panes.ts';
-import { preferences } from '../globals/settings.ts';
+} from '../globals/panes';
+import { preferences } from '../globals/settings';
 
-import { Button } from '~/com/primitives/button.ts';
-import { openModal } from '~/com/globals/modals.tsx';
+import { Button } from '~/com/primitives/button';
+import { openModal } from '~/com/globals/modals';
 
-import AddAccountDialog from '../components/settings/AddAccountDialog.tsx';
+import AddAccountDialog from '../components/settings/AddAccountDialog';
 
 const brandName = import.meta.env.VITE_BRAND_NAME;
 

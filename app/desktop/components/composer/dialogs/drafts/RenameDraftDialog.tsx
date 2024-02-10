@@ -1,16 +1,16 @@
 import { createSignal } from 'solid-js';
 
-import { closeModal } from '~/com/globals/modals.tsx';
+import { closeModal } from '~/com/globals/modals';
 
-import { model } from '~/utils/input.ts';
+import { model } from '~/utils/input';
 
-import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
 
-import { Button } from '~/com/primitives/button.ts';
-import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
-import { Input } from '~/com/primitives/input.ts';
+import { Button } from '~/com/primitives/button';
+import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
+import { Input } from '~/com/primitives/input';
 
-import { type ComposerDraft, getDraftDb } from '../../utils/draft-db.ts';
+import { type ComposerDraft, getDraftDb } from '../../utils/draft-db';
 
 export interface SaveDraftDialogProps {
 	draft: ComposerDraft;

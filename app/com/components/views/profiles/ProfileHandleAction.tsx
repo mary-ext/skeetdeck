@@ -1,15 +1,15 @@
 import { lazy, type JSX } from 'solid-js';
 
-import type { SignalizedProfile } from '~/api/stores/profiles.ts';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 
-import { openModal } from '../../../globals/modals.tsx';
+import { openModal } from '../../../globals/modals';
 
-import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu.ts';
+import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
 
-import { Flyout, offsetlessMiddlewares } from '../../Flyout.tsx';
+import { Flyout, offsetlessMiddlewares } from '../../Flyout';
 
-import ContentCopyIcon from '../../../icons/baseline-content-copy.tsx';
-import HistoryIcon from '../../../icons/baseline-history.tsx';
+import ContentCopyIcon from '../../../icons/baseline-content-copy';
+import HistoryIcon from '../../../icons/baseline-history';
 
 const HandleHistoryDialog = lazy(() => import('../../dialogs/HandleHistoryDialog.tsx'));
 

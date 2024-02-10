@@ -1,14 +1,14 @@
 import { type JSX, For } from 'solid-js';
 
-import type { SignalizedProfile } from '~/api/stores/profiles.ts';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 
-import { loadMoreBtn } from '../../primitives/interactive.ts';
+import { loadMoreBtn } from '../../primitives/interactive';
 
-import CircularProgress from '../CircularProgress.tsx';
-import { VirtualContainer } from '../VirtualContainer.tsx';
-import GenericErrorView from '../views/GenericErrorView.tsx';
+import CircularProgress from '../CircularProgress';
+import { VirtualContainer } from '../VirtualContainer';
+import GenericErrorView from '../views/GenericErrorView';
 
-import { type ProfileItemAccessory, type ProfileItemProps, ProfileItem } from '../items/ProfileItem.tsx';
+import { type ProfileItemAccessory, type ProfileItemProps, ProfileItem } from '../items/ProfileItem';
 
 export interface ProfileListProps {
 	profiles?: SignalizedProfile[];

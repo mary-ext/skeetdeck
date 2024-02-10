@@ -1,18 +1,18 @@
 import { type Accessor, createEffect, createMemo } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema';
 
-import type { SignalizedPost } from '~/api/stores/posts.ts';
-import type { SignalizedTimelineItem } from '~/api/models/timeline.ts';
-import { getRecordId } from '~/api/utils/misc.ts';
+import type { SignalizedPost } from '~/api/stores/posts';
+import type { SignalizedTimelineItem } from '~/api/models/timeline';
+import { getRecordId } from '~/api/utils/misc';
 
-import { updatePostLike } from '~/api/mutations/like-post.ts';
+import { updatePostLike } from '~/api/mutations/like-post';
 
-import { getProfileModDecision } from '../../moderation/profile.ts';
+import { getProfileModDecision } from '../../moderation/profile';
 
-import { formatCompact } from '~/utils/intl/number.ts';
-import { isElementClicked } from '~/utils/interaction.ts';
-import { clsx } from '~/utils/misc.ts';
+import { formatCompact } from '~/utils/intl/number';
+import { isElementClicked } from '~/utils/interaction';
+import { clsx } from '~/utils/misc';
 
 import {
 	type PostLinking,
@@ -21,28 +21,28 @@ import {
 	LINK_POST,
 	Link,
 	useLinking,
-} from '../Link.tsx';
-import RichTextRenderer from '../RichTextRenderer.tsx';
-import { useSharedPreferences } from '../SharedPreferences.tsx';
-import TimeAgo from '../TimeAgo.tsx';
+} from '../Link';
+import RichTextRenderer from '../RichTextRenderer';
+import { useSharedPreferences } from '../SharedPreferences';
+import TimeAgo from '../TimeAgo';
 
-import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble.tsx';
-import ErrorIcon from '../../icons/baseline-error.tsx';
-import FavoriteIcon from '../../icons/baseline-favorite.tsx';
-import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
-import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
-import RepeatIcon from '../../icons/baseline-repeat.tsx';
-import ShareIcon from '../../icons/baseline-share.tsx';
+import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
+import ErrorIcon from '../../icons/baseline-error';
+import FavoriteIcon from '../../icons/baseline-favorite';
+import FavoriteOutlinedIcon from '../../icons/outline-favorite';
+import MoreHorizIcon from '../../icons/baseline-more-horiz';
+import RepeatIcon from '../../icons/baseline-repeat';
+import ShareIcon from '../../icons/baseline-share';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
-import PostWarning from '../moderation/PostWarning.tsx';
-import Embed from '../embeds/Embed.tsx';
+import PostWarning from '../moderation/PostWarning';
+import Embed from '../embeds/Embed';
 
-import PostOverflowAction from './posts/PostOverflowAction.tsx';
-import PostShareAction from './posts/PostShareAction.tsx';
-import ReplyAction from './posts/ReplyAction.tsx';
-import RepostAction from './posts/RepostAction.tsx';
+import PostOverflowAction from './posts/PostOverflowAction';
+import PostShareAction from './posts/PostShareAction';
+import ReplyAction from './posts/ReplyAction';
+import RepostAction from './posts/RepostAction';
 
 export interface PostProps {
 	/** Expected to be static */

@@ -1,22 +1,22 @@
 import { batch, createSignal } from 'solid-js';
 
-import { model } from '~/utils/input.ts';
+import { model } from '~/utils/input';
 
-import { closeModal, openModal } from '~/com/globals/modals.tsx';
-import type { DeckConfig } from '~/desktop/globals/panes.ts';
+import { closeModal, openModal } from '~/com/globals/modals';
+import type { DeckConfig } from '~/desktop/globals/panes';
 
-import { Button } from '~/com/primitives/button.ts';
-import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
-import { IconButton } from '~/com/primitives/icon-button.ts';
-import { Input } from '~/com/primitives/input.ts';
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { Button } from '~/com/primitives/button';
+import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
+import { IconButton } from '~/com/primitives/icon-button';
+import { Input } from '~/com/primitives/input';
+import { Interactive } from '~/com/primitives/interactive';
 
-import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
-import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
-import EmojiFlyout from '~/com/components/emojis/EmojiFlyout.tsx';
+import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
+import EmojiFlyout from '~/com/components/emojis/EmojiFlyout';
 
-import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
-import CloseIcon from '~/com/icons/baseline-close.tsx';
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
+import CloseIcon from '~/com/icons/baseline-close';
 
 export interface EditDeckDialogProps {
 	/** Expected to be static */

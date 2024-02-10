@@ -1,19 +1,19 @@
 import type { Component, ComponentProps, JSX } from 'solid-js';
 
-import type { UnionOf } from '~/api/atp-schema.ts';
+import type { UnionOf } from '~/api/atp-schema';
 
-import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu.ts';
+import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 
-import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout.tsx';
+import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
 
-import AccountCheckIcon from '~/com/icons/baseline-account-check.tsx';
-import AlternateEmailIcon from '~/com/icons/baseline-alternate-email.tsx';
-import CheckIcon from '~/com/icons/baseline-check.tsx';
-// import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
-import PublicIcon from '~/com/icons/baseline-public.tsx';
-import LockIcon from '~/com/icons/baseline-lock.tsx';
+import AccountCheckIcon from '~/com/icons/baseline-account-check';
+import AlternateEmailIcon from '~/com/icons/baseline-alternate-email';
+import CheckIcon from '~/com/icons/baseline-check';
+// import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
+import PublicIcon from '~/com/icons/baseline-public';
+import LockIcon from '~/com/icons/baseline-lock';
 
-import type { GateState } from '../ComposerContext.tsx';
+import type { GateState } from '../ComposerContext';
 
 type Rule =
 	| UnionOf<'app.bsky.feed.threadgate#followingRule'>

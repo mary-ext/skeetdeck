@@ -1,8 +1,8 @@
-import { modelChecked } from '~/utils/input.ts';
+import { modelChecked } from '~/utils/input';
 
-import { preferences } from '~/desktop/globals/settings.ts';
+import { preferences } from '~/desktop/globals/settings';
 
-import Checkbox from '~/com/components/inputs/Checkbox.tsx';
+import Checkbox from '~/com/components/inputs/Checkbox';
 
 const AccessibilityView = () => {
 	const prefs = preferences.a11y;

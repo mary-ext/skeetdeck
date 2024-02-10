@@ -1,14 +1,14 @@
 import { type Component, Match, Show, Switch, createSignal } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema.ts';
-import { getAccountHandle, multiagent } from '~/api/globals/agent.ts';
-import { getCurrentTid } from '~/api/utils/tid.ts';
+import type { DID } from '~/api/atp-schema';
+import { getAccountHandle, multiagent } from '~/api/globals/agent';
+import { getCurrentTid } from '~/api/utils/tid';
 
-import { FILTER_ALL } from '~/api/queries/get-notifications.ts';
+import { FILTER_ALL } from '~/api/queries/get-notifications';
 
-import { createDerivedSignal } from '~/utils/hooks.ts';
+import { createDerivedSignal } from '~/utils/hooks';
 
-import { closeModal } from '~/com/globals/modals.tsx';
+import { closeModal } from '~/com/globals/modals';
 
 import {
 	type DeckConfig,
@@ -23,27 +23,27 @@ import {
 	PANE_TYPE_PROFILE,
 	SpecificPaneSize,
 	labelizePaneType,
-} from '../../globals/panes.ts';
+} from '../../globals/panes';
 
-import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
-import { IconButton } from '~/com/primitives/icon-button.ts';
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
+import { IconButton } from '~/com/primitives/icon-button';
+import { Interactive } from '~/com/primitives/interactive';
 
-import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
-import SelectInput from '~/com/components/inputs/SelectInput.tsx';
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
+import SelectInput from '~/com/components/inputs/SelectInput';
 
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
-import CloseIcon from '~/com/icons/baseline-close.tsx';
-import HomeOutlinedIcon from '~/com/icons/outline-home.tsx';
-import ListBoxOutlinedIcon from '~/com/icons/outline-list-box.tsx';
-import NotificationsOutlinedIcon from '~/com/icons/outline-notifications.tsx';
-import PersonOutlinedIcon from '~/com/icons/outline-person.tsx';
-import PoundIcon from '~/com/icons/baseline-pound.tsx';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+import CloseIcon from '~/com/icons/baseline-close';
+import HomeOutlinedIcon from '~/com/icons/outline-home';
+import ListBoxOutlinedIcon from '~/com/icons/outline-list-box';
+import NotificationsOutlinedIcon from '~/com/icons/outline-notifications';
+import PersonOutlinedIcon from '~/com/icons/outline-person';
+import PoundIcon from '~/com/icons/baseline-pound';
 
-import type { AddFn, PaneCreatorProps } from './pane-creators/types.ts';
-import CustomFeedPaneCreator from './pane-creators/CustomFeedPaneCreator.tsx';
-import CustomListPaneCreator from './pane-creators/CustomListPaneCreator.tsx';
-import ProfilePaneCreator from './pane-creators/ProfilePaneCreator.tsx';
+import type { AddFn, PaneCreatorProps } from './pane-creators/types';
+import CustomFeedPaneCreator from './pane-creators/CustomFeedPaneCreator';
+import CustomListPaneCreator from './pane-creators/CustomListPaneCreator';
+import ProfilePaneCreator from './pane-creators/ProfilePaneCreator';
 
 export interface AddPaneDialogProps {
 	/** Expected to be static */

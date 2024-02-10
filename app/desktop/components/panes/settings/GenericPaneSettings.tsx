@@ -1,28 +1,28 @@
 import { batch } from 'solid-js';
 
-import { multiagent } from '~/api/globals/agent.ts';
+import { multiagent } from '~/api/globals/agent';
 
-import { getUniqueId } from '~/utils/misc.ts';
+import { getUniqueId } from '~/utils/misc';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '~/com/globals/modals';
 
-import { type PaneConfig, SpecificPaneSize } from '../../../globals/panes.ts';
-import { preferences } from '../../../globals/settings.ts';
+import { type PaneConfig, SpecificPaneSize } from '../../../globals/panes';
+import { preferences } from '../../../globals/settings';
 
-import { Input } from '~/com/primitives/input.ts';
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { Input } from '~/com/primitives/input';
+import { Interactive } from '~/com/primitives/interactive';
 
-import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
-import Checkbox from '~/com/components/inputs/Checkbox.tsx';
-import Radio from '~/com/components/inputs/Radio.tsx';
+import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
+import Checkbox from '~/com/components/inputs/Checkbox';
+import Radio from '~/com/components/inputs/Radio';
 
-import AccountSwitchIcon from '~/com/icons/baseline-account-switch.tsx';
-import DeleteIcon from '~/com/icons/baseline-delete.tsx';
-import SwapVertIcon from '~/com/icons/baseline-swap-vert.tsx';
+import AccountSwitchIcon from '~/com/icons/baseline-account-switch';
+import DeleteIcon from '~/com/icons/baseline-delete';
+import SwapVertIcon from '~/com/icons/baseline-swap-vert';
 
-import { usePaneContext } from '../PaneContext.tsx';
-import SwitchAccountAction from '../../flyouts/SwitchAccountAction.tsx';
-import SwitchDeckAction from '../../flyouts/SwitchDeckAction.tsx';
+import { usePaneContext } from '../PaneContext';
+import SwitchAccountAction from '../../flyouts/SwitchAccountAction';
+import SwitchDeckAction from '../../flyouts/SwitchDeckAction';
 
 const GenericPaneSettings = () => {
 	const { deck, pane, deletePane } = usePaneContext();

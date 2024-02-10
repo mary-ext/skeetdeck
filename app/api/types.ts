@@ -1,4 +1,4 @@
-import type { DID } from './atp-schema.ts';
+import type { DID } from './atp-schema';
 
 export interface FilterPreferences {
 	/** Hide reposts by these users from the timeline */

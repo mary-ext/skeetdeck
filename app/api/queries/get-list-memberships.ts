@@ -1,7 +1,7 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID, Records } from '../atp-schema.ts';
-import { multiagent } from '../globals/agent.ts';
+import type { DID, Records } from '../atp-schema';
+import { multiagent } from '../globals/agent';
 
 const PAGE_LIMIT = 1_000;
 const PAGE_SIZE = 100;

@@ -14,17 +14,17 @@ import { makeEventListener } from '@solid-primitives/event-listener';
 import { useFloating } from 'solid-floating-ui';
 import TextareaAutosize from 'solid-textarea-autosize';
 
-import type { DID, RefOf } from '~/api/atp-schema.ts';
-import { multiagent } from '~/api/globals/agent.ts';
+import type { DID, RefOf } from '~/api/atp-schema';
+import { multiagent } from '~/api/globals/agent';
 
-import type { PreliminaryRichText } from '~/api/richtext/composer.ts';
-// import { graphemeLen } from '~/api/richtext/intl.ts';
+import type { PreliminaryRichText } from '~/api/richtext/composer';
+// import { graphemeLen } from '~/api/richtext/intl';
 
-import { createDebouncedValue } from '~/utils/hooks.ts';
-import { isCtrlKeyPressed } from '~/utils/interaction.ts';
-import { assert, clsx } from '~/utils/misc.ts';
+import { createDebouncedValue } from '~/utils/hooks';
+import { isCtrlKeyPressed } from '~/utils/interaction';
+import { assert, clsx } from '~/utils/misc';
 
-import CircularProgress from '../CircularProgress.tsx';
+import CircularProgress from '../CircularProgress';
 
 import DefaultUserAvatar from '../../assets/default-user-avatar.svg?url';
 

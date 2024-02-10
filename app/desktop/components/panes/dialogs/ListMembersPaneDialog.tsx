@@ -1,11 +1,11 @@
-import type { SignalizedList } from '~/api/stores/lists.ts';
+import type { SignalizedList } from '~/api/stores/lists';
 
-import { LINK_PROFILE, useLinking } from '~/com/components/Link.tsx';
+import { LINK_PROFILE, useLinking } from '~/com/components/Link';
 
-import PaneDialog from '../PaneDialog.tsx';
-import PaneDialogHeader from '../PaneDialogHeader.tsx';
+import PaneDialog from '../PaneDialog';
+import PaneDialogHeader from '../PaneDialogHeader';
 
-import ListMembersList from '~/com/components/lists/ListMembersList.tsx';
+import ListMembersList from '~/com/components/lists/ListMembersList';
 
 export interface ListMembersPaneDialogProps {
 	/** Expected to be static */

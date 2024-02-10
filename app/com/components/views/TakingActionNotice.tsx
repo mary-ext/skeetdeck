@@ -1,7 +1,7 @@
 import type { JSX } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema.ts';
-import { getAccountHandle, multiagent } from '~/api/globals/agent.ts';
+import type { DID } from '~/api/atp-schema';
+import { getAccountHandle, multiagent } from '~/api/globals/agent';
 
 export interface TakingActionNoticeProps {
 	uid: DID;

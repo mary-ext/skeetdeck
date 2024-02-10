@@ -2,9 +2,9 @@ import { type Accessor, type JSX, createContext, useContext } from 'solid-js';
 
 import { createSortable } from '@thisbeyond/solid-dnd';
 
-import { type Signal } from '~/utils/signals.ts';
+import { type Signal } from '~/utils/signals';
 
-import type { BasePaneConfig, DeckConfig } from '../../globals/panes.ts';
+import type { BasePaneConfig, DeckConfig } from '../../globals/panes';
 
 export type Sortable = ReturnType<typeof createSortable>;
 

@@ -1,11 +1,11 @@
-import { getUniqueId } from '~/utils/misc.ts';
+import { getUniqueId } from '~/utils/misc';
 
-import Radio from '~/com/components/inputs/Radio.tsx';
+import Radio from '~/com/components/inputs/Radio';
 
-import { type ProfilePaneConfig, ProfilePaneTab } from '../../../globals/panes.ts';
+import { type ProfilePaneConfig, ProfilePaneTab } from '../../../globals/panes';
 
-import { usePaneContext } from '../PaneContext.tsx';
-import Checkbox from '~/com/components/inputs/Checkbox.tsx';
+import { usePaneContext } from '../PaneContext';
+import Checkbox from '~/com/components/inputs/Checkbox';
 
 const ProfilePaneTabSettings = () => {
 	const { pane } = usePaneContext<ProfilePaneConfig>();

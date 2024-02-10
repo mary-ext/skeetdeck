@@ -1,4 +1,4 @@
-import type { SignalizedPost } from '~/api/stores/posts.ts';
+import type { SignalizedPost } from '~/api/stores/posts';
 
 export const isPostModerated = (post: SignalizedPost) => {
 	if (post.uid !== post.author.did) {

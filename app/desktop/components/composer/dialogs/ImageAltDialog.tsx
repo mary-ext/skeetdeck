@@ -2,23 +2,23 @@ import { createMemo, createSignal } from 'solid-js';
 
 import TextareaAutosize from 'solid-textarea-autosize';
 
-import { EOF_WS_RE } from '~/api/richtext/composer.ts';
-import { graphemeLen } from '~/api/richtext/intl.ts';
+import { EOF_WS_RE } from '~/api/richtext/composer';
+import { graphemeLen } from '~/api/richtext/intl';
 
-import { formatLong } from '~/utils/intl/number.ts';
-import type { ComposedImage } from '~/utils/image.ts';
+import { formatLong } from '~/utils/intl/number';
+import type { ComposedImage } from '~/utils/image';
 
-import { closeModal } from '~/com/globals/modals.tsx';
+import { closeModal } from '~/com/globals/modals';
 
-import { Button } from '~/com/primitives/button.ts';
-import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
-import { IconButton } from '~/com/primitives/icon-button.ts';
-import { Textarea } from '~/com/primitives/textarea.ts';
+import { Button } from '~/com/primitives/button';
+import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
+import { IconButton } from '~/com/primitives/icon-button';
+import { Textarea } from '~/com/primitives/textarea';
 
-import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
-import { getBlobSrc } from '~/com/components/BlobImage.tsx';
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
+import { getBlobSrc } from '~/com/components/BlobImage';
 
-import CloseIcon from '~/com/icons/baseline-close.tsx';
+import CloseIcon from '~/com/icons/baseline-close';
 
 export interface ImageAltDialogProps {
 	/** Expected to be static */

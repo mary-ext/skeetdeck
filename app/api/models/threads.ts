@@ -1,6 +1,6 @@
-import type { DID, RefOf, UnionOf } from '../atp-schema.ts';
+import type { DID, RefOf, UnionOf } from '../atp-schema';
 
-import { mergePost, SignalizedPost } from '../stores/posts.ts';
+import { mergePost, SignalizedPost } from '../stores/posts';
 
 type Post = RefOf<'app.bsky.feed.defs#postView'>;
 type Thread = UnionOf<'app.bsky.feed.defs#threadViewPost'>;

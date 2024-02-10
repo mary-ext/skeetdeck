@@ -1,11 +1,11 @@
 import type { JSX } from 'solid-js/jsx-runtime';
 
-import { closeModal } from '../../globals/modals.tsx';
+import { closeModal } from '../../globals/modals';
 
-import { Button } from '../../primitives/button.ts';
-import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog.ts';
+import { Button } from '../../primitives/button';
+import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
 
-import DialogOverlay from './DialogOverlay.tsx';
+import DialogOverlay from './DialogOverlay';
 
 export interface ConfirmDialogProps {
 	title: string;

@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'solid-js';
 
-import CheckIcon from '~/com/icons/baseline-check.tsx';
+import CheckIcon from '~/com/icons/baseline-check';
 
 const Checkbox = (props: ComponentProps<'input'>) => {
 	return (

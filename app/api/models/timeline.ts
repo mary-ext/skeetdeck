@@ -1,6 +1,6 @@
-import type { DID, RefOf } from '../atp-schema.ts';
+import type { DID, RefOf } from '../atp-schema';
 
-import { type SignalizedPost, mergePost } from '../stores/posts.ts';
+import { type SignalizedPost, mergePost } from '../stores/posts';
 
 type Post = RefOf<'app.bsky.feed.defs#postView'>;
 type TimelineItem = RefOf<'app.bsky.feed.defs#feedViewPost'>;

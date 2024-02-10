@@ -1,7 +1,7 @@
-import { type Signal, signal } from '~/utils/signals.ts';
+import { type Signal, signal } from '~/utils/signals';
 
-import type { DID, RefOf } from '../atp-schema.ts';
-import { type SignalizedProfile, mergeProfile } from './profiles.ts';
+import type { DID, RefOf } from '../atp-schema';
+import { type SignalizedProfile, mergeProfile } from './profiles';
 
 type List = RefOf<'app.bsky.graph.defs#listView'>;
 

@@ -1,7 +1,7 @@
-import { isLinkValid } from './renderer.ts';
-import { segmentRichText } from './segmentize.ts';
+import { isLinkValid } from './renderer';
+import { segmentRichText } from './segmentize';
 
-import type { Facet } from './types.ts';
+import type { Facet } from './types';
 
 const MDLINK_ESCAPE_RE = /([\\\]])/g;
 const ESCAPE_RE = /([@#\[\\])/g;

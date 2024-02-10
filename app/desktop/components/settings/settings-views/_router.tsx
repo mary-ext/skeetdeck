@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema';
 
 // Root
 export const VIEW_ABOUT = 0;

@@ -17,7 +17,7 @@ import {
 	VIEW_SUBSCRIBED_LABELERS,
 	VIEW_TEMPORARY_MUTES,
 	useViewRouter,
-} from './_router.tsx';
+} from './_router';
 
 const AboutView = lazy(() => import('./AboutView.tsx'));
 const AccessibilityView = lazy(() => import('./AccessibilityView.tsx'));

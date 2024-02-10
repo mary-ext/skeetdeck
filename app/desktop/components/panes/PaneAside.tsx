@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 
-import { Button } from '~/com/primitives/button.ts';
+import { Button } from '~/com/primitives/button';
 
 export interface PaneAsideProps {
 	children?: JSX.Element;

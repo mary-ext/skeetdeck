@@ -1,10 +1,10 @@
 import * as cborg from 'cborg';
 
-import { assert } from '~/utils/misc.ts';
+import { assert } from '~/utils/misc';
 
-import type { AtBlob } from '../atp-schema.ts';
+import type { AtBlob } from '../atp-schema';
 
-import * as base32 from './base32.ts';
+import * as base32 from './base32';
 
 const decodeCidToBytes = (source: string) => {
 	// Make sure we're dealing with serialized base32 here.

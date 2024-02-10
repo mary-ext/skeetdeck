@@ -1,45 +1,45 @@
 import { type JSX, createMemo, createSignal, lazy } from 'solid-js';
 
-import type { DID, Records, RefOf } from '~/api/atp-schema.ts';
-import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
+import type { DID, Records, RefOf } from '~/api/atp-schema';
+import { getRecordId, getRepoId } from '~/api/utils/misc';
 
-import { updatePostLike } from '~/api/mutations/like-post.ts';
-import type { SignalizedPost } from '~/api/stores/posts.ts';
+import { updatePostLike } from '~/api/mutations/like-post';
+import type { SignalizedPost } from '~/api/stores/posts';
 
-import { getPostModDecision } from '../../moderation/post.ts';
-import { getProfileModDecision } from '../../moderation/profile.ts';
-import { isPostModerated } from '../../moderation/utils.ts';
+import { getPostModDecision } from '../../moderation/post';
+import { getProfileModDecision } from '../../moderation/profile';
+import { isPostModerated } from '../../moderation/utils';
 
-import { openModal } from '../../globals/modals.tsx';
+import { openModal } from '../../globals/modals';
 
-import { formatCompact } from '~/utils/intl/number.ts';
-import { formatAbsDateTime } from '~/utils/intl/time.ts';
-import { clsx } from '~/utils/misc.ts';
+import { formatCompact } from '~/utils/intl/number';
+import { formatAbsDateTime } from '~/utils/intl/time';
+import { clsx } from '~/utils/misc';
 
-import { LINK_LIST, LINK_POST_LIKED_BY, LINK_POST_REPOSTED_BY, LINK_PROFILE, Link } from '../Link.tsx';
-import RichTextRenderer from '../RichTextRenderer.tsx';
-import { useSharedPreferences } from '../SharedPreferences.tsx';
+import { LINK_LIST, LINK_POST_LIKED_BY, LINK_POST_REPOSTED_BY, LINK_PROFILE, Link } from '../Link';
+import RichTextRenderer from '../RichTextRenderer';
+import { useSharedPreferences } from '../SharedPreferences';
 
-import AccountCheckIcon from '../../icons/baseline-account-check.tsx';
-import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble.tsx';
-import ErrorIcon from '../../icons/baseline-error.tsx';
-import FavoriteIcon from '../../icons/baseline-favorite.tsx';
-import FavoriteOutlinedIcon from '../../icons/outline-favorite.tsx';
-import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
-import PoundIcon from '../../icons/baseline-pound.tsx';
-import RepeatIcon from '../../icons/baseline-repeat.tsx';
-import ShareIcon from '../../icons/baseline-share.tsx';
+import AccountCheckIcon from '../../icons/baseline-account-check';
+import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
+import ErrorIcon from '../../icons/baseline-error';
+import FavoriteIcon from '../../icons/baseline-favorite';
+import FavoriteOutlinedIcon from '../../icons/outline-favorite';
+import MoreHorizIcon from '../../icons/baseline-more-horiz';
+import PoundIcon from '../../icons/baseline-pound';
+import RepeatIcon from '../../icons/baseline-repeat';
+import ShareIcon from '../../icons/baseline-share';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
-import Embed from '../embeds/Embed.tsx';
+import Embed from '../embeds/Embed';
 
-import PostOverflowAction from '../items/posts/PostOverflowAction.tsx';
-import PostShareAction from '../items/posts/PostShareAction.tsx';
-import RepostAction from '../items/posts/RepostAction.tsx';
-import ReplyAction from '../items/posts/ReplyAction.tsx';
+import PostOverflowAction from '../items/posts/PostOverflowAction';
+import PostShareAction from '../items/posts/PostShareAction';
+import RepostAction from '../items/posts/RepostAction';
+import ReplyAction from '../items/posts/ReplyAction';
 
-import PostTranslation, { needTranslation } from './posts/PostTranslation.tsx';
+import PostTranslation, { needTranslation } from './posts/PostTranslation';
 
 const AppealLabelDialog = lazy(() => import('../dialogs/AppealLabelDialog.tsx'));
 

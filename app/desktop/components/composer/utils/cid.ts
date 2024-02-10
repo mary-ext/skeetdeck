@@ -1,5 +1,5 @@
-import { encodeCbor } from '~/api/utils/cbor.ts';
-import { CBOR_CODE, createCID, formatCID } from '~/api/utils/cid.ts';
+import { encodeCbor } from '~/api/utils/cbor';
+import { CBOR_CODE, createCID, formatCID } from '~/api/utils/cid';
 
 // Sanity-check by requiring a $type here, this is because the records are
 // expected to be encoded with it, even though the PDS accepts record writes

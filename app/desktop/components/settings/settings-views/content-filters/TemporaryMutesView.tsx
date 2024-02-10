@@ -3,34 +3,34 @@ import { For, Suspense, SuspenseList, createMemo, createSignal } from 'solid-js'
 import { useSuspend } from '@pkg/solid-freeze';
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
-import { multiagent } from '~/api/globals/agent.ts';
-import { formatQueryError } from '~/api/utils/misc.ts';
+import type { DID } from '~/api/atp-schema';
+import { multiagent } from '~/api/globals/agent';
+import { formatQueryError } from '~/api/utils/misc';
 
-import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile.ts';
+import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';
 
-import { formatAbsDateTime } from '~/utils/intl/time.ts';
-import { type Signal, signal } from '~/utils/signals.ts';
+import { formatAbsDateTime } from '~/utils/intl/time';
+import { type Signal, signal } from '~/utils/signals';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '~/com/globals/modals';
 
-import { preferences } from '~/desktop/globals/settings.ts';
+import { preferences } from '~/desktop/globals/settings';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
-import { loadMoreBtn } from '~/com/primitives/interactive.ts';
+import { IconButton } from '~/com/primitives/icon-button';
+import { loadMoreBtn } from '~/com/primitives/interactive';
 
-import CircularProgress from '~/com/components/CircularProgress.tsx';
-import { useSharedPreferences } from '~/com/components/SharedPreferences.tsx';
-import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
+import CircularProgress from '~/com/components/CircularProgress';
+import { useSharedPreferences } from '~/com/components/SharedPreferences';
+import { VirtualContainer } from '~/com/components/VirtualContainer';
 
-import MuteConfirmDialog from '~/com/components/dialogs/MuteConfirmDialog.tsx';
-import ProfileItem, { type ProfileItemAccessory } from '~/com/components/items/ProfileItem.tsx';
+import MuteConfirmDialog from '~/com/components/dialogs/MuteConfirmDialog';
+import ProfileItem, { type ProfileItemAccessory } from '~/com/components/items/ProfileItem';
 
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
-import VolumeOffIcon from '~/com/icons/baseline-volume-off.tsx';
-import VolumeUpIcon from '~/com/icons/baseline-volume-up.tsx';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+import VolumeOffIcon from '~/com/icons/baseline-volume-off';
+import VolumeUpIcon from '~/com/icons/baseline-volume-up';
 
-import { VIEW_CONTENT_FILTERS, useViewRouter } from '../_router.tsx';
+import { VIEW_CONTENT_FILTERS, useViewRouter } from '../_router';
 
 const PAGE_LIMIT = 25;
 

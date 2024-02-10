@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 
-import type { SignalizedPost } from '~/api/stores/posts.ts';
+import type { SignalizedPost } from '~/api/stores/posts';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 

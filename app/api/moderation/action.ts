@@ -1,6 +1,6 @@
-import type { DID } from '../atp-schema.ts';
+import type { DID } from '../atp-schema';
 
-import type { Label, LabelDefinition, ModerationOpts } from './types.ts';
+import type { Label, LabelDefinition, ModerationOpts } from './types';
 import {
 	type KeywordPreference,
 	type LabelPreference,
@@ -10,9 +10,9 @@ import {
 	FlagNoOverride,
 	PreferenceHide,
 	PreferenceWarn,
-} from './enums.ts';
+} from './enums';
 
-import { LABELS } from './labels.ts';
+import { LABELS } from './labels';
 
 // Moderation cause types
 export const CauseLabel = 1;

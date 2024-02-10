@@ -2,16 +2,16 @@ import { type JSX, untrack } from 'solid-js';
 
 import { makeEventListener } from '@solid-primitives/event-listener';
 
-import { getRecordId } from '~/api/utils/misc.ts';
+import { getRecordId } from '~/api/utils/misc';
 
-import type { SignalizedPost } from '~/api/stores/posts.ts';
+import type { SignalizedPost } from '~/api/stores/posts';
 
-import { assert } from '~/utils/misc.ts';
+import { assert } from '~/utils/misc';
 
-import { Button } from '../../../primitives/button.ts';
+import { Button } from '../../../primitives/button';
 
-import { Flyout, offsetlessMiddlewares } from '../../Flyout.tsx';
-import { LINK_REPLY, useLinking } from '../../Link.tsx';
+import { Flyout, offsetlessMiddlewares } from '../../Flyout';
+import { LINK_REPLY, useLinking } from '../../Link';
 
 export interface ReplyActionProps {
 	post: SignalizedPost;

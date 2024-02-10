@@ -3,16 +3,16 @@ import { type JSX, For, createSignal, onCleanup } from 'solid-js';
 import { autoUpdate, offset } from '@floating-ui/dom';
 import { useFloating } from 'solid-floating-ui';
 
-import { graphemeLen } from '~/api/richtext/intl.ts';
+import { graphemeLen } from '~/api/richtext/intl';
 
-import { assert, clsx } from '~/utils/misc.ts';
+import { assert, clsx } from '~/utils/misc';
 
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { Interactive } from '~/com/primitives/interactive';
 
-import { offsetlessMiddlewares } from '~/com/components/Flyout.tsx';
+import { offsetlessMiddlewares } from '~/com/components/Flyout';
 
-import CloseIcon from '~/com/icons/baseline-close.tsx';
-import PoundIcon from '~/com/icons/baseline-pound.tsx';
+import CloseIcon from '~/com/icons/baseline-close';
+import PoundIcon from '~/com/icons/baseline-pound';
 
 export interface TagsInputProps {
 	tags: string[];

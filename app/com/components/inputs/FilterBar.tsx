@@ -1,8 +1,8 @@
 import { untrack } from 'solid-js';
 
-import { getUniqueId } from '~/utils/misc.ts';
+import { getUniqueId } from '~/utils/misc';
 
-import CheckIcon from '~/com/icons/baseline-check.tsx';
+import CheckIcon from '~/com/icons/baseline-check';
 
 export interface FilterItem<T> {
 	value: T;

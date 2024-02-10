@@ -1,6 +1,6 @@
 import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 
-import type { DID } from '../atp-schema.ts';
+import type { DID } from '../atp-schema';
 
 export const isDid = (value: string): value is DID => {
 	return value.startsWith('did:');

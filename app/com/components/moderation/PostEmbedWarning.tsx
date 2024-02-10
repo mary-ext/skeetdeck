@@ -1,12 +1,12 @@
 import { type JSX, createMemo, createSignal } from 'solid-js';
 
-import { renderLabelName } from '~/api/display.ts';
-import type { SignalizedPost } from '~/api/stores/posts.ts';
+import { renderLabelName } from '~/api/display';
+import type { SignalizedPost } from '~/api/stores/posts';
 
-import { CauseLabel, type ModerationDecision } from '~/api/moderation/action.ts';
-import { FlagNoOverride } from '~/api/moderation/enums.ts';
+import { CauseLabel, type ModerationDecision } from '~/api/moderation/action';
+import { FlagNoOverride } from '~/api/moderation/enums';
 
-import VisibilityIcon from '~/com/icons/baseline-visibility.tsx';
+import VisibilityIcon from '~/com/icons/baseline-visibility';
 
 export interface PostEmbedWarningProps {
 	post: SignalizedPost;

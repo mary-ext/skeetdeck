@@ -1,13 +1,13 @@
 import { createContext, useContext } from 'solid-js';
 
-import type { AtUri, DID } from '~/api/atp-schema.ts';
-import { systemLanguages } from '~/api/globals/platform.ts';
+import type { AtUri, DID } from '~/api/atp-schema';
+import { systemLanguages } from '~/api/globals/platform';
 
-import type { PreliminaryRichText } from '~/api/richtext/composer.ts';
+import type { PreliminaryRichText } from '~/api/richtext/composer';
 
-import type { PreferencesSchema } from '~/desktop/globals/settings.ts';
+import type { PreferencesSchema } from '~/desktop/globals/settings';
 
-import type { ComposedImage } from '~/utils/image.ts';
+import type { ComposedImage } from '~/utils/image';
 
 export interface GateStateEveryone {
 	type: 'e';

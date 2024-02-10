@@ -1,22 +1,22 @@
 import { Agent } from '@externdefs/bluesky-client/agent';
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import { assert, mapDefined } from '~/utils/misc.ts';
+import { assert, mapDefined } from '~/utils/misc';
 
-import type { DID, Records, ResponseOf } from '../atp-schema.ts';
-import { multiagent } from '../globals/agent.ts';
-import { systemLanguages } from '../globals/platform.ts';
+import type { DID, Records, ResponseOf } from '../atp-schema';
+import { multiagent } from '../globals/agent';
+import { systemLanguages } from '../globals/platform';
 
-import { wrapInfiniteQuery } from '../utils/query.ts';
+import { wrapInfiniteQuery } from '../utils/query';
 
 import {
 	type ModerationCause,
 	decideLabelModeration,
 	decideMutedKeywordModeration,
 	finalizeModeration,
-} from '../moderation/action.ts';
-import { PreferenceHide } from '../moderation/enums.ts';
-import type { ModerationOpts } from '../moderation/types.ts';
+} from '../moderation/action';
+import { PreferenceHide } from '../moderation/enums';
+import type { ModerationOpts } from '../moderation/types';
 
 import {
 	type PostFilter,
@@ -25,12 +25,12 @@ import {
 	type TimelineSlice,
 	createTimelineSlices,
 	createUnjoinedSlices,
-} from '../models/timeline.ts';
+} from '../models/timeline';
 
-import type { FilterPreferences, LanguagePreferences } from '../types.ts';
+import type { FilterPreferences, LanguagePreferences } from '../types';
 
-import _getDid from './_did.ts';
-import { fetchPost } from './get-post.ts';
+import _getDid from './_did';
+import { fetchPost } from './get-post';
 
 const PALOMAR_SERVICE = 'https://palomar.bsky.social';
 

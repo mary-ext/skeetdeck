@@ -1,15 +1,15 @@
 import { For } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema.ts';
-import { getRecordId, getRepoId } from '~/api/utils/misc.ts';
+import type { DID } from '~/api/atp-schema';
+import { getRecordId, getRepoId } from '~/api/utils/misc';
 
-import type { ThreadData } from '~/api/models/threads.ts';
+import type { ThreadData } from '~/api/models/threads';
 
-import { Link, LINK_POST } from '../../Link.tsx';
-import { VirtualContainer } from '../../VirtualContainer.tsx';
+import { Link, LINK_POST } from '../../Link';
+import { VirtualContainer } from '../../VirtualContainer';
 
-import EmbedRecordBlocked from '../../embeds/EmbedRecordBlocked.tsx';
-import Post from '../../items/Post.tsx';
+import EmbedRecordBlocked from '../../embeds/EmbedRecordBlocked';
+import Post from '../../items/Post';
 
 export interface FlattenedThreadProps {
 	data: ThreadData;

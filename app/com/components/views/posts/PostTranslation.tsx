@@ -2,17 +2,17 @@ import { createSignal } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
-import { systemLanguages } from '~/api/globals/platform.ts';
-import type { TranslationPreferences } from '~/api/types.ts';
+import { systemLanguages } from '~/api/globals/platform';
+import type { TranslationPreferences } from '~/api/types';
 
-import { getTranslation, getTranslationKey } from '~/api/queries/get-translation.ts';
-import type { SignalizedPost } from '~/api/stores/posts.ts';
+import { getTranslation, getTranslationKey } from '~/api/queries/get-translation';
+import type { SignalizedPost } from '~/api/stores/posts';
 
-import { Button } from '../../../primitives/button.ts';
+import { Button } from '../../../primitives/button';
 
-import CircularProgress from '../../CircularProgress.tsx';
-import { useSharedPreferences } from '../../SharedPreferences.tsx';
-import { languageNames } from '~/utils/intl/display-names.ts';
+import CircularProgress from '../../CircularProgress';
+import { useSharedPreferences } from '../../SharedPreferences';
+import { languageNames } from '~/utils/intl/display-names';
 
 export interface PostTranslationProps {
 	post: SignalizedPost;

@@ -1,4 +1,4 @@
-import { Interactive } from './interactive.ts';
+import { Interactive } from './interactive';
 
 export const MenuRoot = () => {
 	return `flex max-w-sm flex-col overflow-hidden overflow-y-auto rounded-lg bg-background shadow-menu`;

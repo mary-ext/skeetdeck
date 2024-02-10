@@ -2,24 +2,24 @@ import { type JSX, createMemo, createSignal } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
-import { getInitialPostThread, getPostThread, getPostThreadKey } from '~/api/queries/get-post-thread.ts';
+import { getInitialPostThread, getPostThread, getPostThreadKey } from '~/api/queries/get-post-thread';
 
-import { type ThreadPaneConfig, SpecificPaneSize } from '../../../globals/panes.ts';
-import { preferences } from '../../../globals/settings.ts';
+import { type ThreadPaneConfig, SpecificPaneSize } from '../../../globals/panes';
+import { preferences } from '../../../globals/settings';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import SettingsIcon from '~/com/icons/baseline-settings.tsx';
+import SettingsIcon from '~/com/icons/baseline-settings';
 
-import { usePaneContext } from '../PaneContext.tsx';
-import Pane from '../Pane.tsx';
-import PaneAside from '../PaneAside.tsx';
-import PaneBody from '../PaneBody.tsx';
-import PaneHeader from '../PaneHeader.tsx';
+import { usePaneContext } from '../PaneContext';
+import Pane from '../Pane';
+import PaneAside from '../PaneAside';
+import PaneBody from '../PaneBody';
+import PaneHeader from '../PaneHeader';
 
-import ThreadView from '../partials/ThreadView.tsx';
+import ThreadView from '../partials/ThreadView';
 
-import GenericPaneSettings from '../settings/GenericPaneSettings.tsx';
+import GenericPaneSettings from '../settings/GenericPaneSettings';
 
 const ThreadPane = () => {
 	const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);

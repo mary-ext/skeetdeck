@@ -2,10 +2,10 @@ import { type JSX, Suspense, lazy } from 'solid-js';
 
 import { autoPlacement, shift } from '@floating-ui/dom';
 
-import CircularProgress from '../CircularProgress.tsx';
-import { Flyout } from '../Flyout.tsx';
+import CircularProgress from '../CircularProgress';
+import { Flyout } from '../Flyout';
 
-import type { PickedEmoji } from './utils/database.ts';
+import type { PickedEmoji } from './utils/database';
 
 const EmojiPicker = lazy(() => import('./EmojiPicker.tsx'));
 

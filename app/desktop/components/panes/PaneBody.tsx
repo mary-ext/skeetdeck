@@ -1,8 +1,8 @@
 import { type JSX, createEffect } from 'solid-js';
 
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 
-import { usePaneContext } from './PaneContext.tsx';
+import { usePaneContext } from './PaneContext';
 
 export interface PaneBodyProps {
 	autoRefresh?: boolean;

@@ -1,8 +1,8 @@
 import type { JSX } from 'solid-js';
 
-import { Button } from '../../../primitives/button.ts';
+import { Button } from '../../../primitives/button';
 
-import { Flyout, offsetlessMiddlewares } from '../../Flyout.tsx';
+import { Flyout, offsetlessMiddlewares } from '../../Flyout';
 
 export interface ImageAltActionProps {
 	alt: string;

@@ -1,10 +1,10 @@
-import type { Records } from '../atp-schema.ts';
-import { multiagent } from '../globals/agent.ts';
+import type { Records } from '../atp-schema';
+import { multiagent } from '../globals/agent';
 
-import type { SignalizedFeed } from '../stores/feeds.ts';
+import type { SignalizedFeed } from '../stores/feeds';
 
-import { getCurrentDate, getRecordId } from '../utils/misc.ts';
-import { createToggleMutation } from '../utils/toggle-mutation.ts';
+import { getCurrentDate, getRecordId } from '../utils/misc';
+import { createToggleMutation } from '../utils/toggle-mutation';
 
 const likeRecordType = 'app.bsky.feed.like';
 

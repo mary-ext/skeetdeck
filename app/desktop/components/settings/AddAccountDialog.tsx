@@ -2,23 +2,23 @@ import { Match, Show, Switch, createEffect, createMemo, createSignal } from 'sol
 
 import { createMutation } from '@pkg/solid-query';
 
-import { retrievePdsEndpoint } from '~/api/did.ts';
-import { multiagent } from '~/api/globals/agent.ts';
-import { DEFAULT_DATA_SERVERS } from '~/api/globals/defaults.ts';
+import { retrievePdsEndpoint } from '~/api/did';
+import { multiagent } from '~/api/globals/agent';
+import { DEFAULT_DATA_SERVERS } from '~/api/globals/defaults';
 
-import { getProfile, getProfileKey } from '~/api/queries/get-profile.ts';
+import { getProfile, getProfileKey } from '~/api/queries/get-profile';
 
-import { queryClient } from '../../globals/query.ts';
+import { queryClient } from '../../globals/query';
 
-import { closeModal, openModal, useModalState } from '~/com/globals/modals.tsx';
-import { model } from '~/utils/input.ts';
+import { closeModal, openModal, useModalState } from '~/com/globals/modals';
+import { model } from '~/utils/input';
 
-import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
-import DialogOverlay from '~/com/components/dialogs/DialogOverlay.tsx';
+import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
 
-import { Button } from '~/com/primitives/button.ts';
-import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog.ts';
-import { Input } from '~/com/primitives/input.ts';
+import { Button } from '~/com/primitives/button';
+import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
+import { Input } from '~/com/primitives/input';
 
 const APP_PASSWORD_REGEX = /^[a-zA-Z\d]{4}(-[a-zA-Z\d]{4}){3}$/;
 const APP_PASSWORD_LINK = 'https://atproto.com/community/projects#app-passwords';

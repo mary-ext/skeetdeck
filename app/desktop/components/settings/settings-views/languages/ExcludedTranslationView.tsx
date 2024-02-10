@@ -1,20 +1,20 @@
 import { type JSX, For, createMemo, createSignal } from 'solid-js';
 
-import { getNativeLanguageName, languageNames, languageNamesStrict } from '~/utils/intl/display-names.ts';
-import { CODE2S } from '~/utils/intl/languages.ts';
-import { model } from '~/utils/input.ts';
+import { getNativeLanguageName, languageNames, languageNamesStrict } from '~/utils/intl/display-names';
+import { CODE2S } from '~/utils/intl/languages';
+import { model } from '~/utils/input';
 
-import { preferences } from '~/desktop/globals/settings.ts';
+import { preferences } from '~/desktop/globals/settings';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import SearchInput from '~/com/components/inputs/SearchInput.tsx';
+import SearchInput from '~/com/components/inputs/SearchInput';
 
-import AddIcon from '~/com/icons/baseline-add.tsx';
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
-import DeleteIcon from '~/com/icons/baseline-delete.tsx';
+import AddIcon from '~/com/icons/baseline-add';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+import DeleteIcon from '~/com/icons/baseline-delete';
 
-import { VIEW_LANGAUGE, useViewRouter } from '../_router.tsx';
+import { VIEW_LANGAUGE, useViewRouter } from '../_router';
 
 const ExcludedTranslationView = () => {
 	const router = useViewRouter();

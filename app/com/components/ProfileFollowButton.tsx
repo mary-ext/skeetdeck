@@ -1,11 +1,11 @@
-import { updateProfileFollow } from '~/api/mutations/follow-profile.ts';
-import type { SignalizedProfile } from '~/api/stores/profiles.ts';
+import { updateProfileFollow } from '~/api/mutations/follow-profile';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 
-import { openModal } from '../globals/modals.tsx';
+import { openModal } from '../globals/modals';
 
-import { Button } from '../primitives/button.ts';
+import { Button } from '../primitives/button';
 
-import ConfirmDialog from './dialogs/ConfirmDialog.tsx';
+import ConfirmDialog from './dialogs/ConfirmDialog';
 
 export interface ProfileFollowButtonProps {
 	profile: SignalizedProfile;

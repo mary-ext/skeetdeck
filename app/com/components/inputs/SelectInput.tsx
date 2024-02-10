@@ -1,4 +1,4 @@
-import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down.tsx';
+import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down';
 
 export interface SelectItem<T extends string = string> {
 	value: T;

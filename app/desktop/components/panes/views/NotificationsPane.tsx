@@ -8,9 +8,9 @@ import {
 	createMutation,
 } from '@pkg/solid-query';
 
-import { getQueryErrorInfo, resetInfiniteData } from '~/api/utils/query.ts';
+import { getQueryErrorInfo, resetInfiniteData } from '~/api/utils/query';
 
-import { updateNotificationsSeen } from '~/api/mutations/update-notifications-seen.ts';
+import { updateNotificationsSeen } from '~/api/mutations/update-notifications-seen';
 import {
 	type NotificationsLatestResult,
 	type NotificationsPage,
@@ -19,28 +19,28 @@ import {
 	getNotificationsKey,
 	getNotificationsLatest,
 	getNotificationsLatestKey,
-} from '~/api/queries/get-notifications.ts';
+} from '~/api/queries/get-notifications';
 
-import type { NotificationsPaneConfig } from '../../../globals/panes.ts';
+import type { NotificationsPaneConfig } from '../../../globals/panes';
 
-import Notification from '~/com/components/items/Notification.tsx';
-import GenericErrorView from '~/com/components/views/GenericErrorView.tsx';
-import CircularProgress from '~/com/components/CircularProgress.tsx';
+import Notification from '~/com/components/items/Notification';
+import GenericErrorView from '~/com/components/views/GenericErrorView';
+import CircularProgress from '~/com/components/CircularProgress';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
-import { loadMoreBtn, loadNewBtn } from '~/com/primitives/interactive.ts';
+import { IconButton } from '~/com/primitives/icon-button';
+import { loadMoreBtn, loadNewBtn } from '~/com/primitives/interactive';
 
-import CheckAllIcon from '~/com/icons/baseline-check-all.tsx';
-import SettingsIcon from '~/com/icons/baseline-settings.tsx';
+import CheckAllIcon from '~/com/icons/baseline-check-all';
+import SettingsIcon from '~/com/icons/baseline-settings';
 
-import { usePaneContext } from '../PaneContext.tsx';
-import Pane from '../Pane.tsx';
-import PaneAside from '../PaneAside.tsx';
-import PaneBody from '../PaneBody.tsx';
-import PaneHeader from '../PaneHeader.tsx';
+import { usePaneContext } from '../PaneContext';
+import Pane from '../Pane';
+import PaneAside from '../PaneAside';
+import PaneBody from '../PaneBody';
+import PaneHeader from '../PaneHeader';
 
-import GenericPaneSettings from '../settings/GenericPaneSettings.tsx';
-import NotificationsPaneSettings from '../settings/NotificationsPaneSettings.tsx';
+import GenericPaneSettings from '../settings/GenericPaneSettings';
+import NotificationsPaneSettings from '../settings/NotificationsPaneSettings';
 
 const isNotificationsStale = (
 	timelineData: InfiniteData<NotificationsPage> | undefined,

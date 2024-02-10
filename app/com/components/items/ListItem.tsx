@@ -1,13 +1,13 @@
 import type { JSX } from 'solid-js';
 
-import { renderListPurpose } from '~/api/display.ts';
-import { getRecordId } from '~/api/utils/misc.ts';
+import { renderListPurpose } from '~/api/display';
+import { getRecordId } from '~/api/utils/misc';
 
-import type { SignalizedList } from '~/api/stores/lists.ts';
+import type { SignalizedList } from '~/api/stores/lists';
 
-import { Interactive } from '../../primitives/interactive.ts';
+import { Interactive } from '../../primitives/interactive';
 
-import { LINK_LIST, Link } from '../Link.tsx';
+import { LINK_LIST, Link } from '../Link';
 
 import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';
 

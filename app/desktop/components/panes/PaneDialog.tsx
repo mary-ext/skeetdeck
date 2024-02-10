@@ -1,11 +1,11 @@
 import { type JSX, createMemo } from 'solid-js';
 
-import { clsx } from '~/utils/misc.ts';
+import { clsx } from '~/utils/misc';
 
-import { preferences } from '../../globals/settings.ts';
-import { PaneSize, SpecificPaneSize } from '../../globals/panes.ts';
+import { preferences } from '../../globals/settings';
+import { PaneSize, SpecificPaneSize } from '../../globals/panes';
 
-import { usePaneContext } from './PaneContext.tsx';
+import { usePaneContext } from './PaneContext';
 
 export interface PaneDialogProps {
 	children?: JSX.Element;

@@ -1,4 +1,4 @@
-import type { RefOf } from '~/api/atp-schema.ts';
+import type { RefOf } from '~/api/atp-schema';
 
 export const MAX_DISPLAYNAME_LENGTH = 64;
 export const MAX_BIO_LENGTH = 256;

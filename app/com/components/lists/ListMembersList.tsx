@@ -2,35 +2,35 @@ import { type JSX, For } from 'solid-js';
 
 import { type InfiniteData, createInfiniteQuery, useQueryClient } from '@pkg/solid-query';
 
-import { multiagent } from '~/api/globals/agent.ts';
-import { getRecordId } from '~/api/utils/misc.ts';
+import { multiagent } from '~/api/globals/agent';
+import { getRecordId } from '~/api/utils/misc';
 
-import { type ListMembersPage, getListMembers, getListMembersKey } from '~/api/queries/get-list-members.ts';
+import { type ListMembersPage, getListMembers, getListMembersKey } from '~/api/queries/get-list-members';
 import {
 	type ListMembership,
 	findMembership,
 	getListMembershipsKey,
-} from '~/api/queries/get-list-memberships.ts';
-import type { SignalizedList } from '~/api/stores/lists.ts';
+} from '~/api/queries/get-list-memberships';
+import type { SignalizedList } from '~/api/stores/lists';
 
-import { produce } from '~/utils/immer.ts';
+import { produce } from '~/utils/immer';
 
-import { openModal } from '../../globals/modals.tsx';
+import { openModal } from '../../globals/modals';
 
-import { IconButton } from '../../primitives/icon-button.ts';
-import { MenuItem, MenuItemIcon, MenuRoot } from '../../primitives/menu.ts';
-import { loadMoreBtn } from '../../primitives/interactive.ts';
+import { IconButton } from '../../primitives/icon-button';
+import { MenuItem, MenuItemIcon, MenuRoot } from '../../primitives/menu';
+import { loadMoreBtn } from '../../primitives/interactive';
 
-import ConfirmDialog from '../dialogs/ConfirmDialog.tsx';
-import GenericErrorView from '../views/GenericErrorView.tsx';
-import CircularProgress from '../CircularProgress.tsx';
-import { Flyout } from '../Flyout.tsx';
-import { VirtualContainer } from '../VirtualContainer.tsx';
+import ConfirmDialog from '../dialogs/ConfirmDialog';
+import GenericErrorView from '../views/GenericErrorView';
+import CircularProgress from '../CircularProgress';
+import { Flyout } from '../Flyout';
+import { VirtualContainer } from '../VirtualContainer';
 
-import DeleteIcon from '../../icons/baseline-delete.tsx';
-import MoreHorizIcon from '../../icons/baseline-more-horiz.tsx';
+import DeleteIcon from '../../icons/baseline-delete';
+import MoreHorizIcon from '../../icons/baseline-more-horiz';
 
-import ProfileItem, { type ProfileItemAccessory, type ProfileItemProps } from '../items/ProfileItem.tsx';
+import ProfileItem, { type ProfileItemAccessory, type ProfileItemProps } from '../items/ProfileItem';
 
 export interface ListMembersListProps {
 	/** Expected to be static */

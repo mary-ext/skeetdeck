@@ -3,21 +3,21 @@ import { For, Show, Suspense, batch, lazy } from 'solid-js';
 import { type RouteComponentProps, Navigate } from '@pkg/solid-page-router';
 import { DragDropProvider, DragDropSensors, SortableProvider } from '@thisbeyond/solid-dnd';
 
-import { openModal } from '~/com/globals/modals.tsx';
-import { Title } from '~/com/lib/meta.tsx';
+import { openModal } from '~/com/globals/modals';
+import { Title } from '~/com/lib/meta';
 
-import { preferences } from '../globals/settings.ts';
-import { ConstrainYDragAxis } from '../utils/dnd.ts';
+import { preferences } from '../globals/settings';
+import { ConstrainYDragAxis } from '../utils/dnd';
 
-import { PaneContextProvider } from '../components/panes/PaneContextProvider.tsx';
-import PaneFallback from '../components/panes/PaneFallback.tsx';
-import PaneRouter from '../components/panes/PaneRouter.tsx';
+import { PaneContextProvider } from '../components/panes/PaneContextProvider';
+import PaneFallback from '../components/panes/PaneFallback';
+import PaneRouter from '../components/panes/PaneRouter';
 
-import AddIcon from '~/com/icons/baseline-add.tsx';
-import EditIcon from '~/com/icons/baseline-edit.tsx';
+import AddIcon from '~/com/icons/baseline-add';
+import EditIcon from '~/com/icons/baseline-edit';
 
-import { Button } from '~/com/primitives/button.ts';
-import { IconButton } from '~/com/primitives/icon-button.ts';
+import { Button } from '~/com/primitives/button';
+import { IconButton } from '~/com/primitives/icon-button';
 
 const EditDeckDialog = lazy(() => import('../components/settings/EditDeckDialog.tsx'));
 const AddPaneDialog = lazy(() => import('../components/settings/AddPaneDialog.tsx'));

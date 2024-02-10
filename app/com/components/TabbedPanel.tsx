@@ -2,9 +2,9 @@ import { type JSX, For, children, createMemo } from 'solid-js';
 
 import { Freeze } from '@pkg/solid-freeze';
 
-import { clsx } from '~/utils/misc.ts';
+import { clsx } from '~/utils/misc';
 
-import Tab from './Tab.tsx';
+import Tab from './Tab';
 
 export interface TabbedPanelViewProps {
 	label: string;

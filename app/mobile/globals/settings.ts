@@ -1,14 +1,14 @@
-import type { AtUri } from '~/api/atp-schema.ts';
-import type { FilterPreferences, LanguagePreferences, TranslationPreferences } from '~/api/types.ts';
+import type { AtUri } from '~/api/atp-schema';
+import type { FilterPreferences, LanguagePreferences, TranslationPreferences } from '~/api/types';
 
-import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults.ts';
+import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults';
 
-import { PreferenceWarn } from '~/api/moderation/enums.ts';
-import type { ModerationOpts } from '~/api/moderation/types.ts';
+import { PreferenceWarn } from '~/api/moderation/enums';
+import type { ModerationOpts } from '~/api/moderation/types';
 
-import { createReactiveLocalStorage } from '~/utils/storage.ts';
+import { createReactiveLocalStorage } from '~/utils/storage';
 
-import type { SharedPreferencesObject } from '~/com/components/SharedPreferences.tsx';
+import type { SharedPreferencesObject } from '~/com/components/SharedPreferences';
 
 export interface PreferencesSchema {
 	$version: 1;

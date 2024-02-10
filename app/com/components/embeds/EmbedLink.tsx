@@ -1,10 +1,10 @@
 import type { JSX } from 'solid-js';
 
-import type { RefOf } from '~/api/atp-schema.ts';
+import type { RefOf } from '~/api/atp-schema';
 
-import { Interactive } from '../../primitives/interactive.ts';
+import { Interactive } from '../../primitives/interactive';
 
-import BlobImage from '../BlobImage.tsx';
+import BlobImage from '../BlobImage';
 
 type EmbeddedLink = RefOf<'app.bsky.embed.external#viewExternal'>;
 

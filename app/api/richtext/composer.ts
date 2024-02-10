@@ -1,12 +1,12 @@
 import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 
-import type { DID } from '../atp-schema.ts';
-import { multiagent } from '../globals/agent.ts';
+import type { DID } from '../atp-schema';
+import { multiagent } from '../globals/agent';
 
-import { asciiLen, graphemeLen } from './intl.ts';
-import { safeUrlParse, toShortUrl } from './renderer.ts';
+import { asciiLen, graphemeLen } from './intl';
+import { safeUrlParse, toShortUrl } from './renderer';
 
-import type { Facet } from './types.ts';
+import type { Facet } from './types';
 
 interface TextSegment {
 	type: 'text';

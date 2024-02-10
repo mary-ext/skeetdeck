@@ -1,7 +1,7 @@
-import { produce } from '~/utils/immer.ts';
+import { produce } from '~/utils/immer';
 
-import { type ThreadData } from '../models/threads.ts';
-import { SignalizedPost } from '../stores/posts.ts';
+import { type ThreadData } from '../models/threads';
+import { SignalizedPost } from '../stores/posts';
 
 export const produceThreadInsert = (posts: SignalizedPost[], parentUri: string) => {
 	const updatePostThread = produce((draft: ThreadData) => {

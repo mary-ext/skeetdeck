@@ -2,17 +2,17 @@ import { type JSX, For } from 'solid-js';
 
 import { createInfiniteQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema';
 
-import { getProfileLists, getProfileListsKey } from '~/api/queries/get-profile-lists.ts';
+import { getProfileLists, getProfileListsKey } from '~/api/queries/get-profile-lists';
 
-import { loadMoreBtn } from '../../primitives/interactive.ts';
+import { loadMoreBtn } from '../../primitives/interactive';
 
-import GenericErrorView from '../views/GenericErrorView.tsx';
-import CircularProgress from '../CircularProgress.tsx';
-import { VirtualContainer } from '../VirtualContainer.tsx';
+import GenericErrorView from '../views/GenericErrorView';
+import CircularProgress from '../CircularProgress';
+import { VirtualContainer } from '../VirtualContainer';
 
-import ListItem from '../items/ListItem.tsx';
+import ListItem from '../items/ListItem';
 
 export interface ListListProps {
 	uid: DID;

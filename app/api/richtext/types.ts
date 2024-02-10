@@ -1,4 +1,4 @@
-import type { RefOf, UnionOf } from '../atp-schema.ts';
+import type { RefOf, UnionOf } from '../atp-schema';
 
 export type Facet = RefOf<'app.bsky.richtext.facet'>;
 export type LinkFeature = UnionOf<'app.bsky.richtext.facet#link'>;

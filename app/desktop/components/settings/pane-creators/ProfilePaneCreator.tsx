@@ -2,19 +2,19 @@ import { Match, Switch, createSignal } from 'solid-js';
 
 import { createInfiniteQuery } from '@pkg/solid-query';
 
-import { getSuggestedFollows, getSuggestedFollowsKey } from '~/api/queries/get-suggested-follows.ts';
-import { searchProfiles, searchProfilesKey } from '~/api/queries/search-profiles.ts';
+import { getSuggestedFollows, getSuggestedFollowsKey } from '~/api/queries/get-suggested-follows';
+import { searchProfiles, searchProfilesKey } from '~/api/queries/search-profiles';
 
-import { type ProfilePaneConfig, PANE_TYPE_PROFILE, ProfilePaneTab } from '~/desktop/globals/panes.ts';
+import { type ProfilePaneConfig, PANE_TYPE_PROFILE, ProfilePaneTab } from '~/desktop/globals/panes';
 
-import { DialogBody } from '~/com/primitives/dialog.ts';
+import { DialogBody } from '~/com/primitives/dialog';
 
-import SearchInput from '~/com/components/inputs/SearchInput.tsx';
+import SearchInput from '~/com/components/inputs/SearchInput';
 
-import type { ProfileItemProps } from '~/com/components/items/ProfileItem.tsx';
-import ProfileList from '~/com/components/lists/ProfileList.tsx';
+import type { ProfileItemProps } from '~/com/components/items/ProfileItem';
+import ProfileList from '~/com/components/lists/ProfileList';
 
-import type { PaneCreatorProps } from './types.ts';
+import type { PaneCreatorProps } from './types';
 
 const ProfilePaneCreator = (props: PaneCreatorProps) => {
 	const [search, setSearch] = createSignal('');

@@ -1,16 +1,16 @@
-import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults.ts';
+import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults';
 
-import { INTERACTION_TAGS, isElementClicked } from '~/utils/interaction.ts';
+import { INTERACTION_TAGS, isElementClicked } from '~/utils/interaction';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { IconButton } from '~/com/primitives/icon-button';
+import { Interactive } from '~/com/primitives/interactive';
 
-import AddIcon from '~/com/icons/baseline-add.tsx';
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
+import AddIcon from '~/com/icons/baseline-add';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 
 import DefaultListAvatar from '~/com/assets/default-list-avatar.svg?url';
 
-import { VIEW_CONTENT_FILTERS, VIEW_LABEL_CONFIG, useViewRouter } from '../_router.tsx';
+import { VIEW_CONTENT_FILTERS, VIEW_LABEL_CONFIG, useViewRouter } from '../_router';
 
 const selectItem = Interactive({
 	variant: 'muted',

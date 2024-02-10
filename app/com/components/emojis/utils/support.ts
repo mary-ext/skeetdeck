@@ -1,7 +1,7 @@
 // https://github.com/nolanlawson/emoji-picker-element/blob/497681f21119c5cc675fd59a1684b1a0d392215e/src/picker/utils/emojiSupport.js#L6
 
-import { scheduleIdleTask } from '~/utils/idle.ts';
-import { assert } from '~/utils/misc.ts';
+import { scheduleIdleTask } from '~/utils/idle';
+import { assert } from '~/utils/misc';
 
 // This should match the fonts set in `tailwind-base.config.js`
 const FONT_FAMILY = '"Noto Color Emoji", "Twemoji Mozilla", sans-serif';

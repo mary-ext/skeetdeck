@@ -1,15 +1,15 @@
 import { batch, createSignal } from 'solid-js';
 
-import { multiagent } from '~/api/globals/agent.ts';
+import { multiagent } from '~/api/globals/agent';
 
-import { modelChecked } from '~/utils/input.ts';
-import { signal } from '~/utils/signals.ts';
+import { modelChecked } from '~/utils/input';
+import { signal } from '~/utils/signals';
 
-import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
-import Checkbox from '~/com/components/inputs/Checkbox.tsx';
+import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
+import Checkbox from '~/com/components/inputs/Checkbox';
 
-import { type GateState, type PostState, useComposer } from '../../ComposerContext.tsx';
-import { type ComposerDraft, type SerializedPostState, getDraftDb } from '../../utils/draft-db.ts';
+import { type GateState, type PostState, useComposer } from '../../ComposerContext';
+import { type ComposerDraft, type SerializedPostState, getDraftDb } from '../../utils/draft-db';
 
 export interface ApplyDraftDialogProps {
 	draft: ComposerDraft;

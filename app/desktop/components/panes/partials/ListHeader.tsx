@@ -1,24 +1,24 @@
 import { type JSX, lazy } from 'solid-js';
 
-import type { SignalizedList } from '~/api/stores/lists.ts';
+import type { SignalizedList } from '~/api/stores/lists';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '~/com/globals/modals';
 
-import { Button } from '~/com/primitives/button.ts';
+import { Button } from '~/com/primitives/button';
 
-import { LINK_PROFILE, Link } from '~/com/components/Link.tsx';
-import RichTextRenderer from '~/com/components/RichTextRenderer.tsx';
-import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
+import { LINK_PROFILE, Link } from '~/com/components/Link';
+import RichTextRenderer from '~/com/components/RichTextRenderer';
+import { VirtualContainer } from '~/com/components/VirtualContainer';
 
 import DefaultListAvatar from '~/com/assets/default-list-avatar.svg?url';
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
-import { usePaneContext } from '../PaneContext.tsx';
+import { usePaneContext } from '../PaneContext';
 
-import EditIcon from '~/com/icons/baseline-edit.tsx';
-import MoreHorizIcon from '~/com/icons/baseline-more-horiz.tsx';
+import EditIcon from '~/com/icons/baseline-edit';
+import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 
-import ListOverflowAction from './actions/ListOverflowAction.tsx';
+import ListOverflowAction from './actions/ListOverflowAction';
 
 const ImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog.tsx'));
 const SubscribeListDialog = lazy(() => import('~/com/components/dialogs/lists/SubscribeListDialog.tsx'));

@@ -1,23 +1,23 @@
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema';
 
-import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info.ts';
+import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info';
 
-import { type CustomFeedPaneConfig, PANE_TYPE_FEED } from '../../../globals/panes.ts';
-import { addPane } from '../../../globals/settings.ts';
+import { type CustomFeedPaneConfig, PANE_TYPE_FEED } from '../../../globals/panes';
+import { addPane } from '../../../globals/settings';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import TimelineList from '~/com/components/lists/TimelineList.tsx';
+import TimelineList from '~/com/components/lists/TimelineList';
 
-import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add.tsx';
+import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
 
-import { usePaneContext, usePaneModalState } from '../PaneContext.tsx';
-import PaneDialog from '../PaneDialog.tsx';
-import PaneDialogHeader from '../PaneDialogHeader.tsx';
+import { usePaneContext, usePaneModalState } from '../PaneContext';
+import PaneDialog from '../PaneDialog';
+import PaneDialogHeader from '../PaneDialogHeader';
 
-import FeedHeader from '../partials/FeedHeader.tsx';
+import FeedHeader from '../partials/FeedHeader';
 
 export interface FeedPaneDialogProps {
 	/** Expected to be static */

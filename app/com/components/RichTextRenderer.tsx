@@ -1,10 +1,10 @@
 import { createMemo, type JSX } from 'solid-js';
 
-import { isLinkValid } from '~/api/richtext/renderer.ts';
-import { segmentRichText } from '~/api/richtext/segmentize.ts';
-import type { Facet, RichTextSegment } from '~/api/richtext/types.ts';
+import { isLinkValid } from '~/api/richtext/renderer';
+import { segmentRichText } from '~/api/richtext/segmentize';
+import type { Facet, RichTextSegment } from '~/api/richtext/types';
 
-import { type Linking, LINK_EXTERNAL, LINK_PROFILE, LINK_TAG, useLinking } from './Link.tsx';
+import { type Linking, LINK_EXTERNAL, LINK_PROFILE, LINK_TAG, useLinking } from './Link';
 
 export interface RichTextReturn {
 	t: string;

@@ -1,8 +1,8 @@
-import { multiagent } from '~/api/globals/agent.ts';
+import { multiagent } from '~/api/globals/agent';
 
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { Interactive } from '~/com/primitives/interactive';
 
-import ChevronRightIcon from '~/com/icons/baseline-chevron-right.tsx';
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 
 import {
 	VIEW_HIDDEN_REPOSTERS,
@@ -10,7 +10,7 @@ import {
 	VIEW_SUBSCRIBED_LABELERS,
 	VIEW_TEMPORARY_MUTES,
 	useViewRouter,
-} from './_router.tsx';
+} from './_router';
 
 const selectItem = Interactive({
 	class: `flex items-center justify-between gap-4 px-4 py-3 text-left text-sm disabled:opacity-50`,

@@ -1,6 +1,6 @@
 import * as tldts from 'tldts';
 
-import ConfirmDialog from './ConfirmDialog.tsx';
+import ConfirmDialog from './ConfirmDialog';
 
 export interface LinkWarningDialogProps {
 	/** Expected to be static */

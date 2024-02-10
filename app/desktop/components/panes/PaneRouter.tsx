@@ -10,7 +10,7 @@ import {
 	PANE_TYPE_PROFILE,
 	PANE_TYPE_SEARCH,
 	PANE_TYPE_THREAD,
-} from '../../globals/panes.ts';
+} from '../../globals/panes';
 
 export interface PaneRouterProps {
 	pane: PaneConfig;

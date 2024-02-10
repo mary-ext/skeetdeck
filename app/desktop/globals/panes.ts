@@ -1,4 +1,4 @@
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema';
 
 export const PANE_TYPE_HOME = 'home';
 export const PANE_TYPE_NOTIFICATIONS = 'notifications';

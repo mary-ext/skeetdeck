@@ -2,28 +2,28 @@ import type { JSX } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema';
 
-import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/get-list-info.ts';
+import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/get-list-info';
 
-import { type CustomListPaneConfig, PANE_TYPE_LIST } from '../../../globals/panes.ts';
-import { addPane } from '../../../globals/settings.ts';
+import { type CustomListPaneConfig, PANE_TYPE_LIST } from '../../../globals/panes';
+import { addPane } from '../../../globals/settings';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import TimelineList from '~/com/components/lists/TimelineList.tsx';
-import ListMembersList from '~/com/components/lists/ListMembersList.tsx';
-import GenericErrorView from '~/com/components/views/GenericErrorView.tsx';
-import CircularProgress from '~/com/components/CircularProgress.tsx';
-import { LINK_PROFILE, useLinking } from '~/com/components/Link.tsx';
+import TimelineList from '~/com/components/lists/TimelineList';
+import ListMembersList from '~/com/components/lists/ListMembersList';
+import GenericErrorView from '~/com/components/views/GenericErrorView';
+import CircularProgress from '~/com/components/CircularProgress';
+import { LINK_PROFILE, useLinking } from '~/com/components/Link';
 
-import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add.tsx';
+import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
 
-import { usePaneContext, usePaneModalState } from '../PaneContext.tsx';
-import PaneDialog from '../PaneDialog.tsx';
-import PaneDialogHeader from '../PaneDialogHeader.tsx';
+import { usePaneContext, usePaneModalState } from '../PaneContext';
+import PaneDialog from '../PaneDialog';
+import PaneDialogHeader from '../PaneDialogHeader';
 
-import ListHeader from '../partials/ListHeader.tsx';
+import ListHeader from '../partials/ListHeader';
 
 export interface ListPaneDialogProps {
 	/** Expected to be static */

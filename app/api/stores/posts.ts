@@ -1,9 +1,9 @@
-import { EQUALS_DEQUAL } from '~/utils/dequal.ts';
-import { type Signal, signal } from '~/utils/signals.ts';
+import { EQUALS_DEQUAL } from '~/utils/dequal';
+import { type Signal, signal } from '~/utils/signals';
 
-import type { DID, Records, RefOf } from '../atp-schema.ts';
+import type { DID, Records, RefOf } from '../atp-schema';
 
-import { type SignalizedProfile, mergeProfile } from './profiles.ts';
+import { type SignalizedProfile, mergeProfile } from './profiles';
 
 type Post = RefOf<'app.bsky.feed.defs#postView'>;
 type PostRecord = Records['app.bsky.feed.post'];

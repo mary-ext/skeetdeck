@@ -1,17 +1,17 @@
 import type { JSX } from 'solid-js';
 
-import { serializeRichText } from '~/api/richtext/utils.ts';
-import { getRecordId } from '~/api/utils/misc.ts';
+import { serializeRichText } from '~/api/richtext/utils';
+import { getRecordId } from '~/api/utils/misc';
 
-import type { SignalizedPost } from '~/api/stores/posts.ts';
+import type { SignalizedPost } from '~/api/stores/posts';
 
-import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu.ts';
+import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
 
-import { Flyout } from '../../Flyout.tsx';
+import { Flyout } from '../../Flyout';
 
-import ContentCopyIcon from '../../../icons/baseline-content-copy.tsx';
-import LinkIcon from '../../../icons/baseline-link.tsx';
-import ShareIcon from '../../../icons/baseline-share.tsx';
+import ContentCopyIcon from '../../../icons/baseline-content-copy';
+import LinkIcon from '../../../icons/baseline-link';
+import ShareIcon from '../../../icons/baseline-share';
 
 export interface PostShareActionProps {
 	post: SignalizedPost;

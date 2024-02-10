@@ -2,26 +2,26 @@ import { type JSX, createSignal, createMemo, batch } from 'solid-js';
 
 import { type InfiniteData, useQueryClient } from '@pkg/solid-query';
 
-import type { RefOf } from '~/api/atp-schema.ts';
-import { ListPurposeLabels } from '~/api/display.ts';
-import { multiagent } from '~/api/globals/agent.ts';
-import type { FilterPreferences } from '~/api/types.ts';
+import type { RefOf } from '~/api/atp-schema';
+import { ListPurposeLabels } from '~/api/display';
+import { multiagent } from '~/api/globals/agent';
+import type { FilterPreferences } from '~/api/types';
 
-import { updateProfileMute } from '~/api/mutations/mute-profile.ts';
-import type { TimelinePage, getTimelineKey } from '~/api/queries/get-timeline.ts';
-import type { SignalizedProfile } from '~/api/stores/profiles.ts';
-import { produceTimelineFilter } from '~/api/updaters/timeline-filter.ts';
+import { updateProfileMute } from '~/api/mutations/mute-profile';
+import type { TimelinePage, getTimelineKey } from '~/api/queries/get-timeline';
+import type { SignalizedProfile } from '~/api/stores/profiles';
+import { produceTimelineFilter } from '~/api/updaters/timeline-filter';
 
-import { closeModal } from '../../globals/modals.tsx';
+import { closeModal } from '../../globals/modals';
 
-import { Button } from '../../primitives/button.ts';
-import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog.ts';
+import { Button } from '../../primitives/button';
+import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
 
-import SelectInput from '../inputs/SelectInput.tsx';
-import DialogOverlay from './DialogOverlay.tsx';
+import SelectInput from '../inputs/SelectInput';
+import DialogOverlay from './DialogOverlay';
 
-import TakingActionNotice from '../views/TakingActionNotice.tsx';
-import { isProfileTempMuted, useBustRevCache } from '../SharedPreferences.tsx';
+import TakingActionNotice from '../views/TakingActionNotice';
+import { isProfileTempMuted, useBustRevCache } from '../SharedPreferences';
 
 import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';
 

@@ -1,8 +1,8 @@
 import { unwrap } from 'solid-js/store';
 
-import { type PreliminaryRichText, getRtLength, parseRt } from '~/api/richtext/composer.ts';
+import { type PreliminaryRichText, getRtLength, parseRt } from '~/api/richtext/composer';
 
-import type { ComposerState, PostState } from '../ComposerContext.tsx';
+import type { ComposerState, PostState } from '../ComposerContext';
 
 export const getPostRt = (post: PostState): PreliminaryRichText => {
 	const unwrapped = unwrap(post);

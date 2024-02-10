@@ -5,9 +5,9 @@ import {
 	isCtrlKeyPressed,
 	isElementAltClicked,
 	isElementClicked,
-} from '~/utils/interaction.ts';
+} from '~/utils/interaction';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '~/com/globals/modals';
 
 import {
 	type LinkingContextObject,
@@ -27,11 +27,11 @@ import {
 	LINK_QUOTE,
 	LINK_REPLY,
 	LinkingContext,
-} from '~/com/components/Link.tsx';
+} from '~/com/components/Link';
 
-import { useComposer } from '../composer/ComposerContext.tsx';
+import { useComposer } from '../composer/ComposerContext';
 
-import { usePaneContext } from './PaneContext.tsx';
+import { usePaneContext } from './PaneContext';
 
 const LinkWarningDialog = lazy(() => import('~/com/components/dialogs/LinkWarningDialog.tsx'));
 

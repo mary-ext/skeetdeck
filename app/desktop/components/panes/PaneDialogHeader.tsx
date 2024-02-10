@@ -1,11 +1,11 @@
 import type { JSX } from 'solid-js';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
-import CloseIcon from '~/com/icons/baseline-close.tsx';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+import CloseIcon from '~/com/icons/baseline-close';
 
-import { usePaneModalState } from './PaneContext.tsx';
+import { usePaneModalState } from './PaneContext';
 
 export interface PaneDialogHeaderProps {
 	title: string;

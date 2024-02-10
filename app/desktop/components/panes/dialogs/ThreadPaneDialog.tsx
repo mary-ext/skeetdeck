@@ -2,22 +2,22 @@ import { createMemo } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema';
 
-import { getInitialPostThread, getPostThread, getPostThreadKey } from '~/api/queries/get-post-thread.ts';
+import { getInitialPostThread, getPostThread, getPostThreadKey } from '~/api/queries/get-post-thread';
 
-import { PANE_TYPE_THREAD, SpecificPaneSize, type ThreadPaneConfig } from '../../../globals/panes.ts';
-import { addPane, preferences } from '../../../globals/settings.ts';
+import { PANE_TYPE_THREAD, SpecificPaneSize, type ThreadPaneConfig } from '../../../globals/panes';
+import { addPane, preferences } from '../../../globals/settings';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add.tsx';
+import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
 
-import { usePaneContext, usePaneModalState } from '../PaneContext.tsx';
-import PaneDialog from '../PaneDialog.tsx';
-import PaneDialogHeader from '../PaneDialogHeader.tsx';
+import { usePaneContext, usePaneModalState } from '../PaneContext';
+import PaneDialog from '../PaneDialog';
+import PaneDialogHeader from '../PaneDialogHeader';
 
-import ThreadView from '../partials/ThreadView.tsx';
+import ThreadView from '../partials/ThreadView';
 
 export interface ThreadPaneDialogProps {
 	/** Expected to be static */

@@ -2,7 +2,7 @@ import { type Accessor, type JSX, Match, Switch, createSignal } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema';
 import type {
 	FollowNotification,
 	FollowNotificationSlice,
@@ -11,23 +11,23 @@ import type {
 	NotificationSlice,
 	RepostNotification,
 	RepostNotificationSlice,
-} from '~/api/models/notifications.ts';
-import { getInitialPost, getPost, getPostKey } from '~/api/queries/get-post.ts';
+} from '~/api/models/notifications';
+import { getInitialPost, getPost, getPostKey } from '~/api/queries/get-post';
 
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { Interactive } from '~/com/primitives/interactive';
 
-import { LINK_PROFILE, Link } from '../Link.tsx';
-import CircularProgress from '../CircularProgress.tsx';
-import { VirtualContainer } from '../VirtualContainer.tsx';
+import { LINK_PROFILE, Link } from '../Link';
+import CircularProgress from '../CircularProgress';
+import { VirtualContainer } from '../VirtualContainer';
 
-import ChevronRightIcon from '../../icons/baseline-chevron-right.tsx';
-import FavoriteIcon from '../../icons/baseline-favorite.tsx';
-import PersonIcon from '../../icons/baseline-person.tsx';
-import RepeatIcon from '../../icons/baseline-repeat.tsx';
+import ChevronRightIcon from '../../icons/baseline-chevron-right';
+import FavoriteIcon from '../../icons/baseline-favorite';
+import PersonIcon from '../../icons/baseline-person';
+import RepeatIcon from '../../icons/baseline-repeat';
 
-import EmbedQuote from '../embeds/EmbedQuote.tsx';
-import GenericErrorView from '../views/GenericErrorView.tsx';
-import Post from './Post.tsx';
+import EmbedQuote from '../embeds/EmbedQuote';
+import GenericErrorView from '../views/GenericErrorView';
+import Post from './Post';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 

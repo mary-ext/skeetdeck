@@ -5,36 +5,36 @@ import {
 	PreferenceIgnore,
 	PreferenceWarn,
 	type KeywordPreference,
-} from '~/api/moderation/enums.ts';
-import type { ModerationFilterKeywordOpts } from '~/api/moderation/types.ts';
+} from '~/api/moderation/enums';
+import type { ModerationFilterKeywordOpts } from '~/api/moderation/types';
 
-import { createRadioModel, model, modelChecked } from '~/utils/input.ts';
-import { getUniqueId } from '~/utils/misc.ts';
+import { createRadioModel, model, modelChecked } from '~/utils/input';
+import { getUniqueId } from '~/utils/misc';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '~/com/globals/modals';
 
-import { bustRevisionCache, preferences } from '../../../../globals/settings.ts';
+import { bustRevisionCache, preferences } from '../../../../globals/settings';
 
-import { Button } from '~/com/primitives/button.ts';
-import { IconButton } from '~/com/primitives/icon-button.ts';
-import { Input } from '~/com/primitives/input.ts';
-import { Interactive } from '~/com/primitives/interactive.ts';
+import { Button } from '~/com/primitives/button';
+import { IconButton } from '~/com/primitives/icon-button';
+import { Input } from '~/com/primitives/input';
+import { Interactive } from '~/com/primitives/interactive';
 
-import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog.tsx';
-import Checkbox from '~/com/components/inputs/Checkbox.tsx';
-import Radio from '~/com/components/inputs/Radio.tsx';
+import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
+import Checkbox from '~/com/components/inputs/Checkbox';
+import Radio from '~/com/components/inputs/Radio';
 
-import AddIcon from '~/com/icons/baseline-add.tsx';
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left.tsx';
-import DeleteIcon from '~/com/icons/baseline-delete.tsx';
-import FormatLetterMatchesIcon from '~/com/icons/baseline-format-letter-matches.tsx';
+import AddIcon from '~/com/icons/baseline-add';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+import DeleteIcon from '~/com/icons/baseline-delete';
+import FormatLetterMatchesIcon from '~/com/icons/baseline-format-letter-matches';
 
 import {
 	type ViewParams,
 	VIEW_KEYWORD_FILTER_FORM,
 	VIEW_KEYWORD_FILTERS,
 	useViewRouter,
-} from '../_router.tsx';
+} from '../_router';
 
 type KeywordState = [keyword: Signal<string>, whole: Signal<boolean>];
 

@@ -1,18 +1,18 @@
 import { type InfiniteData, useQueryClient, createMutation } from '@pkg/solid-query';
 
-import { multiagent } from '~/api/globals/agent.ts';
-import { getRecordId } from '~/api/utils/misc.ts';
+import { multiagent } from '~/api/globals/agent';
+import { getRecordId } from '~/api/utils/misc';
 
-import type { ThreadData } from '~/api/models/threads.ts';
-import { getPost, getPostKey } from '~/api/queries/get-post.ts';
-import type { getPostThreadKey } from '~/api/queries/get-post-thread.ts';
-import type { TimelinePage } from '~/api/queries/get-timeline.ts';
-import { type SignalizedPost, removeCachedPost } from '~/api/stores/posts.ts';
-import { producePostDelete } from '~/api/updaters/delete-post.ts';
+import type { ThreadData } from '~/api/models/threads';
+import { getPost, getPostKey } from '~/api/queries/get-post';
+import type { getPostThreadKey } from '~/api/queries/get-post-thread';
+import type { TimelinePage } from '~/api/queries/get-timeline';
+import { type SignalizedPost, removeCachedPost } from '~/api/stores/posts';
+import { producePostDelete } from '~/api/updaters/delete-post';
 
-import { closeModal } from '~/com/globals/modals.tsx';
+import { closeModal } from '~/com/globals/modals';
 
-import ConfirmDialog from './ConfirmDialog.tsx';
+import ConfirmDialog from './ConfirmDialog';
 
 export interface DeletePostConfirmDialogProps {
 	/** Expected to be static */

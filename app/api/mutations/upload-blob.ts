@@ -1,5 +1,5 @@
-import type { AtBlob, DID } from '../atp-schema.ts';
-import { multiagent } from '../globals/agent.ts';
+import type { AtBlob, DID } from '../atp-schema';
+import { multiagent } from '../globals/agent';
 
 interface BlobMetadata {
 	u: DID;

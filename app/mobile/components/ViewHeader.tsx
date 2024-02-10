@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 
-import { clsx } from '~/utils/misc.ts';
+import { clsx } from '~/utils/misc';
 
 export interface ViewHeaderProps {
 	title: string;

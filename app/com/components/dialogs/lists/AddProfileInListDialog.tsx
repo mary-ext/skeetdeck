@@ -8,41 +8,41 @@ import {
 	useQueryClient,
 } from '@pkg/solid-query';
 
-import type { Records, UnionOf } from '~/api/atp-schema.ts';
-import { multiagent } from '~/api/globals/agent.ts';
-import { renderListPurpose } from '~/api/display.ts';
-import { getCurrentTid } from '~/api/utils/tid.ts';
-import { getCurrentDate, getRecordId } from '~/api/utils/misc.ts';
+import type { Records, UnionOf } from '~/api/atp-schema';
+import { multiagent } from '~/api/globals/agent';
+import { renderListPurpose } from '~/api/display';
+import { getCurrentTid } from '~/api/utils/tid';
+import { getCurrentDate, getRecordId } from '~/api/utils/misc';
 
-import type { ListMembersPage } from '~/api/queries/get-list-members.ts';
+import type { ListMembersPage } from '~/api/queries/get-list-members';
 import {
 	type ListMembership,
 	getListMemberships,
 	getListMembershipsKey,
 	listMembershipsOptions,
-} from '~/api/queries/get-list-memberships.ts';
-import { getProfileKey } from '~/api/queries/get-profile.ts';
-import { getProfileLists, getProfileListsKey } from '~/api/queries/get-profile-lists.ts';
-import type { SignalizedProfile } from '~/api/stores/profiles.ts';
+} from '~/api/queries/get-list-memberships';
+import { getProfileKey } from '~/api/queries/get-profile';
+import { getProfileLists, getProfileListsKey } from '~/api/queries/get-profile-lists';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 
-import { createDerivedSignal } from '~/utils/hooks.ts';
-import { produce } from '~/utils/immer.ts';
-import { chunked, clsx, mapDefined } from '~/utils/misc.ts';
-import { difference } from '~/utils/sets.ts';
+import { createDerivedSignal } from '~/utils/hooks';
+import { produce } from '~/utils/immer';
+import { chunked, clsx, mapDefined } from '~/utils/misc';
+import { difference } from '~/utils/sets';
 
-import { closeModal, useModalState } from '../../../globals/modals.tsx';
+import { closeModal, useModalState } from '../../../globals/modals';
 
-import { Button } from '~/com/primitives/button.ts';
-import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog.ts';
-import { IconButton } from '../../../primitives/icon-button.ts';
-import { Interactive, loadMoreBtn } from '~/com/primitives/interactive.ts';
+import { Button } from '~/com/primitives/button';
+import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog';
+import { IconButton } from '../../../primitives/icon-button';
+import { Interactive, loadMoreBtn } from '~/com/primitives/interactive';
 
-import GenericErrorView from '../../views/GenericErrorView.tsx';
-import CircularProgress from '../../CircularProgress.tsx';
-import DialogOverlay from '../DialogOverlay.tsx';
+import GenericErrorView from '../../views/GenericErrorView';
+import CircularProgress from '../../CircularProgress';
+import DialogOverlay from '../DialogOverlay';
 
-import CloseIcon from '../../../icons/baseline-close.tsx';
-import CheckIcon from '../../../icons/baseline-check.tsx';
+import CloseIcon from '../../../icons/baseline-close';
+import CheckIcon from '../../../icons/baseline-check';
 
 import DefaultListAvatar from '../../../assets/default-list-avatar.svg?url';
 

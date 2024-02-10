@@ -1,12 +1,12 @@
 import type { InfiniteData } from '@pkg/solid-query';
 
-import { produce } from '~/utils/immer.ts';
+import { produce } from '~/utils/immer';
 
-import type { UnionOf } from '../atp-schema.ts';
+import type { UnionOf } from '../atp-schema';
 
-import type { ThreadData } from '../models/threads.ts';
-import type { TimelinePage } from '../queries/get-timeline.ts';
-import { SignalizedPost } from '../stores/posts.ts';
+import type { ThreadData } from '../models/threads';
+import type { TimelinePage } from '../queries/get-timeline';
+import { SignalizedPost } from '../stores/posts';
 
 export const producePostDelete = (postUri: string) => {
 	const updateTimeline = produce((draft: InfiniteData<TimelinePage>) => {

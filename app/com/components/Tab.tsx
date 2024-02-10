@@ -1,6 +1,6 @@
 import type { ComponentProps, JSX } from 'solid-js';
 
-import { clsx } from '~/utils/misc.ts';
+import { clsx } from '~/utils/misc';
 
 type ButtonProps = ComponentProps<'button'>;
 

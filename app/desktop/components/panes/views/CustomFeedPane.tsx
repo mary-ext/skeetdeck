@@ -2,30 +2,30 @@ import { type JSX, createSignal } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema.ts';
+import type { DID } from '~/api/atp-schema';
 
-import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info.ts';
+import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info';
 
-import type { CustomFeedPaneConfig } from '../../../globals/panes.ts';
+import type { CustomFeedPaneConfig } from '../../../globals/panes';
 
-import { IconButton } from '~/com/primitives/icon-button.ts';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import TimelineList from '~/com/components/lists/TimelineList.tsx';
-import { VirtualContainer } from '~/com/components/VirtualContainer.tsx';
+import TimelineList from '~/com/components/lists/TimelineList';
+import { VirtualContainer } from '~/com/components/VirtualContainer';
 
-import InfoIcon from '~/com/icons/baseline-info.tsx';
-import SettingsIcon from '~/com/icons/baseline-settings.tsx';
+import InfoIcon from '~/com/icons/baseline-info';
+import SettingsIcon from '~/com/icons/baseline-settings';
 
-import { usePaneContext } from '../PaneContext.tsx';
-import Pane from '../Pane.tsx';
-import PaneAside from '../PaneAside.tsx';
-import PaneBody from '../PaneBody.tsx';
-import PaneHeader from '../PaneHeader.tsx';
+import { usePaneContext } from '../PaneContext';
+import Pane from '../Pane';
+import PaneAside from '../PaneAside';
+import PaneBody from '../PaneBody';
+import PaneHeader from '../PaneHeader';
 
-import CustomFeedPaneSettings from '../settings/CustomFeedPaneSettings.tsx';
-import GenericPaneSettings from '../settings/GenericPaneSettings.tsx';
+import CustomFeedPaneSettings from '../settings/CustomFeedPaneSettings';
+import GenericPaneSettings from '../settings/GenericPaneSettings';
 
-import FeedHeader from '../partials/FeedHeader.tsx';
+import FeedHeader from '../partials/FeedHeader';
 
 const CustomFeedPane = () => {
 	const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);

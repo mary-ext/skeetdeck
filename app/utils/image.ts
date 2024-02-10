@@ -1,4 +1,4 @@
-import type { Signal } from './signals.ts';
+import type { Signal } from './signals';
 
 const MAX_SIZE = 1_000_000; // 1 MB
 

@@ -7,15 +7,15 @@ import {
 	FILTER_QUOTES,
 	FILTER_REPLIES,
 	FILTER_REPOSTS,
-} from '~/api/queries/get-notifications.ts';
+} from '~/api/queries/get-notifications';
 
-import { getUniqueId } from '~/utils/misc.ts';
+import { getUniqueId } from '~/utils/misc';
 
-import Checkbox from '~/com/components/inputs/Checkbox.tsx';
+import Checkbox from '~/com/components/inputs/Checkbox';
 
-import type { NotificationsPaneConfig } from '~/desktop/globals/panes.ts';
+import type { NotificationsPaneConfig } from '~/desktop/globals/panes';
 
-import { usePaneContext } from '../PaneContext.tsx';
+import { usePaneContext } from '../PaneContext';
 
 const NotificationsPaneSettings = () => {
 	const { pane } = usePaneContext<NotificationsPaneConfig>();

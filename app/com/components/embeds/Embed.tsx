@@ -1,21 +1,21 @@
 import { type Accessor, createMemo } from 'solid-js';
 
-import type { RefOf } from '~/api/atp-schema.ts';
-import { getCollectionId } from '~/api/utils/misc.ts';
+import type { RefOf } from '~/api/atp-schema';
+import { getCollectionId } from '~/api/utils/misc';
 
-import type { ModerationDecision } from '~/api/moderation/action.ts';
+import type { ModerationDecision } from '~/api/moderation/action';
 
-import type { SignalizedPost } from '~/api/stores/posts.ts';
+import type { SignalizedPost } from '~/api/stores/posts';
 
-import PostEmbedWarning from '../moderation/PostEmbedWarning.tsx';
+import PostEmbedWarning from '../moderation/PostEmbedWarning';
 
-import EmbedFeed from './EmbedFeed.tsx';
-import EmbedImage from './EmbedImage.tsx';
-import EmbedLink from './EmbedLink.tsx';
-import EmbedList from './EmbedList.tsx';
-import EmbedQuote from './EmbedQuote.tsx';
-import EmbedRecordBlocked from './EmbedRecordBlocked.tsx';
-import EmbedRecordNotFound from './EmbedRecordNotFound.tsx';
+import EmbedFeed from './EmbedFeed';
+import EmbedImage from './EmbedImage';
+import EmbedLink from './EmbedLink';
+import EmbedList from './EmbedList';
+import EmbedQuote from './EmbedQuote';
+import EmbedRecordBlocked from './EmbedRecordBlocked';
+import EmbedRecordNotFound from './EmbedRecordNotFound';
 
 type EmbeddedRecord = RefOf<'app.bsky.embed.record#view'>['record'];
 

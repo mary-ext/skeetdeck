@@ -3,19 +3,19 @@ import { type JSX, createSignal } from 'solid-js';
 import { type Middleware } from '@floating-ui/dom';
 import { getSide } from '@floating-ui/utils';
 
-import { compressProfileImage } from '~/utils/image.ts';
+import { compressProfileImage } from '~/utils/image';
 
-import { openModal } from '../../globals/modals.tsx';
+import { openModal } from '../../globals/modals';
 
-import { Interactive } from '../../primitives/interactive.ts';
-import { MenuItem, MenuRoot } from '../../primitives/menu.ts';
+import { Interactive } from '../../primitives/interactive';
+import { MenuItem, MenuRoot } from '../../primitives/menu';
 
-import { Flyout, offsetlessMiddlewares } from '../Flyout.tsx';
-import CircularProgress from '../CircularProgress.tsx';
+import { Flyout, offsetlessMiddlewares } from '../Flyout';
+import CircularProgress from '../CircularProgress';
 
-import AddPhotoAlternateIcon from '../../icons/baseline-add-photo-alternate.tsx';
+import AddPhotoAlternateIcon from '../../icons/baseline-add-photo-alternate';
 
-import ImageCompressAlertDialog from '../dialogs/ImageCompressAlertDialog.tsx';
+import ImageCompressAlertDialog from '../dialogs/ImageCompressAlertDialog';
 
 export interface AddPhotoButtonProps {
 	exists: boolean;

@@ -1,18 +1,18 @@
 import { type JSX, lazy } from 'solid-js';
 
-import { getRecordId } from '~/api/utils/misc.ts';
+import { getRecordId } from '~/api/utils/misc';
 
-import type { SignalizedList } from '~/api/stores/lists.ts';
+import type { SignalizedList } from '~/api/stores/lists';
 
-import { openModal } from '~/com/globals/modals.tsx';
+import { openModal } from '~/com/globals/modals';
 
-import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu.ts';
+import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 
-import { Flyout } from '~/com/components/Flyout.tsx';
+import { Flyout } from '~/com/components/Flyout';
 
-import DeleteIcon from '~/com/icons/baseline-delete.tsx';
-import LaunchIcon from '~/com/icons/baseline-launch.tsx';
-import ReportIcon from '~/com/icons/baseline-report.tsx';
+import DeleteIcon from '~/com/icons/baseline-delete';
+import LaunchIcon from '~/com/icons/baseline-launch';
+import ReportIcon from '~/com/icons/baseline-report';
 
 const ReportDialog = lazy(() => import('~/com/components/dialogs/ReportDialog.tsx'));
 const PruneListOrphanDialog = lazy(() => import('~/com/components/dialogs/lists/PruneListOrphanDialog.tsx'));
