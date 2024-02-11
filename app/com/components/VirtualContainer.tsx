@@ -101,7 +101,10 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 		<article
 			ref={startMeasure}
 			class={props.class}
-			style={{ height: shouldHide() ? `${height ?? cachedHeight()}px` : undefined }}
+			style={{
+				contain: 'content',
+				height: shouldHide() ? `${height ?? cachedHeight()}px` : undefined,
+			}}
 			prop:$onintersect={handleIntersect}
 			prop:$onresize={handleResize}
 		>
