@@ -242,10 +242,16 @@ const ComposerPane = () => {
 					if (external) {
 						setLog(logPending(`Resolving link embed #${++linkCount}`));
 
-						const meta = await queryClient.fetchQuery({
-							queryKey: getLinkMetaKey(external),
-							queryFn: getLinkMeta,
-						});
+						let meta: LinkMeta;
+
+						try {
+							meta = await queryClient.fetchQuery({
+								queryKey: getLinkMetaKey(external),
+								queryFn: getLinkMeta,
+							});
+						} catch (err) {
+							throw new ComposeError(`Failed to resolve link card #${linkCount}`, { cause: err });
+						}
 
 						const thumb = meta.thumb;
 
@@ -268,21 +274,25 @@ const ComposerPane = () => {
 						const ns = getCollectionId(record);
 						let promise!: Promise<{ cid: Signal<string>; uri: string }>;
 
-						if (ns === 'app.bsky.feed.post') {
-							promise = queryClient.fetchQuery({
-								queryKey: getPostKey(uid, record),
-								queryFn: getPost,
-							});
-						} else if (ns === 'app.bsky.feed.generator') {
-							promise = queryClient.fetchQuery({
-								queryKey: getFeedInfoKey(uid, record),
-								queryFn: getFeedInfo,
-							});
-						} else if (ns === 'app.bsky.graph.list') {
-							promise = queryClient.fetchQuery({
-								queryKey: getListInfoKey(uid, record),
-								queryFn: getListInfo,
-							});
+						try {
+							if (ns === 'app.bsky.feed.post') {
+								promise = queryClient.fetchQuery({
+									queryKey: getPostKey(uid, record),
+									queryFn: getPost,
+								});
+							} else if (ns === 'app.bsky.feed.generator') {
+								promise = queryClient.fetchQuery({
+									queryKey: getFeedInfoKey(uid, record),
+									queryFn: getFeedInfo,
+								});
+							} else if (ns === 'app.bsky.graph.list') {
+								promise = queryClient.fetchQuery({
+									queryKey: getListInfoKey(uid, record),
+									queryFn: getListInfo,
+								});
+							}
+						} catch (err) {
+							throw new ComposeError(`Failed to resolve embed #${embedCount}`);
 						}
 
 						const data = await promise;
