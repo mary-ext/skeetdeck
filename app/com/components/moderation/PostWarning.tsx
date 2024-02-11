@@ -4,7 +4,12 @@ import type { DID } from '~/api/atp-schema';
 import { renderLabelName } from '~/api/display';
 import type { SignalizedPost } from '~/api/stores/posts';
 
-import { CauseLabel, CauseMutedKeyword, type ModerationDecision } from '~/api/moderation/action';
+import {
+	type ModerationDecision,
+	CauseLabel,
+	CauseMutedKeyword,
+	CauseMutedTemporary,
+} from '~/api/moderation/action';
 import { FlagNoOverride } from '~/api/moderation/enums';
 
 import { getPostModDecision } from '../../moderation/post';
@@ -67,17 +72,22 @@ const PostWarning = (props: PostWarningProps) => {
 		const [show, setShow] = createSignal(false);
 
 		const source = $verdict.s;
-		const forced = source.t === CauseLabel && source.d.f & FlagNoOverride;
+		const type = source.t;
+
+		const forced = type === CauseLabel && source.d.f & FlagNoOverride;
 
 		let Icon: Component<ComponentProps<'svg'>>;
 		let title: string;
 
-		if (source.t === CauseLabel) {
+		if (type === CauseLabel) {
 			Icon = VisibilityIcon;
 			title = renderLabelName(source.l.val);
-		} else if (source.t === CauseMutedKeyword) {
+		} else if (type === CauseMutedKeyword) {
 			Icon = FilterAltIcon;
 			title = source.n;
+		} else if (type === CauseMutedTemporary) {
+			Icon = PersonOffIcon;
+			title = `Silenced user`;
 		} else {
 			Icon = PersonOffIcon;
 			title = `Muted user`;
