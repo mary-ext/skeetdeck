@@ -15,7 +15,7 @@ export interface PaneBodyProps {
 
 const scrollToTopBtn = Interactive({
 	variant: 'none',
-	class: `group pointer-events-auto overflow-hidden rounded-full border border-divider bg-background shadow-md`,
+	class: `group pointer-events-auto overflow-hidden rounded-full bg-background-dark shadow-md`,
 });
 
 const PaneBody = (props: PaneBodyProps) => {
