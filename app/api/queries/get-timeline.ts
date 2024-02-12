@@ -159,6 +159,7 @@ export const getTimeline = wrapInfiniteQuery(
 				createHiddenRepostFilter(timelineOpts?.filters),
 				createDuplicatePostFilter(items),
 
+				params.showReplies === 'follows' && createRootRepliesFilter(uid),
 				!params.showReplies && createHideRepliesFilter(),
 				!params.showQuotes && createHideQuotesFilter(),
 				!params.showReposts && createHideRepostsFilter(),
@@ -592,6 +593,29 @@ const createTempMutePostFilter = (uid: DID, prefs?: FilterPreferences): PostFilt
 	};
 };
 
+const createRootRepliesFilter = (uid: DID): PostFilter => {
+	return (item) => {
+		const reply = item.reply;
+		const reason = item.reason;
+
+		if (reply !== undefined && (reason === undefined || reason.$type !== 'app.bsky.feed.defs#reasonRepost')) {
+			const root = reply.root;
+
+			const author = root.author;
+			const viewer = author.viewer!;
+
+			return (
+				// Allow our own posts
+				author.did === uid ||
+				// Allow posts from users we are following
+				viewer.following !== undefined
+			);
+		}
+
+		return true;
+	};
+};
+
 const createHideRepliesFilter = (): PostFilter => {
 	return (item) => {
 		const reason = item.reason;
@@ -661,19 +685,11 @@ const createHomeSliceFilter = (uid: DID, followsOnly: boolean): SliceFilter | un
 
 		// skip any posts that are in reply to non-followed
 		if (first.reply && (!first.reason || first.reason.$type !== 'app.bsky.feed.defs#reasonRepost')) {
-			const root = first.reply.root;
 			const parent = first.reply.parent;
+			const author = parent.author;
+			const viewer = author.viewer;
 
-			const rAuthor = root.author;
-			const pAuthor = parent.author;
-
-			const rViewer = rAuthor.viewer;
-			const pViewer = pAuthor.viewer;
-
-			if (
-				(rAuthor.did !== uid && ((followsOnly && !rViewer.following.peek()) || rViewer.muted.peek())) ||
-				(pAuthor.did !== uid && ((followsOnly && !pViewer.following.peek()) || pViewer.muted.peek()))
-			) {
+			if (author.did !== uid && followsOnly && !viewer.following.peek()) {
 				return yankReposts(items);
 			}
 		}
