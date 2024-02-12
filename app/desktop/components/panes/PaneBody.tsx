@@ -59,10 +59,8 @@ const PaneBody = (props: PaneBodyProps) => {
 					ref={(sentinel) => {
 						const observer = new IntersectionObserver(
 							(entries) => {
-								for (let i = 0, il = entries.length; i < il; i++) {
-									const entry = entries[i];
-									setScrolled(!entry.isIntersecting);
-								}
+								const entry = entries[0];
+								setScrolled(!entry.isIntersecting);
 							},
 							{ root: ref! },
 						);
