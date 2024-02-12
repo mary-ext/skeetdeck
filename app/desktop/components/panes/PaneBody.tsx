@@ -54,11 +54,23 @@ const PaneBody = (props: PaneBodyProps) => {
 				}
 			})()}
 
-			<div
-				ref={ref}
-				onScrollEnd={(ev) => setScrolled(ev.currentTarget.scrollTop > 26)}
-				class="flex h-full flex-col overflow-y-auto"
-			>
+			<div ref={ref} class="relative flex h-full flex-col overflow-y-auto">
+				<div
+					ref={(sentinel) => {
+						const observer = new IntersectionObserver(
+							(entries) => {
+								for (let i = 0, il = entries.length; i < il; i++) {
+									const entry = entries[i];
+									setScrolled(!entry.isIntersecting);
+								}
+							},
+							{ root: ref! },
+						);
+
+						observer.observe(sentinel);
+					}}
+					class="pointer-events-none absolute top-0 h-13"
+				></div>
 				{props.children}
 			</div>
 		</div>
