@@ -176,7 +176,7 @@ export const getTimeline = wrapInfiniteQuery(
 
 				!params.showReplies && createHideRepliesFilter(),
 				!params.showQuotes && createHideQuotesFilter(),
-				type === 'feed' && !params.showReposts && createHideQuotesFilter(),
+				type === 'feed' && !params.showReposts && createHideRepostsFilter(),
 
 				createLanguagePostFilter(timelineOpts?.language),
 				createLabelPostFilter(timelineOpts?.moderation),
