@@ -599,7 +599,8 @@ const createHideRepliesFilter = (): PostFilter => {
 
 const createHideRepostsFilter = (): PostFilter => {
 	return (item) => {
-		return item.reason === undefined || item.reason.$type !== 'app.bsky.feed.defs#reasonRepost';
+		const reason = item.reason;
+		return reason === undefined || reason.$type !== 'app.bsky.feed.defs#reasonRepost';
 	};
 };
 
