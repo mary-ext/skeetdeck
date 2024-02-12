@@ -8,7 +8,7 @@ export interface IconButtonProps {
 export const IconButton = (props: IconButtonProps = {}) => {
 	const { class: className, size = 'md', color = 'primary', edge } = props;
 
-	let cn = `grid shrink-0 place-items-center rounded-full text-muted-fg outline-2 -outline-offset-1 outline-primary outline-none hover:bg-secondary/40 focus-visible:outline disabled:pointer-events-none disabled:opacity-50`;
+	let cn = `grid shrink-0 place-items-center rounded-full outline-2 -outline-offset-1 outline-primary outline-none hover:bg-secondary/40 focus-visible:outline disabled:pointer-events-none disabled:opacity-50`;
 
 	if (size === 'md') {
 		cn += ` h-8 w-8 text-lg`;
