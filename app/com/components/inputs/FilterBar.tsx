@@ -10,6 +10,7 @@ export interface FilterItem<T> {
 }
 
 export interface FilterBarProps<T> {
+	disabled?: boolean;
 	value: T;
 	items: FilterItem<T>[];
 	onChange: (next: T) => void;
@@ -28,11 +29,11 @@ const FilterBar = <T,>(props: FilterBarProps<T>) => {
 	};
 
 	return (
-		<div class="flex min-w-0 flex-wrap gap-2">
+		<fieldset disabled={props.disabled} class="flex min-w-0 flex-wrap gap-2">
 			{props.items.map((item) => {
 				const isSelected = () => props.value === item.value;
 				return (
-					<label class="flex cursor-pointer">
+					<label class="flex">
 						<input
 							type="radio"
 							name={inputId}
@@ -46,8 +47,8 @@ const FilterBar = <T,>(props: FilterBarProps<T>) => {
 							prop:$item={item}
 						/>
 
-						<span
-							class={`flex min-w-0 items-center gap-2 rounded-md border px-3 py-1.5 text-left text-sm font-medium outline-2 -outline-offset-2 outline-primary disabled:pointer-events-none peer-focus-visible:outline ${
+						<fieldset
+							class={`flex min-w-0 cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-left text-sm font-medium outline-2 -outline-offset-2 outline-primary disabled:pointer-events-none disabled:opacity-50 peer-focus-visible:outline ${
 								!isSelected()
 									? `border-input hover:bg-secondary/30`
 									: `border-transparent bg-accent-dark text-white hover:bg-accent-dark/80`
@@ -60,11 +61,11 @@ const FilterBar = <T,>(props: FilterBarProps<T>) => {
 							})()}
 
 							{item.label}
-						</span>
+						</fieldset>
 					</label>
 				);
 			})}
-		</div>
+		</fieldset>
 	);
 };
 
