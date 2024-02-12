@@ -440,12 +440,13 @@ const createDuplicatePostFilter = (slices: TimelineSlice[]): PostFilter => {
 
 const createInvalidReplyFilter = (): PostFilter => {
 	return (item) => {
-		// There's no reply attached but the record says it has, let's filter these out.
-		if (!item.reply && (item.post.record as PostRecord).reply) {
-			return false;
-		}
-
-		return true;
+		// Don't allow posts that isn't being a hydrated with a reply when it should
+		return (
+			// Allow posts with a timeline reply attached
+			item.reply !== undefined ||
+			// Allow posts whose record doesn't have the reply object
+			(item.post.record as PostRecord).reply === undefined
+		);
 	};
 };
 
