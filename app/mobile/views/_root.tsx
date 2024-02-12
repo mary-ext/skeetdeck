@@ -1,10 +1,8 @@
 import { type JSX, createMemo, lazy, Suspense } from 'solid-js';
 
-import type { MatchedRouteState } from '@pkg/solid-navigation';
+import { type MatchedRouteState, getMatchedRoute } from '@pkg/solid-navigation';
 
-import { multiagent } from '~/api/globals/agent';
-
-import { getMatchedRoute } from '../globals/router';
+import { getAccountData, multiagent } from '~/api/globals/agent';
 
 import { getEntryAt } from '../utils/router';
 
@@ -19,7 +17,10 @@ import HomeOutlinedIcon from '~/com/icons/outline-home';
 import NotificationsIcon from '~/com/icons/baseline-notifications';
 import NotificationsOutlinedIcon from '~/com/icons/outline-notifications';
 
+import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
+
 import { MobileLinkingProvider } from './root/MobileLinkingProvider';
+import UnfoldMoreIcon from '~/com/icons/baseline-unfold-more';
 
 const LoggedOutView = lazy(() => import('./LoggedOut'));
 
@@ -28,12 +29,11 @@ interface RootProps {
 }
 
 const Root = (props: RootProps) => {
-	// Ignore `undefined` here because we've set up the router to always match.
-	const route = createMemo(getMatchedRoute) as () => MatchedRouteState;
+	const route = createMemo(getMatchedRoute);
 
 	const hasAccount = createMemo(() => multiagent.active !== undefined);
-	const isMainRoutes = createMemo(() => !!route().def.meta?.main);
-	const isNotFound = createMemo(() => route().def.meta?.name === 'NotFound');
+	const isMainRoutes = createMemo(() => !!route()?.def.meta?.main);
+	const isNotFound = createMemo(() => route()?.def.meta?.name === 'NotFound');
 
 	return (
 		<MobileLinkingProvider>
@@ -72,12 +72,14 @@ const enum MainTabs {
 	HOME = 'Home',
 	EXPLORE = 'Explore',
 	NOTIFICATIONS = 'Notifications',
+	ME = 'Me',
 }
 
 const MainRoutes = {
 	[MainTabs.HOME]: '/',
 	[MainTabs.EXPLORE]: '/explore',
 	[MainTabs.NOTIFICATIONS]: '/notifications',
+	[MainTabs.ME]: '/@me',
 };
 
 const MainNavbar = (props: { route: MatchedRouteState }) => {
@@ -132,6 +134,13 @@ const MainNavbar = (props: { route: MatchedRouteState }) => {
 				active={() => active() === MainTabs.NOTIFICATIONS}
 				onClick={/* @once */ bindClick(MainTabs.NOTIFICATIONS)}
 			/>
+
+			<MainNavbarItem
+				label="My Profile"
+				icon={() => <UserAvatar />}
+				active={() => active() === MainTabs.ME}
+				onClick={/* @once */ bindClick(MainTabs.ME)}
+			/>
 		</div>
 	);
 };
@@ -164,9 +173,26 @@ const MainNavbarItem = ({
 
 			{(() => {
 				if (active()) {
-					return <div class="absolute bottom-0 h-1 w-8 rounded-t bg-accent"></div>;
+					return <div class="absolute bottom-0 h-1 w-8 rounded bg-accent"></div>;
 				}
 			})()}
 		</button>
+	);
+};
+
+const UserAvatar = () => {
+	return (
+		<div class="flex items-center">
+			<div class="h-6 w-6 shrink-0 overflow-hidden rounded-full">
+				{(() => {
+					const account = getAccountData(multiagent.active);
+					const avatar = account?.profile?.avatar;
+
+					return <img src={avatar || DefaultUserAvatar} class="h-full w-full object-cover" />;
+				})()}
+			</div>
+
+			<UnfoldMoreIcon class="text-base text-muted-fg" style="margin:0 -18px 0 2px" />
+		</div>
 	);
 };

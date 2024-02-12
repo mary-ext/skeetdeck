@@ -1,6 +1,15 @@
 /* @refresh reload */
 
-import { type Component, For, createSignal, createSelector, createContext, useContext } from 'solid-js';
+import {
+	type Component,
+	For,
+	createContext,
+	createEffect,
+	createSelector,
+	createSignal,
+	onCleanup,
+	useContext,
+} from 'solid-js';
 
 import { Freeze } from '@pkg/solid-freeze';
 
@@ -41,194 +50,249 @@ interface RouterState {
 	singles: Record<string, MatchedRouteState>;
 }
 
-export const createRouter = (opts: RouterOptions) => {
-	const routes = opts.routes as InternalRouteDefinition[];
+interface ViewContextObject {
+	route: MatchedRouteState;
+	focusHandlers: (() => void)[];
+	blurHandlers: (() => void)[];
+}
 
-	const [state, setState] = createSignal<RouterState>({
-		active: '',
-		views: {},
-		singles: {},
-	});
+let routes: InternalRouteDefinition[] | undefined;
+let initialized = false;
 
-	const RouteContext = createContext<MatchedRouteState>();
+const [state, setState] = createSignal<RouterState>({
+	active: '',
+	views: {},
+	singles: {},
+});
 
-	const RouterView = () => {
-		const isActive = createSelector(() => state().active);
+const ViewContext = createContext<ViewContextObject>();
 
-		const renderView = (matched: MatchedRouteState) => {
-			const Component = matched.def.component;
-			const id = matched.id;
+export const configureRouter = (opts: RouterOptions) => {
+	routes = opts.routes;
+};
 
-			return (
-				<Freeze freeze={!isActive(id)}>
-					<RouteContext.Provider value={matched}>
-						<Component />
-					</RouteContext.Provider>
-				</Freeze>
-			);
-		};
+export const getMatchedRoute = () => {
+	const current = state();
+	const active = current.active;
 
-		return (
-			<>
-				<For each={Object.values(state().views)}>{renderView}</For>
-				<For each={Object.values(state().singles)}>{renderView}</For>
-			</>
-		);
-	};
+	const match = current.singles[active] || current.views[active];
 
-	const getMatchedRoute = () => {
-		const current = state();
-		const active = current.active;
+	if (match) {
+		return match;
+	}
+};
 
-		const match = current.singles[active] || current.views[active];
+export const useParams = () => {
+	return useContext(ViewContext)!.route.params;
+};
 
-		if (match) {
-			return match;
-		}
-	};
+export const onFocus = (callback: () => void, runFirst = false) => {
+	const focusHandlers = useContext(ViewContext)!.focusHandlers;
 
-	const useParams = () => {
-		return useContext(RouteContext)!.params;
-	};
-
-	const _matchRoute = (path: string): MatchedRoute | null => {
-		for (let idx = 0, len = routes.length; idx < len; idx++) {
-			const route = routes[idx];
-
-			const validate = route.validate;
-			const pattern = (route._regex ||= buildPathRegex(route.path));
-
-			const match = pattern.exec(path);
-
-			if (!match || (validate && !validate(match.groups!))) {
-				continue;
-			}
-
-			const params = match.groups!;
-
-			let id: string | undefined;
-			if (route.single) {
-				id = '@' + idx;
-				for (const param in params) {
-					id += '\0' + params[param];
-				}
-			}
-
-			return { id: id, def: route, params: params };
-		}
-
-		return null;
-	};
-
-	{
-		const currentEntry = navigation.currentEntry!;
-
-		const url = new URL(currentEntry.url!);
-		const pathname = url.pathname;
-
-		const matched = _matchRoute(pathname);
-
-		if (matched) {
-			const nextKey = matched.id || currentEntry.id;
-
-			const matchedState: MatchedRouteState = {
-				...matched,
-				id: nextKey,
-			};
-
-			const isSingle = !!matched.id;
-			const next: Record<string, MatchedRouteState> = { [nextKey]: matchedState };
-
-			setState({
-				active: nextKey,
-				views: isSingle ? {} : next,
-				singles: isSingle ? next : {},
-			});
-		}
+	if (runFirst) {
+		callback();
 	}
 
-	navigation.addEventListener('navigate', (evt) => {
-		const destination = evt.destination;
+	focusHandlers.push(callback);
 
-		if (
-			!evt.canIntercept ||
-			evt.hashChange ||
-			evt.downloadRequest !== null /* || !destination.sameDocument */
-		) {
-			return;
+	onCleanup(() => {
+		const index = focusHandlers.indexOf(callback);
+		focusHandlers.splice(index, 1);
+	});
+};
+
+export const onBlur = (callback: () => void) => {
+	const blurHandlers = useContext(ViewContext)!.blurHandlers;
+
+	blurHandlers.push(callback);
+
+	onCleanup(() => {
+		const index = blurHandlers.indexOf(callback);
+		blurHandlers.splice(index, 1);
+	});
+};
+
+const _matchRoute = (path: string): MatchedRoute | null => {
+	for (let idx = 0, len = routes!.length; idx < len; idx++) {
+		const route = routes![idx];
+
+		const validate = route.validate;
+		const pattern = (route._regex ||= buildPathRegex(route.path));
+
+		const match = pattern.exec(path);
+
+		if (!match || (validate && !validate(match.groups!))) {
+			continue;
 		}
 
-		const current = state();
-		const currentEntry = navigation.currentEntry!;
+		const params = match.groups!;
 
-		const type = evt.navigationType;
-
-		if (type === 'push' && destination.url === currentEntry.url) {
-			evt.preventDefault();
-			return;
-		}
-
-		const url = new URL(destination.url);
-		const pathname = url.pathname;
-
-		const matched = _matchRoute(pathname);
-
-		if (!matched) {
-			return;
-		}
-
-		let views = current.views;
-		let singles = current.singles;
-
-		if (type === 'push' || type === 'replace') {
-			const entries = navigation.entries();
-			const startIndex = currentEntry.index + (type === 'push' ? 1 : 0);
-
-			views = { ...views };
-
-			for (let idx = startIndex, len = entries.length; idx < len; idx++) {
-				const entry = entries[idx];
-				delete views[entry.id];
+		let id: string | undefined;
+		if (route.single) {
+			id = '@' + idx;
+			for (const param in params) {
+				id += '\0' + params[param];
 			}
 		}
 
-		evt.intercept({
-			async handler() {
-				const nextEntry = navigation.currentEntry!;
-				const nextKey = matched.id || nextEntry.id;
+		return { id: id, def: route, params: params };
+	}
+
+	return null;
+};
+
+export const RouterView = () => {
+	if (!initialized) {
+		initialized = true;
+
+		{
+			const currentEntry = navigation.currentEntry!;
+
+			const url = new URL(currentEntry.url!);
+			const pathname = url.pathname;
+
+			const matched = _matchRoute(pathname);
+
+			if (matched) {
+				const nextKey = matched.id || currentEntry.id;
 
 				const matchedState: MatchedRouteState = {
 					...matched,
 					id: nextKey,
 				};
 
-				if (!matched.id) {
-					if (type === 'push' || type === 'replace') {
-						views[nextKey] = matchedState;
-					} else if (type === 'traverse') {
-						if (!(nextKey in views)) {
-							views = { ...views, [nextKey]: matchedState };
+				const isSingle = !!matched.id;
+				const next: Record<string, MatchedRouteState> = { [nextKey]: matchedState };
+
+				setState({
+					active: nextKey,
+					views: isSingle ? {} : next,
+					singles: isSingle ? next : {},
+				});
+			}
+		}
+
+		navigation.addEventListener('navigate', (evt) => {
+			const destination = evt.destination;
+
+			if (
+				!evt.canIntercept ||
+				evt.hashChange ||
+				evt.downloadRequest !== null /* || !destination.sameDocument */
+			) {
+				return;
+			}
+
+			const current = state();
+			const currentEntry = navigation.currentEntry!;
+
+			const type = evt.navigationType;
+
+			if (type === 'push' && destination.url === currentEntry.url) {
+				evt.preventDefault();
+				return;
+			}
+
+			const url = new URL(destination.url);
+			const pathname = url.pathname;
+
+			const matched = _matchRoute(pathname);
+
+			if (!matched) {
+				return;
+			}
+
+			let views = current.views;
+			let singles = current.singles;
+
+			if (type === 'push' || type === 'replace') {
+				const entries = navigation.entries();
+				const startIndex = currentEntry.index + (type === 'push' ? 1 : 0);
+
+				views = { ...views };
+
+				for (let idx = startIndex, len = entries.length; idx < len; idx++) {
+					const entry = entries[idx];
+					delete views[entry.id];
+				}
+			}
+
+			evt.intercept({
+				async handler() {
+					const nextEntry = navigation.currentEntry!;
+					const nextKey = matched.id || nextEntry.id;
+
+					const matchedState: MatchedRouteState = {
+						...matched,
+						id: nextKey,
+					};
+
+					if (!matched.id) {
+						if (type === 'push' || type === 'replace') {
+							views[nextKey] = matchedState;
+						} else if (type === 'traverse') {
+							if (!(nextKey in views)) {
+								views = { ...views, [nextKey]: matchedState };
+							}
+						} else {
+							// @todo: should we handle reload?
 						}
 					} else {
-						// @todo: should we handle reload?
+						if (!(nextKey in singles)) {
+							singles = { ...singles, [nextKey]: matchedState };
+						}
 					}
-				} else {
-					if (!(nextKey in singles)) {
-						singles = { ...singles, [nextKey]: matchedState };
-					}
-				}
 
-				setState({ active: nextKey, views: views, singles: singles });
-				await Promise.resolve();
-			},
+					setState({ active: nextKey, views: views, singles: singles });
+					await Promise.resolve();
+
+					if (type === 'push' || type === 'replace') {
+						window.scrollTo({ top: 0, behavior: 'instant' });
+					}
+				},
+			});
 		});
-	});
+	}
 
-	// createEffect(() => {
-	// 	console.log(state());
-	// });
+	const isActive = createSelector(() => state().active);
 
-	return { RouterView, getMatchedRoute, useParams };
+	const renderView = (matched: MatchedRouteState) => {
+		let focusHandlers: (() => void)[] = [];
+		let blurHandlers: (() => void)[] = [];
+
+		const context: ViewContextObject = {
+			route: matched,
+			focusHandlers: focusHandlers,
+			blurHandlers: blurHandlers,
+		};
+
+		const Component = matched.def.component;
+		const id = matched.id;
+
+		createEffect(() => {
+			const array = isActive(id) ? focusHandlers : blurHandlers;
+
+			for (let i = 0, il = array.length; i < il; i++) {
+				const fn = array[i];
+				fn();
+			}
+		});
+
+		return (
+			<Freeze freeze={!isActive(id)}>
+				<ViewContext.Provider value={context}>
+					<Component />
+				</ViewContext.Provider>
+			</Freeze>
+		);
+	};
+
+	return (
+		<>
+			<For each={Object.values(state().views)}>{renderView}</For>
+			<For each={Object.values(state().singles)}>{renderView}</For>
+		</>
+	);
 };
 
 const buildPathRegex = (path: string) => {

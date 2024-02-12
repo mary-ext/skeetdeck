@@ -1,4 +1,7 @@
-import { For, batch, createEffect, createMemo, createSignal } from 'solid-js';
+import { For, batch, createEffect, createMemo, createSignal, onCleanup } from 'solid-js';
+
+import { onBlur, onFocus } from '@pkg/solid-navigation';
+import { makeEventListener } from '@solid-primitives/event-listener';
 
 import type { AtUri } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
@@ -19,6 +22,11 @@ const HomeView = () => {
 	const [uri, setUri] = createSignal(state().uri);
 
 	const setTab = (next: AtUri | undefined) => {
+		if (uri() === next) {
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+			return;
+		}
+
 		batch(() => {
 			setUri(next);
 			setState({ uri: next });
@@ -41,23 +49,69 @@ const HomeView = () => {
 
 	return (
 		<div class="contents">
-			<ViewHeader title="Home" fixed={hasPinnedFeeds()} borderless={hasPinnedFeeds()} />
+			<div
+				ref={(node) => {
+					const style = node.style;
 
-			{hasPinnedFeeds() && (
-				<div class="sticky top-0 z-30 flex h-13 shrink-0 overflow-x-auto border-b border-divider bg-background">
-					<Tab active={uri() === undefined} onClick={() => setTab(undefined)}>
-						Following
-					</Tab>
+					createEffect(() => {
+						if (hasPinnedFeeds()) {
+							let curr = window.scrollY;
+							let active = true;
+							let minimal = false;
 
-					<For each={pinnedFeeds()}>
-						{(feed) => (
-							<Tab active={uri() === feed.uri} onClick={() => setTab(feed.uri)}>
-								{feed.name}
-							</Tab>
-						)}
-					</For>
-				</div>
-			)}
+							onFocus(() => (active = true));
+							onBlur(() => (active = false));
+
+							makeEventListener(window, 'scroll', () => {
+								if (!active) {
+									return;
+								}
+
+								let next = window.scrollY;
+
+								if (curr === next) {
+									// do nothing
+								} else if (next > 53 && curr <= next) {
+									if (!minimal) {
+										style.translate = '0 -53px';
+										minimal = true;
+									}
+								} else {
+									if (minimal) {
+										style.translate = '';
+										minimal = false;
+									}
+								}
+
+								curr = next;
+							});
+
+							onCleanup(() => {
+								style.translate = '';
+							});
+						}
+					});
+				}}
+				class="sticky top-0 z-30 bg-background transition-all"
+			>
+				<ViewHeader main title="Home" fixed={hasPinnedFeeds()} borderless={hasPinnedFeeds()} />
+
+				{hasPinnedFeeds() && (
+					<div class="flex h-13 shrink-0 overflow-x-auto border-b border-divider">
+						<Tab active={uri() === undefined} onClick={() => setTab(undefined)}>
+							Following
+						</Tab>
+
+						<For each={pinnedFeeds()}>
+							{(feed) => (
+								<Tab active={uri() === feed.uri} onClick={() => setTab(feed.uri)}>
+									{feed.name}
+								</Tab>
+							)}
+						</For>
+					</div>
+				)}
+			</div>
 
 			<ValidatedKeepAlive
 				key={uri()}

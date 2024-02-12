@@ -1,6 +1,7 @@
 import { createRenderEffect, lazy } from 'solid-js';
 import { render } from 'solid-js/web';
 
+import { RouterView } from '@pkg/solid-navigation';
 import { QueryClientProvider } from '@pkg/solid-query';
 
 import { MetaProvider } from '~/com/lib/meta';
@@ -10,7 +11,8 @@ import { useMediaQuery } from '~/utils/media-query';
 
 import { createSharedPreferencesObject, preferences } from './globals/settings';
 import { queryClient } from './globals/query';
-import { RouterView } from './globals/router';
+
+import './globals/router';
 
 import { SharedPreferences } from '~/com/components/SharedPreferences';
 

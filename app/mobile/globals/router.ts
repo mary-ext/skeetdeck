@@ -1,12 +1,17 @@
 import { lazy } from 'solid-js';
 
-import { createRouter } from '@pkg/solid-navigation';
+import { configureRouter } from '@pkg/solid-navigation';
+
+const DID_RE = /^did:[a-z]+:[a-zA-Z0-9._\-]+$/;
 
 const HANDLE_OR_DID_RE =
 	/^@([a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*(?:\.[a-zA-Z]{2,}))|did:[a-z]+:[a-zA-Z0-9._\-]+$/;
 
 const TID_RE = /^[234567abcdefghij][234567abcdefghijklmnopqrstuvwxyz]{12}$/;
 
+const isValidDid = (did: string) => {
+	return DID_RE.test(did);
+};
 const isValidHandleOrDid = (handleOrDid: string) => {
 	return HANDLE_OR_DID_RE.test(handleOrDid);
 };
@@ -14,7 +19,7 @@ const isValidTid = (tid: string) => {
 	return tid.length === 13 && TID_RE.test(tid);
 };
 
-export const { RouterView, getMatchedRoute, useParams } = createRouter({
+configureRouter({
 	routes: [
 		{
 			path: '/',
@@ -44,17 +49,27 @@ export const { RouterView, getMatchedRoute, useParams } = createRouter({
 			},
 		},
 		{
-			path: '/:ident',
+			path: '/@me',
+			component: lazy(() => import('~/mobile/views/Me')),
+			single: true,
+			meta: {
+				name: 'Me',
+				main: true,
+			},
+		},
+
+		{
+			path: '/:actor',
 			component: lazy(() => import('~/mobile/views/Profile')),
 			validate: (params) => {
-				return isValidHandleOrDid(params.ident);
+				return isValidDid(params.actor);
 			},
 		},
 		{
-			path: '/:ident/:post',
+			path: '/:actor/:post',
 			component: lazy(() => import('~/mobile/views/Thread')),
 			validate: (params) => {
-				return isValidHandleOrDid(params.ident) && isValidTid(params.post);
+				return isValidDid(params.actor) && isValidTid(params.post);
 			},
 		},
 		{

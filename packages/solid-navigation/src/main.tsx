@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js';
 import { render } from 'solid-js/web';
 
-import { createRouter } from '../lib/index.tsx';
+import { RouterView, configureRouter } from '../lib/index.tsx';
 
 import './styles.css';
 
@@ -131,7 +131,7 @@ const Routes = {
 	ABOUT: '/about',
 };
 
-const { RouterView } = createRouter({
+configureRouter({
 	routes: [
 		{
 			path: Routes.HOME,
