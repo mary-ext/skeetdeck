@@ -65,7 +65,9 @@ const PaneBody = (props: PaneBodyProps) => {
 							{ root: ref! },
 						);
 
-						observer.observe(sentinel);
+						setTimeout(() => {
+							observer.observe(sentinel);
+						}, 1);
 					}}
 					class="pointer-events-none absolute top-0 h-13"
 				></div>
