@@ -607,6 +607,8 @@ const createHideRepliesFilter = (): PostFilter => {
 const createHideRepostsFilter = (): PostFilter => {
 	return (item) => {
 		const reason = item.reason;
+
+		// Allow posts with no reason, or the reasoning isn't a repost.
 		return reason === undefined || reason.$type !== 'app.bsky.feed.defs#reasonRepost';
 	};
 };
@@ -617,7 +619,9 @@ const createHideQuotesFilter = (): PostFilter => {
 		const embed = record.embed;
 
 		return (
+			// Allow posts with no embeds
 			embed === undefined ||
+			// Allow posts whose embeds aren't a record
 			(embed.$type !== 'app.bsky.embed.record' && embed.$type !== 'app.bsky.embed.recordWithMedia')
 		);
 	};
