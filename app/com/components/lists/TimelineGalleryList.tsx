@@ -32,7 +32,7 @@ const isTimelineStale = (
 	timelineData: InfiniteData<TimelinePage> | undefined,
 	latestData: TimelineLatestResult | undefined,
 ) => {
-	return latestData ? latestData.cid !== timelineData?.pages[0].cid : false;
+	return latestData && timelineData ? latestData.cid !== timelineData?.pages[0].cid : false;
 };
 
 const TimelineGalleryList = (props: TimelineGalleryListProps) => {
