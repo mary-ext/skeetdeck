@@ -9,7 +9,6 @@ import { getPostModDecision } from '../../moderation/post';
 
 import { formatCompact } from '~/utils/intl/number';
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction';
-import { useMediaQuery } from '~/utils/media-query';
 import { clsx } from '~/utils/misc';
 
 import { openModal } from '../../globals/modals';
@@ -22,7 +21,9 @@ import CheckboxMultipleBlankIcon from '../../icons/baseline-checkbox-multiple-bl
 import FavoriteIcon from '../../icons/baseline-favorite';
 import VisibilityIcon from '../../icons/baseline-visibility';
 
-const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog'));
+const ImageViewerDialog = /*#__PURE__*/ lazy(() => import('../dialogs/ImageViewerDialog'));
+
+const isDesktop = import.meta.env.VITE_MODE === 'desktop';
 
 export interface GalleryItemProps {
 	post: SignalizedPost;
@@ -30,7 +31,6 @@ export interface GalleryItemProps {
 
 const GalleryItem = (props: GalleryItemProps) => {
 	const linking = useLinking();
-	const hasHover = useMediaQuery('(hover: hover)');
 
 	return (() => {
 		const post = props.post;
@@ -69,7 +69,7 @@ const GalleryItem = (props: GalleryItemProps) => {
 				return;
 			}
 
-			if (ev.shiftKey) {
+			if (isDesktop && ev.shiftKey) {
 				ev.preventDefault();
 
 				openModal(() => <ImageViewerDialog images={images!} active={0} />);
@@ -90,7 +90,7 @@ const GalleryItem = (props: GalleryItemProps) => {
 			>
 				<img src={img.thumb} class={clsx([`h-full w-full object-cover`, verdict() && `scale-110 blur`])} />
 
-				{hasHover() && (
+				{isDesktop && (
 					<div class="invisible absolute inset-0 grid place-items-center bg-black/50 group-hover:visible">
 						<div class="flex flex-col gap-1 font-medium">
 							<div class="flex items-center justify-center gap-2">
