@@ -1,4 +1,6 @@
-import { type JSX, createEffect } from 'solid-js';
+import { type JSX, createEffect, createSignal } from 'solid-js';
+
+import { Interactive } from '~/com/primitives/interactive';
 
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 
@@ -11,12 +13,16 @@ export interface PaneBodyProps {
 	children?: JSX.Element;
 }
 
+const scrollToTopBtn = Interactive({
+	variant: 'none',
+	class: `group pointer-events-auto overflow-hidden rounded-full border border-divider bg-background shadow-md`,
+});
+
 const PaneBody = (props: PaneBodyProps) => {
 	let ref: HTMLDivElement | undefined;
 
 	const { index } = usePaneContext()!;
-
-	const onScrolled = props.onScrolled;
+	const [scrolled, setScrolled] = createSignal(false);
 
 	createEffect((prev: number | undefined) => {
 		const next = index();
@@ -32,17 +38,16 @@ const PaneBody = (props: PaneBodyProps) => {
 	});
 
 	return (
-		<div class="min-h-0 grow">
+		<div class="relative min-h-0 grow">
 			{(() => {
-				if (props.isScrolled) {
+				if (scrolled()) {
 					return (
-						<div class="pointer-events-none absolute inset-x-0 top-13 z-10 grid place-items-center pt-4">
-							<button
-								onClick={() => (ref!.scrollTop = 0)}
-								class="pointer-events-auto flex items-center gap-2 rounded-full bg-accent px-4 py-1 text-de font-medium leading-5 text-white shadow-md shadow-black hover:bg-accent-dark"
-							>
-								<ArrowLeftIcon class="rotate-90 stroke-white stroke-1 text-base" />
-								<span>Auto-refresh paused</span>
+						<div class="pointer-events-none absolute inset-x-0 top-0 z-10 grid place-items-center pt-2">
+							<button onClick={() => ref!.scrollTo({ top: 0, behavior: 'auto' })} class={scrollToTopBtn}>
+								<div class="flex items-center gap-2 px-4 py-1 group-hover:bg-secondary/30">
+									<ArrowLeftIcon class="rotate-90 text-base" />
+									<span class="text-de font-medium leading-5">Scroll to top</span>
+								</div>
 							</button>
 						</div>
 					);
@@ -51,7 +56,7 @@ const PaneBody = (props: PaneBodyProps) => {
 
 			<div
 				ref={ref}
-				onScrollEnd={onScrolled && ((ev) => onScrolled(ev.currentTarget.scrollTop > 26))}
+				onScrollEnd={(ev) => setScrolled(ev.currentTarget.scrollTop > 26)}
 				class="flex h-full flex-col overflow-y-auto"
 			>
 				{props.children}
