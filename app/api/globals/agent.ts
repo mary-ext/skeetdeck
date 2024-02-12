@@ -4,8 +4,8 @@ import { type MultiagentAccountData, Multiagent } from '../classes/multiagent';
 
 export const multiagent = new Multiagent('accs');
 
-export const getAccountData = (uid: DID): MultiagentAccountData | undefined => {
-	return multiagent.accounts.find((acc) => acc.did === uid);
+export const getAccountData = (uid: DID | undefined): MultiagentAccountData | undefined => {
+	return uid !== undefined ? multiagent.accounts.find((acc) => acc.did === uid) : undefined;
 };
 
 export const renderAccountHandle = (account: MultiagentAccountData) => {
