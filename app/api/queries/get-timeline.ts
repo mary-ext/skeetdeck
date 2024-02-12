@@ -593,7 +593,14 @@ const createTempMutePostFilter = (uid: DID, prefs?: FilterPreferences): PostFilt
 
 const createHideRepliesFilter = (): PostFilter => {
 	return (item) => {
-		return item.reply === undefined && (item.post.record as PostRecord).reply === undefined;
+		const reason = item.reason;
+
+		return (
+			// Allow reposts
+			(reason !== undefined && reason.$type === 'app.bsky.feed.defs#reasonRepost') ||
+			// Allow posts that aren't a reply
+			(item.reply === undefined && (item.post.record as PostRecord).reply === undefined)
+		);
 	};
 };
 
