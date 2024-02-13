@@ -82,8 +82,12 @@ export const getMatchedRoute = () => {
 	}
 };
 
-export const useParams = () => {
-	return useContext(ViewContext)!.route.params;
+export const UNSAFE_useViewContext = () => {
+	return useContext(ViewContext)!;
+};
+
+export const useParams = <T extends Record<string, string>>() => {
+	return useContext(ViewContext)!.route.params as T;
 };
 
 export const onFocus = (callback: () => void, runFirst = false) => {
@@ -308,7 +312,7 @@ const buildPathRegex = (path: string) => {
 		? path === '*' || path === '/*'
 			? '(?<$>.*)$'
 			: '(?:\\/(?<$>.+)|\\/*)$'
-		: '(?:(?=\\/|$))';
+		: '\\/*$';
 
 	return new RegExp(source, 'i');
 };

@@ -85,10 +85,6 @@ const HomeView = () => {
 
 								curr = next;
 							});
-
-							onCleanup(() => {
-								style.translate = '';
-							});
 						}
 					});
 				}}

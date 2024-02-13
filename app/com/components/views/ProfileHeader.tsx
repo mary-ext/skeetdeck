@@ -34,6 +34,8 @@ const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog'));
 const MuteConfirmDialog = lazy(() => import('../dialogs/MuteConfirmDialog'));
 const SilenceConfirmDialog = lazy(() => import('../dialogs/SilenceConfirmDialog'));
 
+const isDesktop = import.meta.env.VITE_MODE === 'desktop';
+
 export interface ProfileHeaderProps {
 	/** Expected to be static */
 	profile: SignalizedProfile;
@@ -108,11 +110,13 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 					{
 						/* @once */ profile.did !== profile.uid
 							? [
-									<ProfileOverflowAction profile={profile}>
-										<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
-											<MoreHorizIcon class="-mx-1.5 text-base" />
-										</button>
-									</ProfileOverflowAction>,
+									isDesktop && (
+										<ProfileOverflowAction profile={profile}>
+											<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
+												<MoreHorizIcon class="-mx-1.5 text-base" />
+											</button>
+										</ProfileOverflowAction>
+									),
 									(() => {
 										if (!viewer.blocking.value && !viewer.blockedBy.value) {
 											return <ProfileFollowButton profile={profile} />;

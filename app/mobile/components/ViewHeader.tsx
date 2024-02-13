@@ -3,12 +3,9 @@ import type { JSX } from 'solid-js';
 import { clsx } from '~/utils/misc';
 
 import { IconButton } from '~/com/primitives/icon-button';
-import { Interactive } from '~/com/primitives/interactive';
 
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import MenuIcon from '~/com/icons/baseline-menu';
-
-import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 export interface ViewHeaderProps {
 	title: string;
@@ -27,8 +24,8 @@ const ViewHeader = (props: ViewHeaderProps) => {
 	return (
 		<div
 			class={clsx([
-				'flex h-13 min-w-0 shrink-0 items-center gap-2 border-divider px-4',
-				!props.fixed && `sticky top-0`,
+				'flex h-13 min-w-0 shrink-0 items-center gap-2 border-divider bg-background px-4',
+				!props.fixed && `sticky top-0 z-30`,
 				!props.borderless && `border-b`,
 			])}
 		>

@@ -1,5 +1,7 @@
+import ProfileView from './Profile';
+
 const MeView = () => {
-	return <div>me</div>;
+	return <ProfileView me />;
 };
 
 export default MeView;

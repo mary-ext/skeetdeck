@@ -1,3 +1,5 @@
+const isDesktop = import.meta.env.VITE_MODE === 'desktop';
+
 export const isMac = /^Mac/i.test(navigator.platform);
 
 const DEFAULT_EXCLUSION = 'a, button, img, video, dialog, [role=button]';
@@ -36,7 +38,7 @@ export const isElementClicked = (ev: Event, exclusion = DEFAULT_EXCLUSION) => {
 };
 
 export const isElementAltClicked = (ev: MouseEvent | KeyboardEvent) => {
-	return ev.type === 'auxclick' || isCtrlKeyPressed(ev);
+	return isDesktop && (ev.type === 'auxclick' || isCtrlKeyPressed(ev));
 };
 
 export const isCtrlKeyPressed = (ev: MouseEvent | KeyboardEvent) => {

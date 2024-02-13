@@ -38,23 +38,19 @@ const Root = (props: RootProps) => {
 	return (
 		<MobileLinkingProvider>
 			<div class="mx-auto flex min-h-screen max-w-md flex-col bg-background">
-				<Suspense
-					fallback={
-						<div class="grid grow place-items-center">
-							<CircularProgress />
-						</div>
-					}
-				>
-					<div class="flex min-h-0 grow flex-col">
-						{(() => {
-							if (hasAccount() || isNotFound()) {
-								return props.children;
-							}
+				<div class="flex min-h-0 grow flex-col">
+					{(() => {
+						if (hasAccount() || isNotFound()) {
+							return props.children;
+						}
 
-							return <LoggedOutView />;
-						})()}
-					</div>
-				</Suspense>
+						return (
+							<Suspense>
+								<LoggedOutView />
+							</Suspense>
+						);
+					})()}
+				</div>
 
 				{(() => {
 					if (hasAccount() && isMainRoutes()) {

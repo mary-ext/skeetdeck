@@ -1,16 +1,37 @@
-import { type JSX, createSignal, onCleanup } from 'solid-js';
+import { createSignal, onCleanup } from 'solid-js';
+
+import { UNSAFE_useViewContext } from '@pkg/solid-navigation';
 
 import { resizeObserver, scrollObserver } from '~/utils/intersection-observer';
 
-export interface VirtualContainerProps {
-	estimateHeight?: number;
-	class?: string;
-	children?: JSX.Element;
+import type { VirtualContainerProps } from './VirtualContainer';
+
+interface ContainerContext {
+	active: boolean;
 }
+
+const mapping = new WeakMap<ReturnType<typeof UNSAFE_useViewContext>, ContainerContext>();
+
+// Only set up one focus and blur listeners for the all virtual containers.
+const getContainerContext = () => {
+	const view = UNSAFE_useViewContext();
+
+	let context = mapping.get(view);
+	if (context === undefined) {
+		mapping.set(view, (context = { active: true }));
+
+		view.focusHandlers.push(() => (context!.active = true));
+		view.blurHandlers.push(() => (context!.active = false));
+	}
+
+	return context;
+};
 
 export const VirtualContainer = (props: VirtualContainerProps) => {
 	let entry: IntersectionObserverEntry | undefined;
 	let height: number | undefined;
+
+	const context = getContainerContext();
 
 	const estimateHeight = props.estimateHeight;
 
@@ -20,10 +41,14 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 	const shouldHide = () => !intersecting() && cachedHeight() !== undefined;
 
 	const handleIntersect = (nextEntry: IntersectionObserverEntry) => {
+		entry = nextEntry;
+
+		if (!context.active) {
+			return;
+		}
+
 		const prev = intersecting();
 		const next = nextEntry.isIntersecting;
-
-		entry = nextEntry;
 
 		if (!prev && next) {
 			// hidden -> visible
