@@ -120,10 +120,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 					}
 				>
 					{({ close, menuProps }) => (
-						<div
-							{...menuProps}
-							class="box-content w-9 rounded border border-divider bg-background shadow-md"
-						>
+						<div {...menuProps} class="box-content w-9 rounded border border-divider bg-background shadow-md">
 							{SKINTONE_EMOJIS.map((emoji, index) => (
 								<button
 									type="button"
