@@ -1,11 +1,11 @@
 const SECOND = 1e3;
-const NOW = SECOND * 5;
+const NOW = SECOND * 10;
 const MINUTE = SECOND * 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
 const WEEK = DAY * 7;
-const MONTH = WEEK * 4;
-const YEAR = MONTH * 12;
+// const MONTH = WEEK * 4;
+// const YEAR = MONTH * 12;
 
 const absWithYearFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' });
 const absFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' });
@@ -15,12 +15,12 @@ const formatters: Record<string, Intl.NumberFormat> = {};
 
 export const formatReltime = (time: string | number, base = new Date()) => {
 	const date = new Date(time);
+	let delta = base.getTime() - date.getTime();
 
-	const num = date.getTime();
-	const delta = Math.abs(num - base.getTime());
-
-	if (delta > WEEK) {
-		// if it's the same year, let's skip showing the year.
+	// show absolute date if it's been more than a week, or if the date is in the
+	// future for whatever reason.
+	if (delta < 0 || delta > WEEK) {
+		// skip showing current year
 		if (date.getFullYear() === base.getFullYear()) {
 			return absFormat.format(date);
 		}
@@ -28,8 +28,18 @@ export const formatReltime = (time: string | number, base = new Date()) => {
 		return absWithYearFormat.format(date);
 	}
 
+	// show `now` if it just happened
 	if (delta < NOW) {
 		return `now`;
+	}
+
+	// normalize the time if more than 24h hours has passed, handles this scenario:
+	// - 2024-02-13T09:00Z <- 2024-02-15T07:00Z = 2d
+	if (delta > DAY && date.getDate() !== base.getDate()) {
+		date.setHours(0, 0, 0, 0);
+		base.setHours(0, 0, 0, 0);
+
+		delta = base.getTime() - date.getTime();
 	}
 
 	const [value, unit] = lookupReltime(delta);
@@ -70,17 +80,18 @@ export const lookupReltime = (delta: number): [value: number, unit: Intl.Relativ
 		return [Math.trunc(delta / HOUR), 'hour'];
 	}
 
-	if (delta < WEEK) {
-		return [Math.trunc(delta / DAY), 'day'];
-	}
+	return [Math.trunc(delta / DAY), 'day'];
+	// if (delta < WEEK) {
+	// 	return [Math.trunc(delta / DAY), 'day'];
+	// }
 
-	if (delta < MONTH) {
-		return [Math.trunc(delta / WEEK), 'week'];
-	}
+	// if (delta < MONTH) {
+	// 	return [Math.trunc(delta / WEEK), 'week'];
+	// }
 
-	if (delta < YEAR) {
-		return [Math.trunc(delta / MONTH), 'month'];
-	}
+	// if (delta < YEAR) {
+	// 	return [Math.trunc(delta / MONTH), 'month'];
+	// }
 
-	return [Math.trunc(delta / YEAR), 'year'];
+	// return [Math.trunc(delta / YEAR), 'year'];
 };
