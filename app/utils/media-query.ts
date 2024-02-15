@@ -20,16 +20,15 @@ export const useMediaQuery = (query: string): Accessor<boolean> => {
 		const [state, setState] = createSignal(matcher.matches);
 
 		const callback = () => setState(matcher.matches);
-
-		matcher.addEventListener('change', callback);
+		matcher.onchange = callback;
 
 		media = map[query] = {
 			n: 0,
 			a: state,
 			c: () => {
 				if (--media.n < 1) {
+					matcher.onchange = null;
 					delete map[query];
-					matcher.removeEventListener('change', callback);
 				}
 			},
 		};
