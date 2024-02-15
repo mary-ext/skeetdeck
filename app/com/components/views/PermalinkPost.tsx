@@ -78,7 +78,10 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 					class="pointer-events-none inline-flex max-w-full items-center overflow-hidden"
 				>
 					<div class="pointer-events-auto z-2 mr-3 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-muted-fg hover:opacity-80">
-						<img src={author.avatar.value || DefaultAvatar} class="h-full w-full" />
+						<img
+							src={author.avatar.value || DefaultAvatar}
+							class={clsx(['h-full w-full', !!author.avatar.value && profileVerdict()?.m && `blur`])}
+						/>
 					</div>
 
 					<span class="group pointer-events-auto block max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
