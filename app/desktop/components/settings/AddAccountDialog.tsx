@@ -10,20 +10,16 @@ import { getProfile, getProfileKey } from '~/api/queries/get-profile';
 
 import { queryClient } from '../../globals/query';
 
-import { closeModal, openModal, useModalState } from '~/com/globals/modals';
+import { closeModal, useModalState } from '~/com/globals/modals';
 import { model } from '~/utils/input';
 
-import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
 
 import { Button } from '~/com/primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
 import { Input } from '~/com/primitives/input';
 
-const APP_PASSWORD_REGEX = /^[a-zA-Z\d]{4}(-[a-zA-Z\d]{4}){3}$/;
 const APP_PASSWORD_LINK = 'https://atproto.com/community/projects#app-passwords';
-
-const brandName = import.meta.env.VITE_BRAND_NAME;
 
 const AddAccountDialog = () => {
 	const { disableBackdropClose } = useModalState();
@@ -92,30 +88,6 @@ const AddAccountDialog = () => {
 
 	const handleSubmit = (ev: SubmitEvent) => {
 		ev.preventDefault();
-
-		if (!APP_PASSWORD_REGEX.test(password())) {
-			openModal(() => (
-				<ConfirmDialog
-					title={`Password notice`}
-					body={
-						<>
-							You're attempting to sign in without using an app password, this could be dangerous to your
-							account's safety. We recommend using app passwords when signing in to third-party clients like{' '}
-							{brandName}.{' '}
-							<a href={APP_PASSWORD_LINK} target="_blank" class="text-accent hover:underline">
-								Learn more here
-							</a>
-							.
-						</>
-					}
-					confirmation={`Continue anyway`}
-					onConfirm={() => loginMutation.mutate()}
-				/>
-			));
-
-			return;
-		}
-
 		loginMutation.mutate();
 	};
 
@@ -155,7 +127,7 @@ const AddAccountDialog = () => {
 						</label>
 
 						<Show when={advanced() && isEmail()}>
-							<p class="mt-3 text-xs text-muted-fg">
+							<p class="mt-2 text-de text-muted-fg">
 								As you're trying to sign in via email, please specify the provider you're signing into.
 							</p>
 						</Show>
@@ -171,6 +143,13 @@ const AddAccountDialog = () => {
 							placeholder="Password"
 							class={/* @once */ Input()}
 						/>
+
+						<p class="mt-2 text-de text-muted-fg">
+							Using an app password is recommended.{' '}
+							<a target="_blank" href={APP_PASSWORD_LINK} class="text-accent hover:underline">
+								Learn more
+							</a>
+						</p>
 					</label>
 
 					<Show when={advanced()}>
