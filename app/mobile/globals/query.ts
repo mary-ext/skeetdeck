@@ -4,7 +4,7 @@ export const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
 			gcTime: 1 * 1_000, // 1 seconds
-			staleTime: Infinity, // the queries will be GC'd ASAP anyway.
+			staleTime: 30_000,
 			refetchOnReconnect: false,
 			refetchOnWindowFocus: false,
 			retry: false,

@@ -105,7 +105,7 @@ const ProfileView = (props: ProfileViewProps) => {
 									if (navigation.canGoBack) {
 										navigation.back();
 									} else {
-										navigation.navigate('/', { history: 'replace' });
+										navigation.navigate('/home', { history: 'replace' });
 									}
 								}}
 								class={`${iconBtn} -ml-2`}
@@ -172,7 +172,7 @@ const ProfileView = (props: ProfileViewProps) => {
 		}
 
 		return [
-			<ViewHeader back={!me ? '/' : undefined} title="Profile" />,
+			<ViewHeader back={!me ? '/home' : undefined} title="Profile" />,
 			<div class="grid h-13 place-items-center">
 				<CircularProgress />
 			</div>,

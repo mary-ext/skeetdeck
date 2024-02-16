@@ -7,7 +7,11 @@ export interface ModalProps extends Pick<ComponentProps<'svg'>, 'children'> {
 
 let checked = false;
 
+const isMobile = import.meta.env.VITE_MODE === 'mobile';
+
 const Modal = (props: ModalProps) => {
+	const onClose = props.onClose;
+
 	let focused: Element | null | undefined;
 
 	return (
@@ -15,6 +19,20 @@ const Modal = (props: ModalProps) => {
 			<dialog
 				ref={(node) => {
 					focused = document.activeElement;
+
+					if (isMobile && typeof CloseWatcher !== 'undefined') {
+						const watcher = new CloseWatcher();
+
+						watcher.oncancel = (ev) => {
+							ev.preventDefault();
+
+							if (onClose) {
+								onClose();
+							}
+						};
+
+						onCleanup(() => watcher.close());
+					}
 
 					onMount(() => {
 						// handle accidental opening of modals when the parent container has a
@@ -55,8 +73,6 @@ const Modal = (props: ModalProps) => {
 				}}
 				onClick={(ev) => {
 					if (ev.target === ev.currentTarget) {
-						const onClose = props.onClose;
-
 						if (onClose) {
 							onClose();
 						}
@@ -65,9 +81,6 @@ const Modal = (props: ModalProps) => {
 				onCancel={(ev) => {
 					// https://github.com/mdn/content/issues/31910
 					if (ev.target === ev.currentTarget) {
-						console.log(ev);
-						const onClose = props.onClose;
-
 						ev.preventDefault();
 
 						if (onClose) {

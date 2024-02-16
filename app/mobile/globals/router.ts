@@ -23,6 +23,21 @@ configureRouter({
 	routes: [
 		{
 			path: '/',
+			component: lazy(() => import('~/mobile/views/LoggedOut')),
+			meta: {
+				public: true,
+			},
+		},
+		{
+			path: '/sign_in',
+			component: lazy(() => import('~/mobile/views/SignIn')),
+			meta: {
+				public: true,
+			},
+		},
+
+		{
+			path: '/home',
 			component: lazy(() => import('~/mobile/views/Home')),
 			single: true,
 			meta: {
@@ -77,6 +92,7 @@ configureRouter({
 			component: lazy(() => import('~/mobile/views/NotFound')),
 			meta: {
 				name: 'NotFound',
+				public: true,
 			},
 		},
 	],

@@ -16,13 +16,11 @@ import HomeIcon from '~/com/icons/baseline-home';
 import HomeOutlinedIcon from '~/com/icons/outline-home';
 import NotificationsIcon from '~/com/icons/baseline-notifications';
 import NotificationsOutlinedIcon from '~/com/icons/outline-notifications';
+import UnfoldMoreIcon from '~/com/icons/baseline-unfold-more';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 import { MobileLinkingProvider } from './root/MobileLinkingProvider';
-import UnfoldMoreIcon from '~/com/icons/baseline-unfold-more';
-
-const LoggedOutView = lazy(() => import('./LoggedOut'));
 
 interface RootProps {
 	children?: JSX.Element;
@@ -33,24 +31,11 @@ const Root = (props: RootProps) => {
 
 	const hasAccount = createMemo(() => multiagent.active !== undefined);
 	const isMainRoutes = createMemo(() => !!route()?.def.meta?.main);
-	const isNotFound = createMemo(() => route()?.def.meta?.name === 'NotFound');
 
 	return (
 		<MobileLinkingProvider>
-			<div class="mx-auto flex min-h-screen max-w-md flex-col bg-background">
-				<div class="flex min-h-0 grow flex-col">
-					{(() => {
-						if (hasAccount() || isNotFound()) {
-							return props.children;
-						}
-
-						return (
-							<Suspense>
-								<LoggedOutView />
-							</Suspense>
-						);
-					})()}
-				</div>
+			<div class="relative mx-auto flex min-h-screen max-w-md flex-col bg-background">
+				<div class="flex min-h-0 grow flex-col">{props.children}</div>
 
 				{(() => {
 					if (hasAccount() && isMainRoutes()) {
@@ -72,7 +57,7 @@ const enum MainTabs {
 }
 
 const MainRoutes = {
-	[MainTabs.HOME]: '/',
+	[MainTabs.HOME]: '/home',
 	[MainTabs.EXPLORE]: '/explore',
 	[MainTabs.NOTIFICATIONS]: '/notifications',
 	[MainTabs.ME]: '/@me',
