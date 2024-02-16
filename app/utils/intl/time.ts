@@ -13,7 +13,7 @@ const absTimeFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'long', time
 
 const formatters: Record<string, Intl.NumberFormat> = {};
 
-export const formatReltime = (time: string | number, base = new Date()) => {
+export const formatReltime = (time: string | number | Date, base = new Date()) => {
 	const date = new Date(time);
 	let delta = base.getTime() - date.getTime();
 
@@ -31,15 +31,6 @@ export const formatReltime = (time: string | number, base = new Date()) => {
 	// show `now` if it just happened
 	if (delta < NOW) {
 		return `now`;
-	}
-
-	// normalize the time if more than 24h hours has passed, handles this scenario:
-	// - 2024-02-13T09:00Z <- 2024-02-15T07:00Z = 2d
-	if (delta > DAY && date.getDate() !== base.getDate()) {
-		date.setHours(0, 0, 0, 0);
-		base.setHours(0, 0, 0, 0);
-
-		delta = base.getTime() - date.getTime();
 	}
 
 	const [value, unit] = lookupReltime(delta);
@@ -69,18 +60,20 @@ export const lookupReltime = (delta: number): [value: number, unit: Intl.Relativ
 	}
 
 	if (delta < MINUTE) {
-		return [Math.trunc(delta / SECOND), 'second'];
+		return [Math.floor(delta / SECOND), 'second'];
 	}
 
 	if (delta < HOUR) {
-		return [Math.trunc(delta / MINUTE), 'minute'];
+		return [Math.floor(delta / MINUTE), 'minute'];
 	}
 
 	if (delta < DAY) {
-		return [Math.trunc(delta / HOUR), 'hour'];
+		return [Math.floor(delta / HOUR), 'hour'];
 	}
 
-	return [Math.trunc(delta / DAY), 'day'];
+	// use rounding, this handles the following scenario:
+	// - 2024-02-13T09:00Z <- 2024-02-15T07:00Z = 2d
+	return [Math.round(delta / DAY), 'day'];
 	// if (delta < WEEK) {
 	// 	return [Math.trunc(delta / DAY), 'day'];
 	// }
