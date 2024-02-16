@@ -1,4 +1,4 @@
-import { batch, createEffect, createRoot } from 'solid-js';
+import { batch, createEffect, createRoot, onCleanup } from 'solid-js';
 
 import {
 	type AtpAccessJwt,
@@ -203,26 +203,24 @@ export class Multiagent {
 		const $accounts = this.store.accounts!;
 		const agent = new Agent({ serviceUri: serviceUri });
 
-		let ignore = false;
-
-		agent.on('sessionUpdate', (session) => {
-			const did = session!.did;
-			const existing = $accounts.find((acc) => acc.did === did);
-
-			if (existing) {
-				ignore = true;
-
-				batch(() => {
-					Object.assign(existing.session, session);
-				});
-
-				ignore = false;
-			}
-		});
-
 		return {
 			agent: agent,
 			cleanup: createRoot((dispose) => {
+				let ignore = false;
+
+				onCleanup(
+					agent.on('sessionUpdate', (session) => {
+						const did = session!.did;
+						const existing = $accounts.find((acc) => acc.did === did);
+
+						if (existing) {
+							ignore = true;
+							batch(() => Object.assign(existing.session, session));
+							ignore = false;
+						}
+					}),
+				);
+
 				createEffect(() => {
 					const actual = agent.session;
 
