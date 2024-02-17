@@ -1,3 +1,6 @@
+let startOfYear = 0;
+let endOfYear = 0;
+
 const SECOND = 1e3;
 const NOW = SECOND * 10;
 const MINUTE = SECOND * 60;
@@ -13,35 +16,62 @@ const absTimeFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'long', time
 
 const formatters: Record<string, Intl.NumberFormat> = {};
 
-export const formatReltime = (time: string | number | Date, base = new Date()) => {
-	const date = new Date(time);
-	let delta = base.getTime() - date.getTime();
+export const formatReltime = (time: number, now: number): string => {
+	const delta = now - time;
 
-	// show absolute date if it's been more than a week, or if the date is in the
-	// future for whatever reason.
 	if (delta < 0 || delta > WEEK) {
-		// skip showing current year
-		if (date.getFullYear() === base.getFullYear()) {
-			return absFormat.format(date);
+		if (now > endOfYear) {
+			const date = new Date();
+
+			date.setMonth(0, 1);
+			date.setHours(0, 0, 0);
+			startOfYear = date.getTime();
+
+			date.setFullYear(date.getFullYear() + 1, 0, 0);
+			date.setHours(23, 59, 59, 999);
+			endOfYear = date.getTime();
 		}
 
-		return absWithYearFormat.format(date);
+		// if it happened this year, don't show the year.
+		if (time >= startOfYear && time <= endOfYear) {
+			return absFormat.format(time);
+		}
+
+		return absWithYearFormat.format(time);
 	}
 
-	// show `now` if it just happened
 	if (delta < NOW) {
 		return `now`;
 	}
 
-	const [value, unit] = lookupReltime(delta);
+	{
+		let value: number;
+		let unit: Intl.RelativeTimeFormatUnit;
 
-	const formatter = (formatters[unit] ||= new Intl.NumberFormat('en-US', {
-		style: 'unit',
-		unit: unit,
-		unitDisplay: 'narrow',
-	}));
+		if (delta < MINUTE) {
+			value = Math.floor(delta / SECOND);
+			unit = 'second';
+		} else if (delta < HOUR) {
+			value = Math.floor(delta / MINUTE);
+			unit = 'minute';
+		} else if (delta < DAY) {
+			value = Math.floor(delta / HOUR);
+			unit = 'hour';
+		} else {
+			// use rounding, this handles the following scenario:
+			// - 2024-02-13T09:00Z <- 2024-02-15T07:00Z = 2d
+			value = Math.round(delta / DAY);
+			unit = 'day';
+		}
 
-	return formatter.format(Math.abs(value));
+		const formatter = (formatters[unit] ||= new Intl.NumberFormat('en-US', {
+			style: 'unit',
+			unit: unit,
+			unitDisplay: 'narrow',
+		}));
+
+		return formatter.format(Math.abs(value));
+	}
 };
 
 export const formatAbsDate = (time: string | number) => {
@@ -52,39 +82,4 @@ export const formatAbsDate = (time: string | number) => {
 export const formatAbsDateTime = (time: string | number) => {
 	const date = new Date(time);
 	return absTimeFormat.format(date);
-};
-
-export const lookupReltime = (delta: number): [value: number, unit: Intl.RelativeTimeFormatUnit] => {
-	if (delta < SECOND) {
-		return [0, 'second'];
-	}
-
-	if (delta < MINUTE) {
-		return [Math.floor(delta / SECOND), 'second'];
-	}
-
-	if (delta < HOUR) {
-		return [Math.floor(delta / MINUTE), 'minute'];
-	}
-
-	if (delta < DAY) {
-		return [Math.floor(delta / HOUR), 'hour'];
-	}
-
-	// use rounding, this handles the following scenario:
-	// - 2024-02-13T09:00Z <- 2024-02-15T07:00Z = 2d
-	return [Math.round(delta / DAY), 'day'];
-	// if (delta < WEEK) {
-	// 	return [Math.trunc(delta / DAY), 'day'];
-	// }
-
-	// if (delta < MONTH) {
-	// 	return [Math.trunc(delta / WEEK), 'week'];
-	// }
-
-	// if (delta < YEAR) {
-	// 	return [Math.trunc(delta / MONTH), 'month'];
-	// }
-
-	// return [Math.trunc(delta / YEAR), 'year'];
 };
