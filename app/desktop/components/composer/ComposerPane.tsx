@@ -831,7 +831,13 @@ const ComposerPane = () => {
 								const file = files[idx];
 								const type = file.type;
 
-								if (type !== 'image/png' && type !== 'image/jpeg' && type !== 'image/webp') {
+								if (
+									type !== 'image/png' &&
+									type !== 'image/jpeg' &&
+									type !== 'image/webp' &&
+									type !== 'image/avif' &&
+									type !== 'image/gif'
+								) {
 									invalid = true;
 									continue;
 								}
@@ -886,7 +892,7 @@ const ComposerPane = () => {
 									ref={fileInputRef}
 									type="file"
 									multiple
-									accept="image/png,image/jpeg,image/webp"
+									accept="image/png,image/jpeg,image/webp,image/avif,image/gif"
 									onChange={() => {
 										const files = Array.from(fileInputRef.files!);
 
