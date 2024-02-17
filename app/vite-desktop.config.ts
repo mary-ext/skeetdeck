@@ -41,18 +41,7 @@ export default defineConfig({
 		modulePreload: false,
 		rollupOptions: {
 			output: {
-				entryFileNames: (() => {
-					let counter = 0;
-					return () => `assets/m${(counter++).toString(36)}.js`;
-				})(),
-				chunkFileNames: (() => {
-					let counter = 0;
-					return () => `assets/c${(counter++).toString(36)}.js`;
-				})(),
-				assetFileNames: (() => {
-					let counter = 0;
-					return () => `assets/a${(counter++).toString(36)}[extname]`;
-				})(),
+				chunkFileNames: 'assets/[hash].js',
 			},
 		},
 		terserOptions: {
