@@ -15,24 +15,21 @@ const tickForward = () => {
 	setTimeout(() => requestIdleCallback(tickForward), 60_000);
 };
 
-tickForward();
-
 const TimeAgo = (props: TimeAgoProps) => {
 	const [absolute, setAbsolute] = createSignal('');
 	const [relative, setRelative] = createSignal('');
 
 	createRenderEffect(() => {
 		const time = toInt(props.value);
-		let first = true;
 
 		setAbsolute(formatAbsDateTime(time));
 
-		createRenderEffect(() => {
+		createRenderEffect((first: boolean) => {
 			const $tick = tick();
-			const now = first ? getNow() : $tick;
+			setRelative(formatReltime(time, first ? getNow() : $tick));
 
-			setRelative(formatReltime(time, now));
-		});
+			return false;
+		}, true);
 	});
 
 	return props.children(relative, absolute);
@@ -43,3 +40,4 @@ const toInt = (date: string | number): number => {
 };
 
 export default TimeAgo;
+tickForward();
