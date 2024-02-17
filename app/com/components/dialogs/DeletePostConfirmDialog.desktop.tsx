@@ -13,6 +13,8 @@ import type { TimelinePage } from '~/api/queries/get-timeline';
 import { type SignalizedPost, removeCachedPost } from '~/api/stores/posts';
 import { producePostDelete } from '~/api/updaters/delete-post';
 
+import { serializeRichText } from '~/api/richtext/utils';
+
 import { type ComposedImage, getImageFromBlob } from '~/utils/image';
 import { modelChecked } from '~/utils/input';
 import { signal } from '~/utils/signals';
@@ -198,7 +200,7 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 						reply: record.reply?.parent?.uri,
 						posts: [
 							{
-								text: record.text,
+								text: serializeRichText(record.text, record.facets, false),
 								external: externalEmbedUri,
 								images: images,
 								labels: record.labels ? [...record.labels.values.map((label) => label.val)] : [],
