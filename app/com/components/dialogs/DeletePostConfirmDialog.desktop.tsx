@@ -26,7 +26,7 @@ import DialogOverlay from './DialogOverlay';
 import { Button } from '../../primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
 
-import { useComposer, type GateState } from '~/desktop/components/composer/ComposerContext';
+import { type GateState, useComposer } from '~/desktop/components/composer/ComposerContext';
 
 export interface DeletePostConfirmDialogProps {
 	/** Expected to be static */
