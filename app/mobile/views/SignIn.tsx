@@ -59,7 +59,7 @@ const SignIn = () => {
 							type="text"
 							required
 							title="Bluesky handle, DID, or email address"
-							pattern=".*\\S+.*"
+							pattern=".*\S+.*"
 							placeholder="you.bsky.social"
 							autocomplete="username"
 							class={/* @once */ Input()}

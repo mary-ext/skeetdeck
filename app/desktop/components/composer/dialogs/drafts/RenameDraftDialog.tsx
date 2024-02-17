@@ -52,7 +52,7 @@ const RenameDraftDialog = (props: SaveDraftDialogProps) => {
 							ref={model(name, setName)}
 							type="text"
 							required
-							pattern=".*\\S+.*"
+							pattern=".*\S+.*"
 							class={/* @once */ Input()}
 						/>
 					</label>
