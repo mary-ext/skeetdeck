@@ -12,7 +12,7 @@ export default defineConfig({
 			registerType: 'prompt',
 			injectRegister: null,
 			workbox: {
-				globPatterns: ['**/*.{js,css,html,svg}'],
+				globPatterns: ['**/*.{js,css,html,svg,jpg,png}'],
 				cleanupOutdatedCaches: true,
 			},
 			manifest: {
