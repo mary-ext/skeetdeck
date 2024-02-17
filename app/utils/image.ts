@@ -108,18 +108,20 @@ const enum Crop {
 }
 
 export const getResizedImage = (img: HTMLImageElement, width: number, height: number, mode: Crop) => {
+	let scale = 1;
 	let w = img.naturalWidth;
 	let h = img.naturalHeight;
 
-	let scale = 1;
-	if (mode === Crop.COVER) {
-		scale = w < h ? width / w : height / h;
-	} else if (mode === Crop.CONTAIN) {
-		scale = w > h ? width / w : height / h;
-	}
+	if (w > width || h > height) {
+		if (mode === Crop.COVER) {
+			scale = w < h ? width / w : height / h;
+		} else if (mode === Crop.CONTAIN) {
+			scale = w > h ? width / w : height / h;
+		}
 
-	w = Math.floor(w * scale);
-	h = Math.floor(h * scale);
+		w = Math.floor(w * scale);
+		h = Math.floor(h * scale);
+	}
 
 	const canvas = new OffscreenCanvas(w, h);
 	const ctx = canvas.getContext('2d');
