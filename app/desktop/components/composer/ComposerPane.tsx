@@ -28,7 +28,7 @@ import { openModal } from '~/com/globals/modals';
 import { preferences } from '~/desktop/globals/settings';
 
 import { languageNames } from '~/utils/intl/display-names';
-import { type PendingImage, compressPostImage } from '~/utils/image';
+import { type CompressResult, compressPostImage } from '~/utils/image';
 import { isMac } from '~/utils/interaction';
 import { clsx, getUniqueId } from '~/utils/misc';
 import { Signal, signal } from '~/utils/signals';
@@ -41,7 +41,6 @@ import CircularProgress from '~/com/components/CircularProgress';
 import RichtextComposer from '~/com/components/richtext/RichtextComposer';
 import BlobImage from '~/com/components/BlobImage';
 
-import ImageCompressAlertDialog from '~/com/components/dialogs/ImageCompressAlertDialog';
 import EmojiFlyout from '~/com/components/emojis/EmojiFlyout';
 
 import { EmbedFeedContent } from '~/com/components/embeds/EmbedFeed';
@@ -795,7 +794,7 @@ const ComposerPane = () => {
 
 						const length = createMemo(() => getRtLength(getPostRt(draft)));
 
-						const addImagesRaw = (imgs: Array<{ blob: Blob; ratio: { width: number; height: number } }>) => {
+						const addImagesRaw = (imgs: Array<CompressResult>) => {
 							batch(() => {
 								for (let i = 0, ilen = imgs.length; i < ilen; i++) {
 									const img = imgs[i];
@@ -820,8 +819,7 @@ const ComposerPane = () => {
 								return;
 							}
 
-							const pending: PendingImage[] = [];
-							const next: Array<{ blob: Blob; ratio: { width: number; height: number } }> = [];
+							const next: Array<CompressResult> = [];
 
 							let errored = false;
 							let invalid = false;
@@ -839,17 +837,8 @@ const ComposerPane = () => {
 								}
 
 								try {
-									const compressed = await compressPostImage(file);
-
-									const blob = compressed.blob;
-									const before = compressed.before;
-									const after = compressed.after;
-
-									if (after.size !== before.size) {
-										pending.push({ ...compressed, name: file.name });
-									} else {
-										next.push({ blob: blob, ratio: { width: after.width, height: after.height } });
-									}
+									const result = await compressPostImage(file);
+									next.push(result);
 								} catch (err) {
 									console.error(`Failed to compress image`, err);
 									errored = true;
@@ -861,25 +850,6 @@ const ComposerPane = () => {
 
 								if (next.length > 0) {
 									addImagesRaw(next);
-								}
-
-								if (pending.length > 0) {
-									openModal(() => (
-										<ImageCompressAlertDialog
-											images={pending}
-											onConfirm={() => {
-												addImagesRaw(
-													pending.map((img) => ({
-														blob: img.blob,
-														ratio: {
-															width: img.after.width,
-															height: img.after.height,
-														},
-													})),
-												);
-											}}
-										/>
-									));
 								}
 
 								if (errored) {

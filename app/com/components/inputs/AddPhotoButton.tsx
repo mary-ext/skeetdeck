@@ -5,8 +5,6 @@ import { getSide } from '@floating-ui/utils';
 
 import { compressProfileImage } from '~/utils/image';
 
-import { openModal } from '../../globals/modals';
-
 import { Interactive } from '../../primitives/interactive';
 import { MenuItem, MenuRoot } from '../../primitives/menu';
 
@@ -14,8 +12,6 @@ import { Flyout, offsetlessMiddlewares } from '../Flyout';
 import CircularProgress from '../CircularProgress';
 
 import AddPhotoAlternateIcon from '../../icons/baseline-add-photo-alternate';
-
-import ImageCompressAlertDialog from '../dialogs/ImageCompressAlertDialog';
 
 export interface AddPhotoButtonProps {
 	exists: boolean;
@@ -57,16 +53,7 @@ const AddPhotoButton = (props: AddPhotoButtonProps) => {
 			const { maxWidth, maxHeight } = props;
 			const result = await compressProfileImage(file, maxWidth, maxHeight);
 
-			if (result.before !== result.after) {
-				openModal(() => (
-					<ImageCompressAlertDialog
-						images={[{ ...result, name: file.name }]}
-						onConfirm={() => props.onPick(result.blob)}
-					/>
-				));
-			} else {
-				props.onPick(file);
-			}
+			props.onPick(result.blob);
 		} catch {}
 
 		setLoading(false);

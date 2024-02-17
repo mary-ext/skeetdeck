@@ -5,21 +5,12 @@ const MAX_SIZE = 1_000_000; // 1 MB
 const POST_MAX_HEIGHT = 2_000;
 const POST_MAX_WIDTH = 2_000;
 
-export interface ImageResult {
-	width: number;
-	height: number;
-	size: number;
-}
-
 export interface CompressResult {
 	blob: Blob;
-	quality: number;
-	after: ImageResult;
-	before: ImageResult;
-}
-
-export interface PendingImage extends CompressResult {
-	name: string;
+	ratio: {
+		width: number;
+		height: number;
+	};
 }
 
 export interface ComposedImage {
@@ -40,22 +31,7 @@ export interface CompressProfileImageOptions {
 export const compressPostImage = async (blob: Blob): Promise<CompressResult> => {
 	const image = await getImageFromBlob(blob);
 
-	if (blob.size < MAX_SIZE) {
-		const ref: ImageResult = {
-			width: image.naturalWidth,
-			height: image.naturalHeight,
-			size: blob.size,
-		};
-
-		return {
-			blob: blob,
-			quality: 100,
-			after: ref,
-			before: ref,
-		};
-	}
-
-	const { canvas, w, h } = getResizedImage(image, POST_MAX_WIDTH, POST_MAX_HEIGHT, Crop.CONTAIN);
+	const [canvas, width, height] = getResizedImage(image, POST_MAX_WIDTH, POST_MAX_HEIGHT, Crop.CONTAIN);
 	const large = blob.size > 1_500_000;
 
 	for (let q = large ? 90 : 100; q >= 70; q -= 10) {
@@ -66,20 +42,7 @@ export const compressPostImage = async (blob: Blob): Promise<CompressResult> => 
 		});
 
 		if (result.size < MAX_SIZE) {
-			return {
-				blob: result,
-				quality: q,
-				after: {
-					width: w,
-					height: h,
-					size: result.size,
-				},
-				before: {
-					width: image.naturalWidth,
-					height: image.naturalHeight,
-					size: blob.size,
-				},
-			};
+			return { blob: result, ratio: { width: width, height: height } };
 		}
 	}
 
@@ -93,22 +56,7 @@ export const compressProfileImage = async (
 ): Promise<CompressResult> => {
 	const image = await getImageFromBlob(blob);
 
-	if (blob.size < MAX_SIZE) {
-		const ref: ImageResult = {
-			width: image.naturalWidth,
-			height: image.naturalHeight,
-			size: blob.size,
-		};
-
-		return {
-			blob: blob,
-			quality: 100,
-			after: ref,
-			before: ref,
-		};
-	}
-
-	const { canvas, w, h } = getResizedImage(image, maxW, maxH, Crop.COVER);
+	const [canvas, width, height] = getResizedImage(image, maxW, maxH, Crop.COVER);
 	const large = blob.size > 1_500_000;
 
 	for (let q = large ? 90 : 100; q >= 70; q -= 10) {
@@ -119,20 +67,7 @@ export const compressProfileImage = async (
 		});
 
 		if (result.size < MAX_SIZE) {
-			return {
-				blob: result,
-				quality: q,
-				after: {
-					width: w,
-					height: h,
-					size: result.size,
-				},
-				before: {
-					width: image.naturalWidth,
-					height: image.naturalHeight,
-					size: blob.size,
-				},
-			};
+			return { blob: result, ratio: { width: width, height: height } };
 		}
 	}
 
@@ -195,5 +130,5 @@ export const getResizedImage = (img: HTMLImageElement, width: number, height: nu
 
 	ctx.drawImage(img, 0, 0, w, h);
 
-	return { canvas, ctx, w, h };
+	return [canvas, width, height] as const;
 };
