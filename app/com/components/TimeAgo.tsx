@@ -7,11 +7,10 @@ export interface TimeAgoProps {
 	children: (relative: Accessor<string>, absolute: Accessor<string>) => JSX.Element;
 }
 
-const getNow = Date.now;
-const [tick, setTick] = createSignal(getNow(), { equals: false });
+const [watch, tick] = createSignal<void>(undefined, { equals: false });
 
 const tickForward = () => {
-	setTick(getNow());
+	tick();
 	setTimeout(() => requestIdleCallback(tickForward), 60_000);
 };
 
@@ -24,12 +23,10 @@ const TimeAgo = (props: TimeAgoProps) => {
 
 		setAbsolute(formatAbsDateTime(time));
 
-		createRenderEffect((first: boolean) => {
-			const $tick = tick();
-			setRelative(formatReltime(time, first ? getNow() : $tick));
-
-			return false;
-		}, true);
+		createRenderEffect(() => {
+			watch();
+			return setRelative(formatReltime(time));
+		});
 	});
 
 	return props.children(relative, absolute);

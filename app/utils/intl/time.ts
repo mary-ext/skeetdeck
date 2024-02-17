@@ -15,8 +15,10 @@ const absFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numer
 const absTimeFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeStyle: 'short' });
 
 const formatters: Record<string, Intl.NumberFormat> = {};
+const getNow = Date.now;
 
-export const formatReltime = (time: number, now: number): string => {
+export const formatReltime = (time: number): string => {
+	const now = getNow();
 	const delta = now - time;
 
 	if (delta < 0 || delta > WEEK) {
