@@ -132,7 +132,7 @@ const CustomFeedPaneCreator = (props: PaneCreatorProps) => {
 
 								<div class="min-w-0 grow">
 									<p class="overflow-hidden text-ellipsis font-bold">{/* @once */ feed.displayName}</p>
-									<p class="text-muted-fg">{/* @once */ `by ${feed.creator.handle}`}</p>
+									<p class="text-muted-fg">{/* @once */ `by @${feed.creator.handle}`}</p>
 								</div>
 							</div>
 
