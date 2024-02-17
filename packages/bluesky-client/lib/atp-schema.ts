@@ -35,7 +35,7 @@ export type UnionOf<K extends keyof Objects> = Objects[K] & { $type: K };
 
 export interface Queries {
 	/**
-	 * Get private preferences attached to the account.
+	 * Get private preferences attached to the current account. Expected use is synchronization between multiple devices, and import/export during account migration. Requires auth.
 	 */
 	'app.bsky.actor.getPreferences': {
 		response: {
@@ -43,10 +43,13 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get detailed profile view of an actor.
+	 * Get detailed profile view of an actor. Does not require auth, but contains relevant metadata with auth.
 	 */
 	'app.bsky.actor.getProfile': {
 		params: {
+			/**
+			 * Handle or DID of account to fetch profile of.
+			 */
 			actor: string;
 		};
 		response: RefOf<'app.bsky.actor.defs#profileViewDetailed'>;
@@ -66,7 +69,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a list of suggested actors, used for discovery.
+	 * Get a list of suggested actors. Expected use is discovery of accounts to follow during new account onboarding.
 	 */
 	'app.bsky.actor.getSuggestions': {
 		params: {
@@ -84,7 +87,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Find actors (profiles) matching search criteria.
+	 * Find actors (profiles) matching search criteria. Does not require auth.
 	 */
 	'app.bsky.actor.searchActors': {
 		params: {
@@ -111,7 +114,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Find actor suggestions for a prefix search term.
+	 * Find actor suggestions for a prefix search term. Expected use is for auto-completion during text field entry. Does not require auth.
 	 */
 	'app.bsky.actor.searchActorsTypeahead': {
 		params: {
@@ -136,7 +139,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get information about a feed generator, including policies and offered feed URIs.
+	 * Get information about a feed generator, including policies and offered feed URIs. Does not require auth; implemented by Feed Generator services (not App View).
 	 */
 	'app.bsky.feed.describeFeedGenerator': {
 		response: {
@@ -146,7 +149,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a list of feeds created by the actor.
+	 * Get a list of feeds (feed generator records) created by the actor (in the actor's repo).
 	 */
 	'app.bsky.feed.getActorFeeds': {
 		params: {
@@ -165,7 +168,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a list of posts liked by an actor.
+	 * Get a list of posts liked by an actor. Does not require auth.
 	 */
 	'app.bsky.feed.getActorLikes': {
 		params: {
@@ -188,7 +191,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a view of an actor's feed.
+	 * Get a view of an actor's 'author feed' (post and reposts by the author). Does not require auth.
 	 */
 	'app.bsky.feed.getAuthorFeed': {
 		params: {
@@ -201,6 +204,7 @@ export interface Queries {
 			limit?: number;
 			cursor?: string;
 			/**
+			 * Combinations of post/repost types to include in response.
 			 * @default "posts_with_replies"
 			 */
 			filter?:
@@ -220,7 +224,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a hydrated feed from an actor's selected feed generator.
+	 * Get a hydrated feed from an actor's selected feed generator. Implemented by App View.
 	 */
 	'app.bsky.feed.getFeed': {
 		params: {
@@ -242,15 +246,24 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get information about a feed generator.
+	 * Get information about a feed generator. Implemented by AppView.
 	 */
 	'app.bsky.feed.getFeedGenerator': {
 		params: {
+			/**
+			 * AT-URI of the feed generator record.
+			 */
 			feed: AtUri;
 		};
 		response: {
 			view: RefOf<'app.bsky.feed.defs#generatorView'>;
+			/**
+			 * Indicates whether the feed generator service has been online recently, or else seems to be inactive.
+			 */
 			isOnline: boolean;
+			/**
+			 * Indicates whether the feed generator service is compatible with the record declaration.
+			 */
 			isValid: boolean;
 		};
 	};
@@ -266,10 +279,13 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a skeleton of a feed provided by a feed generator.
+	 * Get a skeleton of a feed provided by a feed generator. Auth is optional, depending on provider requirements, and provides the DID of the requester. Implemented by Feed Generator Service.
 	 */
 	'app.bsky.feed.getFeedSkeleton': {
 		params: {
+			/**
+			 * Reference to feed generator record describing the specific feed being requested.
+			 */
 			feed: AtUri;
 			/**
 			 * Minimum: 1 \
@@ -288,11 +304,17 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get the list of likes.
+	 * Get like records which reference a subject (by AT-URI and CID).
 	 */
 	'app.bsky.feed.getLikes': {
 		params: {
+			/**
+			 * AT-URI of the subject (eg, a post record).
+			 */
 			uri: AtUri;
+			/**
+			 * CID of the subject record (aka, specific version of record), to filter likes.
+			 */
 			cid?: CID;
 			/**
 			 * Minimum: 1 \
@@ -310,10 +332,13 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a view of a recent posts from actors in a list.
+	 * Get a feed of recent posts from a list (posts and reposts from any actors on the list). Does not require auth.
 	 */
 	'app.bsky.feed.getListFeed': {
 		params: {
+			/**
+			 * Reference (AT-URI) to the list record.
+			 */
 			list: AtUri;
 			/**
 			 * Minimum: 1 \
@@ -332,18 +357,23 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get posts in a thread.
+	 * Get posts in a thread. Does not require auth, but additional metadata and filtering will be applied for authed requests.
 	 */
 	'app.bsky.feed.getPostThread': {
 		params: {
+			/**
+			 * Reference (AT-URI) to post record.
+			 */
 			uri: AtUri;
 			/**
+			 * How many levels of reply depth should be included in response. \
 			 * Minimum: 0 \
 			 * Maximum: 1000
 			 * @default 6
 			 */
 			depth?: number;
 			/**
+			 * How many levels of parent (and grandparent, etc) post to include. \
 			 * Minimum: 0 \
 			 * Maximum: 1000
 			 * @default 80
@@ -361,11 +391,12 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a view of an actor's feed.
+	 * Gets post views for a specified list of posts (by AT-URI). This is sometimes referred to as 'hydrating' a 'feed skeleton'.
 	 */
 	'app.bsky.feed.getPosts': {
 		params: {
 			/**
+			 * List of post AT-URIs to return hydrated views for. \
 			 * Maximum array length: 25
 			 */
 			uris: AtUri[];
@@ -375,11 +406,17 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a list of reposts.
+	 * Get a list of reposts for a given post.
 	 */
 	'app.bsky.feed.getRepostedBy': {
 		params: {
+			/**
+			 * Reference (AT-URI) of post record
+			 */
 			uri: AtUri;
+			/**
+			 * If supplied, filters to reposts of specific version (by CID) of the post record.
+			 */
 			cid?: CID;
 			/**
 			 * Minimum: 1 \
@@ -397,7 +434,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a list of suggested feeds for the viewer.
+	 * Get a list of suggested feeds (feed generators) for the requesting account.
 	 */
 	'app.bsky.feed.getSuggestedFeeds': {
 		params: {
@@ -415,10 +452,13 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a view of the actor's home timeline.
+	 * Get a view of the requesting account's home timeline. This is expected to be some form of reverse-chronological feed.
 	 */
 	'app.bsky.feed.getTimeline': {
 		params: {
+			/**
+			 * Variant 'algorithm' for timeline. Implementation-specific. NOTE: most feed flexibility has been moved to feed generator mechanism.
+			 */
 			algorithm?: string;
 			/**
 			 * Minimum: 1 \
@@ -434,7 +474,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Find posts matching search criteria.
+	 * Find posts matching search criteria, returning views of those posts.
 	 */
 	'app.bsky.feed.searchPosts': {
 		params: {
@@ -466,7 +506,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a list of who the actor is blocking.
+	 * Enumerates which accounts the requesting account is currently blocking. Requires auth.
 	 */
 	'app.bsky.graph.getBlocks': {
 		params: {
@@ -484,7 +524,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a list of an actor's followers.
+	 * Enumerates accounts which follow a specified account (actor).
 	 */
 	'app.bsky.graph.getFollowers': {
 		params: {
@@ -504,7 +544,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a list of who the actor follows.
+	 * Enumerates accounts which a specified account (actor) follows.
 	 */
 	'app.bsky.graph.getFollows': {
 		params: {
@@ -524,10 +564,13 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a list of actors.
+	 * Gets a 'view' (with additional context) of a specified list.
 	 */
 	'app.bsky.graph.getList': {
 		params: {
+			/**
+			 * Reference (AT-URI) of the list record to hydrate.
+			 */
 			list: AtUri;
 			/**
 			 * Minimum: 1 \
@@ -544,7 +587,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get lists that the actor is blocking.
+	 * Get mod lists that the requesting account (actor) is blocking. Requires auth.
 	 */
 	'app.bsky.graph.getListBlocks': {
 		params: {
@@ -562,7 +605,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get lists that the actor is muting.
+	 * Enumerates mod lists that the requesting account (actor) currently has muted. Requires auth.
 	 */
 	'app.bsky.graph.getListMutes': {
 		params: {
@@ -580,10 +623,13 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a list of lists that belong to an actor.
+	 * Enumerates the lists created by a specified account (actor).
 	 */
 	'app.bsky.graph.getLists': {
 		params: {
+			/**
+			 * The account (actor) to enumerate lists from.
+			 */
 			actor: string;
 			/**
 			 * Minimum: 1 \
@@ -599,7 +645,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a list of who the actor mutes.
+	 * Enumerates accounts that the requesting account (actor) currently has muted. Requires auth.
 	 */
 	'app.bsky.graph.getMutes': {
 		params: {
@@ -617,12 +663,16 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Enumerates public relationships between one account, and a list of other accounts
+	 * Enumerates public relationships between one account, and a list of other accounts. Does not require auth.
 	 */
 	'app.bsky.graph.getRelationships': {
 		params: {
+			/**
+			 * Primary account requesting relationships for.
+			 */
 			actor: string;
 			/**
+			 * List of 'other' accounts to be related back to the primary. \
 			 * Maximum array length: 30
 			 */
 			others?: string[];
@@ -639,7 +689,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get suggested follows related to a given actor.
+	 * Enumerates follows similar to a given account (actor). Expected use is to recommend additional accounts immediately after following one account.
 	 */
 	'app.bsky.graph.getSuggestedFollowsByActor': {
 		params: {
@@ -650,7 +700,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get the count of unread notifications.
+	 * Count the number of unread notifications for the requesting account. Requires auth.
 	 */
 	'app.bsky.notification.getUnreadCount': {
 		params: {
@@ -661,7 +711,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a list of notifications.
+	 * Enumerate notifications for the requesting account. Requires auth.
 	 */
 	'app.bsky.notification.listNotifications': {
 		params: {
@@ -891,6 +941,14 @@ export interface Queries {
 			 * @default "desc"
 			 */
 			sortDirection?: string;
+			/**
+			 * Retrieve events created after a given timestamp
+			 */
+			createdAfter?: string;
+			/**
+			 * Retrieve events created before a given timestamp
+			 */
+			createdBefore?: string;
 			subject?: string;
 			/**
 			 * If true, events on all record types (posts, lists, profile etc.) owned by the did are returned
@@ -903,6 +961,23 @@ export interface Queries {
 			 * @default 50
 			 */
 			limit?: number;
+			/**
+			 * If true, only events with comments are returned
+			 */
+			hasComment?: boolean;
+			/**
+			 * If specified, only events with comments containing the keyword are returned
+			 */
+			comment?: string;
+			/**
+			 * If specified, only events where all of these labels were added are returned
+			 */
+			addedLabels?: string[];
+			/**
+			 * If specified, only events where all of these labels were removed are returned
+			 */
+			removedLabels?: string[];
+			reportTypes?: string[];
 			cursor?: string;
 		};
 		response: {
@@ -1003,7 +1078,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Provides the DID of a repo.
+	 * Resolves a handle (domain name) to a DID.
 	 */
 	'com.atproto.identity.resolveHandle': {
 		params: {
@@ -1017,7 +1092,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Find labels relevant to the provided URI patterns.
+	 * Find labels relevant to the provided AT-URI patterns. Public endpoint for moderation services, though may return different or additional results with auth.
 	 */
 	'com.atproto.label.queryLabels': {
 		params: {
@@ -1043,7 +1118,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get information about the repo, including the list of collections.
+	 * Get information about an account and repository, including the list of collections. Does not require auth.
 	 */
 	'com.atproto.repo.describeRepo': {
 		params: {
@@ -1055,13 +1130,22 @@ export interface Queries {
 		response: {
 			handle: Handle;
 			did: DID;
+			/**
+			 * The complete DID document for this account.
+			 */
 			didDoc: unknown;
+			/**
+			 * List of all the collections (NSIDs) for which this repo contains at least one record.
+			 */
 			collections: string[];
+			/**
+			 * Indicates if handle is currently valid (resolves bi-directionally)
+			 */
 			handleIsCorrect: boolean;
 		};
 	};
 	/**
-	 * Get a record.
+	 * Get a single record from a repository. Does not require auth.
 	 */
 	'com.atproto.repo.getRecord': {
 		params: {
@@ -1074,7 +1158,7 @@ export interface Queries {
 			 */
 			collection: string;
 			/**
-			 * The key of the record.
+			 * The Record Key.
 			 */
 			rkey: string;
 			/**
@@ -1089,7 +1173,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * List a range of records in a collection.
+	 * List a range of records in a repository, matching a specific collection. Does not require auth.
 	 */
 	'com.atproto.repo.listRecords': {
 		params: {
@@ -1130,18 +1214,30 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a document describing the service's accounts configuration.
+	 * Describes the server's account creation requirements and capabilities. Implemented by PDS.
 	 */
 	'com.atproto.server.describeServer': {
 		response: {
+			/**
+			 * If true, an invite code must be supplied to create an account on this instance.
+			 */
 			inviteCodeRequired?: boolean;
+			/**
+			 * If true, a phone verification token must be supplied to create an account on this instance.
+			 */
 			phoneVerificationRequired?: boolean;
+			/**
+			 * List of domain suffixes that can be used in account handles.
+			 */
 			availableUserDomains: string[];
+			/**
+			 * URLs of service policy documents.
+			 */
 			links?: RefOf<'com.atproto.server.describeServer#links'>;
 		};
 	};
 	/**
-	 * Get all invite codes for a given account.
+	 * Get all invite codes for the current account. Requires auth.
 	 */
 	'com.atproto.server.getAccountInviteCodes': {
 		params: {
@@ -1150,6 +1246,7 @@ export interface Queries {
 			 */
 			includeUsed?: boolean;
 			/**
+			 * Controls whether any new 'earned' but not 'created' invites should be created.
 			 * @default true
 			 */
 			createAvailable?: boolean;
@@ -1162,7 +1259,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get information about the current session.
+	 * Get information about the current auth session. Requires auth.
 	 */
 	'com.atproto.server.getSession': {
 		response: {
@@ -1185,12 +1282,12 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get a blob associated with a given repo.
+	 * Get a blob associated with a given account. Returns the full blob as originally uploaded. Does not require auth; implemented by PDS.
 	 */
 	'com.atproto.sync.getBlob': {
 		params: {
 			/**
-			 * The DID of the repo.
+			 * The DID of the account.
 			 */
 			did: DID;
 			/**
@@ -1201,7 +1298,7 @@ export interface Queries {
 		response: unknown;
 	};
 	/**
-	 * Get blocks from a given repo.
+	 * Get data blocks from a given repo, by CID. For example, intermediate MST nodes, or records. Does not require auth; implemented by PDS.
 	 */
 	'com.atproto.sync.getBlocks': {
 		params: {
@@ -1245,7 +1342,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get the current commit CID & revision of the repo.
+	 * Get the current commit CID & revision of the specified repo. Does not require auth.
 	 */
 	'com.atproto.sync.getLatestCommit': {
 		params: {
@@ -1263,7 +1360,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Get blocks needed for existence or non-existence of record.
+	 * Get data blocks needed to prove the existence or non-existence of record in the current version of repo. Does not require auth.
 	 */
 	'com.atproto.sync.getRecord': {
 		params: {
@@ -1272,6 +1369,9 @@ export interface Queries {
 			 */
 			did: DID;
 			collection: string;
+			/**
+			 * Record Key
+			 */
 			rkey: string;
 			/**
 			 * An optional past commit CID.
@@ -1281,7 +1381,7 @@ export interface Queries {
 		response: unknown;
 	};
 	/**
-	 * Gets the DID's repo, optionally catching up from a specific revision.
+	 * Download a repository export as CAR file. Optionally only a 'diff' since a previous revision. Does not require auth; implemented by PDS.
 	 */
 	'com.atproto.sync.getRepo': {
 		params: {
@@ -1290,14 +1390,14 @@ export interface Queries {
 			 */
 			did: DID;
 			/**
-			 * The revision of the repo to catch up from.
+			 * The revision ('rev') of the repo to create a diff from.
 			 */
 			since?: string;
 		};
 		response: unknown;
 	};
 	/**
-	 * List blob CIDs since some revision.
+	 * List blob CIDso for an account, since some repo revision. Does not require auth; implemented by PDS.
 	 */
 	'com.atproto.sync.listBlobs': {
 		params: {
@@ -1323,7 +1423,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * List DIDs and root CIDs of hosted repos.
+	 * Enumerates all the DID, rev, and commit CID for all repos hosted by this service. Does not require auth; implemented by PDS and Relay.
 	 */
 	'com.atproto.sync.listRepos': {
 		params: {
@@ -1351,7 +1451,7 @@ export interface Queries {
 		};
 	};
 	/**
-	 * Fetch all labels from a labeler created after a certain date.
+	 * Fetch all labels from a labeler created after a certain date. DEPRECATED: use queryLabels or subscribeLabels instead
 	 */
 	'com.atproto.temp.fetchLabels': {
 		params: {
@@ -1379,7 +1479,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Mute an actor by DID or handle.
+	 * Creates a mute relationship for the specified account. Mutes are private in Bluesky. Requires auth.
 	 */
 	'app.bsky.graph.muteActor': {
 		data: {
@@ -1387,7 +1487,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Mute a list of actors.
+	 * Creates a mute relationship for the specified list of accounts. Mutes are private in Bluesky. Requires auth.
 	 */
 	'app.bsky.graph.muteActorList': {
 		data: {
@@ -1395,7 +1495,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Unmute an actor by DID or handle.
+	 * Unmutes the specified account. Requires auth.
 	 */
 	'app.bsky.graph.unmuteActor': {
 		data: {
@@ -1403,7 +1503,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Unmute a list of actors.
+	 * Unmutes the specified list of accounts. Requires auth.
 	 */
 	'app.bsky.graph.unmuteActorList': {
 		data: {
@@ -1411,7 +1511,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Register for push notifications with a service.
+	 * Register to receive push notifications, via a specified service, for the requesting account. Requires auth.
 	 */
 	'app.bsky.notification.registerPush': {
 		data: {
@@ -1422,7 +1522,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Notify server that the user has seen notifications.
+	 * Notify server that the requesting account has seen notifications. Requires auth.
 	 */
 	'app.bsky.notification.updateSeen': {
 		data: {
@@ -1615,19 +1715,28 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Updates the handle of the account.
+	 * Updates the current account's handle. Verifies handle validity, and updates did:plc document if necessary. Implemented by PDS, and requires auth.
 	 */
 	'com.atproto.identity.updateHandle': {
 		data: {
+			/**
+			 * The new handle.
+			 */
 			handle: Handle;
 		};
 	};
 	/**
-	 * Report a repo or a record.
+	 * Submit a moderation report regarding an atproto account or record. Implemented by moderation services (with PDS proxying), and requires auth.
 	 */
 	'com.atproto.moderation.createReport': {
 		data: {
+			/**
+			 * Indicates the broad category of violation the report is for.
+			 */
 			reasonType: RefOf<'com.atproto.moderation.defs#reasonType'>;
+			/**
+			 * Additional context about the content and violation.
+			 */
 			reason?: string;
 			subject: UnionOf<'com.atproto.admin.defs#repoRef'> | UnionOf<'com.atproto.repo.strongRef'>;
 		};
@@ -1645,16 +1754,16 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Apply a batch transaction of creates, updates, and deletes.
+	 * Apply a batch transaction of repository creates, updates, and deletes. Requires auth, implemented by PDS.
 	 */
 	'com.atproto.repo.applyWrites': {
 		data: {
 			/**
-			 * The handle or DID of the repo.
+			 * The handle or DID of the repo (aka, current account).
 			 */
 			repo: string;
 			/**
-			 * Flag for validating the records.
+			 * Can be set to 'false' to skip Lexicon schema validation of record data, for all operations.
 			 * @default true
 			 */
 			validate?: boolean;
@@ -1663,6 +1772,9 @@ export interface Procedures {
 				| UnionOf<'com.atproto.repo.applyWrites#update'>
 				| UnionOf<'com.atproto.repo.applyWrites#delete'>
 			)[];
+			/**
+			 * If provided, the entire operation will fail if the current repo commit CID does not match this value. Used to prevent conflicting repo mutations.
+			 */
 			swapCommit?: CID;
 		};
 		errors: {
@@ -1670,12 +1782,12 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Create a new record.
+	 * Create a single new repository record. Requires auth, implemented by PDS.
 	 */
 	'com.atproto.repo.createRecord': {
 		data: {
 			/**
-			 * The handle or DID of the repo.
+			 * The handle or DID of the repo (aka, current account).
 			 */
 			repo: string;
 			/**
@@ -1683,17 +1795,17 @@ export interface Procedures {
 			 */
 			collection: string;
 			/**
-			 * The key of the record. \
+			 * The Record Key. \
 			 * Maximum string length: 15
 			 */
 			rkey?: string;
 			/**
-			 * Flag for validating the record.
+			 * Can be set to 'false' to skip Lexicon schema validation of record data.
 			 * @default true
 			 */
 			validate?: boolean;
 			/**
-			 * The record to create.
+			 * The record itself. Must contain a $type field.
 			 */
 			record: unknown;
 			/**
@@ -1710,12 +1822,12 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Delete a record, or ensure it doesn't exist.
+	 * Delete a repository record, or ensure it doesn't exist. Requires auth, implemented by PDS.
 	 */
 	'com.atproto.repo.deleteRecord': {
 		data: {
 			/**
-			 * The handle or DID of the repo.
+			 * The handle or DID of the repo (aka, current account).
 			 */
 			repo: string;
 			/**
@@ -1723,7 +1835,7 @@ export interface Procedures {
 			 */
 			collection: string;
 			/**
-			 * The key of the record.
+			 * The Record Key.
 			 */
 			rkey: string;
 			/**
@@ -1740,12 +1852,12 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Write a record, creating or updating it as needed.
+	 * Write a repository record, creating or updating it as needed. Requires auth, implemented by PDS.
 	 */
 	'com.atproto.repo.putRecord': {
 		data: {
 			/**
-			 * The handle or DID of the repo.
+			 * The handle or DID of the repo (aka, current account).
 			 */
 			repo: string;
 			/**
@@ -1753,12 +1865,12 @@ export interface Procedures {
 			 */
 			collection: string;
 			/**
-			 * The key of the record. \
+			 * The Record Key. \
 			 * Maximum string length: 15
 			 */
 			rkey: string;
 			/**
-			 * Flag for validating the record.
+			 * Can be set to 'false' to skip Lexicon schema validation of record data.
 			 * @default true
 			 */
 			validate?: boolean;
@@ -1767,7 +1879,7 @@ export interface Procedures {
 			 */
 			record: unknown;
 			/**
-			 * Compare and swap with the previous record by CID.
+			 * Compare and swap with the previous record by CID. WARNING: nullable and optional field; may cause problems with golang implementation
 			 */
 			swapRecord?: CID;
 			/**
@@ -1784,7 +1896,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Upload a new blob to be added to repo in a later request.
+	 * Upload a new blob, to be referenced from a repository record. The blob will be deleted if it is not referenced within a time window (eg, minutes). Blob restrictions (mimetype, size, etc) are enforced when the reference is created. Requires auth, implemented by PDS.
 	 */
 	'com.atproto.repo.uploadBlob': {
 		data: Blob;
@@ -1808,25 +1920,49 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Create an account.
+	 * Create an account. Implemented by PDS.
 	 */
 	'com.atproto.server.createAccount': {
 		data: {
 			email?: string;
+			/**
+			 * Requested handle for the account.
+			 */
 			handle: Handle;
+			/**
+			 * Pre-existing atproto DID, being imported to a new account.
+			 */
 			did?: DID;
 			inviteCode?: string;
 			verificationCode?: string;
 			verificationPhone?: string;
+			/**
+			 * Initial account password. May need to meet instance-specific password strength requirements.
+			 */
 			password?: string;
+			/**
+			 * DID PLC rotation key (aka, recovery key) to be included in PLC creation operation.
+			 */
 			recoveryKey?: string;
+			/**
+			 * A signed DID PLC operation to be submitted as part of importing an existing account to this instance. NOTE: this optional field may be updated when full account migration is implemented.
+			 */
 			plcOp?: unknown;
 		};
+		/**
+		 * Account login session returned on successful account creation.
+		 */
 		response: {
 			accessJwt: string;
 			refreshJwt: string;
 			handle: Handle;
+			/**
+			 * The DID of the new account.
+			 */
 			did: DID;
+			/**
+			 * Complete DID document.
+			 */
 			didDoc?: unknown;
 		};
 		errors: {
@@ -1844,6 +1980,9 @@ export interface Procedures {
 	 */
 	'com.atproto.server.createAppPassword': {
 		data: {
+			/**
+			 * A short name for the App Password, to help distinguish them.
+			 */
 			name: string;
 		};
 		response: RefOf<'com.atproto.server.createAppPassword#appPassword'>;
@@ -1904,7 +2043,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Delete an actor's account with a token and password.
+	 * Delete an actor's account with a token and password. Can only be called after requesting a deletion token. Requires auth.
 	 */
 	'com.atproto.server.deleteAccount': {
 		data: {
@@ -1918,11 +2057,11 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Delete the current session.
+	 * Delete the current session. Requires auth.
 	 */
 	'com.atproto.server.deleteSession': {};
 	/**
-	 * Refresh an authentication session.
+	 * Refresh an authentication session. Requires auth using the 'refreshJwt' (not the 'accessJwt').
 	 */
 	'com.atproto.server.refreshSession': {
 		response: {
@@ -1961,18 +2100,18 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Reserve a repo signing key for account creation.
+	 * Reserve a repo signing key, for use with account creation. Necessary so that a DID PLC update operation can be constructed during an account migraiton. Public and does not require auth; implemented by PDS. NOTE: this endpoint may change when full account migration is implemented.
 	 */
 	'com.atproto.server.reserveSigningKey': {
 		data: {
 			/**
-			 * The did to reserve a new did:key for
+			 * The DID to reserve a key for.
 			 */
-			did?: string;
+			did?: DID;
 		};
 		response: {
 			/**
-			 * Public signing key in the form of a did:key.
+			 * The public key for the reserved signing key, in did:key serialization.
 			 */
 			signingKey: string;
 		};
@@ -2016,23 +2155,23 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Notify a crawling service of a recent update; often when a long break between updates causes the connection with the crawling service to break.
+	 * Notify a crawling service of a recent update, and that crawling should resume. Intended use is after a gap between repo stream events caused the crawling service to disconnect. Does not require auth; implemented by Relay.
 	 */
 	'com.atproto.sync.notifyOfUpdate': {
 		data: {
 			/**
-			 * Hostname of the service that is notifying of update.
+			 * Hostname of the current service (usually a PDS) that is notifying of update.
 			 */
 			hostname: string;
 		};
 	};
 	/**
-	 * Request a service to persistently crawl hosted repos.
+	 * Request a service to persistently crawl hosted repos. Expected use is new PDS instances declaring their existence to Relays. Does not require auth.
 	 */
 	'com.atproto.sync.requestCrawl': {
 		data: {
 			/**
-			 * Hostname of the service that is requesting to be crawled.
+			 * Hostname of the current service (eg, PDS) that is requesting to be crawled.
 			 */
 			hostname: string;
 		};
@@ -2071,7 +2210,7 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Transfer an account.
+	 * Transfer an account. NOTE: temporary method, necessarily how account migration will be implemented.
 	 */
 	'com.atproto.temp.transferAccount': {
 		data: {
@@ -2152,6 +2291,9 @@ export interface Objects {
 		viewer?: RefOf<'app.bsky.actor.defs#viewerState'>;
 		labels?: RefOf<'com.atproto.label.defs#label'>[];
 	};
+	/**
+	 * Metadata about the requesting account's relationship with the subject account. Only has meaningful content for authed requests.
+	 */
 	'app.bsky.actor.defs#viewerState': {
 		muted?: boolean;
 		mutedByList?: RefOf<'app.bsky.graph.defs#listViewBasic'>;
@@ -2183,6 +2325,7 @@ export interface Objects {
 	'app.bsky.actor.defs#savedFeedsPref': {
 		pinned: AtUri[];
 		saved: AtUri[];
+		timelineIndex?: number;
 	};
 	'app.bsky.actor.defs#personalDetailsPref': {
 		/**
@@ -2235,6 +2378,9 @@ export interface Objects {
 		 */
 		tags: string[];
 	};
+	/**
+	 * A representation of some externally linked content (eg, a URL and 'card'), embedded in a Bluesky record (eg, a post).
+	 */
 	'app.bsky.embed.external': {
 		external: RefOf<'app.bsky.embed.external#external'>;
 	};
@@ -2261,6 +2407,9 @@ export interface Objects {
 	};
 	'app.bsky.embed.images#image': {
 		image: AtBlob<`image/${string}`>;
+		/**
+		 * Alt text description of the image, for accessibility.
+		 */
 		alt: string;
 		aspectRatio?: RefOf<'app.bsky.embed.images#aspectRatio'>;
 	};
@@ -2284,8 +2433,17 @@ export interface Objects {
 		images: RefOf<'app.bsky.embed.images#viewImage'>[];
 	};
 	'app.bsky.embed.images#viewImage': {
+		/**
+		 * Fully-qualified URL where a thumbnail of the image can be fetched. For example, CDN location provided by the App View.
+		 */
 		thumb: string;
+		/**
+		 * Fully-qualified URL where a large version of the image can be fetched. May or may not be the exact original blob. For example, CDN location provided by the App View.
+		 */
 		fullsize: string;
+		/**
+		 * Alt text description of the image, for accessibility.
+		 */
 		alt: string;
 		aspectRatio?: RefOf<'app.bsky.embed.images#aspectRatio'>;
 	};
@@ -2304,6 +2462,9 @@ export interface Objects {
 		uri: AtUri;
 		cid: CID;
 		author: RefOf<'app.bsky.actor.defs#profileViewBasic'>;
+		/**
+		 * The record data itself.
+		 */
 		value: unknown;
 		labels?: RefOf<'com.atproto.label.defs#label'>[];
 		embeds?: (
@@ -2349,6 +2510,9 @@ export interface Objects {
 		labels?: RefOf<'com.atproto.label.defs#label'>[];
 		threadgate?: RefOf<'app.bsky.feed.defs#threadgateView'>;
 	};
+	/**
+	 * Metadata about the requesting account's relationship with the subject content. Only has meaningful content for authed requests.
+	 */
 	'app.bsky.feed.defs#viewerState': {
 		repost?: AtUri;
 		like?: AtUri;
@@ -2572,6 +2736,9 @@ export interface Objects {
 		indexedAt: string;
 		labels?: RefOf<'com.atproto.label.defs#label'>[];
 	};
+	/**
+	 * Annotation of a sub-string within rich text.
+	 */
 	'app.bsky.richtext.facet': {
 		index: RefOf<'app.bsky.richtext.facet#byteSlice'>;
 		features: (
@@ -2581,19 +2748,19 @@ export interface Objects {
 		)[];
 	};
 	/**
-	 * A facet feature for actor mentions.
+	 * Facet feature for mention of another account. The text is usually a handle, including a '@' prefix, but the facet reference is a DID.
 	 */
 	'app.bsky.richtext.facet#mention': {
 		did: DID;
 	};
 	/**
-	 * A facet feature for links.
+	 * Facet feature for a URL. The text URL may have been simplified or truncated, but the facet reference should be a complete URL.
 	 */
 	'app.bsky.richtext.facet#link': {
 		uri: string;
 	};
 	/**
-	 * A hashtag.
+	 * Facet feature for a hashtag. The text usually includes a '#' prefix, but the facet reference should not (except in the case of 'double hash tags').
 	 */
 	'app.bsky.richtext.facet#tag': {
 		/**
@@ -2603,7 +2770,7 @@ export interface Objects {
 		tag: string;
 	};
 	/**
-	 * A text segment. Start is inclusive, end is exclusive. Indices are for utf8-encoded strings.
+	 * Specifies the sub-string range a facet feature applies to. Start index is inclusive, end index is exclusive. Indices are zero-indexed, counting bytes of the UTF-8 encoded text. NOTE: some languages, like Javascript, use UTF-16 or Unicode codepoints for string slice indexing; in these languages, convert to byte arrays before working with facets.
 	 */
 	'app.bsky.richtext.facet#byteSlice': {
 		/**
@@ -2641,7 +2808,8 @@ export interface Objects {
 			| UnionOf<'com.atproto.admin.defs#modEventAcknowledge'>
 			| UnionOf<'com.atproto.admin.defs#modEventEscalate'>
 			| UnionOf<'com.atproto.admin.defs#modEventMute'>
-			| UnionOf<'com.atproto.admin.defs#modEventEmail'>;
+			| UnionOf<'com.atproto.admin.defs#modEventEmail'>
+			| UnionOf<'com.atproto.admin.defs#modEventResolveAppeal'>;
 		subject: UnionOf<'com.atproto.admin.defs#repoRef'> | UnionOf<'com.atproto.repo.strongRef'>;
 		subjectBlobCids: string[];
 		createdBy: DID;
@@ -2660,6 +2828,7 @@ export interface Objects {
 			| UnionOf<'com.atproto.admin.defs#modEventAcknowledge'>
 			| UnionOf<'com.atproto.admin.defs#modEventEscalate'>
 			| UnionOf<'com.atproto.admin.defs#modEventMute'>
+			| UnionOf<'com.atproto.admin.defs#modEventEmail'>
 			| UnionOf<'com.atproto.admin.defs#modEventResolveAppeal'>;
 		subject:
 			| UnionOf<'com.atproto.admin.defs#repoView'>
@@ -3015,7 +3184,7 @@ export interface Objects {
 	'com.atproto.moderation.defs#reasonOther': 'com.atproto.moderation.defs#reasonOther';
 	'com.atproto.moderation.defs#reasonAppeal': 'com.atproto.moderation.defs#reasonAppeal';
 	/**
-	 * Create a new record.
+	 * Operation which creates a new record.
 	 */
 	'com.atproto.repo.applyWrites#create': {
 		collection: string;
@@ -3026,7 +3195,7 @@ export interface Objects {
 		value: unknown;
 	};
 	/**
-	 * Update an existing record.
+	 * Operation which updates an existing record.
 	 */
 	'com.atproto.repo.applyWrites#update': {
 		collection: string;
@@ -3034,7 +3203,7 @@ export interface Objects {
 		value: unknown;
 	};
 	/**
-	 * Delete an existing record.
+	 * Operation which deletes an existing record.
 	 */
 	'com.atproto.repo.applyWrites#delete': {
 		collection: string;
@@ -3081,47 +3250,89 @@ export interface Objects {
 	};
 	'com.atproto.sync.listRepos#repo': {
 		did: DID;
+		/**
+		 * Current repo commit CID
+		 */
 		head: CID;
 		rev: string;
 	};
+	/**
+	 * Represents an update of repository state. Note that empty commits are allowed, which include no repo data changes, but an update to rev and signature.
+	 */
 	'com.atproto.sync.subscribeRepos#commit': {
+		/**
+		 * The stream sequence number of this message.
+		 */
 		seq: number;
+		/**
+		 * DEPRECATED -- unused
+		 * @deprecated
+		 */
 		rebase: boolean;
+		/**
+		 * Indicates that this commit contained too many ops, or data size was too large. Consumers will need to make a separate request to get missing data.
+		 */
 		tooBig: boolean;
+		/**
+		 * The repo this event comes from.
+		 */
 		repo: DID;
+		/**
+		 * Repo commit object CID.
+		 */
 		commit: unknown;
+		/**
+		 * DEPRECATED -- unused. WARNING -- nullable and optional; stick with optional to ensure golang interoperability.
+		 * @deprecated
+		 */
 		prev?: unknown;
 		/**
-		 * The rev of the emitted commit.
+		 * The rev of the emitted commit. Note that this information is also in the commit object included in blocks, unless this is a tooBig event.
 		 */
 		rev: string;
 		/**
-		 * The rev of the last emitted commit from this repo.
+		 * The rev of the last emitted commit from this repo (if any).
 		 */
 		since: string;
 		/**
-		 * CAR file containing relevant blocks.
+		 * CAR file containing relevant blocks, as a diff since the previous repo state.
 		 */
 		blocks: unknown;
 		/**
-		 * Maximum array length: 200
+		 * Maximum array length: 200 \
+		 * List of repo mutation operations in this commit (eg, records created, updated, or deleted).
 		 */
 		ops: RefOf<'com.atproto.sync.subscribeRepos#repoOp'>[];
+		/**
+		 * List of new blobs (by CID) referenced by records in this commit.
+		 */
 		blobs: unknown[];
+		/**
+		 * Timestamp of when this message was originally broadcast.
+		 */
 		time: string;
 	};
+	/**
+	 * Represents an update of the account's handle, or transition to/from invalid state.
+	 */
 	'com.atproto.sync.subscribeRepos#handle': {
 		seq: number;
 		did: DID;
 		handle: Handle;
 		time: string;
 	};
+	/**
+	 * Represents an account moving from one PDS instance to another. NOTE: not implemented; full account migration may introduce a new message instead.
+	 */
 	'com.atproto.sync.subscribeRepos#migrate': {
 		seq: number;
 		did: DID;
 		migrateTo: string;
 		time: string;
 	};
+	/**
+	 * Indicates that an account has been deleted.
+	 */
 	'com.atproto.sync.subscribeRepos#tombstone': {
 		seq: number;
 		did: DID;
@@ -3132,18 +3343,21 @@ export interface Objects {
 		message?: string;
 	};
 	/**
-	 * A repo operation, ie a write of a single record. For creates and updates, CID is the record's CID as of this operation. For deletes, it's null.
+	 * A repo operation, ie a mutation of a single record.
 	 */
 	'com.atproto.sync.subscribeRepos#repoOp': {
 		action: 'create' | 'update' | 'delete' | (string & {});
 		path: string;
+		/**
+		 * For creates and updates, the new record CID. For deletions, null.
+		 */
 		cid: unknown;
 	};
 }
 
 export interface Records {
 	/**
-	 * A declaration of a profile.
+	 * A declaration of a Bluesky account profile.
 	 */
 	'app.bsky.actor.profile': {
 		/**
@@ -3152,16 +3366,26 @@ export interface Records {
 		 */
 		displayName?: string;
 		/**
+		 * Free-form profile description text. \
 		 * Maximum string length: 2560 \
 		 * Maximum grapheme length: 256
 		 */
 		description?: string;
+		/**
+		 * Small image to be displayed next to posts from account. AKA, 'profile picture'
+		 */
 		avatar?: AtBlob<`image/png` | `image/jpeg`>;
+		/**
+		 * Larger horizontal image to display behind profile view.
+		 */
 		banner?: AtBlob<`image/png` | `image/jpeg`>;
+		/**
+		 * Self-label values, specific to the Bluesky application, on the overall account.
+		 */
 		labels?: UnionOf<'com.atproto.label.defs#selfLabels'>;
 	};
 	/**
-	 * A declaration of the existence of a feed generator.
+	 * Record declaring of the existence of a feed generator, and containing metadata about it. The record can exist in any repository.
 	 */
 	'app.bsky.feed.generator': {
 		did: DID;
@@ -3177,30 +3401,37 @@ export interface Records {
 		description?: string;
 		descriptionFacets?: RefOf<'app.bsky.richtext.facet'>[];
 		avatar?: AtBlob<`image/png` | `image/jpeg`>;
+		/**
+		 * Self-label values
+		 */
 		labels?: UnionOf<'com.atproto.label.defs#selfLabels'>;
 		createdAt: string;
 	};
 	/**
-	 * A declaration of a like.
+	 * Record declaring a 'like' of a piece of subject content.
 	 */
 	'app.bsky.feed.like': {
 		subject: RefOf<'com.atproto.repo.strongRef'>;
 		createdAt: string;
 	};
 	/**
-	 * A declaration of a post.
+	 * Record containing a Bluesky post.
 	 */
 	'app.bsky.feed.post': {
 		/**
+		 * The primary post content. May be an empty string, if there are embeds. \
 		 * Maximum string length: 3000 \
 		 * Maximum grapheme length: 300
 		 */
 		text: string;
 		/**
-		 * Deprecated: replaced by app.bsky.richtext.facet.
+		 * DEPRECATED: replaced by app.bsky.richtext.facet.
 		 * @deprecated
 		 */
 		entities?: RefOf<'app.bsky.feed.post#entity'>[];
+		/**
+		 * Annotations of text (mentions, URLs, hashtags, etc)
+		 */
 		facets?: RefOf<'app.bsky.richtext.facet'>[];
 		reply?: RefOf<'app.bsky.feed.post#replyRef'>;
 		embed?:
@@ -3209,30 +3440,40 @@ export interface Records {
 			| UnionOf<'app.bsky.embed.record'>
 			| UnionOf<'app.bsky.embed.recordWithMedia'>;
 		/**
+		 * Indicates human language of post primary text content. \
 		 * Maximum array length: 3
 		 */
 		langs?: string[];
+		/**
+		 * Self-label values for this post. Effectively content warnings.
+		 */
 		labels?: UnionOf<'com.atproto.label.defs#selfLabels'>;
 		/**
-		 * Additional non-inline tags describing this post. \
+		 * Additional hashtags, in addition to any included in post text and facets. \
 		 * Maximum array length: 8 \
 		 * Maximum string length: 640 \
 		 * Maximum grapheme length: 64
 		 */
 		tags?: string[];
+		/**
+		 * Client-declared timestamp when this post was originally created.
+		 */
 		createdAt: string;
 	};
 	/**
-	 * A declaration of a repost.
+	 * Record representing a 'repost' of an existing Bluesky post.
 	 */
 	'app.bsky.feed.repost': {
 		subject: RefOf<'com.atproto.repo.strongRef'>;
 		createdAt: string;
 	};
 	/**
-	 * Defines interaction gating rules for a thread. The rkey of the threadgate record should match the rkey of the thread's root post.
+	 * Record defining interaction gating rules for a thread (aka, reply controls). The record key (rkey) of the threadgate record must match the record key of the thread's root post, and that record must be in the same repository..
 	 */
 	'app.bsky.feed.threadgate': {
+		/**
+		 * Reference (AT-URI) to the post record.
+		 */
 		post: AtUri;
 		/**
 		 * Maximum array length: 5
@@ -3245,25 +3486,32 @@ export interface Records {
 		createdAt: string;
 	};
 	/**
-	 * A declaration of a block.
+	 * Record declaring a 'block' relationship against another account. NOTE: blocks are public in Bluesky; see blog posts for details.
 	 */
 	'app.bsky.graph.block': {
+		/**
+		 * DID of the account to be blocked.
+		 */
 		subject: DID;
 		createdAt: string;
 	};
 	/**
-	 * A declaration of a social follow.
+	 * Record declaring a social 'follow' relationship of another account. Duplicate follows will be ignored by the AppView.
 	 */
 	'app.bsky.graph.follow': {
 		subject: DID;
 		createdAt: string;
 	};
 	/**
-	 * A declaration of a list of actors.
+	 * Record representing a list of accounts (actors). Scope includes both moderation-oriented lists and curration-oriented lists.
 	 */
 	'app.bsky.graph.list': {
+		/**
+		 * Defines the purpose of the list (aka, moderation-oriented or curration-oriented)
+		 */
 		purpose: RefOf<'app.bsky.graph.defs#listPurpose'>;
 		/**
+		 * Display name for list; can not be empty. \
 		 * Minimum string length: 1 \
 		 * Maximum string length: 64
 		 */
@@ -3279,17 +3527,26 @@ export interface Records {
 		createdAt: string;
 	};
 	/**
-	 * A block of an entire list of actors.
+	 * Record representing a block relationship against an entire an entire list of accounts (actors).
 	 */
 	'app.bsky.graph.listblock': {
+		/**
+		 * Reference (AT-URI) to the mod list record.
+		 */
 		subject: AtUri;
 		createdAt: string;
 	};
 	/**
-	 * An item under a declared list of actors.
+	 * Record representing an account's inclusion on a specific list. The AppView will ignore duplicate listitem records.
 	 */
 	'app.bsky.graph.listitem': {
+		/**
+		 * The account which is included on the list.
+		 */
 		subject: DID;
+		/**
+		 * Reference (AT-URI) to the list record (app.bsky.graph.list).
+		 */
 		list: AtUri;
 		createdAt: string;
 	};
