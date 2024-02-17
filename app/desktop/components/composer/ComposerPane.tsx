@@ -824,14 +824,17 @@ const ComposerPane = () => {
 							const next: Array<{ blob: Blob; ratio: { width: number; height: number } }> = [];
 
 							let errored = false;
+							let invalid = false;
 
 							setLog(logNone);
 							setImageProcessing(imageProcessing() + 1);
 
 							for (let idx = 0, len = files.length; idx < len; idx++) {
 								const file = files[idx];
+								const type = file.type;
 
-								if (!file.type.startsWith('image/')) {
+								if (type !== 'image/png' && type !== 'image/jpeg' && type !== 'image/webp') {
+									invalid = true;
 									continue;
 								}
 
@@ -881,6 +884,8 @@ const ComposerPane = () => {
 
 								if (errored) {
 									setLog(logError(`Some of your images can't be added`));
+								} else if (invalid) {
+									setLog(logError(`Some of your images are of invalid format`));
 								}
 							});
 						};
@@ -911,7 +916,7 @@ const ComposerPane = () => {
 									ref={fileInputRef}
 									type="file"
 									multiple
-									accept="image/*"
+									accept="image/png,image/jpeg,image/webp"
 									onChange={() => {
 										const files = Array.from(fileInputRef.files!);
 
