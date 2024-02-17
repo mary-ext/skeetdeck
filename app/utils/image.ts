@@ -132,5 +132,5 @@ export const getResizedImage = (img: HTMLImageElement, width: number, height: nu
 
 	ctx.drawImage(img, 0, 0, w, h);
 
-	return [canvas, width, height] as const;
+	return [canvas, w, h] as const;
 };
