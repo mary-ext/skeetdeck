@@ -415,30 +415,18 @@ const ComposerPane = () => {
 							createdAt: date.toISOString(),
 							text: rt.text,
 							facets: rt.facets,
+							reply: replyTo,
+							embed: embed,
+							langs: draft.languages.length > 0 ? draft.languages : undefined,
+							tags: draft.tags.length > 0 ? draft.tags : undefined,
+							labels:
+								draft.labels.length > 0
+									? {
+											$type: 'com.atproto.label.defs#selfLabels',
+											values: draft.labels.map((v) => ({ val: v })),
+										}
+									: undefined,
 						};
-
-						if (replyTo) {
-							record.reply = replyTo;
-						}
-
-						if (embed) {
-							record.embed = embed;
-						}
-
-						if (draft.tags.length > 0) {
-							record.tags = draft.tags;
-						}
-
-						if (draft.languages.length > 0) {
-							record.langs = draft.languages;
-						}
-
-						if (draft.labels.length > 0) {
-							record.labels = {
-								$type: 'com.atproto.label.defs#selfLabels',
-								values: draft.labels.map((v) => ({ val: v })),
-							};
-						}
 
 						// No need to calculate CID for the last post
 						if (i !== il - 1) {

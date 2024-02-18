@@ -30,7 +30,7 @@ const CBORG_ENCODE_OPTIONS: cborg.EncodeOptions = {
 			return null;
 		},
 		undefined: () => {
-			throw new Error(`undefined values not supported`);
+			return [];
 		},
 		Object: (val) => {
 			if ('$type' in val && val.$type === 'blob' && 'ref' in val) {
