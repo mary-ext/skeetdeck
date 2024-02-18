@@ -439,17 +439,10 @@ const ComposerPane = () => {
 								uri: uri,
 							};
 
-							if (!replyTo) {
-								replyTo = {
-									root: ref,
-									parent: ref,
-								};
-							} else {
-								replyTo = {
-									root: replyTo.root,
-									parent: ref,
-								};
-							}
+							replyTo = {
+								root: replyTo ? replyTo.root : ref,
+								parent: ref,
+							};
 						}
 
 						uris.push(uri);
