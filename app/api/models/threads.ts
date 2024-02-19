@@ -45,6 +45,7 @@ const calculatePostScore = (uid: DID, child: Post, parent: Post) => {
 
 const collateReplies = (uid: DID, parent: Post) => {
 	const scores: Record<string, number> = {};
+	const dates: Record<string, number> = {};
 
 	return (a: ThreadReply, b: ThreadReply) => {
 		const aType = a.$type;
@@ -56,6 +57,16 @@ const collateReplies = (uid: DID, parent: Post) => {
 
 			const aScore = (scores[aPost.cid] ??= calculatePostScore(uid, aPost, parent));
 			const bScore = (scores[bPost.cid] ??= calculatePostScore(uid, bPost, parent));
+
+			if (aScore === bScore) {
+				const aDate = aPost.indexedAt;
+				const bDate = bPost.indexedAt;
+
+				const aTime = (dates[aDate] ??= new Date(aDate).getTime());
+				const bTime = (dates[bDate] ??= new Date(bDate).getTime());
+
+				return bTime - aTime;
+			}
 
 			return bScore - aScore;
 		}
