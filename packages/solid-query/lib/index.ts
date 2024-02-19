@@ -6,7 +6,7 @@ export * from '@tanstack/query-core';
 // Solid Query
 export { createInfiniteQuery } from './createInfiniteQuery.ts';
 export { createMutation } from './createMutation.ts';
-export { createQueries } from './createQueries.ts'
+export { createQueries } from './createQueries.ts';
 export { createQuery, queryOptions } from './createQuery.ts';
 export { QueryClient } from './QueryClient.ts';
 export type {
