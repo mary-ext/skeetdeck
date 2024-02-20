@@ -1,154 +1,59 @@
-import { Match, Switch, batch } from 'solid-js';
+import { Match, Switch, lazy } from 'solid-js';
 
 import { Navigate } from '@pkg/solid-page-router';
 
-import type { DID } from '~/api/atp-schema';
-import { getAccountData, multiagent } from '~/api/globals/agent';
-import { getCurrentTid } from '~/api/utils/tid';
+import { multiagent } from '~/api/globals/agent';
 
-import { FILTER_ALL } from '~/api/queries/get-notifications';
-
-import {
-	PANE_TYPE_HOME,
-	PANE_TYPE_NOTIFICATIONS,
-	PANE_TYPE_PROFILE,
-	ProfilePaneTab,
-	SpecificPaneSize,
-} from '../globals/panes';
 import { preferences } from '../globals/settings';
 
 import { Button } from '~/com/primitives/button';
-import { openModal } from '~/com/globals/modals';
 
-import AddAccountDialog from '../components/settings/AddAccountDialog';
+import { createStarterDeck } from '../lib/settings/onboarding';
 
-const brandName = import.meta.env.VITE_BRAND_NAME;
-
-const createDefaultDeck = (uid: DID) => {
-	const data = getAccountData(uid);
-
-	if (!data) {
-		return;
-	}
-
-	batch(() => {
-		preferences.onboarding = false;
-
-		preferences.decks.push({
-			id: getCurrentTid(),
-			name: 'Personal',
-			emoji: '⭐',
-			panes: [
-				{
-					type: PANE_TYPE_HOME,
-					id: getCurrentTid(),
-					uid: uid,
-					size: SpecificPaneSize.INHERIT,
-					title: null,
-					showReplies: 'follows',
-					showReposts: true,
-					showQuotes: true,
-				},
-				{
-					type: PANE_TYPE_NOTIFICATIONS,
-					id: getCurrentTid(),
-					uid: uid,
-					size: SpecificPaneSize.INHERIT,
-					title: null,
-					mask: FILTER_ALL,
-				},
-				{
-					type: PANE_TYPE_PROFILE,
-					id: getCurrentTid(),
-					uid: uid,
-					size: SpecificPaneSize.INHERIT,
-					title: null,
-					profile: {
-						did: uid,
-						handle: data.session.handle,
-					},
-					tab: ProfilePaneTab.POSTS,
-					tabVisible: true,
-				},
-			],
-		});
-	});
-};
+const Onboarding = lazy(() => import('../components/views/Onboarding'));
 
 const IndexPage = () => {
 	return (
-		<div class="grid grow">
-			<div class="m-2 h-full max-h-96 w-full max-w-2xl place-self-center p-4">
-				<h1 class="mb-4 text-2xl font-medium">{brandName}</h1>
+		<div class="relative grid grow place-items-center overflow-auto bg-background-dark">
+			<Switch>
+				<Match when={preferences.onboarding}>
+					<Onboarding />
+				</Match>
 
-				<Switch>
-					<Match when={preferences.onboarding}>
-						<div>
-							<p class="mb-2">Welcome to {brandName}, an alternative web client for Bluesky!</p>
+				<Match
+					when={(() => {
+						const decks = preferences.decks;
+						return decks.length > 0 && decks[0];
+					})()}
+					keyed
+				>
+					{(deck) => <Navigate to={`/decks/${deck.id}`} />}
+				</Match>
 
-							<p>
-								It looks like this is the first time you're here, so to get started, add your Bluesky account
-								below and we'll set up an example deck for you.
-							</p>
+				<Match when={multiagent.active}>
+					{(uid) => (
+						<div class="flex max-w-md flex-col items-center gap-4 rounded-md bg-background p-6">
+							<h1 class="text-base font-bold">Looking for a fresh start?</h1>
 
-							<div class="mt-8 flex justify-center">
-								<button
-									onClick={() => {
-										openModal(() => <AddAccountDialog />);
-									}}
-									class={/* @once */ Button({ variant: 'primary' })}
-								>
-									Add account
-								</button>
-							</div>
+							<button
+								onClick={() => {
+									const deck = createStarterDeck(uid());
+									preferences.decks.push(deck);
+								}}
+								class={/* @once */ Button({ variant: 'primary' })}
+							>
+								Create default deck
+							</button>
 						</div>
+					)}
+				</Match>
 
-						{(() => {
-							const uid = multiagent.active;
-
-							if (uid) {
-								createDefaultDeck(uid);
-							}
-
-							return null;
-						})()}
-					</Match>
-
-					<Match when={preferences.decks.length > 0}>
-						<Navigate
-							to={(() => {
-								const deck = preferences.decks[0];
-								return `/decks/${deck.id}`;
-							})()}
-						/>
-					</Match>
-
-					<Match when={multiagent.active}>
-						{(uid) => (
-							<div>
-								<p>Looking for a fresh start?</p>
-
-								<div class="mt-8 flex justify-center">
-									<button
-										onClick={() => {
-											createDefaultDeck(uid());
-										}}
-										class={/* @once */ Button({ variant: 'primary' })}
-									>
-										Create default deck
-									</button>
-								</div>
-							</div>
-						)}
-					</Match>
-
-					<Match when>
-						<div>
-							<p>Nothing but crickets here...</p>
-						</div>
-					</Match>
-				</Switch>
-			</div>
+				<Match when>
+					<div class="flex max-w-md flex-col items-center gap-4 rounded-md bg-background p-6">
+						<p class="text-sm text-muted-fg">Nothing but crickets here...</p>
+					</div>
+				</Match>
+			</Switch>
 		</div>
 	);
 };
