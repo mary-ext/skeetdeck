@@ -36,8 +36,6 @@ import {
 } from './settings-views/_router';
 import SettingsRouterView from './settings-views/SettingsRouterView';
 
-const DONATION_LINK = 'https://mary.my.id/donate.html';
-
 const SettingsDialog = () => {
 	const [view, setView] = createSignal<View>({ type: VIEW_ACCOUNTS });
 
@@ -90,7 +88,11 @@ const SettingsDialog = () => {
 								</SideItem>
 							</div>
 							<div class="flex min-w-0 items-center gap-4 p-4">
-								<a target="_blank" href={DONATION_LINK} class="text-sm text-accent hover:underline">
+								<a
+									target="_blank"
+									href="https://mary.my.id/donate"
+									class="text-sm text-accent hover:underline"
+								>
 									Donate
 								</a>
 							</div>
