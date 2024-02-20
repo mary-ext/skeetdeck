@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"exports": {
 		".": {
-			"default": "./lib/index.tsx"
+			"default": "./lib/index.ts"
 		}
 	}
 }

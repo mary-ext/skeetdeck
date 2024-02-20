@@ -15,7 +15,11 @@ export type BaseType =
 	| 'array'
 	| 'bigint';
 
-export type RequirementIssue = { code: 'length'; min: number; max: number };
+export type RequirementIssue =
+	| { code: 'ends_with'; expected: string }
+	| { code: 'length'; min: number; max: number }
+	| { code: 'regex'; expected: string }
+	| { code: 'starts_with'; expected: string };
 
 export type ValidationIssue =
 	| { code: 'invalid_type'; path: PathType; expected: BaseType }
@@ -37,7 +41,7 @@ export type Validator<TInput = unknown, TOutput = TInput> = ((
 	info: ValidationInfo,
 ) => ValidationResult<TOutput>) & { _t?: { i: TInput; o: TOutput } };
 
-export type Recquisition<T> = (value: T) => boolean | RequirementIssue;
+export type Reqcuisitor<T> = (value: T) => true | RequirementIssue;
 
 export type Input<TValidator extends Validator> = NonNullable<TValidator['_t']>['i'];
 
