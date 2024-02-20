@@ -240,7 +240,7 @@ const DashboardLayout = (props: RouteComponentProps) => {
 				</button>
 			</div>
 
-			<ShowFreeze when={composer.open}>
+			<ShowFreeze when={!!multiagent.active && composer.open}>
 				<Suspense
 					fallback={
 						<div class="grid w-96 shrink-0 place-items-center border-r border-divider">
