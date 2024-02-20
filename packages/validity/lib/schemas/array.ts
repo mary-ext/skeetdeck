@@ -1,10 +1,7 @@
 import type { Input, Output, ValidationIssue, Validator } from '../types.ts';
 import { pushPath } from '../utils.ts';
 
-export type ArrayValidator<TShape extends Validator, TOutput = Output<TShape>[]> = Validator<
-	Input<TShape>[],
-	TOutput
->;
+export type ArrayValidator<TShape extends Validator> = Validator<Input<TShape>[], Output<TShape>[]>;
 
 export const array = <TShape extends Validator>(shape: TShape): ArrayValidator<TShape> => {
 	return (array, info) => {

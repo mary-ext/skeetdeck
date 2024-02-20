@@ -6,6 +6,13 @@ export { never } from './schemas/never.ts';
 export { null_ as null } from './schemas/null.ts';
 export { number } from './schemas/number.ts';
 export { object, type ObjectShape, type ObjectValidator } from './schemas/object.ts';
+export {
+	record,
+	type RecordInput,
+	type RecordKey,
+	type RecordOutput,
+	type RecordValidator,
+} from './schemas/record.ts';
 export { string } from './schemas/string.ts';
 export { undefined_ as undefined } from './schemas/undefined.ts';
 export { unknown } from './schemas/unknown.ts';

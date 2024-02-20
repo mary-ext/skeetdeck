@@ -19,11 +19,10 @@ export type ObjectOutput<TShape extends ObjectShape, TRest extends Validator | u
 				TRest extends Validator ? Output<TRest> : unknown
 			>;
 
-export type ObjectValidator<
-	TShape extends ObjectShape,
-	TRest extends Validator | undefined,
-	TOutput = ObjectOutput<TShape, TRest>,
-> = Validator<ObjectInput<TShape, TRest>, TOutput> & { _shape?: TShape };
+export type ObjectValidator<TShape extends ObjectShape, TRest extends Validator | undefined> = Validator<
+	ObjectInput<TShape, TRest>,
+	ObjectOutput<TShape, TRest>
+>;
 
 export const object = <TShape extends ObjectShape, TRest extends Validator | undefined = undefined>(
 	shape: TShape,
@@ -77,7 +76,7 @@ export const object = <TShape extends ObjectShape, TRest extends Validator | und
 		}
 
 		if (issued) {
-			return { code: 'invalid_object', path: info.path, issues };
+			return { code: 'invalid_object', path: info.path, issues: issues };
 		}
 
 		if (tampered) {

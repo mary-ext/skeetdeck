@@ -1,4 +1,4 @@
-export type Key = string | number;
+export type Key = string | symbol | number;
 
 export type PathType = Key[] | undefined;
 
@@ -6,14 +6,16 @@ export type LiteralType = string | number | boolean | bigint;
 
 export type BaseType =
 	| null
-	| 'string'
-	| 'number'
-	| 'boolean'
-	| 'undefined'
-	| 'null'
-	| 'object'
 	| 'array'
-	| 'bigint';
+	| 'bigint'
+	| 'boolean'
+	| 'null'
+	| 'number'
+	| 'object'
+	| 'record'
+	| 'string'
+	| 'symbol'
+	| 'undefined';
 
 export type RequirementIssue =
 	| { code: 'ends_with'; expected: string }
@@ -22,13 +24,14 @@ export type RequirementIssue =
 	| { code: 'starts_with'; expected: string };
 
 export type ValidationIssue =
-	| { code: 'invalid_type'; path: PathType; expected: BaseType }
+	| { code: 'custom_error'; path: PathType; message: string; [key: string]: unknown }
+	| { code: 'invalid_array'; path: PathType; issues: ValidationIssue[] }
 	| { code: 'invalid_literal'; path: PathType; expected: LiteralType }
 	| { code: 'invalid_object'; path: PathType; issues: ValidationIssue[] }
-	| { code: 'invalid_array'; path: PathType; issues: ValidationIssue[] }
+	| { code: 'invalid_record'; path: PathType; issues: ValidationInfo[] }
+	| { code: 'invalid_type'; path: PathType; expected: BaseType | BaseType[] }
 	| { code: 'invalid_union'; path: PathType; issues: ValidationIssue[] }
-	| { code: 'requirement_failed'; path: PathType; issue: RequirementIssue }
-	| { code: 'custom_error'; path: PathType; message: string; [key: string]: unknown };
+	| { code: 'requirement_failed'; path: PathType; issue: RequirementIssue };
 
 export type ValidationResult<T> = true | { code: 'ok'; value: T } | ValidationIssue;
 
