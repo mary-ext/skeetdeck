@@ -71,185 +71,174 @@ const DashboardLayout = (props: RouteComponentProps) => {
 		<div class="flex h-screen w-screen overflow-hidden">
 			<Title render="Skeetdeck" />
 
-			{(() => {
-				if (preferences.onboarding) {
-					return;
-				}
-
-				return (
-					<div class="flex w-14 shrink-0 flex-col border-r border-divider">
-						<Show when={multiagent.active}>
-							{(uid) => (
-								<>
-									<button
-										disabled={composer.open}
-										title="Post..."
-										onClick={() => {
-											composer.open = true;
-										}}
-										class={menuIconButton}
-									>
-										<FeatherIcon />
-									</button>
-
-									<Flyout
-										button={
-											<button title="Search..." class={menuIconButton}>
-												<SearchIcon />
-											</button>
-										}
-										placement="bottom-start"
-										middleware={[offset({ crossAxis: 8, mainAxis: -18 - 13 })]}
-									>
-										{({ close, menuProps }) => (
-											<div {...menuProps}>
-												<SearchFlyout
-													uid={uid()}
-													onAccept={(item) => {
-														const $deck = params.deck;
-														const $uid = uid();
-
-														let deck = decks.find((deck) => deck.id === $deck);
-
-														if (!deck) {
-															decks.push({
-																id: getCurrentTid(),
-																name: 'New deck',
-																emoji: '⭐',
-																panes: [],
-															});
-
-															deck = decks.at(-1)!;
-															navigate(`/decks/${deck.id}`);
-														}
-
-														if (item.type === 'search') {
-															addPane<SearchPaneConfig>(deck, {
-																type: PANE_TYPE_SEARCH,
-																query: item.query,
-																uid: $uid,
-															});
-														} else if (item.type === 'profile') {
-															addPane<ProfilePaneConfig>(deck, {
-																type: PANE_TYPE_PROFILE,
-																profile: {
-																	did: item.profile.did,
-																	handle: item.profile.handle,
-																},
-																tab: ProfilePaneTab.POSTS,
-																tabVisible: true,
-																uid: $uid,
-															});
-														}
-
-														close();
-													}}
-												/>
-											</div>
-										)}
-									</Flyout>
-
-									<hr class="border-divider" />
-								</>
-							)}
-						</Show>
-
-						<p class="py-3 text-center text-xs font-medium text-muted-fg">Decks</p>
-
-						<div class="flex min-h-0 grow flex-col overflow-y-auto border-b border-divider scrollbar-hide">
+			<div hidden={preferences.onboarding} class="flex w-14 shrink-0 flex-col border-r border-divider">
+				<Show when={multiagent.active}>
+					{(uid) => (
+						<>
 							<button
-								title="Add new deck"
+								disabled={composer.open}
+								title="Post..."
 								onClick={() => {
-									openModal(() => <AddDeckDialog />);
+									composer.open = true;
 								}}
 								class={menuIconButton}
 							>
-								<TableLargeAddIcon class="mx-auto" />
+								<FeatherIcon />
 							</button>
 
-							<DragDropProvider
-								onDragEnd={({ draggable, droppable }) => {
-									if (draggable && droppable) {
-										const fromIndex = decks.findIndex((deck) => deck.id === draggable.id);
-										const toIndex = decks.findIndex((deck) => deck.id === droppable.id);
-
-										if (fromIndex !== toIndex) {
-											batch(() => {
-												decks.splice(toIndex, 0, ...decks.splice(fromIndex, 1));
-											});
-										}
-									}
-								}}
-							>
-								<DragDropSensors />
-								<ConstrainXDragAxis enabled />
-
-								<SortableProvider ids={decks.map((deck) => deck.id)}>
-									<For each={preferences.decks}>
-										{(deck) => {
-											const id = deck.id;
-
-											const sortable = createSortable(id);
-											const href = `/decks/${id}`;
-
-											return (
-												<div
-													ref={sortable}
-													class={clsx([sortable.isActiveDraggable && `z-10 cursor-grabbing`])}
-												>
-													<a
-														title={deck.name}
-														href={href}
-														class={deckButton}
-														data-link="replace"
-														draggable="false"
-														inert={sortable.isActiveDraggable}
-													>
-														<div
-															class={clsx([
-																`pointer-events-none absolute inset-0 border-l-3 border-accent`,
-																location.pathname !== href && `hidden`,
-															])}
-														></div>
-
-														<span>{deck.emoji}</span>
-													</a>
-												</div>
-											);
-										}}
-									</For>
-								</SortableProvider>
-							</DragDropProvider>
-						</div>
-
-						{updateStatus() !== 0 && (
-							<button
-								title={`${brandName} update is ready, click here to reload`}
-								disabled={updateStatus() !== 2}
-								onClick={() => {
-									updateSW();
-								}}
-								class={
-									updateButton +
-									(updateStatus() === 2 ? ` bg-green-700 text-white hover:bg-green-900` : ` opacity-50`)
+							<Flyout
+								button={
+									<button title="Search..." class={menuIconButton}>
+										<SearchIcon />
+									</button>
 								}
+								placement="bottom-start"
+								middleware={[offset({ crossAxis: 8, mainAxis: -18 - 13 })]}
 							>
-								<SystemUpdateAltIcon />
-							</button>
-						)}
+								{({ close, menuProps }) => (
+									<div {...menuProps}>
+										<SearchFlyout
+											uid={uid()}
+											onAccept={(item) => {
+												const $deck = params.deck;
+												const $uid = uid();
 
-						<button
-							title="Open application settings"
-							onClick={() => {
-								openModal(() => <SettingsDialog />);
-							}}
-							class={menuIconButton}
-						>
-							<SettingsIcon />
-						</button>
-					</div>
-				);
-			})()}
+												let deck = decks.find((deck) => deck.id === $deck);
+
+												if (!deck) {
+													decks.push({
+														id: getCurrentTid(),
+														name: 'New deck',
+														emoji: '⭐',
+														panes: [],
+													});
+
+													deck = decks.at(-1)!;
+													navigate(`/decks/${deck.id}`);
+												}
+
+												if (item.type === 'search') {
+													addPane<SearchPaneConfig>(deck, {
+														type: PANE_TYPE_SEARCH,
+														query: item.query,
+														uid: $uid,
+													});
+												} else if (item.type === 'profile') {
+													addPane<ProfilePaneConfig>(deck, {
+														type: PANE_TYPE_PROFILE,
+														profile: {
+															did: item.profile.did,
+															handle: item.profile.handle,
+														},
+														tab: ProfilePaneTab.POSTS,
+														tabVisible: true,
+														uid: $uid,
+													});
+												}
+
+												close();
+											}}
+										/>
+									</div>
+								)}
+							</Flyout>
+
+							<hr class="border-divider" />
+						</>
+					)}
+				</Show>
+
+				<p class="py-3 text-center text-xs font-medium text-muted-fg">Decks</p>
+
+				<div class="flex min-h-0 grow flex-col overflow-y-auto border-b border-divider scrollbar-hide">
+					<button
+						title="Add new deck"
+						onClick={() => {
+							openModal(() => <AddDeckDialog />);
+						}}
+						class={menuIconButton}
+					>
+						<TableLargeAddIcon class="mx-auto" />
+					</button>
+
+					<DragDropProvider
+						onDragEnd={({ draggable, droppable }) => {
+							if (draggable && droppable) {
+								const fromIndex = decks.findIndex((deck) => deck.id === draggable.id);
+								const toIndex = decks.findIndex((deck) => deck.id === droppable.id);
+
+								if (fromIndex !== toIndex) {
+									batch(() => {
+										decks.splice(toIndex, 0, ...decks.splice(fromIndex, 1));
+									});
+								}
+							}
+						}}
+					>
+						<DragDropSensors />
+						<ConstrainXDragAxis enabled />
+
+						<SortableProvider ids={decks.map((deck) => deck.id)}>
+							<For each={preferences.decks}>
+								{(deck) => {
+									const id = deck.id;
+
+									const sortable = createSortable(id);
+									const href = `/decks/${id}`;
+
+									return (
+										<div ref={sortable} class={clsx([sortable.isActiveDraggable && `z-10 cursor-grabbing`])}>
+											<a
+												title={deck.name}
+												href={href}
+												class={deckButton}
+												data-link="replace"
+												draggable="false"
+												inert={sortable.isActiveDraggable}
+											>
+												<div
+													class={clsx([
+														`pointer-events-none absolute inset-0 border-l-3 border-accent`,
+														location.pathname !== href && `hidden`,
+													])}
+												></div>
+
+												<span>{deck.emoji}</span>
+											</a>
+										</div>
+									);
+								}}
+							</For>
+						</SortableProvider>
+					</DragDropProvider>
+				</div>
+
+				{updateStatus() !== 0 && (
+					<button
+						title={`${brandName} update is ready, click here to reload`}
+						disabled={updateStatus() !== 2}
+						onClick={() => {
+							updateSW();
+						}}
+						class={
+							updateButton +
+							(updateStatus() === 2 ? ` bg-green-700 text-white hover:bg-green-900` : ` opacity-50`)
+						}
+					>
+						<SystemUpdateAltIcon />
+					</button>
+				)}
+
+				<button
+					title="Open application settings"
+					onClick={() => {
+						openModal(() => <SettingsDialog />);
+					}}
+					class={menuIconButton}
+				>
+					<SettingsIcon />
+				</button>
+			</div>
 
 			<ShowFreeze when={composer.open}>
 				<Suspense
