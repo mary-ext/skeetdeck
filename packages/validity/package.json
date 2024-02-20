@@ -1,0 +1,11 @@
+{
+	"private": true,
+	"type": "module",
+	"name": "@pkg/validity",
+	"version": "0.1.0",
+	"exports": {
+		".": {
+			"default": "./lib/index.tsx"
+		}
+	}
+}

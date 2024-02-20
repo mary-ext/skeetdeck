@@ -1,0 +1,25 @@
+{
+	"include": ["lib"],
+	"compilerOptions": {
+		"target": "ESNext",
+		"lib": ["DOM", "DOM.Iterable", "ESNext"],
+		"module": "NodeNext",
+		"skipLibCheck": true,
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		"outDir": "types/",
+
+		"allowImportingTsExtensions": true,
+		"moduleResolution": "NodeNext",
+		"resolveJsonModule": true,
+
+		"incremental": true,
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"verbatimModuleSyntax": true,
+		"stripInternal": true,
+		"useDefineForClassFields": false,
+	},
+}
