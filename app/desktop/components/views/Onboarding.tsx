@@ -1,4 +1,4 @@
-import { For, batch, createMemo, createSignal, lazy } from 'solid-js';
+import { For, batch, createSignal, lazy } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent';
 
@@ -46,11 +46,6 @@ const Onboarding = () => {
 	const [startWith, setStartWith] = createSignal(StartWith.FRESH);
 
 	const [freshWithExample, setFreshWithExample] = createSignal(true);
-
-	const canShowBack = createMemo(() => {
-		const $step = step();
-		return $step === Steps.SYNC || $step === Steps.FINISH;
-	});
 
 	const handleFinish = () => {
 		const $startWith = startWith();
@@ -205,26 +200,24 @@ const Onboarding = () => {
 
 				<div class="grow"></div>
 
-				{(() => {
-					if (canShowBack()) {
-						return (
-							<button
-								onClick={() => {
-									const $step = step();
+				<button
+					hidden={(() => {
+						const $step = step();
+						return !($step === Steps.SYNC || $step === Steps.FINISH);
+					})()}
+					onClick={() => {
+						const $step = step();
 
-									if ($step === Steps.SYNC) {
-										setStep(Steps.WELCOME);
-									} else if ($step === Steps.FINISH) {
-										setStep(Steps.SYNC);
-									}
-								}}
-								class={/* @once */ Button({ variant: 'outline' })}
-							>
-								<ChevronRightIcon class="-mx-2 rotate-180 text-lg" />
-							</button>
-						);
-					}
-				})()}
+						if ($step === Steps.SYNC) {
+							setStep(Steps.WELCOME);
+						} else if ($step === Steps.FINISH) {
+							setStep(Steps.SYNC);
+						}
+					}}
+					class={/* @once */ Button({ variant: 'outline' })}
+				>
+					<ChevronRightIcon class="-mx-2 rotate-180 text-lg" />
+				</button>
 
 				<button
 					disabled={(() => {
