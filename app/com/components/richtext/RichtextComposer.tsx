@@ -280,6 +280,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 		>
 			<div
 				ref={renderer}
+				inert
 				class={
 					/* @once */ clsx([
 						`absolute inset-0 z-0 whitespace-pre-wrap break-words`,
