@@ -26,7 +26,7 @@ const PostShareAction = (props: PostShareActionProps) => {
 		const author = post.author;
 
 		const getPostUrl = () => {
-			return `https://bsky.app/profile/${author.handle.value}/post/${getRecordId(post.uri)}`;
+			return `https://bsky.app/profile/${author.did}/post/${getRecordId(post.uri)}`;
 		};
 
 		if (import.meta.env.VITE_MODE === 'desktop') {
