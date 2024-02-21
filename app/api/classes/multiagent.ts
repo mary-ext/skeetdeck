@@ -142,7 +142,7 @@ export class Multiagent {
 			this.#agents[did] = { agent: Promise.resolve(agent), cleanup: cleanup };
 			return did;
 		} catch (err) {
-			throw new MultiagentError(`Failed to login`, { cause: err });
+			throw new MultiagentError(`LOGIN_FAILURE`, { cause: err });
 		}
 	}
 
@@ -176,7 +176,7 @@ export class Multiagent {
 		const data = $accounts.find((acc) => acc.did === did);
 
 		if (!data) {
-			return Promise.reject(new MultiagentError(`Invalid account`));
+			return Promise.reject(new MultiagentError(`INVALID_ACCOUNT`));
 		}
 
 		const { agent, cleanup } = this.#createAgent(data.service);
@@ -190,7 +190,7 @@ export class Multiagent {
 					cleanup();
 
 					delete this.#agents[did];
-					reject(new MultiagentError(`Failed to resume session`, { cause: err }));
+					reject(new MultiagentError(`RESUME_FAILURE`, { cause: err }));
 				},
 			);
 		});
