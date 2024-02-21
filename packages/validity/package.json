@@ -3,6 +3,7 @@
 	"type": "module",
 	"name": "@pkg/validity",
 	"version": "0.1.0",
+	"sideEffects": false,
 	"exports": {
 		".": {
 			"default": "./lib/index.ts"

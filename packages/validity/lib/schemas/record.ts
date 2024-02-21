@@ -6,16 +6,16 @@ import { pushPath } from '../utils.ts';
 export type RecordKey = Validator<string | symbol>;
 
 export type RecordInput<TValue extends Validator, TKey extends RecordKey> = {
-	[P in Input<TKey>]: Input<TValue>;
+	[K in Input<TKey>]: Input<TValue>;
 };
 
 export type RecordOutput<TValue extends Validator, TKey extends RecordKey> = {
-	[P in Output<TKey>]: Output<TValue>;
+	[K in Output<TKey>]: Output<TValue>;
 };
 
 export type RecordValidator<TValue extends Validator, TKey extends RecordKey> = Validator<
-	RecordInput<TValue, TKey>,
-	RecordOutput<TValue, TKey>
+	{ [K in Input<TKey>]: Input<TValue> },
+	{ [K in Output<TKey>]: Output<TValue> }
 >;
 
 export const record = <TValue extends Validator, TKey extends RecordKey = Validator<string>>(
