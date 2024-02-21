@@ -2,7 +2,7 @@ import { EventEmitter } from './events.js';
 import { decodeJwt } from './jwt.js';
 
 import { type FetchHandlerResponse, defaultFetchHandler, isErrorResponse, XRPC } from './xrpc.js';
-import { type Headers, ResponseType, httpResponseCodeToEnum } from './xrpc-utils.js';
+import { type Headers, ResponseType, httpResponseCodeToEnum, XRPCError } from './xrpc-utils.js';
 
 import type { DID, Procedures, Queries, ResponseOf } from './atp-schema.js';
 
@@ -82,7 +82,7 @@ export class Agent extends EventEmitter<AgentEventMap> {
 		const refreshToken = decodeJwt(session.refreshJwt) as AtpRefreshJwt;
 
 		if (now >= refreshToken.exp) {
-			throw new Error('INVALID_TOKEN');
+			throw new XRPCError(401, 'InvalidToken');
 		}
 
 		const accessToken = decodeJwt(session.accessJwt) as AtpAccessJwt;
@@ -112,7 +112,7 @@ export class Agent extends EventEmitter<AgentEventMap> {
 		}
 
 		if (!this.session) {
-			throw new Error(`INVALID_TOKEN`);
+			throw new XRPCError(401, 'InvalidToken');
 		}
 
 		return this.session;
