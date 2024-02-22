@@ -1,4 +1,4 @@
-import { Match, Switch, createSignal } from 'solid-js';
+import { Match, Switch, createSignal, lazy } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
@@ -18,6 +18,7 @@ import ProfileHeader from '~/com/components/views/ProfileHeader';
 
 import { IconButton } from '~/com/primitives/icon-button';
 
+import SearchIcon from '~/com/icons/baseline-search';
 import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
 
 import { type ProfilePaneConfig, PANE_TYPE_PROFILE, ProfilePaneTab } from '../../../globals/panes';
@@ -26,6 +27,8 @@ import { addPane, preferences } from '../../../globals/settings';
 import { usePaneContext, usePaneModalState } from '../PaneContext';
 import PaneDialog from '../PaneDialog';
 import PaneDialogHeader from '../PaneDialogHeader';
+
+const ProfileSearchPaneDialog = lazy(() => import('./ProfileSearchPaneDialog'));
 
 export interface ProfilePaneDialogProps {
 	/** Expected to be static */
@@ -42,7 +45,7 @@ const enum ProfileTab {
 const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 	const { actor } = props;
 
-	const { deck, pane, index } = usePaneContext();
+	const { deck, pane, index, openModal: openPaneModal } = usePaneContext();
 	const modal = usePaneModalState();
 
 	const ui = preferences.ui;
@@ -82,6 +85,16 @@ const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 			>
 				{profile.data && (
 					<>
+						<button
+							title="Search this user's posts"
+							onClick={() => {
+								openPaneModal(() => <ProfileSearchPaneDialog profile={/* @once */ profile.data!} />);
+							}}
+							class={/* @once */ IconButton()}
+						>
+							<SearchIcon />
+						</button>
+
 						<button
 							title="Add as column"
 							onClick={() => {
