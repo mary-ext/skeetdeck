@@ -1,12 +1,16 @@
-import { type JSX, createMemo, lazy, Suspense } from 'solid-js';
+import { type JSX, createMemo, createEffect } from 'solid-js';
+
+import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 
 import { type MatchedRouteState, getMatchedRoute } from '@pkg/solid-navigation';
+import { createQuery } from '@pkg/solid-query';
 
+import { MultiagentError } from '~/api/classes/multiagent';
 import { getAccountData, multiagent } from '~/api/globals/agent';
 
-import { getEntryAt } from '../utils/router';
+import { getProfile, getProfileKey } from '~/api/queries/get-profile';
 
-import CircularProgress from '~/com/components/CircularProgress';
+import { getEntryAt } from '../utils/router';
 
 import { Interactive } from '~/com/primitives/interactive';
 
@@ -16,33 +20,112 @@ import HomeIcon from '~/com/icons/baseline-home';
 import HomeOutlinedIcon from '~/com/icons/outline-home';
 import NotificationsIcon from '~/com/icons/baseline-notifications';
 import NotificationsOutlinedIcon from '~/com/icons/outline-notifications';
-import UnfoldMoreIcon from '~/com/icons/baseline-unfold-more';
 
-import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
+import { type NavDrawerContextObject, NavDrawerContext } from '../components/main/NavDrawerContext';
+import { MobileLinkingProvider } from '../components/main/MobileLinkingProvider';
 
-import { MobileLinkingProvider } from './root/MobileLinkingProvider';
+import NavDrawer from '../components/main/NavDrawer';
 
 interface RootProps {
 	children?: JSX.Element;
 }
 
+const isCloseWatcherSupported = typeof CloseWatcher !== 'undefined';
+
 const Root = (props: RootProps) => {
+	let drawer: HTMLDialogElement;
+	let watcher: CloseWatcher | undefined;
+
 	const route = createMemo(getMatchedRoute);
 
 	const hasAccount = createMemo(() => multiagent.active !== undefined);
 	const isMainRoutes = createMemo(() => !!route()?.def.meta?.main);
 
+	const drawerContext: NavDrawerContextObject = {
+		open: () => {
+			if (isCloseWatcherSupported) {
+				if (watcher) {
+					return;
+				}
+
+				watcher = new CloseWatcher();
+				watcher.oncancel = () => {
+					watcher = undefined;
+					drawer.close();
+				};
+			}
+
+			drawer.showModal();
+		},
+	};
+
+	const profile = createQuery(() => {
+		const uid = multiagent.active;
+
+		return {
+			enabled: uid !== undefined,
+			queryKey: getProfileKey(uid!, uid!),
+			queryFn: getProfile,
+		};
+	});
+
+	createEffect(() => {
+		let err = profile.error;
+		let invalid = false;
+
+		if (err) {
+			if (err instanceof MultiagentError) {
+				err = (err.cause as Error) || err;
+			}
+
+			if (err instanceof XRPCError) {
+				invalid = err.error === 'InvalidToken' || err.error === 'ExpiredToken';
+			}
+		}
+	});
+
 	return (
 		<MobileLinkingProvider>
-			<div class="relative mx-auto flex min-h-screen max-w-md flex-col bg-background">
-				<div class="flex min-h-0 grow flex-col">{props.children}</div>
-
-				{(() => {
-					if (hasAccount() && isMainRoutes()) {
-						return <MainNavbar route={route()!} />;
+			<NavDrawerContext.Provider value={drawerContext}>
+				<dialog
+					ref={drawer!}
+					onClick={(ev) => {
+						if (ev.target === drawer) {
+							drawer.close();
+						}
+					}}
+					onClose={
+						isCloseWatcherSupported
+							? (ev) => {
+									if (ev.target === drawer) {
+										if (watcher) {
+											watcher.close();
+											watcher = undefined;
+										}
+									}
+								}
+							: undefined
 					}
-				})()}
-			</div>
+					class="m-0 h-full max-h-none w-full max-w-none overflow-hidden bg-transparent backdrop:bg-transparent"
+					data-modal
+				>
+					<NavDrawer
+						account={getAccountData(multiagent.active)}
+						profile={profile.data}
+						onClose={() => drawer.close()}
+					/>
+				</dialog>
+
+				<div class="relative mx-auto flex min-h-screen max-w-md flex-col bg-background">
+					{(() => {
+						if (hasAccount() && isMainRoutes()) {
+							return <MainNavbar route={route()!} />;
+						}
+					})()}
+
+					<div class="flex min-h-0 grow flex-col">{props.children}</div>
+				</div>
+			</NavDrawerContext.Provider>
 		</MobileLinkingProvider>
 	);
 };
@@ -53,14 +136,12 @@ const enum MainTabs {
 	HOME = 'Home',
 	EXPLORE = 'Explore',
 	NOTIFICATIONS = 'Notifications',
-	ME = 'Me',
 }
 
 const MainRoutes = {
 	[MainTabs.HOME]: '/home',
 	[MainTabs.EXPLORE]: '/explore',
 	[MainTabs.NOTIFICATIONS]: '/notifications',
-	[MainTabs.ME]: '/@me',
 };
 
 const MainNavbar = (props: { route: MatchedRouteState }) => {
@@ -91,7 +172,10 @@ const MainNavbar = (props: { route: MatchedRouteState }) => {
 	};
 
 	return (
-		<div class="sticky bottom-0 z-30 flex h-13 min-w-0 shrink-0 border-t border-divider bg-background text-primary">
+		<div
+			class="sticky bottom-0 z-30 flex h-13 min-w-0 shrink-0 border-t border-divider bg-background text-primary"
+			style="order:2"
+		>
 			<MainNavbarItem
 				label="Home"
 				icon={HomeOutlinedIcon}
@@ -114,13 +198,6 @@ const MainNavbar = (props: { route: MatchedRouteState }) => {
 				iconActive={NotificationsIcon}
 				active={() => active() === MainTabs.NOTIFICATIONS}
 				onClick={/* @once */ bindClick(MainTabs.NOTIFICATIONS)}
-			/>
-
-			<MainNavbarItem
-				label="My Profile"
-				icon={() => <UserAvatar />}
-				active={() => active() === MainTabs.ME}
-				onClick={/* @once */ bindClick(MainTabs.ME)}
 			/>
 		</div>
 	);
@@ -158,22 +235,5 @@ const MainNavbarItem = ({
 				}
 			})()}
 		</button>
-	);
-};
-
-const UserAvatar = () => {
-	return (
-		<div class="flex items-center">
-			<div class="h-6 w-6 shrink-0 overflow-hidden rounded-full">
-				{(() => {
-					const account = getAccountData(multiagent.active);
-					const avatar = account?.profile?.avatar;
-
-					return <img src={avatar || DefaultUserAvatar} class="h-full w-full object-cover" />;
-				})()}
-			</div>
-
-			<UnfoldMoreIcon class="text-base text-muted-fg" style="margin:0 -18px 0 2px" />
-		</div>
 	);
 };

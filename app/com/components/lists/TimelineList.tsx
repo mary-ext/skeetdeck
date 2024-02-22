@@ -45,6 +45,7 @@ const TimelineList = (props: TimelineListProps) => {
 	const timeline = createInfiniteQuery(() => ({
 		queryKey: getTimelineKey(props.uid, props.params),
 		queryFn: getTimeline,
+		staleTime: Infinity,
 		getNextPageParam: (last) => last.cursor,
 		initialPageParam: undefined,
 		meta: {

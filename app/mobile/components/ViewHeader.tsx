@@ -5,7 +5,8 @@ import { clsx } from '~/utils/misc';
 import { IconButton } from '~/com/primitives/icon-button';
 
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
-import MenuIcon from '~/com/icons/baseline-menu';
+
+import NavDrawerButton from './main/NavDrawerButton';
 
 export interface ViewHeaderProps {
 	title: string;
@@ -24,17 +25,16 @@ const ViewHeader = (props: ViewHeaderProps) => {
 	return (
 		<div
 			class={clsx([
-				'flex h-13 min-w-0 shrink-0 items-center gap-2 border-divider bg-background px-4',
+				'flex h-13 min-w-0 shrink-0 items-center gap-2 border-b bg-background px-4',
 				!props.fixed && `sticky top-0 z-30`,
-				!props.borderless && `border-b`,
+				!props.borderless ? `border-divider` : `border-transparent`,
 			])}
 		>
 			{main ? (
-				<button class={/* @once */ IconButton({ edge: 'left', color: 'muted' })}>
-					<MenuIcon />
-				</button>
+				<NavDrawerButton />
 			) : back ? (
 				<button
+					title="Go back to previous page"
 					onClick={() => {
 						if (navigation.canGoBack) {
 							navigation.back();
@@ -60,7 +60,7 @@ const ViewHeader = (props: ViewHeaderProps) => {
 				)}
 			</div>
 
-			<fieldset class="flex min-w-0 empty:hidden">{props.children}</fieldset>
+			<fieldset class="flex min-w-0 gap-2 empty:hidden">{props.children}</fieldset>
 		</div>
 	);
 };

@@ -1,4 +1,4 @@
-import { type JSX, onMount, createSignal } from 'solid-js';
+import { type JSX, createSignal } from 'solid-js';
 
 import { useParams } from '@pkg/solid-navigation';
 import { createQuery } from '@pkg/solid-query';
@@ -18,13 +18,12 @@ import ProfileHeader from '~/com/components/views/ProfileHeader';
 import TimelineList from '~/com/components/lists/TimelineList';
 import TimelineGalleryList from '~/com/components/lists/TimelineGalleryList';
 
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import { Interactive } from '~/com/primitives/interactive';
-
-import ViewHeader from '../components/ViewHeader';
 import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 import SearchIcon from '~/com/icons/baseline-search';
+
+import ViewHeader from '../components/ViewHeader';
 
 const enum ProfileTab {
 	POSTS,
@@ -33,27 +32,11 @@ const enum ProfileTab {
 	LIKES,
 }
 
-const iconBtn = Interactive({
-	variant: 'white',
-	class: `grid h-8 w-8 shrink-0 place-items-center rounded-full bg-black/50 text-lg text-white backdrop-blur disabled:opacity-50`,
-});
-
-const width = Math.min(window.innerWidth, 448);
-const height = Math.floor((1 / 3) * width);
-
-const paddedHeight = height + 16 + 36 + 12 + 28;
-
-interface ProfileViewProps {
-	me?: boolean;
-}
-
-const ProfileView = (props: ProfileViewProps) => {
-	const me = props.me;
+const ProfileView = () => {
+	const { actor } = useParams<{ actor: DID }>();
 
 	const query = createQuery(() => {
 		const uid = multiagent.active!;
-		const actor = !me ? useParams<{ actor: DID }>().actor : uid;
-
 		const key = getProfileKey(uid, actor);
 
 		return {
@@ -69,69 +52,25 @@ const ProfileView = (props: ProfileViewProps) => {
 		if (profile) {
 			const [tab, setTab] = createSignal(ProfileTab.POSTS);
 
-			// @ts-expect-error
-			const timeline = new ScrollTimeline({ source: document.documentElement });
-
-			const headerRef = (node: HTMLElement) => {
-				onMount(() => {
-					node.animate(
-						{ background: ['transparent', 'black'] },
-						// @ts-expect-error
-						{ timeline, rangeEnd: paddedHeight + 'px', fill: 'forwards' },
-					);
-				});
-			};
-
-			const titleWrapperRef = (node: HTMLElement) => {
-				onMount(() => {
-					node.animate([{ opacity: 0 }, { opacity: 0, offset: 0.8 }, { opacity: 1 }], {
-						timeline,
-						// @ts-expect-error
-						rangeEnd: paddedHeight + 100 + 'px',
-						fill: 'forwards',
-					});
-				});
-			};
-
 			return (
 				<div class="contents">
-					<div
-						ref={headerRef}
-						class="sticky top-0 z-30 -mt-13 flex h-13 min-w-0 shrink-0 items-center gap-2 px-4"
+					<ViewHeader
+						back="/home"
+						title={profile.displayName.value || `@${profile.handle.value}`}
+						subtitle={`${formatCompact(profile.postsCount.value)} posts`}
 					>
-						{!me ? (
-							<button
-								onClick={() => {
-									if (navigation.canGoBack) {
-										navigation.back();
-									} else {
-										navigation.navigate('/home', { history: 'replace' });
-									}
-								}}
-								class={`${iconBtn} -ml-2`}
-							>
-								<ArrowLeftIcon class="drop-shadow" />
-							</button>
-						) : null}
-
-						<div ref={titleWrapperRef} class="flex min-w-0 grow flex-col gap-0.5 opacity-0">
-							<p class="overflow-hidden text-ellipsis whitespace-nowrap text-base font-bold leading-5">
-								{profile.displayName.value}
-							</p>
-
-							<p class="overflow-hidden text-ellipsis whitespace-nowrap text-xs text-muted-fg">
-								{`${formatCompact(profile.postsCount.value)} posts`}
-							</p>
-						</div>
-
-						<a href={/* @once */ `/${profile.did}/search`} class={iconBtn}>
-							<SearchIcon class="drop-shadow" />
+						<a
+							title="Search this user's posts"
+							href={/* @once */ `/${profile.did}/search`}
+							class={/* @once */ IconButton()}
+						>
+							<SearchIcon />
 						</a>
 
-						<button onClick={() => {}} class={`${iconBtn} -mr-2`}>
-							<MoreHorizIcon class="rotate-90 drop-shadow" />
+						<button title="More actions" class={/* @once */ IconButton({ edge: 'right' })}>
+							<MoreHorizIcon />
 						</button>
-					</div>
+					</ViewHeader>
 
 					<VirtualContainer class="shrink-0">
 						<ProfileHeader profile={profile} />
@@ -172,7 +111,7 @@ const ProfileView = (props: ProfileViewProps) => {
 		}
 
 		return [
-			<ViewHeader back={!me ? '/home' : undefined} title="Profile" />,
+			<ViewHeader back="/home" title="Profile" />,
 			<div class="grid h-13 place-items-center">
 				<CircularProgress />
 			</div>,

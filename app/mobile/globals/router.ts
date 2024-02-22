@@ -3,17 +3,15 @@ import { lazy } from 'solid-js';
 import { configureRouter } from '@pkg/solid-navigation';
 
 const DID_RE = /^did:[a-z]+:[a-zA-Z0-9._\-]+$/;
-
-const HANDLE_OR_DID_RE =
-	/^@([a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*(?:\.[a-zA-Z]{2,}))|did:[a-z]+:[a-zA-Z0-9._\-]+$/;
+const HANDLE_RE = /^@([a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*(?:\.[a-zA-Z]{2,}))$/;
 
 const TID_RE = /^[234567abcdefghij][234567abcdefghijklmnopqrstuvwxyz]{12}$/;
 
 const isValidDid = (did: string) => {
 	return DID_RE.test(did);
 };
-const isValidHandleOrDid = (handleOrDid: string) => {
-	return HANDLE_OR_DID_RE.test(handleOrDid);
+const isValidHandle = (handleOrDid: string) => {
+	return HANDLE_RE.test(handleOrDid);
 };
 const isValidTid = (tid: string) => {
 	return tid.length === 13 && TID_RE.test(tid);
@@ -60,15 +58,6 @@ configureRouter({
 			single: true,
 			meta: {
 				name: 'Notifications',
-				main: true,
-			},
-		},
-		{
-			path: '/@me',
-			component: lazy(() => import('~/mobile/views/Me')),
-			single: true,
-			meta: {
-				name: 'Me',
 				main: true,
 			},
 		},

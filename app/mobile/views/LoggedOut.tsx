@@ -27,7 +27,7 @@ const LoggedOutView = () => {
 
 			<div class="flex flex-col gap-4 px-4 pb-4 pt-6">
 				<a
-					href="sign_in"
+					href="/sign_in"
 					class="mt-6 rounded-md bg-accent px-4 py-3 text-center text-lg font-medium text-white hover:bg-accent-dark"
 				>
 					Sign in

@@ -1,4 +1,4 @@
-import { For, Match, Show, Switch, onMount } from 'solid-js';
+import { For, Match, Show, Switch } from 'solid-js';
 
 import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 import { useParams } from '@pkg/solid-navigation';
