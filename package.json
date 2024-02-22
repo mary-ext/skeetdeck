@@ -14,7 +14,7 @@
 			"solid-js@1.8.15": "patches/solid-js@1.8.15.patch",
 			"solid-textarea-autosize@0.0.5": "patches/solid-textarea-autosize@0.0.5.patch",
 			"vite-plugin-pwa@0.17.4": "patches/vite-plugin-pwa@0.17.4.patch",
-			"vite@5.1.3": "patches/vite@5.1.3.patch",
+			"vite@5.1.4": "patches/vite@5.1.4.patch",
 			"workbox-precaching@7.0.0": "patches/workbox-precaching@7.0.0.patch"
 		},
 		"overrides": {
