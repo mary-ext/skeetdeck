@@ -977,6 +977,14 @@ export interface Queries {
 			 * If specified, only events where all of these labels were removed are returned
 			 */
 			removedLabels?: string[];
+			/**
+			 * If specified, only events where all of these tags were added are returned
+			 */
+			addedTags?: string[];
+			/**
+			 * If specified, only events where all of these tags were removed are returned
+			 */
+			removedTags?: string[];
 			reportTypes?: string[];
 			cursor?: string;
 		};
@@ -1046,6 +1054,8 @@ export interface Queries {
 			 * @default 50
 			 */
 			limit?: number;
+			tags?: string[];
+			excludeTags?: string[];
 			cursor?: string;
 		};
 		response: {
@@ -1075,6 +1085,20 @@ export interface Queries {
 		response: {
 			cursor?: string;
 			repos: RefOf<'com.atproto.admin.defs#repoView'>[];
+		};
+	};
+	/**
+	 * Describe the credentials that should be included in the DID doc of an account that is migrating to this service.
+	 */
+	'com.atproto.identity.getRecommendedDidCredentials': {
+		response: {
+			/**
+			 * Recommended rotation keys for PLC dids. Should be undefined (or ignored) for did:webs.
+			 */
+			rotationKeys?: string[];
+			alsoKnownAs?: string[];
+			verificationMethods?: unknown;
+			services?: unknown;
 		};
 	};
 	/**
@@ -1173,6 +1197,24 @@ export interface Queries {
 		};
 	};
 	/**
+	 * Returns a list of missing blobs for the requesting account. Intended to be used in the account migration flow.
+	 */
+	'com.atproto.repo.listMissingBlobs': {
+		params: {
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 1000
+			 * @default 500
+			 */
+			limit?: number;
+			cursor?: string;
+		};
+		response: {
+			cursor?: string;
+			blobs: RefOf<'com.atproto.repo.listMissingBlobs#recordBlob'>[];
+		};
+	};
+	/**
 	 * List a range of records in a repository, matching a specific collection. Does not require auth.
 	 */
 	'com.atproto.repo.listRecords': {
@@ -1214,6 +1256,22 @@ export interface Queries {
 		};
 	};
 	/**
+	 * Returns the status of an account, especially as pertaining to import or recovery. Can be called many times over the course of an account migration. Requires auth and can only be called pertaining to oneself.
+	 */
+	'com.atproto.server.checkAccountStatus': {
+		response: {
+			activated: boolean;
+			validDid: boolean;
+			repoCommit: CID;
+			repoRev: string;
+			repoBlocks: number;
+			indexedRecords: number;
+			privateStateValues: number;
+			expectedBlobs: number;
+			importedBlobs: number;
+		};
+	};
+	/**
 	 * Describes the server's account creation requirements and capabilities. Implemented by PDS.
 	 */
 	'com.atproto.server.describeServer': {
@@ -1234,6 +1292,7 @@ export interface Queries {
 			 * URLs of service policy documents.
 			 */
 			links?: RefOf<'com.atproto.server.describeServer#links'>;
+			did: DID;
 		};
 	};
 	/**
@@ -1256,6 +1315,20 @@ export interface Queries {
 		};
 		errors: {
 			DuplicateCreate: {};
+		};
+	};
+	/**
+	 * Get a signed token on behalf of the requesting DID for the requested service.
+	 */
+	'com.atproto.server.getServiceAuth': {
+		params: {
+			/**
+			 * The DID of the service that the token will be used to authenticate with
+			 */
+			aud: DID;
+		};
+		response: {
+			token: string;
 		};
 	};
 	/**
@@ -1605,7 +1678,8 @@ export interface Procedures {
 				| UnionOf<'com.atproto.admin.defs#modEventMute'>
 				| UnionOf<'com.atproto.admin.defs#modEventReverseTakedown'>
 				| UnionOf<'com.atproto.admin.defs#modEventUnmute'>
-				| UnionOf<'com.atproto.admin.defs#modEventEmail'>;
+				| UnionOf<'com.atproto.admin.defs#modEventEmail'>
+				| UnionOf<'com.atproto.admin.defs#modEventTag'>;
 			subject: UnionOf<'com.atproto.admin.defs#repoRef'> | UnionOf<'com.atproto.repo.strongRef'>;
 			subjectBlobCids?: CID[];
 			createdBy: DID;
@@ -1712,6 +1786,39 @@ export interface Procedures {
 				| UnionOf<'com.atproto.repo.strongRef'>
 				| UnionOf<'com.atproto.admin.defs#repoBlobRef'>;
 			takedown?: RefOf<'com.atproto.admin.defs#statusAttr'>;
+		};
+	};
+	/**
+	 * Request an email with a code to in order to request a signed PLC operation. Requires Auth.
+	 */
+	'com.atproto.identity.requestPlcOperationSignature': {};
+	/**
+	 * Signs a PLC operation to update some value(s) in the requesting DID's document.
+	 */
+	'com.atproto.identity.signPlcOperation': {
+		data: {
+			/**
+			 * A token received through com.atproto.identity.requestPlcOperationSignature
+			 */
+			token?: string;
+			rotationKeys?: string[];
+			alsoKnownAs?: string[];
+			verificationMethods?: unknown;
+			services?: unknown;
+		};
+		response: {
+			/**
+			 * A signed DID PLC operation.
+			 */
+			operation: unknown;
+		};
+	};
+	/**
+	 * Validates a PLC operation to ensure that it doesn't violate a service's constraints or get the identity into a bad state, then submits it to the PLC registry
+	 */
+	'com.atproto.identity.submitPlcOperation': {
+		data: {
+			operation: unknown;
 		};
 	};
 	/**
@@ -1852,6 +1959,12 @@ export interface Procedures {
 		};
 	};
 	/**
+	 * Import a repo in the form of a CAR file. Requires Content-Length HTTP header to be set.
+	 */
+	'com.atproto.repo.importRepo': {
+		data: Blob;
+	};
+	/**
 	 * Write a repository record, creating or updating it as needed. Requires auth, implemented by PDS.
 	 */
 	'com.atproto.repo.putRecord': {
@@ -1904,6 +2017,10 @@ export interface Procedures {
 			blob: AtBlob;
 		};
 	};
+	/**
+	 * Activates a currently deactivated account. Used to finalize account migration after the account's repo is imported and identity is setup.
+	 */
+	'com.atproto.server.activateAccount': {};
 	/**
 	 * Confirm an email using a token from com.atproto.server.requestEmailConfirmation.
 	 */
@@ -2043,6 +2160,17 @@ export interface Procedures {
 		};
 	};
 	/**
+	 * Deactivates a currently active account. Stops serving of repo, and future writes to repo until reactivated. Used to finalize account migration with the old host after the account has been activated on the new host.
+	 */
+	'com.atproto.server.deactivateAccount': {
+		data: {
+			/**
+			 * A recommendation to server as to how long they should hold onto the deactivated account before deleting.
+			 */
+			deleteAfter?: string;
+		};
+	};
+	/**
 	 * Delete an actor's account with a token and password. Can only be called after requesting a deletion token. Requires auth.
 	 */
 	'com.atproto.server.deleteAccount': {
@@ -2177,61 +2305,11 @@ export interface Procedures {
 		};
 	};
 	/**
-	 * Gets the did's repo, optionally catching up from a specific revision.
-	 */
-	'com.atproto.temp.importRepo': {
-		params: {
-			/**
-			 * The DID of the repo.
-			 */
-			did: DID;
-		};
-		data: Blob;
-		response: unknown;
-	};
-	/**
-	 * Gets the did's repo, optionally catching up from a specific revision.
-	 */
-	'com.atproto.temp.pushBlob': {
-		params: {
-			/**
-			 * The DID of the repo.
-			 */
-			did: DID;
-		};
-		data: Blob;
-	};
-	/**
 	 * Request a verification code to be sent to the supplied phone number
 	 */
 	'com.atproto.temp.requestPhoneVerification': {
 		data: {
 			phoneNumber: string;
-		};
-	};
-	/**
-	 * Transfer an account. NOTE: temporary method, necessarily how account migration will be implemented.
-	 */
-	'com.atproto.temp.transferAccount': {
-		data: {
-			handle: Handle;
-			did: DID;
-			plcOp: unknown;
-		};
-		response: {
-			accessJwt: string;
-			refreshJwt: string;
-			handle: Handle;
-			did: DID;
-		};
-		errors: {
-			InvalidHandle: {};
-			InvalidPassword: {};
-			InvalidInviteCode: {};
-			HandleNotAvailable: {};
-			UnsupportedDomain: {};
-			UnresolvableDid: {};
-			IncompatibleDidDoc: {};
 		};
 	};
 }
@@ -2377,6 +2455,38 @@ export interface Objects {
 		 * Maximum grapheme length: 64
 		 */
 		tags: string[];
+	};
+	/**
+	 * Maximum string length: 640 \
+	 * Maximum grapheme length: 64
+	 */
+	'app.bsky.actor.defs#mutedWordTarget': 'content' | 'tag' | (string & {});
+	/**
+	 * A word that the account owner has muted.
+	 */
+	'app.bsky.actor.defs#mutedWord': {
+		/**
+		 * The muted word itself. \
+		 * Maximum string length: 10000 \
+		 * Maximum grapheme length: 1000
+		 */
+		value: string;
+		/**
+		 * The intended targets of the muted word.
+		 */
+		targets: RefOf<'app.bsky.actor.defs#mutedWordTarget'>[];
+	};
+	'app.bsky.actor.defs#mutedWordsPref': {
+		/**
+		 * A list of words the account owner has muted.
+		 */
+		items: RefOf<'app.bsky.actor.defs#mutedWord'>[];
+	};
+	'app.bsky.actor.defs#hiddenPostsPref': {
+		/**
+		 * A list of URIs of posts the account owner has hidden.
+		 */
+		items: AtUri[];
 	};
 	/**
 	 * A representation of some externally linked content (eg, a URL and 'card'), embedded in a Bluesky record (eg, a post).
@@ -2881,6 +2991,7 @@ export interface Objects {
 		 */
 		appealed?: boolean;
 		suspendUntil?: string;
+		tags?: string[];
 	};
 	'com.atproto.admin.defs#reportViewDetail': {
 		id: number;
@@ -3088,6 +3199,23 @@ export interface Objects {
 		 */
 		comment?: string;
 	};
+	/**
+	 * Add/Remove a tag on a subject
+	 */
+	'com.atproto.admin.defs#modEventTag': {
+		/**
+		 * Tags to be added to the subject. If already exists, won't be duplicated.
+		 */
+		add: string[];
+		/**
+		 * Tags to be removed to the subject. Ignores a tag If it doesn't exist, won't be duplicated.
+		 */
+		remove: string[];
+		/**
+		 * Additional comment about added/removed tags.
+		 */
+		comment?: string;
+	};
 	'com.atproto.admin.defs#communicationTemplateView': {
 		id: string;
 		/**
@@ -3209,6 +3337,10 @@ export interface Objects {
 		collection: string;
 		rkey: string;
 	};
+	'com.atproto.repo.listMissingBlobs#recordBlob': {
+		cid: CID;
+		recordUri: AtUri;
+	};
 	'com.atproto.repo.listRecords#record': {
 		uri: AtUri;
 		cid: CID;
@@ -3313,7 +3445,15 @@ export interface Objects {
 		time: string;
 	};
 	/**
-	 * Represents an update of the account's handle, or transition to/from invalid state.
+	 * Represents a change to an account's identity. Could be an updated handle, signing key, or pds hosting endpoint. Serves as a prod to all downstream services to refresh their identity cache.
+	 */
+	'com.atproto.sync.subscribeRepos#identity': {
+		seq: number;
+		did: DID;
+		time: string;
+	};
+	/**
+	 * Represents an update of the account's handle, or transition to/from invalid state. NOTE: Will be deprecated in favor of #identity.
 	 */
 	'com.atproto.sync.subscribeRepos#handle': {
 		seq: number;
@@ -3322,7 +3462,7 @@ export interface Objects {
 		time: string;
 	};
 	/**
-	 * Represents an account moving from one PDS instance to another. NOTE: not implemented; full account migration may introduce a new message instead.
+	 * Represents an account moving from one PDS instance to another. NOTE: not implemented; account migration uses #identity instead
 	 */
 	'com.atproto.sync.subscribeRepos#migrate': {
 		seq: number;
@@ -3331,7 +3471,7 @@ export interface Objects {
 		time: string;
 	};
 	/**
-	 * Indicates that an account has been deleted.
+	 * Indicates that an account has been deleted. NOTE: may be deprecated in favor of #identity or a future #account event
 	 */
 	'com.atproto.sync.subscribeRepos#tombstone': {
 		seq: number;
