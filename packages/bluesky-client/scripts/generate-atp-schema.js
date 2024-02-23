@@ -176,7 +176,7 @@ export declare namespace At {
 	type Uri = string;
 
 	interface Blob<T extends string = string> {
-		[Brand.Type]?: 'blob';
+		$type: 'blob';
 		mimeType: T;
 		ref: {
 			$link: string;
