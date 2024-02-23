@@ -79,36 +79,52 @@ const resolveType = (nsid, def) => {
 		const known = def.knownValues;
 		const format = def.format;
 
-		if (def.minLength !== undefined) {
-			descs.push(`Minimum string length: ${def.minLength}`);
-		}
-
-		if (def.maxLength !== undefined) {
-			descs.push(`Maximum string length: ${def.maxLength}`);
-		}
-
-		if (def.maxGraphemes !== undefined) {
-			descs.push(`Maximum grapheme length: ${def.maxGraphemes}`);
-		}
-
-		if (def.default !== undefined) {
-			descs.push(`@default ${JSON.stringify(def.default)}`);
-		}
-
-		if (enums) {
-			val = enums.map((val) => JSON.stringify(val)).join('|');
-		} else if (known) {
-			val = `${known.map((val) => JSON.stringify(val)).join('|')} | (string & {})`;
-		} else if (format === 'did') {
-			val = 'At.DID';
-		} else if (format === 'cid') {
-			val = 'At.CID';
-		} else if (format === 'handle') {
-			val = 'At.Handle';
-		} else if (format === 'at-uri') {
-			val = 'At.Uri';
+		if (format !== undefined) {
+			if (format === 'did') {
+				val = 'At.DID';
+			} else if (format === 'cid') {
+				val = 'At.CID';
+			} else if (format === 'handle') {
+				val = 'At.Handle';
+			} else if (format === 'at-uri') {
+				val = 'At.Uri';
+			} else if (
+				format === 'at-identifier' ||
+				format === 'datetime' ||
+				format === 'language' ||
+				format === 'nsid' ||
+				format === 'uri'
+			) {
+				// deliberately ignored
+				val = 'string';
+			} else {
+				console.warn(`${nsid}: unknown format ${format}`);
+				val = 'string';
+			}
 		} else {
-			val = 'string';
+			if (def.minLength !== undefined) {
+				descs.push(`Minimum string length: ${def.minLength}`);
+			}
+
+			if (def.maxLength !== undefined) {
+				descs.push(`Maximum string length: ${def.maxLength}`);
+			}
+
+			if (def.maxGraphemes !== undefined) {
+				descs.push(`Maximum grapheme length: ${def.maxGraphemes}`);
+			}
+
+			if (def.default !== undefined) {
+				descs.push(`@default ${JSON.stringify(def.default)}`);
+			}
+
+			if (enums) {
+				val = enums.map((val) => JSON.stringify(val)).join('|');
+			} else if (known) {
+				val = `${known.map((val) => JSON.stringify(val)).join('|')} | (string & {})`;
+			} else {
+				val = 'string';
+			}
 		}
 	} else if (type === 'array') {
 		const { value, descriptions } = resolveType(`${nsid}/0`, def.items);
