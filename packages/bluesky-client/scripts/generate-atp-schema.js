@@ -35,7 +35,7 @@ const writeJsdoc = (descriptions) => {
 	return jsdoc;
 };
 
-const resolveType = (ns, def) => {
+const resolveType = (nsid, def) => {
 	const type = def.type;
 
 	/** @type {string[]} */
@@ -106,7 +106,7 @@ const resolveType = (ns, def) => {
 			val = 'string';
 		}
 	} else if (type === 'array') {
-		const { value, descriptions } = resolveType(ns, def.items);
+		const { value, descriptions } = resolveType(`${nsid}/0`, def.items);
 
 		if (def.minLength !== undefined) {
 			descs.push(`Minimum array length: ${def.minimumLength}`);
@@ -139,7 +139,7 @@ const resolveType = (ns, def) => {
 
 		for (const prop in properties) {
 			const optional = !required || !required.includes(prop);
-			const { value, descriptions } = resolveType(ns, properties[prop]);
+			const { value, descriptions } = resolveType(`${nsid}/${prop}`, properties[prop]);
 
 			chunk += writeJsdoc(descriptions);
 			chunk += `${prop}${optional ? '?' : ''}:${value};`;
@@ -148,7 +148,7 @@ const resolveType = (ns, def) => {
 		chunk += '}';
 		val = chunk;
 	} else {
-		console.log(`unknown type: ${type}`);
+		console.log(`${nsid}: unknown type '${type}'`);
 	}
 
 	return { value: val, descriptions: descs };
@@ -211,7 +211,7 @@ for (const filename of fg.sync('lexicons/**/*.json')) {
 		const typeName = key[0].toUpperCase() + key.slice(1);
 
 		if (type === 'string') {
-			const { value, descriptions } = resolveType(ns, def);
+			const { value, descriptions } = resolveType(nsid, def);
 
 			chunk += writeJsdoc(descriptions);
 			chunk += `type ${typeName} = ${value};`;
@@ -237,7 +237,7 @@ for (const filename of fg.sync('lexicons/**/*.json')) {
 
 			for (const prop in properties) {
 				const optional = !required || !required.includes(prop);
-				const { value, descriptions } = resolveType(ns, properties[prop]);
+				const { value, descriptions } = resolveType(`${nsid}/${prop}`, properties[prop]);
 
 				chunk += writeJsdoc(descriptions);
 				chunk += `${prop}${optional ? '?' : ''}:${value};`;
@@ -245,7 +245,7 @@ for (const filename of fg.sync('lexicons/**/*.json')) {
 
 			chunk += '}';
 		} else if (type === 'array') {
-			const { value, descriptions } = resolveType(ns, def.items);
+			const { value, descriptions } = resolveType(nsid, def.items);
 			const descs = [];
 
 			if (def.minLength !== undefined) {
@@ -259,7 +259,7 @@ for (const filename of fg.sync('lexicons/**/*.json')) {
 			chunk += writeJsdoc(descs.concat(descriptions));
 			chunk += `type ${typeName} = (${value})[];`;
 		} else if (type === 'record') {
-			const { value, descriptions } = resolveType(ns, def.record);
+			const { value, descriptions } = resolveType(nsid, def.record);
 
 			chunk += writeJsdoc(descriptions);
 			chunk += `interface Record`;
@@ -282,7 +282,7 @@ for (const filename of fg.sync('lexicons/**/*.json')) {
 				if (Object.values(parameters.properties) === 0) {
 					parameters = undefined;
 				} else {
-					const { value, descriptions } = resolveType(ns, parameters);
+					const { value, descriptions } = resolveType(nsid, parameters);
 
 					chunk += writeJsdoc(descriptions);
 					chunk += `interface Params ${value}`;
@@ -293,7 +293,7 @@ for (const filename of fg.sync('lexicons/**/*.json')) {
 
 			if (input) {
 				if (input.encoding === 'application/json') {
-					const { value, descriptions } = resolveType(ns, input.schema);
+					const { value, descriptions } = resolveType(nsid, input.schema);
 
 					chunk += writeJsdoc(descriptions);
 
@@ -311,7 +311,7 @@ for (const filename of fg.sync('lexicons/**/*.json')) {
 
 			if (output) {
 				if (output.encoding === 'application/json') {
-					const { value, descriptions } = resolveType(ns, output.schema);
+					const { value, descriptions } = resolveType(nsid, output.schema);
 
 					chunk += writeJsdoc(descriptions);
 
