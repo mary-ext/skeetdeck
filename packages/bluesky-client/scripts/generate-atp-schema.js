@@ -54,7 +54,7 @@ const resolveType = (nsid, def) => {
 		val = 'unknown';
 	} else if (type === 'cid-link') {
 		val = 'At.CIDLink';
-	} else if (type === 'number' || type === 'integer') {
+	} else if (type === 'integer') {
 		val = 'number';
 
 		if (def.minimum !== undefined) {
