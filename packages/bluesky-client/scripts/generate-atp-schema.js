@@ -221,7 +221,7 @@ for (const filename of fg.sync('lexicons/**/*.json')) {
 	const json = JSON.parse(jsonString);
 
 	const ns = json.id;
-	const tsNamespace = ns.replace(/^\w|\.\w/g, (m) => m[m.length === 1 ? 0 : 1].toUpperCase());
+	const tsNamespace = toNamespace(ns);
 
 	const descs = [];
 
