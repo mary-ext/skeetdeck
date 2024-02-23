@@ -52,6 +52,8 @@ const resolveType = (nsid, def) => {
 
 	if (type === 'unknown') {
 		val = 'unknown';
+	} else if (type === 'cid-link') {
+		val = 'At.CIDLink';
 	} else if (type === 'number' || type === 'integer') {
 		val = 'number';
 
@@ -174,6 +176,10 @@ export declare namespace At {
 	type Handle = string;
 
 	type Uri = string;
+
+	interface CIDLink {
+		$link: CID;
+	}
 
 	interface Blob<T extends string = string> {
 		$type: 'blob';
