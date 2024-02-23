@@ -75,6 +75,7 @@ const resolveType = (nsid, def) => {
 			descs.push(`@default ${def.default}`);
 		}
 	} else if (type === 'string') {
+		const enums = def.enum;
 		const known = def.knownValues;
 		const format = def.format;
 
@@ -94,8 +95,10 @@ const resolveType = (nsid, def) => {
 			descs.push(`@default ${JSON.stringify(def.default)}`);
 		}
 
-		if (known) {
-			val = `${known.map((val) => `'${val}'`).join('|')} | (string & {})`;
+		if (enums) {
+			val = enums.map((val) => JSON.stringify(val)).join('|');
+		} else if (known) {
+			val = `${known.map((val) => JSON.stringify(val)).join('|')} | (string & {})`;
 		} else if (format === 'did') {
 			val = 'At.DID';
 		} else if (format === 'cid') {

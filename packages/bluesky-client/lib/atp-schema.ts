@@ -2067,7 +2067,7 @@ export declare namespace ComAtprotoAdminQueryModerationEvents {
 		 * Sort direction for the events. Defaults to descending order of created at timestamp.
 		 * @default "desc"
 		 */
-		sortDirection?: string;
+		sortDirection?: 'asc' | 'desc';
 		/** Retrieve events created after a given timestamp */
 		createdAfter?: string;
 		/** Retrieve events created before a given timestamp */
@@ -2128,9 +2128,9 @@ export declare namespace ComAtprotoAdminQueryModerationStatuses {
 		/** Get all subject statuses that were reviewed by a specific moderator */
 		lastReviewedBy?: At.DID;
 		/** @default "lastReportedAt" */
-		sortField?: string;
+		sortField?: 'lastReviewedAt' | 'lastReportedAt';
 		/** @default "desc" */
-		sortDirection?: string;
+		sortDirection?: 'asc' | 'desc';
 		/** Get subjects that were taken down */
 		takendown?: boolean;
 		/** Get subjects in unresolved appealed status */
