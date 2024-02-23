@@ -2,7 +2,7 @@ import { type Accessor, type JSX, Match, Switch, createSignal } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import type {
 	FollowNotification,
 	FollowNotificationSlice,
@@ -37,7 +37,7 @@ import Post from './Post';
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 export interface NotificationProps {
-	uid: DID;
+	uid: At.DID;
 	data: NotificationSlice;
 }
 
@@ -312,7 +312,7 @@ const renderText = (data: FollowNotificationSlice | LikeNotificationSlice | Repo
 };
 
 const renderAccessory = (
-	uid: Accessor<DID>,
+	uid: Accessor<At.DID>,
 	data: FollowNotificationSlice | LikeNotificationSlice | RepostNotificationSlice,
 ) => {
 	const type = data.type;

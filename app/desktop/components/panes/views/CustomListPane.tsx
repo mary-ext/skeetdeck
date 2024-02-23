@@ -2,7 +2,7 @@ import { type JSX, createSignal } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/get-list-info';
 
 import type { CustomListPaneConfig } from '../../../globals/panes';
@@ -85,7 +85,7 @@ const CustomListPane = () => {
 
 export default CustomListPane;
 
-const ListHeaderAccessory = (props: { uid: DID; uri: string }) => {
+const ListHeaderAccessory = (props: { uid: At.DID; uri: string }) => {
 	const list = createQuery(() => {
 		const key = getListInfoKey(props.uid, props.uri);
 

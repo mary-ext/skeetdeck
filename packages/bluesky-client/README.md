@@ -63,14 +63,14 @@ console.log(profile);
 ### Fiddling with AT Protocol schema...
 
 ```ts
-import { type RefOf, type UnionOf } from '@externdefs/bluesky-client/atp-schema';
+import type { AppBskyRichtextFacet, Brand } from '@externdefs/bluesky-client/atp-schema';
 
-type Facet = RefOf<'app.bsky.richtext.facet'>;
-type MentionFacet = UnionOf<'app.bsky.richtext.facet#mention'>;
+type Facet = AppBskyRichtextFacet.Main;
+type MentionFeature = Brand.Union<AppBskyRichtextFacet.Mention>;
 
-const mention: MentionFacet = {
-	$type: 'app.bsky.richtext.facet#mention',
-	did: 'did:plc:ragtjsm2j2vknwkz3zp4oxrd',
+const mention: MentionFeature = {
+  $type: 'app.bsky.richtext.facet#mention',
+  did: 'did:plc:ragtjsm2j2vknwkz3zp4oxrd',
 };
 
 const facet: Facet = {

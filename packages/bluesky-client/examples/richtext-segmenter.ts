@@ -4,11 +4,11 @@
 // The UnicodeString class is a wrapper for handling UTF-8 and UTF-16 strings
 // in a safe manner, as facets are represented with UTF-8 indices.
 
-import type { RefOf, UnionOf } from '../lib/atp-schema.js';
+import type { AppBskyRichtextFacet, Brand } from '../lib/atp-schema.js';
 
-type Facet = RefOf<'app.bsky.richtext.facet'>;
-type MentionFacet = UnionOf<'app.bsky.richtext.facet#mention'>;
-type LinkFacet = UnionOf<'app.bsky.richtext.facet#link'>;
+type Facet = AppBskyRichtextFacet.Main;
+type LinkFeature = Brand.Union<AppBskyRichtextFacet.Link>;
+type MentionFeature = Brand.Union<AppBskyRichtextFacet.Mention>;
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -33,8 +33,8 @@ class UnicodeString {
 
 export interface RichTextSegment {
 	text: string;
-	link?: LinkFacet;
-	mention?: MentionFacet;
+	link?: LinkFeature;
+	mention?: MentionFeature;
 }
 
 export interface RichTextOptions {
@@ -43,8 +43,8 @@ export interface RichTextOptions {
 }
 
 const createSegment = (text: string, facet?: Facet): RichTextSegment => {
-	let link: LinkFacet | undefined;
-	let mention: MentionFacet | undefined;
+	let link: LinkFeature | undefined;
+	let mention: MentionFeature | undefined;
 
 	if (facet) {
 		const features = facet.features;

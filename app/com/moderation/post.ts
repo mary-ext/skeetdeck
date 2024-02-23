@@ -1,6 +1,6 @@
 import { sequal } from '~/utils/dequal';
 
-import type { RefOf } from '~/api/atp-schema';
+import type { AppBskyEmbedImages, AppBskyFeedDefs } from '~/api/atp-schema';
 
 import type { SignalizedPost } from '~/api/stores/posts';
 
@@ -17,7 +17,7 @@ import { PreferenceWarn } from '~/api/moderation/enums';
 
 import { type SharedPreferencesObject, isProfileTempMuted } from '../components/SharedPreferences';
 
-type Post = RefOf<'app.bsky.feed.defs#postView'>;
+type Post = AppBskyFeedDefs.PostView;
 
 type ModerationResult = { d: ModerationDecision | null; c: unknown[] };
 const cached = new WeakMap<SignalizedPost, ModerationResult>();
@@ -58,7 +58,7 @@ export const getPostModDecision = (post: SignalizedPost, opts: SharedPreferences
 // Include image alt text as part of the text filters...
 export const unwrapImageAlt = (embed: Post['embed']): string => {
 	let str = '';
-	let images: RefOf<'app.bsky.embed.images#viewImage'>[] | undefined;
+	let images: AppBskyEmbedImages.ViewImage[] | undefined;
 
 	if (embed) {
 		if (embed.$type === 'app.bsky.embed.images#view') {

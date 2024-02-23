@@ -2,7 +2,7 @@ import { createMemo } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 
 import { getInitialPostThread, getPostThread, getPostThreadKey } from '~/api/queries/get-post-thread';
 
@@ -21,7 +21,7 @@ import ThreadView from '../partials/ThreadView';
 
 export interface ThreadPaneDialogProps {
 	/** Expected to be static */
-	actor: DID;
+	actor: At.DID;
 	/** Expected to be static */
 	rkey: string;
 }

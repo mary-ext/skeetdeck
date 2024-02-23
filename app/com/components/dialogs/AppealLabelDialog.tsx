@@ -4,7 +4,7 @@ import { createMutation } from '@pkg/solid-query';
 
 import TextareaAutosize from 'solid-textarea-autosize';
 
-import type { AtUri, DID, UnionOf } from '~/api/atp-schema';
+import type { At, Brand, ComAtprotoAdminDefs, ComAtprotoRepoStrongRef } from '~/api/atp-schema';
 import { getAccountHandle, multiagent } from '~/api/globals/agent';
 
 import { EOF_WS_RE } from '~/api/richtext/composer';
@@ -24,14 +24,14 @@ import DialogOverlay from './DialogOverlay';
 import CloseIcon from '../../icons/baseline-close';
 
 export type ReportMessage =
-	| { type: 'feed'; uri: AtUri; cid: string }
-	| { type: 'list'; uri: AtUri; cid: string }
-	| { type: 'post'; uri: AtUri; cid: string }
-	| { type: 'profile'; did: DID };
+	| { type: 'feed'; uri: At.Uri; cid: string }
+	| { type: 'list'; uri: At.Uri; cid: string }
+	| { type: 'post'; uri: At.Uri; cid: string }
+	| { type: 'profile'; did: At.DID };
 
 export interface ReportDialogProps {
 	/** Expected to be static */
-	uid: DID;
+	uid: At.DID;
 	/** Expected to be static */
 	report: ReportMessage;
 }
@@ -62,7 +62,7 @@ const ReportDialog = (props: ReportDialogProps) => {
 
 			const agent = await multiagent.connect(uid);
 
-			let subject: UnionOf<'com.atproto.admin.defs#repoRef'> | UnionOf<'com.atproto.repo.strongRef'>;
+			let subject: Brand.Union<ComAtprotoAdminDefs.RepoRef | ComAtprotoRepoStrongRef.Main>;
 
 			if (report.type === 'profile') {
 				subject = {

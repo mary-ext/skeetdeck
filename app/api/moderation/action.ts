@@ -1,4 +1,4 @@
-import type { DID } from '../atp-schema';
+import type { At } from '../atp-schema';
 
 import type { Label, LabelDefinition, ModerationOpts } from './types';
 import {
@@ -93,7 +93,7 @@ export interface ModerationDecision {
 export const decideLabelModeration = (
 	accu: ModerationCause[],
 	labels: Label[] | undefined,
-	userDid: DID,
+	userDid: At.DID,
 	opts: ModerationOpts,
 ) => {
 	if (labels) {

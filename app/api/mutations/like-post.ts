@@ -1,4 +1,4 @@
-import type { Records } from '../atp-schema';
+import type { AppBskyFeedLike } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 import type { SignalizedPost } from '../stores/posts';
@@ -16,7 +16,7 @@ const createPostLikeMutation = (post: SignalizedPost) => {
 			const agent = await multiagent.connect(uid);
 
 			if (shouldFollow) {
-				const record: Records[typeof likeRecordType] = {
+				const record: AppBskyFeedLike.Record = {
 					createdAt: getCurrentDate(),
 					subject: {
 						uri: post.uri,

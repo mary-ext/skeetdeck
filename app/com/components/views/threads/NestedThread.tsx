@@ -1,6 +1,6 @@
 import { type JSX, For } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import type { ThreadData, ThreadItem } from '~/api/models/threads';
@@ -45,7 +45,7 @@ const renderItem = (x: ThreadItem) => {
 	if (type === 'overflow') {
 		const uri = x.parentUri;
 
-		const actor = getRepoId(uri) as DID;
+		const actor = getRepoId(uri) as At.DID;
 		const rkey = getRecordId(uri);
 
 		return (
@@ -64,7 +64,7 @@ const renderItem = (x: ThreadItem) => {
 	if (type === 'block') {
 		const uri = x.item.uri;
 
-		const actor = getRepoId(uri) as DID;
+		const actor = getRepoId(uri) as At.DID;
 		const rkey = getRecordId(uri);
 
 		return (

@@ -2,7 +2,7 @@ import { For, Match, Switch, createSignal, lazy } from 'solid-js';
 
 import { createInfiniteQuery, useQueryClient } from '@pkg/solid-query';
 
-import type { DID, RefOf } from '~/api/atp-schema';
+import type { AppBskyGraphDefs, At } from '~/api/atp-schema';
 import { multiagent, renderAccountName } from '~/api/globals/agent';
 
 import { openModal } from '~/com/globals/modals';
@@ -23,19 +23,19 @@ import AddIcon from '~/com/icons/baseline-add';
 
 const AddListDialog = lazy(() => import('~/com/components/dialogs/lists/AddListDialog'));
 
-type List = RefOf<'app.bsky.graph.defs#listView'>;
+type List = AppBskyGraphDefs.ListView;
 
 const listItem = Interactive({
 	variant: 'muted',
 	class: `flex w-full cursor-pointer flex-col gap-3 px-4 py-3 text-left text-sm`,
 });
 
-const getCurationListKey = (uid: DID, filter: DID) => {
+const getCurationListKey = (uid: At.DID, filter: At.DID) => {
 	return ['getProfileCurationLists', uid, filter, 30] as const;
 };
 
 const CustomListPaneCreator = (props: PaneCreatorProps) => {
-	const [filter, setFilter] = createSignal<DID>(props.uid);
+	const [filter, setFilter] = createSignal<At.DID>(props.uid);
 
 	const queryClient = useQueryClient();
 

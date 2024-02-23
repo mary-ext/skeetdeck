@@ -1,4 +1,4 @@
-import type { AtUri } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import type { FilterPreferences, LanguagePreferences, TranslationPreferences } from '~/api/types';
 
 import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults';
@@ -28,7 +28,7 @@ export interface PreferencesSchema {
 			quotes: boolean;
 		};
 		/** Saved feeds */
-		saved: { uri: AtUri; name: string; pinned: boolean }[];
+		saved: { uri: At.Uri; name: string; pinned: boolean }[];
 	};
 	/** Content moderation */
 	moderation: Omit<ModerationOpts, '_filtersCache'>;

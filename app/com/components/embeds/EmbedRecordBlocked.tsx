@@ -1,13 +1,13 @@
 import { type JSX } from 'solid-js';
 
-import type { DID, RefOf } from '~/api/atp-schema';
+import type { AppBskyEmbedRecord, AppBskyFeedDefs, At } from '~/api/atp-schema';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import { LINK_POST, Link } from '../Link';
 
 import EmbedRecordNotFound from './EmbedRecordNotFound';
 
-type EmbeddedBlockedRecord = RefOf<'app.bsky.embed.record#viewBlocked'>;
+type EmbeddedBlockedRecord = AppBskyEmbedRecord.ViewBlocked | AppBskyFeedDefs.BlockedPost;
 
 export interface EmbedRecordBlockedProps {
 	record: EmbeddedBlockedRecord;
@@ -26,7 +26,7 @@ const EmbedRecordBlocked = (props: EmbedRecordBlockedProps) => {
 						to={
 							/* @once */ {
 								type: LINK_POST,
-								actor: getRepoId(record.uri) as DID,
+								actor: getRepoId(record.uri) as At.DID,
 								rkey: getRecordId(record.uri),
 							}
 						}

@@ -1,6 +1,6 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID } from '../atp-schema';
+import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 import { type SignalizedProfile, mergeProfile } from '../stores/profiles';
@@ -15,7 +15,7 @@ export interface ListMembersPage {
 	members: Array<ListMember>;
 }
 
-export const getListMembersKey = (uid: DID, uri: string, limit = 25) => {
+export const getListMembersKey = (uid: At.DID, uri: string, limit = 25) => {
 	return ['getListMembers', uid, uri, limit] as const;
 };
 export const getListMembers = async (ctx: QC<ReturnType<typeof getListMembersKey>, string | undefined>) => {

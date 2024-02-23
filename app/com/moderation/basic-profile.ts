@@ -1,4 +1,4 @@
-import type { RefOf } from '~/api/atp-schema';
+import type { AppBskyActorDefs } from '~/api/atp-schema';
 
 import {
 	type ModerationCause,
@@ -11,12 +11,15 @@ import { sequal } from '~/utils/dequal';
 
 import type { SharedPreferencesObject } from '../components/SharedPreferences';
 
-type BasicProfile = RefOf<'app.bsky.actor.defs#profileViewBasic'>;
+type ProfileView =
+	| AppBskyActorDefs.ProfileView
+	| AppBskyActorDefs.ProfileViewBasic
+	| AppBskyActorDefs.ProfileViewDetailed;
 
 type ModerationResult = { d: ModerationDecision | null; c: unknown[] };
-const cached = new WeakMap<BasicProfile, ModerationResult>();
+const cached = new WeakMap<ProfileView, ModerationResult>();
 
-export const getBasicProfileModDecision = (profile: BasicProfile, opts: SharedPreferencesObject) => {
+export const getBasicProfileModDecision = (profile: ProfileView, opts: SharedPreferencesObject) => {
 	const key = [opts.rev];
 
 	let res = cached.get(profile);

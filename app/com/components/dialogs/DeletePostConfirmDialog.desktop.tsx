@@ -2,7 +2,7 @@ import { batch, createEffect, createSignal } from 'solid-js';
 
 import { type InfiniteData, createMutation } from '@pkg/solid-query';
 
-import type { Records, RefOf, UnionOf } from '~/api/atp-schema';
+import type { AppBskyEmbedImages, AppBskyFeedThreadgate, Brand } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { getRecordId } from '~/api/utils/misc';
 
@@ -130,14 +130,14 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 			mutationFn: async () => {
 				const post = props.post;
 				const record = post.record.value;
-				const threadgate = post.threadgate.value?.record as Records['app.bsky.feed.threadgate'] | undefined;
+				const threadgate = post.threadgate.value?.record as AppBskyFeedThreadgate.Record | undefined;
 
 				const uid = post.uid;
 				const agent = await multiagent.connect(uid);
 
 				let externalEmbedUri: string | undefined;
 				let recordEmbedUri: string | undefined;
-				let imageRefs: RefOf<'app.bsky.embed.images#image'>[] = [];
+				let imageRefs: AppBskyEmbedImages.Image[] = [];
 
 				{
 					const embed = record.embed;
@@ -268,10 +268,9 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 
 export default DeletePostConfirmDialog;
 
-type Rule =
-	| UnionOf<'app.bsky.feed.threadgate#followingRule'>
-	| UnionOf<'app.bsky.feed.threadgate#listRule'>
-	| UnionOf<'app.bsky.feed.threadgate#mentionRule'>;
+type Rule = Brand.Union<
+	AppBskyFeedThreadgate.FollowingRule | AppBskyFeedThreadgate.ListRule | AppBskyFeedThreadgate.MentionRule
+>;
 
 const parseGateRules = (rules: Rule[] | undefined): GateState => {
 	if (rules) {

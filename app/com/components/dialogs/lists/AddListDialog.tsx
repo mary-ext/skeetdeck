@@ -2,7 +2,7 @@ import { createEffect, createMemo, createSignal } from 'solid-js';
 
 import { createMutation } from '@pkg/solid-query';
 
-import type { DID, Records, RefOf } from '~/api/atp-schema';
+import type { AppBskyGraphDefs, AppBskyGraphList, At } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { getCurrentDate } from '~/api/utils/misc';
 import { ListPurposeLabels } from '~/api/display';
@@ -29,11 +29,10 @@ import DialogOverlay from '../DialogOverlay';
 
 import CloseIcon from '../../../icons/baseline-close';
 
-type ListPurpose = RefOf<'app.bsky.graph.defs#listPurpose'>;
-type ListRecord = Records['app.bsky.graph.list'];
+type ListPurpose = AppBskyGraphDefs.ListPurpose;
 
 export interface AddListDialogProps {
-	uid: DID;
+	uid: At.DID;
 	type?: ListPurpose;
 	onSubmit?: (uri: string) => void;
 }
@@ -67,7 +66,7 @@ const AddListDialog = (props: AddListDialogProps) => {
 
 			const { text, facets } = await finalizeRt(uid, $richtext);
 
-			const record: ListRecord = {
+			const record: AppBskyGraphList.Record = {
 				createdAt: getCurrentDate(),
 				name: $name,
 				purpose: $purpose,

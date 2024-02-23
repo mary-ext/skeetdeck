@@ -1,11 +1,11 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID } from '../atp-schema';
+import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 import { mergeProfile } from '../stores/profiles';
 
-export const getLikesKey = (uid: DID, uri: string, limit = 25) => {
+export const getLikesKey = (uid: At.DID, uri: string, limit = 25) => {
 	return ['getLikes', uid, uri, limit] as const;
 };
 export const getLikes = async (ctx: QC<ReturnType<typeof getLikesKey>, string | undefined>) => {

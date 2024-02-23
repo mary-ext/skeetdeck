@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js';
 
-import type { RefOf } from '~/api/atp-schema';
+import type { AppBskyGraphDefs } from '~/api/atp-schema';
 import { renderListPurpose } from '~/api/display';
 import { getRecordId } from '~/api/utils/misc';
 
@@ -10,8 +10,8 @@ import { LINK_LIST, Link } from '../Link';
 
 import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';
 
-type ListView = RefOf<'app.bsky.graph.defs#listView'>;
-type ListViewBasic = RefOf<'app.bsky.graph.defs#listViewBasic'>;
+type ListView = AppBskyGraphDefs.ListView;
+type ListViewBasic = AppBskyGraphDefs.ListViewBasic;
 
 export interface EmbedListProps {
 	list: ListView;

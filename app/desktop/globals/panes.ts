@@ -1,4 +1,4 @@
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 
 export const PANE_TYPE_HOME = 'home';
 export const PANE_TYPE_NOTIFICATIONS = 'notifications';
@@ -61,7 +61,7 @@ export interface BasePaneConfig {
 	readonly id: string;
 	title: string | null;
 	size: SpecificPaneSize;
-	uid: DID;
+	uid: At.DID;
 }
 
 export interface HomePaneConfig extends BasePaneConfig {
@@ -79,7 +79,7 @@ export interface NotificationsPaneConfig extends BasePaneConfig {
 export interface ProfilePaneConfig extends BasePaneConfig {
 	readonly type: typeof PANE_TYPE_PROFILE;
 	profile: {
-		did: DID;
+		did: At.DID;
 		handle: string;
 		// name?: string;
 	};
@@ -118,7 +118,7 @@ export interface SearchPaneConfig extends BasePaneConfig {
 export interface ThreadPaneConfig extends BasePaneConfig {
 	readonly type: typeof PANE_TYPE_THREAD;
 	thread: {
-		actor: DID;
+		actor: At.DID;
 		rkey: string;
 	};
 }

@@ -1,7 +1,7 @@
-import type { DID } from '../atp-schema';
+import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
-export const updateNotificationsSeen = async (uid: DID, date = new Date()) => {
+export const updateNotificationsSeen = async (uid: At.DID, date = new Date()) => {
 	const agent = await multiagent.connect(uid);
 
 	await agent.rpc.call('app.bsky.notification.updateSeen', {

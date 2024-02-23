@@ -1,6 +1,6 @@
 import { sequal } from '~/utils/dequal';
 
-import type { Records, UnionOf } from '~/api/atp-schema';
+import type { AppBskyEmbedRecord, AppBskyFeedPost } from '~/api/atp-schema';
 
 import {
 	type ModerationCause,
@@ -16,8 +16,8 @@ import { PreferenceWarn } from '~/api/moderation/enums';
 import { type SharedPreferencesObject, isProfileTempMuted } from '../components/SharedPreferences';
 import { unwrapImageAlt } from './post';
 
-type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
-type PostRecord = Records['app.bsky.feed.post'];
+type EmbeddedPostRecord = AppBskyEmbedRecord.ViewRecord;
+type PostRecord = AppBskyFeedPost.Record;
 
 type ModerationResult = { d: ModerationDecision | null; c: unknown[] };
 const cached = new WeakMap<EmbeddedPostRecord, ModerationResult>();

@@ -1,6 +1,6 @@
 import { type JSX, createContext, useContext } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
 export const LINK_EXTERNAL = 0;
@@ -28,43 +28,43 @@ export interface ExternalLinking {
 
 export interface FeedLinking {
 	type: typeof LINK_FEED;
-	actor: DID;
+	actor: At.DID;
 	rkey: string;
 }
 
 export interface FeedLikedByLinking {
 	type: typeof LINK_FEED_LIKED_BY;
-	actor: DID;
+	actor: At.DID;
 	rkey: string;
 }
 
 export interface ListLinking {
 	type: typeof LINK_LIST;
-	actor: DID;
+	actor: At.DID;
 	rkey: string;
 }
 
 export interface PostLinking {
 	type: typeof LINK_POST;
-	actor: DID;
+	actor: At.DID;
 	rkey: string;
 }
 
 export interface PostLikedByLinking {
 	type: typeof LINK_POST_LIKED_BY;
-	actor: DID;
+	actor: At.DID;
 	rkey: string;
 }
 
 export interface PostRepostedByLinking {
 	type: typeof LINK_POST_REPOSTED_BY;
-	actor: DID;
+	actor: At.DID;
 	rkey: string;
 }
 
 export interface ProfileLinking {
 	type: typeof LINK_PROFILE;
-	actor: DID;
+	actor: At.DID;
 }
 
 export interface ProfileEditLinking {
@@ -74,33 +74,33 @@ export interface ProfileEditLinking {
 
 export interface ProfileFeedsLinking {
 	type: typeof LINK_PROFILE_FEEDS;
-	actor: DID;
+	actor: At.DID;
 }
 
 export interface ProfileFollowsLinking {
 	type: typeof LINK_PROFILE_FOLLOWERS;
-	actor: DID;
+	actor: At.DID;
 }
 
 export interface ProfileFollowersLinking {
 	type: typeof LINK_PROFILE_FOLLOWS;
-	actor: DID;
+	actor: At.DID;
 }
 
 export interface ProfileListsLinking {
 	type: typeof LINK_PROFILE_LISTS;
-	actor: DID;
+	actor: At.DID;
 }
 
 export interface QuoteLinking {
 	type: typeof LINK_QUOTE;
-	actor: DID;
+	actor: At.DID;
 	rkey: string;
 }
 
 export interface ReplyLinking {
 	type: typeof LINK_REPLY;
-	actor: DID;
+	actor: At.DID;
 	rkey: string;
 }
 

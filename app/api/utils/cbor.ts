@@ -2,7 +2,7 @@ import * as cborg from 'cborg';
 
 import { assert } from '~/utils/misc';
 
-import type { AtBlob } from '../atp-schema';
+import type { At } from '../atp-schema';
 
 import * as base32 from './base32';
 
@@ -34,7 +34,7 @@ const CBORG_ENCODE_OPTIONS: cborg.EncodeOptions = {
 		},
 		Object: (val) => {
 			if ('$type' in val && val.$type === 'blob' && 'ref' in val) {
-				const blob = val as AtBlob;
+				const blob = val as At.Blob;
 				const cid = decodeCidToBytes(blob.ref.$link);
 
 				// CID bytes are prefixed with 0x00 for historical reasons, apparently.

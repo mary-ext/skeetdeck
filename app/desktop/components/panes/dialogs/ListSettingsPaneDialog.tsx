@@ -2,7 +2,7 @@ import { createEffect, createMemo, lazy, createSignal as signal } from 'solid-js
 
 import { type InfiniteData, createMutation, useQueryClient } from '@pkg/solid-query';
 
-import type { Records, UnionOf } from '~/api/atp-schema';
+import type { AppBskyGraphList, Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { formatQueryError, getRecordId } from '~/api/utils/misc';
 
@@ -52,7 +52,7 @@ export interface ListSettingsPaneDialogProps {
 
 const listRecordType = 'app.bsky.graph.list';
 
-type ListRecord = Records[typeof listRecordType];
+type ListRecord = AppBskyGraphList.Record;
 
 const MAX_DESC_LENGTH = 300;
 
@@ -158,7 +158,7 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 					return x.listUri === listUri ? x.itemUri : undefined;
 				});
 
-				const writes = itemUris.map((uri): UnionOf<'com.atproto.repo.applyWrites#delete'> => {
+				const writes = itemUris.map((uri): Brand.Union<ComAtprotoRepoApplyWrites.Delete> => {
 					return {
 						$type: 'com.atproto.repo.applyWrites#delete',
 						collection: 'app.bsky.graph.listitem',

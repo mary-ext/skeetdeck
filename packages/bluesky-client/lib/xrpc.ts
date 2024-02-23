@@ -76,9 +76,9 @@ interface BaseRPCOptions {
 
 export type RPCOptions<T> = BaseRPCOptions &
 	(T extends { params: any } ? { params: T['params'] } : {}) &
-	(T extends { data: any } ? { data: T['data'] } : {});
+	(T extends { input: any } ? { data: T['input'] } : {});
 
-export type ResponseOf<T> = T extends { response: any } ? T['response'] : never;
+export type OutputOf<T> = T extends { output: any } ? T['output'] : never;
 
 export class XRPC<Queries, Procedures> {
 	constructor(
@@ -89,14 +89,14 @@ export class XRPC<Queries, Procedures> {
 	get<K extends keyof Queries>(
 		nsid: K,
 		options: RPCOptions<Queries[K]>,
-	): Promise<XRPCResponse<ResponseOf<Queries[K]>>> {
+	): Promise<XRPCResponse<OutputOf<Queries[K]>>> {
 		return this.#call({ type: 'get', method: nsid as any, ...options });
 	}
 
 	call<K extends keyof Procedures>(
 		nsid: K,
 		options: RPCOptions<Procedures[K]>,
-	): Promise<XRPCResponse<ResponseOf<Procedures[K]>>> {
+	): Promise<XRPCResponse<OutputOf<Procedures[K]>>> {
 		return this.#call({ type: 'post', method: nsid as any, ...options });
 	}
 

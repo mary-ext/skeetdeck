@@ -1,12 +1,12 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID } from '../atp-schema';
+import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 // @todo: should this be committed to global store?
 // perhaps it would be better off not to.
 
-export const searchProfilesTypeaheadKey = (uid: DID, query: string, limit = 30) => {
+export const searchProfilesTypeaheadKey = (uid: At.DID, query: string, limit = 30) => {
 	return ['searchProfilesTypeahead', uid, query, limit] as const;
 };
 export const searchProfilesTypeahead = async (ctx: QC<ReturnType<typeof searchProfilesTypeaheadKey>>) => {

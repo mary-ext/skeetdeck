@@ -2,7 +2,7 @@ import { createEffect, createSignal } from 'solid-js';
 
 import { type InfiniteData, createQuery, useQueryClient } from '@pkg/solid-query';
 
-import type { RefOf } from '~/api/atp-schema.ts';
+import type { AppBskyGraphDefs } from '~/api/atp-schema.ts';
 import { getAccountHandle, multiagent } from '~/api/globals/agent.ts';
 import { formatQueryError } from '~/api/utils/misc.ts';
 
@@ -26,7 +26,7 @@ import SwitchAccountAction from '~/desktop/components/flyouts/SwitchAccountActio
 
 import type { MuteConfirmDialogProps } from './MuteConfirmDialog.tsx';
 
-type ListViewBasic = RefOf<'app.bsky.graph.defs#listViewBasic'>;
+type ListViewBasic = AppBskyGraphDefs.ListViewBasic;
 
 const MuteConfirmDialog = (props: MuteConfirmDialogProps) => {
 	const did = props.did;

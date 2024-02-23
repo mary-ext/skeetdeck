@@ -2,7 +2,7 @@ import { Match, Switch, createSignal, lazy } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';
 
 import { formatCompact } from '~/utils/intl/number';
@@ -32,7 +32,7 @@ const ProfileSearchPaneDialog = lazy(() => import('./ProfileSearchPaneDialog'));
 
 export interface ProfilePaneDialogProps {
 	/** Expected to be static */
-	actor: DID;
+	actor: At.DID;
 }
 
 const enum ProfileTab {

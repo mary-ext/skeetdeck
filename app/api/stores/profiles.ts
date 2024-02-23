@@ -1,11 +1,11 @@
 import { EQUALS_DEQUAL } from '~/utils/dequal';
 import { type Signal, signal } from '~/utils/signals';
 
-import type { DID, RefOf } from '../atp-schema';
+import type { AppBskyActorDefs, At } from '../atp-schema';
 
-type Profile = RefOf<'app.bsky.actor.defs#profileView'>;
-type ProfileBasic = RefOf<'app.bsky.actor.defs#profileViewBasic'>;
-type ProfileDetailed = RefOf<'app.bsky.actor.defs#profileViewDetailed'>;
+type Profile = AppBskyActorDefs.ProfileView;
+type ProfileBasic = AppBskyActorDefs.ProfileViewBasic;
+type ProfileDetailed = AppBskyActorDefs.ProfileViewDetailed;
 
 export const profiles: Record<string, WeakRef<SignalizedProfile>> = {};
 
@@ -18,7 +18,7 @@ const gc = new FinalizationRegistry<string>((id) => {
 });
 
 export class SignalizedProfile {
-	readonly uid: DID;
+	readonly uid: At.DID;
 	_key?: number;
 
 	readonly did: ProfileDetailed['did'];
@@ -44,7 +44,7 @@ export class SignalizedProfile {
 		readonly followedBy: Signal<NonNullable<ProfileDetailed['viewer']>['followedBy']>;
 	};
 
-	constructor(uid: DID, profile: Profile | ProfileBasic | ProfileDetailed, key?: number) {
+	constructor(uid: At.DID, profile: Profile | ProfileBasic | ProfileDetailed, key?: number) {
 		const isProfile = 'description' in profile;
 		const isDetailed = 'postsCount' in profile;
 
@@ -74,18 +74,22 @@ export class SignalizedProfile {
 	}
 }
 
-export const createProfileId = (uid: DID, actor: DID) => {
+export const createProfileId = (uid: At.DID, actor: At.DID) => {
 	return uid + '|' + actor;
 };
 
-export const getCachedProfile = (uid: DID, actor: DID) => {
+export const getCachedProfile = (uid: At.DID, actor: At.DID) => {
 	const id = createProfileId(uid, actor);
 	const ref = profiles[id];
 
 	return ref && ref.deref();
 };
 
-export const mergeProfile = (uid: DID, profile: Profile | ProfileBasic | ProfileDetailed, key?: number) => {
+export const mergeProfile = (
+	uid: At.DID,
+	profile: Profile | ProfileBasic | ProfileDetailed,
+	key?: number,
+) => {
 	let id = createProfileId(uid, profile.did);
 
 	let ref: WeakRef<SignalizedProfile> | undefined = profiles[id];

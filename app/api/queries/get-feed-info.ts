@@ -1,13 +1,13 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID, RefOf } from '../atp-schema';
+import type { AppBskyFeedDefs, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 import { createBatchedFetch } from '../utils/batch-fetch';
 
 import { getCachedFeed, mergeFeed } from '../stores/feeds';
 
-type Feed = RefOf<'app.bsky.feed.defs#generatorView'>;
-type Query = [uid: DID, uri: string];
+type Feed = AppBskyFeedDefs.GeneratorView;
+type Query = [uid: At.DID, uri: string];
 
 export const fetchFeedBatched = createBatchedFetch<Query, string, Feed>({
 	limit: 25,
@@ -31,7 +31,7 @@ export const fetchFeedBatched = createBatchedFetch<Query, string, Feed>({
 	},
 });
 
-export const getFeedInfoKey = (uid: DID, uri: string) => {
+export const getFeedInfoKey = (uid: At.DID, uri: string) => {
 	return ['getFeedInfo', uid, uri] as const;
 };
 export const getFeedInfo = async (ctx: QC<ReturnType<typeof getFeedInfoKey>>) => {

@@ -5,13 +5,13 @@
 // can be avoided, along with the need to encode into UTF-8 to get the indices
 // for facets.
 
-import { DID, RefOf } from '../lib/atp-schema.js';
+import { AppBskyRichtextFacet, At } from '../lib/atp-schema.js';
 
 import { graphemeLen } from './richtext-grapheme.js';
 
 type UnwrapArray<T> = T extends (infer V)[] ? V : never;
 
-type Facet = RefOf<'app.bsky.richtext.facet'>;
+type Facet = AppBskyRichtextFacet.Main;
 type FacetFeature = UnwrapArray<Facet['features']>;
 
 const encoder = new TextEncoder();
@@ -51,7 +51,7 @@ class RichTextBuilder {
 		return this;
 	}
 
-	mention(substr: string, did: DID) {
+	mention(substr: string, did: At.DID) {
 		return this.feature(substr, { $type: 'app.bsky.richtext.facet#mention', did });
 	}
 

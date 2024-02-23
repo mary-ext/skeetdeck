@@ -1,4 +1,4 @@
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { getAccountData } from '~/api/globals/agent';
 
 import { getCurrentTid } from '~/api/utils/tid';
@@ -22,7 +22,7 @@ export const createEmptyDeck = (): DeckConfig => {
 	};
 };
 
-export const createStarterDeck = (uid: DID): DeckConfig => {
+export const createStarterDeck = (uid: At.DID): DeckConfig => {
 	const data = getAccountData(uid)!;
 
 	return {

@@ -1,6 +1,6 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID, RefOf } from '../atp-schema';
+import type { AppBskyFeedDefs, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 import { createBatchedFetch } from '../utils/batch-fetch';
 
@@ -8,8 +8,8 @@ import { getCachedPost, mergePost, type SignalizedPost } from '../stores/posts';
 
 import _getDid from './_did';
 
-type Post = RefOf<'app.bsky.feed.defs#postView'>;
-type Query = [uid: DID, uri: string];
+type Post = AppBskyFeedDefs.PostView;
+type Query = [uid: At.DID, uri: string];
 
 export const fetchPost = createBatchedFetch<Query, string, Post>({
 	limit: 25,
@@ -33,7 +33,7 @@ export const fetchPost = createBatchedFetch<Query, string, Post>({
 	},
 });
 
-export const getPostKey = (uid: DID, uri: string) => {
+export const getPostKey = (uid: At.DID, uri: string) => {
 	return ['getPost', uid, uri] as const;
 };
 export const getPost = async (ctx: QC<ReturnType<typeof getPostKey>>) => {

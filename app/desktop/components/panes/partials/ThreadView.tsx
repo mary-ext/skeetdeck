@@ -3,7 +3,7 @@ import { For, Match, Show, Suspense, Switch, lazy, onMount } from 'solid-js';
 import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 import { type CreateQueryResult } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import type { ThreadData } from '~/api/models/threads';
@@ -30,7 +30,7 @@ const FlattenedThread = lazy(() => import('~/com/components/views/threads/Flatte
 const NestedThread = lazy(() => import('~/com/components/views/threads/NestedThread'));
 
 export interface ThreadViewProps {
-	actor: DID;
+	actor: At.DID;
 	thread: CreateQueryResult<ThreadData, Error>;
 }
 
@@ -135,7 +135,7 @@ const ThreadView = (props: ThreadViewProps) => {
 
 									if (type === 'overflow') {
 										const uri = item.uri;
-										const actor = getRepoId(uri) as DID;
+										const actor = getRepoId(uri) as At.DID;
 										const rkey = getRecordId(uri);
 
 										return (

@@ -1,10 +1,10 @@
-import type { DID, RefOf } from '../atp-schema';
+import type { AppBskyFeedDefs, At } from '../atp-schema';
 
 import { type SignalizedPost, mergePost } from '../stores/posts';
 
-type Post = RefOf<'app.bsky.feed.defs#postView'>;
-type TimelineItem = RefOf<'app.bsky.feed.defs#feedViewPost'>;
-type ReplyRef = RefOf<'app.bsky.feed.defs#replyRef'>;
+type Post = AppBskyFeedDefs.PostView;
+type TimelineItem = AppBskyFeedDefs.FeedViewPost;
+type ReplyRef = AppBskyFeedDefs.ReplyRef;
 
 // EnsuredTimelineItem
 export interface EnsuredReplyRef {
@@ -48,7 +48,7 @@ export interface SignalizedTimelineItem {
 }
 
 export const mergeSignalizedTimelineItem = (
-	uid: DID,
+	uid: At.DID,
 	item: EnsuredTimelineItem,
 	key?: number,
 ): SignalizedTimelineItem => {
@@ -93,7 +93,7 @@ const isFirstInThread = (slice: TimelineSlice, item: EnsuredTimelineItem) => {
 const isArray = Array.isArray;
 
 export const createTimelineSlices = (
-	uid: DID,
+	uid: At.DID,
 	arr: TimelineItem[],
 	filterSlice?: SliceFilter,
 	filterPost?: PostFilter,
@@ -170,7 +170,7 @@ export const createTimelineSlices = (
 };
 
 export const createUnjoinedSlices = (
-	uid: DID,
+	uid: At.DID,
 	arr: TimelineItem[],
 	filterPost?: PostFilter,
 ): TimelineSlice[] => {

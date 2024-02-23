@@ -1,6 +1,6 @@
 import { type JSX, createMemo, createSignal, lazy } from 'solid-js';
 
-import type { DID, Records, RefOf } from '~/api/atp-schema';
+import type { AppBskyFeedDefs, AppBskyFeedThreadgate, At } from '~/api/atp-schema';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import { updatePostLike } from '~/api/mutations/like-post';
@@ -263,7 +263,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 							const list = lists[idx];
 
 							const uri = list.uri;
-							const actor = getRepoId(uri) as DID;
+							const actor = getRepoId(uri) as At.DID;
 							const rkey = getRecordId(uri);
 
 							if (idx !== 0) {
@@ -315,12 +315,12 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 
 export default PermalinkPost;
 
-const unwrapThreadgateRecord = (threadgate?: RefOf<'app.bsky.feed.defs#threadgateView'>) => {
+const unwrapThreadgateRecord = (threadgate?: AppBskyFeedDefs.ThreadgateView) => {
 	if (!threadgate) {
 		return null;
 	}
 
-	const record = threadgate.record as Records['app.bsky.feed.threadgate'];
+	const record = threadgate.record as AppBskyFeedThreadgate.Record;
 	const rules = record.allow;
 
 	if (!rules) {

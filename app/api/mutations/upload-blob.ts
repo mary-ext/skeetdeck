@@ -1,14 +1,14 @@
-import type { AtBlob, DID } from '../atp-schema';
+import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 interface BlobMetadata {
-	u: DID;
-	b: AtBlob;
+	u: At.DID;
+	b: At.Blob;
 }
 
 const cache = new WeakMap<Blob, BlobMetadata>();
 
-export const uploadBlob = async <T extends string = string>(uid: DID, blob: Blob): Promise<AtBlob<T>> => {
+export const uploadBlob = async <T extends string = string>(uid: At.DID, blob: Blob): Promise<At.Blob<T>> => {
 	let meta = cache.get(blob);
 
 	if (!meta || meta.u !== uid) {
@@ -22,10 +22,13 @@ export const uploadBlob = async <T extends string = string>(uid: DID, blob: Blob
 		cache.set(blob, (meta = { u: uid, b: response.data.blob }));
 	}
 
-	return meta.b as AtBlob<T>;
+	return meta.b as At.Blob<T>;
 };
 
-export const getUploadedBlob = <T extends string = string>(uid: DID, blob: Blob): AtBlob<T> | undefined => {
+export const getUploadedBlob = <T extends string = string>(
+	uid: At.DID,
+	blob: Blob,
+): At.Blob<T> | undefined => {
 	const meta = cache.get(blob);
-	return meta && meta.u === uid ? (meta.b as AtBlob<T>) : undefined;
+	return meta && meta.u === uid ? (meta.b as At.Blob<T>) : undefined;
 };

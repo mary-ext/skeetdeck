@@ -2,7 +2,7 @@ import { createEffect, createMemo } from 'solid-js';
 
 import { createInfiniteQuery, createMutation, createQuery } from '@pkg/solid-query';
 
-import type { UnionOf } from '~/api/atp-schema';
+import type { Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { getRecordId } from '~/api/utils/misc';
 
@@ -72,7 +72,7 @@ const PruneListOrphanDialog = (props: PruneListOrphanDialogProps) => {
 		mutationFn: async () => {
 			const $orphanUris = orphanUris()!;
 
-			const writes: UnionOf<'com.atproto.repo.applyWrites#delete'>[] = $orphanUris.map((uri) => ({
+			const writes: Brand.Union<ComAtprotoRepoApplyWrites.Delete>[] = $orphanUris.map((uri) => ({
 				$type: 'com.atproto.repo.applyWrites#delete',
 				collection: 'app.bsky.graph.listitem',
 				rkey: getRecordId(uri),

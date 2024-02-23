@@ -1,4 +1,4 @@
-import type { Records } from '../atp-schema';
+import type { AppBskyGraphListblock } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 import type { SignalizedList } from '../stores/lists';
@@ -16,7 +16,7 @@ const createListBlockMutation = (list: SignalizedList) => {
 			const agent = await multiagent.connect(uid);
 
 			if (shouldBlock) {
-				const record: Records[typeof blockRecordType] = {
+				const record: AppBskyGraphListblock.Record = {
 					createdAt: getCurrentDate(),
 					subject: list.uri,
 				};

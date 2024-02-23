@@ -1,11 +1,11 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID } from '../atp-schema';
+import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 import { getCachedProfile, mergeProfile } from '../stores/profiles';
 
-export const getProfileFollowersKey = (uid: DID, actor: string, limit = 25) => {
+export const getProfileFollowersKey = (uid: At.DID, actor: string, limit = 25) => {
 	return ['getProfileFollowers', uid, actor, limit] as const;
 };
 export const getProfileFollowers = async (
@@ -36,7 +36,7 @@ export const getProfileFollowers = async (
 export const getInitialProfileFollowers = (key: ReturnType<typeof getProfileFollowersKey>) => {
 	const [, uid, actor] = key;
 
-	const profile = getCachedProfile(uid, actor as DID);
+	const profile = getCachedProfile(uid, actor as At.DID);
 
 	if (profile) {
 		return {

@@ -1,9 +1,9 @@
 import { type Signal, signal } from '~/utils/signals';
 
-import type { DID, RefOf } from '../atp-schema';
+import type { AppBskyFeedDefs, At } from '../atp-schema';
 import { type SignalizedProfile, mergeProfile } from './profiles';
 
-type Feed = RefOf<'app.bsky.feed.defs#generatorView'>;
+type Feed = AppBskyFeedDefs.GeneratorView;
 
 export const feeds: Record<string, WeakRef<SignalizedFeed>> = {};
 
@@ -16,7 +16,7 @@ const gc = new FinalizationRegistry<string>((id) => {
 });
 
 export class SignalizedFeed {
-	readonly uid: DID;
+	readonly uid: At.DID;
 	_key?: number;
 
 	readonly uri: string;
@@ -33,7 +33,7 @@ export class SignalizedFeed {
 		readonly like: Signal<NonNullable<Feed['viewer']>['like']>;
 	};
 
-	constructor(uid: DID, feed: Feed, key?: number) {
+	constructor(uid: At.DID, feed: Feed, key?: number) {
 		this.uid = uid;
 		this._key = key;
 
@@ -53,18 +53,18 @@ export class SignalizedFeed {
 	}
 }
 
-export const createFeedId = (uid: DID, uri: string) => {
+export const createFeedId = (uid: At.DID, uri: string) => {
 	return uid + '|' + uri;
 };
 
-export const getCachedFeed = (uid: DID, uri: string) => {
+export const getCachedFeed = (uid: At.DID, uri: string) => {
 	const id = createFeedId(uid, uri);
 	const ref = feeds[id];
 
 	return ref && ref.deref();
 };
 
-export const mergeFeed = (uid: DID, feed: Feed, key?: number) => {
+export const mergeFeed = (uid: At.DID, feed: Feed, key?: number) => {
 	let id = createFeedId(uid, feed.uri);
 
 	let ref: WeakRef<SignalizedFeed> | undefined = feeds[id];

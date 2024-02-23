@@ -2,7 +2,7 @@ import { For, Match, Switch, createSignal } from 'solid-js';
 
 import { createInfiniteQuery } from '@pkg/solid-query';
 
-import type { DID, ResponseOf } from '~/api/atp-schema';
+import type { AppBskyUnspeccedGetPopularFeedGenerators, At } from '~/api/atp-schema';
 import { multiagent, renderAccountName } from '~/api/globals/agent';
 
 import { type CustomFeedPaneConfig, PANE_TYPE_FEED } from '../../../globals/panes';
@@ -30,7 +30,7 @@ const showMoreBtn = Interactive({
 
 const CustomFeedPaneCreator = (props: PaneCreatorProps) => {
 	const [search, setSearch] = createSignal('');
-	const [filter, setFilter] = createSignal<DID>();
+	const [filter, setFilter] = createSignal<At.DID>();
 
 	const feeds = createInfiniteQuery(() => ({
 		queryKey: ['getPopularFeedGenerators', props.uid, filter(), search(), 30] as const,
@@ -39,7 +39,7 @@ const CustomFeedPaneCreator = (props: PaneCreatorProps) => {
 
 			const agent = await multiagent.connect(uid);
 
-			let data: ResponseOf<'app.bsky.unspecced.getPopularFeedGenerators'>;
+			let data: AppBskyUnspeccedGetPopularFeedGenerators.Output;
 			if (actor) {
 				const response = await agent.rpc.get('app.bsky.feed.getActorFeeds', {
 					signal: ctx.signal,

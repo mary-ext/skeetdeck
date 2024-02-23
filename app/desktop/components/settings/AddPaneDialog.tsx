@@ -1,6 +1,6 @@
 import { type Component, Match, Show, Switch, createSignal } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { getAccountHandle, multiagent } from '~/api/globals/agent';
 import { getCurrentTid } from '~/api/utils/tid';
 
@@ -86,7 +86,7 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 
 	const creatorProps: PaneCreatorProps = {
 		get uid() {
-			return user() as DID;
+			return user() as At.DID;
 		},
 		onAdd: add,
 	};
@@ -124,7 +124,7 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 							<div class="flex min-w-0 grow flex-col gap-0.5">
 								<p class="text-base font-bold leading-5">Add a {labelizePaneType(type())} column</p>
 								<p class="overflow-hidden text-ellipsis whitespace-nowrap text-xs text-muted-fg">
-									@{getAccountHandle(user() as DID)}
+									@{getAccountHandle(user() as At.DID)}
 								</p>
 							</div>
 						)}

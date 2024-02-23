@@ -1,12 +1,12 @@
 import { EQUALS_DEQUAL } from '~/utils/dequal';
 import { type Signal, signal } from '~/utils/signals';
 
-import type { DID, Records, RefOf } from '../atp-schema';
+import type { AppBskyFeedDefs, AppBskyFeedPost, At } from '../atp-schema';
 
 import { type SignalizedProfile, mergeProfile } from './profiles';
 
-type Post = RefOf<'app.bsky.feed.defs#postView'>;
-type PostRecord = Records['app.bsky.feed.post'];
+type Post = AppBskyFeedDefs.PostView;
+type PostRecord = AppBskyFeedPost.Record;
 
 export const posts: Record<string, WeakRef<SignalizedPost>> = {};
 
@@ -19,7 +19,7 @@ const gc = new FinalizationRegistry<string>((id) => {
 });
 
 export class SignalizedPost {
-	readonly uid: DID;
+	readonly uid: At.DID;
 	_key?: number;
 
 	readonly uri: Post['uri'];
@@ -41,7 +41,7 @@ export class SignalizedPost {
 
 	$truncated?: boolean;
 
-	constructor(uid: DID, post: Post, key?: number) {
+	constructor(uid: At.DID, post: Post, key?: number) {
 		this.uid = uid;
 		this._key = key;
 
@@ -64,18 +64,18 @@ export class SignalizedPost {
 	}
 }
 
-export const createPostId = (uid: DID, uri: string) => {
+export const createPostId = (uid: At.DID, uri: string) => {
 	return uid + '|' + uri;
 };
 
-export const getCachedPost = (uid: DID, uri: string) => {
+export const getCachedPost = (uid: At.DID, uri: string) => {
 	const id = createPostId(uid, uri);
 	const ref = posts[id];
 
 	return ref?.deref();
 };
 
-export const removeCachedPost = (uid: DID, uri: string) => {
+export const removeCachedPost = (uid: At.DID, uri: string) => {
 	const id = createPostId(uid, uri);
 
 	const ref = posts[id];
@@ -87,7 +87,7 @@ export const removeCachedPost = (uid: DID, uri: string) => {
 	}
 };
 
-export const mergePost = (uid: DID, post: Post, key?: number) => {
+export const mergePost = (uid: At.DID, post: Post, key?: number) => {
 	let id = createPostId(uid, post.uri);
 
 	let ref: WeakRef<SignalizedPost> | undefined = posts[id];

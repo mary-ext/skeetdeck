@@ -1,6 +1,6 @@
 import { type DBSchema, type IDBPDatabase, openDB } from 'idb';
 
-import type { AtUri, DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 
 import type { GateState } from '../ComposerContext';
 
@@ -13,7 +13,7 @@ export interface SerializedImage {
 export interface SerializedPostState {
 	text: string;
 	external: string | undefined;
-	record: AtUri | undefined;
+	record: At.Uri | undefined;
 	images: SerializedImage[];
 	tags: string[];
 	labels: string[];
@@ -35,7 +35,7 @@ export interface ComposerDraft {
 	createdAt: number;
 
 	/** Which user are we using to send these posts */
-	author: DID;
+	author: At.DID;
 	/** State of the composer */
 	state: SerializedComposerState;
 }

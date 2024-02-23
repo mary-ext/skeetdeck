@@ -2,7 +2,7 @@ import type { JSX } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 
 import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/get-list-info';
 
@@ -27,7 +27,7 @@ import ListHeader from '../partials/ListHeader';
 
 export interface ListPaneDialogProps {
 	/** Expected to be static */
-	actor: DID;
+	actor: At.DID;
 	/** Expected to be static */
 	rkey: string;
 }

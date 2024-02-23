@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import type { FilterPreferences, LanguagePreferences, TranslationPreferences } from '~/api/types';
 
 import type { ModerationOpts } from '~/api/moderation/types';
@@ -23,7 +23,7 @@ export const useSharedPreferences = () => {
 	return useContext(SharedPreferences)!;
 };
 
-export const isProfileTempMuted = (prefs: FilterPreferences, actor: DID): number | null => {
+export const isProfileTempMuted = (prefs: FilterPreferences, actor: At.DID): number | null => {
 	const date = prefs.tempMutes[actor];
 	return date !== undefined && Date.now() < date ? date : null;
 };

@@ -6,8 +6,9 @@ import {
 	type AtpSessionData,
 	Agent,
 } from '@externdefs/bluesky-client/agent';
-import type { DID } from '@externdefs/bluesky-client/atp-schema';
 import { decodeJwt } from '@externdefs/bluesky-client/jwt';
+
+import type { At } from '../atp-schema';
 
 import { createReactiveLocalStorage } from '~/utils/storage';
 
@@ -23,7 +24,7 @@ export interface MultiagentProfileData {
 }
 
 export interface MultiagentAccountData {
-	readonly did: DID;
+	readonly did: At.DID;
 	service: string;
 	session: AtpSessionData;
 	isAppPassword?: boolean;
@@ -32,7 +33,7 @@ export interface MultiagentAccountData {
 
 interface MultiagentStorage {
 	$version: 1;
-	active: DID | undefined;
+	active: At.DID | undefined;
 	accounts: MultiagentAccountData[];
 }
 
@@ -51,7 +52,7 @@ export class MultiagentError extends Error {
 export class Multiagent {
 	store: MultiagentStorage;
 
-	#agents: Record<DID, AgentInstance> = {};
+	#agents: Record<At.DID, AgentInstance> = {};
 
 	constructor(name: string) {
 		const store = createReactiveLocalStorage<MultiagentStorage>(name, (version, prev) => {
@@ -92,7 +93,7 @@ export class Multiagent {
 
 		return value;
 	}
-	set active(next: DID | undefined) {
+	set active(next: At.DID | undefined) {
 		batch(() => {
 			this.store.active = next;
 
@@ -108,7 +109,7 @@ export class Multiagent {
 	/**
 	 * Login with a new account
 	 */
-	async login({ service, identifier, password }: MultiagentLoginOptions): Promise<DID> {
+	async login({ service, identifier, password }: MultiagentLoginOptions): Promise<At.DID> {
 		const { agent, cleanup } = this.#createAgent(service);
 
 		try {
@@ -149,7 +150,7 @@ export class Multiagent {
 	/**
 	 * Log out from account
 	 */
-	logout(did: DID): void {
+	logout(did: At.DID): void {
 		const $accounts = this.accounts;
 		const index = $accounts.findIndex((acc) => acc.did === did);
 
@@ -167,7 +168,7 @@ export class Multiagent {
 	/**
 	 * Retrieve an agent associated with an account
 	 */
-	connect(did: DID): Promise<Agent> {
+	connect(did: At.DID): Promise<Agent> {
 		if (did in this.#agents) {
 			return this.#agents[did].agent;
 		}

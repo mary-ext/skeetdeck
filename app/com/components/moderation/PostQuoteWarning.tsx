@@ -1,6 +1,6 @@
 import { type Component, type ComponentProps, type JSX, createMemo, createSignal } from 'solid-js';
 
-import type { UnionOf } from '~/api/atp-schema';
+import type { AppBskyEmbedRecord } from '~/api/atp-schema';
 import { renderLabelName } from '~/api/display';
 
 import {
@@ -19,7 +19,7 @@ import VisibilityIcon from '../../icons/baseline-visibility';
 import FilterAltIcon from '../../icons/baseline-filter-alt';
 import PersonOffIcon from '../../icons/baseline-person-off';
 
-type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
+type EmbeddedPostRecord = AppBskyEmbedRecord.ViewRecord;
 
 export interface PostQuoteWarningProps {
 	quote: EmbeddedPostRecord;

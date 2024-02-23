@@ -3,7 +3,7 @@ import { type JSX, createSignal } from 'solid-js';
 import { useParams } from '@pkg/solid-navigation';
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 
 import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';
@@ -33,7 +33,7 @@ const enum ProfileTab {
 }
 
 const ProfileView = () => {
-	const { actor } = useParams<{ actor: DID }>();
+	const { actor } = useParams<{ actor: At.DID }>();
 
 	const query = createQuery(() => {
 		const uid = multiagent.active!;

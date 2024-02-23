@@ -1,13 +1,13 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID, RefOf } from '../atp-schema';
+import type { AppBskyNotificationListNotifications, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 import { wrapInfiniteQuery } from '../utils/query';
 
 import { type NotificationSlice, createNotificationSlices } from '../models/notifications';
 
-type Notification = RefOf<'app.bsky.notification.listNotifications#notification'>;
+type Notification = AppBskyNotificationListNotifications.Notification;
 
 export const FILTER_FOLLOWS = 1 << 0;
 export const FILTER_LIKES = 1 << 1;
@@ -42,7 +42,7 @@ export interface NotificationsPage {
 // 2 is the minimum, 1st attempt will always fail because it's empty.
 const MAX_ATTEMPTS = 3;
 
-export const getNotificationsKey = (uid: DID, limit: number = 25) => {
+export const getNotificationsKey = (uid: At.DID, limit: number = 25) => {
 	return ['getNotifications', uid, limit] as const;
 };
 export const getNotifications = wrapInfiniteQuery(
@@ -101,7 +101,7 @@ export interface NotificationsLatestResult {
 	read: boolean;
 }
 
-export const getNotificationsLatestKey = (uid: DID) => {
+export const getNotificationsLatestKey = (uid: At.DID) => {
 	return ['getNotificationsLatest', uid] as const;
 };
 export const getNotificationsLatest = async (ctx: QC<ReturnType<typeof getNotificationsLatestKey>>) => {

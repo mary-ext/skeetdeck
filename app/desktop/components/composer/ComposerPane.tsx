@@ -4,7 +4,15 @@ import { unwrap } from 'solid-js/store';
 import { createQuery, useQueryClient } from '@pkg/solid-query';
 import { makeEventListener } from '@solid-primitives/event-listener';
 
-import type { DID, Records, RefOf, UnionOf } from '~/api/atp-schema';
+import type {
+	AppBskyEmbedExternal,
+	AppBskyFeedPost,
+	AppBskyFeedThreadgate,
+	At,
+	Brand,
+	ComAtprotoRepoApplyWrites,
+	ComAtprotoRepoStrongRef,
+} from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { extractAppLink } from '~/api/utils/links';
 import { getCurrentTid } from '~/api/utils/tid';
@@ -114,11 +122,11 @@ interface LogState {
 	m: string;
 }
 
-type PostRecord = Records['app.bsky.feed.post'];
-type ThreadgateRecord = Records['app.bsky.feed.threadgate'];
+type PostRecord = AppBskyFeedPost.Record;
+type ThreadgateRecord = AppBskyFeedThreadgate.Record;
 
 type PostRecordEmbed = PostRecord['embed'];
-type StrongRef = RefOf<'com.atproto.repo.strongRef'>;
+type StrongRef = ComAtprotoRepoStrongRef.Main;
 
 const logNone: LogState = { t: LogType.NONE, m: '' };
 const logError = (m: string): LogState => ({ t: LogType.ERROR, m: m });
@@ -126,7 +134,7 @@ const logPending = (m: string): LogState => ({ t: LogType.PENDING, m: m });
 
 const RESOLVED_RT = new WeakMap<PreliminaryRichText, Awaited<ReturnType<typeof finalizeRt>>>();
 
-const resolveRt = async (uid: DID, prelim: PreliminaryRichText) => {
+const resolveRt = async (uid: At.DID, prelim: PreliminaryRichText) => {
 	let resolved = RESOLVED_RT.get(prelim);
 	if (resolved === undefined) {
 		RESOLVED_RT.set(prelim, (resolved = await finalizeRt(uid, prelim)));
@@ -205,7 +213,7 @@ const ComposerPane = () => {
 
 		// These two variables are necessary for invalidation/mutation purposes
 		const uris: string[] = [];
-		let topReplyTo: RefOf<'app.bsky.feed.post#replyRef'> | undefined;
+		let topReplyTo: AppBskyFeedPost.ReplyRef | undefined;
 
 		try {
 			// 1. Crawl through the posts, resolve all the facets and blobs
@@ -306,12 +314,12 @@ const ComposerPane = () => {
 			{
 				setLog(logPending(`Sending post`));
 
-				const writes: UnionOf<'com.atproto.repo.applyWrites#create'>[] = [];
+				const writes: Brand.Union<ComAtprotoRepoApplyWrites.Create>[] = [];
 				const date = new Date();
 
 				// Create post records
 				{
-					let replyTo: RefOf<'app.bsky.feed.post#replyRef'> | undefined;
+					let replyTo: AppBskyFeedPost.ReplyRef | undefined;
 
 					// Resolve the record
 					if (replying.data) {
@@ -365,7 +373,7 @@ const ComposerPane = () => {
 							if (external) {
 								const data = cache.get(external) as LinkMeta;
 
-								const ext: RefOf<'app.bsky.embed.external#external'> = {
+								const ext: AppBskyEmbedExternal.External = {
 									uri: data.uri,
 									title: data.title,
 									description: data.description,
@@ -1080,7 +1088,7 @@ const ComposerPane = () => {
 															if (record) {
 																const { type, author, rkey } = record;
 
-																let did: DID;
+																let did: At.DID;
 																if (isDid(author)) {
 																	did = author;
 																} else {
@@ -1288,7 +1296,7 @@ const EmbedExternal = (props: { url: string }) => {
 	}) as unknown as JSX.Element;
 };
 
-const EmbedRecord = (props: { uid: DID; uri: string }) => {
+const EmbedRecord = (props: { uid: At.DID; uri: string }) => {
 	const opts = createMemo(() => {
 		const uid = props.uid;
 		const uri = props.uri;

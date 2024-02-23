@@ -1,6 +1,6 @@
 import { type Component, type ComponentProps, type JSX, createMemo, createSignal } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { renderLabelName } from '~/api/display';
 import type { SignalizedPost } from '~/api/stores/posts';
 
@@ -24,7 +24,7 @@ import PersonOffIcon from '../../icons/baseline-person-off';
 
 export interface PostWarningProps {
 	post: SignalizedPost;
-	timelineDid?: DID;
+	timelineDid?: At.DID;
 	permalink?: boolean;
 	children: (decision: () => ModerationDecision | null) => JSX.Element;
 }

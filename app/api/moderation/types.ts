@@ -1,8 +1,8 @@
-import type { DID, RefOf } from '../atp-schema';
+import type { At, ComAtprotoLabelDefs } from '../atp-schema';
 
 import type { KeywordPreference } from './enums';
 
-export type Label = RefOf<'com.atproto.label.defs#label'>;
+export type Label = ComAtprotoLabelDefs.Label;
 
 export interface LabelDefinition {
 	/** The group ID that the label falls under */
@@ -40,7 +40,7 @@ export interface ModerationOpts {
 	_filtersCache?: [raw: string, match: RegExp][];
 
 	globals: ModerationLabelOpts;
-	// users: { [user: DID]: ModerationLabelOpts | undefined };
-	labelers: { [labeler: DID]: ModerationLabelOpts | undefined };
+	// users: { [user: At.DID]: ModerationLabelOpts | undefined };
+	labelers: { [labeler: At.DID]: ModerationLabelOpts | undefined };
 	keywords: ModerationFiltersOpts[];
 }

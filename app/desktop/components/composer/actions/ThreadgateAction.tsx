@@ -1,6 +1,6 @@
 import type { Component, ComponentProps, JSX } from 'solid-js';
 
-import type { UnionOf } from '~/api/atp-schema';
+import type { AppBskyFeedThreadgate, Brand } from '~/api/atp-schema';
 
 import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 
@@ -15,10 +15,9 @@ import LockIcon from '~/com/icons/baseline-lock';
 
 import type { GateState } from '../ComposerContext';
 
-type Rule =
-	| UnionOf<'app.bsky.feed.threadgate#followingRule'>
-	| UnionOf<'app.bsky.feed.threadgate#listRule'>
-	| UnionOf<'app.bsky.feed.threadgate#mentionRule'>;
+type Rule = Brand.Union<
+	AppBskyFeedThreadgate.FollowingRule | AppBskyFeedThreadgate.ListRule | AppBskyFeedThreadgate.MentionRule
+>;
 
 export interface ThreadgateActionProps {
 	state: GateState;

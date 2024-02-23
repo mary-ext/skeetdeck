@@ -1,11 +1,11 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID } from '../atp-schema';
+import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 import { mergeProfile } from '../stores/profiles';
 
-export const getSuggestedFollowsKey = (uid: DID, limit = 30) => {
+export const getSuggestedFollowsKey = (uid: At.DID, limit = 30) => {
 	return ['getSuggestedFollows', uid, limit] as const;
 };
 export const getSuggestedFollows = async (

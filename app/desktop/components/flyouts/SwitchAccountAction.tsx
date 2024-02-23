@@ -1,6 +1,6 @@
 import { type JSX, For } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 
 import { clsx } from '~/utils/misc';
@@ -14,9 +14,9 @@ import CheckIcon from '~/com/icons/baseline-check';
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 export interface SwitchAccountActionProps {
-	value?: DID | undefined;
-	exclude?: DID[];
-	onChange: (next: DID) => void;
+	value?: At.DID | undefined;
+	exclude?: At.DID[];
+	onChange: (next: At.DID) => void;
 	children: JSX.Element;
 }
 

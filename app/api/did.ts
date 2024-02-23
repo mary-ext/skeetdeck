@@ -1,7 +1,7 @@
 import { type DidDocument, Agent, getPdsEndpoint } from '@externdefs/bluesky-client/agent';
 import type { QueryClient } from '@pkg/solid-query';
 
-import type { DID } from './atp-schema';
+import type { At } from './atp-schema';
 import { APPVIEW_URL } from './globals/defaults';
 import { isDid } from './utils/misc';
 
@@ -12,7 +12,7 @@ export const retrievePdsEndpoint = async (client: QueryClient, identifier: strin
 		throw new Error(`Email not supported`);
 	}
 
-	let did: DID;
+	let did: At.DID;
 	let isAlreadyDid = false;
 
 	if (isDid(identifier)) {

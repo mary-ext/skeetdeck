@@ -1,4 +1,4 @@
-import type { Records } from '../atp-schema';
+import type { AppBskyGraphFollow } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 import type { SignalizedProfile } from '../stores/profiles';
@@ -16,7 +16,7 @@ const createProfileFollowMutation = (profile: SignalizedProfile) => {
 			const agent = await multiagent.connect(uid);
 
 			if (shouldFollow) {
-				const record: Records[typeof followRecordType] = {
+				const record: AppBskyGraphFollow.Record = {
 					createdAt: getCurrentDate(),
 					subject: profile.did,
 				};

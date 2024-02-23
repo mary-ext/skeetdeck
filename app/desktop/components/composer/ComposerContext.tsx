@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'solid-js';
 
-import type { AtUri, DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { systemLanguages } from '~/api/globals/platform';
 
 import type { PreliminaryRichText } from '~/api/richtext/composer';
@@ -25,7 +25,7 @@ export interface GateStateCustom {
 	type: 'c';
 	mentions: boolean;
 	follows: boolean;
-	lists: AtUri[];
+	lists: At.Uri[];
 }
 
 export type GateState = GateStateEveryone | GateStateMentionedOnly | GateStateFollowedOnly | GateStateCustom;
@@ -38,7 +38,7 @@ export interface ParsedPost {
 export interface PostState {
 	text: string;
 	external: string | undefined;
-	record: AtUri | undefined;
+	record: At.Uri | undefined;
 	images: ComposedImage[];
 	tags: string[];
 	labels: string[];
@@ -59,7 +59,7 @@ export interface ComposerState {
 export interface ComposerContextState {
 	open: boolean;
 	/** Which user are we using to send these posts */
-	author: DID;
+	author: At.DID;
 	/** Keyed state object, reassigning should reset the entire composer */
 	state: ComposerState;
 }

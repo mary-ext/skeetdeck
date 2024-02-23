@@ -2,7 +2,7 @@ import { type JSX, createSignal } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 
 import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info';
 
@@ -86,7 +86,7 @@ const CustomFeedPane = () => {
 
 export default CustomFeedPane;
 
-const FeedHeaderAccessory = (props: { uid: DID; uri: string }) => {
+const FeedHeaderAccessory = (props: { uid: At.DID; uri: string }) => {
 	const list = createQuery(() => {
 		const key = getFeedInfoKey(props.uid, props.uri);
 

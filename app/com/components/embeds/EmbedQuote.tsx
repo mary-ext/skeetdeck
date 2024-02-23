@@ -1,6 +1,6 @@
 import { type JSX } from 'solid-js';
 
-import type { Records, UnionOf } from '~/api/atp-schema';
+import type { AppBskyEmbedRecord, AppBskyFeedPost } from '~/api/atp-schema';
 import { getRecordId } from '~/api/utils/misc';
 
 import type { ModerationDecision } from '~/api/moderation/action';
@@ -17,8 +17,8 @@ import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 import PostQuoteWarning from '../moderation/PostQuoteWarning';
 import EmbedImage from './EmbedImage';
 
-type EmbeddedPostRecord = UnionOf<'app.bsky.embed.record#viewRecord'>;
-type PostRecord = Records['app.bsky.feed.post'];
+type EmbeddedPostRecord = AppBskyEmbedRecord.ViewRecord;
+type PostRecord = AppBskyFeedPost.Record;
 
 export interface EmbedQuoteProps {
 	record: EmbeddedPostRecord;

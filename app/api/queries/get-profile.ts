@@ -1,13 +1,13 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID, RefOf } from '../atp-schema';
+import type { AppBskyActorDefs, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 import { createBatchedFetch } from '../utils/batch-fetch';
 
 import { type SignalizedProfile, getCachedProfile, mergeProfile } from '../stores/profiles';
 
-type ProfileData = RefOf<'app.bsky.actor.defs#profileViewDetailed'>;
-type Query = [uid: DID, actor: string];
+type ProfileData = AppBskyActorDefs.ProfileViewDetailed;
+type Query = [uid: At.DID, actor: string];
 
 export const fetchProfileBatched = createBatchedFetch<Query, string, ProfileData>({
 	limit: 25,
@@ -32,7 +32,7 @@ export const fetchProfileBatched = createBatchedFetch<Query, string, ProfileData
 	},
 });
 
-export const getProfileKey = (uid: DID, actor: string) => {
+export const getProfileKey = (uid: At.DID, actor: string) => {
 	return ['getProfile', uid, actor] as const;
 };
 export const getProfile = async (ctx: QC<ReturnType<typeof getProfileKey>>) => {
@@ -82,7 +82,7 @@ export const getProfile = async (ctx: QC<ReturnType<typeof getProfileKey>>) => {
 export const getInitialProfile = (key: ReturnType<typeof getProfileKey>): SignalizedProfile | undefined => {
 	const [, uid, actor] = key;
 
-	const profile = getCachedProfile(uid, actor as DID);
+	const profile = getCachedProfile(uid, actor as At.DID);
 
 	return profile;
 };

@@ -1,12 +1,12 @@
 import type { JSX } from 'solid-js';
 
-import type { RefOf } from '~/api/atp-schema';
+import type { AppBskyEmbedExternal } from '~/api/atp-schema';
 
 import { Interactive } from '../../primitives/interactive';
 
 import BlobImage from '../BlobImage';
 
-type EmbeddedLink = RefOf<'app.bsky.embed.external#viewExternal'>;
+type EmbeddedLink = AppBskyEmbedExternal.ViewExternal;
 
 export interface EmbedLinkData extends Omit<EmbeddedLink, 'thumb'> {
 	thumb?: Blob | string;

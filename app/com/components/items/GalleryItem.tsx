@@ -1,6 +1,6 @@
 import { createMemo, lazy, type JSX } from 'solid-js';
 
-import type { RefOf } from '~/api/atp-schema';
+import type { AppBskyEmbedImages } from '~/api/atp-schema';
 import { getRecordId } from '~/api/utils/misc';
 
 import type { SignalizedPost } from '~/api/stores/posts';
@@ -36,7 +36,7 @@ const GalleryItem = (props: GalleryItemProps) => {
 		const post = props.post;
 		const embed = post.embed.value;
 
-		let images: RefOf<'app.bsky.embed.images#viewImage'>[] | undefined;
+		let images: AppBskyEmbedImages.ViewImage[] | undefined;
 		if (embed) {
 			if (embed.$type === 'app.bsky.embed.images#view') {
 				images = embed.images;

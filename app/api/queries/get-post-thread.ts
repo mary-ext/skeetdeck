@@ -1,6 +1,6 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID, RefOf } from '../atp-schema';
+import type { AppBskyFeedDefs, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 import { type ThreadData, createThreadData } from '../models/threads';
@@ -9,13 +9,13 @@ import { getCachedPost } from '../stores/posts';
 import _getDid from './_did';
 
 export class BlockedThreadError extends Error {
-	constructor(public view: RefOf<'app.bsky.feed.defs#blockedPost'>) {
+	constructor(public view: AppBskyFeedDefs.BlockedPost) {
 		super();
 		this.name = 'BlockedThreadError';
 	}
 }
 
-export const getPostThreadKey = (uid: DID, actor: string, post: string, depth: number, height: number) =>
+export const getPostThreadKey = (uid: At.DID, actor: string, post: string, depth: number, height: number) =>
 	['getPostThread', uid, actor, post, depth, height] as const;
 export const getPostThread = async (ctx: QC<ReturnType<typeof getPostThreadKey>>) => {
 	const [, uid, actor, rkey, depth, height] = ctx.queryKey;

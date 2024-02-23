@@ -14,7 +14,7 @@ import { makeEventListener } from '@solid-primitives/event-listener';
 import { useFloating } from 'solid-floating-ui';
 import TextareaAutosize from 'solid-textarea-autosize';
 
-import type { DID, RefOf } from '~/api/atp-schema';
+import type { AppBskyActorDefs, At } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 
 import type { PreliminaryRichText } from '~/api/richtext/composer';
@@ -32,7 +32,7 @@ export interface RichtextComposerProps {
 	ref?: HTMLTextAreaElement | ((el: HTMLTextAreaElement) => void);
 
 	type: 'post' | 'textarea';
-	uid: DID;
+	uid: At.DID;
 
 	value: string;
 	rt: PreliminaryRichText;
@@ -120,7 +120,7 @@ const enum Suggestion {
 
 interface MentionSuggestionItem {
 	type: Suggestion.MENTION;
-	data: RefOf<'app.bsky.actor.defs#profileViewBasic'>;
+	data: AppBskyActorDefs.ProfileViewBasic;
 }
 
 type SuggestionItem = MentionSuggestionItem;

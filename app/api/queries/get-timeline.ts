@@ -3,7 +3,7 @@ import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
 import { assert, mapDefined } from '~/utils/misc';
 
-import type { DID, Records, RefOf, ResponseOf } from '../atp-schema';
+import type { AppBskyEmbedImages, AppBskyFeedGetTimeline, AppBskyFeedPost, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 import { systemLanguages } from '../globals/platform';
 
@@ -59,7 +59,7 @@ export interface ListTimelineParams {
 
 export interface ProfileTimelineParams {
 	type: 'profile';
-	actor: DID;
+	actor: At.DID;
 	tab: 'posts' | 'replies' | 'likes' | 'media';
 }
 
@@ -90,9 +90,9 @@ export interface TimelineLatestResult {
 	cid: string | undefined;
 }
 
-type TimelineResponse = ResponseOf<'app.bsky.feed.getTimeline'> & { cid?: string };
+type TimelineResponse = AppBskyFeedGetTimeline.Output & { cid?: string };
 
-type PostRecord = Records['app.bsky.feed.post'];
+type PostRecord = AppBskyFeedPost.Record;
 
 //// Feed query
 // How many attempts it should try looking for more items before it gives up on empty pages.
@@ -122,7 +122,7 @@ const countPosts = (slices: TimelineSlice[], limit?: number) => {
 	return count;
 };
 
-export const getTimelineKey = (uid: DID, params: TimelineParams, limit = MAX_POSTS) => {
+export const getTimelineKey = (uid: At.DID, params: TimelineParams, limit = MAX_POSTS) => {
 	return ['getTimeline', uid, params, limit] as const;
 };
 export const getTimeline = wrapInfiniteQuery(
@@ -234,7 +234,7 @@ export const getTimeline = wrapInfiniteQuery(
 );
 
 /// Latest feed query
-export const getTimelineLatestKey = (uid: DID, params: TimelineParams) => {
+export const getTimelineLatestKey = (uid: At.DID, params: TimelineParams) => {
 	return ['getTimelineLatest', uid, params] as const;
 };
 export const getTimelineLatest = async (ctx: QC<ReturnType<typeof getTimelineLatestKey>>) => {
@@ -457,7 +457,7 @@ const createLabelPostFilter = (opts?: ModerationOpts): PostFilter | undefined =>
 
 	const unwrapImageAlt = (embed: PostRecord['embed']) => {
 		let str = '';
-		let images: RefOf<'app.bsky.embed.images#image'>[] | undefined;
+		let images: AppBskyEmbedImages.Image[] | undefined;
 
 		if (embed) {
 			if (embed.$type === 'app.bsky.embed.images') {
@@ -546,7 +546,7 @@ const createHiddenRepostFilter = (prefs?: FilterPreferences): PostFilter | undef
 	};
 };
 
-const createTempMutePostFilter = (uid: DID, prefs?: FilterPreferences): PostFilter | undefined => {
+const createTempMutePostFilter = (uid: At.DID, prefs?: FilterPreferences): PostFilter | undefined => {
 	if (!prefs) {
 		return;
 	}
@@ -558,10 +558,10 @@ const createTempMutePostFilter = (uid: DID, prefs?: FilterPreferences): PostFilt
 
 	// check if there are any outdated mutes before proceeding
 	for (const did in mutes) {
-		const date = mutes[did as DID];
+		const date = mutes[did as At.DID];
 
 		if (date === undefined || now >= date) {
-			delete mutes[did as DID];
+			delete mutes[did as At.DID];
 		} else {
 			hasMutes = true;
 		}
@@ -654,7 +654,7 @@ const createFeedSliceFilter = (): SliceFilter | undefined => {
 	};
 };
 
-const createHomeSliceFilter = (uid: DID, followsOnly: boolean): SliceFilter | undefined => {
+const createHomeSliceFilter = (uid: At.DID, followsOnly: boolean): SliceFilter | undefined => {
 	return (slice) => {
 		const items = slice.items;
 		const first = items[0];
@@ -682,7 +682,7 @@ const createHomeSliceFilter = (uid: DID, followsOnly: boolean): SliceFilter | un
 	};
 };
 
-const createProfileSliceFilter = (did: DID): SliceFilter | undefined => {
+const createProfileSliceFilter = (did: At.DID): SliceFilter | undefined => {
 	return (slice) => {
 		const items = slice.items;
 		const first = items[0];

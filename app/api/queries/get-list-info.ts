@@ -1,11 +1,11 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID } from '../atp-schema';
+import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 import { getCachedList, mergeList } from '../stores/lists';
 
-export const getListInfoKey = (uid: DID, uri: string) => {
+export const getListInfoKey = (uid: At.DID, uri: string) => {
 	return ['getListInfo', uid, uri] as const;
 };
 export const getListInfo = async (ctx: QC<ReturnType<typeof getListInfoKey>>) => {

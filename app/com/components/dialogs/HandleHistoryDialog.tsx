@@ -1,6 +1,6 @@
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
@@ -167,7 +167,7 @@ interface TombstoneOp {
 type PlcOperation = LegacyGenesisOp | OperationOp | TombstoneOp;
 
 interface AuditEntry {
-	did: DID;
+	did: At.DID;
 	operation: PlcOperation;
 	cid: string;
 	nullified?: boolean;

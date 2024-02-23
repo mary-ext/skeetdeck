@@ -1,6 +1,6 @@
 import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 
-import type { DID } from '../atp-schema';
+import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 import { asciiLen, graphemeLen } from './intl';
@@ -408,7 +408,7 @@ const getUtf8Length = (str: string): number => {
 	return asciiLen(str) ?? encoder.encode(str).byteLength;
 };
 
-export const finalizeRt = async (uid: DID, rt: PreliminaryRichText) => {
+export const finalizeRt = async (uid: At.DID, rt: PreliminaryRichText) => {
 	const agent = await multiagent.connect(uid);
 
 	const segments = rt.segments;

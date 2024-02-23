@@ -1,12 +1,12 @@
-import type { DID, RefOf, UnionOf } from '../atp-schema';
+import type { AppBskyFeedDefs, At, Brand } from '../atp-schema';
 
 import { mergePost, SignalizedPost } from '../stores/posts';
 
-type Post = RefOf<'app.bsky.feed.defs#postView'>;
-type Thread = UnionOf<'app.bsky.feed.defs#threadViewPost'>;
+type Post = AppBskyFeedDefs.PostView;
+type Thread = Brand.Union<AppBskyFeedDefs.ThreadViewPost>;
 
-type NotFoundPost = UnionOf<'app.bsky.feed.defs#notFoundPost'>;
-type BlockedPost = UnionOf<'app.bsky.feed.defs#blockedPost'>;
+type NotFoundPost = Brand.Union<AppBskyFeedDefs.NotFoundPost>;
+type BlockedPost = Brand.Union<AppBskyFeedDefs.BlockedPost>;
 
 type UnwrapArray<T> = T extends (infer V)[] ? V : never;
 type ThreadReply = UnwrapArray<Thread['replies']>;
@@ -29,7 +29,7 @@ const enum PostSortOrder {
 	SAME_AUTHOR = 4,
 }
 
-const calculatePostScore = (uid: DID, child: Post, parent: Post) => {
+const calculatePostScore = (uid: At.DID, child: Post, parent: Post) => {
 	if (child.author.viewer!.muted) {
 		return PostSortOrder.MUTED;
 	} else if (parent.author.did === child.author.did) {
@@ -43,7 +43,7 @@ const calculatePostScore = (uid: DID, child: Post, parent: Post) => {
 	}
 };
 
-const collateReplies = (uid: DID, parent: Post) => {
+const collateReplies = (uid: At.DID, parent: Post) => {
 	const scores: Record<string, number> = {};
 	const dates: Record<string, number> = {};
 
@@ -115,7 +115,12 @@ export interface ThreadData {
 	maxDepth: number;
 }
 
-export const createThreadData = (uid: DID, data: Thread, maxDepth: number, maxHeight: number): ThreadData => {
+export const createThreadData = (
+	uid: At.DID,
+	data: Thread,
+	maxDepth: number,
+	maxHeight: number,
+): ThreadData => {
 	/** This needs to be reversed! */
 	const ancestors: ThreadData['ancestors'] = [];
 	let descendants: ThreadData['descendants'];

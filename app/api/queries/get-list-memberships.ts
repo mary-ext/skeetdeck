@@ -1,6 +1,6 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID, Records } from '../atp-schema';
+import type { AppBskyGraphListitem, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 const PAGE_LIMIT = 1_000;
@@ -14,12 +14,12 @@ export const listMembershipsOptions = {
 };
 
 export interface ListMembership {
-	actor: DID;
+	actor: At.DID;
 	itemUri: string;
 	listUri: string;
 }
 
-export const getListMembershipsKey = (uid: DID) => {
+export const getListMembershipsKey = (uid: At.DID) => {
 	return ['getListMemberships', uid] as const;
 };
 export const getListMemberships = async (ctx: QC<ReturnType<typeof getListMembershipsKey>>) => {
@@ -46,7 +46,7 @@ export const getListMemberships = async (ctx: QC<ReturnType<typeof getListMember
 
 		for (let j = 0, jl = items.length; j < jl; j++) {
 			const item = items[j];
-			const record = item.value as Records['app.bsky.graph.listitem'];
+			const record = item.value as AppBskyGraphListitem.Record;
 
 			memberships.push({ actor: record.subject, listUri: record.list, itemUri: item.uri });
 		}
@@ -63,7 +63,11 @@ export const getListMemberships = async (ctx: QC<ReturnType<typeof getListMember
 	return memberships;
 };
 
-export const findMembership = (memberships: ListMembership[], listUri: string, actor: DID): number | null => {
+export const findMembership = (
+	memberships: ListMembership[],
+	listUri: string,
+	actor: At.DID,
+): number | null => {
 	for (let i = 0, il = memberships.length; i < il; i++) {
 		const membership = memberships[i];
 

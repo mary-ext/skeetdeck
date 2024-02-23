@@ -1,9 +1,9 @@
 import { type Signal, signal } from '~/utils/signals';
 
-import type { DID, RefOf } from '../atp-schema';
+import type { AppBskyGraphDefs, At } from '../atp-schema';
 import { type SignalizedProfile, mergeProfile } from './profiles';
 
-type List = RefOf<'app.bsky.graph.defs#listView'>;
+type List = AppBskyGraphDefs.ListView;
 
 export const lists: Record<string, WeakRef<SignalizedList>> = {};
 
@@ -16,7 +16,7 @@ const gc = new FinalizationRegistry<string>((id) => {
 });
 
 export class SignalizedList {
-	readonly uid: DID;
+	readonly uid: At.DID;
 	_key?: number;
 
 	readonly uri: List['uri'];
@@ -33,7 +33,7 @@ export class SignalizedList {
 		readonly blocked: Signal<NonNullable<List['viewer']>['blocked']>;
 	};
 
-	constructor(uid: DID, list: List, key?: number) {
+	constructor(uid: At.DID, list: List, key?: number) {
 		this.uid = uid;
 		this._key = key;
 
@@ -53,18 +53,18 @@ export class SignalizedList {
 	}
 }
 
-export const createListId = (uid: DID, uri: string) => {
+export const createListId = (uid: At.DID, uri: string) => {
 	return uid + '|' + uri;
 };
 
-export const getCachedList = (uid: DID, uri: string) => {
+export const getCachedList = (uid: At.DID, uri: string) => {
 	const id = createListId(uid, uri);
 	const ref = lists[id];
 
 	return ref && ref.deref();
 };
 
-export const removeCachedList = (uid: DID, uri: string) => {
+export const removeCachedList = (uid: At.DID, uri: string) => {
 	const id = createListId(uid, uri);
 
 	const ref = lists[id];
@@ -76,7 +76,7 @@ export const removeCachedList = (uid: DID, uri: string) => {
 	}
 };
 
-export const mergeList = (uid: DID, list: List, key?: number) => {
+export const mergeList = (uid: At.DID, list: List, key?: number) => {
 	let id = createListId(uid, list.uri);
 
 	let ref: WeakRef<SignalizedList> | undefined = lists[id];

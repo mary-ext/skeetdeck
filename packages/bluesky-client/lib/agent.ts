@@ -4,7 +4,13 @@ import { decodeJwt } from './jwt.js';
 import { type FetchHandlerResponse, defaultFetchHandler, isErrorResponse, XRPC } from './xrpc.js';
 import { type Headers, ResponseType, httpResponseCodeToEnum, XRPCError } from './xrpc-utils.js';
 
-import type { DID, Procedures, Queries, ResponseOf } from './atp-schema.js';
+import type {
+	ComAtprotoServerCreateSession,
+	ComAtprotoServerRefreshSession,
+	Primitives,
+	Procedures,
+	Queries,
+} from './atp-schema.js';
 
 export interface JwtToken {
 	exp: number;
@@ -13,12 +19,12 @@ export interface JwtToken {
 
 export interface AtpAccessJwt extends JwtToken {
 	scope: 'com.atproto.access' | 'com.atproto.appPass';
-	sub: DID;
+	sub: Primitives.DID;
 }
 
 export interface AtpRefreshJwt extends JwtToken {
 	scope: 'com.atproto.refresh';
-	sub: DID;
+	sub: Primitives.DID;
 	aud: string;
 	jti: string;
 }
@@ -27,7 +33,7 @@ export interface AtpSessionData {
 	refreshJwt: string;
 	accessJwt: string;
 	handle: string;
-	did: DID;
+	did: Primitives.DID;
 	pdsUri?: string;
 	email?: string;
 	emailConfirmed?: boolean;
@@ -199,7 +205,7 @@ export class Agent extends EventEmitter<AgentEventMap> {
 			this.emit('sessionExpired');
 		} else if (httpResponseCodeToEnum(res.status) === ResponseType.Success) {
 			// succeeded, update the session
-			this.#updateSession(res.body as ResponseOf<'com.atproto.server.refreshSession'>);
+			this.#updateSession(res.body as ComAtprotoServerRefreshSession.Output);
 			this.emit('sessionUpdate', this.session!);
 		}
 	}
@@ -209,7 +215,7 @@ export class Agent extends EventEmitter<AgentEventMap> {
 		this.rpc.serviceUri = (existing && existing.pdsUri) || this.serviceUri;
 	}
 
-	#updateSession(raw: ResponseOf<'com.atproto.server.createSession'>) {
+	#updateSession(raw: ComAtprotoServerCreateSession.Output) {
 		const didDoc = raw.didDoc as DidDocument | undefined;
 
 		let pdsUri: string | undefined;

@@ -3,7 +3,7 @@ import { For, Suspense, SuspenseList, createMemo, createSignal } from 'solid-js'
 import { useSuspend } from '@pkg/solid-freeze';
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { formatQueryError } from '~/api/utils/misc';
 
@@ -30,7 +30,7 @@ import { VIEW_CONTENT_FILTERS, useViewRouter } from '../_router';
 const PAGE_LIMIT = 25;
 
 interface ProfileHiddenItem {
-	did: DID;
+	did: At.DID;
 	hidden: Signal<boolean>;
 }
 

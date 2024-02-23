@@ -1,4 +1,4 @@
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 
 import { closeModal } from '../../globals/modals';
 
@@ -9,9 +9,9 @@ import { Button } from '../../primitives/button';
 
 export interface MuteConfirmDialogProps {
 	/** Expected to be static */
-	uid: DID;
+	uid: At.DID;
 	/** Expected to be static */
-	did: DID;
+	did: At.DID;
 }
 
 const MuteConfirmDialog = ({}: MuteConfirmDialogProps) => {

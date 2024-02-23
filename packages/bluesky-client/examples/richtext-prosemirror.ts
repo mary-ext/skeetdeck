@@ -6,17 +6,18 @@
 
 import { type JSONContent } from '@tiptap/core';
 
-import { graphemeLen } from './richtext-grapheme.js';
-import type { RefOf, UnionOf } from '../lib/atp-schema.js';
+import type { AppBskyRichtextFacet, Brand } from '../lib/atp-schema.js';
 
-type Facet = RefOf<'app.bsky.richtext.facet'>;
-type LinkFacet = UnionOf<'app.bsky.richtext.facet#link'>;
+import { graphemeLen } from './richtext-grapheme.js';
+
+type Facet = AppBskyRichtextFacet.Main;
+type LinkFeature = Brand.Union<AppBskyRichtextFacet.Link>;
 
 type SerializedMarks = NonNullable<JSONContent['marks']>;
 
 const encoder = new TextEncoder();
 
-const findFeature = (marks?: SerializedMarks): LinkFacet | undefined => {
+const findFeature = (marks?: SerializedMarks): LinkFeature | undefined => {
 	if (marks && marks.length) {
 		for (let idx = 0, len = marks.length; idx < len; idx++) {
 			const mark = marks[idx];

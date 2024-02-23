@@ -1,6 +1,6 @@
 import { type JSX, lazy, createMemo } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { renderLabelName } from '~/api/display';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
@@ -207,7 +207,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 										to={
 											/* @once */ {
 												type: LINK_LIST,
-												actor: getRepoId(blockingByList.uri) as DID,
+												actor: getRepoId(blockingByList.uri) as At.DID,
 												rkey: getRecordId(blockingByList.uri),
 											}
 										}
@@ -230,7 +230,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 										to={
 											/* @once */ {
 												type: LINK_LIST,
-												actor: getRepoId(mutedByList.uri) as DID,
+												actor: getRepoId(mutedByList.uri) as At.DID,
 												rkey: getRecordId(mutedByList.uri),
 											}
 										}

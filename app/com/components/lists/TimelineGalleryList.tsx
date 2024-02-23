@@ -2,7 +2,7 @@ import { For, Match, Switch, createEffect } from 'solid-js';
 
 import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { getQueryErrorInfo, resetInfiniteData } from '~/api/utils/query';
 
 import {
@@ -24,7 +24,7 @@ import { loadMoreBtn, loadNewBtn } from '../../primitives/interactive';
 import GalleryItem from '../items/GalleryItem';
 
 export interface TimelineGalleryListProps {
-	uid: DID;
+	uid: At.DID;
 	params: TimelineParams;
 }
 

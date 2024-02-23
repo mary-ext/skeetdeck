@@ -1,13 +1,19 @@
-import type { Records, RefOf } from '../atp-schema';
+import type {
+	AppBskyFeedLike,
+	AppBskyFeedPost,
+	AppBskyFeedRepost,
+	AppBskyGraphFollow,
+	AppBskyNotificationListNotifications,
+} from '../atp-schema';
 
 import { getCollectionId } from '../utils/misc';
 
-type Notification = RefOf<'app.bsky.notification.listNotifications#notification'>;
+type Notification = AppBskyNotificationListNotifications.Notification;
 
-type FollowRecord = Records['app.bsky.graph.follow'];
-type LikeRecord = Records['app.bsky.feed.like'];
-type PostRecord = Records['app.bsky.feed.post'];
-type RepostRecord = Records['app.bsky.feed.repost'];
+type FollowRecord = AppBskyGraphFollow.Record;
+type LikeRecord = AppBskyFeedLike.Record;
+type PostRecord = AppBskyFeedPost.Record;
+type RepostRecord = AppBskyFeedRepost.Record;
 
 export type FollowNotification = Notification & { reason: 'follow'; record: FollowRecord };
 export type LikeNotification = Notification & { reason: 'like'; record: LikeRecord };
@@ -79,7 +85,7 @@ export const createNotificationSlices = (notifications: Notification[]) => {
 
 	loop: for (let i = len - 1; i >= 0; i--) {
 		const item = notifications[i];
-		const reason = item.reason;
+		const reason = item.reason as 'like' | 'repost' | 'follow' | 'mention' | 'reply' | 'quote';
 
 		const date = new Date(item.indexedAt).getTime();
 
@@ -112,7 +118,6 @@ export const createNotificationSlices = (notifications: Notification[]) => {
 			slen++;
 
 			slices.unshift({
-				// @ts-expect-error
 				type: reason,
 				read: item.isRead,
 				date: date,
@@ -155,7 +160,6 @@ export const createNotificationSlices = (notifications: Notification[]) => {
 			slen++;
 
 			slices.unshift({
-				// @ts-expect-error
 				type: reason,
 				read: item.isRead,
 				key: key,
@@ -167,7 +171,6 @@ export const createNotificationSlices = (notifications: Notification[]) => {
 			slen++;
 
 			slices.unshift({
-				// @ts-expect-error
 				type: reason,
 				read: item.isRead,
 				date: date,

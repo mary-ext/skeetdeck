@@ -1,4 +1,4 @@
-import type { Records } from '../atp-schema';
+import type { AppBskyFeedRepost } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 import type { SignalizedPost } from '../stores/posts';
@@ -16,7 +16,7 @@ const createPostRepostMutation = (post: SignalizedPost) => {
 			const agent = await multiagent.connect(uid);
 
 			if (shouldFollow) {
-				const record: Records[typeof repostRecordType] = {
+				const record: AppBskyFeedRepost.Record = {
 					createdAt: getCurrentDate(),
 					subject: {
 						uri: post.uri,

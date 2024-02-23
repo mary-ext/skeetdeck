@@ -8,7 +8,7 @@ import {
 	useQueryClient,
 } from '@pkg/solid-query';
 
-import type { Records, UnionOf } from '~/api/atp-schema';
+import type { AppBskyGraphListitem, Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { multiagent, renderAccountName } from '~/api/globals/agent';
 import { renderListPurpose } from '~/api/display';
 import { getCurrentTid } from '~/api/utils/tid';
@@ -97,8 +97,8 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 
 	const listMutation = createMutation(() => ({
 		mutationFn: async () => {
-			const deletions: UnionOf<'com.atproto.repo.applyWrites#delete'>[] = [];
-			const creations: UnionOf<'com.atproto.repo.applyWrites#create'>[] = [];
+			const deletions: Brand.Union<ComAtprotoRepoApplyWrites.Delete>[] = [];
+			const creations: Brand.Union<ComAtprotoRepoApplyWrites.Create>[] = [];
 
 			const $uid = uid();
 
@@ -125,7 +125,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 			}
 
 			for (const listUri of additions) {
-				const record: Records['app.bsky.graph.listitem'] = {
+				const record: AppBskyGraphListitem.Record = {
 					list: listUri,
 					subject: did,
 					createdAt: date,
@@ -171,7 +171,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 						next.push({
 							actor: did,
 							itemUri: `at://${uid}/app.bsky.graph.listitem/${cr.rkey!}`,
-							listUri: (cr.value as Records['app.bsky.graph.listitem']).list,
+							listUri: (cr.value as AppBskyGraphListitem.Record).list,
 						});
 					}
 

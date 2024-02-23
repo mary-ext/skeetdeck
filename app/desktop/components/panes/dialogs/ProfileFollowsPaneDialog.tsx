@@ -2,7 +2,7 @@ import { createMemo } from 'solid-js';
 
 import { createInfiniteQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 
 import {
 	getInitialProfileFollows,
@@ -20,7 +20,7 @@ import PaneDialogHeader from '../PaneDialogHeader';
 
 export interface ProfileFollowsPaneDialogProps {
 	/** Expected to be static */
-	actor: DID;
+	actor: At.DID;
 }
 
 const ProfileFollowsPaneDialog = (props: ProfileFollowsPaneDialogProps) => {

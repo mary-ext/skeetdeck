@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 
 // Root
 export const VIEW_ABOUT = 0;
@@ -52,7 +52,7 @@ export type View =
 	// Content filters
 	| { type: typeof VIEW_HIDDEN_REPOSTERS }
 	| { type: typeof VIEW_LABEL_CONFIG; kind: 'global' }
-	| { type: typeof VIEW_LABEL_CONFIG; kind: 'labeler'; did: DID }
+	| { type: typeof VIEW_LABEL_CONFIG; kind: 'labeler'; did: At.DID }
 	| { type: typeof VIEW_SUBSCRIBED_LABELERS }
 	| { type: typeof VIEW_TEMPORARY_MUTES }
 	// Keyword filter form

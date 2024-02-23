@@ -2,7 +2,7 @@ import { type JSX, For } from 'solid-js';
 
 import { createInfiniteQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 
 import { getProfileLists, getProfileListsKey } from '~/api/queries/get-profile-lists';
 
@@ -15,7 +15,7 @@ import { VirtualContainer } from '../VirtualContainer';
 import ListItem from '../items/ListItem';
 
 export interface ListListProps {
-	uid: DID;
+	uid: At.DID;
 	actor: string;
 }
 

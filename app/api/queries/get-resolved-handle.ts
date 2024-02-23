@@ -1,11 +1,11 @@
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import type { DID } from '../atp-schema';
+import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 import { isDid } from '../utils/misc';
 
-export const getResolvedHandleKey = (uid: DID, actor: string) => {
+export const getResolvedHandleKey = (uid: At.DID, actor: string) => {
 	return ['getResolvedHandle', uid, actor] as const;
 };
 export const getResolvedHandle = async (ctx: QC<ReturnType<typeof getResolvedHandleKey>>) => {

@@ -1,6 +1,6 @@
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 
 import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info';
 
@@ -21,7 +21,7 @@ import FeedHeader from '../partials/FeedHeader';
 
 export interface FeedPaneDialogProps {
 	/** Expected to be static */
-	actor: DID;
+	actor: At.DID;
 	/** Expected to be static */
 	rkey: string;
 }

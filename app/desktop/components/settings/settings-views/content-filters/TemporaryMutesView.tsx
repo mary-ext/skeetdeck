@@ -3,7 +3,7 @@ import { For, Suspense, SuspenseList, createMemo, createSignal } from 'solid-js'
 import { useSuspend } from '@pkg/solid-freeze';
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { formatQueryError } from '~/api/utils/misc';
 
@@ -34,7 +34,7 @@ import { VIEW_CONTENT_FILTERS, useViewRouter } from '../_router';
 const PAGE_LIMIT = 25;
 
 interface ProfileMuteItem {
-	did: DID;
+	did: At.DID;
 	muted: Signal<boolean>;
 }
 
@@ -55,7 +55,7 @@ const TemporaryMutesView = () => {
 
 		for (const _did in tempMutes) {
 			// assert _did as an actual DID because TypeScript converted to to string indices
-			const did = _did as DID;
+			const did = _did as At.DID;
 			const val = tempMutes[did];
 
 			if (val != null && now < val) {

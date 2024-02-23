@@ -1,6 +1,6 @@
 import { createInfiniteQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 
 import { getPostReposts, getPostRepostsKey } from '~/api/queries/get-post-reposts';
 
@@ -13,7 +13,7 @@ import PaneDialogHeader from '../PaneDialogHeader';
 
 export interface PostRepostedByDialogProps {
 	/** Expected to be static */
-	actor: DID;
+	actor: At.DID;
 	/** Expected to be static */
 	rkey: string;
 }

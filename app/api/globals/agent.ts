@@ -1,10 +1,10 @@
-import type { DID } from '../atp-schema';
+import type { At } from '../atp-schema';
 
 import { type MultiagentAccountData, Multiagent } from '../classes/multiagent';
 
 export const multiagent = new Multiagent('accs');
 
-export const getAccountData = (uid: DID | undefined): MultiagentAccountData | undefined => {
+export const getAccountData = (uid: At.DID | undefined): MultiagentAccountData | undefined => {
 	return uid !== undefined ? multiagent.accounts.find((acc) => acc.did === uid) : undefined;
 };
 
@@ -19,7 +19,7 @@ export const renderAccountName = (account: MultiagentAccountData) => {
 	return account.profile?.displayName || `@` + account.session.handle;
 };
 
-export const getAccountHandle = (uid: DID): string | null => {
+export const getAccountHandle = (uid: At.DID): string | null => {
 	const account = getAccountData(uid);
 
 	if (account) {

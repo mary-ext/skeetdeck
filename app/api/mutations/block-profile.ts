@@ -1,4 +1,4 @@
-import type { Records } from '../atp-schema';
+import type { AppBskyGraphBlock } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 import type { SignalizedProfile } from '../stores/profiles';
@@ -16,7 +16,7 @@ const createProfileBlockMutation = (profile: SignalizedProfile) => {
 			const agent = await multiagent.connect(uid);
 
 			if (shouldBlock) {
-				const record: Records[typeof blockRecordType] = {
+				const record: AppBskyGraphBlock.Record = {
 					createdAt: getCurrentDate(),
 					subject: profile.did,
 				};

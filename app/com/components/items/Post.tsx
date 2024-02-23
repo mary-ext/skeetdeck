@@ -1,6 +1,6 @@
 import { type Accessor, createEffect, createMemo } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 
 import type { SignalizedPost } from '~/api/stores/posts';
 import type { SignalizedTimelineItem } from '~/api/models/timeline';
@@ -46,7 +46,7 @@ export interface PostProps {
 	next?: boolean;
 	interactive?: boolean;
 	highlight?: boolean;
-	timelineDid?: DID;
+	timelineDid?: At.DID;
 }
 
 const Post = (props: PostProps) => {
@@ -332,7 +332,7 @@ export default Post;
 interface PostContentProps {
 	post: SignalizedPost;
 	postPermalink: PostLinking;
-	timelineDid: Accessor<DID | undefined>;
+	timelineDid: Accessor<At.DID | undefined>;
 }
 
 const PostContent = ({ post, postPermalink, timelineDid }: PostContentProps) => {

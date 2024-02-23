@@ -4,7 +4,7 @@ import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 import { useParams } from '@pkg/solid-navigation';
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
@@ -33,7 +33,7 @@ import FlattenedThread from '~/com/components/views/threads/FlattenedThread';
 import PermalinkPost from '~/com/components/views/PermalinkPost';
 
 const ThreadView = () => {
-	const { actor, post: rkey } = useParams<{ actor: DID; post: string }>();
+	const { actor, post: rkey } = useParams<{ actor: At.DID; post: string }>();
 
 	const query = createQuery(() => {
 		const key = getPostThreadKey(multiagent.active!, actor, rkey, 4, 10);
@@ -137,7 +137,7 @@ const ThreadView = () => {
 
 										if (type === 'overflow') {
 											const uri = item.uri;
-											const actor = getRepoId(uri) as DID;
+											const actor = getRepoId(uri) as At.DID;
 											const rkey = getRecordId(uri);
 
 											return (

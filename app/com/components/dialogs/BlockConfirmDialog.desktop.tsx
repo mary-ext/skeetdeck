@@ -2,7 +2,7 @@ import { createEffect, createSignal } from 'solid-js';
 
 import { type InfiniteData, createQuery, useQueryClient } from '@pkg/solid-query';
 
-import type { RefOf } from '~/api/atp-schema';
+import type { AppBskyGraphDefs } from '~/api/atp-schema';
 import { getAccountHandle, multiagent } from '~/api/globals/agent';
 import { formatQueryError } from '~/api/utils/misc';
 
@@ -26,7 +26,7 @@ import SwitchAccountAction from '~/desktop/components/flyouts/SwitchAccountActio
 
 import type { BlockConfirmDialogProps } from './BlockConfirmDialog';
 
-type ListViewBasic = RefOf<'app.bsky.graph.defs#listViewBasic'>;
+type ListViewBasic = AppBskyGraphDefs.ListViewBasic;
 
 const BlockConfirmDialog = (props: BlockConfirmDialogProps) => {
 	const [uid, setUid] = createSignal(props.uid);

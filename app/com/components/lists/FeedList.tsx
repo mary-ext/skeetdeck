@@ -2,7 +2,7 @@ import { type JSX, For } from 'solid-js';
 
 import { createInfiniteQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 
 import { getProfileFeeds, getProfileFeedsKey } from '~/api/queries/get-profile-feeds';
 
@@ -15,7 +15,7 @@ import { VirtualContainer } from '../VirtualContainer';
 import FeedItem from '../items/FeedItem';
 
 export interface FeedListProps {
-	uid: DID;
+	uid: At.DID;
 	actor: string;
 }
 

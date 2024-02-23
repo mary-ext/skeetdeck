@@ -1,15 +1,9 @@
-import type { RefOf, UnionOf } from '../atp-schema';
+import type { AppBskyRichtextFacet } from '../atp-schema';
 
-export type Facet = RefOf<'app.bsky.richtext.facet'>;
-export type LinkFeature = UnionOf<'app.bsky.richtext.facet#link'>;
-export type MentionFeature = UnionOf<'app.bsky.richtext.facet#mention'>;
-export type TagFeature = UnionOf<'app.bsky.richtext.facet#tag'>;
-
-/** This is a non-standard facet so that we don't mix up MentionFacet for unresolved handles */
-export interface UnresolvedMentionFeature {
-	$type: 'io.github.intrnl.langit#unresolvedMention';
-	handle: string;
-}
+export type Facet = AppBskyRichtextFacet.Main;
+export type LinkFeature = AppBskyRichtextFacet.Link;
+export type MentionFeature = AppBskyRichtextFacet.Mention;
+export type TagFeature = AppBskyRichtextFacet.Tag;
 
 export interface RichTextSegment {
 	text: string;

@@ -1,9 +1,9 @@
-import { For, batch, createEffect, createMemo, createSignal, onCleanup } from 'solid-js';
+import { For, batch, createEffect, createMemo, createSignal } from 'solid-js';
 
 import { onBlur, onFocus } from '@pkg/solid-navigation';
 import { makeEventListener } from '@solid-primitives/event-listener';
 
-import type { AtUri } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 
 import { preferences } from '../globals/settings';
@@ -18,10 +18,10 @@ import ViewHeader from '../components/ViewHeader';
 import ValidatedKeepAlive from '../components/ValidatedKeepAlive';
 
 const HomeView = () => {
-	const [state, setState] = useEntryState<{ uri?: AtUri }>();
+	const [state, setState] = useEntryState<{ uri?: At.Uri }>();
 	const [uri, setUri] = createSignal(state().uri);
 
-	const setTab = (next: AtUri | undefined) => {
+	const setTab = (next: At.Uri | undefined) => {
 		if (uri() === next) {
 			window.scrollTo({ top: 0, behavior: 'smooth' });
 			return;

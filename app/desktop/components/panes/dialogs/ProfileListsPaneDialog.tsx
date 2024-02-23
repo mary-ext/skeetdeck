@@ -1,6 +1,6 @@
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 
 import { getProfile, getProfileKey } from '~/api/queries/get-profile';
 
@@ -12,7 +12,7 @@ import PaneDialogHeader from '../PaneDialogHeader';
 
 export interface ProfileListsPaneDialogProps {
 	/** Expected to be static */
-	actor: DID;
+	actor: At.DID;
 }
 
 const ProfileListsPaneDialog = (props: ProfileListsPaneDialogProps) => {

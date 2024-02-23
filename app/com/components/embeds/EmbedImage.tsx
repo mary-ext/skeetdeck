@@ -1,6 +1,6 @@
 import { lazy } from 'solid-js';
 
-import type { RefOf } from '~/api/atp-schema';
+import type { AppBskyEmbedImages } from '~/api/atp-schema';
 
 import { clsx } from '~/utils/misc';
 
@@ -10,7 +10,7 @@ import ImageAltAction from './images/ImageAltAction';
 
 const LazyImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog'));
 
-type EmbeddedImage = RefOf<'app.bsky.embed.images#viewImage'>;
+type EmbeddedImage = AppBskyEmbedImages.ViewImage;
 
 export interface EmbedImageProps {
 	images: EmbeddedImage[];

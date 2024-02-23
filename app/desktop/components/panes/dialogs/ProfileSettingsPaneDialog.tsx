@@ -5,7 +5,7 @@ import { createMutation, useQueryClient } from '@pkg/solid-query';
 
 import TextareaAutosize from 'solid-textarea-autosize';
 
-import type { Records, UnionOf } from '~/api/atp-schema';
+import type { AppBskyActorProfile, Brand, ComAtprotoLabelDefs } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { formatQueryError } from '~/api/utils/misc';
 
@@ -43,7 +43,7 @@ const NoUnauthenticatedLabel = '!no-unauthenticated';
 
 const profileRecordType = 'app.bsky.actor.profile';
 
-type ProfileRecord = Records[typeof profileRecordType];
+type ProfileRecord = AppBskyActorProfile.Record;
 
 const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 	const queryClient = useQueryClient();
@@ -117,7 +117,7 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 							? await uploadBlob<any>(uid, $banner)
 							: prev?.banner;
 
-				const nextLabels: UnionOf<'com.atproto.label.defs#selfLabels'> | undefined =
+				const nextLabels: Brand.Union<ComAtprotoLabelDefs.SelfLabels> | undefined =
 					$labels.length > 0
 						? { $type: 'com.atproto.label.defs#selfLabels', values: $labels.map((val) => ({ val: val })) }
 						: undefined;

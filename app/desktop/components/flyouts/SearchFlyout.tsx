@@ -2,7 +2,7 @@ import { type JSX, For, createMemo, createSignal } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
-import type { DID, RefOf } from '~/api/atp-schema';
+import type { AppBskyActorDefs, At } from '~/api/atp-schema';
 
 import { searchProfilesTypeahead, searchProfilesTypeaheadKey } from '~/api/queries/search-profiles-typeahead';
 
@@ -22,14 +22,14 @@ export interface SearchPostsSuggestionItem {
 
 export interface ProfileSuggestionItem {
 	type: 'profile';
-	id: DID;
-	profile: RefOf<'app.bsky.actor.defs#profileViewBasic'>;
+	id: At.DID;
+	profile: AppBskyActorDefs.ProfileViewBasic;
 }
 
 export type SuggestionItem = SearchPostsSuggestionItem | ProfileSuggestionItem;
 
 export interface SearchFlyoutProps {
-	uid: DID;
+	uid: At.DID;
 	onAccept: (item: SuggestionItem) => void;
 }
 

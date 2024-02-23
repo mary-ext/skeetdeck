@@ -2,7 +2,7 @@ import type { InfiniteData } from '@pkg/solid-query';
 
 import { produce } from '~/utils/immer';
 
-import type { UnionOf } from '../atp-schema';
+import type { AppBskyFeedDefs, Brand } from '../atp-schema';
 
 import type { ThreadData } from '../models/threads';
 import type { TimelinePage } from '../queries/get-timeline';
@@ -67,7 +67,7 @@ export const producePostDelete = (postUri: string) => {
 
 			if (item.uri === postUri) {
 				// Insert a #notFoundPost here to make it clear it's been deleted.
-				const notFoundPost: UnionOf<'app.bsky.feed.defs#notFoundPost'> = {
+				const notFoundPost: Brand.Union<AppBskyFeedDefs.NotFoundPost> = {
 					$type: 'app.bsky.feed.defs#notFoundPost',
 					notFound: true,
 					uri: postUri,

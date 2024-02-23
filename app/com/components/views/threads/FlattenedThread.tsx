@@ -1,6 +1,6 @@
 import { For } from 'solid-js';
 
-import type { DID } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import type { ThreadData } from '~/api/models/threads';
@@ -56,7 +56,7 @@ const FlattenedThread = (props: FlattenedThreadProps) => {
 				if (type === 'overflow') {
 					const uri = x.parentUri;
 
-					const actor = getRepoId(uri) as DID;
+					const actor = getRepoId(uri) as At.DID;
 					const rkey = getRecordId(uri);
 
 					return (

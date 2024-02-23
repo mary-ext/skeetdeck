@@ -1,6 +1,6 @@
 import { type Accessor, createMemo } from 'solid-js';
 
-import type { RefOf } from '~/api/atp-schema';
+import type { AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedRecord } from '~/api/atp-schema';
 import { getCollectionId } from '~/api/utils/misc';
 
 import type { ModerationDecision } from '~/api/moderation/action';
@@ -17,10 +17,10 @@ import EmbedQuote from './EmbedQuote';
 import EmbedRecordBlocked from './EmbedRecordBlocked';
 import EmbedRecordNotFound from './EmbedRecordNotFound';
 
-type EmbeddedRecord = RefOf<'app.bsky.embed.record#view'>['record'];
+type EmbeddedRecord = AppBskyEmbedRecord.View['record'];
 
-type EmbeddedImage = RefOf<'app.bsky.embed.images#viewImage'>;
-type EmbeddedLink = RefOf<'app.bsky.embed.external#viewExternal'>;
+type EmbeddedImage = AppBskyEmbedImages.ViewImage;
+type EmbeddedLink = AppBskyEmbedExternal.ViewExternal;
 
 export interface EmbedProps {
 	/** Expected to be static */
@@ -96,10 +96,7 @@ const Embed = (props: EmbedProps) => {
 
 export default Embed;
 
-const renderRecord = (
-	record: RefOf<'app.bsky.embed.record#view'>['record'],
-	large: Accessor<boolean | undefined>,
-) => {
+const renderRecord = (record: AppBskyEmbedRecord.View['record'], large: Accessor<boolean | undefined>) => {
 	const type = record.$type;
 
 	if (getCollectionId(record.uri) === 'app.bsky.feed.post') {
