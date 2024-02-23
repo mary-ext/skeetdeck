@@ -130,7 +130,7 @@ const resolveType = (nsid, def) => {
 		const { value, descriptions } = resolveType(`${nsid}/0`, def.items);
 
 		if (def.minLength !== undefined) {
-			descs.push(`Minimum array length: ${def.minimumLength}`);
+			descs.push(`Minimum array length: ${def.minLength}`);
 		}
 
 		if (def.maxLength !== undefined) {
