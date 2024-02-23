@@ -17,6 +17,10 @@ export declare namespace At {
 
 	type Uri = string;
 
+	interface CIDLink {
+		$link: CID;
+	}
+
 	interface Blob<T extends string = string> {
 		$type: 'blob';
 		mimeType: T;
@@ -3260,12 +3264,12 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		/** The repo this event comes from. */
 		repo: At.DID;
 		/** Repo commit object CID. */
-		commit: unknown;
+		commit: At.CIDLink;
 		/**
 		 * DEPRECATED -- unused. WARNING -- nullable and optional; stick with optional to ensure golang interoperability.
 		 * @deprecated
 		 */
-		prev?: unknown;
+		prev?: At.CIDLink;
 		/** The rev of the emitted commit. Note that this information is also in the commit object included in blocks, unless this is a tooBig event. */
 		rev: string;
 		/** The rev of the last emitted commit from this repo (if any). */
@@ -3278,7 +3282,7 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		 */
 		ops: RepoOp[];
 		/** List of new blobs (by CID) referenced by records in this commit. */
-		blobs: unknown[];
+		blobs: At.CIDLink[];
 		/** Timestamp of when this message was originally broadcast. */
 		time: string;
 	}
@@ -3323,7 +3327,7 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		action: 'create' | 'update' | 'delete' | (string & {});
 		path: string;
 		/** For creates and updates, the new record CID. For deletions, null. */
-		cid: unknown;
+		cid: At.CIDLink;
 	}
 }
 
