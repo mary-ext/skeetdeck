@@ -1,6 +1,6 @@
 # bluesky-client
 
-<a href="https://pkg-size.dev/@externdefs/bluesky-client"><img src="https://pkg-size.dev/badge/bundle/6302" title="Bundle size for @externdefs/bluesky-client"></a>
+<a href="https://pkg-size.dev/@externdefs/bluesky-client"><img src="https://pkg-size.dev/badge/bundle/6300" title="Bundle size for @externdefs/bluesky-client"></a>
 
 Lightweight API client for Bluesky/AT Protocol.
 
