@@ -3377,7 +3377,9 @@ export declare interface Queries {
 		params: AppBskyActorSearchActorsTypeahead.Params;
 		output: AppBskyActorSearchActorsTypeahead.Output;
 	};
-	'app.bsky.feed.describeFeedGenerator': { output: AppBskyFeedDescribeFeedGenerator.Output };
+	'app.bsky.feed.describeFeedGenerator': {
+		output: AppBskyFeedDescribeFeedGenerator.Output;
+	};
 	'app.bsky.feed.getActorFeeds': {
 		params: AppBskyFeedGetActorFeeds.Params;
 		output: AppBskyFeedGetActorFeeds.Output;
@@ -3390,7 +3392,10 @@ export declare interface Queries {
 		params: AppBskyFeedGetAuthorFeed.Params;
 		output: AppBskyFeedGetAuthorFeed.Output;
 	};
-	'app.bsky.feed.getFeed': { params: AppBskyFeedGetFeed.Params; output: AppBskyFeedGetFeed.Output };
+	'app.bsky.feed.getFeed': {
+		params: AppBskyFeedGetFeed.Params;
+		output: AppBskyFeedGetFeed.Output;
+	};
 	'app.bsky.feed.getFeedGenerator': {
 		params: AppBskyFeedGetFeedGenerator.Params;
 		output: AppBskyFeedGetFeedGenerator.Output;
@@ -3403,7 +3408,10 @@ export declare interface Queries {
 		params: AppBskyFeedGetFeedSkeleton.Params;
 		output: AppBskyFeedGetFeedSkeleton.Output;
 	};
-	'app.bsky.feed.getLikes': { params: AppBskyFeedGetLikes.Params; output: AppBskyFeedGetLikes.Output };
+	'app.bsky.feed.getLikes': {
+		params: AppBskyFeedGetLikes.Params;
+		output: AppBskyFeedGetLikes.Output;
+	};
 	'app.bsky.feed.getListFeed': {
 		params: AppBskyFeedGetListFeed.Params;
 		output: AppBskyFeedGetListFeed.Output;
@@ -3412,7 +3420,10 @@ export declare interface Queries {
 		params: AppBskyFeedGetPostThread.Params;
 		output: AppBskyFeedGetPostThread.Output;
 	};
-	'app.bsky.feed.getPosts': { params: AppBskyFeedGetPosts.Params; output: AppBskyFeedGetPosts.Output };
+	'app.bsky.feed.getPosts': {
+		params: AppBskyFeedGetPosts.Params;
+		output: AppBskyFeedGetPosts.Output;
+	};
 	'app.bsky.feed.getRepostedBy': {
 		params: AppBskyFeedGetRepostedBy.Params;
 		output: AppBskyFeedGetRepostedBy.Output;
@@ -3429,7 +3440,10 @@ export declare interface Queries {
 		params: AppBskyFeedSearchPosts.Params;
 		output: AppBskyFeedSearchPosts.Output;
 	};
-	'app.bsky.graph.getBlocks': { params: AppBskyGraphGetBlocks.Params; output: AppBskyGraphGetBlocks.Output };
+	'app.bsky.graph.getBlocks': {
+		params: AppBskyGraphGetBlocks.Params;
+		output: AppBskyGraphGetBlocks.Output;
+	};
 	'app.bsky.graph.getFollowers': {
 		params: AppBskyGraphGetFollowers.Params;
 		output: AppBskyGraphGetFollowers.Output;
@@ -3438,7 +3452,10 @@ export declare interface Queries {
 		params: AppBskyGraphGetFollows.Params;
 		output: AppBskyGraphGetFollows.Output;
 	};
-	'app.bsky.graph.getList': { params: AppBskyGraphGetList.Params; output: AppBskyGraphGetList.Output };
+	'app.bsky.graph.getList': {
+		params: AppBskyGraphGetList.Params;
+		output: AppBskyGraphGetList.Output;
+	};
 	'app.bsky.graph.getListBlocks': {
 		params: AppBskyGraphGetListBlocks.Params;
 		output: AppBskyGraphGetListBlocks.Output;
@@ -3447,8 +3464,14 @@ export declare interface Queries {
 		params: AppBskyGraphGetListMutes.Params;
 		output: AppBskyGraphGetListMutes.Output;
 	};
-	'app.bsky.graph.getLists': { params: AppBskyGraphGetLists.Params; output: AppBskyGraphGetLists.Output };
-	'app.bsky.graph.getMutes': { params: AppBskyGraphGetMutes.Params; output: AppBskyGraphGetMutes.Output };
+	'app.bsky.graph.getLists': {
+		params: AppBskyGraphGetLists.Params;
+		output: AppBskyGraphGetLists.Output;
+	};
+	'app.bsky.graph.getMutes': {
+		params: AppBskyGraphGetMutes.Params;
+		output: AppBskyGraphGetMutes.Output;
+	};
 	'app.bsky.graph.getRelationships': {
 		params: AppBskyGraphGetRelationships.Params;
 		output: AppBskyGraphGetRelationships.Output;
@@ -3551,8 +3574,12 @@ export declare interface Queries {
 		params: ComAtprotoRepoListRecords.Params;
 		output: ComAtprotoRepoListRecords.Output;
 	};
-	'com.atproto.server.checkAccountStatus': { output: ComAtprotoServerCheckAccountStatus.Output };
-	'com.atproto.server.describeServer': { output: ComAtprotoServerDescribeServer.Output };
+	'com.atproto.server.checkAccountStatus': {
+		output: ComAtprotoServerCheckAccountStatus.Output;
+	};
+	'com.atproto.server.describeServer': {
+		output: ComAtprotoServerDescribeServer.Output;
+	};
 	'com.atproto.server.getAccountInviteCodes': {
 		params: ComAtprotoServerGetAccountInviteCodes.Params;
 		output: ComAtprotoServerGetAccountInviteCodes.Output;
@@ -3561,9 +3588,16 @@ export declare interface Queries {
 		params: ComAtprotoServerGetServiceAuth.Params;
 		output: ComAtprotoServerGetServiceAuth.Output;
 	};
-	'com.atproto.server.getSession': { output: ComAtprotoServerGetSession.Output };
-	'com.atproto.server.listAppPasswords': { output: ComAtprotoServerListAppPasswords.Output };
-	'com.atproto.sync.getBlob': { params: ComAtprotoSyncGetBlob.Params; output: ComAtprotoSyncGetBlob.Output };
+	'com.atproto.server.getSession': {
+		output: ComAtprotoServerGetSession.Output;
+	};
+	'com.atproto.server.listAppPasswords': {
+		output: ComAtprotoServerListAppPasswords.Output;
+	};
+	'com.atproto.sync.getBlob': {
+		params: ComAtprotoSyncGetBlob.Params;
+		output: ComAtprotoSyncGetBlob.Output;
+	};
 	'com.atproto.sync.getBlocks': {
 		params: ComAtprotoSyncGetBlocks.Params;
 		output: ComAtprotoSyncGetBlocks.Output;
@@ -3572,7 +3606,10 @@ export declare interface Queries {
 		params: ComAtprotoSyncGetCheckout.Params;
 		output: ComAtprotoSyncGetCheckout.Output;
 	};
-	'com.atproto.sync.getHead': { params: ComAtprotoSyncGetHead.Params; output: ComAtprotoSyncGetHead.Output };
+	'com.atproto.sync.getHead': {
+		params: ComAtprotoSyncGetHead.Params;
+		output: ComAtprotoSyncGetHead.Output;
+	};
 	'com.atproto.sync.getLatestCommit': {
 		params: ComAtprotoSyncGetLatestCommit.Params;
 		output: ComAtprotoSyncGetLatestCommit.Output;
@@ -3581,7 +3618,10 @@ export declare interface Queries {
 		params: ComAtprotoSyncGetRecord.Params;
 		output: ComAtprotoSyncGetRecord.Output;
 	};
-	'com.atproto.sync.getRepo': { params: ComAtprotoSyncGetRepo.Params; output: ComAtprotoSyncGetRepo.Output };
+	'com.atproto.sync.getRepo': {
+		params: ComAtprotoSyncGetRepo.Params;
+		output: ComAtprotoSyncGetRepo.Output;
+	};
 	'com.atproto.sync.listBlobs': {
 		params: ComAtprotoSyncListBlobs.Params;
 		output: ComAtprotoSyncListBlobs.Output;
@@ -3590,7 +3630,9 @@ export declare interface Queries {
 		params: ComAtprotoSyncListRepos.Params;
 		output: ComAtprotoSyncListRepos.Output;
 	};
-	'com.atproto.temp.checkSignupQueue': { output: ComAtprotoTempCheckSignupQueue.Output };
+	'com.atproto.temp.checkSignupQueue': {
+		output: ComAtprotoTempCheckSignupQueue.Output;
+	};
 	'com.atproto.temp.fetchLabels': {
 		params: ComAtprotoTempFetchLabels.Params;
 		output: ComAtprotoTempFetchLabels.Output;
@@ -3598,34 +3640,60 @@ export declare interface Queries {
 }
 
 export declare interface Procedures {
-	'app.bsky.actor.putPreferences': { input: AppBskyActorPutPreferences.Input };
-	'app.bsky.graph.muteActor': { input: AppBskyGraphMuteActor.Input };
-	'app.bsky.graph.muteActorList': { input: AppBskyGraphMuteActorList.Input };
-	'app.bsky.graph.unmuteActor': { input: AppBskyGraphUnmuteActor.Input };
-	'app.bsky.graph.unmuteActorList': { input: AppBskyGraphUnmuteActorList.Input };
-	'app.bsky.notification.registerPush': { input: AppBskyNotificationRegisterPush.Input };
-	'app.bsky.notification.updateSeen': { input: AppBskyNotificationUpdateSeen.Input };
+	'app.bsky.actor.putPreferences': {
+		input: AppBskyActorPutPreferences.Input;
+	};
+	'app.bsky.graph.muteActor': {
+		input: AppBskyGraphMuteActor.Input;
+	};
+	'app.bsky.graph.muteActorList': {
+		input: AppBskyGraphMuteActorList.Input;
+	};
+	'app.bsky.graph.unmuteActor': {
+		input: AppBskyGraphUnmuteActor.Input;
+	};
+	'app.bsky.graph.unmuteActorList': {
+		input: AppBskyGraphUnmuteActorList.Input;
+	};
+	'app.bsky.notification.registerPush': {
+		input: AppBskyNotificationRegisterPush.Input;
+	};
+	'app.bsky.notification.updateSeen': {
+		input: AppBskyNotificationUpdateSeen.Input;
+	};
 	'com.atproto.admin.createCommunicationTemplate': {
 		input: ComAtprotoAdminCreateCommunicationTemplate.Input;
 		output: ComAtprotoAdminCreateCommunicationTemplate.Output;
 	};
-	'com.atproto.admin.deleteAccount': { input: ComAtprotoAdminDeleteAccount.Input };
+	'com.atproto.admin.deleteAccount': {
+		input: ComAtprotoAdminDeleteAccount.Input;
+	};
 	'com.atproto.admin.deleteCommunicationTemplate': {
 		input: ComAtprotoAdminDeleteCommunicationTemplate.Input;
 	};
-	'com.atproto.admin.disableAccountInvites': { input: ComAtprotoAdminDisableAccountInvites.Input };
-	'com.atproto.admin.disableInviteCodes': { input: ComAtprotoAdminDisableInviteCodes.Input };
+	'com.atproto.admin.disableAccountInvites': {
+		input: ComAtprotoAdminDisableAccountInvites.Input;
+	};
+	'com.atproto.admin.disableInviteCodes': {
+		input: ComAtprotoAdminDisableInviteCodes.Input;
+	};
 	'com.atproto.admin.emitModerationEvent': {
 		input: ComAtprotoAdminEmitModerationEvent.Input;
 		output: ComAtprotoAdminEmitModerationEvent.Output;
 	};
-	'com.atproto.admin.enableAccountInvites': { input: ComAtprotoAdminEnableAccountInvites.Input };
+	'com.atproto.admin.enableAccountInvites': {
+		input: ComAtprotoAdminEnableAccountInvites.Input;
+	};
 	'com.atproto.admin.sendEmail': {
 		input: ComAtprotoAdminSendEmail.Input;
 		output: ComAtprotoAdminSendEmail.Output;
 	};
-	'com.atproto.admin.updateAccountEmail': { input: ComAtprotoAdminUpdateAccountEmail.Input };
-	'com.atproto.admin.updateAccountHandle': { input: ComAtprotoAdminUpdateAccountHandle.Input };
+	'com.atproto.admin.updateAccountEmail': {
+		input: ComAtprotoAdminUpdateAccountEmail.Input;
+	};
+	'com.atproto.admin.updateAccountHandle': {
+		input: ComAtprotoAdminUpdateAccountHandle.Input;
+	};
 	'com.atproto.admin.updateCommunicationTemplate': {
 		input: ComAtprotoAdminUpdateCommunicationTemplate.Input;
 		output: ComAtprotoAdminUpdateCommunicationTemplate.Output;
@@ -3639,19 +3707,29 @@ export declare interface Procedures {
 		input: ComAtprotoIdentitySignPlcOperation.Input;
 		output: ComAtprotoIdentitySignPlcOperation.Output;
 	};
-	'com.atproto.identity.submitPlcOperation': { input: ComAtprotoIdentitySubmitPlcOperation.Input };
-	'com.atproto.identity.updateHandle': { input: ComAtprotoIdentityUpdateHandle.Input };
+	'com.atproto.identity.submitPlcOperation': {
+		input: ComAtprotoIdentitySubmitPlcOperation.Input;
+	};
+	'com.atproto.identity.updateHandle': {
+		input: ComAtprotoIdentityUpdateHandle.Input;
+	};
 	'com.atproto.moderation.createReport': {
 		input: ComAtprotoModerationCreateReport.Input;
 		output: ComAtprotoModerationCreateReport.Output;
 	};
-	'com.atproto.repo.applyWrites': { input: ComAtprotoRepoApplyWrites.Input };
+	'com.atproto.repo.applyWrites': {
+		input: ComAtprotoRepoApplyWrites.Input;
+	};
 	'com.atproto.repo.createRecord': {
 		input: ComAtprotoRepoCreateRecord.Input;
 		output: ComAtprotoRepoCreateRecord.Output;
 	};
-	'com.atproto.repo.deleteRecord': { input: ComAtprotoRepoDeleteRecord.Input };
-	'com.atproto.repo.importRepo': { input: ComAtprotoRepoImportRepo.Input };
+	'com.atproto.repo.deleteRecord': {
+		input: ComAtprotoRepoDeleteRecord.Input;
+	};
+	'com.atproto.repo.importRepo': {
+		input: ComAtprotoRepoImportRepo.Input;
+	};
 	'com.atproto.repo.putRecord': {
 		input: ComAtprotoRepoPutRecord.Input;
 		output: ComAtprotoRepoPutRecord.Output;
@@ -3661,7 +3739,9 @@ export declare interface Procedures {
 		output: ComAtprotoRepoUploadBlob.Output;
 	};
 	'com.atproto.server.activateAccount': {};
-	'com.atproto.server.confirmEmail': { input: ComAtprotoServerConfirmEmail.Input };
+	'com.atproto.server.confirmEmail': {
+		input: ComAtprotoServerConfirmEmail.Input;
+	};
 	'com.atproto.server.createAccount': {
 		input: ComAtprotoServerCreateAccount.Input;
 		output: ComAtprotoServerCreateAccount.Output;
@@ -3682,22 +3762,44 @@ export declare interface Procedures {
 		input: ComAtprotoServerCreateSession.Input;
 		output: ComAtprotoServerCreateSession.Output;
 	};
-	'com.atproto.server.deactivateAccount': { input: ComAtprotoServerDeactivateAccount.Input };
-	'com.atproto.server.deleteAccount': { input: ComAtprotoServerDeleteAccount.Input };
+	'com.atproto.server.deactivateAccount': {
+		input: ComAtprotoServerDeactivateAccount.Input;
+	};
+	'com.atproto.server.deleteAccount': {
+		input: ComAtprotoServerDeleteAccount.Input;
+	};
 	'com.atproto.server.deleteSession': {};
-	'com.atproto.server.refreshSession': { output: ComAtprotoServerRefreshSession.Output };
+	'com.atproto.server.refreshSession': {
+		output: ComAtprotoServerRefreshSession.Output;
+	};
 	'com.atproto.server.requestAccountDelete': {};
 	'com.atproto.server.requestEmailConfirmation': {};
-	'com.atproto.server.requestEmailUpdate': { output: ComAtprotoServerRequestEmailUpdate.Output };
-	'com.atproto.server.requestPasswordReset': { input: ComAtprotoServerRequestPasswordReset.Input };
+	'com.atproto.server.requestEmailUpdate': {
+		output: ComAtprotoServerRequestEmailUpdate.Output;
+	};
+	'com.atproto.server.requestPasswordReset': {
+		input: ComAtprotoServerRequestPasswordReset.Input;
+	};
 	'com.atproto.server.reserveSigningKey': {
 		input: ComAtprotoServerReserveSigningKey.Input;
 		output: ComAtprotoServerReserveSigningKey.Output;
 	};
-	'com.atproto.server.resetPassword': { input: ComAtprotoServerResetPassword.Input };
-	'com.atproto.server.revokeAppPassword': { input: ComAtprotoServerRevokeAppPassword.Input };
-	'com.atproto.server.updateEmail': { input: ComAtprotoServerUpdateEmail.Input };
-	'com.atproto.sync.notifyOfUpdate': { input: ComAtprotoSyncNotifyOfUpdate.Input };
-	'com.atproto.sync.requestCrawl': { input: ComAtprotoSyncRequestCrawl.Input };
-	'com.atproto.temp.requestPhoneVerification': { input: ComAtprotoTempRequestPhoneVerification.Input };
+	'com.atproto.server.resetPassword': {
+		input: ComAtprotoServerResetPassword.Input;
+	};
+	'com.atproto.server.revokeAppPassword': {
+		input: ComAtprotoServerRevokeAppPassword.Input;
+	};
+	'com.atproto.server.updateEmail': {
+		input: ComAtprotoServerUpdateEmail.Input;
+	};
+	'com.atproto.sync.notifyOfUpdate': {
+		input: ComAtprotoSyncNotifyOfUpdate.Input;
+	};
+	'com.atproto.sync.requestCrawl': {
+		input: ComAtprotoSyncRequestCrawl.Input;
+	};
+	'com.atproto.temp.requestPhoneVerification': {
+		input: ComAtprotoTempRequestPhoneVerification.Input;
+	};
 }

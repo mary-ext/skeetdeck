@@ -338,7 +338,7 @@ for (const filename of fg.sync('lexicons/**/*.json')) {
 			}
 
 			{
-				let rc = `'${ns}':{`;
+				let rc = `'${ns}':{\n`;
 
 				if (parameters) {
 					rc += `params: ${tsNamespace}.Params;`;
