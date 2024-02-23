@@ -1,8 +1,8 @@
 import type { Input, Output, Validator } from '../types.ts';
 
-export type NullableValidator<TValidator extends Validator, TOutput = Output<TValidator> | null> = Validator<
+export type NullableValidator<TValidator extends Validator> = Validator<
 	Input<TValidator> | null,
-	TOutput
+	Output<TValidator> | null
 >;
 
 export const nullable = <TValidator extends Validator>(

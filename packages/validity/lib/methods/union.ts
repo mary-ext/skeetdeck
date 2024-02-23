@@ -2,9 +2,9 @@ import type { Input, Output, ValidationIssue, Validator } from '../types.ts';
 
 export type UnionOptions = [Validator<any>, Validator<any>, ...Validator<any>[]];
 
-export type UnionValidator<TOptions extends UnionOptions, TOutput = Output<TOptions[number]>> = Validator<
+export type UnionValidator<TOptions extends UnionOptions> = Validator<
 	Input<TOptions[number]>,
-	TOutput
+	Output<TOptions[number]>
 >;
 
 export const union = <TOptions extends UnionOptions>(...options: TOptions): UnionValidator<TOptions> => {

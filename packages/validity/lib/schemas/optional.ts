@@ -1,9 +1,9 @@
 import type { Input, Output, Validator } from '../types.ts';
 
-export type OptionalValidator<
-	TValidator extends Validator,
-	TOutput = Output<TValidator> | undefined,
-> = Validator<Input<TValidator> | undefined, TOutput>;
+export type OptionalValidator<TValidator extends Validator> = Validator<
+	Input<TValidator> | undefined,
+	Output<TValidator> | undefined
+>;
 
 export const optional = <TValidator extends Validator>(
 	validate: TValidator,
