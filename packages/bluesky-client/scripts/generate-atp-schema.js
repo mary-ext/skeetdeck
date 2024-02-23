@@ -150,7 +150,7 @@ const resolveType = (nsid, def) => {
 		chunk += '}';
 		val = chunk;
 	} else {
-		console.log(`${nsid}: unknown type '${type}'`);
+		console.log(`${nsid}: unknown type ${type}`);
 	}
 
 	return { value: val, descriptions: descs };
