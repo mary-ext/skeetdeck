@@ -69,8 +69,8 @@ type Facet = AppBskyRichtextFacet.Main;
 type MentionFeature = Brand.Union<AppBskyRichtextFacet.Mention>;
 
 const mention: MentionFeature = {
-  $type: 'app.bsky.richtext.facet#mention',
-  did: 'did:plc:ragtjsm2j2vknwkz3zp4oxrd',
+	$type: 'app.bsky.richtext.facet#mention',
+	did: 'did:plc:ragtjsm2j2vknwkz3zp4oxrd',
 };
 
 const facet: Facet = {
