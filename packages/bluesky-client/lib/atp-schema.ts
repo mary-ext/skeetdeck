@@ -101,6 +101,8 @@ export declare namespace AppBskyActorDefs {
 		| FeedViewPref
 		| ThreadViewPref
 		| InterestsPref
+		| MutedWordsPref
+		| HiddenPostsPref
 	>[];
 	interface AdultContentPref {
 		[Brand.Type]?: 'app.bsky.actor.defs#adultContentPref';
@@ -2207,6 +2209,16 @@ export declare namespace ComAtprotoAdminUpdateAccountHandle {
 	type Output = undefined;
 }
 
+/** Update the password for a user account as an administrator. */
+export declare namespace ComAtprotoAdminUpdateAccountPassword {
+	interface Params {}
+	interface Input {
+		did: At.DID;
+		password: string;
+	}
+	type Output = undefined;
+}
+
 /** Administrative action to update an existing communication template. Allows passing partial fields to patch specific fields only. */
 export declare namespace ComAtprotoAdminUpdateCommunicationTemplate {
 	interface Params {}
@@ -3693,6 +3705,9 @@ export declare interface Procedures {
 	};
 	'com.atproto.admin.updateAccountHandle': {
 		input: ComAtprotoAdminUpdateAccountHandle.Input;
+	};
+	'com.atproto.admin.updateAccountPassword': {
+		input: ComAtprotoAdminUpdateAccountPassword.Input;
 	};
 	'com.atproto.admin.updateCommunicationTemplate': {
 		input: ComAtprotoAdminUpdateCommunicationTemplate.Input;
