@@ -15,6 +15,7 @@ import { clsx } from '~/utils/misc';
 
 import { openModal } from '~/com/globals/modals';
 
+import { BoxedIconButton } from '../../primitives/boxed-icon-button';
 import { Button } from '../../primitives/button';
 
 import { LINK_LIST, LINK_PROFILE_EDIT, LINK_PROFILE_FOLLOWERS, LINK_PROFILE_FOLLOWS, Link } from '../Link';
@@ -112,8 +113,8 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 							? [
 									isDesktop && (
 										<ProfileOverflowAction profile={profile}>
-											<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
-												<MoreHorizIcon class="-mx-0.75 text-base" />
+											<button title="Actions" class={/* @once */ BoxedIconButton()}>
+												<MoreHorizIcon />
 											</button>
 										</ProfileOverflowAction>
 									),
@@ -125,8 +126,8 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 								]
 							: [
 									<ProfileOverflowAction profile={profile}>
-										<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
-											<MoreHorizIcon class="-mx-0.75 text-base" />
+										<button title="Actions" class={/* @once */ BoxedIconButton()}>
+											<MoreHorizIcon />
 										</button>
 									</ProfileOverflowAction>,
 									<Link

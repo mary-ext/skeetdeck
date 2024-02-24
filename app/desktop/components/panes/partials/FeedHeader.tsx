@@ -9,7 +9,7 @@ import { formatCompact } from '~/utils/intl/number';
 
 import { openModal } from '~/com/globals/modals';
 
-import { Button } from '~/com/primitives/button';
+import { BoxedIconButton } from '~/com/primitives/boxed-icon-button';
 
 import { LINK_FEED_LIKED_BY, LINK_PROFILE, Link } from '~/com/components/Link';
 import RichTextRenderer from '~/com/components/RichTextRenderer';
@@ -108,20 +108,16 @@ const FeedHeader = (props: FeedHeaderProps) => {
 							onClick={() => {
 								updateFeedLike(feed, !isLiked());
 							}}
-							class={/* @once */ Button({ variant: 'outline' })}
+							class={/* @once */ BoxedIconButton()}
 						>
-							{isLiked() ? (
-								<FavoriteIcon class="-mx-1.5 text-base text-red-500" />
-							) : (
-								<FavoriteOutlinedIcon class="-mx-1.5 text-base" />
-							)}
+							{isLiked() ? <FavoriteIcon class="text-red-500" /> : <FavoriteOutlinedIcon />}
 						</button>
 
 						<div class="grow"></div>
 
 						<FeedOverflowAction feed={feed}>
-							<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
-								<MoreHorizIcon class="-mx-1.5 text-base" />
+							<button title="Actions" class={/* @once */ BoxedIconButton()}>
+								<MoreHorizIcon />
 							</button>
 						</FeedOverflowAction>
 					</div>

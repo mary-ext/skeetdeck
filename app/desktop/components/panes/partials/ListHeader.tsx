@@ -4,6 +4,7 @@ import type { SignalizedList } from '~/api/stores/lists';
 
 import { openModal } from '~/com/globals/modals';
 
+import { BoxedIconButton } from '~/com/primitives/boxed-icon-button';
 import { Button } from '~/com/primitives/button';
 
 import { LINK_PROFILE, Link } from '~/com/components/Link';
@@ -137,16 +138,16 @@ const ListHeader = (props: ListHeaderProps) => {
 									onClick={() => {
 										openPaneModal(() => <ListSettingsPaneDialog list={list} />);
 									}}
-									class={/* @once */ Button({ variant: 'outline' })}
+									class={/* @once */ BoxedIconButton()}
 								>
-									<EditIcon class="-mx-1.5 text-base" />
+									<EditIcon />
 								</button>
 							)
 						}
 
 						<ListOverflowAction list={list}>
-							<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
-								<MoreHorizIcon class="-mx-1.5 text-base" />
+							<button title="Actions" class={/* @once */ BoxedIconButton()}>
+								<MoreHorizIcon />
 							</button>
 						</ListOverflowAction>
 					</div>
