@@ -32,6 +32,9 @@ const PaneBody = (props: PaneBodyProps) => {
 			// position is at 0px but also not, so let's nudge it to 1px first.
 			ref!.scrollTop = 1;
 			ref!.scrollTop = 0;
+
+			// Manually set scrolled state because it's being faulty for whatever reason.
+			setScrolled(false);
 		}
 
 		return next;
