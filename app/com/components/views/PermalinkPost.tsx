@@ -86,7 +86,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 						</div>
 
 						{(() => {
-							const verdict = profileVerdict() || { a: true };
+							const verdict = profileVerdict();
 
 							if (verdict) {
 								return (
