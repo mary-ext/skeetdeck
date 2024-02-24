@@ -62,6 +62,8 @@ console.log(profile);
 
 ### Fiddling with AT Protocol schema...
 
+Typings for AT Protocol lexicons can be accessed by the `/atp-schema` subimport.
+
 ```ts
 import type { AppBskyRichtextFacet, Brand } from '@externdefs/bluesky-client/atp-schema';
 
@@ -82,7 +84,8 @@ const facet: Facet = {
 };
 ```
 
-- `RefOf` types are used for referencing an object within another object or record.
-- `UnionOf` types are used in places where a field can contain multiple references, requiring a `$type` field to differentiate the reference.
-- `ResponseOf` can be used to retrieve the response data out of a given endpoint.
-- `Records` interface contains the interface declarations for actual records.
+For the most part, it is 1:1 with the official library's typings, but it's also stricter with the branded typing that's present on each interface.
+
+It's slightly annoying in that a function accepting `AppBskyActorDefs.ProfileViewBasic` can't also accept `ProfileViewDetailed` without making it a union. (depending on how you see it)
+
+However, it allows for AT Protocol's discriminated unions to be typed properly, and that's the best part about this approach.
