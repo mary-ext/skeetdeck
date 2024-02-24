@@ -73,9 +73,9 @@ export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: b
 					])
 				}
 			>
-				<div class="mx-3 mt-3 flex text-sm text-muted-fg">
-					<div class="mr-1 h-5 w-5 shrink-0 overflow-hidden rounded-full bg-muted-fg">
-						<img src={author.avatar || DefaultAvatar} class="h-full w-full" />
+				<div class="mx-3 mt-3 flex min-w-0 text-sm text-muted-fg">
+					<div class="mr-2 h-5 w-5 shrink-0 overflow-hidden rounded-full bg-muted-fg">
+						<img src={/* @once */ author.avatar || DefaultAvatar} class="h-full w-full" />
 					</div>
 
 					<span class="flex max-w-full gap-1 overflow-hidden text-ellipsis whitespace-nowrap text-left">
@@ -98,7 +98,7 @@ export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: b
 					<div class="flex items-start">
 						{images && !large && (
 							<div class="mb-3 ml-3 mt-2 grow basis-0">
-								<EmbedImage images={images} blur={/* @once */ mod?.m} />
+								<EmbedImage images={images} blur={mod?.m} />
 							</div>
 						)}
 
@@ -110,7 +110,7 @@ export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: b
 					<div class="mt-3"></div>
 				)}
 
-				{showLargeImages && <EmbedImage images={images} blur={/* @once */ mod?.m} borderless />}
+				{showLargeImages && <EmbedImage images={images} blur={mod?.m} borderless />}
 			</div>
 		);
 	}) as unknown as JSX.Element;

@@ -97,11 +97,11 @@ const Post = (props: PostProps) => {
 					if (reason) {
 						return (
 							<div class="-mt-1 mb-1 flex items-center gap-3 text-de text-muted-fg">
-								<div class="flex w-10 shrink-0 justify-end">
+								<div class="flex w-9 shrink-0 justify-end">
 									<RepeatIcon />
 								</div>
 								<Link
-									to={{ type: LINK_PROFILE, actor: reason.by.did }}
+									to={/* @once */ { type: LINK_PROFILE, actor: reason.by.did }}
 									class="flex min-w-0 font-medium hover:underline"
 								>
 									<span dir="auto" class="overflow-hidden text-ellipsis whitespace-nowrap">
@@ -122,7 +122,7 @@ const Post = (props: PostProps) => {
 						if (parent) {
 							return (
 								<div class="-mt-1 mb-1 flex items-center gap-3 text-de text-muted-fg">
-									<div class="flex w-10 shrink-0 justify-end">
+									<div class="flex w-9 shrink-0 justify-end">
 										<ChatBubbleOutlinedIcon />
 									</div>
 									<Link
@@ -150,7 +150,7 @@ const Post = (props: PostProps) => {
 						if (record.value.reply) {
 							return (
 								<div class="-mt-1 mb-1 flex items-center gap-3 text-de text-muted-fg">
-									<div class="flex w-10 shrink-0 justify-end">
+									<div class="flex w-9 shrink-0 justify-end">
 										<ChatBubbleOutlinedIcon />
 									</div>
 									<Link to={postPermalink} class="flex min-w-0 font-medium hover:underline">
@@ -168,7 +168,7 @@ const Post = (props: PostProps) => {
 					<Link
 						tabindex={-1}
 						to={authorPermalink}
-						class="h-10 w-10 overflow-hidden rounded-full hover:opacity-80"
+						class="h-9 w-9 overflow-hidden rounded-full hover:opacity-80"
 					>
 						<img
 							src={author.avatar.value || DefaultAvatar}

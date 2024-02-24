@@ -77,7 +77,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 					to={{ type: LINK_PROFILE, actor: author.did }}
 					class="pointer-events-none inline-flex max-w-full items-center overflow-hidden"
 				>
-					<div class="pointer-events-auto z-2 mr-3 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-muted-fg hover:opacity-80">
+					<div class="pointer-events-auto z-2 mr-3 h-9 w-9 shrink-0 overflow-hidden rounded-full bg-muted-fg hover:opacity-80">
 						<img
 							src={author.avatar.value || DefaultAvatar}
 							class={clsx(['h-full w-full', !!author.avatar.value && profileVerdict()?.m && `blur`])}

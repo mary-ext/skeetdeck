@@ -111,6 +111,12 @@ const linkEmbedBtn = Interactive({
 	class: `flex items-center gap-3 rounded-md border border-divider px-3 py-2.5 text-left text-sm`,
 });
 
+const switchUserBtn = Interactive({
+	variant: 'none',
+	class: `h-9 w-9 overflow-hidden rounded-full outline-primary hover:opacity-80`,
+	offset: false,
+});
+
 const enum LogType {
 	NONE,
 	ERROR,
@@ -754,7 +760,7 @@ const ComposerPane = () => {
 							return (
 								<div class="flex min-w-0 gap-3 px-4 pt-3">
 									<div class="flex shrink-0 flex-col items-center">
-										<div class="h-10 w-10 rounded-full bg-muted"></div>
+										<div class="h-9 w-9 rounded-full bg-muted"></div>
 										<div class="-mb-4 mt-2 grow border-l-2 border-divider" />
 									</div>
 
@@ -903,12 +909,12 @@ const ComposerPane = () => {
 									class="hidden"
 								/>
 
-								<div class="flex shrink-0 flex-col items-center px-4">
+								<div class="flex shrink-0 flex-col items-center pl-4 pr-3">
 									<SwitchAccountAction value={context.author} onChange={(next) => (context.author = next)}>
 										<button
 											tabindex={index() === 0 ? 0 : -1}
 											disabled={multiagent.accounts.length < 2}
-											class="h-10 w-10 overflow-hidden rounded-full hover:opacity-80 disabled:pointer-events-none"
+											class={switchUserBtn}
 										>
 											<img
 												src={author()?.profile?.avatar || DefaultUserAvatar}
@@ -1235,7 +1241,7 @@ const ComposerPane = () => {
 
 				{posts.length < MAX_THREAD_LIMIT && (
 					<div class="relative flex items-center px-4 pt-2">
-						<div class="w-10"></div>
+						<div class="w-9"></div>
 
 						<button
 							disabled={(() => {
@@ -1249,7 +1255,7 @@ const ComposerPane = () => {
 							data-targets={inputId}
 						>
 							{/* Add some affordances to people attempting to click the plus button */}
-							<div class="absolute left-4 grid h-9 w-10 place-items-center">
+							<div class="absolute left-4 grid h-9 w-9 place-items-center">
 								{/* Icon shouldn't be affected by hover:text-white */}
 								<AddIcon class="text-xl text-primary/85" />
 							</div>
