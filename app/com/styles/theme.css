@@ -43,6 +43,10 @@
 		--divider: 51 51 56 /* zinc-750 */;
 	}
 
+	[hidden] {
+		display: none !important;
+	}
+
 	body {
 		/* @apply overflow-y-scroll; */
 		@apply bg-background text-primary;
