@@ -12,7 +12,7 @@ This is an [ESM-only library](https://gist.github.com/sindresorhus/a39789f98801d
 
 ## Why?
 
-The official `@atproto/api` library is big! <a href="https://pkg-size.dev/@atproto/api"><img src="https://pkg-size.dev/badge/bundle/426499" title="Bundle size for @atproto/api"></a>
+The official `@atproto/api` library is big! <a href="https://pkg-size.dev/@atproto/api"><img src="https://pkg-size.dev/badge/bundle/461666" title="Bundle size for @atproto/api"></a>
 
 - The lexicon codegen generates a ton of classes and functions due to the API being designed around RPC and namespaces. These can't be treeshaken at all if you only need access to some of the endpoints.
 - The library unnecessarily bundles dependencies like `graphemer` and `zod`, which causes duplication in your app code if you also rely on said libraries.
