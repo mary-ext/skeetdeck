@@ -158,7 +158,7 @@ const KeywordFilterFormView = () => {
 										ref={model(keyword, setKeyword)}
 										type="text"
 										required
-										class={/* @once */ Input({ class: 'pr-8' })}
+										class={/* @once */ Input({ class: 'pr-9' })}
 									/>
 
 									<button
