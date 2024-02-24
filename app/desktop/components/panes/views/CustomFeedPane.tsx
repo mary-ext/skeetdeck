@@ -1,4 +1,4 @@
-import { type JSX, createSignal } from 'solid-js';
+import { type JSX, createSignal, lazy } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
@@ -22,8 +22,8 @@ import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
 import PaneHeader from '../PaneHeader';
 
-import CustomFeedPaneSettings from '../settings/CustomFeedPaneSettings';
-import GenericPaneSettings from '../settings/GenericPaneSettings';
+const CustomFeedPaneSettings = lazy(() => import('../settings/CustomFeedPaneSettings'));
+const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));
 
 import FeedHeader from '../partials/FeedHeader';
 

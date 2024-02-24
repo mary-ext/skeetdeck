@@ -1,4 +1,6 @@
-import type { JSX } from 'solid-js';
+import { type JSX, Suspense } from 'solid-js';
+
+import CircularProgress from '~/com/components/CircularProgress';
 
 import { Button } from '~/com/primitives/button';
 
@@ -13,15 +15,20 @@ const PaneAside = (props: PaneAsideProps) => {
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
 				<div class="grow"></div>
 
-				<button
-					onClick={props.onClose}
-					class={/* @once */ Button({ variant: 'primary', size: 'xs', class: '-mr-2' })}
-				>
+				<button onClick={props.onClose} class={/* @once */ Button({ variant: 'primary', size: 'xs' })}>
 					Done
 				</button>
 			</div>
 
-			<div class="flex min-h-0 grow flex-col overflow-y-auto">{props.children}</div>
+			<Suspense
+				fallback={
+					<div class="grid grow place-items-center">
+						<CircularProgress />
+					</div>
+				}
+			>
+				<div class="flex min-h-0 grow flex-col overflow-y-auto">{props.children}</div>
+			</Suspense>
 		</div>
 	);
 };

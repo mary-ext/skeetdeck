@@ -1,4 +1,4 @@
-import { type JSX, createSignal } from 'solid-js';
+import { type JSX, createSignal, lazy } from 'solid-js';
 
 import type { SearchPaneConfig } from '../../../globals/panes';
 
@@ -14,8 +14,8 @@ import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
 import PaneHeader from '../PaneHeader';
 
-import GenericPaneSettings from '../settings/GenericPaneSettings';
-import SearchPaneSettings from '../settings/SearchPaneSettings';
+const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));
+const SearchPaneSettings = lazy(() => import('../settings/SearchPaneSettings'));
 
 const augmentSearchQuery = (query: string, { did }: { did: string }) => {
 	// We don't want to replace substrings that are being "quoted" because those

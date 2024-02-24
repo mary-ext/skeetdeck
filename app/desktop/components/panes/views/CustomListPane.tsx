@@ -1,4 +1,4 @@
-import { type JSX, createSignal } from 'solid-js';
+import { type JSX, createSignal, lazy } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
@@ -21,8 +21,8 @@ import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
 import PaneHeader from '../PaneHeader';
 
-import CustomListPaneSettings from '../settings/CustomListPaneSettings';
-import GenericPaneSettings from '../settings/GenericPaneSettings';
+const CustomListPaneSettings = lazy(() => import('../settings/CustomListPaneSettings'));
+const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));
 
 import ListHeader from '../partials/ListHeader';
 

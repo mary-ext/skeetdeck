@@ -1,4 +1,4 @@
-import { type JSX, createSignal } from 'solid-js';
+import { type JSX, createSignal, lazy } from 'solid-js';
 
 import { preferences } from '../../../globals/settings';
 import { ProfilePaneTab, type ProfilePaneConfig } from '../../../globals/panes';
@@ -17,8 +17,8 @@ import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
 import PaneHeader from '../PaneHeader';
 
-import GenericPaneSettings from '../settings/GenericPaneSettings';
-import ProfilePaneTabSettings from '../settings/ProfilePaneTabSettings';
+const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));
+const ProfilePaneTabSettings = lazy(() => import('../settings/ProfilePaneTabSettings'));
 
 const ProfilePane = () => {
 	const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);

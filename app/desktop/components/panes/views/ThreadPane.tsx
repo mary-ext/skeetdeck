@@ -1,4 +1,4 @@
-import { type JSX, createMemo, createSignal } from 'solid-js';
+import { type JSX, createMemo, createSignal, lazy } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
@@ -19,7 +19,7 @@ import PaneHeader from '../PaneHeader';
 
 import ThreadView from '../partials/ThreadView';
 
-import GenericPaneSettings from '../settings/GenericPaneSettings';
+const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));
 
 const ThreadPane = () => {
 	const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);

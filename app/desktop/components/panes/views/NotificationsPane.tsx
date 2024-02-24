@@ -1,4 +1,4 @@
-import { type JSX, For, Match, Switch, createEffect, createSignal } from 'solid-js';
+import { type JSX, For, Match, Switch, createEffect, createSignal, lazy } from 'solid-js';
 
 import {
 	type InfiniteData,
@@ -39,8 +39,8 @@ import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
 import PaneHeader from '../PaneHeader';
 
-import GenericPaneSettings from '../settings/GenericPaneSettings';
-import NotificationsPaneSettings from '../settings/NotificationsPaneSettings';
+const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));
+const NotificationsPaneSettings = lazy(() => import('../settings/NotificationsPaneSettings'));
 
 const isNotificationsStale = (
 	timelineData: InfiniteData<NotificationsPage> | undefined,
