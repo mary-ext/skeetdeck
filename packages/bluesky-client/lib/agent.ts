@@ -5,9 +5,9 @@ import { type FetchHandlerResponse, defaultFetchHandler, isErrorResponse, XRPC }
 import { type Headers, ResponseType, httpResponseCodeToEnum, XRPCError } from './xrpc-utils.js';
 
 import type {
+	At,
 	ComAtprotoServerCreateSession,
 	ComAtprotoServerRefreshSession,
-	Primitives,
 	Procedures,
 	Queries,
 } from './atp-schema.js';
@@ -19,12 +19,12 @@ export interface JwtToken {
 
 export interface AtpAccessJwt extends JwtToken {
 	scope: 'com.atproto.access' | 'com.atproto.appPass';
-	sub: Primitives.DID;
+	sub: At.DID;
 }
 
 export interface AtpRefreshJwt extends JwtToken {
 	scope: 'com.atproto.refresh';
-	sub: Primitives.DID;
+	sub: At.DID;
 	aud: string;
 	jti: string;
 }
@@ -33,7 +33,7 @@ export interface AtpSessionData {
 	refreshJwt: string;
 	accessJwt: string;
 	handle: string;
-	did: Primitives.DID;
+	did: At.DID;
 	pdsUri?: string;
 	email?: string;
 	emailConfirmed?: boolean;
