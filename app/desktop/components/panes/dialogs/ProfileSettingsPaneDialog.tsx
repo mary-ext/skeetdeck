@@ -286,7 +286,7 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 						</p>
 
 						<p class="mr-8 mt-1 text-de font-bold text-muted-fg">
-							Honoring this request is voluntary — your profile and data will remain publicly available, and
+							Honoring this request is voluntary — your profile and posts will remain publicly available, and
 							some apps may show your account regardless.
 						</p>
 					</div>
