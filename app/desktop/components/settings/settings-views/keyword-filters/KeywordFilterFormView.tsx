@@ -15,6 +15,7 @@ import { openModal } from '~/com/globals/modals';
 
 import { bustRevisionCache, preferences } from '../../../../globals/settings';
 
+import { BoxedIconButton } from '~/com/primitives/boxed-icon-button';
 import { Button } from '~/com/primitives/button';
 import { IconButton } from '~/com/primitives/icon-button';
 import { Input } from '~/com/primitives/input';
@@ -179,9 +180,9 @@ const KeywordFilterFormView = () => {
 									onClick={() => {
 										setMatchers(matchers().toSpliced(index(), 1));
 									}}
-									class={/* @once */ Button({ variant: 'outline' })}
+									class={/* @once */ BoxedIconButton()}
 								>
-									<DeleteIcon class="-mx-1.5 text-lg" />
+									<DeleteIcon />
 								</button>
 							</div>
 						)}

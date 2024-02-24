@@ -7,6 +7,7 @@ import { createRadioModel, modelChecked } from '~/utils/input';
 
 import { openModal } from '~/com/globals/modals';
 
+import { BoxedIconButton } from '~/com/primitives/boxed-icon-button';
 import { Button } from '~/com/primitives/button';
 import { Interactive } from '~/com/primitives/interactive';
 
@@ -201,6 +202,7 @@ const Onboarding = () => {
 				<div class="grow"></div>
 
 				<button
+					title="Go back to previous page"
 					hidden={(() => {
 						const $step = step();
 						return !($step === Steps.SYNC || $step === Steps.FINISH);
@@ -214,9 +216,9 @@ const Onboarding = () => {
 							setStep(Steps.SYNC);
 						}
 					}}
-					class={/* @once */ Button({ variant: 'outline' })}
+					class={/* @once */ BoxedIconButton()}
 				>
-					<ChevronRightIcon class="-mx-2 rotate-180 text-lg" />
+					<ChevronRightIcon class="rotate-180" />
 				</button>
 
 				<button
