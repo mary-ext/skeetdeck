@@ -57,7 +57,7 @@ const PaneHeader = (props: PaneHeaderProps) => {
 				</p>
 			</div>
 
-			<div class="flex min-w-0 shrink-0 empty:hidden">{props.children}</div>
+			<div class="flex min-w-0 shrink-0 gap-1 empty:hidden">{props.children}</div>
 		</div>
 	);
 };

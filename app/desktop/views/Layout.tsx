@@ -71,7 +71,7 @@ const DashboardLayout = (props: RouteComponentProps) => {
 		<div class="flex h-screen w-screen overflow-hidden">
 			<Title render="Skeetdeck" />
 
-			<div hidden={preferences.onboarding} class="flex w-14 shrink-0 flex-col border-r border-divider">
+			<div hidden={preferences.onboarding} class="flex w-13 shrink-0 flex-col border-r border-divider">
 				<Show when={multiagent.active}>
 					{(uid) => (
 						<>

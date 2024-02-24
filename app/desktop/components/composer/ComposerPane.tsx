@@ -1251,7 +1251,13 @@ const ComposerPane = () => {
 							onClick={() => {
 								posts.push(createPostState(preferences));
 							}}
-							class={/* @once */ Button({ variant: 'ghost', class: 'text-primary/85' })}
+							class={
+								/* @once */ Button({
+									size: null,
+									variant: 'ghost',
+									class: 'h-9 px-3 text-sm text-primary/85',
+								})
+							}
 							data-targets={inputId}
 						>
 							{/* Add some affordances to people attempting to click the plus button */}

@@ -84,7 +84,7 @@ const DecksView = (props: RouteComponentProps) => {
 								}}
 								class={/* @once */ Button({ variant: 'primary' })}
 							>
-								<AddIcon class="-ml-1.5 mr-2 text-lg" />
+								<AddIcon class="-ml-0.5 mr-2 text-lg" />
 								<span>Add column</span>
 							</button>
 						</div>

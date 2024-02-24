@@ -57,7 +57,7 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 				</p>
 			</div>
 
-			<fieldset disabled={props.disabled} class="flex min-w-0 shrink-0 empty:hidden">
+			<fieldset disabled={props.disabled} class="flex min-w-0 shrink-0 gap-1 empty:hidden">
 				{props.children}
 			</fieldset>
 		</div>
