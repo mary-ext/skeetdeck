@@ -66,7 +66,7 @@ export const ProfileItem = (props: ProfileItemProps) => {
 			class={profileItem}
 		>
 			<div class="relative shrink-0">
-				<div class="h-12 w-12 overflow-hidden rounded-full">
+				<div class="h-10 w-10 overflow-hidden rounded-full">
 					<img
 						src={profile().avatar.value || DefaultAvatar}
 						class={clsx([`h-full w-full object-cover`, profile().avatar.value && verdict()?.m && `blur`])}
@@ -80,11 +80,11 @@ export const ProfileItem = (props: ProfileItemProps) => {
 							<div
 								class={
 									/* @once */
-									`absolute right-0 top-8 rounded-full bg-background ` +
+									`absolute right-0 top-6 rounded-full bg-background ` +
 									($verdict.a ? `text-red-500` : `text-muted-fg`)
 								}
 							>
-								<ErrorIcon class="text-xl" />
+								<ErrorIcon class="text-lg" />
 							</div>
 						);
 					}

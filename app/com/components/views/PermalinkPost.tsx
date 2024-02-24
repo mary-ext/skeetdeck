@@ -75,13 +75,33 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 			<div class="relative mb-3 flex items-center gap-3 text-sm text-muted-fg">
 				<Link
 					to={{ type: LINK_PROFILE, actor: author.did }}
-					class="pointer-events-none inline-flex max-w-full items-center overflow-hidden"
+					class="pointer-events-none inline-flex min-w-0 max-w-full items-center gap-3"
 				>
-					<div class="pointer-events-auto z-2 mr-3 h-9 w-9 shrink-0 overflow-hidden rounded-full bg-muted-fg hover:opacity-80">
-						<img
-							src={author.avatar.value || DefaultAvatar}
-							class={clsx(['h-full w-full', !!author.avatar.value && profileVerdict()?.m && `blur`])}
-						/>
+					<div class="relative">
+						<div class="pointer-events-auto z-2 h-9 w-9 shrink-0 overflow-hidden rounded-full bg-muted-fg hover:opacity-80">
+							<img
+								src={author.avatar.value || DefaultAvatar}
+								class={clsx(['h-full w-full', !!author.avatar.value && profileVerdict()?.m && `blur`])}
+							/>
+						</div>
+
+						{(() => {
+							const verdict = profileVerdict() || { a: true };
+
+							if (verdict) {
+								return (
+									<div
+										class={
+											/* @once */
+											`absolute right-0 top-6 z-10 rounded-full bg-background ` +
+											(verdict.a ? `text-red-500` : `text-muted-fg`)
+										}
+									>
+										<ErrorIcon class="text-base" />
+									</div>
+								);
+							}
+						})()}
 					</div>
 
 					<span class="group pointer-events-auto block max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
@@ -99,24 +119,6 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 						</button>
 					</PostOverflowAction>
 				</div>
-
-				{(() => {
-					const verdict = profileVerdict();
-
-					if (verdict) {
-						return (
-							<div
-								class={
-									/* @once */
-									`absolute left-7 top-7 z-10 rounded-full bg-background ` +
-									(verdict.a ? `text-red-500` : `text-muted-fg`)
-								}
-							>
-								<ErrorIcon class="text-lg" />
-							</div>
-						);
-					}
-				})()}
 			</div>
 
 			{isPostModerated(post) ? (

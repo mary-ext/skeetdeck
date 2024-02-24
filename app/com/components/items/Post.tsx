@@ -183,11 +183,11 @@ const Post = (props: PostProps) => {
 								<div
 									class={
 										/* @once */
-										`absolute left-7 top-7 rounded-full bg-background ` +
+										`absolute right-0 top-6 rounded-full bg-background ` +
 										(verdict.a ? `text-red-500` : `text-muted-fg`)
 									}
 								>
-									<ErrorIcon class="text-lg" />
+									<ErrorIcon class="text-base" />
 								</div>
 							);
 						}
