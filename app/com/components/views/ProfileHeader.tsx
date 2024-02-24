@@ -126,7 +126,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 							: [
 									<ProfileOverflowAction profile={profile}>
 										<button title="Actions" class={/* @once */ Button({ variant: 'outline' })}>
-											<MoreHorizIcon class="-mx-1.5 text-base" />
+											<MoreHorizIcon class="-mx-0.75 text-base" />
 										</button>
 									</ProfileOverflowAction>,
 									<Link
