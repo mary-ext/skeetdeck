@@ -161,7 +161,7 @@ const Onboarding = () => {
 									</label>
 									<div hidden={startWith() !== StartWith.LOCAL_BACKUP} class="ml-4 px-4 pb-3 pt-1">
 										<button class={/* @once */ Button({ variant: 'outline' })}>
-											<AddIcon class="-ml-1.5 mr-2 text-lg" />
+											<AddIcon class="-ml-1 mr-2 text-lg" />
 											<span>Select file</span>
 										</button>
 									</div>

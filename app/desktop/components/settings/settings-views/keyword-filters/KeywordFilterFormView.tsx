@@ -35,7 +35,7 @@ import { type ViewParams, VIEW_KEYWORD_FILTER_FORM, VIEW_KEYWORD_FILTERS, useVie
 type KeywordState = [keyword: Signal<string>, whole: Signal<boolean>];
 
 const wholeMatchBtn = Interactive({
-	class: `absolute inset-y-0 right-0 ml-px grid place-items-center rounded-r-md px-2`,
+	class: `absolute inset-y-0 right-0 grid w-9 place-items-center rounded-r-md`,
 });
 
 const createKeywordState = (keyword: string, whole: boolean): KeywordState => {
@@ -168,9 +168,7 @@ const KeywordFilterFormView = () => {
 										onClick={() => setWhole(!whole())}
 										class={wholeMatchBtn}
 									>
-										<FormatLetterMatchesIcon
-											class={`text-lg ${!whole() ? `text-muted-fg` : `text-accent`}`}
-										/>
+										<FormatLetterMatchesIcon class={!whole() ? `text-muted-fg` : `text-accent`} />
 									</button>
 								</div>
 
@@ -193,7 +191,7 @@ const KeywordFilterFormView = () => {
 						onClick={() => setMatchers([...matchers(), createKeywordState('', true)])}
 						class={/* @once */ Button({ variant: 'outline', class: 'self-start' })}
 					>
-						<AddIcon class="-ml-1.5 mr-2 text-lg" />
+						<AddIcon class="-ml-1 mr-2 text-lg" />
 						<span>Add phrase</span>
 					</button>
 				</div>
