@@ -32,10 +32,10 @@
 	"devDependencies": {
 		"@types/dom-close-watcher": "^1.0.0",
 		"@types/dom-navigation": "^1.0.3",
-		"@types/node": "^20.11.19",
+		"@types/node": "^20.11.20",
 		"autoprefixer": "^10.4.17",
 		"postcss": "^8.4.35",
-		"terser": "^5.27.2",
+		"terser": "^5.28.1",
 		"vite": "^5.1.4",
 		"vite-plugin-pwa": "0.17.4",
 		"vite-plugin-solid": "^2.10.1"
