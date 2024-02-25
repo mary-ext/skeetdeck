@@ -24,6 +24,7 @@ import ErrorIcon from '../../icons/baseline-error';
 import FavoriteIcon from '../../icons/baseline-favorite';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
+import PoundIcon from '../../icons/baseline-pound';
 import RepeatIcon from '../../icons/baseline-repeat';
 import ShareIcon from '../../icons/baseline-share';
 
@@ -245,6 +246,30 @@ const Post = (props: PostProps) => {
 					</div>
 
 					<PostContent post={post} postPermalink={postPermalink} timelineDid={() => props.timelineDid} />
+
+					<div class="mt-3 flex flex-wrap items-center gap-1.5 text-de text-primary/85 empty:hidden">
+						{(() => {
+							const tags = record.value.tags;
+
+							if (!tags || tags.length === 0) {
+								return null;
+							}
+
+							const length = tags.length;
+							const overflowing = length > 3;
+							const sliced = overflowing ? tags.slice(0, 3) : tags;
+
+							return [
+								...sliced.map((tag) => (
+									<div class="flex min-w-0 items-center gap-1 rounded-full bg-secondary/30 px-2 leading-6">
+										<PoundIcon />
+										<span class="overflow-hidden text-ellipsis whitespace-nowrap">{tag}</span>
+									</div>
+								)),
+								overflowing && <span class="text-muted-fg">...and {length - 3} more</span>,
+							];
+						})()}
+					</div>
 
 					{(() => {
 						if (props.interactive) {
