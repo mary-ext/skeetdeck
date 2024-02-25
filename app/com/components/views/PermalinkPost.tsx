@@ -168,7 +168,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 
 			{post.embed.value && <Embed post={post} decision={decision} large />}
 
-			<div class="my-3 flex flex-wrap gap-1.5 text-sm empty:hidden">
+			<div class="my-3 flex flex-wrap gap-1.5 text-de text-primary/85 empty:hidden">
 				{record.value.tags?.map((tag) => (
 					<div class="flex min-w-0 items-center gap-1 rounded-full bg-secondary/30 px-2 leading-6">
 						<PoundIcon />
