@@ -263,9 +263,9 @@ export const RouterView = () => {
 
 					if (type === 'push' || type === 'replace') {
 						window.scrollTo({ top: 0, behavior: 'instant' });
-					} else if (type === 'traverse') {
-						dispatcher.dispatchEvent(new CustomEvent('a' + nextKey));
 					}
+
+					dispatcher.dispatchEvent(new CustomEvent('a' + nextKey));
 				},
 			});
 		});
