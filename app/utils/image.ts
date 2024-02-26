@@ -68,7 +68,10 @@ export const compressProfileImage = async (
 	maxW: number,
 	maxH: number,
 ): Promise<CompressResult> => {
-	{
+	const type = blob.type;
+	const isEligible = type === 'image/jpeg' || type === 'image/png';
+
+	if (isEligible) {
 		const exifRemoved = removeExif(await blob.arrayBuffer());
 
 		if (exifRemoved !== null) {
@@ -78,7 +81,7 @@ export const compressProfileImage = async (
 
 	const image = await getImageFromBlob(blob);
 
-	if (blob.size <= MAX_SIZE) {
+	if (isEligible && blob.size <= MAX_SIZE) {
 		return { blob: blob, ratio: { width: image.naturalWidth, height: image.naturalHeight } };
 	}
 
