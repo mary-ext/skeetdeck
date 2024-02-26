@@ -66,6 +66,10 @@ const Embed = (props: EmbedProps) => {
 			}
 		}
 
+		if (images && images.length === 0) {
+			images = undefined;
+		}
+
 		return { images, link, record };
 	});
 
