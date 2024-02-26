@@ -274,9 +274,8 @@ export const RouterView = () => {
 	const isActive = createSelector(() => state().active);
 
 	const renderView = (matched: MatchedRouteState) => {
-		let focusHandlers: (() => void)[] = [];
-		let blurHandlers: (() => void)[] = [];
-		let storedHeight: number | undefined;
+		const focusHandlers: (() => void)[] = [];
+		const blurHandlers: (() => void)[] = [];
 
 		const context: ViewContextObject = {
 			route: matched,
@@ -288,6 +287,8 @@ export const RouterView = () => {
 		const id = matched.id;
 
 		const single = def.single;
+
+		let storedHeight: number | undefined;
 
 		dispatcher.addEventListener('a' + id, () => {
 			if (single && storedHeight !== undefined) {
