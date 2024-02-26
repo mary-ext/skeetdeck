@@ -1,3 +1,5 @@
+import { removeExif } from './image/exif-remover';
+
 import type { Signal } from './signals';
 
 const MAX_SIZE = 1_000_000; // 1 MB
@@ -29,7 +31,19 @@ export interface CompressProfileImageOptions {
 }
 
 export const compressPostImage = async (blob: Blob): Promise<CompressResult> => {
+	{
+		const exifRemoved = removeExif(await blob.arrayBuffer());
+
+		if (exifRemoved !== null) {
+			blob = new Blob([exifRemoved], { type: blob.type });
+		}
+	}
+
 	const image = await getImageFromBlob(blob);
+
+	if (blob.size <= MAX_SIZE) {
+		return { blob: blob, ratio: { width: image.naturalWidth, height: image.naturalHeight } };
+	}
 
 	const [canvas, width, height] = getResizedImage(image, POST_MAX_WIDTH, POST_MAX_HEIGHT, Crop.CONTAIN);
 	const large = blob.size > 1_500_000;
