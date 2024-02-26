@@ -1,14 +1,6 @@
 /* @refresh reload */
 
-import {
-	type Component,
-	For,
-	createContext,
-	createSelector,
-	createSignal,
-	onCleanup,
-	useContext,
-} from 'solid-js';
+import { type Component, For, batch, createContext, createSignal, onCleanup, useContext } from 'solid-js';
 
 import { Freeze } from '@pkg/solid-freeze';
 
@@ -256,9 +248,11 @@ export const RouterView = () => {
 						}
 					}
 
-					dispatcher.dispatchEvent(new CustomEvent('b' + current.active));
+					batch(() => {
+						dispatcher.dispatchEvent(new CustomEvent('b' + current.active));
+						setState({ active: nextKey, views: views, singles: singles });
+					});
 
-					setState({ active: nextKey, views: views, singles: singles });
 					await Promise.resolve();
 
 					if (!matched.id && (type === 'push' || type === 'replace')) {
@@ -271,9 +265,9 @@ export const RouterView = () => {
 		});
 	}
 
-	const isActive = createSelector(() => state().active);
-
 	const renderView = (matched: MatchedRouteState) => {
+		const [active, setActive] = createSignal(true);
+
 		const focusHandlers: (() => void)[] = [];
 		const blurHandlers: (() => void)[] = [];
 
@@ -291,6 +285,8 @@ export const RouterView = () => {
 		let storedHeight = 0;
 
 		dispatcher.addEventListener('a' + id, () => {
+			setActive(true);
+
 			if (single) {
 				window.scrollTo({ top: storedHeight, behavior: 'instant' });
 			}
@@ -302,6 +298,8 @@ export const RouterView = () => {
 		});
 
 		dispatcher.addEventListener('b' + id, () => {
+			setActive(false);
+
 			if (single) {
 				storedHeight = document.documentElement.scrollTop;
 			}
@@ -313,7 +311,7 @@ export const RouterView = () => {
 		});
 
 		return (
-			<Freeze freeze={!isActive(id)}>
+			<Freeze freeze={!active()}>
 				<ViewContext.Provider value={context}>
 					<def.component />
 				</ViewContext.Provider>
