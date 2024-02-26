@@ -1,5 +1,15 @@
 import { type Accessor, createEffect } from 'solid-js';
 
+import type { CreateMutationResult } from '@pkg/solid-query';
+
+export const refs = <T>(...fns: Array<(node: T) => void>) => {
+	return (node: T) => {
+		for (let idx = 0, len = fns.length; idx < len; idx++) {
+			(0, fns[idx])(node);
+		}
+	};
+};
+
 export const model = (getter: Accessor<string>, setter: (next: string) => void) => {
 	return (node: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement) => {
 		createEffect(() => {
@@ -58,5 +68,23 @@ export const createMultipleChoiceModel = <T>(getter: Accessor<T[]>, setter: (nex
 				}
 			});
 		};
+	};
+};
+
+export const autofocus = (node: HTMLInputElement) => {
+	createEffect(() => {
+		node.focus();
+	});
+};
+
+export const mutationAutofocus = (mutation: CreateMutationResult<any, any, any, any>, first = true) => {
+	return (node: HTMLInputElement) => {
+		createEffect((first) => {
+			if (mutation.isError || first) {
+				node.focus();
+			}
+
+			return false;
+		}, first);
 	};
 };

@@ -13,7 +13,7 @@ import { formatQueryError } from '~/api/utils/misc';
 
 import { getProfile, getProfileKey } from '~/api/queries/get-profile';
 
-import { model } from '~/utils/input';
+import { model, mutationAutofocus, refs } from '~/utils/input';
 
 import { closeModal, openModal, useModalState } from '~/com/globals/modals';
 
@@ -153,10 +153,7 @@ const AddAccountDialog = () => {
 											Bluesky handle, DID or email address
 										</span>
 										<input
-											ref={(node) => {
-												model(identifier, setIdentifier)(node);
-												setTimeout(() => node.focus(), 1);
-											}}
+											ref={refs(model(identifier, setIdentifier), mutationAutofocus(pdsMutation))}
 											name="username"
 											type="text"
 											required
@@ -274,17 +271,7 @@ const AddAccountDialog = () => {
 									<label class="block">
 										<span class="mb-2 block text-sm font-medium leading-6 text-primary">Password</span>
 										<input
-											ref={(node) => {
-												model(password, setPassword)(node);
-
-												createEffect((first) => {
-													if (loginMutation.isError || first) {
-														node.focus();
-													}
-
-													return false;
-												}, true);
-											}}
+											ref={refs(model(password, setPassword), mutationAutofocus(loginMutation))}
 											type="password"
 											required
 											placeholder="Password"

@@ -1,4 +1,4 @@
-import { createEffect, createSignal } from 'solid-js';
+import { createSignal } from 'solid-js';
 
 import { Agent } from '@externdefs/bluesky-client/agent';
 import { createMutation } from '@pkg/solid-query';
@@ -6,7 +6,7 @@ import { createMutation } from '@pkg/solid-query';
 import { type DataServer, DEFAULT_DATA_SERVERS } from '~/api/globals/defaults';
 import { formatQueryError } from '~/api/utils/misc';
 
-import { createRadioModel, model } from '~/utils/input';
+import { createRadioModel, model, mutationAutofocus, refs } from '~/utils/input';
 import { getUniqueId } from '~/utils/misc';
 
 import { closeModal } from '~/com/globals/modals';
@@ -115,14 +115,10 @@ const ChooseServiceDialog = (props: ChooseServiceDialogProps) => {
 									</fieldset>
 
 									<input
-										ref={(node) => {
-											model(serviceUri, setServiceUri)(node);
-											createEffect(() => {
-												if (pdsMutation.isError) {
-													node.focus();
-												}
-											});
-										}}
+										ref={refs(
+											model(serviceUri, setServiceUri),
+											mutationAutofocus(pdsMutation, !initialIsDefault),
+										)}
 										type="url"
 										required={chosen() === Chosen.CUSTOM}
 										class={/* @once */ Input({ class: 'pl-9' })}
