@@ -261,7 +261,7 @@ export const RouterView = () => {
 					setState({ active: nextKey, views: views, singles: singles });
 					await Promise.resolve();
 
-					if (type === 'push' || type === 'replace') {
+					if (!matched.id && (type === 'push' || type === 'replace')) {
 						window.scrollTo({ top: 0, behavior: 'instant' });
 					}
 
@@ -288,11 +288,11 @@ export const RouterView = () => {
 
 		const single = def.single;
 
-		let storedHeight: number | undefined;
+		let storedHeight = 0;
 
 		dispatcher.addEventListener('a' + id, () => {
-			if (single && storedHeight !== undefined) {
-				document.documentElement.scrollTop = storedHeight;
+			if (single) {
+				window.scrollTo({ top: storedHeight, behavior: 'instant' });
 			}
 
 			for (let idx = 0, len = focusHandlers.length; idx < len; idx++) {
