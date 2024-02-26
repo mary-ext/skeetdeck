@@ -209,18 +209,6 @@ export const RouterView = () => {
 			let views = current.views;
 			let singles = current.singles;
 
-			if (type === 'push' || type === 'replace') {
-				const entries = navigation.entries();
-				const startIndex = currentEntry.index + (type === 'push' ? 1 : 0);
-
-				views = { ...views };
-
-				for (let idx = startIndex, len = entries.length; idx < len; idx++) {
-					const entry = entries[idx];
-					delete views[entry.id];
-				}
-			}
-
 			evt.intercept({
 				async handler() {
 					const nextEntry = navigation.currentEntry!;
@@ -233,7 +221,20 @@ export const RouterView = () => {
 
 					if (!matched.id) {
 						if (type === 'push' || type === 'replace') {
-							views[nextKey] = matchedState;
+							const entries = navigation.entries();
+							const nextViews: Record<string, MatchedRouteState> = {};
+
+							for (let idx = 0, len = entries.length; idx < len; idx++) {
+								const entry = entries[idx];
+								const id = entry.id;
+
+								if (id in views) {
+									nextViews[id] = views[id];
+								}
+							}
+
+							nextViews[nextKey] = matchedState;
+							views = nextViews;
 						} else if (type === 'traverse') {
 							if (!(nextKey in views)) {
 								views = { ...views, [nextKey]: matchedState };
