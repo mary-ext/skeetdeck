@@ -693,32 +693,30 @@ const ComposerPane = () => {
 						const target = ev.target;
 						const self = ev.currentTarget;
 
-						const closest = target.closest(`[data-targets~=${inputId}]`) as
-							| HTMLButtonElement
-							| HTMLTextAreaElement;
+						const closest = target.closest(`[data-targets~=${inputId}]`);
+
+						ev.preventDefault();
 
 						if (!closest) {
 							return;
 						}
 
-						ev.preventDefault();
-
-						const nodes = [
-							...self.querySelectorAll<HTMLButtonElement | HTMLTextAreaElement>(`[data-targets~=${inputId}]`),
-						];
+						const nodes = [...self.querySelectorAll(`[data-targets~=${inputId}]`)];
 
 						const pos = nodes.indexOf(closest);
 						const delta = key === 'ArrowUp' ? -1 : 1;
 
-						let nextPos = pos + delta;
+						const nextPos = pos + delta;
 
 						if (nextPos < 0 || nextPos > nodes.length - 1) {
 							return;
 						}
 
-						const nextTarget = nodes[nextPos];
-						if (nextTarget && !nextTarget.disabled) {
-							nextTarget.focus();
+						const next = nodes.at(pos + delta);
+
+						if (next) {
+							const node = next.querySelector<HTMLTextAreaElement>(`textarea, button[data-focus]`);
+							node?.focus();
 						}
 					}
 				}}
@@ -894,7 +892,7 @@ const ComposerPane = () => {
 						});
 
 						return (
-							<div class="flex pt-4">
+							<div class="flex pt-4" data-targets={inputId}>
 								<input
 									ref={fileInputRef}
 									type="file"
@@ -951,7 +949,15 @@ const ComposerPane = () => {
 
 													{index() !== 0 && (
 														<button
-															onClick={() => {
+															onClick={(ev) => {
+																{
+																	const target = ev.currentTarget;
+																	const parent = target.closest(`[data-targets~=${inputId}]`)!;
+
+																	const prev = parent.previousElementSibling!;
+																	prev.querySelector(`textarea`)?.focus();
+																}
+
 																posts.splice(index(), 1);
 															}}
 															class={
@@ -970,7 +976,6 @@ const ComposerPane = () => {
 									<RichtextComposer
 										ref={(node) => {
 											textareaRef = node;
-											node.setAttribute('data-targets', inputId);
 										}}
 										type="post"
 										uid={context.author}
@@ -1240,7 +1245,7 @@ const ComposerPane = () => {
 				</For>
 
 				{posts.length < MAX_THREAD_LIMIT && (
-					<div class="relative flex items-center px-4 pt-2">
+					<div class="relative flex items-center px-4 pt-2" data-targets={inputId}>
 						<div class="w-9"></div>
 
 						<button
@@ -1258,7 +1263,7 @@ const ComposerPane = () => {
 									class: 'h-9 px-3 text-sm text-primary/85',
 								})
 							}
-							data-targets={inputId}
+							data-focus
 						>
 							{/* Add some affordances to people attempting to click the plus button */}
 							<div class="absolute left-4 grid h-9 w-9 place-items-center">
