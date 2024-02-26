@@ -1,12 +1,14 @@
 import { createEffect, createSignal, lazy } from 'solid-js';
 
 import { getPdsEndpoint } from '@externdefs/bluesky-client/agent';
+import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 
 import { createMutation } from '@pkg/solid-query';
 
 import { getDidInfo } from '~/api/did';
 import { multiagent } from '~/api/globals/agent';
 import { DEFAULT_DATA_SERVERS } from '~/api/globals/defaults';
+import { MultiagentError } from '~/api/classes/multiagent';
 import { formatQueryError } from '~/api/utils/misc';
 
 import { getProfile, getProfileKey } from '~/api/queries/get-profile';
@@ -187,15 +189,29 @@ const AddAccountDialog = () => {
 										</button>
 									</label>
 
-									{(() => {
-										if (pdsMutation.isPending) {
-											return <p class="text-de text-muted-fg">Locating your hosting service...</p>;
-										}
+									<p class="text-de text-red-500 empty:hidden">
+										{(() => {
+											const error: unknown = pdsMutation.error;
 
-										if (pdsMutation.isError) {
-											return <p class="text-de text-red-500">{'' + formatQueryError(pdsMutation.error)}</p>;
-										}
-									})()}
+											if (!error) {
+												return;
+											}
+
+											if (error instanceof XRPCError) {
+												const err = error.error;
+
+												if (error.message === 'Unable to resolve handle') {
+													return `We can't find your account`;
+												}
+
+												if (err === 'InvalidRequest') {
+													return `Invalid identifier`;
+												}
+											}
+
+											return formatQueryError(error);
+										})()}
+									</p>
 
 									<div hidden>
 										<input ref={model(password, setPassword)} type="password" />
@@ -208,7 +224,9 @@ const AddAccountDialog = () => {
 					if ($step === Steps.PASSWORD) {
 						const goBack = () => {
 							setStep(Steps.IDENTIFIER);
+
 							setPassword('');
+							loginMutation.reset();
 						};
 
 						return (
@@ -280,6 +298,33 @@ const AddAccountDialog = () => {
 											</a>
 										</p>
 									</label>
+
+									<p class="text-de text-red-500 empty:hidden">
+										{(() => {
+											let error: unknown = loginMutation.error;
+
+											if (!error) {
+												return;
+											}
+
+											if (error instanceof MultiagentError && error.cause) {
+												error = error.cause;
+											}
+
+											if (error instanceof XRPCError) {
+												const err = error.error;
+
+												if (err === 'AccountTakedown') {
+													return `Account has been taken down`;
+												}
+												if (err === 'AuthenticationRequired') {
+													return `Invalid identifier or password`;
+												}
+											}
+
+											return formatQueryError(error);
+										})()}
+									</p>
 								</div>
 							</fieldset>
 						);
