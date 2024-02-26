@@ -12,8 +12,8 @@ import { Interactive } from '~/com/primitives/interactive';
 
 import BackHandOutlinedIcon from '~/com/icons/outline-back-hand';
 import ListBoxOutlinedIcon from '~/com/icons/outline-list-box';
-import PersonIcon from '~/com/icons/baseline-person';
 import PersonOutlinedIcon from '~/com/icons/outline-person';
+import SettingsOutlinedIcon from '~/com/icons/outline-settings';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
@@ -92,6 +92,11 @@ const NavDrawer = (props: {
 								<a href="/settings/moderation" onClick={close} class={navItem}>
 									<BackHandOutlinedIcon class="text-2xl" />
 									<span>Moderation</span>
+								</a>
+
+								<a href="/settings" onClick={close} class={navItem}>
+									<SettingsOutlinedIcon class="text-2xl" />
+									<span>Settings</span>
 								</a>
 							</div>
 						);
