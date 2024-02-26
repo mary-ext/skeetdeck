@@ -145,7 +145,7 @@ const AddAccountDialog = () => {
 					if ($step === Steps.IDENTIFIER) {
 						return (
 							<fieldset disabled={pdsMutation.isPending} class="contents">
-								<div class={/* @once */ DialogBody({ class: 'flex flex-col gap-4' })}>
+								<div class={/* @once */ DialogBody({ class: 'flex flex-col gap-2' })}>
 									<label class="block">
 										<span class="mb-2 block text-sm font-medium leading-6">
 											Bluesky handle, DID or email address
