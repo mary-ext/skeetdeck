@@ -4,12 +4,10 @@ import {
 	type Component,
 	For,
 	createContext,
-	createEffect,
 	createSelector,
 	createSignal,
 	onCleanup,
 	useContext,
-	untrack,
 } from 'solid-js';
 
 import { Freeze } from '@pkg/solid-freeze';
@@ -147,7 +145,7 @@ const _matchRoute = (path: string): MatchedRoute | null => {
 	return null;
 };
 
-const blurDispatcher = new EventTarget();
+const dispatcher = new EventTarget();
 
 export const RouterView = () => {
 	if (!initialized) {
@@ -258,13 +256,15 @@ export const RouterView = () => {
 						}
 					}
 
-					blurDispatcher.dispatchEvent(new CustomEvent(current.active));
+					dispatcher.dispatchEvent(new CustomEvent('b' + current.active));
 
 					setState({ active: nextKey, views: views, singles: singles });
 					await Promise.resolve();
 
 					if (type === 'push' || type === 'replace') {
 						window.scrollTo({ top: 0, behavior: 'instant' });
+					} else if (type === 'traverse') {
+						dispatcher.dispatchEvent(new CustomEvent('a' + nextKey));
 					}
 				},
 			});
@@ -289,22 +289,18 @@ export const RouterView = () => {
 
 		const single = def.single;
 
-		createEffect(() => {
-			if (isActive(id)) {
-				if (single && storedHeight !== undefined) {
-					document.documentElement.scrollTop = storedHeight;
-				}
+		dispatcher.addEventListener('a' + id, () => {
+			if (single && storedHeight !== undefined) {
+				document.documentElement.scrollTop = storedHeight;
+			}
 
-				untrack(() => {
-					for (let idx = 0, len = focusHandlers.length; idx < len; idx++) {
-						const fn = focusHandlers[idx];
-						fn();
-					}
-				});
+			for (let idx = 0, len = focusHandlers.length; idx < len; idx++) {
+				const fn = focusHandlers[idx];
+				fn();
 			}
 		});
 
-		blurDispatcher.addEventListener(id, () => {
+		dispatcher.addEventListener('b' + id, () => {
 			if (single) {
 				storedHeight = document.documentElement.scrollTop;
 			}
