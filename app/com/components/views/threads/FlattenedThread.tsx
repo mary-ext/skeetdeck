@@ -64,7 +64,7 @@ const FlattenedThread = (props: FlattenedThreadProps) => {
 							to={{ type: LINK_POST, actor: actor, rkey: rkey }}
 							class="flex h-10 w-full items-center gap-3 border-b border-divider px-4 hover:bg-secondary/10"
 						>
-							<div class="flex h-full w-10 justify-center">
+							<div class="flex h-full w-9 justify-center">
 								<div class="mb-3 border-l-2 border-dashed border-divider" />
 							</div>
 							<span class="text-sm text-accent">Continue thread</span>
