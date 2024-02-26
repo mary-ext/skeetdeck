@@ -127,15 +127,21 @@ const ChooseServiceDialog = (props: ChooseServiceDialogProps) => {
 							</label>
 						</fieldset>
 
-						{(() => {
-							if (pdsMutation.isPending) {
-								return <p class="mt-4 text-de text-muted-fg">Contacting hosting service...</p>;
-							}
+						<p class="mt-4 text-de text-red-500 empty:hidden">
+							{(() => {
+								const error: unknown = pdsMutation.error;
 
-							if (pdsMutation.isError) {
-								return <p class="mt-4 text-de text-red-500">{'' + formatQueryError(pdsMutation.error)}</p>;
-							}
-						})()}
+								if (!error || chosen() !== Chosen.CUSTOM) {
+									return null;
+								}
+
+								if (error instanceof TypeError) {
+									return `Can't seem to contact the service, is it down?`;
+								}
+
+								return formatQueryError(error);
+							})()}
+						</p>
 					</div>
 
 					<div class={/* @once */ DialogActions()}>
