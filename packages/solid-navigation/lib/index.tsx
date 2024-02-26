@@ -9,6 +9,7 @@ import {
 	createSignal,
 	onCleanup,
 	useContext,
+	untrack,
 } from 'solid-js';
 
 import { Freeze } from '@pkg/solid-freeze';
@@ -42,6 +43,7 @@ interface MatchedRoute {
 
 export interface MatchedRouteState extends MatchedRoute {
 	id: string;
+	single: boolean;
 }
 
 interface RouterState {
@@ -145,6 +147,8 @@ const _matchRoute = (path: string): MatchedRoute | null => {
 	return null;
 };
 
+const blurDispatcher = new EventTarget();
+
 export const RouterView = () => {
 	if (!initialized) {
 		initialized = true;
@@ -163,6 +167,7 @@ export const RouterView = () => {
 				const matchedState: MatchedRouteState = {
 					...matched,
 					id: nextKey,
+					single: !!matched.id,
 				};
 
 				const isSingle = !!matched.id;
@@ -210,6 +215,7 @@ export const RouterView = () => {
 			let singles = current.singles;
 
 			evt.intercept({
+				scroll: matched.id ? 'manual' : 'after-transition',
 				async handler() {
 					const nextEntry = navigation.currentEntry!;
 					const nextKey = matched.id || nextEntry.id;
@@ -217,6 +223,7 @@ export const RouterView = () => {
 					const matchedState: MatchedRouteState = {
 						...matched,
 						id: nextKey,
+						single: !!matched.id,
 					};
 
 					if (!matched.id) {
@@ -248,6 +255,8 @@ export const RouterView = () => {
 						}
 					}
 
+					blurDispatcher.dispatchEvent(new CustomEvent(current.active));
+
 					setState({ active: nextKey, views: views, singles: singles });
 					await Promise.resolve();
 
@@ -264,6 +273,7 @@ export const RouterView = () => {
 	const renderView = (matched: MatchedRouteState) => {
 		let focusHandlers: (() => void)[] = [];
 		let blurHandlers: (() => void)[] = [];
+		let storedHeight: number | undefined;
 
 		const context: ViewContextObject = {
 			route: matched,
@@ -271,14 +281,33 @@ export const RouterView = () => {
 			blurHandlers: blurHandlers,
 		};
 
-		const Component = matched.def.component;
+		const def = matched.def;
 		const id = matched.id;
 
-		createEffect(() => {
-			const array = isActive(id) ? focusHandlers : blurHandlers;
+		const single = def.single;
 
-			for (let i = 0, il = array.length; i < il; i++) {
-				const fn = array[i];
+		createEffect(() => {
+			if (isActive(id)) {
+				if (single && storedHeight !== undefined) {
+					document.documentElement.scrollTop = storedHeight;
+				}
+
+				untrack(() => {
+					for (let idx = 0, len = focusHandlers.length; idx < len; idx++) {
+						const fn = focusHandlers[idx];
+						fn();
+					}
+				});
+			}
+		});
+
+		blurDispatcher.addEventListener(id, () => {
+			if (single) {
+				storedHeight = document.documentElement.scrollTop;
+			}
+
+			for (let idx = 0, len = blurHandlers.length; idx < len; idx++) {
+				const fn = blurHandlers[idx];
 				fn();
 			}
 		});
@@ -286,7 +315,7 @@ export const RouterView = () => {
 		return (
 			<Freeze freeze={!isActive(id)}>
 				<ViewContext.Provider value={context}>
-					<Component />
+					<def.component />
 				</ViewContext.Provider>
 			</Freeze>
 		);
