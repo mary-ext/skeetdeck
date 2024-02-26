@@ -1,17 +1,19 @@
-import { Match, Show, Switch, createEffect, createMemo, createSignal } from 'solid-js';
+import { createEffect, createSignal, lazy } from 'solid-js';
+
+import { getPdsEndpoint } from '@externdefs/bluesky-client/agent';
 
 import { createMutation } from '@pkg/solid-query';
 
-import { retrievePdsEndpoint } from '~/api/did';
+import { getDidInfo } from '~/api/did';
 import { multiagent } from '~/api/globals/agent';
 import { DEFAULT_DATA_SERVERS } from '~/api/globals/defaults';
+import { formatQueryError } from '~/api/utils/misc';
 
 import { getProfile, getProfileKey } from '~/api/queries/get-profile';
 
-import { queryClient } from '../../globals/query';
-
-import { closeModal, useModalState } from '~/com/globals/modals';
 import { model } from '~/utils/input';
+
+import { closeModal, openModal, useModalState } from '~/com/globals/modals';
 
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
 
@@ -19,76 +21,111 @@ import { Button } from '~/com/primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
 import { Input } from '~/com/primitives/input';
 
+import GlobeIcon from '~/com/icons/baseline-globe';
+import EditIcon from '~/com/icons/baseline-edit';
+
+const ChooseServiceDialog = lazy(() => import('./ChooseServiceDialog'));
+
 const APP_PASSWORD_LINK = 'https://atproto.com/community/projects#app-passwords';
+
+const enum Steps {
+	IDENTIFIER,
+	PASSWORD,
+}
 
 const AddAccountDialog = () => {
 	const { disableBackdropClose } = useModalState();
 
-	const [service, setService] = createSignal('');
+	const [step, setStep] = createSignal(Steps.IDENTIFIER);
 
 	const [identifier, setIdentifier] = createSignal('');
 	const [password, setPassword] = createSignal('');
+	const [service, setService] = createSignal(DEFAULT_DATA_SERVERS[0]);
 
-	const [advanced, setAdvanced] = createSignal(false);
+	const loginMutation = createMutation((queryClient) => {
+		return {
+			mutationFn: async () => {
+				const $identifier = identifier().trim();
+				const $password = password();
+				const $service = service();
 
-	const isEmail = createMemo(() => identifier().trim().indexOf('@') > 0);
+				const uid = await multiagent.login({
+					service: $service.url,
+					identifier: $identifier,
+					password: $password,
+				});
 
-	const loginMutation = createMutation(() => ({
-		mutationKey: ['login'],
-		mutationFn: async () => {
-			let $identifier = identifier().trim();
-			let $password = password();
-			let $service = service();
+				// Invalidate any queries involving this DID,
+				// in the case that we're signing in to an already added account.
+				queryClient.invalidateQueries({
+					predicate: (query) => {
+						const key = query.queryKey;
+						return key.length >= 2 && key[1] === uid && !(key[0] as string).includes('/');
+					},
+				});
 
-			const isEmail = $identifier.indexOf('@') > 0;
+				// Fetch the profile while we're at it,
+				// let's set the GC time to 1 minute just in case.
+				await queryClient.fetchQuery({
+					queryKey: getProfileKey(uid, uid),
+					queryFn: getProfile,
+					gcTime: 60 * 1_000,
+				});
+			},
+			onSuccess() {
+				closeModal();
+			},
+		};
+	});
 
-			if (!isEmail) {
-				$identifier = $identifier.replace(/^@/, '');
-			}
+	const pdsMutation = createMutation(() => {
+		return {
+			mutationFn: async ({ ident }: { ident: string }) => {
+				const didDoc = await getDidInfo(ident);
 
-			if (!$service) {
-				if (isEmail) {
-					// default to bsky.social if email address is used.
-					$service = DEFAULT_DATA_SERVERS[0].url;
-				} else {
-					// we don't know which PDS they are on, so let's find it.
-					$service = await retrievePdsEndpoint(queryClient, $identifier);
+				const pds = getPdsEndpoint(didDoc);
+				if (!pds) {
+					throw new Error(`No PDS found`);
 				}
-			} else {
-				$service = `https://${$service}`;
-			}
 
-			const uid = await multiagent.login({
-				service: $service,
-				identifier: $identifier,
-				password: $password,
-			});
+				const url = new URL(pds);
+				const host = url.host;
+				const isBskySocial = host.endsWith('.host.bsky.network');
 
-			// Invalidate any queries involving this DID,
-			// in the case that we're signing in to an already added account.
-			queryClient.invalidateQueries({
-				predicate: (query) => {
-					const key = query.queryKey;
-					return key.length >= 2 && key[1] === uid && !(key[0] as string).includes('/');
-				},
-			});
+				setService({
+					name: !isBskySocial ? host : 'Bluesky Social',
+					url: pds,
+				});
 
-			// Fetch the profile while we're at it,
-			// let's set the GC time to 1 minute just in case.
-			await queryClient.fetchQuery({
-				queryKey: getProfileKey(uid, uid),
-				queryFn: getProfile,
-				gcTime: 60 * 1_000,
-			});
-		},
-		onSuccess() {
-			closeModal();
-		},
-	}));
+				setStep(Steps.PASSWORD);
+			},
+		};
+	});
 
 	const handleSubmit = (ev: SubmitEvent) => {
+		const form = new FormData(ev.currentTarget as HTMLFormElement, ev.submitter);
+		const $step = step();
+
 		ev.preventDefault();
-		loginMutation.mutate();
+
+		if ($step === Steps.IDENTIFIER) {
+			const noResolution = form.has('no_resolution');
+
+			// Normalize it here.
+			const $identifier = identifier().trim().replace(/^@/, '');
+			setIdentifier($identifier);
+
+			if (noResolution || $identifier.indexOf('@') > 0) {
+				// Email login
+				setService(DEFAULT_DATA_SERVERS[0]);
+				setStep(Steps.PASSWORD);
+			} else {
+				// Handle/DID login
+				pdsMutation.mutate({ ident: $identifier });
+			}
+		} else if ($step === Steps.PASSWORD) {
+			loginMutation.mutate();
+		}
 	};
 
 	createEffect(() => {
@@ -97,117 +134,315 @@ const AddAccountDialog = () => {
 
 	return (
 		<DialogOverlay>
-			<form onSubmit={handleSubmit} class={/* @once */ DialogRoot()}>
+			<form onSubmit={handleSubmit} class={/* @once */ DialogRoot({ size: 'sm' })}>
 				<div class={/* @once */ DialogHeader()}>
 					<h1 class={/* @once */ DialogTitle()}>Add new account</h1>
 				</div>
 
-				<fieldset
-					disabled={loginMutation.isPending}
-					class={/* @once */ DialogBody({ class: 'flex flex-col gap-4' })}
-				>
-					<div>
-						<label class="block">
-							<span class="mb-2 block text-sm font-medium leading-6 text-primary">Identifier</span>
-							<input
-								ref={model(identifier, setIdentifier)}
-								type="text"
-								required
-								title="Bluesky handle, DID, or email address"
-								pattern=".*\S+.*"
-								placeholder="you.bsky.social"
-								autocomplete="username"
-								onBlur={() => {
-									if (isEmail()) {
-										setAdvanced(true);
-									}
-								}}
-								class={/* @once */ Input()}
-							/>
-						</label>
+				{(() => {
+					const $step = step();
 
-						<Show when={advanced() && isEmail()}>
-							<p class="mt-2 text-de text-muted-fg">
-								As you're trying to sign in via email, please specify the provider you're signing into.
-							</p>
-						</Show>
-					</div>
+					if ($step === Steps.IDENTIFIER) {
+						return (
+							<fieldset disabled={pdsMutation.isPending} class="contents">
+								<div class={/* @once */ DialogBody({ class: 'flex flex-col gap-4' })}>
+									<label class="block">
+										<span class="mb-2 block text-sm font-medium leading-6">
+											Bluesky handle, DID or email address
+										</span>
+										<input
+											ref={(node) => {
+												model(identifier, setIdentifier)(node);
+												setTimeout(() => node.focus(), 1);
+											}}
+											name="username"
+											type="text"
+											required
+											pattern=".*\S+.*"
+											placeholder="you.bsky.social"
+											autocomplete="username"
+											class={/* @once */ Input()}
+										/>
 
-					<label class="block">
-						<span class="mb-2 block text-sm font-medium leading-6 text-primary">Password</span>
-						<input
-							ref={model(password, setPassword)}
-							type="password"
-							required
-							autocomplete="password"
-							placeholder="Password"
-							class={/* @once */ Input()}
-						/>
+										<button
+											type="button"
+											name="no_resolution"
+											onClick={(ev) => {
+												// implicit form submissions uses the first submit
+												// button available, and that's annoying.
+												const target = ev.currentTarget;
 
-						<p class="mt-2 text-de text-muted-fg">
-							Using an app password is recommended.{' '}
-							<a target="_blank" href={APP_PASSWORD_LINK} class="text-accent hover:underline">
-								Learn more
-							</a>
-						</p>
-					</label>
+												target.type = 'submit';
 
-					<Show when={advanced()}>
-						<label class="block">
-							<span class="mb-2 block text-sm font-medium leading-6 text-primary">Hosting provider</span>
-							<input
-								ref={model(service, setService)}
-								type="string"
-								title="Domain name for the provider"
-								pattern="([a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*(?:\.[a-zA-Z]+))"
-								placeholder={
-									isEmail()
-										? `Leave blank to connect to bsky.social`
-										: `Leave blank for automatic provider detection`
-								}
-								class={/* @once */ Input()}
-							/>
-						</label>
-					</Show>
+												// can't be done in one tick, for some reason
+												setTimeout(() => {
+													// reset the type first because lmao
+													target.type = 'button';
+													target.click();
+												}, 0);
+											}}
+											class="mt-2 text-de text-accent hover:underline disabled:pointer-events-none disabled:opacity-50"
+										>
+											Continue without automatic service resolution
+										</button>
+									</label>
 
-					<Switch>
-						<Match when={loginMutation.error} keyed>
-							{(error: any) => (
-								<p class="text-sm leading-6 text-red-600">
-									{error.cause ? error.cause.message : error.message || '' + error}
-								</p>
-							)}
-						</Match>
-					</Switch>
-				</fieldset>
+									{(() => {
+										if (pdsMutation.isPending) {
+											return <p class="text-de text-muted-fg">Locating your hosting service...</p>;
+										}
+
+										if (pdsMutation.isError) {
+											return <p class="text-de text-red-500">{'' + formatQueryError(pdsMutation.error)}</p>;
+										}
+									})()}
+
+									<div hidden>
+										<input ref={model(password, setPassword)} type="password" />
+									</div>
+								</div>
+							</fieldset>
+						);
+					}
+
+					if ($step === Steps.PASSWORD) {
+						const goBack = () => {
+							setStep(Steps.IDENTIFIER);
+						};
+
+						return (
+							<fieldset disabled={loginMutation.isPending} class="contents">
+								<div class={/* @once */ DialogBody({ scrollable: true, class: 'flex flex-col gap-4' })}>
+									<p class="break-words text-sm">
+										Signing in as <b>{identifier()}</b>{' '}
+										<span class="text-muted-fg">
+											(
+											<button
+												type="button"
+												onClick={goBack}
+												class="text-accent hover:underline disabled:pointer-events-none disabled:opacity-50"
+											>
+												not you?
+											</button>
+											)
+										</span>
+									</p>
+
+									<div>
+										<span class="mb-2 block text-sm font-medium leading-6">Service</span>
+
+										<button
+											type="button"
+											onClick={() => {
+												openModal(() => (
+													<ChooseServiceDialog serviceUri={/* @once */ service().url} onSubmit={setService} />
+												));
+											}}
+											class="flex h-9 w-full items-center rounded-md border border-input text-left text-sm outline-2 -outline-offset-1 outline-accent hover:bg-secondary/30 hover:text-secondary-fg focus-visible:outline disabled:pointer-events-none disabled:opacity-50"
+										>
+											<div class="grid w-9 shrink-0 place-items-center">
+												<GlobeIcon class="text-base text-muted-fg" />
+											</div>
+
+											<span class="grow">{service().name}</span>
+
+											<div class="grid w-9 shrink-0 place-items-center">
+												<EditIcon class="text-base" />
+											</div>
+										</button>
+									</div>
+
+									<label class="block">
+										<span class="mb-2 block text-sm font-medium leading-6 text-primary">Password</span>
+										<input
+											ref={(node) => {
+												model(password, setPassword)(node);
+												setTimeout(() => node.focus(), 1);
+											}}
+											type="password"
+											required
+											placeholder="Password"
+											class={/* @once */ Input()}
+										/>
+
+										<p class="mt-2 text-de text-muted-fg">
+											Using an app password is recommended.{' '}
+											<a target="_blank" href={APP_PASSWORD_LINK} class="text-accent hover:underline">
+												Learn more
+											</a>
+										</p>
+									</label>
+								</div>
+							</fieldset>
+						);
+					}
+				})()}
 
 				<fieldset disabled={loginMutation.isPending} class={/* @once */ DialogActions()}>
-					<Show when={!advanced()}>
-						<button
-							type="button"
-							onClick={() => setAdvanced(true)}
-							class={/* @once */ Button({ variant: 'ghost' })}
-						>
-							Advanced
-						</button>
-					</Show>
-
-					<div class="grow"></div>
-
 					<button type="button" onClick={closeModal} class={/* @once */ Button({ variant: 'ghost' })}>
 						Cancel
 					</button>
+
 					<button
 						type="submit"
-						disabled={isEmail() && !advanced()}
+						disabled={pdsMutation.isPending}
 						class={/* @once */ Button({ variant: 'primary' })}
 					>
-						Sign in
+						{step() === Steps.IDENTIFIER ? 'Continue' : 'Sign in'}
 					</button>
 				</fieldset>
 			</form>
 		</DialogOverlay>
 	);
 };
+
+// const AddAccountDialog = () => {
+// 	const { disableBackdropClose } = useModalState();
+
+// 	const [service, setService] = createSignal('');
+
+// 	const [identifier, setIdentifier] = createSignal('');
+// 	const [password, setPassword] = createSignal('');
+
+// 	const [advanced, setAdvanced] = createSignal(false);
+
+// 	const isEmail = createMemo(() => identifier().trim().indexOf('@') > 0);
+
+// 	const loginMutation = createMutation(() => ({
+// 		mutationKey: ['login'],
+// 		mutationFn: async () => {
+// 			let $identifier = identifier().trim();
+// 			let $password = password();
+// 			let $service = service();
+
+// 			const isEmail = $identifier.indexOf('@') > 0;
+
+// 			if (!isEmail) {
+// 				$identifier = $identifier.replace(/^@/, '');
+// 			}
+
+// 			if (!$service) {
+// 				if (isEmail) {
+// 					// default to bsky.social if email address is used.
+// 					$service = DEFAULT_DATA_SERVERS[0].url;
+// 				} else {
+// 					// we don't know which PDS they are on, so let's find it.
+// 					$service = await retrievePdsEndpoint(queryClient, $identifier);
+// 				}
+// 			} else {
+// 				$service = `https://${$service}`;
+// 			}
+
+// 			const uid = await multiagent.login({
+// 				service: $service,
+// 				identifier: $identifier,
+// 				password: $password,
+// 			});
+
+// 			// Invalidate any queries involving this DID,
+// 			// in the case that we're signing in to an already added account.
+// 			queryClient.invalidateQueries({
+// 				predicate: (query) => {
+// 					const key = query.queryKey;
+// 					return key.length >= 2 && key[1] === uid && !(key[0] as string).includes('/');
+// 				},
+// 			});
+
+// 			// Fetch the profile while we're at it,
+// 			// let's set the GC time to 1 minute just in case.
+// 			await queryClient.fetchQuery({
+// 				queryKey: getProfileKey(uid, uid),
+// 				queryFn: getProfile,
+// 				gcTime: 60 * 1_000,
+// 			});
+// 		},
+// 		onSuccess() {
+// 			closeModal();
+// 		},
+// 	}));
+
+// 	const handleSubmit = (ev: SubmitEvent) => {
+// 		ev.preventDefault();
+// 		loginMutation.mutate();
+// 	};
+
+// 	createEffect(() => {
+// 		disableBackdropClose.value = loginMutation.isPending;
+// 	});
+
+// 	return (
+// 		<DialogOverlay>
+// 			<form onSubmit={handleSubmit} class={/* @once */ DialogRoot()}>
+// 				<div class={/* @once */ DialogHeader()}>
+// 					<h1 class={/* @once */ DialogTitle()}>Add new account</h1>
+// 				</div>
+
+// 				<fieldset
+// 					disabled={loginMutation.isPending}
+// 					class={/* @once */ DialogBody({ class: 'flex flex-col gap-4' })}
+// 				>
+// 					<div>
+// 						<label class="block">
+// 							<span class="mb-2 block text-sm font-medium leading-6 text-primary">Identifier</span>
+// 							<input
+// 								ref={model(identifier, setIdentifier)}
+// 								type="text"
+// 								required
+// 								title="Bluesky handle, DID, or email address"
+// 								pattern=".*\S+.*"
+// 								placeholder="you.bsky.social"
+// 								autocomplete="username"
+// 								onBlur={() => {
+// 									if (isEmail()) {
+// 										setAdvanced(true);
+// 									}
+// 								}}
+// 								class={/* @once */ Input()}
+// 							/>
+// 						</label>
+// 					</div>
+
+// 					<label class="block">
+// 						<span class="mb-2 block text-sm font-medium leading-6 text-primary">Password</span>
+// 						<input
+// 							ref={model(password, setPassword)}
+// 							type="password"
+// 							required
+// 							autocomplete="password"
+// 							placeholder="Password"
+// 							class={/* @once */ Input()}
+// 						/>
+
+// <p class="mt-2 text-de text-muted-fg">
+// 	Using an app password is recommended.{' '}
+// 	<a target="_blank" href={APP_PASSWORD_LINK} class="text-accent hover:underline">
+// 		Learn more
+// 	</a>
+// </p>
+// 					</label>
+
+// 					<Switch>
+// 						<Match when={loginMutation.error} keyed>
+// 							{(error: any) => (
+// 								<p class="text-sm leading-6 text-red-600">
+// 									{error.cause ? error.cause.message : error.message || '' + error}
+// 								</p>
+// 							)}
+// 						</Match>
+// 					</Switch>
+// 				</fieldset>
+
+// 				<fieldset disabled={loginMutation.isPending} class={/* @once */ DialogActions()}>
+// 					<button type="button" onClick={closeModal} class={/* @once */ Button({ variant: 'ghost' })}>
+// 						Cancel
+// 					</button>
+// 					<button type="submit" class={/* @once */ Button({ variant: 'primary' })}>
+// 						Continue
+// 					</button>
+// 				</fieldset>
+// 			</form>
+// 		</DialogOverlay>
+// 	);
+// };
 
 export default AddAccountDialog;
