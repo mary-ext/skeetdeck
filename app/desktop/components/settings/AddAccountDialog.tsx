@@ -208,6 +208,7 @@ const AddAccountDialog = () => {
 					if ($step === Steps.PASSWORD) {
 						const goBack = () => {
 							setStep(Steps.IDENTIFIER);
+							setPassword('');
 						};
 
 						return (
