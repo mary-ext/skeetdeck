@@ -111,13 +111,13 @@ const ThreadView = () => {
 									})()}
 								>
 									<div class="relative flex h-13 px-4">
-										<div class="flex w-10 flex-col items-center">
+										<div class="flex w-9 flex-col items-center">
 											<div class="mt-3 grow border-l-2 border-dashed border-divider" />
 										</div>
 										<div class="grid grow place-items-center">
 											<CircularProgress />
 										</div>
-										<div class="w-10"></div>
+										<div class="w-9"></div>
 									</div>
 								</Show>
 
@@ -145,7 +145,7 @@ const ThreadView = () => {
 													to={{ type: LINK_POST, actor: actor, rkey: rkey }}
 													class="flex h-10 w-full shrink-0 items-center gap-3 px-4 hover:bg-secondary/10"
 												>
-													<div class="flex h-full w-10 justify-center">
+													<div class="flex h-full w-9 justify-center">
 														<div class="mt-3 border-l-2 border-dashed border-divider" />
 													</div>
 													<span class="text-sm text-accent">Show parent post</span>
