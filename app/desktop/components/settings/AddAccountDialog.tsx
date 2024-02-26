@@ -258,7 +258,14 @@ const AddAccountDialog = () => {
 										<input
 											ref={(node) => {
 												model(password, setPassword)(node);
-												setTimeout(() => node.focus(), 1);
+
+												createEffect((first) => {
+													if (loginMutation.isError || first) {
+														node.focus();
+													}
+
+													return false;
+												}, true);
 											}}
 											type="password"
 											required
