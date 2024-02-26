@@ -227,7 +227,7 @@ export const RouterView = () => {
 					};
 
 					if (!matched.id) {
-						if (type === 'push' || type === 'replace') {
+						if (type === 'push') {
 							const entries = navigation.entries();
 							const nextViews: Record<string, MatchedRouteState> = {};
 
@@ -242,6 +242,9 @@ export const RouterView = () => {
 
 							nextViews[nextKey] = matchedState;
 							views = nextViews;
+						} else if (type === 'replace') {
+							views = { ...views, [nextKey]: matchedState };
+							delete views[current.active];
 						} else if (type === 'traverse') {
 							if (!(nextKey in views)) {
 								views = { ...views, [nextKey]: matchedState };
