@@ -117,9 +117,6 @@ export const decideLabelModeration = (
 
 			if (pref === undefined) {
 				if (isSelfLabeled) {
-					// const userPref = opts.users[src];
-					// pref = userPref?.labels[id] ?? globalPref.labels[id];
-
 					pref = globalPref.labels[id];
 				} else {
 					const labelerPref = opts.labelers[src];
@@ -131,19 +128,6 @@ export const decideLabelModeration = (
 					pref = labelerPref.labels[id] ?? globalPref.labels[id];
 				}
 			}
-
-			// TODO: change it to this when `labels` array is confirmed to only return
-			// labels from subscribed label providers (alongside self-labels)
-			// let pref = labelDef.enforce;
-
-			// if (pref === undefined) {
-			// 	const localPref = isSelfLabeled ? opts.users[src] : opts.labelers[src];
-			// 	pref =
-			// 		localPref?.labels[id] ??
-			// 		localPref?.groups[groupId] ??
-			// 		globalPref.labels[id] ??
-			// 		globalPref.groups[groupId];
-			// }
 
 			if (pref !== PreferenceHide && pref !== PreferenceWarn) {
 				continue;
