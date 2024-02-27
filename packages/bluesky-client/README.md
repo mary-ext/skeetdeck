@@ -89,3 +89,16 @@ For the most part, it is 1:1 with the official library's typings, but it's also 
 It's slightly annoying in that a function accepting `AppBskyActorDefs.ProfileViewBasic` can't also accept `ProfileViewDetailed` without making it a union. (depending on how you see it)
 
 However, it allows for AT Protocol's discriminated unions to be typed properly, and that's the best part about this approach.
+
+## Barebones usage
+
+If you don't need the session handling that `Agent` class offers, you can import
+the `XRPC` class directly, this shaves the bundle size from 6.2 KB to 2.8 KB.
+
+```ts
+import type { Procedures, Queries } from '@externdefs/bluesky-client/atp-schema';
+import { XRPC } from '@externdefs/bluesky-client/xrpc';
+
+export type Agent = XRPC<Queries, Procedures>;
+export const Agent = XRPC<Queries, Procedures>;
+```
