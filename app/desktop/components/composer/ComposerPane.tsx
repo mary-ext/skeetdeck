@@ -719,7 +719,7 @@ const ComposerPane = () => {
 
 							if (node) {
 								node.focus();
-								node.scrollIntoView({ block: 'center' });
+								next.scrollIntoView({ block: 'center' });
 							}
 						}
 					}
