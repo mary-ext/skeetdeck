@@ -716,7 +716,11 @@ const ComposerPane = () => {
 
 						if (next) {
 							const node = next.querySelector<HTMLTextAreaElement>(`textarea, button[data-focus]`);
-							node?.focus();
+
+							if (node) {
+								node.focus();
+								node.scrollIntoView({ block: 'center' });
+							}
 						}
 					}
 				}}
