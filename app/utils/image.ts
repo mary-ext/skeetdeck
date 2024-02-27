@@ -34,6 +34,8 @@ export const compressPostImage = async (blob: Blob): Promise<CompressResult> => 
 	{
 		const exifRemoved = removeExif(await blob.arrayBuffer());
 
+		// have the images be read again below, to make sure the exif removal code
+		// is working as intended.
 		if (exifRemoved !== null) {
 			blob = new Blob([exifRemoved], { type: blob.type });
 		}
