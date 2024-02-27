@@ -2,13 +2,15 @@ export const removeExif = (buf: ArrayBuffer) => {
 	const view = new DataView(buf);
 	const indices: [start: number, end: number][] = [];
 
+	const blen = view.byteLength;
+
 	let start = 0;
 
-	if (view.byteLength >= 2 && view.getUint16(0) === 0xffd8) {
+	if (blen >= 2 && view.getUint16(0) === 0xffd8) {
 		// JPEG
 		let pos = 2;
 
-		while (pos + 4 + 5 <= view.byteLength) {
+		while (pos + 4 + 5 <= blen) {
 			const marker = view.getUint16(pos);
 
 			if (/* Fill */ marker === 0xffff) {
@@ -43,11 +45,11 @@ export const removeExif = (buf: ArrayBuffer) => {
 
 			break;
 		}
-	} else if (view.byteLength >= 8 && view.getUint32(0) === 0x89504e47 && view.getUint32(4) === 0x0d0a1a0a) {
+	} else if (blen >= 8 && view.getUint32(0) === 0x89504e47 && view.getUint32(4) === 0x0d0a1a0a) {
 		// PNG
 		let pos = 8;
 
-		while (pos + 4 + 4 <= view.byteLength) {
+		while (pos + 4 + 4 <= blen) {
 			const flen = view.getUint32(pos);
 			const marker = view.getUint32(pos + 4);
 
@@ -74,9 +76,7 @@ export const removeExif = (buf: ArrayBuffer) => {
 	}
 
 	const uint8 = new Uint8Array(buf);
-	const copy = new Uint8Array(
-		indices.reduce((accu, index) => accu + (index[1] - index[0]), view.byteLength - start),
-	);
+	const copy = new Uint8Array(indices.reduce((accu, index) => accu + (index[1] - index[0]), blen - start));
 
 	copy.set(
 		uint8.subarray(start),
