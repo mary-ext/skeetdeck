@@ -1,4 +1,6 @@
-import { createEffect, createMemo, createSignal, onMount } from 'solid-js';
+import { createMemo, createSignal, onMount } from 'solid-js';
+
+import { makeEventListener } from '@solid-primitives/event-listener';
 
 import { clsx } from '~/utils/misc';
 
@@ -29,7 +31,14 @@ export interface ImageViewerDialogProps {
 	images: EmbeddedImage[];
 }
 
+const enum GalleryNav {
+	PREV,
+	NEXT,
+}
+
 const ImageViewerDialog = (props: ImageViewerDialogProps) => {
+	let scrollRef: HTMLDivElement;
+
 	const images = props.images;
 	const initialActive = props.active ?? 0;
 
@@ -41,34 +50,24 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 	const hasNext = createMemo(() => active() < images.length - 1);
 	const hasPrev = createMemo(() => active() > 0);
 
-	const scrollRef = (node: HTMLElement) => {
-		createEffect((first) => {
-			const children = [...node.childNodes];
-			const child = children[active()] as HTMLElement;
+	const observer = new IntersectionObserver(
+		(entries) => {
+			for (let idx = 0, len = entries.length; idx < len; idx++) {
+				const entry = entries[idx];
 
-			child.scrollIntoView({ inline: 'center', behavior: first ? 'instant' : 'smooth' });
-
-			console.log('foo');
-			return false;
-		}, true);
-	};
+				if (entry.isIntersecting) {
+					setActive((entry.target as any)._index);
+					return;
+				}
+			}
+		},
+		{ threshold: 0.5 },
+	);
 
 	const bindImageWrapperRef = (index: number) => {
 		return (node: HTMLElement) => {
-			onMount(() => {
-				const observer = new IntersectionObserver(
-					(entries) => {
-						const entry = entries[0];
-
-						if (entry.isIntersecting) {
-							setActive(index);
-						}
-					},
-					{ threshold: 0.5 },
-				);
-
-				observer.observe(node);
-			});
+			(node as any)._index = index;
+			observer.observe(node);
 		};
 	};
 
@@ -77,6 +76,44 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 			closeModal();
 		}
 	};
+
+	const bindNavClick = (nav: GalleryNav) => {
+		return () => {
+			const current = active();
+			const delta = nav === GalleryNav.PREV ? -1 : 1;
+
+			const next = current + delta;
+
+			const children = [...scrollRef.childNodes];
+
+			if (next < 0 || next > children.length - 1) {
+				return;
+			}
+
+			const child = children[current + delta] as HTMLElement;
+
+			child?.scrollIntoView({ inline: 'center' });
+		};
+	};
+
+	onMount(() => {
+		const children = [...scrollRef.childNodes];
+		const child = children[active()] as HTMLElement;
+
+		child.scrollIntoView({ inline: 'center', behavior: 'instant' });
+	});
+
+	makeEventListener(document.body, 'keydown', (ev) => {
+		const key = ev.key;
+
+		if (key === 'ArrowLeft') {
+			ev.preventDefault();
+			bindNavClick(GalleryNav.PREV)();
+		} else if (key === 'ArrowRight') {
+			ev.preventDefault();
+			bindNavClick(GalleryNav.NEXT)();
+		}
+	});
 
 	return (
 		<div class="h-full w-full overflow-hidden bg-black/75">
@@ -87,7 +124,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 			)}
 
 			<div
-				ref={scrollRef}
+				ref={scrollRef!}
 				class="flex h-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-contain"
 			>
 				{
@@ -107,7 +144,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 							<div
 								ref={bindImageWrapperRef(index)}
 								onClick={handleImageWrapperClick}
-								class="grid min-w-full snap-center snap-always place-items-center p-6"
+								class="flex h-full w-full shrink-0 snap-center snap-always items-center justify-center p-6"
 							>
 								<img
 									src={fullsize}
@@ -183,7 +220,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 				if (hasPrev()) {
 					return (
 						<div class="fixed left-2.5 top-1/2 z-20 -translate-y-1/2">
-							<button title="Previous image" onClick={() => setActive(active() - 1)} class={iconButton}>
+							<button title="Previous image" onClick={bindNavClick(GalleryNav.PREV)} class={iconButton}>
 								<ArrowLeftIcon />
 							</button>
 						</div>
@@ -195,7 +232,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 				if (hasNext()) {
 					return (
 						<div class="fixed right-2.5 top-1/2 z-20 -translate-y-1/2">
-							<button title="Next image" onClick={() => setActive(active() + 1)} class={iconButton}>
+							<button title="Next image" onClick={bindNavClick(GalleryNav.NEXT)} class={iconButton}>
 								<ArrowLeftIcon class="rotate-180" />
 							</button>
 						</div>
