@@ -50,6 +50,8 @@ export interface PostProps {
 	timelineDid?: At.DID;
 }
 
+const isMobile = import.meta.env.VITE_MODE === 'mobile';
+
 const Post = (props: PostProps) => {
 	const linking = useLinking();
 
@@ -166,11 +168,7 @@ const Post = (props: PostProps) => {
 
 			<div class="flex gap-3">
 				<div class="relative flex shrink-0 flex-col items-center">
-					<Link
-						tabindex={-1}
-						to={authorPermalink}
-						class="h-9 w-9 overflow-hidden rounded-full hover:opacity-80"
-					>
+					<Link to={authorPermalink} class="h-9 w-9 overflow-hidden rounded-full hover:opacity-80">
 						<img
 							src={author.avatar.value || DefaultAvatar}
 							class={clsx([`h-full w-full`, !!author.avatar.value && profileVerdict()?.m && `blur`])}
@@ -204,20 +202,35 @@ const Post = (props: PostProps) => {
 				<div class="min-w-0 grow pb-3">
 					<div class="mb-0.5 flex items-center justify-between gap-4">
 						<div class="flex items-center overflow-hidden text-sm text-muted-fg">
-							<Link
-								to={authorPermalink}
-								class="group flex max-w-full gap-1 overflow-hidden text-ellipsis whitespace-nowrap text-left"
-							>
-								{author.displayName.value && (
-									<bdi class="overflow-hidden text-ellipsis group-hover:underline">
-										<span class="font-bold text-primary">{author.displayName.value}</span>
-									</bdi>
-								)}
+							{isMobile ? (
+								<span class="group flex max-w-full gap-1 overflow-hidden text-ellipsis whitespace-nowrap text-left">
+									{author.displayName.value && (
+										<bdi class="overflow-hidden text-ellipsis group-hover:underline">
+											<span class="font-bold text-primary">{author.displayName.value}</span>
+										</bdi>
+									)}
 
-								<span class="block overflow-hidden text-ellipsis whitespace-nowrap">
-									@{author.handle.value}
+									<span class="block overflow-hidden text-ellipsis whitespace-nowrap">
+										@{author.handle.value}
+									</span>
 								</span>
-							</Link>
+							) : (
+								<Link
+									tabindex={-1}
+									to={authorPermalink}
+									class="group flex max-w-full gap-1 overflow-hidden text-ellipsis whitespace-nowrap text-left"
+								>
+									{author.displayName.value && (
+										<bdi class="overflow-hidden text-ellipsis group-hover:underline">
+											<span class="font-bold text-primary">{author.displayName.value}</span>
+										</bdi>
+									)}
+
+									<span class="block overflow-hidden text-ellipsis whitespace-nowrap">
+										@{author.handle.value}
+									</span>
+								</Link>
+							)}
 
 							<span class="px-1">·</span>
 
