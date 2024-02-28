@@ -10,6 +10,7 @@ import { Flyout, offsetlessMiddlewares } from '../../Flyout';
 
 import ContentCopyIcon from '../../../icons/baseline-content-copy';
 import HistoryIcon from '../../../icons/baseline-history';
+import LaunchIcon from '../../../icons/baseline-launch';
 
 const HandleHistoryDialog = lazy(() => import('../../dialogs/HandleHistoryDialog'));
 
@@ -27,6 +28,16 @@ const ProfileHandleAction = (props: ProfileHandleActionProps) => {
 				<Flyout button={props.children} placement="bottom-start" middleware={offsetlessMiddlewares}>
 					{({ close, menuProps }) => (
 						<div {...menuProps} class={/* @once */ MenuRoot()}>
+							<a
+								href={`https://${profile.handle.value}`}
+								target="_blank"
+								onClick={close}
+								class={/* @once */ MenuItem()}
+							>
+								<LaunchIcon class={/* @once */ MenuItemIcon()} />
+								<span>Open website</span>
+							</a>
+
 							<button
 								onClick={() => {
 									close();
