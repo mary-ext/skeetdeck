@@ -29,7 +29,12 @@ import type { getTimelineLatestKey } from '~/api/queries/get-timeline';
 import type { SignalizedPost } from '~/api/stores/posts';
 import { produceThreadInsert } from '~/api/updaters/insert-post';
 
-import { type PreliminaryRichText, finalizeRt, getRtLength } from '~/api/richtext/composer';
+import {
+	type PreliminaryRichText,
+	finalizeRt,
+	getRtLength,
+	InvalidHandleError,
+} from '~/api/richtext/composer';
 
 import { openModal } from '~/com/globals/modals';
 
@@ -236,9 +241,15 @@ const ComposerPane = () => {
 					const external = draft.external;
 					const record = draft.record;
 
-					{
+					try {
 						setLog(logPending(`Resolving rich text #${i + 1}`));
 						await resolveRt(uid, rt);
+					} catch (err) {
+						if (err instanceof InvalidHandleError) {
+							throw new ComposeError(`@${err.message} cannot be mentioned`);
+						}
+
+						throw new ComposeError(`Failed to resolve rich text for post #${i}`, { cause: err });
 					}
 
 					for (let j = 0, jl = images.length; j < jl; j++) {
@@ -681,7 +692,7 @@ const ComposerPane = () => {
 			</div>
 
 			{log().t === LogType.ERROR && (
-				<div class="shrink-0 bg-red-800 px-4 py-3 text-sm text-white">{log().m}</div>
+				<div class="shrink-0 break-words bg-red-900 px-4 py-3 text-sm text-white">{log().m}</div>
 			)}
 
 			<fieldset

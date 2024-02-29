@@ -414,6 +414,10 @@ const getUtf8Length = (str: string): number => {
 	return asciiLen(str) ?? encoder.encode(str).byteLength;
 };
 
+export class InvalidHandleError extends Error {
+	name = 'InvalidHandleError';
+}
+
 export const finalizeRt = async (uid: At.DID, rt: PreliminaryRichText) => {
 	const agent = await multiagent.connect(uid);
 
@@ -453,7 +457,7 @@ export const finalizeRt = async (uid: At.DID, rt: PreliminaryRichText) => {
 				});
 			} catch (err) {
 				if (err instanceof XRPCError && err.error === 'InvalidRequest') {
-					continue;
+					throw new InvalidHandleError(segment.handle);
 				}
 
 				throw err;
