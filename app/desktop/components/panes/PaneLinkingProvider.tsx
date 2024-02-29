@@ -1,11 +1,6 @@
 import { type JSX, lazy, batch } from 'solid-js';
 
-import {
-	hasSelectionRange,
-	isCtrlKeyPressed,
-	isElementAltClicked,
-	isElementClicked,
-} from '~/utils/interaction';
+import { hasSelectionRange, isCtrlKeyPressed, isElementAltClicked } from '~/utils/interaction';
 
 import { openModal } from '~/com/globals/modals';
 
@@ -152,7 +147,7 @@ interface InvalidAnchorElement extends HTMLAnchorElement {
 const handleInvalidLink: JSX.EventHandler<HTMLAnchorElement, MouseEvent> = (ev) => {
 	const target = ev.currentTarget as InvalidAnchorElement;
 
-	if (target._ignored || !isElementClicked(ev)) {
+	if (target._ignored || (ev.type === 'auxclick' && (ev as MouseEvent).button !== 1)) {
 		return;
 	}
 
