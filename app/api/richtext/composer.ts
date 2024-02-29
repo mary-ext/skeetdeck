@@ -442,10 +442,16 @@ export const finalizeRt = async (uid: At.DID, rt: PreliminaryRichText) => {
 				features: [{ $type: 'app.bsky.richtext.facet#link', uri: segment.uri }],
 			});
 		} else if (type === 'mention') {
+			const handle = segment.handle;
+
+			if (handle === 'handle.invalid') {
+				throw new InvalidHandleError(handle);
+			}
+
 			try {
 				const response = await agent.rpc.get('com.atproto.identity.resolveHandle', {
 					params: {
-						handle: segment.handle,
+						handle: handle,
 					},
 				});
 
@@ -457,7 +463,7 @@ export const finalizeRt = async (uid: At.DID, rt: PreliminaryRichText) => {
 				});
 			} catch (err) {
 				if (err instanceof XRPCError && err.error === 'InvalidRequest') {
-					throw new InvalidHandleError(segment.handle);
+					throw new InvalidHandleError(handle);
 				}
 
 				throw err;
