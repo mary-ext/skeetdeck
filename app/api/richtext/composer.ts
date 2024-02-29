@@ -63,30 +63,30 @@ export interface PreliminaryRichText {
 }
 
 const enum CharCode {
-	ESCAPE = 92,
+	ESCAPE = 0x5c,
 
-	AT = 64,
-	TAG = 35,
+	AT = 0x40,
+	TAG = 0x23,
 
-	OSQUARE = 91,
-	ESQUARE = 93,
-	OPAREN = 40,
-	EPAREN = 41,
+	OSQUARE = 0x5b,
+	ESQUARE = 0x5d,
+	OPAREN = 0x28,
+	EPAREN = 0x29,
 
-	NEWLINE = 10,
-	SPACE = 32,
+	NEWLINE = 0xa,
+	SPACE = 0x20,
 
-	COLON = 58,
-	FSLASH = 47,
+	COLON = 0x3a,
+	FSLASH = 0x2f,
 
-	COMMA = 44,
-	DOT = 46,
-	SEMICOLON = 59,
+	COMMA = 0x2c,
+	DOT = 0x2e,
+	SEMICOLON = 0x3b,
 
-	H = 104,
-	P = 112,
-	S = 115,
-	T = 116,
+	H = 0x68,
+	P = 0x70,
+	S = 0x73,
+	T = 0x74,
 }
 
 const WS_RE = / +(?=\n)/g;
