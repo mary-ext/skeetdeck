@@ -91,7 +91,7 @@ const TagsInput = (props: TagsInputProps) => {
 			}
 		},
 
-		<div ref={setReference} class="flex flex-wrap gap-1.5 text-sm">
+		<div ref={setReference} class="flex flex-wrap gap-1.5 text-de text-primary/85">
 			<For each={props.tags}>
 				{(tag, index) => {
 					let target: HTMLButtonElement;
@@ -147,7 +147,7 @@ const TagsInput = (props: TagsInputProps) => {
 				type="text"
 				placeholder="#add tags"
 				class={clsx([
-					`min-w-0 grow rounded-md bg-transparent leading-6 outline-2 outline-transparent outline placeholder:text-muted-fg`,
+					`w-16 grow rounded-md bg-transparent leading-6 outline-2 outline-transparent outline placeholder:text-muted-fg`,
 					tags.length >= limit && `hidden`,
 				])}
 				onFocus={(ev) => {
