@@ -35,7 +35,7 @@ import { type ViewParams, VIEW_KEYWORD_FILTER_FORM, VIEW_KEYWORD_FILTERS, useVie
 type KeywordState = [keyword: Signal<string>, whole: Signal<boolean>];
 
 const wholeMatchBtn = Interactive({
-	class: `absolute inset-y-0 right-0 grid w-9 place-items-center rounded-r-md`,
+	class: `absolute inset-y-0 right-0 grid w-9 place-items-center rounded-r-md text-base`,
 });
 
 const createKeywordState = (keyword: string, whole: boolean): KeywordState => {
