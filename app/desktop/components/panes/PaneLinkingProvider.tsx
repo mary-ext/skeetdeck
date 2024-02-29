@@ -1,6 +1,6 @@
 import { type JSX, lazy, batch } from 'solid-js';
 
-import { hasSelectionRange, isCtrlKeyPressed, isElementAltClicked } from '~/utils/interaction';
+import { isCtrlKeyPressed, isElementAltClicked } from '~/utils/interaction';
 
 import { openModal } from '~/com/globals/modals';
 
@@ -123,7 +123,7 @@ export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {
 						{...props}
 						// @ts-expect-error
 						to={null}
-						onClick={(ev) => !hasSelectionRange() && navigate(to, isCtrlKeyPressed(ev))}
+						onClick={(ev) => isValidClick(ev) && navigate(to, isCtrlKeyPressed(ev))}
 						onAuxClick={(ev) => ev.button === 1 && navigate(to, true)}
 						onKeyDown={(ev) => isEnterPressed(ev) && navigate(to, isCtrlKeyPressed(ev))}
 					/>
@@ -133,6 +133,21 @@ export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {
 	};
 
 	return <LinkingContext.Provider value={linkContext}>{props.children}</LinkingContext.Provider>;
+};
+
+const isValidClick = (ev: MouseEvent & { target: Element }) => {
+	const selection = window.getSelection();
+	if (selection === null || selection.type === 'Caret') {
+		return true;
+	}
+
+	const closest = ev.target.closest('img');
+	if (closest !== null) {
+		selection.removeAllRanges();
+		return true;
+	}
+
+	return false;
 };
 
 const isEnterPressed = (ev: KeyboardEvent) => {
