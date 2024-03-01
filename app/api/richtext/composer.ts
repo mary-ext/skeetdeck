@@ -82,6 +82,8 @@ const enum CharCode {
 	COMMA = 0x2c,
 	DOT = 0x2e,
 	SEMICOLON = 0x3b,
+	DQUOTE = 0x22,
+	SQUOTE = 0x27,
 
 	H = 0x68,
 	P = 0x70,
@@ -334,8 +336,14 @@ export const parseRt = (source: string): PreliminaryRichText => {
 					for (; end >= start; end--) {
 						const char = c(end - 1);
 
-						// If we encounter a dot, comma, or a semicolon, save it and continue
-						if (char === CharCode.DOT || char === CharCode.COMMA || char === CharCode.SEMICOLON) {
+						// If we encounter any of these punctuations, save it and continue
+						if (
+							char === CharCode.DOT ||
+							char === CharCode.COMMA ||
+							char === CharCode.SEMICOLON ||
+							char === CharCode.DQUOTE ||
+							char === CharCode.SQUOTE
+						) {
 							continue;
 						}
 
