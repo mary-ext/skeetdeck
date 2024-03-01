@@ -137,7 +137,7 @@ export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {
 
 const isValidClick = (ev: MouseEvent & { target: Element }) => {
 	const selection = window.getSelection();
-	if (selection === null || selection.type === 'Caret') {
+	if (selection === null || selection.type !== 'Line') {
 		return true;
 	}
 
