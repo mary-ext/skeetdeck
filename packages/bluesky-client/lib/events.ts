@@ -7,7 +7,7 @@ export interface EventMap {
 export class EventEmitter<Events extends EventMap> {
 	#events?: Record<keyof Events, EventFunction | EventFunction[]>;
 
-	on<E extends keyof Events>(type: E, listener: Events[E]) {
+	on<E extends keyof Events>(type: E, listener: Events[E]): () => void {
 		let events: Record<keyof Events, EventFunction | EventFunction[]> | undefined;
 		let existing: EventFunction | EventFunction[] | undefined;
 
@@ -28,7 +28,7 @@ export class EventEmitter<Events extends EventMap> {
 
 		return () => this.off(type, listener);
 	}
-	off<E extends keyof Events>(type: E, listener: Events[E]) {
+	off<E extends keyof Events>(type: E, listener: Events[E]): void {
 		const events = this.#events;
 
 		if (events === undefined) {
@@ -56,7 +56,7 @@ export class EventEmitter<Events extends EventMap> {
 		}
 	}
 
-	emit<E extends keyof Events>(type: E, ...args: Parameters<Events[E]>) {
+	emit<E extends keyof Events>(type: E, ...args: Parameters<Events[E]>): void {
 		const events = this.#events;
 
 		if (events === undefined) {

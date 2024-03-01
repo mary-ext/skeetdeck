@@ -1,5 +1,5 @@
-const encoder = new TextEncoder();
-const decoder = new TextDecoder();
+const encoder: TextEncoder = new TextEncoder();
+const decoder: TextDecoder = new TextDecoder();
 
 export type Headers = Record<string, string>;
 export type QueryParams = Record<string, any>;

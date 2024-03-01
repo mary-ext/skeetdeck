@@ -5,7 +5,11 @@
 Lightweight API client for Bluesky/AT Protocol.
 
 ```
+# npm
 npm install @externdefs/bluesky-client
+
+# jsr
+jsr add @mary/bluesky-client
 ```
 
 This is an [ESM-only library](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c), if you are using TypeScript you'd need to [configure your projects correctly](https://www.typescriptlang.org/tsconfig#moduleResolution) in order to pick up the type declarations.

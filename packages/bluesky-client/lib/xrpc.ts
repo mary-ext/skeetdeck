@@ -37,13 +37,21 @@ export const isErrorResponse = (value: any, names?: string[]): value is ErrorRes
 	);
 };
 
-export const defaultFetchHandler = async (
+export type FetchHandler = (
 	httpUri: string,
 	httpMethod: string,
 	httpHeaders: Headers,
 	httpReqBody: unknown,
 	signal: AbortSignal | undefined,
-): Promise<FetchHandlerResponse> => {
+) => Promise<FetchHandlerResponse>;
+
+export const defaultFetchHandler: FetchHandler = async (
+	httpUri,
+	httpMethod,
+	httpHeaders,
+	httpReqBody,
+	signal,
+) => {
 	// The duplex field is now required for streaming bodies, but not yet reflected
 	// anywhere in docs or types. See whatwg/fetch#1438, nodejs/node#46221.
 	const reqInit: RequestInit & { duplex: string } = {
@@ -79,7 +87,7 @@ export type OutputOf<T> = T extends { output: any } ? T['output'] : never;
 export class XRPC<Queries, Procedures> {
 	constructor(
 		public serviceUri: string,
-		public fetch = defaultFetchHandler,
+		public fetch: FetchHandler = defaultFetchHandler,
 	) {}
 
 	get<K extends keyof Queries>(

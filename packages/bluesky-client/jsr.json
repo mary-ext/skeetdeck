@@ -1,0 +1,12 @@
+{
+	"name": "@mary/bluesky-client",
+	"version": "0.4.0",
+	"exports": {
+		"./agent": "./lib/agent.ts",
+		"./atp-schema": "./lib/atp-schema.ts",
+		"./events": "./lib/events.ts",
+		"./jwt": "./lib/jwt.ts",
+		"./xrpc-utils": "./lib/xrpc-utils.ts",
+		"./xrpc": "./lib/xrpc.ts"
+	}
+}

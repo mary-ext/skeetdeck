@@ -237,11 +237,11 @@ export class Agent extends EventEmitter<AgentEventMap> {
 	}
 }
 
-export const getPdsEndpoint = (doc: DidDocument) => {
+export const getPdsEndpoint = (doc: DidDocument): string | undefined => {
 	return getServiceEndpoint(doc, '#atproto_pds', 'AtprotoPersonalDataServer');
 };
 
-export const getServiceEndpoint = (doc: DidDocument, serviceId: string, serviceType: string) => {
+export const getServiceEndpoint = (doc: DidDocument, serviceId: string, serviceType: string): string | undefined => {
 	const did = doc.id;
 
 	const didServiceId = did + serviceId;

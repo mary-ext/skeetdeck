@@ -1,4 +1,4 @@
-const b64DecodeUnicode = (str: string) => {
+const b64DecodeUnicode = (str: string): string => {
 	return decodeURIComponent(
 		atob(str).replace(/(.)/g, (_m, p) => {
 			let code = p.charCodeAt(0).toString(16).toUpperCase();
@@ -12,7 +12,7 @@ const b64DecodeUnicode = (str: string) => {
 	);
 };
 
-export const base64UrlDecode = (str: string) => {
+export const base64UrlDecode = (str: string): string => {
 	var output = str.replace(/-/g, '+').replace(/_/g, '/');
 
 	switch (output.length % 4) {
@@ -35,7 +35,7 @@ export const base64UrlDecode = (str: string) => {
 	}
 };
 
-export const decodeJwt = (token: string) => {
+export const decodeJwt = (token: string): string => {
 	const pos = 1;
 	const part = token.split('.')[1];
 
