@@ -128,12 +128,18 @@ export const parseRt = (source: string): PreliminaryRichText => {
 
 			continue;
 		} else if (look === CharCode.TAG) {
+			const enum TagFlags {
+				NUMBERS = 1 << 0,
+				OTHER = 1 << 1,
+			}
+
+			let flags = 0;
 			let end = idx + 1;
 			for (; end < len; end++) {
 				const char = c(end);
 
-				// 1. Do not interpret variation selector as hashtag
-				// 2. Do not interpret combining enclosing screen as hashtag
+				// 1. skip interpreting variation selector as tag
+				// 2. skip interpreting combining enclosing screen as tag
 				if (end - idx === 1 && (char === 0xfe0f || char === 0x20e2)) {
 					break jump;
 				}
@@ -141,18 +147,50 @@ export const parseRt = (source: string): PreliminaryRichText => {
 				if (
 					char === CharCode.SPACE ||
 					char === CharCode.NEWLINE ||
-					char === 0x00ad || // soft hyphen
-					char === 0x2060 || // word joiner
-					char === 0x200a || // hair space
-					char === 0x200b || // zero width space
-					char === 0x200c || // zero width non-joiner
-					char === 0x200d // zero width joiner
+					/* soft hyphen */ char === 0x00ad ||
+					/* word joiner */ char === 0x2060 ||
+					/* hair space */ char === 0x200a ||
+					/* zero-width space */ char === 0x200b ||
+					/* zero-width non-joiner */ char === 0x200c ||
+					/* zero-width joiner */ char === 0x200d
 				) {
+					break;
+				}
+
+				if (/* 0..9 */ char >= 0x30 && char <= 0x39) {
+					flags |= TagFlags.NUMBERS;
+				} else {
+					flags |= TagFlags.OTHER;
+				}
+			}
+
+			// Trim the tag from trailing punctuations
+			for (; end > idx + 1; end--) {
+				const char = c(end - 1);
+
+				if (
+					/* dot */ char === 0x2e ||
+					/* comma */ char === 0x2c ||
+					/* semicolon */ char === 0x3b ||
+					/* double quote */ char === 0x22 ||
+					/* single quote */ char === 0x27 ||
+					/* exclamation mark */ char === 0x21 ||
+					/* question mark */ char === 0x3f ||
+					/* forward slash */ char === 0x2f ||
+					/* backward slash */ char === 0x5c ||
+					/* at-sign */ char === 0x40 ||
+					/* hashtag */ char === 0x23 ||
+					/* opening paren */ char === 0x28 ||
+					/* closing paren */ char === 0x29
+				) {
+					// Continue the loop
+				} else {
 					break;
 				}
 			}
 
-			if (end === idx + 1) {
+			// Skip if empty, or if it's just numbers.
+			if (end === idx + 1 || flags === TagFlags.NUMBERS) {
 				break jump;
 			}
 
@@ -346,11 +384,11 @@ export const parseRt = (source: string): PreliminaryRichText => {
 
 						// If we encounter any of these punctuations, save it and continue
 						if (
-							char === CharCode.DOT ||
-							char === CharCode.COMMA ||
-							char === CharCode.SEMICOLON ||
-							char === CharCode.DQUOTE ||
-							char === CharCode.SQUOTE
+							/* dot */ char === 0x2e ||
+							/* comma */ char === 0x2c ||
+							/* semicolon */ char === 0x3b ||
+							/* double quote */ char === 0x22 ||
+							/* single quote */ char === 0x27
 						) {
 							continue;
 						}
