@@ -42,6 +42,7 @@
 	"scripts": {
 		"build:lib": "node ./scripts/mkdist.js",
 		"build:schema": "node ./scripts/generate-atp-schema.js",
+		"preinstall": "npm run build:lib",
 		"prepublishOnly": "npm run build:schema && tsc && npm run build:lib"
 	},
 	"devDependencies": {
