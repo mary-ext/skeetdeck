@@ -8,5 +8,14 @@
 		"./jwt": "./lib/jwt.ts",
 		"./xrpc-utils": "./lib/xrpc-utils.ts",
 		"./xrpc": "./lib/xrpc.ts"
-	}
+	},
+	"exclude": [
+		"./lexicons/**",
+		"./examples/**",
+		"./scripts/**",
+		"./package.json",
+		"./pnpm-lock.yaml",
+		"./tsconfig.json",
+		"./jsconfig.json"
+	]
 }
