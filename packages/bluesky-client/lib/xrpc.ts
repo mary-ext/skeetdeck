@@ -11,17 +11,25 @@ import {
 	XRPCResponse,
 } from './xrpc-utils.js';
 
+/** Returned response */
 export interface FetchHandlerResponse {
 	status: number;
 	headers: Headers;
 	body: any;
 }
 
+/** Response body from a thrown query/procedure */
 export interface ErrorResponseBody {
 	error?: string;
 	message?: string;
 }
 
+/**
+ * Checks if the response body is an error
+ * @param value Raw response body
+ * @param names Pass this if you're only interested in select errors
+ * @returns Whether the `value` is an error response
+ */
 export const isErrorResponse = (value: any, names?: string[]): value is ErrorResponseBody => {
 	if (!value) {
 		return false;
@@ -84,12 +92,28 @@ export type RPCOptions<T> = BaseRPCOptions &
 
 export type OutputOf<T> = T extends { output: any } ? T['output'] : never;
 
+/**
+ * The core functionality that talks to XRPC-based endpoints
+ * @typeParam Queries Interface containing available query endpoints
+ * @typeParam Procedures Interface containing available procedure endpoints
+ */
 export class XRPC<Queries, Procedures> {
 	constructor(
+		/** The service it should connect to */
 		public serviceUri: string,
+		/**
+		 * The fetch handler it should use, the default fetch handler uses fetch API, but you can
+		 * easily replace this with something else for cases like mocking.
+		 */
 		public fetch: FetchHandler = defaultFetchHandler,
 	) {}
 
+	/**
+	 * Makes a query (GET) request
+	 * @param nsid Namespace ID of a query endpoint
+	 * @param options Options to include like parameters
+	 * @returns The response of the request
+	 */
 	get<K extends keyof Queries>(
 		nsid: K,
 		options: RPCOptions<Queries[K]>,
@@ -97,6 +121,12 @@ export class XRPC<Queries, Procedures> {
 		return this.#call({ type: 'get', method: nsid as any, ...options });
 	}
 
+	/**
+	 * Makes a procedure (POST) request
+	 * @param nsid Namespace ID of a procedure endpoint
+	 * @param options Options to include like input body or parameters
+	 * @returns The response of the request
+	 */
 	call<K extends keyof Procedures>(
 		nsid: K,
 		options: RPCOptions<Procedures[K]>,
