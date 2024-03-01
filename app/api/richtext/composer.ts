@@ -130,9 +130,10 @@ export const parseRt = (source: string): PreliminaryRichText => {
 			for (; end < len; end++) {
 				const char = c(end);
 
-				// - Do not interpret variation selector as hashtag
-				// - Do not allow tags to start with digits
-				if (end - idx === 1 && (char === 0xfe0f || (char >= 0x30 && char <= 0x39))) {
+				// 1. Do not interpret variation selector as hashtag
+				// 2. Do not interpret combining enclosing screen as hashtag
+				// 3. Do not allow tags to start with digits
+				if (end - idx === 1 && (char === 0xfe0f || char === 0x20e2 || (char >= 0x30 && char <= 0x39))) {
 					break jump;
 				}
 
