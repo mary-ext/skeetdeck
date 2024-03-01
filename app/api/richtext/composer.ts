@@ -95,32 +95,11 @@ const WS_RE = / +(?=\n)/g;
 export const EOF_WS_RE = /\s+$| +(?=\n)/g;
 
 const MENTION_RE = /[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]{2,})/y;
+const HASHTAG_RE = /(?!\ufe0f|\u20e3)[\d]*[^ \n\d\p{P}]+[\d]*/yu;
 
 const ESCAPE_SEGMENT: EscapeSegment = { type: 'escape', raw: '\\', text: '' };
 
 const charCodeAt = String.prototype.charCodeAt;
-
-const isTagPunctuation = (char: number): boolean => {
-	return (
-		/* dot */ char === 0x2e ||
-		/* comma */ char === 0x2c ||
-		/* semicolon */ char === 0x3b ||
-		/* double quote */ char === 0x22 ||
-		/* single quote */ char === 0x27 ||
-		/* exclamation mark */ char === 0x21 ||
-		/* question mark */ char === 0x3f ||
-		/* forward slash */ char === 0x2f ||
-		/* backward slash */ char === 0x5c ||
-		/* at-sign */ char === 0x40 ||
-		/* hashtag */ char === 0x23 ||
-		/* opening paren */ char === 0x28 ||
-		/* closing paren */ char === 0x29 ||
-		/* opening square bracket */ char === 0x5b ||
-		/* closing square bracket */ char === 0x5d ||
-		/* opening curly bracket */ char === 0x7b ||
-		/* closing curly bracket */ char === 0x7d
-	);
-};
 
 export const parseRt = (source: string): PreliminaryRichText => {
 	const segments: PreliminarySegment[] = [];
@@ -150,62 +129,17 @@ export const parseRt = (source: string): PreliminaryRichText => {
 
 			continue;
 		} else if (look === CharCode.TAG) {
-			const enum TagFlags {
-				NUMBERS = 1 << 0,
-				OTHER = 1 << 1,
-			}
+			HASHTAG_RE.lastIndex = idx + 1;
+			const match = HASHTAG_RE.exec(source);
 
-			let flags = 0;
-			let end = idx + 1;
-			for (; end < len; end++) {
-				const char = c(end);
-
-				// 1. skip interpreting variation selector as tag
-				// 2. skip interpreting combining enclosing screen as tag
-				if (end - idx === 1 && (char === 0xfe0f || char === 0x20e2)) {
-					break jump;
-				}
-
-				if (
-					char === CharCode.SPACE ||
-					char === CharCode.NEWLINE ||
-					/* soft hyphen */ char === 0x00ad ||
-					/* word joiner */ char === 0x2060 ||
-					/* hair space */ char === 0x200a ||
-					/* zero-width space */ char === 0x200b ||
-					/* zero-width non-joiner */ char === 0x200c ||
-					/* zero-width joiner */ char === 0x200d
-				) {
-					break;
-				}
-
-				if (isTagPunctuation(char)) {
-					// do nothing
-				} else if (/* 0..9 */ char >= 0x30 && char <= 0x39) {
-					flags |= TagFlags.NUMBERS;
-				} else {
-					flags |= TagFlags.OTHER;
-				}
-			}
-
-			// trim the tag from trailing punctuations
-			for (; end > idx + 1; end--) {
-				const char = c(end - 1);
-
-				if (!isTagPunctuation(char)) {
-					break;
-				}
-			}
-
-			// Skip if empty, or if it's just numbers.
-			if (end === idx + 1 || flags === TagFlags.NUMBERS) {
+			if (!match) {
 				break jump;
 			}
 
-			const tag = source.slice(idx + 1, end);
+			const tag = match[0];
 			const raw = '#' + tag;
 
-			idx = end;
+			idx = idx + 1 + tag.length;
 			segments.push({ type: 'tag', raw: raw, text: raw, tag: tag });
 
 			continue;
