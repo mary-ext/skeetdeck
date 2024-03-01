@@ -35,7 +35,7 @@ export const base64UrlDecode = (str: string): string => {
 	}
 };
 
-export const decodeJwt = (token: string): string => {
+export const decodeJwt = (token: string): unknown => {
 	const pos = 1;
 	const part = token.split('.')[1];
 
