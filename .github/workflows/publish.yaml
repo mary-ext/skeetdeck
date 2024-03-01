@@ -49,11 +49,6 @@ jobs:
           pnpm install -r --prefer-offline --frozen-lockfile
           pnpm store prune
 
-      - name: Build bluesky-client
-        working-directory: packages/bluesky-client
-        run: |
-          pnpm run build:lib
-
       - name: Build project
         working-directory: app
         run: |
