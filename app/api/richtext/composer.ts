@@ -134,12 +134,20 @@ export const parseRt = (source: string): PreliminaryRichText => {
 
 				// 1. Do not interpret variation selector as hashtag
 				// 2. Do not interpret combining enclosing screen as hashtag
-				// 3. Do not allow tags to start with digits
-				if (end - idx === 1 && (char === 0xfe0f || char === 0x20e2 || (char >= 0x30 && char <= 0x39))) {
+				if (end - idx === 1 && (char === 0xfe0f || char === 0x20e2)) {
 					break jump;
 				}
 
-				if (char === CharCode.SPACE || char === CharCode.NEWLINE) {
+				if (
+					char === CharCode.SPACE ||
+					char === CharCode.NEWLINE ||
+					char === 0x00ad || // soft hyphen
+					char === 0x2060 || // word joiner
+					char === 0x200a || // hair space
+					char === 0x200b || // zero width space
+					char === 0x200c || // zero width non-joiner
+					char === 0x200d // zero width joiner
+				) {
 					break;
 				}
 			}
