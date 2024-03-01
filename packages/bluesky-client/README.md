@@ -46,7 +46,7 @@ The points above leads to `@externdefs/bluesky-client`, where the following trad
 ### Creating an agent to make requests...
 
 ```ts
-import { Agent } from '@externdefs/bluesky-client/agent';
+import { Agent } from '.../agent';
 
 const agent = new Agent({ serviceUri: 'https://bsky.social' });
 
@@ -69,7 +69,7 @@ console.log(profile);
 Typings for AT Protocol lexicons can be accessed by the `/atp-schema` subimport.
 
 ```ts
-import type { AppBskyRichtextFacet, Brand } from '@externdefs/bluesky-client/atp-schema';
+import type { AppBskyRichtextFacet, Brand } from '.../atp-schema';
 
 type Facet = AppBskyRichtextFacet.Main;
 type MentionFeature = Brand.Union<AppBskyRichtextFacet.Mention>;
@@ -100,8 +100,8 @@ If you don't need the session handling that `Agent` class offers, you can import
 the `XRPC` class directly, this shaves the bundle size from 6.2 KB to 2.8 KB.
 
 ```ts
-import type { Procedures, Queries } from '@externdefs/bluesky-client/atp-schema';
-import { XRPC } from '@externdefs/bluesky-client/xrpc';
+import type { Procedures, Queries } from '.../atp-schema';
+import { XRPC } from '.../xrpc';
 
 export type Agent = XRPC<Queries, Procedures>;
 export const Agent = XRPC<Queries, Procedures>;
