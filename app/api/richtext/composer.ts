@@ -94,8 +94,8 @@ const enum CharCode {
 const WS_RE = / +(?=\n)/g;
 export const EOF_WS_RE = /\s+$| +(?=\n)/g;
 
-const MENTION_RE = /[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]{2,})/y;
-const HASHTAG_RE = /(?!\ufe0f|\u20e3)[\d]*[^ \n\d\p{P}]+[\d]*/uy;
+const MENTION_RE = /[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]{2,})(@)?/y;
+const HASHTAG_RE = /(?!\ufe0f|\u20e3)[\d]*[^ \n\d\p{P}]+[\d]*(#)?/uy;
 
 const ESCAPE_SEGMENT: EscapeSegment = { type: 'escape', raw: '\\', text: '' };
 
@@ -117,7 +117,7 @@ export const parseRt = (source: string): PreliminaryRichText => {
 			MENTION_RE.lastIndex = idx + 1;
 			const match = MENTION_RE.exec(source);
 
-			if (!match) {
+			if (!match || match[1]) {
 				break jump;
 			}
 
@@ -132,7 +132,7 @@ export const parseRt = (source: string): PreliminaryRichText => {
 			HASHTAG_RE.lastIndex = idx + 1;
 			const match = HASHTAG_RE.exec(source);
 
-			if (!match) {
+			if (!match || match[1]) {
 				break jump;
 			}
 
