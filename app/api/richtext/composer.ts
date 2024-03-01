@@ -114,7 +114,11 @@ const isTagPunctuation = (char: number): boolean => {
 		/* at-sign */ char === 0x40 ||
 		/* hashtag */ char === 0x23 ||
 		/* opening paren */ char === 0x28 ||
-		/* closing paren */ char === 0x29
+		/* closing paren */ char === 0x29 ||
+		/* opening square bracket */ char === 0x5b ||
+		/* closing square bracket */ char === 0x5d ||
+		/* opening curly bracket */ char === 0x7b ||
+		/* closing curly bracket */ char === 0x7d
 	);
 };
 
