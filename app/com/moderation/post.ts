@@ -1,6 +1,7 @@
 import { sequal } from '~/utils/dequal';
 
 import type { AppBskyEmbedImages, AppBskyFeedDefs } from '~/api/atp-schema';
+import { unwrapPostEmbedText } from '~/api/utils/post';
 
 import type { SignalizedPost } from '~/api/stores/posts';
 
@@ -41,8 +42,9 @@ export const getPostModDecision = (post: SignalizedPost, opts: SharedPreferences
 
 		const accu: ModerationCause[] = [];
 
-		// Text and image alt generally doesn't change, so we're putting it inside.
-		const text = post.record.value.text + unwrapImageAlt(post.embed.value);
+		// Text and embeds generally doesn't change, so we're putting it inside.
+		const record = post.record.value;
+		const text = record.text + unwrapPostEmbedText(record.embed);
 
 		decideLabelModeration(accu, labels, authorDid, moderation);
 		decideMutedPermanentModeration(accu, isMuted);
@@ -53,29 +55,4 @@ export const getPostModDecision = (post: SignalizedPost, opts: SharedPreferences
 	}
 
 	return res.d;
-};
-
-// Include image alt text as part of the text filters...
-export const unwrapImageAlt = (embed: Post['embed']): string => {
-	let str = '';
-	let images: AppBskyEmbedImages.ViewImage[] | undefined;
-
-	if (embed) {
-		if (embed.$type === 'app.bsky.embed.images#view') {
-			images = embed.images;
-		} else if (
-			embed.$type === 'app.bsky.embed.recordWithMedia#view' &&
-			embed.media.$type === 'app.bsky.embed.images#view'
-		) {
-			images = embed.media.images;
-		}
-	}
-
-	if (images) {
-		for (let i = 0, il = images.length; i < il; i++) {
-			str += ' ' + images[i].alt;
-		}
-	}
-
-	return str;
 };

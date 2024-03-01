@@ -1,6 +1,7 @@
 import { sequal } from '~/utils/dequal';
 
 import type { AppBskyEmbedRecord, AppBskyFeedPost } from '~/api/atp-schema';
+import { unwrapPostEmbedText } from '~/api/utils/post';
 
 import {
 	type ModerationCause,
@@ -14,7 +15,6 @@ import {
 import { PreferenceWarn } from '~/api/moderation/enums';
 
 import { type SharedPreferencesObject, isProfileTempMuted } from '../components/SharedPreferences';
-import { unwrapImageAlt } from './post';
 
 type EmbeddedPostRecord = AppBskyEmbedRecord.ViewRecord;
 type PostRecord = AppBskyFeedPost.Record;
@@ -31,7 +31,7 @@ export const getQuoteModDecision = (quote: EmbeddedPostRecord, opts: SharedPrefe
 		const { moderation, filters } = opts;
 
 		const labels = quote.labels;
-		const text = (quote.value as PostRecord).text + unwrapImageAlt(quote.embeds?.[0]);
+		const text = (quote.value as PostRecord).text + unwrapPostEmbedText(quote.embeds?.[0]);
 
 		const author = quote.author;
 		const viewer = author.viewer;

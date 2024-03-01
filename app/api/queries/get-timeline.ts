@@ -3,10 +3,11 @@ import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
 import { assert, mapDefined } from '~/utils/misc';
 
-import type { AppBskyEmbedImages, AppBskyFeedGetTimeline, AppBskyFeedPost, At } from '../atp-schema';
+import type { AppBskyFeedGetTimeline, AppBskyFeedPost, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 import { systemLanguages } from '../globals/platform';
 
+import { unwrapPostEmbedText } from '../utils/post';
 import { wrapInfiniteQuery } from '../utils/query';
 
 import {
@@ -455,30 +456,6 @@ const createLabelPostFilter = (opts?: ModerationOpts): PostFilter | undefined =>
 		return;
 	}
 
-	const unwrapImageAlt = (embed: PostRecord['embed']) => {
-		let str = '';
-		let images: AppBskyEmbedImages.Image[] | undefined;
-
-		if (embed) {
-			if (embed.$type === 'app.bsky.embed.images') {
-				images = embed.images;
-			} else if (
-				embed.$type === 'app.bsky.embed.recordWithMedia' &&
-				embed.media.$type === 'app.bsky.embed.images'
-			) {
-				images = embed.media.images;
-			}
-		}
-
-		if (images) {
-			for (let i = 0, il = images.length; i < il; i++) {
-				str += ' ' + images[i].alt;
-			}
-		}
-
-		return str;
-	};
-
 	return (item) => {
 		const post = item.post;
 
@@ -486,7 +463,7 @@ const createLabelPostFilter = (opts?: ModerationOpts): PostFilter | undefined =>
 		const record = post.record as PostRecord;
 
 		const isFollowing = !!author.viewer?.following;
-		const text = record.text + unwrapImageAlt(record.embed);
+		const text = record.text + unwrapPostEmbedText(record.embed);
 
 		record.embed;
 
