@@ -19,7 +19,7 @@
 		"@pkg/solid-page-router": "workspace:^",
 		"@pkg/solid-query": "workspace:^",
 		"@pkg/solid-use-gesture": "workspace:^",
-		"@solid-primitives/event-listener": "^2.3.1",
+		"@solid-primitives/event-listener": "^2.3.2",
 		"@thisbeyond/solid-dnd": "^0.7.5",
 		"cborg": "4.0.7",
 		"idb": "^8.0.0",
@@ -32,7 +32,7 @@
 	"devDependencies": {
 		"@types/dom-close-watcher": "^1.0.0",
 		"@types/dom-navigation": "^1.0.3",
-		"@types/node": "^20.11.20",
+		"@types/node": "^20.11.24",
 		"autoprefixer": "^10.4.17",
 		"postcss": "^8.4.35",
 		"terser": "^5.28.1",
