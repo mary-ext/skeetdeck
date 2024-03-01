@@ -100,6 +100,24 @@ const ESCAPE_SEGMENT: EscapeSegment = { type: 'escape', raw: '\\', text: '' };
 
 const charCodeAt = String.prototype.charCodeAt;
 
+const isTagPunctuation = (char: number): boolean => {
+	return (
+		/* dot */ char === 0x2e ||
+		/* comma */ char === 0x2c ||
+		/* semicolon */ char === 0x3b ||
+		/* double quote */ char === 0x22 ||
+		/* single quote */ char === 0x27 ||
+		/* exclamation mark */ char === 0x21 ||
+		/* question mark */ char === 0x3f ||
+		/* forward slash */ char === 0x2f ||
+		/* backward slash */ char === 0x5c ||
+		/* at-sign */ char === 0x40 ||
+		/* hashtag */ char === 0x23 ||
+		/* opening paren */ char === 0x28 ||
+		/* closing paren */ char === 0x29
+	);
+};
+
 export const parseRt = (source: string): PreliminaryRichText => {
 	const segments: PreliminarySegment[] = [];
 	const links: string[] = [];
@@ -157,34 +175,20 @@ export const parseRt = (source: string): PreliminaryRichText => {
 					break;
 				}
 
-				if (/* 0..9 */ char >= 0x30 && char <= 0x39) {
+				if (isTagPunctuation(char)) {
+					// do nothing
+				} else if (/* 0..9 */ char >= 0x30 && char <= 0x39) {
 					flags |= TagFlags.NUMBERS;
 				} else {
 					flags |= TagFlags.OTHER;
 				}
 			}
 
-			// Trim the tag from trailing punctuations
+			// trim the tag from trailing punctuations
 			for (; end > idx + 1; end--) {
 				const char = c(end - 1);
 
-				if (
-					/* dot */ char === 0x2e ||
-					/* comma */ char === 0x2c ||
-					/* semicolon */ char === 0x3b ||
-					/* double quote */ char === 0x22 ||
-					/* single quote */ char === 0x27 ||
-					/* exclamation mark */ char === 0x21 ||
-					/* question mark */ char === 0x3f ||
-					/* forward slash */ char === 0x2f ||
-					/* backward slash */ char === 0x5c ||
-					/* at-sign */ char === 0x40 ||
-					/* hashtag */ char === 0x23 ||
-					/* opening paren */ char === 0x28 ||
-					/* closing paren */ char === 0x29
-				) {
-					// Continue the loop
-				} else {
+				if (!isTagPunctuation(char)) {
 					break;
 				}
 			}
