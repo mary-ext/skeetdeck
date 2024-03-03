@@ -1,6 +1,7 @@
 import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
 
 import type { At } from '../atp-schema';
+import { MultiagentError } from '../classes/multiagent';
 
 export const isDid = (value: string): value is At.DID => {
 	return value.startsWith('did:');
@@ -57,7 +58,26 @@ export const formatXRPCError = (err: XRPCError): string => {
 };
 
 export const formatQueryError = (err: unknown): string => {
+	if (err instanceof MultiagentError) {
+		const msg = err.message;
+		const cause = err.cause;
+
+		if (msg === 'INVALID_ACCOUNT') {
+			return `Account associated was removed, try switching to another account.`;
+		}
+
+		if (cause) {
+			err = cause;
+		}
+	}
+
 	if (err instanceof XRPCError) {
+		const error = err.error;
+
+		if (error === 'InvalidToken' || error === 'ExpiredToken') {
+			return `Account session is no longer valid, please sign in again.`;
+		}
+
 		return formatXRPCError(err);
 	}
 
