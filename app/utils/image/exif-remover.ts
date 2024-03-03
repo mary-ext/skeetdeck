@@ -1,4 +1,4 @@
-export const removeExif = (buf: ArrayBuffer) => {
+export const removeExif = (buf: ArrayBuffer): Uint8Array | null => {
 	const view = new DataView(buf);
 	const indices: [start: number, end: number][] = [];
 
@@ -86,5 +86,5 @@ export const removeExif = (buf: ArrayBuffer) => {
 		}, 0),
 	);
 
-	return buf;
+	return copy;
 };
