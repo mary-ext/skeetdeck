@@ -63,7 +63,7 @@ export const formatQueryError = (err: unknown): string => {
 		const cause = err.cause;
 
 		if (msg === 'INVALID_ACCOUNT') {
-			return `Account associated was removed, try switching to another account.`;
+			return `Associated account was removed, sign in again or switch to another account`;
 		}
 
 		if (cause) {
@@ -75,7 +75,7 @@ export const formatQueryError = (err: unknown): string => {
 		const error = err.error;
 
 		if (error === 'InvalidToken' || error === 'ExpiredToken') {
-			return `Account session is no longer valid, please sign in again.`;
+			return `Account session is no longer valid, please sign in again`;
 		}
 
 		return formatXRPCError(err);
