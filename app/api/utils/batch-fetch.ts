@@ -3,23 +3,6 @@
 
 type Promisable<T> = T | Promise<T>;
 
-interface Deferred<T> {
-	promise: Promise<T>;
-	resolve(value: T | PromiseLike<T>): void;
-	reject(reason?: any): void;
-}
-
-const createDeferred = <T>(): Deferred<T> => {
-	const deferred: any = {};
-
-	deferred.promise = new Promise((resolve, reject) => {
-		deferred.resolve = resolve;
-		deferred.reject = reject;
-	});
-
-	return deferred;
-};
-
 export type QueryId = string | number;
 
 export interface BatchedFetchOptions<Query, Id extends QueryId, Data> {
@@ -35,7 +18,7 @@ interface BatchedFetchMap<Query, Id, Data> {
 	key: string | number;
 	timeout: any;
 	queries: Query[];
-	pending: Map<Id, Deferred<Data>>;
+	pending: Map<Id, PromiseWithResolvers<Data>>;
 }
 
 export class ResourceMissingError extends Error {
@@ -68,7 +51,7 @@ export const createBatchedFetch = <Query, Id extends QueryId, Data>(
 		let deferred = map.pending.get(id);
 
 		if (!deferred) {
-			deferred = createDeferred<Data>();
+			deferred = Promise.withResolvers<Data>();
 
 			map.queries.push(query);
 			map.pending.set(id, deferred);
