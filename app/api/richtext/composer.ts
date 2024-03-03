@@ -95,7 +95,7 @@ const WS_RE = / +(?=\n)/g;
 export const EOF_WS_RE = /\s+$| +(?=\n)/g;
 
 const MENTION_RE = /[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]{2,})(@)?/y;
-const HASHTAG_RE = /(?!\ufe0f|\u20e3)[\d]*[^ \n\d\p{P}][^ \n\p{P}]*(#)?/uy;
+const HASHTAG_RE = /(?!\ufe0f|\u20e3)[\p{N}]*[\p{L}\p{M}\p{Pc}][\p{L}\p{M}\p{Pc}\p{N}]*(#)?/uy;
 
 const ESCAPE_SEGMENT: EscapeSegment = { type: 'escape', raw: '\\', text: '' };
 
