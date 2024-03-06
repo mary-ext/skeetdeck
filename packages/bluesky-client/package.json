@@ -46,6 +46,8 @@
 		"prepublishOnly": "npm run build:schema && tsc && npm run build:lib"
 	},
 	"devDependencies": {
+		"@mary/reader": "npm:@jsr/mary__reader@^0.1.1",
+		"@mary/tar": "npm:@jsr/mary__tar@^0.1.2",
 		"@tiptap/core": "^2.2.4",
 		"fast-glob": "^3.3.2",
 		"graphemer": "^1.4.0",

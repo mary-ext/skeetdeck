@@ -132,6 +132,12 @@ importers:
 
   packages/bluesky-client:
     devDependencies:
+      '@mary/reader':
+        specifier: npm:@jsr/mary__reader@^0.1.1
+        version: /@jsr/mary__reader@0.1.1
+      '@mary/tar':
+        specifier: npm:@jsr/mary__tar@^0.1.2
+        version: /@jsr/mary__tar@0.1.2
       '@tiptap/core':
         specifier: ^2.2.4
         version: 2.2.4
@@ -1708,6 +1714,14 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
+    dev: true
+
+  /@jsr/mary__reader@0.1.1:
+    resolution: {integrity: sha512-SSGVHqvZTH37CXK7DMXAf4yhJd4fvJF+pCwWWRl4RS2ekQngwRTmg18YilGsKz6icIVclNBIbS/lqB+iOab7pg==, tarball: https://npm.jsr.io/~/6/@jsr/mary__reader/0.1.1.tgz}
+    dev: true
+
+  /@jsr/mary__tar@0.1.2:
+    resolution: {integrity: sha512-DCrcwcw0AiSGFBr2x8B+7/G8z6s7f3yxPcRsEn07dz9+tfqrnhYFKYrCp/DMbDkWyEaljVUxlnbTi6LYr6Q8pA==, tarball: https://npm.jsr.io/~/6/@jsr/mary__tar/0.1.2.tgz}
     dev: true
 
   /@nodelib/fs.scandir@2.1.5:
