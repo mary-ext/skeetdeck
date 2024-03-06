@@ -1851,6 +1851,8 @@ export declare namespace ComAtprotoAdminDefs {
 		[Brand.Type]?: 'com.atproto.admin.defs#modEventEmail';
 		/** The subject line of the email sent to the user. */
 		subjectLine: string;
+		/** The content of the email sent to the user. */
+		content?: string;
 		/** Additional comment about the outgoing comm. */
 		comment?: string;
 	}
@@ -3342,7 +3344,10 @@ export declare namespace ComAtprotoTempCheckSignupQueue {
 	}
 }
 
-/** Fetch all labels from a labeler created after a certain date. DEPRECATED: use queryLabels or subscribeLabels instead */
+/**
+ * DEPRECATED: use queryLabels or subscribeLabels instead -- Fetch all labels from a labeler created after a certain date.
+ * @deprecated
+ */
 export declare namespace ComAtprotoTempFetchLabels {
 	interface Params {
 		since?: number;
