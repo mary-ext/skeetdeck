@@ -86,7 +86,7 @@ async function main() {
 	{
 		const source = `https://github.com/${repo}/tree/${sha}/lexicons\n`;
 
-		console.log(`  writing readme file`);
+		console.log(`writing readme file`);
 		await fsp.writeFile(tmpdir + `README.md`, source);
 	}
 
