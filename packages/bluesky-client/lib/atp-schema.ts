@@ -82,9 +82,16 @@ export declare namespace AppBskyActorDefs {
 		followersCount?: number;
 		followsCount?: number;
 		postsCount?: number;
+		associated?: ProfileAssociated;
 		indexedAt?: string;
 		viewer?: ViewerState;
 		labels?: ComAtprotoLabelDefs.Label[];
+	}
+	interface ProfileAssociated {
+		[Brand.Type]?: 'app.bsky.actor.defs#profileAssociated';
+		lists?: number;
+		feedgens?: number;
+		labeler?: boolean;
 	}
 	/** Metadata about the requesting account's relationship with the subject account. Only has meaningful content for authed requests. */
 	interface ViewerState {
@@ -115,8 +122,10 @@ export declare namespace AppBskyActorDefs {
 	}
 	interface ContentLabelPref {
 		[Brand.Type]?: 'app.bsky.actor.defs#contentLabelPref';
+		/** Which labeler does this preference apply to? If undefined, applies globally. */
+		labelerDid?: At.DID;
 		label: string;
-		visibility: 'show' | 'warn' | 'hide' | (string & {});
+		visibility: 'ignore' | 'show' | 'warn' | 'hide' | (string & {});
 	}
 	interface SavedFeedsPref {
 		[Brand.Type]?: 'app.bsky.actor.defs#savedFeedsPref';
@@ -135,7 +144,10 @@ export declare namespace AppBskyActorDefs {
 		feed: string;
 		/** Hide replies in the feed. */
 		hideReplies?: boolean;
-		/** Hide replies in the feed if they are not by followed users. */
+		/**
+		 * Hide replies in the feed if they are not by followed users.
+		 * @default true
+		 */
 		hideRepliesByUnfollowed?: boolean;
 		/** Hide replies in the feed if they do not have this number of likes. */
 		hideRepliesByLikeCount?: number;
@@ -187,6 +199,14 @@ export declare namespace AppBskyActorDefs {
 		[Brand.Type]?: 'app.bsky.actor.defs#hiddenPostsPref';
 		/** A list of URIs of posts the account owner has hidden. */
 		items: At.Uri[];
+	}
+	interface ModsPref {
+		[Brand.Type]?: 'app.bsky.actor.defs#modsPref';
+		mods: ModPrefItem[];
+	}
+	interface ModPrefItem {
+		[Brand.Type]?: 'app.bsky.actor.defs#modPrefItem';
+		did: At.DID;
 	}
 }
 
@@ -390,7 +410,12 @@ export declare namespace AppBskyEmbedRecord {
 	interface View {
 		[Brand.Type]?: 'app.bsky.embed.record#view';
 		record: Brand.Union<
-			ViewRecord | ViewNotFound | ViewBlocked | AppBskyFeedDefs.GeneratorView | AppBskyGraphDefs.ListView
+			| ViewRecord
+			| ViewNotFound
+			| ViewBlocked
+			| AppBskyFeedDefs.GeneratorView
+			| AppBskyGraphDefs.ListView
+			| AppBskyLabelerDefs.LabelerView
 		>;
 	}
 	interface ViewRecord {
@@ -1364,6 +1389,64 @@ export declare namespace AppBskyGraphUnmuteActorList {
 	type Output = undefined;
 }
 
+export declare namespace AppBskyLabelerDefs {
+	interface LabelerView {
+		[Brand.Type]?: 'app.bsky.labeler.defs#labelerView';
+		uri: At.Uri;
+		cid: At.CID;
+		creator: AppBskyActorDefs.ProfileView;
+		/** Minimum: 0 */
+		likeCount?: number;
+		viewer?: LabelerViewerState;
+		indexedAt: string;
+		labels?: ComAtprotoLabelDefs.Label[];
+	}
+	interface LabelerViewDetailed {
+		[Brand.Type]?: 'app.bsky.labeler.defs#labelerViewDetailed';
+		uri: At.Uri;
+		cid: At.CID;
+		creator: AppBskyActorDefs.ProfileView;
+		policies: AppBskyLabelerDefs.LabelerPolicies;
+		/** Minimum: 0 */
+		likeCount?: number;
+		viewer?: LabelerViewerState;
+		indexedAt: string;
+		labels?: ComAtprotoLabelDefs.Label[];
+	}
+	interface LabelerViewerState {
+		[Brand.Type]?: 'app.bsky.labeler.defs#labelerViewerState';
+		like?: At.Uri;
+	}
+	interface LabelerPolicies {
+		[Brand.Type]?: 'app.bsky.labeler.defs#labelerPolicies';
+		/** The label values which this labeler publishes. May include global or custom labels. */
+		labelValues: ComAtprotoLabelDefs.LabelValue[];
+		/** Label values created by this labeler and scoped exclusively to it. Labels defined here will override global label definitions for this labeler. */
+		labelValueDefinitions?: ComAtprotoLabelDefs.LabelValueDefinition[];
+	}
+}
+
+/** Get information about a list of labeler services. */
+export declare namespace AppBskyLabelerGetServices {
+	interface Params {
+		dids: At.DID[];
+		/** @default false */
+		detailed?: boolean;
+	}
+	type Input = undefined;
+	interface Output {
+		views: Brand.Union<AppBskyLabelerDefs.LabelerView | AppBskyLabelerDefs.LabelerViewDetailed>[];
+	}
+}
+
+export declare namespace AppBskyLabelerService {
+	interface Record {
+		policies: AppBskyLabelerDefs.LabelerPolicies;
+		labels?: Brand.Union<ComAtprotoLabelDefs.SelfLabels>;
+		createdAt: string;
+	}
+}
+
 /** Count the number of unread notifications for the requesting account. Requires auth. */
 export declare namespace AppBskyNotificationGetUnreadCount {
 	interface Params {
@@ -1782,10 +1865,16 @@ export declare namespace ComAtprotoAdminDefs {
 		height: number;
 		length: number;
 	}
-	type SubjectReviewState = '#reviewOpen' | '#reviewEscalated' | '#reviewClosed' | (string & {});
+	type SubjectReviewState =
+		| '#reviewOpen'
+		| '#reviewEscalated'
+		| '#reviewClosed'
+		| '#reviewNone'
+		| (string & {});
 	type ReviewOpen = 'com.atproto.admin.defs#reviewOpen';
 	type ReviewEscalated = 'com.atproto.admin.defs#reviewEscalated';
 	type ReviewClosed = 'com.atproto.admin.defs#reviewClosed';
+	type ReviewNone = 'com.atproto.admin.defs#reviewNone';
 	/** Take down a subject permanently or temporarily */
 	interface ModEventTakedown {
 		[Brand.Type]?: 'com.atproto.admin.defs#modEventTakedown';
@@ -2364,6 +2453,52 @@ export declare namespace ComAtprotoLabelDefs {
 		 */
 		val: string;
 	}
+	/** Declares a label value and its expected interpertations and behaviors. */
+	interface LabelValueDefinition {
+		[Brand.Type]?: 'com.atproto.label.defs#labelValueDefinition';
+		/**
+		 * The value of the label being defined. Must only include lowercase ascii and the '-' character ([a-z-]+). \
+		 * Maximum string length: 100 \
+		 * Maximum grapheme length: 100
+		 */
+		identifier: string;
+		/** How should a client visually convey this label? 'inform' means neutral and informational; 'alert' means negative and warning; 'none' means show nothing. */
+		severity: 'inform' | 'alert' | 'none' | (string & {});
+		/** What should this label hide in the UI, if applied? 'content' hides all of the target; 'media' hides the images/video/audio; 'none' hides nothing. */
+		blurs: 'content' | 'media' | 'none' | (string & {});
+		locales: LabelValueDefinitionStrings[];
+	}
+	/** Strings which describe the label in the UI, localized into a specific language. */
+	interface LabelValueDefinitionStrings {
+		[Brand.Type]?: 'com.atproto.label.defs#labelValueDefinitionStrings';
+		/** The code of the language these strings are written in. */
+		lang: string;
+		/**
+		 * A short human-readable name for the label. \
+		 * Maximum string length: 640 \
+		 * Maximum grapheme length: 64
+		 */
+		name: string;
+		/**
+		 * A longer description of what the label means and why it might be applied. \
+		 * Maximum string length: 100000 \
+		 * Maximum grapheme length: 10000
+		 */
+		description: string;
+	}
+	type LabelValue =
+		| '!hide'
+		| '!no-promote'
+		| '!warn'
+		| '!no-unauthenticated'
+		| 'dmca-violation'
+		| 'doxxing'
+		| 'porn'
+		| 'sexual'
+		| 'nudity'
+		| 'nsfl'
+		| 'gore'
+		| (string & {});
 }
 
 /** Find labels relevant to the provided AT-URI patterns. Public endpoint for moderation services, though may return different or additional results with auth. */
@@ -3500,6 +3635,10 @@ export declare interface Queries {
 	'app.bsky.graph.getSuggestedFollowsByActor': {
 		params: AppBskyGraphGetSuggestedFollowsByActor.Params;
 		output: AppBskyGraphGetSuggestedFollowsByActor.Output;
+	};
+	'app.bsky.labeler.getServices': {
+		params: AppBskyLabelerGetServices.Params;
+		output: AppBskyLabelerGetServices.Output;
 	};
 	'app.bsky.notification.getUnreadCount': {
 		params: AppBskyNotificationGetUnreadCount.Params;
