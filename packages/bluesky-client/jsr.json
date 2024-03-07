@@ -1,6 +1,6 @@
 {
 	"name": "@mary/bluesky-client",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"exports": {
 		"./agent": "./lib/agent.ts",
 		"./atp-schema": "./lib/atp-schema.ts",
