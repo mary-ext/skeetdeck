@@ -236,8 +236,34 @@ export const RouterView = () => {
 							views = { ...views, [nextKey]: matchedState };
 							delete views[current.active];
 						} else if (type === 'traverse') {
+							let nextViews: Record<string, MatchedRouteState> | undefined;
+
+							if (nextEntry.index < currentEntry.index) {
+								const entries = navigation.entries();
+								const len = nextEntry.index;
+
+								nextViews = {};
+
+								for (let idx = 0; idx <= len; idx++) {
+									const entry = entries[idx];
+									const id = entry.id;
+
+									if (id in views) {
+										nextViews[id] = views[id];
+									}
+								}
+							}
+
 							if (!(nextKey in views)) {
-								views = { ...views, [nextKey]: matchedState };
+								if (nextViews) {
+									nextViews[nextKey] = matchedState;
+								} else {
+									nextViews = { ...views, [nextKey]: matchedState };
+								}
+							}
+
+							if (nextViews) {
+								views = nextViews;
 							}
 						} else {
 							// @todo: should we handle reload?
