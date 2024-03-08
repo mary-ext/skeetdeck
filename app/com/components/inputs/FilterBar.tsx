@@ -48,7 +48,7 @@ const FilterBar = <T,>(props: FilterBarProps<T>) => {
 						/>
 
 						<fieldset
-							class={`flex min-w-0 cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-left text-sm font-medium outline-2 -outline-offset-2 outline-primary disabled:pointer-events-none disabled:opacity-50 peer-focus-visible:outline ${
+							class={`flex h-8 min-w-0 cursor-pointer items-center gap-2 rounded-md border px-3 text-left text-sm font-medium outline-2 -outline-offset-2 outline-primary disabled:pointer-events-none disabled:opacity-50 peer-focus-visible:outline ${
 								!isSelected()
 									? `border-input hover:bg-secondary/30`
 									: `border-transparent bg-accent-dark text-white hover:bg-accent-dark/80`
