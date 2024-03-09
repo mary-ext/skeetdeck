@@ -116,7 +116,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 	});
 
 	return (
-		<div class="h-full w-full overflow-hidden bg-black/75">
+		<div class="h-full w-full overflow-hidden bg-black/90">
 			{loading() > 0 && (
 				<div class="pointer-events-none absolute top-0 h-1 w-full">
 					<div class="h-full w-1/4 animate-indeterminate bg-accent" />
