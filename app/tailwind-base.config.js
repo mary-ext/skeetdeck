@@ -36,6 +36,7 @@ export default {
 				'50vh': '50vh',
 			},
 			flexGrow: {
+				2: '2',
 				4: '4',
 			},
 			aspectRatio: {

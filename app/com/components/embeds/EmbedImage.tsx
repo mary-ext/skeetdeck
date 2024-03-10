@@ -133,7 +133,7 @@ const EmbedImage = (props: EmbedImageProps) => {
 				if (images.length >= 3) {
 					return (
 						<div class="flex gap-0.5">
-							<div class="flex aspect-square grow-[2] basis-0 flex-col gap-0.5">
+							<div class="flex aspect-square grow-2 basis-0 flex-col gap-0.5">
 								{/* @once */ render(0, RenderMode.MULTIPLE)}
 							</div>
 
