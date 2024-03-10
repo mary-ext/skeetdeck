@@ -48,8 +48,8 @@ importers:
   app:
     dependencies:
       '@externdefs/bluesky-client':
-        specifier: ~0.5.2
-        version: 0.5.2
+        specifier: ~0.5.3
+        version: 0.5.3
       '@floating-ui/dom':
         specifier: ^1.6.3
         version: 1.6.3
@@ -1629,8 +1629,8 @@ packages:
     dev: true
     optional: true
 
-  /@externdefs/bluesky-client@0.5.2:
-    resolution: {integrity: sha512-PWufkjtGAkVls0n9KEac48HQmROyV+0UHm+zxgerWulb+zmFVXmYhOR/VqJVIOuwvqG+m/EmPTnT5jjQodM1Lg==}
+  /@externdefs/bluesky-client@0.5.3:
+    resolution: {integrity: sha512-dU0VjbrSfD+g7+ffg1/HKP7uT2y/PxFZsFixg/oAfKYcc0uphwQ6Ac+ICtL7l8CjGW0s3rt+Luw2ZlN4BRj5dg==}
     dev: false
 
   /@floating-ui/core@1.6.0:
