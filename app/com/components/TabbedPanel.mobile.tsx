@@ -46,28 +46,32 @@ export const TabbedPanel = <T extends string | number>(props: TabbedPanelProps<T
 
 	return (
 		<div ref={sentinel!} class="flex min-h-[calc(100vh-3.25rem)] scroll-m-13 flex-col">
-			<div class="sticky top-13 z-30 flex h-13 shrink-0 overflow-x-auto border-b border-divider bg-background">
-				<For each={panels.toArray() as unknown as TabbedPanelViewProps[]}>
-					{(panel) => (
-						<>
-							{!panel.hidden && (
-								<Tab
-									active={props.selected === panel.value}
-									onClick={() => {
-										if (props.selected === panel.value) {
-											sentinel.scrollIntoView({ block: 'start', behavior: 'smooth' });
-										} else {
-											props.onChange(panel.value as T);
-										}
-									}}
-								>
-									{panel.label}
-								</Tab>
-							)}
-						</>
-					)}
-				</For>
-			</div>
+			{!props.hideTabs ? (
+				<div class="sticky top-13 z-30 flex h-12 shrink-0 overflow-x-auto border-b border-divider bg-background">
+					<For each={panels.toArray() as unknown as TabbedPanelViewProps[]}>
+						{(panel) => (
+							<>
+								{!panel.hidden && (
+									<Tab
+										active={props.selected === panel.value}
+										onClick={() => {
+											if (props.selected === panel.value) {
+												sentinel.scrollIntoView({ block: 'start', behavior: 'smooth' });
+											} else {
+												props.onChange(panel.value as T);
+											}
+										}}
+									>
+										{panel.label}
+									</Tab>
+								)}
+							</>
+						)}
+					</For>
+				</div>
+			) : (
+				<hr class="border-divider" />
+			)}
 
 			<For each={rendered()}>
 				{(panel) => <Freeze freeze={props.selected !== panel.value}>{panel.children}</Freeze>}

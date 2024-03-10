@@ -2,10 +2,11 @@ export interface ButtonProps {
 	class?: string;
 	size?: 'xs' | 'sm' | null;
 	variant?: 'primary' | 'danger' | 'outline' | 'ghost' | null;
+	grow?: boolean;
 }
 
 export const Button = (props: ButtonProps = {}) => {
-	const { class: className, size = 'sm', variant = 'outline' } = props;
+	const { class: className, size = 'sm', variant = 'outline', grow = false } = props;
 
 	let cn = `inline-flex select-none items-center justify-center rounded-md font-medium outline-2 -outline-offset-1 outline-primary focus-visible:outline disabled:pointer-events-none disabled:opacity-50`;
 
@@ -23,6 +24,10 @@ export const Button = (props: ButtonProps = {}) => {
 		cn += ` border border-input hover:bg-secondary/30 hover:text-secondary-fg`;
 	} else if (variant === 'ghost') {
 		cn += ` hover:bg-secondary/30 hover:text-secondary-fg`;
+	}
+
+	if (grow) {
+		cn += ` grow`;
 	}
 
 	if (className) {

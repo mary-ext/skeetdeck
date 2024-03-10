@@ -7,90 +7,98 @@ import { DEFAULT_DATA_SERVERS } from '~/api/globals/defaults';
 
 import { model } from '~/utils/input';
 
+import { Button } from '~/com/primitives/button';
+import { IconButton } from '~/com/primitives/icon-button';
 import { Input } from '~/com/primitives/input';
 
-import ViewHeader from '../components/ViewHeader';
-import { Button } from '~/com/primitives/button';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import EditIcon from '~/com/icons/baseline-edit';
 
+import ViewHeader from '../components/ViewHeader';
+
+const APP_PASSWORD_LINK = 'https://atproto.com/community/projects#app-passwords';
+
+const enum Steps {
+	IDENTIFIER,
+	PASSWORD,
+}
+
 const SignIn = () => {
+	const [step, setStep] = createSignal(Steps.IDENTIFIER);
+
 	const [service, setService] = createSignal(DEFAULT_DATA_SERVERS[0]);
-
-	const info = createQuery(() => {
-		return {
-			queryKey: ['/describeServer', service().url],
-			queryFn: async (ctx) => {
-				const [, url] = ctx.queryKey;
-				const agent = new Agent({ serviceUri: url });
-				const response = await agent.rpc.get('com.atproto.server.describeServer', {});
-
-				return response.data;
-			},
-		};
-	});
-
 	const [identifier, setIdentifier] = createSignal('');
 	const [password, setPassword] = createSignal('');
 
 	return (
 		<fieldset class="contents">
-			<ViewHeader back="/" title="Sign in" />
-
-			<form class="flex grow flex-col gap-8 p-4">
-				<div>
-					<span class="mb-2 block text-sm font-medium leading-6 text-primary">Hosting provider</span>
-
-					<button
-						type="button"
-						class="flex h-9 w-full grow items-center justify-between rounded-md border border-input text-sm outline-2 -outline-offset-1 outline-accent outline-none hover:bg-secondary/30 focus-visible:outline"
-					>
-						<span class="px-3 py-2">{service().name}</span>
-						<div class="grid h-8 w-8 place-items-center">
-							<EditIcon class="text-base text-muted-fg" />
-						</div>
-					</button>
-				</div>
-
-				<div class="flex flex-col gap-4">
-					<label class="block">
-						<span class="mb-2 block text-sm font-medium leading-6 text-primary">Handle or email address</span>
-						<input
-							ref={model(identifier, setIdentifier)}
-							type="text"
-							required
-							title="Bluesky handle, DID, or email address"
-							pattern=".*\S+.*"
-							placeholder="you.bsky.social"
-							autocomplete="username"
-							class={/* @once */ Input()}
-						/>
-					</label>
-
-					<div>
-						<label class="block">
-							<span class="mb-2 block text-sm font-medium leading-6 text-primary">Password</span>
-							<input
-								ref={model(password, setPassword)}
-								type="password"
-								required
-								autocomplete="password"
-								placeholder="Password"
-								class={/* @once */ Input()}
-							/>
-						</label>
-
-						<p class="mt-2 text-de text-muted-fg">
-							Using an app password is recommended.{' '}
-							<button type="button" class="text-accent hover:underline">
-								Learn more
-							</button>
-						</p>
-					</div>
-				</div>
-
-				<button type="submit" disabled={!info.data} class={/* @once */ Button({ variant: 'primary' })}>
-					Sign in
+			<div class="flex h-13 shrink-0 items-center border-b border-transparent px-4">
+				<button
+					title="Go back to previous page"
+					onClick={() => {
+						if (navigation.canGoBack) {
+							navigation.back();
+						} else {
+							navigation.navigate('/', { history: 'replace' });
+						}
+					}}
+					class={/* @once */ IconButton({ edge: 'left' })}
+				>
+					<ArrowLeftIcon />
 				</button>
+			</div>
+
+			<div class="p-4">
+				<h1 class="text-2xl font-semibold">Sign in</h1>
+				<p class="mt-1 text-base text-muted-fg">To begin, enter your Bluesky handle, DID or email address.</p>
+			</div>
+
+			<form class="flex grow flex-col">
+				<div class="flex grow flex-col gap-8 p-4">
+					{(() => {
+						const $step = step();
+
+						if ($step === Steps.IDENTIFIER) {
+							return (
+								<fieldset class="contents">
+									<label class="block">
+										<span class="mb-2 block text-sm font-medium leading-6 text-primary">
+											Bluesky handle, DID or email address
+										</span>
+										<input
+											ref={model(identifier, setIdentifier)}
+											type="text"
+											required
+											title="Bluesky handle, DID, or email address"
+											pattern=".*\S+.*"
+											placeholder="you.bsky.social"
+											autocomplete="username"
+											class={/* @once */ Input()}
+										/>
+									</label>
+								</fieldset>
+							);
+						}
+					})()}
+				</div>
+
+				<fieldset class="flex flex-col gap-3 border-t border-divider p-4">
+					<button type="submit" class={/* @once */ Button({ variant: 'primary' })}>
+						{step() === Steps.IDENTIFIER ? `Continue` : `Sign in`}
+					</button>
+
+					{(() => {
+						const $step = step();
+
+						if ($step === Steps.IDENTIFIER) {
+							return (
+								<button type="button" class="h-9 text-de text-accent hover:underline">
+									Continue without automatic service resolution
+								</button>
+							);
+						}
+					})()}
+				</fieldset>
 			</form>
 		</fieldset>
 	);

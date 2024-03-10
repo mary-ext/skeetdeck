@@ -9,6 +9,7 @@ import ConfirmDialog from './dialogs/ConfirmDialog';
 
 export interface ProfileFollowButtonProps {
 	profile: SignalizedProfile;
+	grow?: boolean;
 }
 
 // TODO: differentiate blockedBy and blocking
@@ -44,7 +45,10 @@ const ProfileFollowButton = (props: ProfileFollowButtonProps) => {
 					updateProfileFollow($profile, true);
 				}
 			}}
-			class={Button({ variant: isBlocked() ? 'danger' : isFollowing() ? 'outline' : 'primary' })}
+			class={Button({
+				variant: isBlocked() ? 'danger' : isFollowing() ? 'outline' : 'primary',
+				grow: props.grow,
+			})}
 		>
 			{isBlocked() ? 'Blocked' : isFollowing() ? 'Following' : 'Follow'}
 		</button>
