@@ -6,7 +6,7 @@
 		"prettier": "^3.2.5",
 		"prettier-plugin-tailwindcss": "^0.5.11",
 		"tailwindcss": "^3.4.1",
-		"typescript": "5.4.0-beta"
+		"typescript": "5.4.2"
 	},
 	"pnpm": {
 		"patchedDependencies": {

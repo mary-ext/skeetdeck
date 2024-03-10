@@ -42,8 +42,8 @@ importers:
         specifier: ^3.4.1
         version: 3.4.1
       typescript:
-        specifier: 5.4.0-beta
-        version: 5.4.0-beta
+        specifier: 5.4.2
+        version: 5.4.2
 
   app:
     dependencies:
@@ -3479,8 +3479,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /typescript@5.4.0-beta:
-    resolution: {integrity: sha512-KgekV5JS7TQ7Bb8eO64QGxdM7MSBUUXOXq28OWX23d2MA8SiVtNYoo4s33tCTEGV8+6AGBRD2+KiXNNnexRRYw==}
+  /typescript@5.4.2:
+    resolution: {integrity: sha512-+2/g0Fds1ERlP6JsakQQDXjZdZMM+rqpamFZJEKh4kwTIn3iDkgKtby0CeNd5ATNZ4Ry1ax15TMx0W2V+miizQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
