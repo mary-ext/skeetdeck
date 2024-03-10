@@ -21,6 +21,7 @@ export interface EmbedImageProps {
 
 const enum RenderMode {
 	MULTIPLE,
+	MULTIPLE_SQUARE,
 	STANDALONE,
 	STANDALONE_RATIO,
 }
@@ -61,6 +62,8 @@ const EmbedImage = (props: EmbedImageProps) => {
 
 		if (mode === RenderMode.MULTIPLE) {
 			cn = `min-h-0 grow basis-0 overflow-hidden`;
+		} else if (mode === RenderMode.MULTIPLE_SQUARE) {
+			cn = `aspect-square overflow-hidden`;
 		} else if (mode === RenderMode.STANDALONE) {
 			cn = `aspect-video overflow-hidden`;
 		} else if (mode === RenderMode.STANDALONE_RATIO) {
@@ -113,15 +116,15 @@ const EmbedImage = (props: EmbedImageProps) => {
 
 				if (images.length >= 4) {
 					return (
-						<div class="flex aspect-video gap-0.5">
+						<div class="flex gap-0.5">
 							<div class="flex grow basis-0 flex-col gap-0.5">
-								{/* @once */ render(0, RenderMode.MULTIPLE)}
-								{/* @once */ render(2, RenderMode.MULTIPLE)}
+								{/* @once */ render(0, RenderMode.MULTIPLE_SQUARE)}
+								{/* @once */ render(2, RenderMode.MULTIPLE_SQUARE)}
 							</div>
 
 							<div class="flex grow basis-0 flex-col gap-0.5">
-								{/* @once */ render(1, RenderMode.MULTIPLE)}
-								{/* @once */ render(3, RenderMode.MULTIPLE)}
+								{/* @once */ render(1, RenderMode.MULTIPLE_SQUARE)}
+								{/* @once */ render(3, RenderMode.MULTIPLE_SQUARE)}
 							</div>
 						</div>
 					);
@@ -129,14 +132,14 @@ const EmbedImage = (props: EmbedImageProps) => {
 
 				if (images.length >= 3) {
 					return (
-						<div class="flex aspect-video gap-0.5">
-							<div class="flex grow basis-0 flex-col gap-0.5">
+						<div class="flex gap-0.5">
+							<div class="flex aspect-square grow-[2] basis-0 flex-col gap-0.5">
 								{/* @once */ render(0, RenderMode.MULTIPLE)}
-								{/* @once */ render(1, RenderMode.MULTIPLE)}
 							</div>
 
 							<div class="flex grow basis-0 flex-col gap-0.5">
-								{/* @once */ render(2, RenderMode.MULTIPLE)}
+								{/* @once */ render(1, RenderMode.MULTIPLE_SQUARE)}
+								{/* @once */ render(2, RenderMode.MULTIPLE_SQUARE)}
 							</div>
 						</div>
 					);
