@@ -1,4 +1,4 @@
-import type { BskyXRPC } from '@externdefs/bluesky-client';
+import type { BskyXRPC } from '@mary/bluesky-client';
 
 import type { At } from '../atp-schema';
 import { isDid } from '../utils/misc';

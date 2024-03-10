@@ -1,6 +1,6 @@
 import { For, Match, Show, Switch } from 'solid-js';
 
-import { XRPCError } from '@externdefs/bluesky-client/xrpc';
+import { XRPCError } from '@mary/bluesky-client/xrpc';
 import { useParams } from '@pkg/solid-navigation';
 import { createQuery } from '@pkg/solid-query';
 

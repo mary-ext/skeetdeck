@@ -1,1 +1,1 @@
-export type * from '@externdefs/bluesky-client/lexicons';
+export type * from '@mary/bluesky-client/lexicons';

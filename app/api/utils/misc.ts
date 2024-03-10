@@ -1,4 +1,4 @@
-import { XRPCError } from '@externdefs/bluesky-client/xrpc';
+import { XRPCError } from '@mary/bluesky-client/xrpc';
 
 import type { At } from '../atp-schema';
 import { MultiagentError } from '../classes/multiagent';

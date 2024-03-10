@@ -47,15 +47,15 @@ importers:
 
   app:
     dependencies:
-      '@externdefs/bluesky-client':
-        specifier: ~0.5.3
-        version: 0.5.3
       '@floating-ui/dom':
         specifier: ^1.6.3
         version: 1.6.3
       '@floating-ui/utils':
         specifier: ^0.2.1
         version: 0.2.1
+      '@mary/bluesky-client':
+        specifier: npm:@jsr/mary__bluesky-client@^0.5.2
+        version: /@jsr/mary__bluesky-client@0.5.2
       '@pkg/emoji-db':
         specifier: workspace:^
         version: link:../packages/emoji-db
@@ -1629,10 +1629,6 @@ packages:
     dev: true
     optional: true
 
-  /@externdefs/bluesky-client@0.5.3:
-    resolution: {integrity: sha512-dU0VjbrSfD+g7+ffg1/HKP7uT2y/PxFZsFixg/oAfKYcc0uphwQ6Ac+ICtL7l8CjGW0s3rt+Luw2ZlN4BRj5dg==}
-    dev: false
-
   /@floating-ui/core@1.6.0:
     resolution: {integrity: sha512-PcF++MykgmTj3CIyOQbKA/hDzOAiqI3mhuoN44WRCopIs1sgoDoU4oty4Jtqaj/y3oDU6fnVSm4QG0a3t5i0+g==}
     dependencies:
@@ -1698,6 +1694,10 @@ packages:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
+
+  /@jsr/mary__bluesky-client@0.5.2:
+    resolution: {integrity: sha512-3sEMJ+LEf4sguVQ/BOwXDzvOOKCyjRbgrAZNZEtD46sMrKXCPmOsj7CFT+5hr1JuvYjy9k1o6QCmU/NsSy3YtA==, tarball: https://npm.jsr.io/~/7/@jsr/mary__bluesky-client/0.5.2.tgz}
+    dev: false
 
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}

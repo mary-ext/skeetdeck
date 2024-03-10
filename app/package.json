@@ -10,9 +10,9 @@
 		"lint": "tsc"
 	},
 	"dependencies": {
-		"@externdefs/bluesky-client": "~0.5.3",
 		"@floating-ui/dom": "^1.6.3",
 		"@floating-ui/utils": "^0.2.1",
+		"@mary/bluesky-client": "npm:@jsr/mary__bluesky-client@^0.5.2",
 		"@pkg/emoji-db": "workspace:^",
 		"@pkg/solid-freeze": "workspace:^",
 		"@pkg/solid-navigation": "workspace:^",

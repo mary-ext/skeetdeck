@@ -1,6 +1,6 @@
 import { For, Match, Show, Suspense, Switch, lazy, onMount } from 'solid-js';
 
-import { XRPCError } from '@externdefs/bluesky-client/xrpc';
+import { XRPCError } from '@mary/bluesky-client/xrpc';
 import { type CreateQueryResult } from '@pkg/solid-query';
 
 import type { At } from '~/api/atp-schema';

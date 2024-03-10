@@ -1,4 +1,4 @@
-import { BskyXRPC } from '@externdefs/bluesky-client';
+import { BskyXRPC } from '@mary/bluesky-client';
 
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 

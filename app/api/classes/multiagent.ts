@@ -7,8 +7,8 @@ import {
 	type AuthLoginOptions,
 	BskyAuth,
 	BskyXRPC,
-} from '@externdefs/bluesky-client';
-import { decodeJwt } from '@externdefs/bluesky-client/utils/jwt';
+} from '@mary/bluesky-client';
+import { decodeJwt } from '@mary/bluesky-client/utils/jwt';
 
 import type { At } from '../atp-schema';
 

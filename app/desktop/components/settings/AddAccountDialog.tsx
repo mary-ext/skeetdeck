@@ -1,7 +1,7 @@
 import { createEffect, createSignal, lazy } from 'solid-js';
 
-import { getPdsEndpoint } from '@externdefs/bluesky-client';
-import { XRPCError } from '@externdefs/bluesky-client/xrpc';
+import { getPdsEndpoint } from '@mary/bluesky-client';
+import { XRPCError } from '@mary/bluesky-client/xrpc';
 
 import { createMutation } from '@pkg/solid-query';
 
