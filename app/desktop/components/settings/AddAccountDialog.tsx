@@ -1,7 +1,7 @@
 import { createEffect, createSignal, lazy } from 'solid-js';
 
-import { getPdsEndpoint } from '@externdefs/bluesky-client/agent';
-import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
+import { getPdsEndpoint } from '@externdefs/bluesky-client';
+import { XRPCError } from '@externdefs/bluesky-client/xrpc';
 
 import { createMutation } from '@pkg/solid-query';
 
@@ -195,7 +195,7 @@ const AddAccountDialog = () => {
 											}
 
 											if (error instanceof XRPCError) {
-												const err = error.error;
+												const err = error.kind;
 
 												if (error.message === 'Unable to resolve handle') {
 													return `We can't find your account`;
@@ -299,7 +299,7 @@ const AddAccountDialog = () => {
 											}
 
 											if (error instanceof XRPCError) {
-												const err = error.error;
+												const err = error.kind;
 
 												if (err === 'AccountTakedown') {
 													return `Account has been taken down`;

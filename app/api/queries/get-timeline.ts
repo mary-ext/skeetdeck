@@ -1,4 +1,5 @@
-import { Agent } from '@externdefs/bluesky-client/agent';
+import { BskyXRPC } from '@externdefs/bluesky-client';
+
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
 import { assert, mapDefined } from '~/utils/misc';
@@ -32,6 +33,7 @@ import type { FilterPreferences, LanguagePreferences } from '../types';
 
 import _getDid from './_did';
 import { fetchPost } from './get-post';
+import type { AgentInstance } from '../classes/multiagent';
 
 const PALOMAR_SERVICE = 'https://palomar.bsky.social';
 
@@ -186,7 +188,7 @@ export const getTimeline = wrapInfiniteQuery(
 			postFilter = createLabelPostFilter(timelineOpts?.moderation);
 
 			if (params.tab === 'posts') {
-				const did = await _getDid(agent, params.actor);
+				const did = await _getDid(agent.rpc, params.actor);
 				sliceFilter = createProfileSliceFilter(did);
 				postFilter = combine([createInvalidReplyFilter(), createLabelPostFilter(timelineOpts?.moderation)]);
 			} else if (params.tab === 'likes' || params.tab === 'media') {
@@ -243,9 +245,9 @@ export const getTimelineLatest = async (ctx: QC<ReturnType<typeof getTimelineLat
 
 	// Short-circuit search timeline so that we don't go through the hydration
 	if (params.type === 'search') {
-		const agent = new Agent({ serviceUri: PALOMAR_SERVICE });
+		const rpc = new BskyXRPC({ service: PALOMAR_SERVICE });
 
-		const response = await agent.rpc.get('app.bsky.unspecced.searchPostsSkeleton', {
+		const response = await rpc.get('app.bsky.unspecced.searchPostsSkeleton', {
 			signal: ctx.signal,
 			params: {
 				q: params.query,
@@ -268,7 +270,7 @@ export const getTimelineLatest = async (ctx: QC<ReturnType<typeof getTimelineLat
 
 //// Raw fetch
 const fetchPage = async (
-	agent: Agent,
+	{ auth, rpc }: AgentInstance,
 	params: TimelineParams,
 	limit: number,
 	cursor: string | undefined,
@@ -286,7 +288,7 @@ const fetchPage = async (
 	}
 
 	if (type === 'home') {
-		const response = await agent.rpc.get('app.bsky.feed.getTimeline', {
+		const response = await rpc.get('app.bsky.feed.getTimeline', {
 			signal: signal,
 			headers: headers,
 			params: {
@@ -298,7 +300,7 @@ const fetchPage = async (
 
 		return response.data;
 	} else if (type === 'feed') {
-		const response = await agent.rpc.get('app.bsky.feed.getFeed', {
+		const response = await rpc.get('app.bsky.feed.getFeed', {
 			signal: signal,
 			headers: headers,
 			params: {
@@ -310,7 +312,7 @@ const fetchPage = async (
 
 		return response.data;
 	} else if (type === 'list') {
-		const response = await agent.rpc.get('app.bsky.feed.getListFeed', {
+		const response = await rpc.get('app.bsky.feed.getListFeed', {
 			signal: signal,
 			headers: headers,
 			params: {
@@ -323,7 +325,7 @@ const fetchPage = async (
 		return response.data;
 	} else if (type === 'profile') {
 		if (params.tab === 'likes') {
-			const response = await agent.rpc.get('app.bsky.feed.getActorLikes', {
+			const response = await rpc.get('app.bsky.feed.getActorLikes', {
 				signal: signal,
 				headers: headers,
 				params: {
@@ -335,7 +337,7 @@ const fetchPage = async (
 
 			return response.data;
 		} else {
-			const response = await agent.rpc.get('app.bsky.feed.getAuthorFeed', {
+			const response = await rpc.get('app.bsky.feed.getAuthorFeed', {
 				signal: signal,
 				headers: headers,
 				params: {
@@ -354,9 +356,9 @@ const fetchPage = async (
 			return response.data;
 		}
 	} else if (type === 'search') {
-		const palomar = new Agent({ serviceUri: PALOMAR_SERVICE });
+		const palomar = new BskyXRPC({ service: PALOMAR_SERVICE });
 
-		const skeleton = await palomar.rpc.get('app.bsky.unspecced.searchPostsSkeleton', {
+		const skeleton = await palomar.get('app.bsky.unspecced.searchPostsSkeleton', {
 			signal: signal,
 			headers: headers,
 			params: {
@@ -369,7 +371,7 @@ const fetchPage = async (
 		const data = skeleton.data;
 		const skeletons = data.posts;
 
-		const uid = agent.session!.did;
+		const uid = auth.session!.did;
 		const results = await Promise.allSettled(skeletons.map((post) => fetchPost([uid, post.uri])));
 
 		signal?.throwIfAborted();

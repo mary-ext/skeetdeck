@@ -1,4 +1,4 @@
-import { type DidDocument, Agent } from '@externdefs/bluesky-client/agent';
+import { type DidDocument, BskyXRPC} from '@externdefs/bluesky-client'
 
 import type { At } from './atp-schema';
 import { APPVIEW_URL } from './globals/defaults';
@@ -16,8 +16,8 @@ export const getDidInfo = async (identifier: string): Promise<DidDocument> => {
 	if (isDid(identifier)) {
 		did = identifier;
 	} else {
-		const agent = new Agent({ serviceUri: APPVIEW_URL });
-		const response = await agent.rpc.get('com.atproto.identity.resolveHandle', {
+		const rpc = new BskyXRPC({ service: APPVIEW_URL });
+		const response = await rpc.get('com.atproto.identity.resolveHandle', {
 			params: {
 				handle: identifier,
 			},

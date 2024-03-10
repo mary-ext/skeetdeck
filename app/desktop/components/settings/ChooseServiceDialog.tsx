@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js';
 
-import { Agent } from '@externdefs/bluesky-client/agent';
+import { BskyXRPC } from '@externdefs/bluesky-client';
 import { createMutation } from '@pkg/solid-query';
 
 import { type DataServer, DEFAULT_DATA_SERVERS } from '~/api/globals/defaults';
@@ -45,8 +45,8 @@ const ChooseServiceDialog = (props: ChooseServiceDialogProps) => {
 	const pdsMutation = createMutation(() => {
 		return {
 			mutationFn: async ({ uri }: { uri: string }) => {
-				const agent = new Agent({ serviceUri: uri });
-				await agent.rpc.get('com.atproto.server.describeServer', {});
+				const rpc = new BskyXRPC({ service: uri });
+				await rpc.get('com.atproto.server.describeServer', {});
 			},
 			onSuccess(_data: void, { uri }) {
 				const url = new URL(uri);

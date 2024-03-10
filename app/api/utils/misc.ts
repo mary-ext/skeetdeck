@@ -1,4 +1,4 @@
-import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
+import { XRPCError } from '@externdefs/bluesky-client/xrpc';
 
 import type { At } from '../atp-schema';
 import { MultiagentError } from '../classes/multiagent';
@@ -53,7 +53,7 @@ export const followAbortSignal = (signals: (AbortSignal | undefined)[]) => {
 };
 
 export const formatXRPCError = (err: XRPCError): string => {
-	const name = err.error;
+	const name = err.kind;
 	return (name ? name + ': ' : '') + err.message;
 };
 
@@ -72,7 +72,7 @@ export const formatQueryError = (err: unknown): string => {
 	}
 
 	if (err instanceof XRPCError) {
-		const error = err.error;
+		const error = err.kind;
 
 		if (error === 'InvalidToken' || error === 'ExpiredToken') {
 			return `Account session is no longer valid, please sign in again`;

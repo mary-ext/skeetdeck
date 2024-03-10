@@ -1,1 +1,1 @@
-export type * from '@externdefs/bluesky-client/atp-schema';
+export type * from '@externdefs/bluesky-client/lexicons';

@@ -1,6 +1,6 @@
 import { For, Match, Show, Switch } from 'solid-js';
 
-import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
+import { XRPCError } from '@externdefs/bluesky-client/xrpc';
 import { useParams } from '@pkg/solid-navigation';
 import { createQuery } from '@pkg/solid-query';
 
@@ -52,7 +52,7 @@ const ThreadView = () => {
 			<Switch>
 				<Match when={query.error} keyed>
 					{(err) => {
-						if (err instanceof XRPCError && err.error === 'NotFound') {
+						if (err instanceof XRPCError && err.kind === 'NotFound') {
 							return (
 								<div class="p-3">
 									<EmbedRecordNotFound />

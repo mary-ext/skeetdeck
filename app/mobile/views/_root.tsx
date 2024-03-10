@@ -1,6 +1,6 @@
 import { type JSX, createMemo, createEffect } from 'solid-js';
 
-import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
+import { XRPCError } from '@externdefs/bluesky-client/xrpc';
 
 import { type MatchedRouteState, getMatchedRoute } from '@pkg/solid-navigation';
 import { createQuery } from '@pkg/solid-query';
@@ -79,7 +79,7 @@ const Root = (props: RootProps) => {
 			}
 
 			if (err instanceof XRPCError) {
-				invalid = err.error === 'InvalidToken' || err.error === 'ExpiredToken';
+				invalid = err.kind === 'InvalidToken' || err.kind === 'ExpiredToken';
 			}
 		}
 	});

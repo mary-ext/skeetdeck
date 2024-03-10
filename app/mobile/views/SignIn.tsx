@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js';
 
-import { Agent } from '@externdefs/bluesky-client/agent';
+import { BskyXRPC } from '@externdefs/bluesky-client';
 import { createQuery } from '@pkg/solid-query';
 
 import { DEFAULT_DATA_SERVERS } from '~/api/globals/defaults';

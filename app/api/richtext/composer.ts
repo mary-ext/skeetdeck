@@ -1,4 +1,4 @@
-import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
+import { XRPCError } from '@externdefs/bluesky-client/xrpc';
 
 import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
@@ -459,7 +459,7 @@ export const finalizeRt = async (uid: At.DID, rt: PreliminaryRichText) => {
 					features: [{ $type: 'app.bsky.richtext.facet#mention', did: did }],
 				});
 			} catch (err) {
-				if (err instanceof XRPCError && err.error === 'InvalidRequest') {
+				if (err instanceof XRPCError && err.kind === 'InvalidRequest') {
 					throw new InvalidHandleError(handle);
 				}
 

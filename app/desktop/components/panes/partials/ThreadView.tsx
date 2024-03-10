@@ -1,6 +1,6 @@
 import { For, Match, Show, Suspense, Switch, lazy, onMount } from 'solid-js';
 
-import { XRPCError } from '@externdefs/bluesky-client/xrpc-utils';
+import { XRPCError } from '@externdefs/bluesky-client/xrpc';
 import { type CreateQueryResult } from '@pkg/solid-query';
 
 import type { At } from '~/api/atp-schema';
@@ -50,7 +50,7 @@ const ThreadView = (props: ThreadViewProps) => {
 
 			<Match when={thread.error} keyed>
 				{(err) => {
-					if (err instanceof XRPCError && err.error === 'NotFound') {
+					if (err instanceof XRPCError && err.kind === 'NotFound') {
 						return (
 							<div class="p-3">
 								<EmbedRecordNotFound />

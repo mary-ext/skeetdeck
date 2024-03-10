@@ -1,18 +1,19 @@
-import { batch, createEffect, createRoot, onCleanup } from 'solid-js';
+import { batch, createEffect, createRoot } from 'solid-js';
 
 import {
 	type AtpAccessJwt,
-	type AtpLoginOptions,
 	type AtpSessionData,
-	Agent,
-} from '@externdefs/bluesky-client/agent';
-import { decodeJwt } from '@externdefs/bluesky-client/jwt';
+	type AuthLoginOptions,
+	BskyAuth,
+	BskyXRPC,
+} from '@externdefs/bluesky-client';
+import { decodeJwt } from '@externdefs/bluesky-client/utils/jwt';
 
 import type { At } from '../atp-schema';
 
 import { createReactiveLocalStorage } from '~/utils/storage';
 
-export interface MultiagentLoginOptions extends AtpLoginOptions {
+export interface MultiagentLoginOptions extends AuthLoginOptions {
 	service: string;
 }
 
@@ -37,8 +38,13 @@ interface MultiagentStorage {
 	accounts: MultiagentAccountData[];
 }
 
-interface AgentInstance {
-	agent: Promise<Agent>;
+export interface AgentInstance {
+	rpc: BskyXRPC;
+	auth: BskyAuth;
+}
+
+interface StoredAgent {
+	instance: Promise<AgentInstance>;
 	cleanup: () => void;
 }
 
@@ -52,7 +58,7 @@ export class MultiagentError extends Error {
 export class Multiagent {
 	store: MultiagentStorage;
 
-	#agents: Record<At.DID, AgentInstance> = {};
+	#agents: Record<At.DID, StoredAgent> = {};
 
 	constructor(name: string) {
 		const store = createReactiveLocalStorage<MultiagentStorage>(name, (version, prev) => {
@@ -110,12 +116,12 @@ export class Multiagent {
 	 * Login with a new account
 	 */
 	async login({ service, identifier, password }: MultiagentLoginOptions): Promise<At.DID> {
-		const { agent, cleanup } = this.#createAgent(service);
+		const { auth, rpc, cleanup } = this.#createAgent(service);
 
 		try {
-			await agent.login({ identifier, password });
+			await auth.login({ identifier, password });
 
-			const session = agent.session!;
+			const session = auth.session!;
 			const did = session.did;
 
 			const sessionJwt = decodeJwt(session.accessJwt) as AtpAccessJwt;
@@ -140,7 +146,7 @@ export class Multiagent {
 			});
 
 			this.#agents[did]?.cleanup();
-			this.#agents[did] = { agent: Promise.resolve(agent), cleanup: cleanup };
+			this.#agents[did] = { instance: Promise.resolve({ auth, rpc }), cleanup: cleanup };
 			return did;
 		} catch (err) {
 			throw new MultiagentError(`LOGIN_FAILURE`, { cause: err });
@@ -168,9 +174,9 @@ export class Multiagent {
 	/**
 	 * Retrieve an agent associated with an account
 	 */
-	connect(did: At.DID): Promise<Agent> {
+	connect(did: At.DID): Promise<AgentInstance> {
 		if (did in this.#agents) {
-			return this.#agents[did].agent;
+			return this.#agents[did].instance;
 		}
 
 		const $accounts = this.store.accounts;
@@ -180,12 +186,12 @@ export class Multiagent {
 			return Promise.reject(new MultiagentError(`INVALID_ACCOUNT`));
 		}
 
-		const { agent, cleanup } = this.#createAgent(data.service);
+		const { rpc, auth, cleanup } = this.#createAgent(data.service);
 
-		const promise = new Promise<Agent>((resolve, reject) => {
-			agent.resumeSession(data.session).then(
+		const promise = new Promise<AgentInstance>((resolve, reject) => {
+			auth.resume(data.session).then(
 				() => {
-					resolve(agent);
+					resolve({ auth, rpc });
 				},
 				(err) => {
 					cleanup();
@@ -196,34 +202,35 @@ export class Multiagent {
 			);
 		});
 
-		this.#agents[did] = { agent: promise, cleanup: cleanup };
+		this.#agents[did] = { instance: promise, cleanup: cleanup };
 		return promise;
 	}
 
 	#createAgent(serviceUri: string) {
+		let ignore = false;
+
 		const $accounts = this.store.accounts!;
-		const agent = new Agent({ serviceUri: serviceUri });
+
+		const rpc = new BskyXRPC({ service: serviceUri });
+		const auth = new BskyAuth(rpc, {
+			onRefresh(session) {
+				const did = session!.did;
+				const existing = $accounts.find((acc) => acc.did === did);
+
+				if (existing) {
+					ignore = true;
+					batch(() => Object.assign(existing.session, session));
+					ignore = false;
+				}
+			},
+		});
 
 		return {
-			agent: agent,
+			rpc: rpc,
+			auth: auth,
 			cleanup: createRoot((dispose) => {
-				let ignore = false;
-
-				onCleanup(
-					agent.on('sessionUpdate', (session) => {
-						const did = session!.did;
-						const existing = $accounts.find((acc) => acc.did === did);
-
-						if (existing) {
-							ignore = true;
-							batch(() => Object.assign(existing.session, session));
-							ignore = false;
-						}
-					}),
-				);
-
 				createEffect(() => {
-					const actual = agent.session;
+					const actual = auth.session;
 
 					const did = actual?.did;
 					const existing = $accounts.find((acc) => did && acc.did === did);

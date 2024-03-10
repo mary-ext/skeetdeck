@@ -21,7 +21,7 @@ export const getPostThread = async (ctx: QC<ReturnType<typeof getPostThreadKey>>
 	const [, uid, actor, rkey, depth, height] = ctx.queryKey;
 
 	const agent = await multiagent.connect(uid);
-	const did = await _getDid(agent, actor);
+	const did = await _getDid(agent.rpc, actor);
 
 	const uri = `at://${did}/app.bsky.feed.post/${rkey}`;
 	const response = await agent.rpc.get('app.bsky.feed.getPostThread', {
