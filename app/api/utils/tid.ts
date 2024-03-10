@@ -16,7 +16,7 @@ export const getCurrentTid = () => {
 
 	lastTimestamp = now;
 
-	const id = Math.floor(Math.random() * 32);
+	const id = Math.floor(Math.random() * 1023);
 
 	return s32encode(now) + s32encode(id).padStart(2, '2');
 };
