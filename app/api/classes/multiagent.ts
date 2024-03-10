@@ -1,4 +1,5 @@
 import { batch, createEffect, createRoot } from 'solid-js';
+import { unwrap } from 'solid-js/store';
 
 import {
 	type AtpAccessJwt,
@@ -189,7 +190,7 @@ export class Multiagent {
 		const { rpc, auth, cleanup } = this.#createAgent(data.service);
 
 		const promise = new Promise<AgentInstance>((resolve, reject) => {
-			auth.resume(data.session).then(
+			auth.resume(unwrap(data.session)).then(
 				() => {
 					resolve({ auth, rpc });
 				},
