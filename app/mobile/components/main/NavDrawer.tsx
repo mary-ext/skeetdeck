@@ -1,9 +1,5 @@
-import { createQuery } from '@pkg/solid-query';
-
-import { multiagent } from '~/api/globals/agent';
 import type { MultiagentAccountData } from '~/api/classes/multiagent';
 
-import { getProfile, getProfileKey } from '~/api/queries/get-profile';
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
 import { formatCompact } from '~/utils/intl/number';

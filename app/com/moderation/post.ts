@@ -1,6 +1,5 @@
 import { sequal } from '~/utils/dequal';
 
-import type { AppBskyEmbedImages, AppBskyFeedDefs } from '~/api/atp-schema';
 import { unwrapPostEmbedText } from '~/api/utils/post';
 
 import type { SignalizedPost } from '~/api/stores/posts';
@@ -17,8 +16,6 @@ import {
 import { PreferenceWarn } from '~/api/moderation/enums';
 
 import { type SharedPreferencesObject, isProfileTempMuted } from '../components/SharedPreferences';
-
-type Post = AppBskyFeedDefs.PostView;
 
 type ModerationResult = { d: ModerationDecision | null; c: unknown[] };
 const cached = new WeakMap<SignalizedPost, ModerationResult>();
