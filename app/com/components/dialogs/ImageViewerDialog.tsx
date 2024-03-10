@@ -125,7 +125,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 
 			<div
 				ref={scrollRef!}
-				class="flex h-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-contain"
+				class="flex h-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-contain scrollbar-hide"
 			>
 				{
 					/* @once */ images.map(({ fullsize, alt }, index) => {
