@@ -36,6 +36,8 @@ export interface ProfileOverflowActionProps {
 	children: JSX.Element;
 }
 
+const isDesktop = import.meta.env.VITE_MODE === 'desktop';
+
 const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 	const linking = useLinking();
 	const { filters } = useSharedPreferences();
@@ -59,56 +61,56 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 			}
 		});
 
-		if (import.meta.env.VITE_MODE === 'desktop') {
-			return (
-				<Flyout button={props.children} placement="bottom-end">
-					{({ close, menuProps }) => (
-						<div {...menuProps} class={/* @once */ MenuRoot()}>
-							<a
-								href={`https://bsky.app/profile/${did}`}
-								target="_blank"
-								onClick={close}
-								class={/* @once */ MenuItem()}
-							>
-								<LaunchIcon class={/* @once */ MenuItemIcon()} />
-								<span>Open in Bluesky app</span>
-							</a>
+		return (
+			<Flyout button={props.children} placement="bottom-end">
+				{({ close, menuProps }) => (
+					<div {...menuProps} class={/* @once */ MenuRoot()}>
+						<a
+							href={`https://bsky.app/profile/${did}`}
+							target="_blank"
+							onClick={close}
+							class={/* @once */ MenuItem()}
+						>
+							<LaunchIcon class={/* @once */ MenuItemIcon()} />
+							<span>Open in Bluesky app</span>
+						</a>
 
-							{!isSelf && (
-								<button
-									onClick={() => {
-										const array = filters.hideReposts;
-										const repostHidden = isRepostHidden();
-
-										close();
-
-										if (repostHidden) {
-											array.splice(repostHidden.index, 1);
-										} else {
-											array.push(did);
-										}
-									}}
-									class={/* @once */ MenuItem()}
-								>
-									{(() => {
-										const Icon = !isRepostHidden() ? RepeatOffIcon : RepeatIcon;
-										return <Icon class={/* @once */ MenuItemIcon()} />;
-									})()}
-									<span>{isRepostHidden() ? `Turn on reposts` : `Turn off reposts`}</span>
-								</button>
-							)}
-
+						{!isSelf && (
 							<button
 								onClick={() => {
+									const array = filters.hideReposts;
+									const repostHidden = isRepostHidden();
+
 									close();
-									openModal(() => <AddProfileInListDialog profile={profile} />);
+
+									if (repostHidden) {
+										array.splice(repostHidden.index, 1);
+									} else {
+										array.push(did);
+									}
 								}}
 								class={/* @once */ MenuItem()}
 							>
-								<PlaylistAddIcon class={/* @once */ MenuItemIcon()} />
-								<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Add/remove @${profile.handle.value} from lists`}</span>
+								{(() => {
+									const Icon = !isRepostHidden() ? RepeatOffIcon : RepeatIcon;
+									return <Icon class={/* @once */ MenuItemIcon()} />;
+								})()}
+								<span>{isRepostHidden() ? `Turn on reposts` : `Turn off reposts`}</span>
 							</button>
+						)}
 
+						<button
+							onClick={() => {
+								close();
+								openModal(() => <AddProfileInListDialog profile={profile} />);
+							}}
+							class={/* @once */ MenuItem()}
+						>
+							<PlaylistAddIcon class={/* @once */ MenuItemIcon()} />
+							<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Add/remove from lists`}</span>
+						</button>
+
+						{isDesktop && (
 							<button
 								onClick={() => {
 									close();
@@ -119,7 +121,9 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								<ListBoxOutlinedIcon class={/* @once */ MenuItemIcon()} />
 								<span>View lists</span>
 							</button>
+						)}
 
+						{isDesktop && (
 							<button
 								onClick={() => {
 									close();
@@ -130,91 +134,85 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								<PoundIcon class={/* @once */ MenuItemIcon()} />
 								<span>View feeds</span>
 							</button>
+						)}
 
-							{!isSelf && (
-								<button
-									onClick={() => {
-										close();
-										openModal(() => (
-											<MuteConfirmDialog uid={/* @once */ profile.uid} did={/* @once */ profile.did} />
-										));
-									}}
-									class={/* @once */ MenuItem()}
-								>
-									{(() => {
-										const Icon = !isMuted() ? VolumeOffIcon : VolumeUpIcon;
-										return <Icon class={/* @once */ MenuItemIcon()} />;
-									})()}
-									<span class="overflow-hidden text-ellipsis whitespace-nowrap">
-										{isMuted() ? `Unmute @${profile.handle.value}` : `Mute @${profile.handle.value}`}
-									</span>
-								</button>
-							)}
-
-							{(() => {
-								if (!isOwnAccount()) {
-									return (
-										<button
-											onClick={() => {
-												close();
-												openModal(() => <SilenceConfirmDialog profile={profile} />);
-											}}
-											class={/* @once */ MenuItem()}
-										>
-											{(() => {
-												const Icon = !isMuted() ? VisibilityOffIcon : VisibilityIcon;
-												return <Icon class={/* @once */ MenuItemIcon()} />;
-											})()}
-											<span>
-												{!isTempMuted()
-													? `Silence @${profile.handle.value}`
-													: `Unsilence @${profile.handle.value}`}
-											</span>
-										</button>
-									);
-								}
-							})()}
-
-							{!isSelf && (
-								<button
-									onClick={() => {
-										close();
-										openModal(() => (
-											<BlockConfirmDialog uid={/* @once */ profile.uid} did={/* @once */ profile.did} />
-										));
-									}}
-									class={/* @once */ MenuItem()}
-								>
-									<BlockIcon class={/* @once */ MenuItemIcon()} />
-									<span class="overflow-hidden text-ellipsis whitespace-nowrap">
-										{isBlocked() ? `Unblock @${profile.handle.value}` : `Block @${profile.handle.value}`}
-									</span>
-								</button>
-							)}
-
+						{!isSelf && (
 							<button
 								onClick={() => {
 									close();
-
 									openModal(() => (
-										<ReportDialog
-											uid={/* @once */ profile.uid}
-											report={/* @once */ { type: 'profile', did: did }}
-										/>
+										<MuteConfirmDialog uid={/* @once */ profile.uid} did={/* @once */ profile.did} />
 									));
 								}}
 								class={/* @once */ MenuItem()}
 							>
-								<ReportIcon class={/* @once */ MenuItemIcon()} />
-								<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Report @${profile.handle.value}`}</span>
+								{(() => {
+									const Icon = !isMuted() ? VolumeOffIcon : VolumeUpIcon;
+									return <Icon class={/* @once */ MenuItemIcon()} />;
+								})()}
+								<span class="overflow-hidden text-ellipsis whitespace-nowrap">
+									{isMuted() ? `Unmute user` : `Mute user`}
+								</span>
 							</button>
-						</div>
-					)}
-				</Flyout>
-			);
-		}
+						)}
 
-		return props.children;
+						{(() => {
+							if (!isOwnAccount()) {
+								return (
+									<button
+										onClick={() => {
+											close();
+											openModal(() => <SilenceConfirmDialog profile={profile} />);
+										}}
+										class={/* @once */ MenuItem()}
+									>
+										{(() => {
+											const Icon = !isMuted() ? VisibilityOffIcon : VisibilityIcon;
+											return <Icon class={/* @once */ MenuItemIcon()} />;
+										})()}
+										<span>{!isTempMuted() ? `Silence user` : `Unsilence user`}</span>
+									</button>
+								);
+							}
+						})()}
+
+						{!isSelf && (
+							<button
+								onClick={() => {
+									close();
+									openModal(() => (
+										<BlockConfirmDialog uid={/* @once */ profile.uid} did={/* @once */ profile.did} />
+									));
+								}}
+								class={/* @once */ MenuItem()}
+							>
+								<BlockIcon class={/* @once */ MenuItemIcon()} />
+								<span class="overflow-hidden text-ellipsis whitespace-nowrap">
+									{isBlocked() ? `Unblock user` : `Block user`}
+								</span>
+							</button>
+						)}
+
+						<button
+							onClick={() => {
+								close();
+
+								openModal(() => (
+									<ReportDialog
+										uid={/* @once */ profile.uid}
+										report={/* @once */ { type: 'profile', did: did }}
+									/>
+								));
+							}}
+							class={/* @once */ MenuItem()}
+						>
+							<ReportIcon class={/* @once */ MenuItemIcon()} />
+							<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Report user`}</span>
+						</button>
+					</div>
+				)}
+			</Flyout>
+		);
 	}) as unknown as JSX.Element;
 };
 

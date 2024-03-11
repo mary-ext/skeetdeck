@@ -104,9 +104,7 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 										const Icon = !isMuted() ? VolumeOffIcon : VolumeUpIcon;
 										return <Icon class={/* @once */ MenuItemIcon()} />;
 									})()}
-									<span>
-										{!isMuted() ? `Mute @${author.handle.value}` : `Unmute @${author.handle.value}`}
-									</span>
+									<span>{!isMuted() ? `Mute user` : `Unmute user`}</span>
 								</button>
 							)}
 
@@ -124,11 +122,7 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 												const Icon = !isMuted() ? VisibilityOffIcon : VisibilityIcon;
 												return <Icon class={/* @once */ MenuItemIcon()} />;
 											})()}
-											<span>
-												{!isTempMuted()
-													? `Silence @${author.handle.value}`
-													: `Unsilence @${author.handle.value}`}
-											</span>
+											<span>{!isTempMuted() ? `Silence user` : `Unsilence user`}</span>
 										</button>
 									);
 								}
