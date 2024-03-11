@@ -1,4 +1,4 @@
-import { type JSX, createSignal } from 'solid-js';
+import { type JSX, createSignal, createMemo, Suspense, lazy } from 'solid-js';
 
 import { useParams } from '@pkg/solid-navigation';
 import { createQuery } from '@pkg/solid-query';
@@ -7,9 +7,11 @@ import type { At } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 
 import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 
 import { formatCompact } from '~/utils/intl/number';
 
+import FilterBar from '~/com/components/inputs/FilterBar';
 import CircularProgress from '~/com/components/CircularProgress';
 import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel';
 import { VirtualContainer } from '~/com/components/VirtualContainer';
@@ -24,15 +26,10 @@ import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 import SearchIcon from '~/com/icons/baseline-search';
 
 import ViewHeader from '../components/ViewHeader';
-import FilterBar from '~/com/components/inputs/FilterBar';
-import type { SignalizedProfile } from '~/api/stores/profiles';
 
-const enum ProfileTab {
-	POSTS,
-	POSTS_WITH_REPLIES,
-	MEDIA,
-	LIKES,
-}
+import ProfileOverflowAction from '~/com/components/views/profiles/ProfileOverflowAction';
+
+const FeaturedTab = lazy(() => import('../components/profile/FeaturedTab'));
 
 const enum NewProfileTab {
 	FEATURED,
@@ -98,6 +95,7 @@ const ProfileView = () => {
 						back="/home"
 						title={profile.displayName.value || `@${profile.handle.value}`}
 						subtitle={`${formatCompact(profile.postsCount.value)} posts`}
+						borderless={!!profile.associated.value}
 					>
 						<a
 							title="Search this user's posts"
@@ -107,17 +105,29 @@ const ProfileView = () => {
 							<SearchIcon />
 						</a>
 
-						<button title="More actions" class={/* @once */ IconButton({ edge: 'right' })}>
-							<MoreHorizIcon />
-						</button>
+						<ProfileOverflowAction profile={profile}>
+							<button title="More actions" class={/* @once */ IconButton({ edge: 'right' })}>
+								<MoreHorizIcon />
+							</button>
+						</ProfileOverflowAction>
 					</ViewHeader>
 
 					<VirtualContainer class="shrink-0">
 						<ProfileHeader profile={profile} />
 					</VirtualContainer>
 
-					<TabbedPanel selected={tab()} onChange={setTab} hideTabs>
-						<TabbedPanelView label="Featured" value={NewProfileTab.FEATURED}></TabbedPanelView>
+					<TabbedPanel selected={tab()} onChange={setTab} hideTabs={!profile.associated.value}>
+						<TabbedPanelView label="Featured" value={NewProfileTab.FEATURED}>
+							<Suspense
+								fallback={
+									<div class="grid h-13 place-items-center">
+										<CircularProgress />
+									</div>
+								}
+							>
+								<FeaturedTab profile={profile} />
+							</Suspense>
+						</TabbedPanelView>
 						<TabbedPanelView label="Timeline" value={NewProfileTab.TIMELINE}>
 							<TimelineView profile={profile} />
 						</TabbedPanelView>

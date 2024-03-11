@@ -1,11 +1,13 @@
 import { EQUALS_DEQUAL } from '~/utils/dequal';
 import { type Signal, signal } from '~/utils/signals';
 
-import type { AppBskyActorDefs, At } from '../atp-schema';
+import type { AppBskyActorDefs, At, Brand } from '../atp-schema';
 
 type Profile = AppBskyActorDefs.ProfileView;
 type ProfileBasic = AppBskyActorDefs.ProfileViewBasic;
 type ProfileDetailed = AppBskyActorDefs.ProfileViewDetailed;
+
+type ProfileAssociated = Required<Omit<AppBskyActorDefs.ProfileAssociated, typeof Brand.Type>>;
 
 export const profiles: Record<string, WeakRef<SignalizedProfile>> = {};
 
@@ -30,6 +32,7 @@ export class SignalizedProfile {
 	readonly followersCount: Signal<NonNullable<ProfileDetailed['followersCount']>>;
 	readonly followsCount: Signal<NonNullable<ProfileDetailed['followsCount']>>;
 	readonly postsCount: Signal<NonNullable<ProfileDetailed['postsCount']>>;
+	readonly associated: Signal<ProfileAssociated | undefined>;
 	readonly labels: Signal<NonNullable<ProfileDetailed['labels']>>;
 
 	readonly viewer: {
@@ -60,6 +63,7 @@ export class SignalizedProfile {
 		this.followersCount = signal((isDetailed && profile.followersCount) || 0);
 		this.followsCount = signal((isDetailed && profile.followsCount) || 0);
 		this.postsCount = signal((isDetailed && profile.postsCount) || 0);
+		this.associated = signal(isDetailed ? getAssociated(profile.associated) : undefined, EQUALS_DEQUAL);
 		this.labels = signal(profile.labels || [], EQUALS_DEQUAL);
 
 		this.viewer = {
@@ -125,8 +129,17 @@ export const mergeProfile = (
 			val.followersCount.value = profile.followersCount ?? 0;
 			val.followsCount.value = profile.followsCount ?? 0;
 			val.postsCount.value = profile.postsCount ?? 0;
+			val.associated.value = getAssociated(profile.associated);
 		}
 	}
 
 	return val;
+};
+
+const getAssociated = (o: AppBskyActorDefs.ProfileAssociated | undefined): ProfileAssociated | undefined => {
+	const { feedgens = 0, labeler = false, lists = 0 } = o || {};
+
+	if (feedgens > 0 || labeler || lists > 0) {
+		return { feedgens, labeler, lists };
+	}
 };

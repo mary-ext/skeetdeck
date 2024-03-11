@@ -47,7 +47,7 @@ export const TabbedPanel = <T extends string | number>(props: TabbedPanelProps<T
 	return (
 		<div ref={sentinel!} class="flex min-h-[calc(100vh-3.25rem)] scroll-m-13 flex-col">
 			{!props.hideTabs ? (
-				<div class="sticky top-13 z-30 flex h-12 shrink-0 overflow-x-auto border-b border-divider bg-background">
+				<div class="sticky top-13 z-30 flex h-13 shrink-0 overflow-x-auto border-b border-divider bg-background">
 					<For each={panels.toArray() as unknown as TabbedPanelViewProps[]}>
 						{(panel) => (
 							<>

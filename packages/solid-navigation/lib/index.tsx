@@ -1,6 +1,15 @@
 /* @refresh reload */
 
-import { type Component, For, batch, createContext, createSignal, onCleanup, useContext } from 'solid-js';
+import {
+	type Component,
+	type JSX,
+	For,
+	batch,
+	createContext,
+	createSignal,
+	onCleanup,
+	useContext,
+} from 'solid-js';
 
 import { Freeze } from '@pkg/solid-freeze';
 
@@ -139,7 +148,11 @@ const _matchRoute = (path: string): MatchedRoute | null => {
 
 const dispatcher = new EventTarget();
 
-export const RouterView = () => {
+export interface RouterViewProps {
+	fallback?: JSX.Element;
+}
+
+export const RouterView = (props: RouterViewProps) => {
 	if (!initialized) {
 		initialized = true;
 
@@ -337,7 +350,7 @@ export const RouterView = () => {
 		});
 
 		return (
-			<Freeze freeze={!active()}>
+			<Freeze freeze={!active()} fallback={active() && props.fallback}>
 				<ViewContext.Provider value={context}>
 					<def.component />
 				</ViewContext.Provider>

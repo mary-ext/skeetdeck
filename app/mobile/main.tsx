@@ -14,6 +14,7 @@ import { queryClient } from './globals/query';
 
 import './globals/router';
 
+import CircularProgress from '~/com/components/CircularProgress';
 import { SharedPreferences } from '~/com/components/SharedPreferences';
 
 import './styles/tailwind.css';
@@ -42,7 +43,13 @@ const App = () => {
 			<MetaProvider>
 				<SharedPreferences.Provider value={createSharedPreferencesObject()}>
 					<Root>
-						<RouterView />
+						<RouterView
+							fallback={
+								<div class="grid grow place-items-center">
+									<CircularProgress />
+								</div>
+							}
+						/>
 					</Root>
 
 					<ModalProvider />
