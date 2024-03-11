@@ -54,8 +54,8 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1
       '@mary/bluesky-client':
-        specifier: npm:@jsr/mary__bluesky-client@^0.5.2
-        version: /@jsr/mary__bluesky-client@0.5.2
+        specifier: npm:@jsr/mary__bluesky-client@^0.5.4
+        version: /@jsr/mary__bluesky-client@0.5.4
       '@pkg/emoji-db':
         specifier: workspace:^
         version: link:../packages/emoji-db
@@ -1695,8 +1695,8 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
 
-  /@jsr/mary__bluesky-client@0.5.2:
-    resolution: {integrity: sha512-3sEMJ+LEf4sguVQ/BOwXDzvOOKCyjRbgrAZNZEtD46sMrKXCPmOsj7CFT+5hr1JuvYjy9k1o6QCmU/NsSy3YtA==, tarball: https://npm.jsr.io/~/7/@jsr/mary__bluesky-client/0.5.2.tgz}
+  /@jsr/mary__bluesky-client@0.5.4:
+    resolution: {integrity: sha512-QcDAlqahSpi5W9hZkaTEKubmOfp8Ob93yUduj3P8UfIzEoo5pOOfrDFabLhpB2Abv9DFdTKTGzXNSjoco5TRPg==, tarball: https://npm.jsr.io/~/7/@jsr/mary__bluesky-client/0.5.4.tgz}
     dev: false
 
   /@nodelib/fs.scandir@2.1.5:
