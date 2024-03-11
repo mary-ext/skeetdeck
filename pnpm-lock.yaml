@@ -9,6 +9,9 @@ overrides:
   string.prototype.matchall: npm:@nolyfill/string.prototype.matchall@latest
 
 patchedDependencies:
+  '@tanstack/query-core@5.17.19':
+    hash: g2ughl2kfxjzh4u2yff3gobzsu
+    path: patches/@tanstack__query-core@5.17.19.patch
   cborg@4.0.7:
     hash: dz6b6r6dc4jadjfng7vtgi53hy
     path: patches/cborg@4.0.6.patch
@@ -183,7 +186,7 @@ importers:
     dependencies:
       '@tanstack/query-core':
         specifier: 5.17.19
-        version: 5.17.19
+        version: 5.17.19(patch_hash=g2ughl2kfxjzh4u2yff3gobzsu)
     devDependencies:
       solid-js:
         specifier: ^1.8.15
@@ -1927,9 +1930,10 @@ packages:
       string.prototype.matchall: /@nolyfill/string.prototype.matchall@1.0.28
     dev: true
 
-  /@tanstack/query-core@5.17.19:
+  /@tanstack/query-core@5.17.19(patch_hash=g2ughl2kfxjzh4u2yff3gobzsu):
     resolution: {integrity: sha512-Lzw8FUtnLCc9Jwz0sw9xOjZB+/mCCmJev38v2wHMUl/ioXNIhnNWeMxu0NKUjIhAd62IRB3eAtvxAGDJ55UkyA==}
     dev: false
+    patched: true
 
   /@thisbeyond/solid-dnd@0.7.5(solid-js@1.8.15):
     resolution: {integrity: sha512-DfI5ff+yYGpK9M21LhYwIPlbP2msKxN2ARwuu6GF8tT1GgNVDTI8VCQvH4TJFoVApP9d44izmAcTh/iTCH2UUw==}

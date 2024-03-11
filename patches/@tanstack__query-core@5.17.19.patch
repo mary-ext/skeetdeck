@@ -1,0 +1,60 @@
+diff --git a/build/modern/utils.cjs b/build/modern/utils.cjs
+index 6ef9599fd446b7fa98a292f85160b46be88c0295..c9e3957446a81f4fee1da9ac9da779d5f0e90a5d 100644
+--- a/build/modern/utils.cjs
++++ b/build/modern/utils.cjs
+@@ -182,21 +182,12 @@ function isPlainArray(value) {
+   return Array.isArray(value) && value.length === Object.keys(value).length;
+ }
+ function isPlainObject(o) {
+-  if (!hasObjectPrototype(o)) {
++  if (typeof o !== "object" || o === null) {
+     return false;
+   }
+-  const ctor = o.constructor;
+-  if (typeof ctor === "undefined") {
+-    return true;
+-  }
+-  const prot = ctor.prototype;
+-  if (!hasObjectPrototype(prot)) {
+-    return false;
+-  }
+-  if (!prot.hasOwnProperty("isPrototypeOf")) {
+-    return false;
+-  }
+-  return true;
++
++  const proto = Object.getPrototypeOf(o);
++  return (proto === null || proto === Object) && Object.isExtensible(o);
+ }
+ function hasObjectPrototype(o) {
+   return Object.prototype.toString.call(o) === "[object Object]";
+diff --git a/build/modern/utils.js b/build/modern/utils.js
+index 0e93a35b45cfc2d53fc17120c741a91ec8a8c533..82b51475e4e12860552f4a0f5f3af23f416740fa 100644
+--- a/build/modern/utils.js
++++ b/build/modern/utils.js
+@@ -140,21 +140,12 @@ function isPlainArray(value) {
+   return Array.isArray(value) && value.length === Object.keys(value).length;
+ }
+ function isPlainObject(o) {
+-  if (!hasObjectPrototype(o)) {
++  if (typeof o !== "object" || o === null) {
+     return false;
+   }
+-  const ctor = o.constructor;
+-  if (typeof ctor === "undefined") {
+-    return true;
+-  }
+-  const prot = ctor.prototype;
+-  if (!hasObjectPrototype(prot)) {
+-    return false;
+-  }
+-  if (!prot.hasOwnProperty("isPrototypeOf")) {
+-    return false;
+-  }
+-  return true;
++
++  const proto = Object.getPrototypeOf(o);
++  return (proto === null || proto === Object) && Object.isExtensible(o);
+ }
+ function hasObjectPrototype(o) {
+   return Object.prototype.toString.call(o) === "[object Object]";
