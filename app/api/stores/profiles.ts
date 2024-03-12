@@ -19,7 +19,7 @@ const gc = new FinalizationRegistry<string>((id) => {
 	}
 });
 
-export interface SignalizedProfile {
+export class SignalizedProfile {
 	readonly uid: At.DID;
 	_key?: number;
 
@@ -46,6 +46,36 @@ export interface SignalizedProfile {
 		readonly following: Signal<NonNullable<ProfileDetailed['viewer']>['following']>;
 		readonly followedBy: Signal<NonNullable<ProfileDetailed['viewer']>['followedBy']>;
 	};
+
+	constructor(uid: At.DID, profile: Profile | ProfileBasic | ProfileDetailed, key?: number) {
+		const isProfile = 'description' in profile;
+		const isDetailed = 'postsCount' in profile;
+
+		this.uid = uid;
+		this._key = key;
+
+		this.did = profile.did;
+		this.handle = signal(profile.handle);
+		this.displayName = signal(profile.displayName);
+		this.description = signal(isProfile ? profile.description : '');
+		this.avatar = signal(profile.avatar);
+		this.banner = signal(isDetailed ? profile.banner : '');
+		this.followersCount = signal((isDetailed && profile.followersCount) || 0);
+		this.followsCount = signal((isDetailed && profile.followsCount) || 0);
+		this.postsCount = signal((isDetailed && profile.postsCount) || 0);
+		this.associated = signal(isDetailed ? getAssociated(profile.associated) : undefined, EQUALS_DEQUAL);
+		this.labels = signal(profile.labels || [], EQUALS_DEQUAL);
+
+		this.viewer = {
+			muted: signal(profile.viewer?.muted),
+			mutedByList: signal(profile.viewer?.mutedByList),
+			blockedBy: signal(profile.viewer?.blockedBy),
+			blocking: signal(profile.viewer?.blocking),
+			blockingByList: signal(profile.viewer?.blockingByList),
+			following: signal(profile.viewer?.following),
+			followedBy: signal(profile.viewer?.followedBy),
+		};
+	}
 }
 
 export const createProfileId = (uid: At.DID, actor: At.DID) => {
@@ -64,43 +94,15 @@ export const mergeProfile = (
 	profile: Profile | ProfileBasic | ProfileDetailed,
 	key?: number,
 ) => {
-	const id = createProfileId(uid, profile.did);
-
-	const isProfile = 'description' in profile;
-	const isDetailed = 'postsCount' in profile;
+	let id = createProfileId(uid, profile.did);
 
 	let ref: WeakRef<SignalizedProfile> | undefined = profiles[id];
 	let val: SignalizedProfile;
 
 	if (!ref || !(val = ref.deref()!)) {
-		val = Object.preventExtensions({
-			uid: uid,
-			_key: key,
-
-			did: profile.did,
-			handle: signal(profile.handle),
-			displayName: signal(profile.displayName),
-			description: signal(isProfile ? profile.description : ''),
-			avatar: signal(profile.avatar),
-			banner: signal(isDetailed ? profile.banner : ''),
-			followersCount: signal((isDetailed && profile.followersCount) || 0),
-			followsCount: signal((isDetailed && profile.followsCount) || 0),
-			postsCount: signal((isDetailed && profile.postsCount) || 0),
-			associated: signal(isDetailed ? getAssociated(profile.associated) : undefined, EQUALS_DEQUAL),
-			labels: signal(profile.labels || [], EQUALS_DEQUAL),
-
-			viewer: {
-				muted: signal(profile.viewer?.muted),
-				mutedByList: signal(profile.viewer?.mutedByList),
-				blockedBy: signal(profile.viewer?.blockedBy),
-				blocking: signal(profile.viewer?.blocking),
-				blockingByList: signal(profile.viewer?.blockingByList),
-				following: signal(profile.viewer?.following),
-				followedBy: signal(profile.viewer?.followedBy),
-			},
-		});
-
+		val = new SignalizedProfile(uid, profile, key);
 		profiles[id] = new WeakRef(val);
+
 		gc.register(val, id);
 	} else if (!key || val._key !== key) {
 		val._key = key;
@@ -118,11 +120,11 @@ export const mergeProfile = (
 		val.viewer.following.value = profile.viewer?.following;
 		val.viewer.followedBy.value = profile.viewer?.followedBy;
 
-		if (isProfile) {
+		if ('description' in profile) {
 			val.description.value = profile.description;
 		}
 
-		if (isDetailed) {
+		if ('postsCount' in profile) {
 			val.banner.value = profile.banner;
 			val.followersCount.value = profile.followersCount ?? 0;
 			val.followsCount.value = profile.followsCount ?? 0;
