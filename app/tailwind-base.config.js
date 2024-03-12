@@ -93,7 +93,7 @@ export default {
 			transparent: 'transparent',
 			black: colors.black,
 			white: colors.white,
-			gray: colors.neutral,
+			gray: colors.zinc,
 			red: colors.red,
 			green: colors.green,
 		},
@@ -109,6 +109,7 @@ export default {
 	plugins: [
 		plugin(({ addVariant, addUtilities }) => {
 			addVariant('modal', '&:modal');
+			addVariant('focus-within', '&:has(:focus-visible)');
 
 			addUtilities({
 				'.scrollbar-hide': {

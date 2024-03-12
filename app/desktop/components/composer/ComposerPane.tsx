@@ -106,12 +106,12 @@ const removeEmbedBtn = Interactive({
 
 const removeImageBtn = Interactive({
 	variant: 'none',
-	class: `absolute right-1 top-1 z-20 grid h-7 w-7 place-items-center rounded-full bg-black/75 text-base text-white outline-primary hover:bg-secondary disabled:opacity-50`,
+	class: `absolute top-0 right-0 m-1 z-20 grid h-7 w-7 place-items-center rounded-full text-lg text-white outline-primary hover:bg-gray-400/30 disabled:opacity-50`,
 });
 
 const altBtn = Interactive({
 	variant: 'none',
-	class: `absolute bottom-0 left-0 m-1 flex h-5 items-center rounded bg-black/75 px-1 text-xs font-medium text-white hover:bg-secondary disabled:opacity-50`,
+	class: `absolute bottom-0 left-0 m-2 flex h-5 items-center rounded px-1 text-xs font-medium text-white hover:bg-gray-400/30 disabled:opacity-50`,
 });
 
 const linkEmbedBtn = Interactive({
@@ -1022,35 +1022,37 @@ const ComposerPane = () => {
 									<div class="mb-2 mr-4 flex flex-wrap gap-3 empty:hidden">
 										<For each={images}>
 											{(image, index) => (
-												<div class="relative">
-													<BlobImage src={image.blob} class="h-32 w-32 rounded-md object-cover" />
+												<div class="relative overflow-hidden rounded-md">
+													<BlobImage src={image.blob} class="h-32 w-32 object-cover" />
 
-													<button
-														title="Remove this image"
-														onClick={() => {
-															images.splice(index(), 1);
+													<fieldset class="absolute inset-0 grid place-items-center bg-black/70 text-white disabled:pointer-events-none">
+														<button
+															title="Remove this image"
+															onClick={() => {
+																images.splice(index(), 1);
 
-															if (images.length === 0) {
-																textareaRef!.focus();
-															}
-														}}
-														class={removeImageBtn}
-													>
-														<CloseIcon class="drop-shadow" />
-													</button>
+																if (images.length === 0) {
+																	textareaRef!.focus();
+																}
+															}}
+															class={removeImageBtn}
+														>
+															<CloseIcon class="drop-shadow" />
+														</button>
 
-													<button
-														title="Add image description"
-														onClick={() => {
-															openModal(() => <ImageAltDialog image={image} />, {
-																disableBackdropClose: true,
-															});
-														}}
-														class={altBtn}
-													>
-														<span class="drop-shadow">ALT</span>
-														{image.alt.value && <CheckIcon class="ml-1" />}
-													</button>
+														<button
+															title="Add image description"
+															onClick={() => {
+																openModal(() => <ImageAltDialog image={image} />, {
+																	disableBackdropClose: true,
+																});
+															}}
+															class={altBtn}
+														>
+															<span class="drop-shadow">ALT</span>
+															{image.alt.value && <CheckIcon class="ml-1 text-green-400" />}
+														</button>
+													</fieldset>
 												</div>
 											)}
 										</For>

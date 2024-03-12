@@ -5,7 +5,6 @@ import { getSide } from '@floating-ui/utils';
 
 import { compressProfileImage } from '~/utils/image';
 
-import { Interactive } from '../../primitives/interactive';
 import { MenuItem, MenuRoot } from '../../primitives/menu';
 
 import { Flyout, offsetlessMiddlewares } from '../Flyout';
@@ -88,27 +87,21 @@ const AddPhotoButton = (props: AddPhotoButtonProps) => {
 				);
 			}
 
-			const isDesktop = import.meta.env.VITE_MODE === 'desktop';
 			const exists = props.exists;
 
-			const shouldDisplayFlyout = isDesktop && exists;
-
-			const buttonClass = Interactive({
-				variant: 'white',
-				class: `grid h-10 w-10 place-items-center rounded-full bg-black/50 text-lg text-white backdrop-blur disabled:opacity-50`,
-			});
+			const shouldDisplayFlyout = exists;
 
 			const button = (
-				<label class="absolute inset-0 grid place-items-center">
+				<fieldset class="absolute inset-0 grid place-items-center bg-black/50 text-white opacity-0 transition-opacity focus-within:opacity-100 hover:opacity-100 disabled:pointer-events-none">
 					<button
 						type="button"
 						title={props.title}
 						onClick={!shouldDisplayFlyout ? handleButtonClick : undefined}
-						class={buttonClass}
+						class="grid h-9 w-9 place-items-center rounded-full text-lg hover:bg-gray-400/30"
 					>
 						<AddPhotoAlternateIcon class="drop-shadow" />
 					</button>
-				</label>
+				</fieldset>
 			);
 
 			if (shouldDisplayFlyout) {
