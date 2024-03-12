@@ -3,7 +3,7 @@ import { createEffect, createMemo, createSignal } from 'solid-js';
 import { createMutation } from '@pkg/solid-query';
 
 import type { AppBskyGraphDefs, AppBskyGraphList, At } from '~/api/atp-schema';
-import { multiagent } from '~/api/globals/agent';
+import { getAccountHandle, multiagent } from '~/api/globals/agent';
 import { getCurrentDate } from '~/api/utils/misc';
 import { ListPurposeLabels } from '~/api/display';
 
@@ -134,9 +134,14 @@ const AddListDialog = (props: AddListDialogProps) => {
 							<CloseIcon />
 						</button>
 
-						<h1 class={/* @once */ DialogTitle()}>
-							{/* @once */ (initialType !== undefined && DIALOG_TITLES[initialType]) || `New list`}
-						</h1>
+						<div class="flex min-w-0 grow flex-col gap-0.5">
+							<p class="overflow-hidden text-ellipsis whitespace-nowrap text-base font-bold leading-5">
+								{/* @once */ (initialType !== undefined && DIALOG_TITLES[initialType]) || `New list`}
+							</p>
+							<p class="overflow-hidden text-ellipsis whitespace-nowrap text-xs text-muted-fg">
+								{/* @once */ '@' + getAccountHandle(uid)}
+							</p>
+						</div>
 
 						<button
 							disabled={isDescriptionOver()}
