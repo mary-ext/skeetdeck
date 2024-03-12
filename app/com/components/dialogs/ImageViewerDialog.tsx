@@ -16,11 +16,11 @@ import VisibilityOffIcon from '../../icons/baseline-visibility-off';
 const isMobile = import.meta.env.VITE_MODE === 'mobile';
 
 const iconButton = Interactive({
-	class: `pointer-events-auto grid h-8 w-8 place-items-center rounded-full bg-black/75 text-base text-white`,
+	class: `pointer-events-auto grid h-8 w-8 place-items-center rounded-full bg-black/70 text-base text-white`,
 });
 
 const altButton = Interactive({
-	class: `group pointer-events-auto flex h-8 place-items-center rounded-full bg-black/75 px-2 text-base text-white`,
+	class: `group pointer-events-auto flex h-8 place-items-center rounded-full bg-black/70 px-2 text-base text-white`,
 });
 
 export interface EmbeddedImage {
@@ -186,7 +186,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 						>
 							<div
 								class={
-									`pointer-events-auto max-h-44 max-w-120 overflow-y-auto bg-black/90 text-sm text-white` +
+									`pointer-events-auto max-h-44 max-w-120 overflow-y-auto bg-black/70 text-sm text-white` +
 									(!isMobile ? ` m-4 rounded-md px-3 py-2` : ` w-full px-4 py-3`)
 								}
 							>
@@ -229,7 +229,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 
 				{
 					/* @once */ images.length > 1 && (
-						<div class="rounded-full bg-black/75 px-2 py-0.5 text-de font-medium text-white">
+						<div class="rounded-full bg-black/70 px-2 py-0.5 text-de font-medium text-white">
 							<span class="drop-shadow">{`${active() + 1} of ${images.length}`}</span>
 						</div>
 					)
