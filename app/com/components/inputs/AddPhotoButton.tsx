@@ -81,7 +81,7 @@ const AddPhotoButton = (props: AddPhotoButtonProps) => {
 		() => {
 			if (loading()) {
 				return (
-					<div class="absolute left-1/2 top-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-black/75">
+					<div class="absolute inset-0 grid place-items-center bg-black/50">
 						<CircularProgress />
 					</div>
 				);
@@ -92,7 +92,7 @@ const AddPhotoButton = (props: AddPhotoButtonProps) => {
 			const shouldDisplayFlyout = exists;
 
 			const button = (
-				<fieldset class="absolute inset-0 grid place-items-center bg-black/50 text-white opacity-0 transition-opacity focus-within:opacity-100 hover:opacity-100 disabled:pointer-events-none">
+				<fieldset class="absolute inset-0 grid place-items-center bg-black/50 text-white opacity-0 transition-opacity hover:opacity-100 disabled:pointer-events-none focus-within:opacity-100">
 					<button
 						type="button"
 						title={props.title}
