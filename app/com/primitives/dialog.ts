@@ -8,7 +8,7 @@ export interface DialogRootProps {
 export const DialogRoot = (props: DialogRootProps = {}) => {
 	const { class: className, size = 'md', maxHeight = 'md', fullHeight } = props;
 
-	let cn = `flex w-full flex-col overflow-hidden rounded-lg bg-background`;
+	let cn = `flex w-full flex-col overflow-hidden rounded-t-lg bg-background sm:rounded-lg`;
 
 	if (size === 'sm') {
 		cn += ` sm:max-w-md`;

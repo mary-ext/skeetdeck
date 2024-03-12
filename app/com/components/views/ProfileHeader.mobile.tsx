@@ -39,6 +39,8 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 	const { filters } = useSharedPreferences();
 
 	const profile = props.profile;
+
+	const did = profile.did;
 	const viewer = profile.viewer;
 
 	const verdict = createMemo(() => {
@@ -116,19 +118,19 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 				<div class="whitespace-pre-wrap break-words text-sm empty:hidden">{profile.description.value}</div>
 
 				<div class="flex flex-wrap gap-4 text-sm">
-					<Link to={{ type: LINK_PROFILE_FOLLOWS, actor: profile.did }} class="hover:underline">
+					<Link to={{ type: LINK_PROFILE_FOLLOWS, actor: did }} class="hover:underline">
 						<span class="font-bold">{formatCompact(profile.followsCount.value)}</span>{' '}
 						<span class="text-muted-fg">Follows</span>
 					</Link>
 
-					<Link to={{ type: LINK_PROFILE_FOLLOWERS, actor: profile.did }} class="hover:underline">
+					<Link to={{ type: LINK_PROFILE_FOLLOWERS, actor: did }} class="hover:underline">
 						<span class="font-bold">{formatCompact(profile.followersCount.value)}</span>{' '}
 						<span class="text-muted-fg">Followers</span>
 					</Link>
 				</div>
 
 				{(() => {
-					const isTemporarilyMuted = isProfileTempMuted(filters, profile.did);
+					const isTemporarilyMuted = isProfileTempMuted(filters, did);
 					if (isTemporarilyMuted !== null) {
 						return (
 							<div class="text-sm text-muted-fg">
@@ -203,7 +205,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 									<button
 										onClick={() => {
 											openModal(() => (
-												<MuteConfirmDialog uid={/* @once */ profile.uid} did={/* @once */ profile.did} />
+												<MuteConfirmDialog uid={/* @once */ profile.uid} did={/* @once */ did} />
 											));
 										}}
 										class="text-accent hover:underline"
@@ -245,9 +247,9 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 				<div class="flex gap-3">
 					<ProfileFollowButton profile={profile} grow />
 
-					<button title={`Suggest users to follow`} class={/* @once */ BoxedIconButton()}>
+					<a href={`/${did}/connect`} title={`Suggest users to follow`} class={/* @once */ BoxedIconButton()}>
 						<PersonAddIcon />
-					</button>
+					</a>
 
 					<button title={`Share profile`} class={/* @once */ BoxedIconButton()}>
 						<ShareIcon />

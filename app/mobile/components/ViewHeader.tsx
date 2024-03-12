@@ -60,7 +60,7 @@ const ViewHeader = (props: ViewHeaderProps) => {
 				)}
 			</div>
 
-			<fieldset class="flex min-w-0 gap-2 empty:hidden">{props.children}</fieldset>
+			<fieldset class="flex min-w-0 shrink-0 gap-2 empty:hidden">{props.children}</fieldset>
 		</div>
 	);
 };

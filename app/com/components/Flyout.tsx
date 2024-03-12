@@ -29,6 +29,8 @@ export interface FlyoutProps {
 	children: (context: MenuContext) => JSX.Element;
 }
 
+const isDesktop = import.meta.env.VITE_MODE === 'desktop';
+
 export const offset: Middleware = {
 	name: 'offset',
 	fn(state) {
@@ -45,16 +47,18 @@ export const offset: Middleware = {
 	},
 };
 
+const PADDING = isDesktop ? 16 : 8;
+
 export const offsetlessMiddlewares = [
 	flip({
-		padding: 16,
+		padding: PADDING,
 		crossAxis: false,
 	}),
 	shift({
-		padding: 16,
+		padding: PADDING,
 	}),
 	size({
-		padding: 16,
+		padding: PADDING,
 		apply({ availableWidth, availableHeight, elements }) {
 			Object.assign(elements.floating.style, {
 				maxWidth: `${availableWidth}px`,
@@ -64,7 +68,9 @@ export const offsetlessMiddlewares = [
 	}),
 ];
 
-const defaultMiddlewares: Middleware[] = [offset, ...offsetlessMiddlewares];
+const defaultMiddlewares: Middleware[] = isDesktop
+	? [offset, ...offsetlessMiddlewares]
+	: offsetlessMiddlewares;
 
 export const Flyout = (props: FlyoutProps) => {
 	const [isOpen, setIsOpen] = createSignal(false);
