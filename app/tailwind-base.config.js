@@ -93,6 +93,7 @@ export default {
 			transparent: 'transparent',
 			black: colors.black,
 			white: colors.white,
+			gray: colors.neutral,
 			red: colors.red,
 			green: colors.green,
 		},
