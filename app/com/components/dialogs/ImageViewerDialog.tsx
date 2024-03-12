@@ -1,4 +1,4 @@
-import { createMemo, createSignal, onMount } from 'solid-js';
+import { type JSX, createMemo, createSignal, onMount } from 'solid-js';
 
 import { makeEventListener } from '@solid-primitives/event-listener';
 
@@ -13,12 +13,14 @@ import CloseIcon from '../../icons/baseline-close';
 import VisibilityIcon from '../../icons/baseline-visibility';
 import VisibilityOffIcon from '../../icons/baseline-visibility-off';
 
+const isMobile = import.meta.env.VITE_MODE === 'mobile';
+
 const iconButton = Interactive({
-	class: `pointer-events-auto grid h-8 w-8 place-items-center rounded-full bg-black/50 text-base text-white backdrop-blur`,
+	class: `pointer-events-auto grid h-8 w-8 place-items-center rounded-full bg-black/75 text-base text-white`,
 });
 
 const altButton = Interactive({
-	class: `group pointer-events-auto flex h-8 place-items-center rounded-full bg-black/50 px-2 text-base text-white backdrop-blur`,
+	class: `group pointer-events-auto flex h-8 place-items-center rounded-full bg-black/75 px-2 text-base text-white`,
 });
 
 export interface EmbeddedImage {
@@ -42,8 +44,10 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 	const images = props.images;
 	const initialActive = props.active ?? 0;
 
-	const [active, setActive] = createSignal(initialActive);
+	const [hidden, setHidden] = createSignal(false);
 	const [displayAlt, setDisplayAlt] = createSignal(true);
+
+	const [active, setActive] = createSignal(initialActive);
 
 	const [loading, setLoading] = createSignal(images.length);
 
@@ -72,7 +76,9 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 	};
 
 	const handleImageWrapperClick = (ev: MouseEvent) => {
-		if (ev.currentTarget === ev.target) {
+		if (isMobile) {
+			setHidden(!hidden());
+		} else if (ev.currentTarget === ev.target) {
 			closeModal();
 		}
 	};
@@ -116,7 +122,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 	});
 
 	return (
-		<div class="h-full w-full overflow-hidden bg-black/90">
+		<div class={`h-full w-full overflow-hidden` + (!isMobile ? ` bg-black/90` : ` bg-black`)}>
 			{loading() > 0 && (
 				<div class="pointer-events-none absolute top-0 h-1 w-full">
 					<div class="h-full w-1/4 animate-indeterminate bg-accent" />
@@ -144,7 +150,10 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 							<div
 								ref={bindImageWrapperRef(index)}
 								onClick={handleImageWrapperClick}
-								class="flex h-full w-full shrink-0 snap-center snap-always items-center justify-center p-6"
+								class={
+									`flex h-full w-full shrink-0 snap-center snap-always items-center justify-center py-6` +
+									(!isMobile ? ` px-6` : ``)
+								}
 							>
 								<img
 									src={fullsize}
@@ -171,8 +180,16 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 
 				if (alt) {
 					return (
-						<div class="pointer-events-none absolute bottom-0 left-0 right-0 grid place-items-center">
-							<div class="pointer-events-auto m-4 max-h-44 max-w-120 overflow-y-auto rounded-md bg-black/50 px-3 py-2 text-sm text-white backdrop-blur">
+						<div
+							class="pointer-events-none absolute bottom-0 left-0 right-0 grid place-items-center transition-opacity"
+							classList={{ [`opacity-0`]: isMobile && hidden() }}
+						>
+							<div
+								class={
+									`pointer-events-auto max-h-44 max-w-120 overflow-y-auto bg-black/90 text-sm text-white` +
+									(!isMobile ? ` m-4 rounded-md px-3 py-2` : ` w-full px-4 py-3`)
+								}
+							>
 								<p class="whitespace-pre-wrap break-words drop-shadow">{alt}</p>
 							</div>
 						</div>
@@ -180,7 +197,10 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 				}
 			})()}
 
-			<div class="pointer-events-none fixed inset-x-0 top-0 z-20 flex h-13 items-center gap-2 px-2">
+			<div
+				class="pointer-events-none fixed inset-x-0 top-0 z-20 flex h-13 items-center gap-2 px-2 transition-opacity"
+				classList={{ [`opacity-0`]: isMobile && hidden() }}
+			>
 				<button
 					title="Close viewer"
 					onClick={() => {
@@ -209,36 +229,37 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 
 				{
 					/* @once */ images.length > 1 && (
-						<div class="rounded-full bg-black/50 px-2 py-0.5 text-de font-medium text-white backdrop-blur">
+						<div class="rounded-full bg-black/75 px-2 py-0.5 text-de font-medium text-white">
 							<span class="drop-shadow">{`${active() + 1} of ${images.length}`}</span>
 						</div>
 					)
 				}
 			</div>
 
-			{(() => {
-				if (hasPrev()) {
-					return (
-						<div class="fixed left-2.5 top-1/2 z-20 -translate-y-1/2">
-							<button title="Previous image" onClick={bindNavClick(GalleryNav.PREV)} class={iconButton}>
-								<ArrowLeftIcon />
-							</button>
-						</div>
-					);
-				}
-			})()}
-
-			{(() => {
-				if (hasNext()) {
-					return (
-						<div class="fixed right-2.5 top-1/2 z-20 -translate-y-1/2">
-							<button title="Next image" onClick={bindNavClick(GalleryNav.NEXT)} class={iconButton}>
-								<ArrowLeftIcon class="rotate-180" />
-							</button>
-						</div>
-					);
-				}
-			})()}
+			{!isMobile && [
+				(() => {
+					if (hasPrev()) {
+						return (
+							<div class="fixed left-2.5 top-1/2 z-20 -translate-y-1/2">
+								<button title="Previous image" onClick={bindNavClick(GalleryNav.PREV)} class={iconButton}>
+									<ArrowLeftIcon />
+								</button>
+							</div>
+						);
+					}
+				}) as unknown as JSX.Element,
+				(() => {
+					if (hasNext()) {
+						return (
+							<div class="fixed right-2.5 top-1/2 z-20 -translate-y-1/2">
+								<button title="Next image" onClick={bindNavClick(GalleryNav.NEXT)} class={iconButton}>
+									<ArrowLeftIcon class="rotate-180" />
+								</button>
+							</div>
+						);
+					}
+				}) as unknown as JSX.Element,
+			]}
 		</div>
 	);
 };
