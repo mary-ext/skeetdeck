@@ -105,11 +105,13 @@ const removeEmbedBtn = Interactive({
 });
 
 const removeImageBtn = Interactive({
-	class: `absolute right-1 top-1 z-20 grid h-7 w-7 place-items-center rounded-full bg-black/50 text-base text-white backdrop-blur disabled:opacity-50`,
+	variant: 'none',
+	class: `absolute right-1 top-1 z-20 grid h-7 w-7 place-items-center rounded-full bg-black/75 text-base text-white outline-primary hover:bg-secondary disabled:opacity-50`,
 });
 
 const altBtn = Interactive({
-	class: `absolute bottom-0 left-0 m-1 flex h-5 items-center rounded bg-black/50 px-1 text-xs font-medium text-white backdrop-blur disabled:opacity-50`,
+	variant: 'none',
+	class: `absolute bottom-0 left-0 m-1 flex h-5 items-center rounded bg-black/75 px-1 text-xs font-medium text-white hover:bg-secondary disabled:opacity-50`,
 });
 
 const linkEmbedBtn = Interactive({
