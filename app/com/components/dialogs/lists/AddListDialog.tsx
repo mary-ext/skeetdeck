@@ -39,15 +39,22 @@ export interface AddListDialogProps {
 
 const MAX_DESC_LENGTH = 300;
 
+const DIALOG_TITLES: Record<ListPurpose, string> = {
+	'app.bsky.graph.defs#curatelist': 'New user list',
+	'app.bsky.graph.defs#modlist': 'New moderation list',
+};
+
 const AddListDialog = (props: AddListDialogProps) => {
 	const uid = props.uid;
 	const onSubmit = props.onSubmit;
+
+	const initialType = props.type;
 
 	const { close, disableBackdropClose } = useModalState();
 
 	const [avatar, setAvatar] = createSignal<Blob>();
 	const [name, setName] = createSignal<string>('');
-	const [purpose, setPurpose] = createSignal<ListPurpose>(props.type ?? 'app.bsky.graph.defs#curatelist');
+	const [purpose, setPurpose] = createSignal<ListPurpose>(initialType ?? 'app.bsky.graph.defs#curatelist');
 
 	const [description, setDescription] = createSignal('');
 
@@ -127,7 +134,9 @@ const AddListDialog = (props: AddListDialogProps) => {
 							<CloseIcon />
 						</button>
 
-						<h1 class={/* @once */ DialogTitle()}>New list</h1>
+						<h1 class={/* @once */ DialogTitle()}>
+							{/* @once */ (initialType !== undefined && DIALOG_TITLES[initialType]) || `New list`}
+						</h1>
 
 						<button
 							disabled={isDescriptionOver()}
