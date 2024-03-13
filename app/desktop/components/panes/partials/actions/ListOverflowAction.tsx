@@ -10,10 +10,10 @@ import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 
 import { Flyout } from '~/com/components/Flyout';
 
+import CleaningServicesOutlinedIcon from '~/com/icons/outline-cleaning-services';
 import CopyAllIcon from '~/com/icons/baseline-copy-all';
 import LaunchIcon from '~/com/icons/baseline-launch';
-import OutlinedCleaningServicesIcon from '~/com/icons/outline-cleaning-services';
-import OutlinedReportProblemIcon from '~/com/icons/outline-report-problem';
+import ReportProblemOutlinedIcon from '~/com/icons/outline-report-problem';
 
 const CloneListMembersDialog = lazy(() => import('~/com/components/dialogs/lists/CloneListMembersDialog'));
 const PruneListOrphanDialog = lazy(() => import('~/com/components/dialogs/lists/PruneListOrphanDialog'));
@@ -64,7 +64,7 @@ const ListOverflowAction = (props: FeedOverflowActionProps) => {
 								}}
 								class={/* @once */ MenuItem()}
 							>
-								<OutlinedCleaningServicesIcon class={/* @once */ MenuItemIcon()} />
+								<CleaningServicesOutlinedIcon class={/* @once */ MenuItemIcon()} />
 								<span>Prune orphan members</span>
 							</button>
 						) : (
@@ -81,7 +81,7 @@ const ListOverflowAction = (props: FeedOverflowActionProps) => {
 								}}
 								class={/* @once */ MenuItem()}
 							>
-								<OutlinedReportProblemIcon class={/* @once */ MenuItemIcon()} />
+								<ReportProblemOutlinedIcon class={/* @once */ MenuItemIcon()} />
 								<span class="overflow-hidden text-ellipsis whitespace-nowrap">Report list</span>
 							</button>
 						)}

@@ -11,8 +11,7 @@ import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 import { Flyout } from '~/com/components/Flyout';
 
 import LaunchIcon from '~/com/icons/baseline-launch';
-import ReportIcon from '~/com/icons/baseline-report';
-import OutlinedReportProblemIcon from '~/com/icons/outline-report-problem';
+import ReportProblemOutlinedIcon from '~/com/icons/outline-report-problem';
 
 const ReportDialog = lazy(() => import('~/com/components/dialogs/ReportDialog'));
 
@@ -56,7 +55,7 @@ const FeedOverflowAction = (props: FeedOverflowActionProps) => {
 								}}
 								class={/* @once */ MenuItem()}
 							>
-								<OutlinedReportProblemIcon class={/* @once */ MenuItemIcon()} />
+								<ReportProblemOutlinedIcon class={/* @once */ MenuItemIcon()} />
 								<span class="overflow-hidden text-ellipsis whitespace-nowrap">Report feed</span>
 							</button>
 						)}
