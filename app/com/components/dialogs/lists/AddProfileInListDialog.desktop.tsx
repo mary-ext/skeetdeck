@@ -1,4 +1,4 @@
-import { For, createEffect, createMemo, createSignal } from 'solid-js';
+import { For, createEffect, createMemo, createSignal, lazy } from 'solid-js';
 
 import {
 	type InfiniteData,
@@ -29,7 +29,7 @@ import { produce } from '~/utils/immer';
 import { chunked, clsx, mapDefined } from '~/utils/misc';
 import { difference } from '~/utils/sets';
 
-import { closeModal, useModalState } from '../../../globals/modals';
+import { closeModal, openModal, useModalState } from '../../../globals/modals';
 
 import { Button } from '~/com/primitives/button';
 import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog';
@@ -41,12 +41,15 @@ import FilterBar from '../../inputs/FilterBar';
 import CircularProgress from '../../CircularProgress';
 import DialogOverlay from '../DialogOverlay';
 
-import CloseIcon from '../../../icons/baseline-close';
+import AddIcon from '../../../icons/baseline-add';
 import CheckIcon from '../../../icons/baseline-check';
+import CloseIcon from '../../../icons/baseline-close';
 
 import DefaultListAvatar from '../../../assets/default-list-avatar.svg?url';
 
 import type { AddProfileInListDialogProps } from './AddProfileInListDialog';
+
+const AddListDialog = lazy(() => import('./AddListDialog'));
 
 const listItem = Interactive({
 	variant: 'muted',
@@ -267,7 +270,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 
 					<div class={/* @once */ DialogBody({ padded: false, scrollable: true, class: 'flex flex-col' })}>
 						{multiagent.accounts.length > 1 && (
-							<div class="p-4 pb-1">
+							<div class="p-4 pb-2">
 								<FilterBar
 									value={uid()}
 									onChange={setUid}
@@ -280,6 +283,28 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 								/>
 							</div>
 						)}
+
+						<button
+							onClick={() => {
+								const $uid = uid();
+
+								openModal(() => (
+									<AddListDialog
+										uid={$uid}
+										onSubmit={() => {
+											queryClient.resetQueries({
+												exact: true,
+												queryKey: getProfileListsKey($uid, $uid),
+											});
+										}}
+									/>
+								));
+							}}
+							class={listItem}
+						>
+							<AddIcon class="text-lg" />
+							<span class="text-sm">Create new list</span>
+						</button>
 
 						<For each={lists.data?.pages.flatMap((page) => page.lists)}>
 							{(list) => {

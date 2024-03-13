@@ -1,4 +1,4 @@
-import { For, createEffect, createSignal } from 'solid-js';
+import { For, createEffect, createSignal, lazy } from 'solid-js';
 import { createMutable } from 'solid-js/store';
 
 import { createInfiniteQuery, useQueryClient } from '@pkg/solid-query';
@@ -13,7 +13,7 @@ import type { SignalizedList } from '~/api/stores/lists';
 
 import { chunked, clsx, mapDefined } from '~/utils/misc';
 
-import { closeModal, useModalState } from '../../../globals/modals';
+import { closeModal, openModal, useModalState } from '../../../globals/modals';
 
 import { Button } from '../../../primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog';
@@ -26,12 +26,15 @@ import CircularProgress from '../../CircularProgress';
 import Modal from '../../Modal';
 import DialogOverlay from '../DialogOverlay';
 
+import AddIcon from '../../../icons/baseline-add';
 import CheckIcon from '../../../icons/baseline-check';
 import CloseIcon from '../../../icons/baseline-close';
 
 import DefaultListAvatar from '../../../assets/default-list-avatar.svg?url';
 
 import type { CloneListMembersDialogProps } from './CloneListMembersDialog';
+
+const AddListDialog = lazy(() => import('./AddListDialog'));
 
 const listItem = Interactive({
 	variant: 'muted',
@@ -286,13 +289,13 @@ const CloneListMembersDialog = (props: CloneListMembersDialogProps) => {
 							onClick={handleSubmit}
 							class={/* @once */ Button({ variant: 'primary', size: 'xs' })}
 						>
-							Save
+							Clone
 						</button>
 					</div>
 
 					<div class={/* @once */ DialogBody({ padded: false, scrollable: true, class: 'flex flex-col' })}>
 						{multiagent.accounts.length > 1 && (
-							<div class="p-4 pb-1">
+							<div class="p-4 pb-2">
 								<FilterBar
 									value={uid()}
 									onChange={setUid}
@@ -305,6 +308,28 @@ const CloneListMembersDialog = (props: CloneListMembersDialogProps) => {
 								/>
 							</div>
 						)}
+
+						<button
+							onClick={() => {
+								const $uid = uid();
+
+								openModal(() => (
+									<AddListDialog
+										uid={$uid}
+										onSubmit={() => {
+											queryClient.resetQueries({
+												exact: true,
+												queryKey: getProfileListsKey($uid, $uid),
+											});
+										}}
+									/>
+								));
+							}}
+							class={listItem}
+						>
+							<AddIcon class="text-lg" />
+							<span class="text-sm">Create new list</span>
+						</button>
 
 						<For each={lists.data}>
 							{(list) => {
