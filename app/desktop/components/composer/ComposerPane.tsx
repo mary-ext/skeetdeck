@@ -66,11 +66,11 @@ import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import CheckIcon from '~/com/icons/baseline-check';
 import CloseIcon from '~/com/icons/baseline-close';
-import EmojiEmotionsIcon from '~/com/icons/baseline-emoji-emotions';
-import ImageIcon from '~/com/icons/baseline-image';
+import EmojiEmotionsOutlinedIcon from '~/com/icons/outline-emoji-emotions.tsx';
+import ImageOutlinedIcon from '~/com/icons/outline-image.tsx';
 import LanguageIcon from '~/com/icons/baseline-language';
 import LinkIcon from '~/com/icons/baseline-link';
-import ShieldIcon from '~/com/icons/baseline-shield';
+import ShieldOutlinedIcon from '~/com/icons/outline-shield';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
@@ -98,7 +98,7 @@ const MAX_THREAD_LIMIT = 9;
 const MAX_IMAGE_LIMIT = 4;
 const MAX_EXTERNAL_TAGS_LIMIT = 8;
 
-const toolbarIcon = IconButton({ size: 'lg', class: 'text-primary/85 hover:text-primary' });
+const toolbarIcon = IconButton({ size: 'lg', color: null, class: 'text-muted-fg' });
 
 const removeEmbedBtn = Interactive({
 	class: `absolute right-1 top-1 z-20 grid h-7 w-7 place-items-center rounded-full bg-background text-base text-primary hover:bg-secondary disabled:opacity-50`,
@@ -1173,7 +1173,7 @@ const ComposerPane = () => {
 												onClick={() => fileInputRef.click()}
 												class={toolbarIcon}
 											>
-												<ImageIcon />
+												<ImageOutlinedIcon />
 											</button>
 										)}
 
@@ -1195,7 +1195,7 @@ const ComposerPane = () => {
 											}}
 										>
 											<button title="Insert emojis..." class={toolbarIcon}>
-												<EmojiEmotionsIcon />
+												<EmojiEmotionsOutlinedIcon />
 											</button>
 										</EmojiFlyout>
 
@@ -1213,7 +1213,7 @@ const ComposerPane = () => {
 										{images.length > 0 && (
 											<ContentWarningAction labels={draft.labels}>
 												<button title="Add content warning..." class={toolbarIcon}>
-													<ShieldIcon class={clsx([draft.labels.length > 0 && `text-accent`])} />
+													<ShieldOutlinedIcon class={clsx([draft.labels.length > 0 && `text-accent`])} />
 												</button>
 											</ContentWarningAction>
 										)}
@@ -1230,7 +1230,7 @@ const ComposerPane = () => {
 											<button
 												class={
 													/* @once */ Interactive({
-														class: `flex h-9 min-w-0 items-center rounded-md px-2 text-sm text-primary/85 hover:text-primary disabled:opacity-50`,
+														class: `flex h-9 min-w-0 items-center rounded-md px-2 text-sm text-muted-fg disabled:opacity-50`,
 													})
 												}
 											>
@@ -1279,7 +1279,7 @@ const ComposerPane = () => {
 								/* @once */ Button({
 									size: null,
 									variant: 'ghost',
-									class: 'h-9 px-3 text-sm text-primary/85',
+									class: 'h-9 px-3 text-sm text-muted-fg',
 								})
 							}
 							data-focus
@@ -1287,7 +1287,7 @@ const ComposerPane = () => {
 							{/* Add some affordances to people attempting to click the plus button */}
 							<div class="absolute left-4 grid h-9 w-9 place-items-center">
 								{/* Icon shouldn't be affected by hover:text-white */}
-								<AddIcon class="text-xl text-primary/85" />
+								<AddIcon class="text-xl text-muted-fg" />
 							</div>
 							<span class="text-de">Add to thread</span>
 						</button>

@@ -10,7 +10,7 @@ import { MenuItem, MenuRoot } from '../../primitives/menu';
 import { Flyout, offsetlessMiddlewares } from '../Flyout';
 import CircularProgress from '../CircularProgress';
 
-import AddPhotoAlternateIcon from '../../icons/baseline-add-photo-alternate';
+import AddPhotoAlternateOutlinedIcon from '../../icons/outline-add-photo-alternate';
 
 export interface AddPhotoButtonProps {
 	exists: boolean;
@@ -99,7 +99,7 @@ const AddPhotoButton = (props: AddPhotoButtonProps) => {
 						onClick={!shouldDisplayFlyout ? handleButtonClick : undefined}
 						class="grid h-9 w-9 place-items-center rounded-full text-lg hover:bg-gray-400/30"
 					>
-						<AddPhotoAlternateIcon class="drop-shadow" />
+						<AddPhotoAlternateOutlinedIcon class="drop-shadow" />
 					</button>
 				</fieldset>
 			);

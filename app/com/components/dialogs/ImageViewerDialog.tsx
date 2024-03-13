@@ -10,8 +10,8 @@ import { Interactive } from '../../primitives/interactive';
 
 import ArrowLeftIcon from '../../icons/baseline-arrow-left';
 import CloseIcon from '../../icons/baseline-close';
-import VisibilityIcon from '../../icons/baseline-visibility';
-import VisibilityOffIcon from '../../icons/baseline-visibility-off';
+import VisibilityOutlinedIcon from '../../icons/outline-visibility';
+import VisibilityOffOutlinedIcon from '../../icons/outline-visibility-off';
 
 const isMobile = import.meta.env.VITE_MODE === 'mobile';
 
@@ -219,8 +219,8 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 							class={clsx([altButton, displayAlt() && `is-active`])}
 						>
 							<span class="pl-0.5 pr-2 text-xs font-bold drop-shadow">ALT</span>
-							<VisibilityOffIcon class="drop-shadow group-[.is-active]:hidden" />
-							<VisibilityIcon class="hidden drop-shadow group-[.is-active]:block" />
+							<VisibilityOffOutlinedIcon class="drop-shadow group-[.is-active]:hidden" />
+							<VisibilityOutlinedIcon class="hidden drop-shadow group-[.is-active]:block" />
 						</button>
 					)
 				}

@@ -1,7 +1,7 @@
 export interface IconButtonProps {
 	class?: string;
 	size?: 'md' | 'lg';
-	color?: 'primary' | 'muted' | 'inherit';
+	color?: 'primary' | 'muted' | 'inherit' | null;
 	edge?: 'left' | 'right';
 }
 
