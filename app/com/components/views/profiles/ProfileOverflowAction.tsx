@@ -103,6 +103,17 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 
 						<hr class="mx-2 my-1 border-divider" />
 
+						<button
+							onClick={() => {
+								close();
+								openModal(() => <AddProfileInListDialog profile={profile} />);
+							}}
+							class={/* @once */ MenuItem()}
+						>
+							<PlaylistAddIcon class={/* @once */ MenuItemIcon()} />
+							<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Add/remove from lists`}</span>
+						</button>
+
 						{!isSelf && (
 							<button
 								onClick={() => {
@@ -127,16 +138,25 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 							</button>
 						)}
 
-						<button
-							onClick={() => {
-								close();
-								openModal(() => <AddProfileInListDialog profile={profile} />);
-							}}
-							class={/* @once */ MenuItem()}
-						>
-							<PlaylistAddIcon class={/* @once */ MenuItemIcon()} />
-							<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Add/remove from lists`}</span>
-						</button>
+						{(() => {
+							if (!isOwnAccount()) {
+								return (
+									<button
+										onClick={() => {
+											close();
+											openModal(() => <SilenceConfirmDialog profile={profile} />);
+										}}
+										class={/* @once */ MenuItem()}
+									>
+										{(() => {
+											const Icon = !isMuted() ? VisibilityOffIcon : VisibilityIcon;
+											return <Icon class={/* @once */ MenuItemIcon()} />;
+										})()}
+										<span>{!isTempMuted() ? `Silence user` : `Unsilence user`}</span>
+									</button>
+								);
+							}
+						})()}
 
 						{!isSelf && (
 							<button
@@ -157,26 +177,6 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								</span>
 							</button>
 						)}
-
-						{(() => {
-							if (!isOwnAccount()) {
-								return (
-									<button
-										onClick={() => {
-											close();
-											openModal(() => <SilenceConfirmDialog profile={profile} />);
-										}}
-										class={/* @once */ MenuItem()}
-									>
-										{(() => {
-											const Icon = !isMuted() ? VisibilityOffIcon : VisibilityIcon;
-											return <Icon class={/* @once */ MenuItemIcon()} />;
-										})()}
-										<span>{!isTempMuted() ? `Silence user` : `Unsilence user`}</span>
-									</button>
-								);
-							}
-						})()}
 
 						{!isSelf && (
 							<button

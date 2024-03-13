@@ -107,24 +107,6 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 
 						<hr class="mx-2 my-1 border-divider" />
 
-						{!isSameAuthor && (
-							<button
-								onClick={() => {
-									close();
-									openModal(() => (
-										<MuteConfirmDialog uid={/* @once */ author.uid} did={/* @once */ author.did} />
-									));
-								}}
-								class={/* @once */ MenuItem()}
-							>
-								{(() => {
-									const Icon = !isMuted() ? VolumeOffIcon : VolumeUpIcon;
-									return <Icon class={/* @once */ MenuItemIcon()} />;
-								})()}
-								<span>{!isMuted() ? `Mute user` : `Unmute user`}</span>
-							</button>
-						)}
-
 						{(() => {
 							if (!isOwnAccount()) {
 								return (
@@ -144,6 +126,24 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 								);
 							}
 						})()}
+
+						{!isSameAuthor && (
+							<button
+								onClick={() => {
+									close();
+									openModal(() => (
+										<MuteConfirmDialog uid={/* @once */ author.uid} did={/* @once */ author.did} />
+									));
+								}}
+								class={/* @once */ MenuItem()}
+							>
+								{(() => {
+									const Icon = !isMuted() ? VolumeOffIcon : VolumeUpIcon;
+									return <Icon class={/* @once */ MenuItemIcon()} />;
+								})()}
+								<span>{!isMuted() ? `Mute user` : `Unmute user`}</span>
+							</button>
+						)}
 
 						{isSameAuthor ? (
 							<button
