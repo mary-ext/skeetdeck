@@ -78,7 +78,7 @@ const ImageViewerDialog = (props: ImageViewerDialogProps) => {
 	const handleImageWrapperClick = (ev: MouseEvent) => {
 		if (isMobile) {
 			setHidden(!hidden());
-		} else if (ev.currentTarget === ev.target) {
+		} else {
 			closeModal();
 		}
 	};
