@@ -52,7 +52,7 @@ const ThreadgateAction = (props: ThreadgateActionProps) => {
 							<span class="grow">{name}</span>
 
 							<CheckIcon
-								class={/* @once */ 'text-xl text-accent' + (current.type !== value ? ' invisible' : '')}
+								class={/* @once */ 'text-base text-accent' + (current.type !== value ? ' invisible' : '')}
 							/>
 						</button>
 					);
@@ -60,9 +60,9 @@ const ThreadgateAction = (props: ThreadgateActionProps) => {
 
 				return (
 					<div {...menuProps} class={/* @once */ MenuRoot()}>
-						<div class="p-4 text-sm">
+						<div class="px-3 py-2 text-sm">
 							<p class="font-bold">Who can reply?</p>
-							<p class="text-muted-fg">Choose who can reply to this post.</p>
+							<p class="text-de text-muted-fg">Choose who can reply to this post.</p>
 						</div>
 
 						{/* @once */ item('e', PublicIcon, `Everyone`)}

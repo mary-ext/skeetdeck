@@ -50,9 +50,9 @@ const PostLanguageAction = (props: PostLanguageActionProps) => {
 
 				return (
 					<div {...menuProps} class={/* @once */ MenuRoot()}>
-						<div class="p-4 text-sm">
+						<div class="px-3 py-2 text-sm">
 							<p class="font-bold">Post language</p>
-							<p class="text-muted-fg">What languages are you using for this post?</p>
+							<p class="text-de text-muted-fg">What languages are you using for this post?</p>
 						</div>
 
 						<div class="flex grow flex-col overflow-y-auto">
@@ -76,7 +76,7 @@ const PostLanguageAction = (props: PostLanguageActionProps) => {
 
 										<CheckIcon
 											class={clsx([
-												`text-xl text-accent`,
+												`text-base text-accent`,
 												(props.languages.length !== 1 || !props.languages.includes(code)) && `invisible`,
 											])}
 										/>
@@ -96,7 +96,7 @@ const PostLanguageAction = (props: PostLanguageActionProps) => {
 
 								<CheckIcon
 									class={clsx([
-										`text-xl text-accent`,
+										`text-base text-accent`,
 										props.languages.length < 2 &&
 											props.languages.every((code) => available.includes(code)) &&
 											`invisible`,

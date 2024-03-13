@@ -42,7 +42,7 @@ const ContentWarningAction = (props: ContentWarningActionProps) => {
 
 							<CheckIcon
 								class={clsx([
-									`text-xl text-accent`,
+									`text-base text-accent`,
 									(value !== undefined ? !selected.includes(value) : selected.length !== 0) && `invisible`,
 								])}
 							/>
@@ -52,7 +52,7 @@ const ContentWarningAction = (props: ContentWarningActionProps) => {
 
 				return (
 					<div {...menuProps} class={/* @once */ MenuRoot()}>
-						<div class="p-4 text-sm">
+						<div class="px-3 py-2 text-sm">
 							<p class="font-bold">Add content warning</p>
 						</div>
 
