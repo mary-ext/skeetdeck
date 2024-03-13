@@ -75,6 +75,34 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 							<span>Open in Bluesky app</span>
 						</a>
 
+						{isDesktop && (
+							<button
+								onClick={() => {
+									close();
+									linking.navigate({ type: LINK_PROFILE_LISTS, actor: did });
+								}}
+								class={/* @once */ MenuItem()}
+							>
+								<ListBoxOutlinedIcon class={/* @once */ MenuItemIcon()} />
+								<span>View lists</span>
+							</button>
+						)}
+
+						{isDesktop && (
+							<button
+								onClick={() => {
+									close();
+									linking.navigate({ type: LINK_PROFILE_FEEDS, actor: did });
+								}}
+								class={/* @once */ MenuItem()}
+							>
+								<PoundIcon class={/* @once */ MenuItemIcon()} />
+								<span>View feeds</span>
+							</button>
+						)}
+
+						<hr class="mx-2 my-1 border-divider" />
+
 						{!isSelf && (
 							<button
 								onClick={() => {
@@ -109,32 +137,6 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 							<PlaylistAddIcon class={/* @once */ MenuItemIcon()} />
 							<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Add/remove from lists`}</span>
 						</button>
-
-						{isDesktop && (
-							<button
-								onClick={() => {
-									close();
-									linking.navigate({ type: LINK_PROFILE_LISTS, actor: did });
-								}}
-								class={/* @once */ MenuItem()}
-							>
-								<ListBoxOutlinedIcon class={/* @once */ MenuItemIcon()} />
-								<span>View lists</span>
-							</button>
-						)}
-
-						{isDesktop && (
-							<button
-								onClick={() => {
-									close();
-									linking.navigate({ type: LINK_PROFILE_FEEDS, actor: did });
-								}}
-								class={/* @once */ MenuItem()}
-							>
-								<PoundIcon class={/* @once */ MenuItemIcon()} />
-								<span>View feeds</span>
-							</button>
-						)}
 
 						{!isSelf && (
 							<button
@@ -193,22 +195,24 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 							</button>
 						)}
 
-						<button
-							onClick={() => {
-								close();
+						{!isSelf && (
+							<button
+								onClick={() => {
+									close();
 
-								openModal(() => (
-									<ReportDialog
-										uid={/* @once */ profile.uid}
-										report={/* @once */ { type: 'profile', did: did }}
-									/>
-								));
-							}}
-							class={/* @once */ MenuItem()}
-						>
-							<ReportIcon class={/* @once */ MenuItemIcon()} />
-							<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Report user`}</span>
-						</button>
+									openModal(() => (
+										<ReportDialog
+											uid={/* @once */ profile.uid}
+											report={/* @once */ { type: 'profile', did: did }}
+										/>
+									));
+								}}
+								class={/* @once */ MenuItem()}
+							>
+								<ReportIcon class={/* @once */ MenuItemIcon()} />
+								<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Report user`}</span>
+							</button>
+						)}
 					</div>
 				)}
 			</Flyout>
