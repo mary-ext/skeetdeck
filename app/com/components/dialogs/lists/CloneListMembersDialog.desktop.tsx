@@ -275,7 +275,7 @@ const CloneListMembersDialog = (props: CloneListMembersDialogProps) => {
 
 						<div class="flex min-w-0 grow flex-col gap-0.5">
 							<p class="overflow-hidden text-ellipsis whitespace-nowrap text-base font-bold leading-5">
-								Clone list members
+								Copy list members
 							</p>
 
 							<p class="overflow-hidden text-ellipsis whitespace-nowrap text-xs text-muted-fg">

@@ -66,7 +66,7 @@ const ListOverflowAction = (props: FeedOverflowActionProps) => {
 							class={/* @once */ MenuItem()}
 						>
 							<CopyAllIcon class={/* @once */ MenuItemIcon()} />
-							<span>Clone list members</span>
+							<span>Copy list members</span>
 						</button>
 
 						<button
