@@ -47,7 +47,7 @@ const SwitchAccountAction = (props: SwitchAccountActionProps) => {
 							>
 								<img
 									src={account.profile?.avatar || DefaultUserAvatar}
-									class="h-10 w-10 shrink-0 rounded-full"
+									class="h-9 w-9 shrink-0 rounded-full"
 								/>
 
 								<div class="min-w-0 grow text-sm">
@@ -60,7 +60,7 @@ const SwitchAccountAction = (props: SwitchAccountActionProps) => {
 								</div>
 
 								<CheckIcon
-									class={clsx([`text-xl text-accent`, account.did !== props.value && `invisible`])}
+									class={clsx([`text-base text-accent`, account.did !== props.value && `invisible`])}
 								/>
 							</button>
 						)}

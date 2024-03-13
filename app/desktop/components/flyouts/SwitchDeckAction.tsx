@@ -33,10 +33,10 @@ const SwitchDeckAction = (props: SwitchDeckActionProps) => {
 							}}
 							class={/* @once */ MenuItem()}
 						>
-							<span class="text-lg">{deck.emoji}</span>
+							<span class="text-sm">{deck.emoji}</span>
 							<span class="min-w-0 grow">{deck.name}</span>
 
-							<CheckIcon class={clsx([`text-xl text-accent`, deck.id !== props.value && `invisible`])} />
+							<CheckIcon class={clsx([`text-base text-accent`, deck.id !== props.value && `invisible`])} />
 						</button>
 					))}
 				</div>

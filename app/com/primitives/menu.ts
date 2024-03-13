@@ -20,7 +20,7 @@ export const MenuItem = (props: MenuItemProps = {}): string => {
 	if (isDesktop) {
 		let cn = Interactive({
 			variant,
-			class: `flex items-center gap-2 px-3 h-9 text-de text-left disabled:opacity-50`,
+			class: `flex items-center gap-2 px-3 py-2 text-left text-de disabled:opacity-50`,
 		});
 
 		if (variant === 'danger') {
