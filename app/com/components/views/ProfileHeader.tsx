@@ -21,9 +21,9 @@ import { Button } from '../../primitives/button';
 import { LINK_LIST, LINK_PROFILE_EDIT, LINK_PROFILE_FOLLOWERS, LINK_PROFILE_FOLLOWS, Link } from '../Link';
 import { isProfileTempMuted, useSharedPreferences } from '../SharedPreferences';
 
-import ErrorIcon from '../../icons/baseline-error';
+import ErrorOutlinedIcon from '../../icons/outline-error';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
-import VisibilityIcon from '../../icons/baseline-visibility';
+import VisibilityOutlinedIcon from '../../icons/outline-visibility';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
@@ -282,9 +282,9 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 						<div class="flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider p-3 text-left">
 							{
 								/* @once */ $verdict.a ? (
-									<ErrorIcon class="shrink-0 text-lg text-red-500" />
+									<ErrorOutlinedIcon class="shrink-0 text-lg text-red-500" />
 								) : (
-									<VisibilityIcon class="shrink-0 text-lg text-muted-fg" />
+									<VisibilityOutlinedIcon class="shrink-0 text-lg text-muted-fg" />
 								)
 							}
 							<span class="grow text-sm">{/* @once */ renderLabelName(source.l.val)}</span>

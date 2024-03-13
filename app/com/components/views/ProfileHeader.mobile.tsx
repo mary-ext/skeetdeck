@@ -18,7 +18,7 @@ import { LINK_LIST, LINK_PROFILE_FOLLOWERS, LINK_PROFILE_FOLLOWS, Link } from '.
 import { isProfileTempMuted, useSharedPreferences } from '../SharedPreferences';
 
 import ErrorIcon from '../../icons/baseline-error';
-import VisibilityIcon from '../../icons/baseline-visibility';
+import VisibilityOutlinedIcon from '../../icons/outline-visibility';
 import ShareIcon from '../../icons/baseline-share';
 import PersonAddIcon from '../../icons/baseline-person-add';
 
@@ -236,7 +236,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 								/* @once */ $verdict.a ? (
 									<ErrorIcon class="shrink-0 text-lg text-red-500" />
 								) : (
-									<VisibilityIcon class="shrink-0 text-lg text-muted-fg" />
+									<VisibilityOutlinedIcon class="shrink-0 text-lg text-muted-fg" />
 								)
 							}
 							<span class="grow text-sm">{/* @once */ renderLabelName(source.l.val)}</span>
