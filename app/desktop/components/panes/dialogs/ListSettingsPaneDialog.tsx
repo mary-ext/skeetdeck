@@ -166,7 +166,7 @@ const ListSettingsPaneDialog = (props: ListSettingsPaneDialogProps) => {
 					};
 				});
 
-				const promises = chunked(writes, 10).map((chunk) => {
+				const promises = chunked(writes, 100).map((chunk) => {
 					return agent.rpc.call('com.atproto.repo.applyWrites', {
 						data: {
 							repo: uid,
