@@ -1,4 +1,4 @@
-import { XRPCError } from '@mary/bluesky-client/xrpc';
+import { type Headers, XRPCError } from '@mary/bluesky-client/xrpc';
 
 import type { At } from '../atp-schema';
 import { MultiagentError } from '../classes/multiagent';
@@ -82,4 +82,21 @@ export const formatQueryError = (err: unknown): string => {
 	}
 
 	return '' + err;
+};
+
+export const waitForRatelimit = async (headers: Headers, expected: number) => {
+	if ('ratelimit-remaining' in headers) {
+		const remaining = +headers['ratelimit-remaining'];
+		const reset = +headers['ratelimit-reset'] * 1_000;
+
+		if (remaining <= expected) {
+			// Add some delay to be sure
+			const delta = reset - Date.now() + 5_000;
+			await new Promise((resolve) => setTimeout(resolve, delta));
+		}
+	}
+};
+
+export const sleep = (ms: number): Promise<void> => {
+	return new Promise((resolve) => setTimeout(resolve, ms));
 };

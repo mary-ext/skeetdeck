@@ -10,12 +10,14 @@ import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 
 import { Flyout } from '~/com/components/Flyout';
 
+import CopyAllIcon from '~/com/icons/baseline-copy-all';
 import DeleteIcon from '~/com/icons/baseline-delete';
 import LaunchIcon from '~/com/icons/baseline-launch';
 import ReportIcon from '~/com/icons/baseline-report';
 
-const ReportDialog = lazy(() => import('~/com/components/dialogs/ReportDialog'));
+const CloneListMembersDialog = lazy(() => import('~/com/components/dialogs/lists/CloneListMembersDialog'));
 const PruneListOrphanDialog = lazy(() => import('~/com/components/dialogs/lists/PruneListOrphanDialog'));
+const ReportDialog = lazy(() => import('~/com/components/dialogs/ReportDialog'));
 
 export interface FeedOverflowActionProps {
 	list: SignalizedList;
@@ -55,6 +57,17 @@ const ListOverflowAction = (props: FeedOverflowActionProps) => {
 								<span>Prune orphan members</span>
 							</button>
 						)}
+
+						<button
+							onClick={() => {
+								close();
+								openModal(() => <CloneListMembersDialog list={list} />);
+							}}
+							class={/* @once */ MenuItem()}
+						>
+							<CopyAllIcon class={/* @once */ MenuItemIcon()} />
+							<span>Clone list members</span>
+						</button>
 
 						<button
 							onClick={() => {
