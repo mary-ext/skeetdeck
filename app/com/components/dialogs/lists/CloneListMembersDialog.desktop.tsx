@@ -90,14 +90,13 @@ const CloneListMembersDialog = (props: CloneListMembersDialogProps) => {
 	});
 
 	const handleSubmit = async () => {
-		const $dest = dest();
-		const $uid = uid();
+		const dst = dest();
 
-		if (ui.step !== Step.START || !$dest) {
+		if (ui.step !== Step.START || !dst) {
 			return;
 		}
 
-		const { rpc } = await multiagent.connect($uid);
+		const { rpc } = await multiagent.connect(dst.uid);
 
 		let existing: Set<At.DID>;
 		let members: At.DID[] = [];
@@ -113,7 +112,7 @@ const CloneListMembersDialog = (props: CloneListMembersDialogProps) => {
 
 				const response = await rpc.get('app.bsky.graph.getList', {
 					params: {
-						list: $dest.uri,
+						list: dst.uri,
 						cursor: cursor,
 						limit: 100,
 					},
@@ -171,7 +170,7 @@ const CloneListMembersDialog = (props: CloneListMembersDialogProps) => {
 		const writes: Brand.Union<ComAtprotoRepoApplyWrites.Create>[] = members.map((did) => {
 			const record: AppBskyGraphListitem.Record = {
 				createdAt: date,
-				list: $dest.uri,
+				list: dst.uri,
 				subject: did,
 			};
 
@@ -196,7 +195,7 @@ const CloneListMembersDialog = (props: CloneListMembersDialogProps) => {
 
 				const { headers } = await rpc.call('com.atproto.repo.applyWrites', {
 					data: {
-						repo: $uid,
+						repo: dst.uid,
 						writes: chunk,
 					},
 				});
@@ -217,7 +216,7 @@ const CloneListMembersDialog = (props: CloneListMembersDialogProps) => {
 			// Invalidate the memberships
 			queryClient.invalidateQueries({
 				exact: true,
-				queryKey: ['getListMemberships', $uid],
+				queryKey: ['getListMemberships', dst.uid],
 			});
 		}
 
