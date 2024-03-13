@@ -1,4 +1,4 @@
-import { type JSX, createSignal, untrack } from 'solid-js';
+import { type JSX, createSignal, untrack, getOwner, runWithOwner } from 'solid-js';
 
 import { makeEventListener } from '@solid-primitives/event-listener';
 
@@ -8,7 +8,7 @@ import { useFloating } from 'solid-floating-ui';
 
 import { assert } from '~/utils/misc';
 
-import Modal from './Modal';
+import { openModal, useModalState } from '../globals/modals';
 
 export interface MenuContentProps {
 	ref: (el: HTMLElement) => void;
@@ -73,20 +73,16 @@ const defaultMiddlewares: Middleware[] = isDesktop
 	: offsetlessMiddlewares;
 
 export const Flyout = (props: FlyoutProps) => {
-	const [isOpen, setIsOpen] = createSignal(false);
+	const owner = getOwner();
 
 	const anchor = props.button;
 	assert(anchor instanceof HTMLElement);
 
 	makeEventListener(anchor, 'click', () => {
-		setIsOpen(true);
-	});
+		openModal(() => {
+			const { close } = useModalState();
 
-	const modal = (
-		<Modal
-			open={isOpen()}
-			onClose={() => setIsOpen(false)}
-			children={(() => {
+			return runWithOwner(owner, () => {
 				const [floating, setFloating] = createSignal<HTMLElement>();
 
 				const position = useFloating(() => anchor, floating, {
@@ -107,13 +103,13 @@ export const Flyout = (props: FlyoutProps) => {
 							};
 						},
 					},
-					close: () => setIsOpen(false),
+					close: close,
 				};
 
 				return untrack(() => props.children(context)) as unknown as JSX.Element;
-			})()}
-		/>
-	);
+			});
+		});
+	});
 
-	return [anchor, modal] as unknown as JSX.Element;
+	return anchor as unknown as JSX.Element;
 };
