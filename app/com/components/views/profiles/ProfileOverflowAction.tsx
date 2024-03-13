@@ -15,15 +15,15 @@ import { isProfileTempMuted, useSharedPreferences } from '../../SharedPreference
 import BlockIcon from '../../../icons/baseline-block';
 import LaunchIcon from '../../../icons/baseline-launch';
 import ListBoxOutlinedIcon from '../../../icons/outline-list-box';
+import OutlinedReportProblemIcon from '../../../icons/outline-report-problem';
+import OutlinedVisibilityIcon from '../../../icons/outline-visibility';
+import OutlinedVisibilityOffIcon from '../../../icons/outline-visibility-off';
+import OutlinedVolumeOffIcon from '../../../icons/outline-volume-off';
+import OutlinedVolumeUpIcon from '../../../icons/outline-volume-up';
 import PlaylistAddIcon from '../../../icons/baseline-playlist-add';
 import PoundIcon from '../../../icons/baseline-pound';
 import RepeatIcon from '../../../icons/baseline-repeat';
 import RepeatOffIcon from '../../../icons/baseline-repeat-off';
-import ReportIcon from '../../../icons/baseline-report';
-import VisibilityIcon from '../../../icons/baseline-visibility';
-import VisibilityOffIcon from '../../../icons/baseline-visibility-off';
-import VolumeOffIcon from '../../../icons/baseline-volume-off';
-import VolumeUpIcon from '../../../icons/baseline-volume-up';
 
 const AddProfileInListDialog = lazy(() => import('../../dialogs/lists/AddProfileInListDialog'));
 const BlockConfirmDialog = lazy(() => import('../../dialogs/BlockConfirmDialog'));
@@ -149,7 +149,7 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 										class={/* @once */ MenuItem()}
 									>
 										{(() => {
-											const Icon = !isMuted() ? VisibilityOffIcon : VisibilityIcon;
+											const Icon = !isMuted() ? OutlinedVisibilityOffIcon : OutlinedVisibilityIcon;
 											return <Icon class={/* @once */ MenuItemIcon()} />;
 										})()}
 										<span>{!isTempMuted() ? `Silence user` : `Unsilence user`}</span>
@@ -169,7 +169,7 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								class={/* @once */ MenuItem()}
 							>
 								{(() => {
-									const Icon = !isMuted() ? VolumeOffIcon : VolumeUpIcon;
+									const Icon = !isMuted() ? OutlinedVolumeOffIcon : OutlinedVolumeUpIcon;
 									return <Icon class={/* @once */ MenuItemIcon()} />;
 								})()}
 								<span class="overflow-hidden text-ellipsis whitespace-nowrap">
@@ -209,7 +209,7 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 								}}
 								class={/* @once */ MenuItem()}
 							>
-								<ReportIcon class={/* @once */ MenuItemIcon()} />
+								<OutlinedReportProblemIcon class={/* @once */ MenuItemIcon()} />
 								<span class="overflow-hidden text-ellipsis whitespace-nowrap">{`Report user`}</span>
 							</button>
 						)}

@@ -12,6 +12,7 @@ import { Flyout } from '~/com/components/Flyout';
 
 import LaunchIcon from '~/com/icons/baseline-launch';
 import ReportIcon from '~/com/icons/baseline-report';
+import OutlinedReportProblemIcon from '~/com/icons/outline-report-problem';
 
 const ReportDialog = lazy(() => import('~/com/components/dialogs/ReportDialog'));
 
@@ -24,6 +25,8 @@ const FeedOverflowAction = (props: FeedOverflowActionProps) => {
 	return (() => {
 		const feed = props.feed;
 		const creator = feed.creator;
+
+		const isSameAuthor = creator.did === feed.uid;
 
 		return (
 			<Flyout button={props.children} placement="bottom-end">
@@ -39,22 +42,24 @@ const FeedOverflowAction = (props: FeedOverflowActionProps) => {
 							<span>Open in Bluesky app</span>
 						</a>
 
-						<button
-							onClick={() => {
-								close();
+						{!isSameAuthor && (
+							<button
+								onClick={() => {
+									close();
 
-								openModal(() => (
-									<ReportDialog
-										uid={/* @once */ feed.uid}
-										report={/* @once */ { type: 'feed', uri: feed.uri, cid: feed.cid.value }}
-									/>
-								));
-							}}
-							class={/* @once */ MenuItem()}
-						>
-							<ReportIcon class={/* @once */ MenuItemIcon()} />
-							<span class="overflow-hidden text-ellipsis whitespace-nowrap">Report feed</span>
-						</button>
+									openModal(() => (
+										<ReportDialog
+											uid={/* @once */ feed.uid}
+											report={/* @once */ { type: 'feed', uri: feed.uri, cid: feed.cid.value }}
+										/>
+									));
+								}}
+								class={/* @once */ MenuItem()}
+							>
+								<OutlinedReportProblemIcon class={/* @once */ MenuItemIcon()} />
+								<span class="overflow-hidden text-ellipsis whitespace-nowrap">Report feed</span>
+							</button>
+						)}
 					</div>
 				)}
 			</Flyout>

@@ -15,15 +15,15 @@ import { Flyout } from '../../Flyout';
 import { isProfileTempMuted, useSharedPreferences } from '../../SharedPreferences';
 
 import ContentCopyIcon from '../../../icons/baseline-content-copy';
-import DeleteIcon from '../../../icons/baseline-delete';
 import LaunchIcon from '../../../icons/baseline-launch';
 import LinkIcon from '../../../icons/baseline-link';
-import ReportIcon from '../../../icons/baseline-report';
+import OutlinedDeleteIcon from '../../../icons/outline-delete';
+import OutlinedReportProblemIcon from '../../../icons/outline-report-problem';
+import OutlinedVisibilityIcon from '../../../icons/outline-visibility';
+import OutlinedVisibilityOffIcon from '../../../icons/outline-visibility-off';
+import OutlinedVolumeOffIcon from '../../../icons/outline-volume-off';
+import OutlinedVolumeUpIcon from '../../../icons/outline-volume-up';
 import TranslateIcon from '../../../icons/baseline-translate';
-import VisibilityIcon from '../../../icons/baseline-visibility';
-import VisibilityOffIcon from '../../../icons/baseline-visibility-off';
-import VolumeOffIcon from '../../../icons/baseline-volume-off';
-import VolumeUpIcon from '../../../icons/baseline-volume-up';
 
 const DeletePostConfirmDialog = lazy(() => import('../../dialogs/DeletePostConfirmDialog'));
 const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog'));
@@ -118,7 +118,7 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 										class={/* @once */ MenuItem()}
 									>
 										{(() => {
-											const Icon = !isMuted() ? VisibilityOffIcon : VisibilityIcon;
+											const Icon = !isMuted() ? OutlinedVisibilityOffIcon : OutlinedVisibilityIcon;
 											return <Icon class={/* @once */ MenuItemIcon()} />;
 										})()}
 										<span>{!isTempMuted() ? `Silence user` : `Unsilence user`}</span>
@@ -138,7 +138,7 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 								class={/* @once */ MenuItem()}
 							>
 								{(() => {
-									const Icon = !isMuted() ? VolumeOffIcon : VolumeUpIcon;
+									const Icon = !isMuted() ? OutlinedVolumeOffIcon : OutlinedVolumeUpIcon;
 									return <Icon class={/* @once */ MenuItemIcon()} />;
 								})()}
 								<span>{!isMuted() ? `Mute user` : `Unmute user`}</span>
@@ -153,7 +153,7 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 								}}
 								class={/* @once */ MenuItem()}
 							>
-								<DeleteIcon class={/* @once */ MenuItemIcon()} />
+								<OutlinedDeleteIcon class={/* @once */ MenuItemIcon()} />
 								<span>Delete post</span>
 							</button>
 						) : (
@@ -170,7 +170,7 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 								}}
 								class={/* @once */ MenuItem()}
 							>
-								<ReportIcon class={/* @once */ MenuItemIcon()} />
+								<OutlinedReportProblemIcon class={/* @once */ MenuItemIcon()} />
 								<span class="overflow-hidden text-ellipsis whitespace-nowrap">Report post</span>
 							</button>
 						)}

@@ -11,9 +11,9 @@ import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 import { Flyout } from '~/com/components/Flyout';
 
 import CopyAllIcon from '~/com/icons/baseline-copy-all';
-import DeleteIcon from '~/com/icons/baseline-delete';
 import LaunchIcon from '~/com/icons/baseline-launch';
-import ReportIcon from '~/com/icons/baseline-report';
+import OutlinedCleaningServicesIcon from '~/com/icons/outline-cleaning-services';
+import OutlinedReportProblemIcon from '~/com/icons/outline-report-problem';
 
 const CloneListMembersDialog = lazy(() => import('~/com/components/dialogs/lists/CloneListMembersDialog'));
 const PruneListOrphanDialog = lazy(() => import('~/com/components/dialogs/lists/PruneListOrphanDialog'));
@@ -45,19 +45,6 @@ const ListOverflowAction = (props: FeedOverflowActionProps) => {
 							<span>Open in Bluesky app</span>
 						</a>
 
-						{isOwner && (
-							<button
-								onClick={() => {
-									close();
-									openModal(() => <PruneListOrphanDialog list={list} />);
-								}}
-								class={/* @once */ MenuItem()}
-							>
-								<DeleteIcon class={/* @once */ MenuItemIcon()} />
-								<span>Prune orphan members</span>
-							</button>
-						)}
-
 						<button
 							onClick={() => {
 								close();
@@ -69,22 +56,35 @@ const ListOverflowAction = (props: FeedOverflowActionProps) => {
 							<span>Copy list members</span>
 						</button>
 
-						<button
-							onClick={() => {
-								close();
+						{isOwner ? (
+							<button
+								onClick={() => {
+									close();
+									openModal(() => <PruneListOrphanDialog list={list} />);
+								}}
+								class={/* @once */ MenuItem()}
+							>
+								<OutlinedCleaningServicesIcon class={/* @once */ MenuItemIcon()} />
+								<span>Prune orphan members</span>
+							</button>
+						) : (
+							<button
+								onClick={() => {
+									close();
 
-								openModal(() => (
-									<ReportDialog
-										uid={/* @once */ list.uid}
-										report={/* @once */ { type: 'list', uri: list.uri, cid: list.cid.value }}
-									/>
-								));
-							}}
-							class={/* @once */ MenuItem()}
-						>
-							<ReportIcon class={/* @once */ MenuItemIcon()} />
-							<span class="overflow-hidden text-ellipsis whitespace-nowrap">Report list</span>
-						</button>
+									openModal(() => (
+										<ReportDialog
+											uid={/* @once */ list.uid}
+											report={/* @once */ { type: 'list', uri: list.uri, cid: list.cid.value }}
+										/>
+									));
+								}}
+								class={/* @once */ MenuItem()}
+							>
+								<OutlinedReportProblemIcon class={/* @once */ MenuItemIcon()} />
+								<span class="overflow-hidden text-ellipsis whitespace-nowrap">Report list</span>
+							</button>
+						)}
 					</div>
 				)}
 			</Flyout>
