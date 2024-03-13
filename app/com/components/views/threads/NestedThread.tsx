@@ -18,7 +18,7 @@ export interface NestedThreadProps {
 
 const NestedThread = (props: NestedThreadProps) => {
 	return (
-		<div class="flex flex-col gap-4 px-3 py-4 empty:hidden">
+		<div class="flex flex-col px-3 py-2 empty:hidden">
 			<For each={props.data.descendants}>
 				{(x) => {
 					return (
@@ -90,7 +90,7 @@ const renderLines = (depth: number /* , hasNextSibling: boolean */) => {
 				<div class="absolute -top-4 bottom-0 left-2 border-l-2 border-muted"></div>
 
 				{i === depth - 1 && (
-					<div class="absolute right-0.5 top-[-16px] h-[26px] w-[10px] rounded-bl-[8px] border-b-2 border-l-2 border-muted"></div>
+					<div class="absolute right-0.5 top-[-8px] h-[26px] w-[10px] rounded-bl-[8px] border-b-2 border-l-2 border-muted"></div>
 				)}
 			</div>,
 		);

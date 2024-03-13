@@ -62,7 +62,7 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 	});
 
 	return (
-		<div class="flex min-w-0 gap-2">
+		<div class="flex min-w-0 gap-2 py-2">
 			<div class="relative flex shrink-0 flex-col items-center">
 				<Link
 					tabindex={-1}
@@ -134,7 +134,7 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 
 				<PostContent post={post} permalink={postPermalink} />
 
-				<div class="-mb-1.5 -ml-1 mt-1.5 flex items-center gap-1 text-muted-fg">
+				<div class="-ml-1 mt-1.5 flex items-center gap-1 text-muted-fg">
 					<ReplyAction post={post}>
 						{(disabled) => (
 							<button class="group flex max-w-full items-center gap-0.5">
