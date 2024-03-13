@@ -107,19 +107,6 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 
 						<hr class="mx-2 my-1 border-divider" />
 
-						{isSameAuthor && (
-							<button
-								onClick={() => {
-									close();
-									openModal(() => <DeletePostConfirmDialog post={post} />);
-								}}
-								class={/* @once */ MenuItem()}
-							>
-								<DeleteIcon class={/* @once */ MenuItemIcon()} />
-								<span>Delete post</span>
-							</button>
-						)}
-
 						{!isSameAuthor && (
 							<button
 								onClick={() => {
@@ -158,22 +145,35 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 							}
 						})()}
 
-						<button
-							onClick={() => {
-								close();
+						{isSameAuthor ? (
+							<button
+								onClick={() => {
+									close();
+									openModal(() => <DeletePostConfirmDialog post={post} />);
+								}}
+								class={/* @once */ MenuItem()}
+							>
+								<DeleteIcon class={/* @once */ MenuItemIcon()} />
+								<span>Delete post</span>
+							</button>
+						) : (
+							<button
+								onClick={() => {
+									close();
 
-								openModal(() => (
-									<ReportDialog
-										uid={/* @once */ post.uid}
-										report={/* @once */ { type: 'post', uri: post.uri, cid: post.cid.value }}
-									/>
-								));
-							}}
-							class={/* @once */ MenuItem()}
-						>
-							<ReportIcon class={/* @once */ MenuItemIcon()} />
-							<span class="overflow-hidden text-ellipsis whitespace-nowrap">Report post</span>
-						</button>
+									openModal(() => (
+										<ReportDialog
+											uid={/* @once */ post.uid}
+											report={/* @once */ { type: 'post', uri: post.uri, cid: post.cid.value }}
+										/>
+									));
+								}}
+								class={/* @once */ MenuItem()}
+							>
+								<ReportIcon class={/* @once */ MenuItemIcon()} />
+								<span class="overflow-hidden text-ellipsis whitespace-nowrap">Report post</span>
+							</button>
+						)}
 					</div>
 				)}
 			</Flyout>
