@@ -15,9 +15,9 @@ import { getQuoteModDecision } from '../../moderation/quote';
 
 import { useSharedPreferences } from '../SharedPreferences';
 
-import VisibilityIcon from '../../icons/baseline-visibility';
-import FilterAltIcon from '../../icons/baseline-filter-alt';
-import PersonOffIcon from '../../icons/baseline-person-off';
+import FilterAltOutlinedIcon from '../../icons/outline-filter-alt';
+import PersonOffOutlinedIcon from '../../icons/outline-person-off';
+import VisibilityOutlinedIcon from '../../icons/outline-visibility';
 
 type EmbeddedPostRecord = AppBskyEmbedRecord.ViewRecord;
 
@@ -69,16 +69,16 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 				let title: string;
 
 				if (type === CauseLabel) {
-					Icon = VisibilityIcon;
+					Icon = VisibilityOutlinedIcon;
 					title = `Quote contains ${renderLabelName(source.l.val)}`;
 				} else if (type === CauseMutedKeyword) {
-					Icon = FilterAltIcon;
+					Icon = FilterAltOutlinedIcon;
 					title = source.n;
 				} else if (type === CauseMutedTemporary) {
-					Icon = PersonOffIcon;
+					Icon = PersonOffOutlinedIcon;
 					title = `Quote from silenced user`;
 				} else {
-					Icon = PersonOffIcon;
+					Icon = PersonOffOutlinedIcon;
 					title = `Quote from muted user`;
 				}
 
