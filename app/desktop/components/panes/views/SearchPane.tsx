@@ -6,7 +6,7 @@ import { IconButton } from '~/com/primitives/icon-button';
 
 import TimelineList from '~/com/components/lists/TimelineList';
 
-import SettingsIcon from '~/com/icons/baseline-settings';
+import SettingsOutlinedIcon from '~/com/icons/outline-settings';
 
 import { usePaneContext } from '../PaneContext';
 import Pane from '../Pane';
@@ -48,7 +48,7 @@ const SearchPane = () => {
 					onClick={() => setIsSettingsOpen(!isSettingsOpen())}
 					class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
 				>
-					<SettingsIcon class="place-self-center" />
+					<SettingsOutlinedIcon />
 				</button>
 			</PaneHeader>
 

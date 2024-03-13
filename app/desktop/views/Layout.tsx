@@ -32,7 +32,7 @@ import Keyed from '~/com/components/Keyed';
 
 import FeatherIcon from '~/com/icons/baseline-feather';
 import SearchIcon from '~/com/icons/baseline-search';
-import SettingsIcon from '~/com/icons/baseline-settings';
+import SettingsOutlinedIcon from '~/com/icons/outline-settings';
 import SystemUpdateAltIcon from '~/com/icons/baseline-system-update-alt';
 import TableLargeAddIcon from '~/com/icons/baseline-table-large-add';
 
@@ -236,7 +236,7 @@ const DashboardLayout = (props: RouteComponentProps) => {
 					}}
 					class={menuIconButton}
 				>
-					<SettingsIcon />
+					<SettingsOutlinedIcon />
 				</button>
 			</div>
 

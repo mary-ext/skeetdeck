@@ -31,7 +31,7 @@ import { IconButton } from '~/com/primitives/icon-button';
 import { loadMoreBtn, loadNewBtn } from '~/com/primitives/interactive';
 
 import CheckAllIcon from '~/com/icons/baseline-check-all';
-import SettingsIcon from '~/com/icons/baseline-settings';
+import SettingsOutlinedIcon from '~/com/icons/outline-settings';
 
 import { usePaneContext } from '../PaneContext';
 import Pane from '../Pane';
@@ -165,7 +165,7 @@ const NotificationsPane = () => {
 					onClick={() => setIsSettingsOpen(!isSettingsOpen())}
 					class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
 				>
-					<SettingsIcon class="place-self-center" />
+					<SettingsOutlinedIcon />
 				</button>
 			</PaneHeader>
 

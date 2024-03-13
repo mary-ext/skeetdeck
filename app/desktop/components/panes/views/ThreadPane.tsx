@@ -9,7 +9,7 @@ import { preferences } from '../../../globals/settings';
 
 import { IconButton } from '~/com/primitives/icon-button';
 
-import SettingsIcon from '~/com/icons/baseline-settings';
+import SettingsOutlinedIcon from '~/com/icons/outline-settings';
 
 import { usePaneContext } from '../PaneContext';
 import Pane from '../Pane';
@@ -59,7 +59,7 @@ const ThreadPane = () => {
 					onClick={() => setIsSettingsOpen(!isSettingsOpen())}
 					class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
 				>
-					<SettingsIcon class="place-self-center" />
+					<SettingsOutlinedIcon />
 				</button>
 			</PaneHeader>
 

@@ -14,7 +14,7 @@ import TimelineList from '~/com/components/lists/TimelineList';
 import { VirtualContainer } from '~/com/components/VirtualContainer';
 
 import InfoIcon from '~/com/icons/baseline-info';
-import SettingsIcon from '~/com/icons/baseline-settings';
+import SettingsOutlinedIcon from '~/com/icons/outline-settings';
 
 import { usePaneContext } from '../PaneContext';
 import Pane from '../Pane';
@@ -48,7 +48,7 @@ const CustomFeedPane = () => {
 					onClick={() => setIsSettingsOpen(!isSettingsOpen())}
 					class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
 				>
-					<SettingsIcon class="place-self-center" />
+					<SettingsOutlinedIcon />
 				</button>
 			</PaneHeader>
 
