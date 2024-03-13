@@ -21,7 +21,6 @@ import FavoriteIcon from '../../icons/baseline-favorite';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
 import RepeatIcon from '../../icons/baseline-repeat';
-import ShareIcon from '../../icons/baseline-share';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
@@ -29,7 +28,6 @@ import Embed from '../embeds/Embed';
 import PostWarning from '../moderation/PostWarning';
 
 import PostOverflowAction from './posts/PostOverflowAction';
-import PostShareAction from './posts/PostShareAction';
 import ReplyAction from './posts/ReplyAction';
 import RepostAction from './posts/RepostAction';
 
@@ -132,14 +130,6 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 							)}
 						</TimeAgo>
 					</div>
-
-					<div class="-m-1 shrink-0">
-						<PostOverflowAction post={post}>
-							<button class="flex h-6 w-6 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary/40">
-								<MoreHorizIcon />
-							</button>
-						</PostOverflowAction>
-					</div>
 				</div>
 
 				<PostContent post={post} permalink={postPermalink} />
@@ -196,11 +186,11 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 						</span>
 					</button>
 
-					<PostShareAction post={post}>
+					<PostOverflowAction post={post}>
 						<button class="flex h-6 w-6 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary/40">
-							<ShareIcon />
+							<MoreHorizIcon />
 						</button>
-					</PostShareAction>
+					</PostOverflowAction>
 				</div>
 			</div>
 		</div>

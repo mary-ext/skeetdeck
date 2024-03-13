@@ -5,6 +5,8 @@ import { getRecordId } from '~/api/utils/misc';
 
 import type { SignalizedPost } from '~/api/stores/posts';
 
+import { serializeRichText } from '~/api/richtext/utils';
+
 import { openModal } from '../../../globals/modals';
 
 import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
@@ -12,8 +14,10 @@ import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
 import { Flyout } from '../../Flyout';
 import { isProfileTempMuted, useSharedPreferences } from '../../SharedPreferences';
 
+import ContentCopyIcon from '../../../icons/baseline-content-copy';
 import DeleteIcon from '../../../icons/baseline-delete';
 import LaunchIcon from '../../../icons/baseline-launch';
+import LinkIcon from '../../../icons/baseline-link';
 import ReportIcon from '../../../icons/baseline-report';
 import TranslateIcon from '../../../icons/baseline-translate';
 import VisibilityIcon from '../../../icons/baseline-visibility';
@@ -49,19 +53,44 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 		const isTempMuted = () => isProfileTempMuted(filters, author.did);
 		const isMuted = () => author.viewer.muted.value;
 
+		const getPostUrl = () => {
+			return `https://bsky.app/profile/${author.did}/post/${getRecordId(post.uri)}`;
+		};
+
 		return (
 			<Flyout button={props.children} placement="bottom-end">
 				{({ close, menuProps }) => (
 					<div {...menuProps} class={/* @once */ MenuRoot()}>
-						<a
-							href={`https://bsky.app/profile/${author.did}/post/${getRecordId(post.uri)}`}
-							target="_blank"
-							onClick={close}
-							class={/* @once */ MenuItem()}
-						>
+						<a href={getPostUrl()} target="_blank" onClick={close} class={/* @once */ MenuItem()}>
 							<LaunchIcon class={/* @once */ MenuItemIcon()} />
 							<span>Open in Bluesky app</span>
 						</a>
+
+						<button
+							onClick={() => {
+								close();
+								navigator.clipboard.writeText(getPostUrl());
+							}}
+							class={/* @once */ MenuItem()}
+						>
+							<LinkIcon class={/* @once */ MenuItemIcon()} />
+							<span>Copy bsky.app link to post</span>
+						</button>
+
+						<button
+							onClick={() => {
+								close();
+
+								const record = post.record.value;
+								const serialized = serializeRichText(record.text, record.facets, true);
+
+								navigator.clipboard.writeText(serialized);
+							}}
+							class={/* @once */ MenuItem()}
+						>
+							<ContentCopyIcon class={/* @once */ MenuItemIcon()} />
+							<span>Copy post text</span>
+						</button>
 
 						{onTranslate && (
 							<button
@@ -75,6 +104,8 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 								<span>Translate post</span>
 							</button>
 						)}
+
+						<hr class="mx-2 my-1 border-divider" />
 
 						{isSameAuthor && (
 							<button

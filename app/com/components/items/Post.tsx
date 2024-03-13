@@ -26,7 +26,6 @@ import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
 import PoundIcon from '../../icons/baseline-pound';
 import RepeatIcon from '../../icons/baseline-repeat';
-import ShareIcon from '../../icons/baseline-share';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
@@ -34,7 +33,6 @@ import PostWarning from '../moderation/PostWarning';
 import Embed from '../embeds/Embed';
 
 import PostOverflowAction from './posts/PostOverflowAction';
-import PostShareAction from './posts/PostShareAction';
 import ReplyAction from './posts/ReplyAction';
 import RepostAction from './posts/RepostAction';
 
@@ -242,20 +240,6 @@ const Post = (props: PostProps) => {
 								)}
 							</TimeAgo>
 						</div>
-
-						{(() => {
-							if (props.interactive) {
-								return (
-									<div class="shrink-0">
-										<PostOverflowAction post={post}>
-											<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary/40">
-												<MoreHorizIcon />
-											</button>
-										</PostOverflowAction>
-									</div>
-								);
-							}
-						})()}
 					</div>
 
 					<PostContent post={post} postPermalink={postPermalink} timelineDid={() => props.timelineDid} />
@@ -348,11 +332,11 @@ const Post = (props: PostProps) => {
 									</div>
 
 									<div class="shrink-0">
-										<PostShareAction post={post}>
+										<PostOverflowAction post={post}>
 											<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base hover:bg-secondary/40">
-												<ShareIcon />
+												<MoreHorizIcon />
 											</button>
-										</PostShareAction>
+										</PostOverflowAction>
 									</div>
 								</div>
 							);

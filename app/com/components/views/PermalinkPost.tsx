@@ -28,14 +28,12 @@ import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
 import PoundIcon from '../../icons/baseline-pound';
 import RepeatIcon from '../../icons/baseline-repeat';
-import ShareIcon from '../../icons/baseline-share';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import Embed from '../embeds/Embed';
 
 import PostOverflowAction from '../items/posts/PostOverflowAction';
-import PostShareAction from '../items/posts/PostShareAction';
 import RepostAction from '../items/posts/RepostAction';
 import ReplyAction from '../items/posts/ReplyAction';
 
@@ -111,14 +109,6 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 						<span class="block overflow-hidden text-ellipsis whitespace-nowrap">@{author.handle.value}</span>
 					</span>
 				</Link>
-
-				<div class="flex shrink-0 grow justify-end">
-					<PostOverflowAction post={post} onTranslate={() => setShowTl(true)}>
-						<button class="-mx-2 -my-1.5 flex h-8 w-8 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary/40">
-							<MoreHorizIcon />
-						</button>
-					</PostOverflowAction>
-				</div>
 			</div>
 
 			{isPostModerated(post) ? (
@@ -235,11 +225,11 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 					<FavoriteIcon class="hidden group-[.is-active]:block" />
 				</button>
 
-				<PostShareAction post={post}>
+				<PostOverflowAction post={post} onTranslate={() => setShowTl(true)}>
 					<button class="flex h-9 w-9 items-center justify-center rounded-full text-xl hover:bg-secondary/40">
-						<ShareIcon />
+						<MoreHorizIcon />
 					</button>
-				</PostShareAction>
+				</PostOverflowAction>
 			</div>
 
 			{(() => {
