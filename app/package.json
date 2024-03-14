@@ -12,31 +12,31 @@
 	"dependencies": {
 		"@floating-ui/dom": "^1.6.3",
 		"@floating-ui/utils": "^0.2.1",
-		"@mary/bluesky-client": "npm:@jsr/mary__bluesky-client@^0.5.4",
+		"@mary/bluesky-client": "npm:@jsr/mary__bluesky-client@^0.5.6",
 		"@pkg/emoji-db": "workspace:^",
 		"@pkg/solid-freeze": "workspace:^",
 		"@pkg/solid-navigation": "workspace:^",
 		"@pkg/solid-page-router": "workspace:^",
 		"@pkg/solid-query": "workspace:^",
 		"@pkg/solid-use-gesture": "workspace:^",
-		"@solid-primitives/event-listener": "^2.3.2",
+		"@solid-primitives/event-listener": "^2.3.3",
 		"@thisbeyond/solid-dnd": "^0.7.5",
 		"cborg": "4.0.7",
 		"idb": "^8.0.0",
-		"immer": "^10.0.3",
+		"immer": "^10.0.4",
 		"solid-floating-ui": "^0.2.1",
 		"solid-js": "^1.8.15",
 		"solid-textarea-autosize": "^0.0.5",
-		"tldts": "^6.1.11"
+		"tldts": "^6.1.13"
 	},
 	"devDependencies": {
 		"@types/dom-close-watcher": "^1.0.0",
 		"@types/dom-navigation": "^1.0.3",
-		"@types/node": "^20.11.24",
+		"@types/node": "^20.11.27",
 		"autoprefixer": "^10.4.18",
 		"postcss": "^8.4.35",
-		"terser": "^5.28.1",
-		"vite": "^5.1.4",
+		"terser": "^5.29.1",
+		"vite": "^5.1.6",
 		"vite-plugin-pwa": "0.17.4",
 		"vite-plugin-solid": "^2.10.1"
 	}
