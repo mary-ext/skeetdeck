@@ -274,7 +274,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 					`group relative`,
 					type === 'post' && `text-base`,
 					type === 'textarea' &&
-						`rounded-md border border-input text-sm outline-2 -outline-offset-1 outline-accent focus-within:outline disabled:opacity-50`,
+						`rounded-md border border-input text-sm outline-2 -outline-offset-1 outline-accent disabled:opacity-50 focus-within:outline`,
 				])
 			}
 		>

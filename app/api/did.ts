@@ -1,4 +1,4 @@
-import { type DidDocument, BskyXRPC} from '@mary/bluesky-client'
+import { type DidDocument, BskyXRPC } from '@mary/bluesky-client';
 
 import type { At } from './atp-schema';
 import { APPVIEW_URL } from './globals/defaults';
