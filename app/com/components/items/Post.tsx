@@ -82,7 +82,7 @@ const Post = (props: PostProps) => {
 			class={clsx([
 				`relative border-divider px-4 outline-2 -outline-offset-2 outline-primary focus-visible:outline`,
 				!props.next && `border-b`,
-				props.interactive && `hover:bg-secondary/10`,
+				!isMobile && props.interactive && `hover:bg-secondary/10`,
 			])}
 		>
 			{(() => {
