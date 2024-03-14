@@ -1022,8 +1022,8 @@ const ComposerPane = () => {
 									<div class="mb-2 mr-4 flex flex-wrap gap-3 empty:hidden">
 										<For each={images}>
 											{(image, index) => (
-												<div class="relative overflow-hidden rounded-md">
-													<BlobImage src={image.blob} class="h-32 w-32 object-cover" />
+												<div class="relative overflow-hidden rounded-md border border-divider">
+													<BlobImage src={image.blob} class="h-32 w-32 bg-white object-cover" />
 
 													<fieldset class="absolute inset-0 grid place-items-center bg-black/70 text-white disabled:pointer-events-none">
 														<button
