@@ -65,7 +65,7 @@ export const MobileLinkingProvider = (props: MobileLinkingProviderProps) => {
 		}
 	};
 
-	const navigate: LinkingContextObject['navigate'] = (to, alt) => {
+	const navigate: LinkingContextObject['navigate'] = (to, _alt) => {
 		const resolved = resolve(to);
 
 		if (typeof resolved === 'string') {

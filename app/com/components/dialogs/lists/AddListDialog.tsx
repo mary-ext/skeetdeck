@@ -17,7 +17,7 @@ import { clsx } from '~/utils/misc';
 import { closeModal, useModalState } from '../../../globals/modals';
 
 import { Button } from '../../../primitives/button';
-import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog';
+import { DialogBody, DialogHeader, DialogRoot } from '../../../primitives/dialog';
 import { IconButton } from '../../../primitives/icon-button';
 import { Input } from '../../../primitives/input';
 
