@@ -266,7 +266,7 @@ export const decideLabelModeration = (
 			const service: GlobalServiceOptions | ServiceOptions | undefined = !isSelfLabeled
 				? globals
 				: services[src];
-			const def = (!isSelfLabeled && !isSystem && services[src]?.defs[val]) || GLOBAL_LABELS[val];
+			const def = (!isSystem && services[src]?.defs[val]) || GLOBAL_LABELS[val];
 
 			if (!service || !def || (isSelfLabeled && def.f & FlagsNoSelf)) {
 				continue;
