@@ -90,6 +90,22 @@ export default {
 			input: 'rgb(var(--input))',
 			divider: 'rgb(var(--divider))',
 
+			shade: {
+				0: 'rgb(var(--shade-0))',
+				50: 'rgb(var(--shade-50))',
+				100: 'rgb(var(--shade-100))',
+				200: 'rgb(var(--shade-200))',
+				300: 'rgb(var(--shade-300))',
+				400: 'rgb(var(--shade-400))',
+				500: 'rgb(var(--shade-500))',
+				600: 'rgb(var(--shade-600))',
+				700: 'rgb(var(--shade-700))',
+				800: 'rgb(var(--shade-800))',
+				900: 'rgb(var(--shade-900))',
+				950: 'rgb(var(--shade-950))',
+				1000: 'rgb(var(--shade-1000))',
+			},
+
 			transparent: 'transparent',
 			black: colors.black,
 			white: colors.white,
