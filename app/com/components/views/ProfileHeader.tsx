@@ -1,28 +1,28 @@
 import { type JSX, lazy, createMemo } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
-import { renderLabelName } from '~/api/display';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
-import { CauseLabel } from '~/api/moderation/action';
+import { CauseLabel, getLocalizedLabel, isProfileTempMuted } from '~/api/moderation';
 import { getProfileModDecision } from '../../moderation/profile';
 
 import { formatCompact } from '~/utils/intl/number';
 import { formatAbsDateTime } from '~/utils/intl/time';
 import { clsx } from '~/utils/misc';
 
-import { openModal } from '~/com/globals/modals';
+import { openModal } from '../../globals/modals';
 
 import { BoxedIconButton } from '../../primitives/boxed-icon-button';
 import { Button } from '../../primitives/button';
 
 import { LINK_LIST, LINK_PROFILE_EDIT, LINK_PROFILE_FOLLOWERS, LINK_PROFILE_FOLLOWS, Link } from '../Link';
-import { isProfileTempMuted, useSharedPreferences } from '../SharedPreferences';
+import { useSharedPreferences } from '../SharedPreferences';
 
-import ErrorOutlinedIcon from '../../icons/outline-error';
+import InfoOutlinedIcon from '../../icons/outline-info';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
+import ReportProblemOutlinedIcon from '../../icons/outline-report-problem';
 import VisibilityOutlinedIcon from '../../icons/outline-visibility';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
@@ -43,7 +43,7 @@ export interface ProfileHeaderProps {
 }
 
 const ProfileHeader = (props: ProfileHeaderProps) => {
-	const { filters } = useSharedPreferences();
+	const { moderation } = useSharedPreferences();
 
 	const profile = props.profile;
 	const viewer = profile.viewer;
@@ -178,7 +178,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 				</div>
 
 				{(() => {
-					const isTemporarilyMuted = isProfileTempMuted(filters, profile.did);
+					const isTemporarilyMuted = isProfileTempMuted(moderation, profile.did);
 					if (isTemporarilyMuted !== null) {
 						return (
 							<div class="text-sm text-muted-fg">
@@ -278,16 +278,17 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 						return null;
 					}
 
+					const alert = $verdict.a;
+					const Icon = alert
+						? ReportProblemOutlinedIcon
+						: $verdict.i
+							? InfoOutlinedIcon
+							: VisibilityOutlinedIcon;
+
 					return (
 						<div class="flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider p-3 text-left">
-							{
-								/* @once */ $verdict.a ? (
-									<ErrorOutlinedIcon class="shrink-0 text-lg text-red-500" />
-								) : (
-									<VisibilityOutlinedIcon class="shrink-0 text-lg text-muted-fg" />
-								)
-							}
-							<span class="grow text-sm">{/* @once */ renderLabelName(source.l.val)}</span>
+							<Icon class={`shrink-0 text-lg ` + (alert ? `text-red-500` : `text-muted-fg`)} />
+							<span class="grow text-sm">{/* @once */ getLocalizedLabel(source.d).n}</span>
 						</div>
 					);
 				})()}

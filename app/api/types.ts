@@ -1,12 +1,3 @@
-import type { At } from './atp-schema';
-
-export interface FilterPreferences {
-	/** Hide reposts by these users from the timeline */
-	hideReposts: At.DID[];
-	/** Temporarily hide posts by these users from the timeline */
-	tempMutes: { [user: At.DID]: number | undefined };
-}
-
 export interface LanguagePreferences {
 	/** Allow posts with these languages */
 	languages: string[];

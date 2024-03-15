@@ -6,10 +6,12 @@ import type { SignalizedProfile } from '~/api/stores/profiles';
 import type { TimelinePage, getTimelineKey } from '~/api/queries/get-timeline';
 import { produceTimelineFilter } from '~/api/updaters/timeline-filter';
 
+import { isProfileTempMuted } from '~/api/moderation';
+
 import { closeModal } from '../../globals/modals';
 
 import DialogOverlay from './DialogOverlay';
-import { isProfileTempMuted, useBustRevCache, useSharedPreferences } from '../SharedPreferences';
+import { useBustRevCache, useSharedPreferences } from '../SharedPreferences';
 
 import { Button } from '../../primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
@@ -28,13 +30,13 @@ const SilenceConfirmDialog = (props: SilenceConfirmDialogProps) => {
 	const did = profile.did;
 	const uid = profile.uid;
 
-	const { filters } = useSharedPreferences();
+	const { moderation } = useSharedPreferences();
 
 	const [duration, setDuration] = createSignal(1 * 24 * 60 * 60 * 1_000);
-	const silenced = createMemo(() => isProfileTempMuted(filters, did) !== null);
+	const silenced = createMemo(() => isProfileTempMuted(moderation, did) !== null);
 
 	const handleConfirm = () => {
-		const tempMutes = filters.tempMutes;
+		const tempMutes = moderation.tempMutes;
 
 		closeModal();
 

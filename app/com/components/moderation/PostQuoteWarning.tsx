@@ -1,15 +1,15 @@
 import { type Component, type ComponentProps, type JSX, createMemo, createSignal } from 'solid-js';
 
 import type { AppBskyEmbedRecord } from '~/api/atp-schema';
-import { renderLabelName } from '~/api/display';
 
 import {
 	type ModerationDecision,
 	CauseLabel,
 	CauseMutedKeyword,
 	CauseMutedTemporary,
-} from '~/api/moderation/action';
-import { FlagNoOverride } from '~/api/moderation/enums';
+	FlagsForced,
+	getLocalizedLabel,
+} from '~/api/moderation';
 
 import { getQuoteModDecision } from '../../moderation/quote';
 
@@ -63,14 +63,14 @@ const PostQuoteWarning = (props: PostQuoteWarningProps) => {
 				const source = $verdict.s;
 				const type = source.t;
 
-				const forced = type === CauseLabel && source.d.f & FlagNoOverride;
+				const forced = type === CauseLabel && source.d.f & FlagsForced;
 
 				let Icon: Component<ComponentProps<'svg'>>;
 				let title: string;
 
 				if (type === CauseLabel) {
 					Icon = VisibilityOutlinedIcon;
-					title = `Quote contains ${renderLabelName(source.l.val)}`;
+					title = `Quote contains ${getLocalizedLabel(source.d).n}`;
 				} else if (type === CauseMutedKeyword) {
 					Icon = FilterAltOutlinedIcon;
 					title = source.n;

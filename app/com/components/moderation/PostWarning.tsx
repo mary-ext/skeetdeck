@@ -1,7 +1,6 @@
 import { type Component, type ComponentProps, type JSX, createMemo, createSignal } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
-import { renderLabelName } from '~/api/display';
 import type { SignalizedPost } from '~/api/stores/posts';
 
 import {
@@ -9,8 +8,9 @@ import {
 	CauseLabel,
 	CauseMutedKeyword,
 	CauseMutedTemporary,
-} from '~/api/moderation/action';
-import { FlagNoOverride } from '~/api/moderation/enums';
+	FlagsForced,
+	getLocalizedLabel,
+} from '~/api/moderation';
 
 import { getPostModDecision } from '../../moderation/post';
 
@@ -74,14 +74,14 @@ const PostWarning = (props: PostWarningProps) => {
 		const source = $verdict.s;
 		const type = source.t;
 
-		const forced = type === CauseLabel && source.d.f & FlagNoOverride;
+		const forced = type === CauseLabel && source.d.f & FlagsForced;
 
 		let Icon: Component<ComponentProps<'svg'>>;
 		let title: string;
 
 		if (type === CauseLabel) {
 			Icon = VisibilityOutlinedIcon;
-			title = renderLabelName(source.l.val);
+			title = getLocalizedLabel(source.d).n;
 		} else if (type === CauseMutedKeyword) {
 			Icon = FilterAltOutlinedIcon;
 			title = source.n;

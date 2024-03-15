@@ -5,7 +5,7 @@ import {
 	type ModerationDecision,
 	decideLabelModeration,
 	finalizeModeration,
-} from '~/api/moderation/action';
+} from '~/api/moderation';
 
 import { sequal } from '~/utils/dequal';
 

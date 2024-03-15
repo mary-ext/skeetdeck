@@ -1,15 +1,14 @@
 import '@pkg/solid-query';
 
-import type { ModerationOpts } from './moderation/types';
-import type { FilterPreferences, LanguagePreferences } from './types';
+import type { ModerationOptions } from './moderation';
+import type { LanguagePreferences } from './types';
 
 declare module '@pkg/solid-query' {
 	interface Register {
 		queryMeta: {
 			batched?: boolean;
 			timelineOpts?: {
-				moderation: ModerationOpts;
-				filters: FilterPreferences;
+				moderation: ModerationOptions;
 				language: LanguagePreferences;
 			};
 		};

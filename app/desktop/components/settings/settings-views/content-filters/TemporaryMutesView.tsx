@@ -41,7 +41,7 @@ interface ProfileMuteItem {
 const TemporaryMutesView = () => {
 	const router = useViewRouter();
 
-	const tempMutes = preferences.filters.tempMutes;
+	const tempMutes = preferences.moderation.tempMutes;
 
 	const [page, setPage] = createSignal(1);
 

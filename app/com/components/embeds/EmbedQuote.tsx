@@ -3,7 +3,7 @@ import { type JSX } from 'solid-js';
 import type { AppBskyEmbedRecord, AppBskyFeedPost } from '~/api/atp-schema';
 import { getRecordId } from '~/api/utils/misc';
 
-import type { ModerationDecision } from '~/api/moderation/action';
+import type { ModerationDecision } from '~/api/moderation';
 
 import { clsx } from '~/utils/misc';
 

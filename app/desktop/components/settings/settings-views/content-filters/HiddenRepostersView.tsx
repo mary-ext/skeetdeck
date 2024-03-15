@@ -37,7 +37,7 @@ interface ProfileHiddenItem {
 const TemporaryMutesView = () => {
 	const router = useViewRouter();
 
-	const hiddenReposters = preferences.filters.hideReposts;
+	const hiddenReposters = preferences.moderation.hideReposts;
 
 	const [page, setPage] = createSignal(1);
 

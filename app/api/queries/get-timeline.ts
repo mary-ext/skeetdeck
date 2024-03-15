@@ -13,12 +13,12 @@ import { wrapInfiniteQuery } from '../utils/query';
 
 import {
 	type ModerationCause,
+	type ModerationOptions,
+	PreferenceHide,
 	decideLabelModeration,
 	decideMutedKeywordModeration,
 	finalizeModeration,
-} from '../moderation/action';
-import { PreferenceHide } from '../moderation/enums';
-import type { ModerationOpts } from '../moderation/types';
+} from '../moderation';
 
 import {
 	type PostFilter,
@@ -29,7 +29,7 @@ import {
 	createUnjoinedSlices,
 } from '../models/timeline';
 
-import type { FilterPreferences, LanguagePreferences } from '../types';
+import type { LanguagePreferences } from '../types';
 
 import _getDid from './_did';
 import { fetchPost } from './get-post';
@@ -133,7 +133,7 @@ export const getTimeline = wrapInfiniteQuery(
 		const [, uid, params, limit] = ctx.queryKey;
 		const pageParam = ctx.pageParam;
 
-		const timelineOpts = ctx.meta?.timelineOpts;
+		const { language, moderation } = ctx.meta?.timelineOpts || {};
 
 		const type = params.type;
 
@@ -159,7 +159,7 @@ export const getTimeline = wrapInfiniteQuery(
 			sliceFilter = createHomeSliceFilter(uid, params.showReplies === 'follows');
 
 			postFilter = combine([
-				createHiddenRepostFilter(timelineOpts?.filters),
+				createHiddenRepostFilter(moderation),
 				createDuplicatePostFilter(items),
 
 				!params.showReplies && createHideRepliesFilter(),
@@ -167,35 +167,35 @@ export const getTimeline = wrapInfiniteQuery(
 				!params.showReposts && createHideRepostsFilter(),
 
 				createInvalidReplyFilter(),
-				createLabelPostFilter(timelineOpts?.moderation),
-				createTempMutePostFilter(uid, timelineOpts?.filters),
+				createLabelPostFilter(moderation),
+				createTempMutePostFilter(uid, moderation),
 			]);
 		} else if (type === 'feed' || type === 'list') {
 			sliceFilter = createFeedSliceFilter();
 			postFilter = combine([
-				type === 'feed' && createHiddenRepostFilter(timelineOpts?.filters),
+				type === 'feed' && createHiddenRepostFilter(moderation),
 				createDuplicatePostFilter(items),
 
 				!params.showReplies && createHideRepliesFilter(),
 				!params.showQuotes && createHideQuotesFilter(),
 				type === 'feed' && !params.showReposts && createHideRepostsFilter(),
 
-				createLanguagePostFilter(timelineOpts?.language),
-				createLabelPostFilter(timelineOpts?.moderation),
-				createTempMutePostFilter(uid, timelineOpts?.filters),
+				createLanguagePostFilter(language),
+				createLabelPostFilter(moderation),
+				createTempMutePostFilter(uid, moderation),
 			]);
 		} else if (type === 'profile') {
-			postFilter = createLabelPostFilter(timelineOpts?.moderation);
+			postFilter = createLabelPostFilter(moderation);
 
 			if (params.tab === 'posts') {
 				const did = await _getDid(agent.rpc, params.actor);
 				sliceFilter = createProfileSliceFilter(did);
-				postFilter = combine([createInvalidReplyFilter(), createLabelPostFilter(timelineOpts?.moderation)]);
+				postFilter = combine([createInvalidReplyFilter(), createLabelPostFilter(moderation)]);
 			} else if (params.tab === 'likes' || params.tab === 'media') {
 				sliceFilter = null;
 			}
 		} else {
-			postFilter = createLabelPostFilter(timelineOpts?.moderation);
+			postFilter = createLabelPostFilter(moderation);
 		}
 
 		while (cursor !== null && count < limit) {
@@ -453,7 +453,7 @@ const createInvalidReplyFilter = (): PostFilter => {
 	};
 };
 
-const createLabelPostFilter = (opts?: ModerationOpts): PostFilter | undefined => {
+const createLabelPostFilter = (opts?: ModerationOptions): PostFilter | undefined => {
 	if (!opts) {
 		return;
 	}
@@ -507,7 +507,7 @@ const createLanguagePostFilter = (prefs?: LanguagePreferences): PostFilter | und
 	};
 };
 
-const createHiddenRepostFilter = (prefs?: FilterPreferences): PostFilter | undefined => {
+const createHiddenRepostFilter = (prefs?: ModerationOptions): PostFilter | undefined => {
 	if (!prefs) {
 		return;
 	}
@@ -525,7 +525,10 @@ const createHiddenRepostFilter = (prefs?: FilterPreferences): PostFilter | undef
 	};
 };
 
-const createTempMutePostFilter = (uid: At.DID, prefs?: FilterPreferences): PostFilter | undefined => {
+const createTempMutePostFilter = (
+	uid: At.DID,
+	prefs: ModerationOptions | undefined,
+): PostFilter | undefined => {
 	if (!prefs) {
 		return;
 	}

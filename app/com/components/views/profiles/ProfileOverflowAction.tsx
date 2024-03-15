@@ -4,13 +4,15 @@ import { multiagent } from '~/api/globals/agent';
 
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
+import { isProfileTempMuted } from '~/api/moderation';
+
 import { openModal } from '../../../globals/modals';
 
 import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
 
 import { Flyout } from '../../Flyout';
 import { LINK_PROFILE_FEEDS, LINK_PROFILE_LISTS, useLinking } from '../../Link';
-import { isProfileTempMuted, useSharedPreferences } from '../../SharedPreferences';
+import { useSharedPreferences } from '../../SharedPreferences';
 
 import BlockIcon from '../../../icons/baseline-block';
 import LaunchIcon from '../../../icons/baseline-launch';
@@ -40,7 +42,7 @@ const isDesktop = import.meta.env.VITE_MODE === 'desktop';
 
 const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 	const linking = useLinking();
-	const { filters } = useSharedPreferences();
+	const { moderation } = useSharedPreferences();
 
 	return (() => {
 		const profile = props.profile;
@@ -49,12 +51,12 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 		const isSelf = profile.uid === did;
 		const isOwnAccount = createMemo(() => multiagent.accounts.some((account) => account.did === did));
 
-		const isTempMuted = () => isProfileTempMuted(filters, did);
+		const isTempMuted = () => isProfileTempMuted(moderation, did);
 		const isMuted = () => profile.viewer.muted.value;
 		const isBlocked = () => profile.viewer.blocking.value;
 
 		const isRepostHidden = createMemo(() => {
-			const index = filters.hideReposts.indexOf(did);
+			const index = moderation.hideReposts.indexOf(did);
 
 			if (index !== -1) {
 				return { index: index };
@@ -117,7 +119,7 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 						{!isSelf && (
 							<button
 								onClick={() => {
-									const array = filters.hideReposts;
+									const array = moderation.hideReposts;
 									const repostHidden = isRepostHidden();
 
 									close();

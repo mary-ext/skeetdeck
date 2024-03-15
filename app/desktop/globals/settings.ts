@@ -1,7 +1,5 @@
-import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults';
-import { PreferenceWarn } from '~/api/moderation/enums';
-import type { ModerationOpts } from '~/api/moderation/types';
-import type { FilterPreferences, LanguagePreferences, TranslationPreferences } from '~/api/types';
+import type { ModerationOptions } from '~/api/moderation';
+import type { LanguagePreferences, TranslationPreferences } from '~/api/types';
 
 import { getCurrentTid } from '~/api/utils/tid';
 
@@ -11,12 +9,21 @@ import type { SharedPreferencesObject } from '~/com/components/SharedPreferences
 
 import { type DeckConfig, type PaneConfig, PaneSize, SpecificPaneSize } from './panes';
 
+interface PartialPreferencesSchemaV9 {
+	/** Content moderation */
+	moderation: any;
+	/** Filter configuration */
+	filters: any;
+}
+
 export interface PreferencesSchema {
-	$version: 9;
+	$version: 10;
 	/** Used for cache-busting moderation filters */
 	rev: number;
 	/** Onboarding mode */
 	onboarding: boolean;
+	/** Temporary flag for moderation migration purposes */
+	moderationMigrate: boolean;
 	/** Deck configuration */
 	decks: DeckConfig[];
 	/** UI configuration */
@@ -36,9 +43,7 @@ export interface PreferencesSchema {
 		warnNoMediaAlt: boolean;
 	};
 	/** Content moderation */
-	moderation: Omit<ModerationOpts, '_filtersCache'>;
-	/** Filter configuration */
-	filters: FilterPreferences;
+	moderation: ModerationOptions;
 	/** Language configuration */
 	language: LanguagePreferences;
 	/** Translation configuration */
@@ -50,9 +55,10 @@ const PREF_KEY = 'rantai_prefs';
 export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KEY, (version, prev) => {
 	if (version === 0) {
 		const object: PreferencesSchema = {
-			$version: 9,
+			$version: 10,
 			rev: 0,
 			onboarding: true,
+			moderationMigrate: false,
 			decks: [],
 			ui: {
 				theme: 'auto',
@@ -64,40 +70,9 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 				warnNoMediaAlt: true,
 			},
 			moderation: {
-				globals: {
-					labels: {
-						porn: PreferenceWarn,
-						sexual: PreferenceWarn,
-						nudity: PreferenceWarn,
-						nsfl: PreferenceWarn,
-						corpse: PreferenceWarn,
-						gore: PreferenceWarn,
-						torture: PreferenceWarn,
-						'self-harm': PreferenceWarn,
-						intolerant: PreferenceWarn,
-						'intolerant-race': PreferenceWarn,
-						'intolerant-gender': PreferenceWarn,
-						'intolerant-sexual-orientation': PreferenceWarn,
-						'intolerant-religion': PreferenceWarn,
-						'icon-intolerant': PreferenceWarn,
-						threat: PreferenceWarn,
-						spoiler: PreferenceWarn,
-						spam: PreferenceWarn,
-						'account-security': PreferenceWarn,
-						'net-abuse': PreferenceWarn,
-						impersonation: PreferenceWarn,
-						scam: PreferenceWarn,
-					},
-				},
-				// users: {},
-				labelers: {
-					[DEFAULT_MODERATION_LABELER]: {
-						labels: {},
-					},
-				},
+				globals: { prefs: {} },
+				services: {},
 				keywords: [],
-			},
-			filters: {
 				hideReposts: [],
 				tempMutes: {},
 			},
@@ -116,94 +91,21 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 		return object;
 	}
 
-	if (version < 2) {
-		const _prev = prev as PreferencesSchema;
+	if (version < 10) {
+		const _prev = prev as PartialPreferencesSchemaV9;
+		const _next = prev as PreferencesSchema;
 
-		_prev.a11y = {
-			warnNoMediaAlt: true,
+		_next.moderationMigrate = true;
+
+		_next.moderation = {
+			globals: { prefs: {} },
+			services: {},
+			keywords: _prev.moderation.keywords,
+			hideReposts: _prev.filters.hideReposts,
+			tempMutes: _prev.filters.tempMutes,
 		};
-	}
 
-	if (version < 3) {
-		const _prev = prev as PreferencesSchema;
-
-		_prev.rev = 0;
-	}
-
-	if (version < 4) {
-		const _prev = prev as PreferencesSchema;
-
-		_prev.translation = {
-			to: 'system',
-			exclusions: [],
-		};
-	}
-
-	if (version < 5) {
-		const _prev = prev as PreferencesSchema;
-
-		const decks = _prev.decks;
-		for (let i = 0, il = decks.length; i < il; i++) {
-			const deck = decks[i];
-			const panes = deck.panes;
-
-			for (let j = 0, jl = panes.length; j < jl; j++) {
-				const pane = panes[j];
-
-				if (pane.type === 'home') {
-					pane.showReplies = 'follows';
-					pane.showQuotes = true;
-					pane.showReposts = true;
-				}
-			}
-		}
-	}
-
-	if (version < 6) {
-		const _prev = prev as PreferencesSchema;
-
-		_prev.ui.profileMediaGrid = true;
-	}
-
-	if (version < 7) {
-		const _prev = prev as PreferencesSchema;
-
-		const decks = _prev.decks;
-		for (let i = 0, il = decks.length; i < il; i++) {
-			const deck = decks[i];
-			const panes = deck.panes;
-
-			for (let j = 0, jl = panes.length; j < jl; j++) {
-				const pane = panes[j];
-
-				if (pane.type === 'list') {
-					pane.showReplies = true;
-					pane.showQuotes = true;
-				} else if (pane.type === 'feed') {
-					pane.showReplies = true;
-					pane.showQuotes = true;
-					pane.showReposts = true;
-				}
-			}
-		}
-	}
-
-	if (version < 8) {
-		const _prev = prev as PreferencesSchema;
-
-		_prev.ui.threadedReplies = false;
-	}
-
-	if (version < 9) {
-		const _prev = prev as PreferencesSchema;
-
-		const filters = _prev.moderation.keywords;
-		for (let i = 0, il = filters.length; i < il; i++) {
-			const filter = filters[i];
-			filter.noFollows = false;
-		}
-
-		_prev.$version = 9;
+		_next.$version = 10;
 	}
 
 	return prev;
@@ -222,7 +124,6 @@ export const createSharedPreferencesObject = (): SharedPreferencesObject => {
 		moderation: {
 			...preferences.moderation,
 		},
-		filters: preferences.filters,
 		language: preferences.language,
 		translation: preferences.translation,
 	};

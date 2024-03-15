@@ -6,7 +6,6 @@ import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 
 import {
 	VIEW_HIDDEN_REPOSTERS,
-	VIEW_LABEL_CONFIG,
 	VIEW_SUBSCRIBED_LABELERS,
 	VIEW_TEMPORARY_MUTES,
 	useViewRouter,
@@ -27,7 +26,7 @@ const ContentFiltersView = () => {
 			<div class="flex grow flex-col overflow-y-auto pb-4">
 				<p class="p-4 text-base font-bold leading-5">Label filters</p>
 
-				<button onClick={() => router.move({ type: VIEW_LABEL_CONFIG, kind: 'global' })} class={selectItem}>
+				<button class={selectItem}>
 					<span>Content filter preferences</span>
 					<ChevronRightIcon class="text-xl text-muted-fg" />
 				</button>

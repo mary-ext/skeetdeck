@@ -1,10 +1,8 @@
 import { type JSX, createMemo, createSignal } from 'solid-js';
 
-import { renderLabelName } from '~/api/display';
 import type { SignalizedPost } from '~/api/stores/posts';
 
-import { CauseLabel, type ModerationDecision } from '~/api/moderation/action';
-import { FlagNoOverride } from '~/api/moderation/enums';
+import { type ModerationDecision, CauseLabel, FlagsForced, getLocalizedLabel } from '~/api/moderation';
 
 import VisibilityOutlinedIcon from '~/com/icons/outline-visibility';
 
@@ -35,8 +33,8 @@ const PostEmbedWarning = (props: PostEmbedWarningProps) => {
 		const [show, setShow] = createSignal(false);
 
 		const source = $verdict.s;
-		const forced = source.t === CauseLabel && source.d.f & FlagNoOverride;
-		const title = source.t === CauseLabel ? renderLabelName(source.l.val) : `Media warning`;
+		const forced = source.t === CauseLabel && source.d.f & FlagsForced;
+		const title = source.t === CauseLabel ? getLocalizedLabel(source.d).n : `Media warning`;
 
 		return [
 			<button

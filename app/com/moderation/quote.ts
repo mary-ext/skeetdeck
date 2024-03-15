@@ -6,15 +6,15 @@ import { unwrapPostEmbedText } from '~/api/utils/post';
 import {
 	type ModerationCause,
 	type ModerationDecision,
+	PreferenceWarn,
 	decideLabelModeration,
 	decideMutedKeywordModeration,
 	decideMutedPermanentModeration,
 	decideMutedTemporaryModeration,
 	finalizeModeration,
-} from '~/api/moderation/action';
-import { PreferenceWarn } from '~/api/moderation/enums';
+} from '~/api/moderation';
 
-import { type SharedPreferencesObject, isProfileTempMuted } from '../components/SharedPreferences';
+import { type SharedPreferencesObject } from '../components/SharedPreferences';
 
 type EmbeddedPostRecord = AppBskyEmbedRecord.ViewRecord;
 type PostRecord = AppBskyFeedPost.Record;
@@ -28,7 +28,7 @@ export const getQuoteModDecision = (quote: EmbeddedPostRecord, opts: SharedPrefe
 	let res = cached.get(quote);
 
 	if (!res || !sequal(res.c, key)) {
-		const { moderation, filters } = opts;
+		const { moderation } = opts;
 
 		const labels = quote.labels;
 		const text = (quote.value as PostRecord).text + unwrapPostEmbedText(quote.embeds?.[0]);
@@ -44,7 +44,7 @@ export const getQuoteModDecision = (quote: EmbeddedPostRecord, opts: SharedPrefe
 
 		decideLabelModeration(accu, labels, authorDid, moderation);
 		decideMutedPermanentModeration(accu, isMuted);
-		decideMutedTemporaryModeration(accu, isProfileTempMuted(filters, authorDid));
+		decideMutedTemporaryModeration(accu, authorDid, moderation);
 		decideMutedKeywordModeration(accu, text, isFollowing, PreferenceWarn, moderation);
 
 		cached.set(quote, (res = { d: finalizeModeration(accu), c: key }));

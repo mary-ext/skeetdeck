@@ -3,7 +3,7 @@ import { type Accessor } from 'solid-js';
 import type { AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedRecord } from '~/api/atp-schema';
 import { getCollectionId } from '~/api/utils/misc';
 
-import type { ModerationDecision } from '~/api/moderation/action';
+import type { ModerationDecision } from '~/api/moderation';
 
 import type { SignalizedPost } from '~/api/stores/posts';
 

@@ -16,7 +16,7 @@ export const VIEW_KEYWORD_FILTER_FORM = 7;
 
 // Content filters
 export const VIEW_HIDDEN_REPOSTERS = 8;
-export const VIEW_LABEL_CONFIG = 9;
+export const VIEW_LABELER_CONFIG = 9;
 export const VIEW_SUBSCRIBED_LABELERS = 10;
 export const VIEW_TEMPORARY_MUTES = 11;
 
@@ -35,7 +35,7 @@ export type ViewType =
 	| typeof VIEW_HIDDEN_REPOSTERS
 	| typeof VIEW_KEYWORD_FILTER_FORM
 	| typeof VIEW_KEYWORD_FILTERS
-	| typeof VIEW_LABEL_CONFIG
+	| typeof VIEW_LABELER_CONFIG
 	| typeof VIEW_LANGAUGE
 	| typeof VIEW_SUBSCRIBED_LABELERS
 	| typeof VIEW_TEMPORARY_MUTES;
@@ -51,8 +51,7 @@ export type View =
 	| { type: typeof VIEW_ACCESSIBILITY }
 	// Content filters
 	| { type: typeof VIEW_HIDDEN_REPOSTERS }
-	| { type: typeof VIEW_LABEL_CONFIG; kind: 'global' }
-	| { type: typeof VIEW_LABEL_CONFIG; kind: 'labeler'; did: At.DID }
+	| { type: typeof VIEW_LABELER_CONFIG; did: At.DID }
 	| { type: typeof VIEW_SUBSCRIBED_LABELERS }
 	| { type: typeof VIEW_TEMPORARY_MUTES }
 	// Keyword filter form

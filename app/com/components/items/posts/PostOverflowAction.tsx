@@ -5,6 +5,7 @@ import { getRecordId } from '~/api/utils/misc';
 
 import type { SignalizedPost } from '~/api/stores/posts';
 
+import { isProfileTempMuted } from '~/api/moderation';
 import { serializeRichText } from '~/api/richtext/utils';
 
 import { openModal } from '../../../globals/modals';
@@ -12,7 +13,7 @@ import { openModal } from '../../../globals/modals';
 import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
 
 import { Flyout } from '../../Flyout';
-import { isProfileTempMuted, useSharedPreferences } from '../../SharedPreferences';
+import { useSharedPreferences } from '../../SharedPreferences';
 
 import ContentCopyIcon from '../../../icons/baseline-content-copy';
 import DeleteOutlinedIcon from '../../../icons/outline-delete';
@@ -37,7 +38,7 @@ export interface PostOverflowActionProps {
 }
 
 const PostOverflowAction = (props: PostOverflowActionProps) => {
-	const { filters } = useSharedPreferences();
+	const { moderation } = useSharedPreferences();
 
 	const onTranslate = props.onTranslate;
 
@@ -50,7 +51,7 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 		const isSameAuthor = post.uid === authorDid;
 		const isOwnAccount = createMemo(() => multiagent.accounts.some((account) => account.did === authorDid));
 
-		const isTempMuted = () => isProfileTempMuted(filters, author.did);
+		const isTempMuted = () => isProfileTempMuted(moderation, author.did);
 		const isMuted = () => author.viewer.muted.value;
 
 		const getPostUrl = () => {

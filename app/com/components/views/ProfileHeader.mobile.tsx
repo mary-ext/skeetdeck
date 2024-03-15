@@ -1,10 +1,9 @@
 import { createMemo, lazy } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
-import { renderLabelName } from '~/api/display';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
-import { CauseLabel } from '~/api/moderation/action';
+import { CauseLabel, getLocalizedLabel, isProfileTempMuted } from '~/api/moderation';
 
 import { formatCompact } from '~/utils/intl/number';
 import { formatAbsDateTime } from '~/utils/intl/time';
@@ -15,12 +14,13 @@ import { openModal } from '~/com/globals/modals';
 import { getProfileModDecision } from '~/com/moderation/profile';
 
 import { LINK_LIST, LINK_PROFILE_FOLLOWERS, LINK_PROFILE_FOLLOWS, Link } from '../Link';
-import { isProfileTempMuted, useSharedPreferences } from '../SharedPreferences';
+import { useSharedPreferences } from '../SharedPreferences';
 
-import ErrorIcon from '../../icons/baseline-error';
-import VisibilityOutlinedIcon from '../../icons/outline-visibility';
-import ShareIcon from '../../icons/baseline-share';
+import InfoOutlinedIcon from '../../icons/outline-info';
 import PersonAddIcon from '../../icons/baseline-person-add';
+import ReportProblemOutlinedIcon from '../../icons/outline-report-problem';
+import ShareIcon from '../../icons/baseline-share';
+import VisibilityOutlinedIcon from '../../icons/outline-visibility';
 
 import { BoxedIconButton } from '../../primitives/boxed-icon-button';
 
@@ -36,7 +36,7 @@ const MuteConfirmDialog = lazy(() => import('../dialogs/MuteConfirmDialog'));
 const SilenceConfirmDialog = lazy(() => import('../dialogs/SilenceConfirmDialog'));
 
 const ProfileHeader = (props: ProfileHeaderProps) => {
-	const { filters } = useSharedPreferences();
+	const { moderation } = useSharedPreferences();
 
 	const profile = props.profile;
 
@@ -130,7 +130,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 				</div>
 
 				{(() => {
-					const isTemporarilyMuted = isProfileTempMuted(filters, did);
+					const isTemporarilyMuted = isProfileTempMuted(moderation, did);
 					if (isTemporarilyMuted !== null) {
 						return (
 							<div class="text-sm text-muted-fg">
@@ -230,16 +230,17 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 						return null;
 					}
 
+					const alert = $verdict.a;
+					const Icon = alert
+						? ReportProblemOutlinedIcon
+						: $verdict.i
+							? InfoOutlinedIcon
+							: VisibilityOutlinedIcon;
+
 					return (
 						<div class="flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider p-3 text-left">
-							{
-								/* @once */ $verdict.a ? (
-									<ErrorIcon class="shrink-0 text-lg text-red-500" />
-								) : (
-									<VisibilityOutlinedIcon class="shrink-0 text-lg text-muted-fg" />
-								)
-							}
-							<span class="grow text-sm">{/* @once */ renderLabelName(source.l.val)}</span>
+							<Icon class={`shrink-0 text-lg ` + (alert ? `text-red-500` : `text-muted-fg`)} />
+							<span class="grow text-sm">{/* @once */ getLocalizedLabel(source.d).n}</span>
 						</div>
 					);
 				})()}

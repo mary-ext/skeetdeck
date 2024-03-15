@@ -1,10 +1,7 @@
 import type { At } from '~/api/atp-schema';
-import type { FilterPreferences, LanguagePreferences, TranslationPreferences } from '~/api/types';
+import type { LanguagePreferences, TranslationPreferences } from '~/api/types';
 
-import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults';
-
-import { PreferenceWarn } from '~/api/moderation/enums';
-import type { ModerationOpts } from '~/api/moderation/types';
+import type { ModerationOptions } from '~/api/moderation';
 
 import { createReactiveLocalStorage } from '~/utils/storage';
 
@@ -31,9 +28,7 @@ export interface PreferencesSchema {
 		saved: { uri: At.Uri; name: string; pinned: boolean }[];
 	};
 	/** Content moderation */
-	moderation: Omit<ModerationOpts, '_filtersCache'>;
-	/** Filter configuration */
-	filters: FilterPreferences;
+	moderation: ModerationOptions;
 	/** Language configuration */
 	language: LanguagePreferences;
 	/** Translation configuration */
@@ -65,40 +60,9 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 				],
 			},
 			moderation: {
-				globals: {
-					labels: {
-						porn: PreferenceWarn,
-						sexual: PreferenceWarn,
-						nudity: PreferenceWarn,
-						nsfl: PreferenceWarn,
-						corpse: PreferenceWarn,
-						gore: PreferenceWarn,
-						torture: PreferenceWarn,
-						'self-harm': PreferenceWarn,
-						intolerant: PreferenceWarn,
-						'intolerant-race': PreferenceWarn,
-						'intolerant-gender': PreferenceWarn,
-						'intolerant-sexual-orientation': PreferenceWarn,
-						'intolerant-religion': PreferenceWarn,
-						'icon-intolerant': PreferenceWarn,
-						threat: PreferenceWarn,
-						spoiler: PreferenceWarn,
-						spam: PreferenceWarn,
-						'account-security': PreferenceWarn,
-						'net-abuse': PreferenceWarn,
-						impersonation: PreferenceWarn,
-						scam: PreferenceWarn,
-					},
-				},
-				// users: {},
-				labelers: {
-					[DEFAULT_MODERATION_LABELER]: {
-						labels: {},
-					},
-				},
+				globals: { prefs: {} },
+				services: {},
 				keywords: [],
-			},
-			filters: {
 				hideReposts: [],
 				tempMutes: {},
 			},
@@ -133,7 +97,6 @@ export const createSharedPreferencesObject = (): SharedPreferencesObject => {
 		moderation: {
 			...preferences.moderation,
 		},
-		filters: preferences.filters,
 		language: preferences.language,
 		translation: preferences.translation,
 	};

@@ -10,7 +10,7 @@ import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 
 import DefaultListAvatar from '~/com/assets/default-list-avatar.svg?url';
 
-import { VIEW_CONTENT_FILTERS, VIEW_LABEL_CONFIG, useViewRouter } from '../_router';
+import { VIEW_CONTENT_FILTERS, VIEW_LABELER_CONFIG, useViewRouter } from '../_router';
 
 const selectItem = Interactive({
 	variant: 'muted',
@@ -54,7 +54,7 @@ const SubscribedLabelersView = () => {
 							return;
 						}
 
-						router.move({ type: VIEW_LABEL_CONFIG, kind: 'labeler', did: DEFAULT_MODERATION_LABELER });
+						router.move({ type: VIEW_LABELER_CONFIG, did: DEFAULT_MODERATION_LABELER });
 					};
 
 					return (

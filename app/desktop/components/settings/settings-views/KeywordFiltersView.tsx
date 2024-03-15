@@ -1,6 +1,6 @@
 import { For } from 'solid-js';
 
-import { PreferenceHide, PreferenceIgnore, PreferenceWarn } from '~/api/moderation/enums';
+import { PreferenceHide, PreferenceIgnore, PreferenceWarn } from '~/api/moderation';
 
 import { preferences } from '~/desktop/globals/settings';
 
