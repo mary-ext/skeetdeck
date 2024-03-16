@@ -44,9 +44,9 @@ export interface AgentInstance {
 	auth: BskyAuth;
 }
 
-interface StoredAgent {
-	instance: Promise<AgentInstance>;
-	cleanup: () => void;
+interface StoredAgent extends AgentInstance {
+	p: Promise<AgentInstance>;
+	c: () => void;
 }
 
 export class MultiagentError extends Error {
@@ -117,7 +117,7 @@ export class Multiagent {
 	 * Login with a new account
 	 */
 	async login({ service, identifier, password }: MultiagentLoginOptions): Promise<At.DID> {
-		const { auth, rpc, cleanup } = this.#createAgent(service);
+		const { rpc, auth, c: cleanup } = this.#createAgent(service);
 
 		try {
 			await auth.login({ identifier, password });
@@ -146,8 +146,15 @@ export class Multiagent {
 				}
 			});
 
-			this.#agents[did]?.cleanup();
-			this.#agents[did] = { instance: Promise.resolve({ auth, rpc }), cleanup: cleanup };
+			const stored: StoredAgent = {
+				p: Promise.resolve().then(() => stored),
+				c: cleanup,
+				rpc,
+				auth,
+			};
+
+			this.#agents[did]?.c();
+			this.#agents[did] = stored;
 			return did;
 		} catch (err) {
 			throw new MultiagentError(`LOGIN_FAILURE`, { cause: err });
@@ -162,9 +169,12 @@ export class Multiagent {
 		const index = $accounts.findIndex((acc) => acc.did === did);
 
 		if (index !== -1) {
-			$accounts.splice(index, 1);
+			if (did in this.#agents) {
+				this.#agents[did].c();
+				delete this.#agents[did];
+			}
 
-			delete this.#agents[did];
+			$accounts.splice(index, 1);
 
 			if (this.active === did) {
 				this.active = undefined;
@@ -177,7 +187,8 @@ export class Multiagent {
 	 */
 	connect(did: At.DID): Promise<AgentInstance> {
 		if (did in this.#agents) {
-			return this.#agents[did].instance;
+			const stored = this.#agents[did];
+			return stored.p;
 		}
 
 		const $accounts = this.store.accounts;
@@ -187,12 +198,12 @@ export class Multiagent {
 			return Promise.reject(new MultiagentError(`INVALID_ACCOUNT`));
 		}
 
-		const { rpc, auth, cleanup } = this.#createAgent(data.service);
+		const { rpc, auth, c: cleanup } = this.#createAgent(data.service);
 
-		const promise = new Promise<AgentInstance>((resolve, reject) => {
+		const promise = new Promise<void>((resolve, reject) => {
 			auth.resume(unwrap(data.session)).then(
 				() => {
-					resolve({ auth, rpc });
+					resolve();
 				},
 				(err) => {
 					cleanup();
@@ -201,10 +212,12 @@ export class Multiagent {
 					reject(new MultiagentError(`RESUME_FAILURE`, { cause: err }));
 				},
 			);
-		});
+		}).then(() => stored);
 
-		this.#agents[did] = { instance: promise, cleanup: cleanup };
-		return promise;
+		const stored: StoredAgent = { p: promise, c: cleanup, rpc, auth };
+
+		this.#agents[did] = stored;
+		return stored.p;
 	}
 
 	#createAgent(serviceUri: string) {
@@ -229,7 +242,7 @@ export class Multiagent {
 		return {
 			rpc: rpc,
 			auth: auth,
-			cleanup: createRoot((dispose) => {
+			c: createRoot((dispose) => {
 				createEffect(() => {
 					const actual = auth.session;
 
