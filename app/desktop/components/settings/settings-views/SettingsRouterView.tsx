@@ -7,14 +7,13 @@ import {
 	VIEW_ACCOUNTS,
 	VIEW_ADDITIONAL_LANGUAGE,
 	VIEW_APPEARANCE,
-	VIEW_CONTENT_FILTERS,
+	VIEW_MODERATION,
 	VIEW_EXCLUDED_TRANSLATION,
 	VIEW_HIDDEN_REPOSTERS,
 	VIEW_KEYWORD_FILTER_FORM,
 	VIEW_KEYWORD_FILTERS,
 	VIEW_LABELER_CONFIG,
 	VIEW_LANGAUGE,
-	VIEW_SUBSCRIBED_LABELERS,
 	VIEW_TEMPORARY_MUTES,
 	useViewRouter,
 } from './_router';
@@ -23,13 +22,12 @@ const AboutView = lazy(() => import('./AboutView'));
 const AccessibilityView = lazy(() => import('./AccessibilityView'));
 const AccountsView = lazy(() => import('./AccountsView'));
 const AppearanceView = lazy(() => import('./AppearanceView'));
-const ContentFiltersView = lazy(() => import('./ContentFiltersView'));
+const ModerationView = lazy(() => import('./ModerationView'));
 const KeywordFiltersView = lazy(() => import('./KeywordFiltersView'));
 const LanguageView = lazy(() => import('./LanguageView'));
 
 const HiddenRepostersView = lazy(() => import('./content-filters/HiddenRepostersView'));
 const LabelConfigView = lazy(() => import('./content-filters/LabelerConfigView'));
-const SubscribedLabelersView = lazy(() => import('./content-filters/SubscribedLabelersView'));
 const TemporaryMutesView = lazy(() => import('./content-filters/TemporaryMutesView'));
 
 const KeywordFilterFormView = lazy(() => import('./keyword-filters/KeywordFilterFormView'));
@@ -42,13 +40,12 @@ const views: Record<ViewType, Component> = {
 	[VIEW_ACCESSIBILITY]: AccessibilityView,
 	[VIEW_ACCOUNTS]: AccountsView,
 	[VIEW_APPEARANCE]: AppearanceView,
-	[VIEW_CONTENT_FILTERS]: ContentFiltersView,
+	[VIEW_MODERATION]: ModerationView,
 	[VIEW_KEYWORD_FILTERS]: KeywordFiltersView,
 	[VIEW_LANGAUGE]: LanguageView,
 
 	[VIEW_HIDDEN_REPOSTERS]: HiddenRepostersView,
 	[VIEW_LABELER_CONFIG]: LabelConfigView,
-	[VIEW_SUBSCRIBED_LABELERS]: SubscribedLabelersView,
 	[VIEW_TEMPORARY_MUTES]: TemporaryMutesView,
 
 	[VIEW_KEYWORD_FILTER_FORM]: KeywordFilterFormView,

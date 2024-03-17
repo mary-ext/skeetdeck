@@ -5,14 +5,17 @@ import {
 	type AtpAccessJwt,
 	type AtpSessionData,
 	type AuthLoginOptions,
+	type ModerationService,
 	BskyAuth,
 	BskyXRPC,
+	BskyMod,
 } from '@mary/bluesky-client';
 import { decodeJwt } from '@mary/bluesky-client/utils/jwt';
 
 import type { At } from '../atp-schema';
 
 import { createReactiveLocalStorage } from '~/utils/storage';
+import { signal } from '~/utils/signals';
 
 export interface MultiagentLoginOptions extends AuthLoginOptions {
 	service: string;
@@ -58,6 +61,7 @@ export class MultiagentError extends Error {
 
 export class Multiagent {
 	store: MultiagentStorage;
+	services = signal<ModerationService[]>([]);
 
 	#agents: Record<At.DID, StoredAgent> = {};
 
@@ -226,6 +230,7 @@ export class Multiagent {
 		const $accounts = this.store.accounts!;
 
 		const rpc = new BskyXRPC({ service: serviceUri });
+		const mod = new BskyMod(rpc);
 		const auth = new BskyAuth(rpc, {
 			onRefresh(session) {
 				const did = session!.did;
@@ -257,6 +262,10 @@ export class Multiagent {
 							actual!.refreshJwt = expected.refreshJwt;
 						}
 					}
+				});
+
+				createEffect(() => {
+					mod.labelers = this.services.value;
 				});
 
 				return dispose;

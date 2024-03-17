@@ -8,8 +8,9 @@ import { IconButton } from '~/com/primitives/icon-button';
 import { Interactive } from '~/com/primitives/interactive';
 
 import AddIcon from '~/com/icons/baseline-add';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 
-import { VIEW_KEYWORD_FILTER_FORM, useViewRouter } from './_router';
+import { VIEW_KEYWORD_FILTER_FORM, VIEW_MODERATION, useViewRouter } from './_router';
 
 const selectItem = Interactive({
 	variant: 'muted',
@@ -24,6 +25,14 @@ const KeywordFiltersView = () => {
 	return (
 		<div class="contents">
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
+				<button
+					title="Return to previous screen"
+					onClick={() => router.move({ type: VIEW_MODERATION })}
+					class={/* @once */ IconButton({ edge: 'left' })}
+				>
+					<ArrowLeftIcon />
+				</button>
+
 				<h2 class="grow text-base font-bold">Keyword filters</h2>
 
 				<button

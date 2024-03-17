@@ -29,7 +29,7 @@ import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import VolumeOffIcon from '~/com/icons/baseline-volume-off';
 import VolumeUpIcon from '~/com/icons/baseline-volume-up';
 
-import { VIEW_CONTENT_FILTERS, useViewRouter } from '../_router';
+import { VIEW_MODERATION, useViewRouter } from '../_router';
 
 const PAGE_LIMIT = 25;
 
@@ -105,7 +105,7 @@ const TemporaryMutesView = () => {
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
 				<button
 					title="Return to previous screen"
-					onClick={() => router.move({ type: VIEW_CONTENT_FILTERS })}
+					onClick={() => router.move({ type: VIEW_MODERATION })}
 					class={/* @once */ IconButton({ edge: 'left' })}
 				>
 					<ArrowLeftIcon />

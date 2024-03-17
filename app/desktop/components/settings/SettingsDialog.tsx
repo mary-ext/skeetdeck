@@ -29,12 +29,13 @@ import {
 	VIEW_ACCESSIBILITY,
 	VIEW_ACCOUNTS,
 	VIEW_APPEARANCE,
-	VIEW_CONTENT_FILTERS,
+	VIEW_MODERATION,
 	VIEW_KEYWORD_FILTERS,
 	VIEW_LANGAUGE,
 	useViewRouter,
 } from './settings-views/_router';
 import SettingsRouterView from './settings-views/SettingsRouterView';
+import BackHandOutlinedIcon from '~/com/icons/outline-back-hand';
 
 const SettingsDialog = () => {
 	const [view, setView] = createSignal<View>({ type: VIEW_ACCOUNTS });
@@ -76,11 +77,8 @@ const SettingsDialog = () => {
 								<SideItem to={VIEW_LANGAUGE} icon={LanguageIcon}>
 									Language
 								</SideItem>
-								<SideItem to={VIEW_CONTENT_FILTERS} icon={VisibilityIcon}>
-									Content filters
-								</SideItem>
-								<SideItem to={VIEW_KEYWORD_FILTERS} icon={FilterAltIcon}>
-									Keyword filters
+								<SideItem to={VIEW_MODERATION} icon={BackHandOutlinedIcon}>
+									Moderation
 								</SideItem>
 
 								<SideItem to={VIEW_ABOUT} icon={InfoIcon}>

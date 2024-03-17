@@ -1,4 +1,5 @@
 import type { At } from '~/api/atp-schema';
+import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults';
 import type { LanguagePreferences, TranslationPreferences } from '~/api/types';
 
 import type { ModerationOptions } from '~/api/moderation';
@@ -60,8 +61,17 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 				],
 			},
 			moderation: {
-				globals: { prefs: {} },
-				services: {},
+				labels: {},
+				services: [
+					{
+						did: DEFAULT_MODERATION_LABELER,
+						redact: true,
+						profile: { handle: 'moderation.bsky.app' },
+						prefs: {},
+						vals: [],
+						defs: {},
+					},
+				],
 				keywords: [],
 				hideReposts: [],
 				tempMutes: {},

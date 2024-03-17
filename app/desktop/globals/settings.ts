@@ -1,5 +1,7 @@
-import type { ModerationOptions } from '~/api/moderation';
+import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults';
 import type { LanguagePreferences, TranslationPreferences } from '~/api/types';
+
+import type { ModerationOptions } from '~/api/moderation';
 
 import { getCurrentTid } from '~/api/utils/tid';
 
@@ -9,11 +11,8 @@ import type { SharedPreferencesObject } from '~/com/components/SharedPreferences
 
 import { type DeckConfig, type PaneConfig, PaneSize, SpecificPaneSize } from './panes';
 
-interface PartialPreferencesSchemaV9 {
-	/** Content moderation */
-	moderation: any;
-	/** Filter configuration */
-	filters: any;
+export interface ModerationPreferences extends Omit<ModerationOptions, '_filtersCache'> {
+	updatedAt: number;
 }
 
 export interface PreferencesSchema {
@@ -22,8 +21,6 @@ export interface PreferencesSchema {
 	rev: number;
 	/** Onboarding mode */
 	onboarding: boolean;
-	/** Temporary flag for moderation migration purposes */
-	moderationMigrate: boolean;
 	/** Deck configuration */
 	decks: DeckConfig[];
 	/** UI configuration */
@@ -43,7 +40,7 @@ export interface PreferencesSchema {
 		warnNoMediaAlt: boolean;
 	};
 	/** Content moderation */
-	moderation: ModerationOptions;
+	moderation: ModerationPreferences;
 	/** Language configuration */
 	language: LanguagePreferences;
 	/** Translation configuration */
@@ -58,7 +55,6 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 			$version: 10,
 			rev: 0,
 			onboarding: true,
-			moderationMigrate: false,
 			decks: [],
 			ui: {
 				theme: 'auto',
@@ -70,8 +66,18 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 				warnNoMediaAlt: true,
 			},
 			moderation: {
-				globals: { prefs: {} },
-				services: {},
+				updatedAt: 0,
+				labels: {},
+				services: [
+					{
+						did: DEFAULT_MODERATION_LABELER,
+						redact: true,
+						profile: { handle: 'moderation.bsky.app' },
+						prefs: {},
+						vals: [],
+						defs: {},
+					},
+				],
 				keywords: [],
 				hideReposts: [],
 				tempMutes: {},
@@ -92,17 +98,24 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 	}
 
 	if (version < 10) {
-		const _prev = prev as PartialPreferencesSchemaV9;
 		const _next = prev as PreferencesSchema;
 
-		_next.moderationMigrate = true;
-
 		_next.moderation = {
-			globals: { prefs: {} },
-			services: {},
-			keywords: _prev.moderation.keywords,
-			hideReposts: _prev.filters.hideReposts,
-			tempMutes: _prev.filters.tempMutes,
+			updatedAt: 0,
+			labels: {},
+			services: [
+				{
+					did: DEFAULT_MODERATION_LABELER,
+					redact: true,
+					profile: { handle: 'moderation.bsky.app' },
+					prefs: {},
+					vals: [],
+					defs: {},
+				},
+			],
+			keywords: [],
+			hideReposts: [],
+			tempMutes: {},
 		};
 
 		_next.$version = 10;
@@ -112,6 +125,8 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 });
 
 export const createSharedPreferencesObject = (): SharedPreferencesObject => {
+	const moderation = preferences.moderation;
+
 	return {
 		get rev() {
 			return preferences.rev;
@@ -122,7 +137,11 @@ export const createSharedPreferencesObject = (): SharedPreferencesObject => {
 		// ModerationOpts contains internal state properties, we don't want them
 		// to be reflected back into persisted storage.
 		moderation: {
-			...preferences.moderation,
+			labels: moderation.labels,
+			services: moderation.services,
+			keywords: moderation.keywords,
+			hideReposts: moderation.hideReposts,
+			tempMutes: moderation.tempMutes,
 		},
 		language: preferences.language,
 		translation: preferences.translation,

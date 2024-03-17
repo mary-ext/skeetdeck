@@ -64,6 +64,7 @@ export interface LabelDefinition {
 }
 
 export type LabelDefinitionMapping = Record<string, LabelDefinition>;
+export type LabelPreferenceMapping = Record<string, LabelPreference | undefined>;
 
 export const GLOBAL_LABELS: LabelDefinitionMapping = {
 	'!hide': {
@@ -72,7 +73,7 @@ export const GLOBAL_LABELS: LabelDefinitionMapping = {
 		b: BlurAll,
 		s: SeverityNone,
 		f: FlagsForced | FlagsNoSelf,
-		l: [{ i: 'en', n: `Content hidden`, d: `` }],
+		l: [{ i: 'en', n: `Hidden by moderators`, d: `` }],
 	},
 	'!warn': {
 		i: '!warn',
@@ -98,6 +99,14 @@ export const GLOBAL_LABELS: LabelDefinitionMapping = {
 		f: FlagsAdultOnly,
 		l: [{ i: 'en', n: `Sexually suggestive`, d: `Not pornographic but sexual in nature` }],
 	},
+	'graphic-media': {
+		i: 'graphic-media',
+		d: PreferenceWarn,
+		b: BlurMedia,
+		s: SeverityNone,
+		f: FlagsAdultOnly,
+		l: [{ i: 'en', n: `Graphic media`, d: `Disturbing content` }],
+	},
 	nudity: {
 		i: 'nudity',
 		d: PreferenceIgnore,
@@ -105,14 +114,6 @@ export const GLOBAL_LABELS: LabelDefinitionMapping = {
 		s: SeverityNone,
 		f: FlagsNone,
 		l: [{ i: 'en', n: `Nudity`, d: `Artistic or non-erotic nudity` }],
-	},
-	'graphic-media': {
-		i: 'graphic-media',
-		d: PreferenceWarn,
-		b: BlurMedia,
-		s: SeverityNone,
-		f: FlagsAdultOnly,
-		l: [{ i: 'en', n: `Graphic`, d: `Disturbing content` }],
 	},
 };
 
@@ -144,7 +145,7 @@ export interface LabelModerationCause {
 	p: 1 | 2 | 5 | 7 | 8;
 
 	/** Label source */
-	s: ServiceOptions | undefined;
+	s: ModerationService | undefined;
 	/** Label object */
 	l: Label;
 	/** Label definition */
@@ -220,22 +221,41 @@ export interface KeywordFilter {
 	matchers: KeywordFilterMatcher[];
 }
 
-export interface GlobalServiceOptions {
-	prefs: { [label: string]: LabelPreference | undefined };
+export interface ServiceProfile {
+	avatar?: string;
+	handle: string;
+	displayName?: string;
+	description?: string;
+	indexedAt?: number;
 }
 
-export interface ServiceOptions extends GlobalServiceOptions {
-	info: {
-		name: string;
-	};
+export interface ModerationService {
+	/** DID of the service */
+	did: At.DID;
+	/** Whether it should apply takedowns from this service */
+	redact?: boolean;
+	/** Information about this service */
+	profile: ServiceProfile;
+	/** Preferences for service-defined labels */
+	prefs: LabelPreferenceMapping;
+	/** Labels that this service claims to provide */
+	vals: string[];
+	/** Labels defined by this service */
 	defs: LabelDefinitionMapping;
+	/** Record indexed at */
+	indexedAt?: number;
+	/** Wasn't found during automatic update */
+	deleted?: boolean;
 }
 
 export interface ModerationOptions {
 	_filtersCache?: [raw: string, match: RegExp][];
 
-	globals: GlobalServiceOptions;
-	services: Record<At.DID, ServiceOptions | undefined>;
+	/** Preferences for global-defined labels */
+	labels: LabelPreferenceMapping;
+	/** Service options */
+	services: ModerationService[];
+	/** Keyword filters */
 	keywords: KeywordFilter[];
 
 	/** Hide reposts by these users from the timeline */
@@ -251,11 +271,11 @@ export const decideLabelModeration = (
 	opts: ModerationOptions,
 ) => {
 	if (labels) {
-		const globals = opts.globals;
-		const services = opts.services;
+		const globalPrefs = opts.labels;
+		const services = Object.fromEntries(opts.services.map((service) => [service.did, service]));
 
-		for (let i = 0, ilen = labels.length; i < ilen; i++) {
-			const label = labels[i] as Label;
+		for (let i = 0, il = labels.length; i < il; i++) {
+			const label = labels[i];
 
 			const val = label.val;
 			const src = label.src;
@@ -263,16 +283,21 @@ export const decideLabelModeration = (
 			const isSelfLabeled = src === userDid;
 			const isSystem = val[0] === '!';
 
-			const service: GlobalServiceOptions | ServiceOptions | undefined = !isSelfLabeled
-				? globals
-				: services[src];
-			const def = (!isSystem && services[src]?.defs[val]) || GLOBAL_LABELS[val];
+			const foundService: ModerationService | undefined = services[src];
 
-			if (!service || !def || (isSelfLabeled && def.f & FlagsNoSelf)) {
+			let service: ModerationService | undefined;
+			let def: LabelDefinition | undefined = GLOBAL_LABELS[val];
+
+			if (!isSystem && foundService && val in foundService.defs) {
+				service = foundService;
+				def = foundService.defs[val];
+			}
+
+			if (!def || (isSelfLabeled && def.f & FlagsNoSelf)) {
 				continue;
 			}
 
-			const pref = service.prefs[val] ?? def.d;
+			const pref = (service ? service.prefs : globalPrefs)[val] ?? def.d;
 			if (pref !== PreferenceHide && pref !== PreferenceWarn) {
 				continue;
 			}
@@ -298,7 +323,7 @@ export const decideLabelModeration = (
 				t: CauseLabel,
 				p: prio,
 
-				s: !isSelfLabeled ? (service as ServiceOptions) : undefined,
+				s: service,
 				l: label,
 				d: def,
 				v: pref,

@@ -4,6 +4,8 @@ import { render } from 'solid-js/web';
 import { Router, configureRouter } from '@pkg/solid-page-router';
 import { QueryClientProvider } from '@pkg/solid-query';
 
+import { multiagent } from '~/api/globals/agent';
+
 import { useMediaQuery } from '~/utils/media-query';
 
 import { ModalProvider } from '~/com/globals/modals';
@@ -17,6 +19,8 @@ import { createSharedPreferencesObject, preferences } from './globals/settings';
 import { queryClient } from './globals/query';
 
 import './styles/tailwind.css';
+
+import('./lib/moderation/update');
 
 configureRouter([
 	{
@@ -36,6 +40,13 @@ configureRouter([
 ]);
 
 const App = () => {
+	createRenderEffect(() => {
+		multiagent.services.value = preferences.moderation.services.map((service) => ({
+			did: service.did,
+			redact: service.redact,
+		}));
+	});
+
 	createRenderEffect(() => {
 		const theme = preferences.ui.theme;
 
