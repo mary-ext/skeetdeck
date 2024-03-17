@@ -3,8 +3,6 @@ import { type JSX } from 'solid-js';
 import type { AppBskyEmbedRecord, AppBskyFeedPost } from '~/api/atp-schema';
 import { getRecordId } from '~/api/utils/misc';
 
-import type { ModerationDecision } from '~/api/moderation';
-
 import { clsx } from '~/utils/misc';
 
 import { Interactive } from '../../primitives/interactive';
@@ -14,7 +12,6 @@ import TimeAgo from '../TimeAgo';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
-import PostQuoteWarning from '../moderation/PostQuoteWarning';
 import EmbedImage from './EmbedImage';
 
 type EmbeddedPostRecord = AppBskyEmbedRecord.ViewRecord;
@@ -26,9 +23,7 @@ export interface EmbedQuoteProps {
 	large?: boolean;
 }
 
-export interface EmbedQuoteContentProps extends EmbedQuoteProps {
-	mod: ModerationDecision | null;
-}
+export interface EmbedQuoteContentProps extends EmbedQuoteProps {}
 
 const getPostImages = (post: EmbeddedPostRecord) => {
 	const embeds = post.embeds;
@@ -54,7 +49,6 @@ export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: b
 	return (() => {
 		const post = props.record;
 		const large = props.large;
-		const mod = props.mod;
 
 		const author = post.author;
 		const val = post.value as PostRecord;
@@ -98,7 +92,7 @@ export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: b
 					<div class="flex items-start">
 						{images && !large && (
 							<div class="mb-3 ml-3 mt-2 grow basis-0">
-								<EmbedImage images={images} blur={mod?.m} />
+								<EmbedImage images={images} />
 							</div>
 						)}
 
@@ -110,7 +104,7 @@ export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: b
 					<div class="mt-3"></div>
 				)}
 
-				{showLargeImages && <EmbedImage images={images} blur={mod?.m} borderless />}
+				{showLargeImages && <EmbedImage images={images} borderless />}
 			</div>
 		);
 	}) as unknown as JSX.Element;
@@ -122,16 +116,12 @@ const EmbedQuote = (props: EmbedQuoteProps) => {
 		const author = post.author;
 
 		return (
-			<PostQuoteWarning quote={post}>
-				{(mod) => (
-					<Link
-						to={{ type: LINK_POST, actor: author.did, rkey: getRecordId(post.uri) }}
-						class={embedQuoteInteractive}
-					>
-						{/* @once */ EmbedQuoteContent({ ...props, mod: mod }, true)}
-					</Link>
-				)}
-			</PostQuoteWarning>
+			<Link
+				to={{ type: LINK_POST, actor: author.did, rkey: getRecordId(post.uri) }}
+				class={embedQuoteInteractive}
+			>
+				{/* @once */ EmbedQuoteContent({ ...props }, true)}
+			</Link>
 		);
 	}) as unknown as JSX.Element;
 };

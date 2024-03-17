@@ -1,9 +1,9 @@
-import { createMemo, lazy } from 'solid-js';
+import { lazy } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
-import { CauseLabel, getLocalizedLabel, isProfileTempMuted } from '~/api/moderation';
+import { isProfileTempMuted } from '~/api/moderation';
 
 import { formatCompact } from '~/utils/intl/number';
 import { formatAbsDateTime } from '~/utils/intl/time';
@@ -11,16 +11,11 @@ import { clsx } from '~/utils/misc';
 
 import { openModal } from '~/com/globals/modals';
 
-import { getProfileModDecision } from '~/com/moderation/profile';
-
 import { LINK_LIST, LINK_PROFILE_FOLLOWERS, LINK_PROFILE_FOLLOWS, Link } from '../Link';
 import { useSharedPreferences } from '../SharedPreferences';
 
-import InfoOutlinedIcon from '../../icons/outline-info';
 import PersonAddIcon from '../../icons/baseline-person-add';
-import ReportProblemOutlinedIcon from '../../icons/outline-report-problem';
 import ShareIcon from '../../icons/baseline-share';
-import VisibilityOutlinedIcon from '../../icons/outline-visibility';
 
 import { BoxedIconButton } from '../../primitives/boxed-icon-button';
 
@@ -42,12 +37,6 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 
 	const did = profile.did;
 	const viewer = profile.viewer;
-
-	const verdict = createMemo(() => {
-		const decision = getProfileModDecision(profile, useSharedPreferences());
-
-		return decision;
-	});
 
 	return (
 		<div class="flex flex-col">
@@ -216,33 +205,6 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 							</div>
 						);
 					}
-				})()}
-
-				{(() => {
-					const $verdict = verdict();
-
-					if (!$verdict) {
-						return null;
-					}
-
-					const source = $verdict.s;
-					if (source.t !== CauseLabel) {
-						return null;
-					}
-
-					const alert = $verdict.a;
-					const Icon = alert
-						? ReportProblemOutlinedIcon
-						: $verdict.i
-							? InfoOutlinedIcon
-							: VisibilityOutlinedIcon;
-
-					return (
-						<div class="flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider p-3 text-left">
-							<Icon class={`shrink-0 text-lg ` + (alert ? `text-red-500` : `text-muted-fg`)} />
-							<span class="grow text-sm">{/* @once */ getLocalizedLabel(source.d).n}</span>
-						</div>
-					);
 				})()}
 
 				<div class="flex gap-3">

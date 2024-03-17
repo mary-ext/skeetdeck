@@ -3,11 +3,7 @@ import { type Accessor } from 'solid-js';
 import type { AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedRecord } from '~/api/atp-schema';
 import { getCollectionId } from '~/api/utils/misc';
 
-import type { ModerationDecision } from '~/api/moderation';
-
 import type { SignalizedPost } from '~/api/stores/posts';
-
-import PostEmbedWarning from '../moderation/PostEmbedWarning';
 
 import EmbedFeed from './EmbedFeed';
 import EmbedImage from './EmbedImage';
@@ -25,14 +21,12 @@ type EmbeddedLink = AppBskyEmbedExternal.ViewExternal;
 export interface EmbedProps {
 	/** Expected to be static */
 	post: SignalizedPost;
-	decision: () => ModerationDecision | null;
 	/** Whether it should show a large UI for certain embeds */
 	large?: boolean;
 }
 
 const Embed = (props: EmbedProps) => {
 	const post = props.post;
-	const decision = props.decision;
 
 	return (
 		<div class="mt-3 flex flex-col gap-3 empty:hidden">
@@ -78,18 +72,10 @@ const Embed = (props: EmbedProps) => {
 				}
 
 				return [
-					(link || images) && (
-						<PostEmbedWarning
-							post={post}
-							decision={decision()}
-							children={(() => {
-								return [
-									link && <EmbedLink link={link} />,
-									images && <EmbedImage images={images} interactive />,
-								];
-							})()}
-						/>
-					),
+					(link || images) && [
+						link && <EmbedLink link={link} />,
+						images && <EmbedImage images={images} interactive />,
+					],
 					record && renderRecord(record, () => props.large),
 					unsupported && renderUnsupported(`Unsupported embed`),
 				];

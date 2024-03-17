@@ -16,13 +16,10 @@ import { getInitialPost, getPost, getPostKey } from '~/api/queries/get-post';
 
 import { clsx } from '~/utils/misc';
 
-import { getBasicProfileModDecision } from '~/com/moderation/basic-profile';
-
 import { Interactive } from '~/com/primitives/interactive';
 
 import { LINK_PROFILE, Link } from '../Link';
 import CircularProgress from '../CircularProgress';
-import { useSharedPreferences } from '../SharedPreferences';
 import { VirtualContainer } from '../VirtualContainer';
 
 import ChevronRightIcon from '../../icons/baseline-chevron-right';
@@ -161,8 +158,6 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 		const item = items[0];
 		const { did, avatar, displayName, handle } = item.author;
 
-		const verdict = () => getBasicProfileModDecision(item.author, useSharedPreferences());
-
 		return (
 			<div class="flex gap-2 overflow-hidden">
 				<Link
@@ -170,10 +165,7 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 					title={displayName ? `${displayName} (@${handle})` : `@${handle}`}
 					class="h-7.5 w-7.5 shrink-0 overflow-hidden rounded-full bg-muted-fg hover:opacity-80"
 				>
-					<img
-						src={avatar || DefaultAvatar}
-						class={clsx(['h-full w-full', avatar && verdict()?.m && `blur`])}
-					/>
+					<img src={avatar || DefaultAvatar} class={clsx(['h-full w-full'])} />
 				</Link>
 			</div>
 		);
@@ -197,15 +189,11 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 					{(() => {
 						if (!show()) {
 							const avatars = items.slice(0, MAX_AVATARS).map((item) => {
-								const verdict = () => getBasicProfileModDecision(item.author, useSharedPreferences());
 								const avatar = item.author.avatar;
 
 								return (
 									<div class="h-7.5 w-7.5 shrink-0 overflow-hidden rounded-full bg-muted-fg">
-										<img
-											src={avatar || DefaultAvatar}
-											class={clsx(['h-full w-full', avatar && verdict()?.m && `blur`])}
-										/>
+										<img src={avatar || DefaultAvatar} class={clsx(['h-full w-full'])} />
 									</div>
 								);
 							});
@@ -232,7 +220,6 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 					}
 
 					return items.map((item) => {
-						const verdict = () => getBasicProfileModDecision(item.author, useSharedPreferences());
 						const { did, avatar, displayName, handle } = item.author;
 
 						return (
@@ -245,10 +232,7 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 								}
 							>
 								<div class="mr-2 h-7.5 w-7.5 shrink-0 overflow-hidden rounded-full bg-muted-fg">
-									<img
-										src={avatar || DefaultAvatar}
-										class={clsx(['h-full w-full', avatar && verdict()?.m && `blur`])}
-									/>
+									<img src={avatar || DefaultAvatar} class={clsx(['h-full w-full'])} />
 								</div>
 
 								<span class="mr-1 overflow-hidden text-ellipsis whitespace-nowrap font-bold text-primary empty:hidden">

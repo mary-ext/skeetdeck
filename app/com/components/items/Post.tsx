@@ -1,4 +1,4 @@
-import { type Accessor, createEffect, createMemo } from 'solid-js';
+import { type Accessor, createEffect } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
 
@@ -8,19 +8,15 @@ import { getRecordId } from '~/api/utils/misc';
 
 import { updatePostLike } from '~/api/mutations/like-post';
 
-import { getProfileModDecision } from '../../moderation/profile';
-
 import { formatCompact } from '~/utils/intl/number';
 import { isElementClicked } from '~/utils/interaction';
 import { clsx } from '~/utils/misc';
 
 import { type PostLinking, type ProfileLinking, LINK_PROFILE, LINK_POST, Link, useLinking } from '../Link';
 import RichTextRenderer from '../RichTextRenderer';
-import { useSharedPreferences } from '../SharedPreferences';
 import TimeAgo from '../TimeAgo';
 
 import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
-import ErrorIcon from '../../icons/baseline-error';
 import FavoriteIcon from '../../icons/baseline-favorite';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
@@ -29,7 +25,6 @@ import RepeatIcon from '../../icons/baseline-repeat';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
-import PostWarning from '../moderation/PostWarning';
 import Embed from '../embeds/Embed';
 
 import PostOverflowAction from './posts/PostOverflowAction';
@@ -61,10 +56,6 @@ const Post = (props: PostProps) => {
 
 	const authorPermalink: ProfileLinking = { type: LINK_PROFILE, actor: author.did };
 	const postPermalink: PostLinking = { type: LINK_POST, actor: author.did, rkey: getRecordId(post.uri) };
-
-	const profileVerdict = createMemo(() => {
-		return getProfileModDecision(author, useSharedPreferences());
-	});
 
 	const handleClick = (ev: MouseEvent | KeyboardEvent) => {
 		if (!props.interactive || !isElementClicked(ev)) {
@@ -167,28 +158,8 @@ const Post = (props: PostProps) => {
 			<div class="flex gap-3">
 				<div class="relative flex shrink-0 flex-col items-center">
 					<Link to={authorPermalink} class="h-9 w-9 overflow-hidden rounded-full hover:opacity-80">
-						<img
-							src={author.avatar.value || DefaultAvatar}
-							class={clsx([`h-full w-full`, !!author.avatar.value && profileVerdict()?.m && `blur`])}
-						/>
+						<img src={author.avatar.value || DefaultAvatar} class={clsx([`h-full w-full`])} />
 					</Link>
-					{(() => {
-						const verdict = profileVerdict();
-
-						if (verdict) {
-							return (
-								<div
-									class={
-										/* @once */
-										`absolute right-0 top-6 rounded-full bg-background ` +
-										(verdict.a ? `text-red-500` : `text-muted-fg`)
-									}
-								>
-									<ErrorIcon class="text-base" />
-								</div>
-							);
-						}
-					})()}
 
 					{(() => {
 						if (props.next) {
@@ -357,46 +328,42 @@ interface PostContentProps {
 	timelineDid: Accessor<At.DID | undefined>;
 }
 
-const PostContent = ({ post, postPermalink, timelineDid }: PostContentProps) => {
+const PostContent = ({ post, postPermalink, timelineDid: _timelineDid }: PostContentProps) => {
 	const embed = post.embed;
 
 	let content: HTMLDivElement | undefined;
 
 	return (
-		<PostWarning post={post} timelineDid={timelineDid()}>
-			{(decision) => (
-				<>
-					<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
-						<RichTextRenderer
-							item={post}
-							get={(item) => {
-								const record = item.record.value;
-								return { t: record.text, f: record.facets };
-							}}
-						/>
-					</div>
+		<>
+			<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
+				<RichTextRenderer
+					item={post}
+					get={(item) => {
+						const record = item.record.value;
+						return { t: record.text, f: record.facets };
+					}}
+				/>
+			</div>
 
-					<Link
-						ref={(node) => {
-							node.style.display = post.$truncated !== false ? 'block' : 'none';
+			<Link
+				ref={(node) => {
+					node.style.display = post.$truncated !== false ? 'block' : 'none';
 
-							createEffect(() => {
-								const delta = content!.scrollHeight - content!.clientHeight;
-								const next = delta > 10 && !!post.record.value.text;
+					createEffect(() => {
+						const delta = content!.scrollHeight - content!.clientHeight;
+						const next = delta > 10 && !!post.record.value.text;
 
-								post.$truncated = next;
-								node.style.display = next ? 'block' : 'none';
-							});
-						}}
-						to={postPermalink}
-						class="text-sm text-accent hover:underline"
-					>
-						Show more
-					</Link>
+						post.$truncated = next;
+						node.style.display = next ? 'block' : 'none';
+					});
+				}}
+				to={postPermalink}
+				class="text-sm text-accent hover:underline"
+			>
+				Show more
+			</Link>
 
-					{embed.value && <Embed post={post} decision={decision} />}
-				</>
-			)}
-		</PostWarning>
+			{embed.value && <Embed post={post} />}
+		</>
 	);
 };

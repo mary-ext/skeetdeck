@@ -1,12 +1,11 @@
-import { type JSX, lazy, createMemo } from 'solid-js';
+import { type JSX, lazy } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
-import { CauseLabel, getLocalizedLabel, isProfileTempMuted } from '~/api/moderation';
-import { getProfileModDecision } from '../../moderation/profile';
+import { isProfileTempMuted } from '~/api/moderation';
 
 import { formatCompact } from '~/utils/intl/number';
 import { formatAbsDateTime } from '~/utils/intl/time';
@@ -20,10 +19,7 @@ import { Button } from '../../primitives/button';
 import { LINK_LIST, LINK_PROFILE_EDIT, LINK_PROFILE_FOLLOWERS, LINK_PROFILE_FOLLOWS, Link } from '../Link';
 import { useSharedPreferences } from '../SharedPreferences';
 
-import InfoOutlinedIcon from '../../icons/outline-info';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
-import ReportProblemOutlinedIcon from '../../icons/outline-report-problem';
-import VisibilityOutlinedIcon from '../../icons/outline-visibility';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
@@ -48,12 +44,6 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 	const profile = props.profile;
 	const viewer = profile.viewer;
 
-	const verdict = createMemo(() => {
-		const decision = getProfileModDecision(profile, useSharedPreferences());
-
-		return decision;
-	});
-
 	return (
 		<div class="flex flex-col">
 			{(() => {
@@ -67,10 +57,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 							}}
 							class="group aspect-banner overflow-hidden bg-background"
 						>
-							<img
-								src={banner}
-								class={clsx([`h-full w-full object-cover group-hover:opacity-75`, verdict()?.m && `blur`])}
-							/>
+							<img src={banner} class={clsx([`h-full w-full object-cover group-hover:opacity-75`])} />
 						</button>
 					);
 				}
@@ -91,10 +78,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 									}}
 									class="group -mt-11 h-20 w-20 shrink-0 overflow-hidden rounded-full bg-background outline-2 outline-background outline focus-visible:outline-primary"
 								>
-									<img
-										src={avatar}
-										class={clsx([`h-full w-full group-hover:opacity-75`, verdict()?.m && `blur`])}
-									/>
+									<img src={avatar} class={clsx([`h-full w-full group-hover:opacity-75`])} />
 								</button>
 							);
 						}
@@ -264,33 +248,6 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 							</div>
 						);
 					}
-				})()}
-
-				{(() => {
-					const $verdict = verdict();
-
-					if (!$verdict) {
-						return null;
-					}
-
-					const source = $verdict.s;
-					if (source.t !== CauseLabel) {
-						return null;
-					}
-
-					const alert = $verdict.a;
-					const Icon = alert
-						? ReportProblemOutlinedIcon
-						: $verdict.i
-							? InfoOutlinedIcon
-							: VisibilityOutlinedIcon;
-
-					return (
-						<div class="flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider p-3 text-left">
-							<Icon class={`shrink-0 text-lg ` + (alert ? `text-red-500` : `text-muted-fg`)} />
-							<span class="grow text-sm">{/* @once */ getLocalizedLabel(source.d).n}</span>
-						</div>
-					);
 				})()}
 			</div>
 		</div>

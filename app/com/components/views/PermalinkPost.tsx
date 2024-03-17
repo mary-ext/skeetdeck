@@ -1,16 +1,10 @@
-import { type JSX, createMemo, createSignal, lazy } from 'solid-js';
+import { type JSX, createSignal } from 'solid-js';
 
 import type { AppBskyFeedDefs, AppBskyFeedThreadgate, At } from '~/api/atp-schema';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import { updatePostLike } from '~/api/mutations/like-post';
 import type { SignalizedPost } from '~/api/stores/posts';
-
-import { getPostModDecision } from '../../moderation/post';
-import { getProfileModDecision } from '../../moderation/profile';
-import { isPostModerated } from '../../moderation/utils';
-
-import { openModal } from '../../globals/modals';
 
 import { formatCompact } from '~/utils/intl/number';
 import { formatAbsDateTime } from '~/utils/intl/time';
@@ -22,7 +16,6 @@ import { useSharedPreferences } from '../SharedPreferences';
 
 import AccountCheckIcon from '../../icons/baseline-account-check';
 import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
-import ErrorIcon from '../../icons/baseline-error';
 import FavoriteIcon from '../../icons/baseline-favorite';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
@@ -38,8 +31,6 @@ import RepostAction from '../items/posts/RepostAction';
 import ReplyAction from '../items/posts/ReplyAction';
 
 import PostTranslation, { needTranslation } from './posts/PostTranslation';
-
-const AppealLabelDialog = lazy(() => import('../dialogs/AppealLabelDialog'));
 
 export interface PermalinkPostProps {
 	/** Expected to be static */
@@ -60,14 +51,6 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 		return getRecordId(post.uri);
 	};
 
-	const profileVerdict = createMemo(() => {
-		return getProfileModDecision(author, useSharedPreferences());
-	});
-
-	const decision = createMemo(() => {
-		return getPostModDecision(post, preferences);
-	});
-
 	return (
 		<div class="px-4 pt-3">
 			<div class="relative mb-3 flex items-center gap-3 text-sm text-muted-fg">
@@ -77,29 +60,8 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 				>
 					<div class="relative">
 						<div class="pointer-events-auto z-2 h-9 w-9 shrink-0 overflow-hidden rounded-full bg-muted-fg hover:opacity-80">
-							<img
-								src={author.avatar.value || DefaultAvatar}
-								class={clsx(['h-full w-full', !!author.avatar.value && profileVerdict()?.m && `blur`])}
-							/>
+							<img src={author.avatar.value || DefaultAvatar} class={clsx(['h-full w-full'])} />
 						</div>
-
-						{(() => {
-							const verdict = profileVerdict();
-
-							if (verdict) {
-								return (
-									<div
-										class={
-											/* @once */
-											`absolute right-0 top-6 z-10 rounded-full bg-background ` +
-											(verdict.a ? `text-red-500` : `text-muted-fg`)
-										}
-									>
-										<ErrorIcon class="text-base" />
-									</div>
-								);
-							}
-						})()}
 					</div>
 
 					<span class="group pointer-events-auto block max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
@@ -110,25 +72,6 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 					</span>
 				</Link>
 			</div>
-
-			{isPostModerated(post) ? (
-				<div class="mt-3 rounded border border-divider px-3 py-2 text-sm">
-					<p>Content warning has been applied by moderators.</p>
-					<button
-						onClick={() => {
-							openModal(() => (
-								<AppealLabelDialog
-									uid={/* @once */ post.uid}
-									report={/* @once */ { type: 'post', uri: post.uri, cid: post.cid.value }}
-								/>
-							));
-						}}
-						class="text-accent hover:underline"
-					>
-						Appeal this decision
-					</button>
-				</div>
-			) : null}
 
 			<div class="mt-3 overflow-hidden whitespace-pre-wrap break-words text-base empty:hidden">
 				<RichTextRenderer
@@ -156,7 +99,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 				return null;
 			})()}
 
-			{post.embed.value && <Embed post={post} decision={decision} large />}
+			{post.embed.value && <Embed post={post} large />}
 
 			<div class="my-3 flex flex-wrap gap-1.5 text-de text-primary/85 empty:hidden">
 				{record.value.tags?.map((tag) => (
