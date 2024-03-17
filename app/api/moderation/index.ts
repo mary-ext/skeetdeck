@@ -283,14 +283,11 @@ export const decideLabelModeration = (
 			const isSelfLabeled = src === userDid;
 			const isSystem = val[0] === '!';
 
-			const foundService: ModerationService | undefined = services[src];
-
-			let service: ModerationService | undefined;
+			let service: ModerationService | undefined = services[src];
 			let def: LabelDefinition | undefined = GLOBAL_LABELS[val];
 
-			if (!isSystem && foundService && val in foundService.defs) {
-				service = foundService;
-				def = foundService.defs[val];
+			if (!isSystem && service && val in service.defs) {
+				def = service.defs[val];
 			}
 
 			if (!def || (isSelfLabeled && def.f & FlagsNoSelf)) {
