@@ -6,9 +6,15 @@ import { getSide } from '@floating-ui/utils';
 import {
 	type LabelDefinition,
 	type LabelPreference,
+	BlurContent,
+	BlurMedia,
+	BlurNone,
 	PreferenceHide,
-	PreferenceWarn,
 	PreferenceIgnore,
+	PreferenceWarn,
+	SeverityAlert,
+	SeverityInform,
+	SeverityNone,
 	getLocalizedLabel,
 } from '~/api/moderation';
 
@@ -52,7 +58,7 @@ const LabelItem = (props: LabelItemProps) => {
 						</span>
 
 						<span class="flex min-w-0 shrink-0 items-center gap-0.5 self-start text-muted-fg">
-							<span class="text-de">{renderValue(value(), def.d)}</span>
+							<span class="text-de">{renderValueDef(def, value())}</span>
 							<ArrowDropDownIcon class={clsx(['-mr-1 text-base', props.global && `hidden`])} />
 						</span>
 					</div>
@@ -98,6 +104,8 @@ const LabelItemFlyout = (props: LabelItemFlyoutProps) => {
 	const onChange = props.onChange;
 	const def = props.def;
 
+	const displayWarn = canDisplayWarn(def);
+
 	return (
 		<Flyout button={props.children} middleware={[offsetMiddleware, ...offsetlessMiddlewares]}>
 			{({ close, menuProps }) => {
@@ -110,7 +118,7 @@ const LabelItemFlyout = (props: LabelItemFlyoutProps) => {
 							}}
 							class={/* @once */ MenuItem()}
 						>
-							<span class="grow">{renderValue(value, def.d)}</span>
+							<span class="grow">{renderValueDef(def, value)}</span>
 
 							<CheckIcon
 								class={clsx([MenuItemIcon(), 'text-accent', value !== props.value && `invisible`])}
@@ -123,7 +131,7 @@ const LabelItemFlyout = (props: LabelItemFlyoutProps) => {
 					<div {...menuProps} class={/* @once */ MenuRoot()}>
 						{/* @once */ props.showDefault && item(undefined)}
 						{/* @once */ item(PreferenceIgnore)}
-						{/* @once */ item(PreferenceWarn)}
+						{/* @once */ displayWarn && item(PreferenceWarn)}
 						{/* @once */ item(PreferenceHide)}
 					</div>
 				);
@@ -132,21 +140,28 @@ const LabelItemFlyout = (props: LabelItemFlyoutProps) => {
 	);
 };
 
-const renderValue = (value: LabelPreference | undefined, defaultValue?: LabelPreference): string => {
-	if (value === PreferenceHide) {
+const canDisplayWarn = (def: LabelDefinition) => {
+	return !(def.b === BlurNone && def.s === SeverityNone);
+};
+
+const renderValueDef = (def: LabelDefinition, pref: LabelPreference | undefined): string => {
+	if (pref === undefined) {
+		return `Default (${renderValueDef(def, def.d)})`;
+	}
+
+	if (pref === PreferenceIgnore) {
+		return `Off`;
+	}
+	if (pref === PreferenceHide) {
 		return `Hide`;
 	}
 
-	if (value === PreferenceWarn) {
+	if (def.b === BlurContent || def.b === BlurMedia || def.s === SeverityAlert) {
 		return `Warn`;
 	}
 
-	if (value === PreferenceIgnore) {
-		return `Show`;
-	}
-
-	if (defaultValue !== undefined) {
-		return `Default (${renderValue(defaultValue)})`;
+	if (def.s === SeverityInform) {
+		return `Inform`;
 	}
 
 	return `Unknown`;
