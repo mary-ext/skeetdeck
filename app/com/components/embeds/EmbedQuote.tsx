@@ -3,7 +3,17 @@ import { type JSX } from 'solid-js';
 import type { AppBskyEmbedRecord, AppBskyFeedPost } from '~/api/atp-schema';
 import { getRecordId } from '~/api/utils/misc';
 
+import {
+	type ModerationCause,
+	ContextContentList,
+	ContextContentMedia,
+	getModerationUI,
+} from '~/api/moderation';
+import { decideQuote } from '~/api/moderation/entities/quote';
+
 import { clsx } from '~/utils/misc';
+
+import { getModerationOptions } from '../../globals/shared';
 
 import { Interactive } from '../../primitives/interactive';
 
@@ -12,6 +22,7 @@ import TimeAgo from '../TimeAgo';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
+import ContentWarning from '../moderation/ContentWarning';
 import EmbedImage from './EmbedImage';
 
 type EmbeddedPostRecord = AppBskyEmbedRecord.ViewRecord;
@@ -19,6 +30,7 @@ type PostRecord = AppBskyFeedPost.Record;
 
 export interface EmbedQuoteProps {
 	record: EmbeddedPostRecord;
+	causes?: ModerationCause[];
 	/** Whether it should show a large UI for image embeds */
 	large?: boolean;
 }
@@ -48,6 +60,7 @@ const embedQuoteInteractive = Interactive({ variant: 'muted', class: `w-full rou
 export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: boolean) => {
 	return (() => {
 		const post = props.record;
+		const causes = props.causes;
 		const large = props.large;
 
 		const author = post.author;
@@ -57,6 +70,7 @@ export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: b
 		const images = getPostImages(post);
 
 		const showLargeImages = images && (large || !text);
+		const shouldBlurImage = images && causes && !!getModerationUI(causes, ContextContentMedia).b[0];
 
 		return (
 			<div
@@ -92,7 +106,7 @@ export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: b
 					<div class="flex items-start">
 						{images && !large && (
 							<div class="mb-3 ml-3 mt-2 grow basis-0">
-								<EmbedImage images={images} />
+								<EmbedImage images={images} blur={shouldBlurImage} />
 							</div>
 						)}
 
@@ -104,7 +118,7 @@ export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: b
 					<div class="mt-3"></div>
 				)}
 
-				{showLargeImages && <EmbedImage images={images} borderless />}
+				{showLargeImages && <EmbedImage images={images} borderless blur={shouldBlurImage} />}
 			</div>
 		);
 	}) as unknown as JSX.Element;
@@ -115,13 +129,17 @@ const EmbedQuote = (props: EmbedQuoteProps) => {
 		const post = props.record;
 		const author = post.author;
 
+		const causes = decideQuote(post, getModerationOptions());
+
 		return (
-			<Link
-				to={{ type: LINK_POST, actor: author.did, rkey: getRecordId(post.uri) }}
-				class={embedQuoteInteractive}
-			>
-				{/* @once */ EmbedQuoteContent({ ...props }, true)}
-			</Link>
+			<ContentWarning ui={getModerationUI(causes, ContextContentList)} innerClass="mt-2">
+				<Link
+					to={{ type: LINK_POST, actor: author.did, rkey: getRecordId(post.uri) }}
+					class={embedQuoteInteractive}
+				>
+					{/* @once */ EmbedQuoteContent({ ...props, causes }, true)}
+				</Link>
+			</ContentWarning>
 		);
 	}) as unknown as JSX.Element;
 };

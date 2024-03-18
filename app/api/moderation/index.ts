@@ -139,7 +139,7 @@ export const getLocalizedLabel = (label: LabelDefinition): LabelLocale => {
 
 	return locales.length > 0
 		? locales.find(({ i }) => i.split('-')[0] === 'en') || locales[0]
-		: { i: 'en', n: `Flagged: ${label.i}`, d: `` };
+		: { i: 'en', n: label.i, d: `` };
 };
 
 export const CauseLabel = 0;
@@ -163,8 +163,11 @@ export interface LabelModerationCause {
 	/** Target of the label */
 	k: LabelTarget;
 
-	/** Label source */
+	/** Label source, self-label if empty */
 	s: ModerationService | undefined;
+	/** Whether label definition is global or not (also true for nonexistent definitions) */
+	g: boolean;
+
 	/** Label object */
 	l: Label;
 	/** Label definition */
@@ -270,12 +273,6 @@ export const decideLabelModeration = (
 		const globalPrefs = opts.labels;
 		const services = Object.fromEntries(opts.services.map((service) => [service.did, service]));
 
-		// labels.sort((a, b) => {
-		// 	const aSelf = a.src === userDid;
-		// 	const bSelf = b.src === userDid;
-		// 	return aSelf === bSelf ? 0 : aSelf ? -1 : 1;
-		// });
-
 		for (let i = 0, il = labels.length; i < il; i++) {
 			const label = labels[i];
 
@@ -287,8 +284,10 @@ export const decideLabelModeration = (
 
 			let service: ModerationService | undefined = services[src];
 			let def: LabelDefinition | undefined = GLOBAL_LABELS[val];
+			let isGlobalDef = true;
 
 			if (!isSystem && service && val in service.defs) {
+				isGlobalDef = false;
 				def = service.defs[val];
 			}
 
@@ -296,7 +295,7 @@ export const decideLabelModeration = (
 				continue;
 			}
 
-			const pref = (service ? service.prefs : globalPrefs)[val] ?? def.d;
+			const pref = (!isGlobalDef && service ? service.prefs : globalPrefs)[val] ?? def.d;
 			if (pref !== PreferenceHide && pref !== PreferenceWarn) {
 				continue;
 			}
@@ -325,6 +324,7 @@ export const decideLabelModeration = (
 				k: target,
 
 				s: service,
+				g: isGlobalDef,
 				l: label,
 				d: def,
 				v: pref,
@@ -425,10 +425,7 @@ export interface ModerationUI {
 	i: ModerationCause[];
 }
 
-export const getModerationUI = (
-	causes: ModerationCause[],
-	context: ModerationContext,
-): ModerationUI => {
+export const getModerationUI = (causes: ModerationCause[], context: ModerationContext): ModerationUI => {
 	const filters: ModerationCause[] = [];
 	const blurs: ModerationCause[] = [];
 	const alerts: ModerationCause[] = [];
@@ -487,6 +484,22 @@ export const getModerationUI = (
 				} else if (severity === SeverityInform) {
 					informs.push(cause);
 				}
+			}
+		} else if (type === CauseMutedKeyword) {
+			if (context === ContextContentList) {
+				if (cause.v === PreferenceHide) {
+					filters.push(cause);
+				}
+
+				blurs.push(cause);
+			}
+		} else if (type === CauseMutedTemporary || type === CauseMutedPermanent) {
+			if (context === ContextContentList) {
+				filters.push(cause);
+			}
+
+			if (context !== ContextContentMedia) {
+				blurs.push(cause);
 			}
 		}
 	}

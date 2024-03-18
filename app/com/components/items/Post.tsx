@@ -1,4 +1,4 @@
-import { type Accessor, createEffect } from 'solid-js';
+import { type Accessor, createEffect, createMemo } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
 
@@ -8,9 +8,14 @@ import { getRecordId } from '~/api/utils/misc';
 
 import { updatePostLike } from '~/api/mutations/like-post';
 
+import { ContextContentList, getModerationUI } from '~/api/moderation';
+import { moderatePost } from '~/api/moderation/entities/post';
+
 import { formatCompact } from '~/utils/intl/number';
 import { isElementClicked } from '~/utils/interaction';
 import { clsx } from '~/utils/misc';
+
+import { getModerationOptions } from '../../globals/shared';
 
 import { type PostLinking, type ProfileLinking, LINK_PROFILE, LINK_POST, Link, useLinking } from '../Link';
 import RichTextRenderer from '../RichTextRenderer';
@@ -26,6 +31,7 @@ import RepeatIcon from '../../icons/baseline-repeat';
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import Embed from '../embeds/Embed';
+import ContentWarning from '../moderation/ContentWarning';
 
 import PostOverflowAction from './posts/PostOverflowAction';
 import ReplyAction from './posts/ReplyAction';
@@ -73,7 +79,6 @@ const Post = (props: PostProps) => {
 			class={clsx([
 				`relative border-divider px-4 outline-2 -outline-offset-2 outline-primary focus-visible:outline`,
 				!props.next && `border-b`,
-				!isMobile && props.interactive && `hover:bg-secondary/10`,
 			])}
 		>
 			{(() => {
@@ -331,39 +336,52 @@ interface PostContentProps {
 const PostContent = ({ post, postPermalink, timelineDid: _timelineDid }: PostContentProps) => {
 	const embed = post.embed;
 
-	let content: HTMLDivElement | undefined;
+	const causes = createMemo(() => moderatePost(post, getModerationOptions()));
+	const ui = createMemo(() => getModerationUI(causes(), ContextContentList));
 
 	return (
-		<>
-			<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
-				<RichTextRenderer
-					item={post}
-					get={(item) => {
-						const record = item.record.value;
-						return { t: record.text, f: record.facets };
-					}}
-				/>
-			</div>
+		<ContentWarning
+			ui={ui()}
+			ignoreMute
+			containerClass="mt-2"
+			innerClass="mt-3"
+			children={(() => {
+				let content: HTMLDivElement | undefined;
 
-			<Link
-				ref={(node) => {
-					node.style.display = post.$truncated !== false ? 'block' : 'none';
+				return (
+					<>
+						<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
+							<RichTextRenderer
+								item={post}
+								get={(item) => {
+									const record = item.record.value;
+									return { t: record.text, f: record.facets };
+								}}
+							/>
+						</div>
 
-					createEffect(() => {
-						const delta = content!.scrollHeight - content!.clientHeight;
-						const next = delta > 10 && !!post.record.value.text;
+						<Link
+							ref={(node) => {
+								node.style.display = post.$truncated !== false ? 'block' : 'none';
 
-						post.$truncated = next;
-						node.style.display = next ? 'block' : 'none';
-					});
-				}}
-				to={postPermalink}
-				class="text-sm text-accent hover:underline"
-			>
-				Show more
-			</Link>
+								createEffect(() => {
+									const delta = content!.scrollHeight - content!.clientHeight;
+									const next = delta > 10 && !!post.record.value.text;
 
-			{embed.value && <Embed post={post} />}
-		</>
+									post.$truncated = next;
+									node.style.display = next ? 'block' : 'none';
+								});
+							}}
+							to={postPermalink}
+							class="text-sm text-accent hover:underline"
+						>
+							Show more
+						</Link>
+
+						{embed.value && <Embed post={post} causes={causes()} />}
+					</>
+				);
+			})()}
+		/>
 	);
 };
