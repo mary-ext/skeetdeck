@@ -14,10 +14,12 @@ import { wrapInfiniteQuery } from '../utils/query';
 import {
 	type ModerationCause,
 	type ModerationOptions,
+	ContextContentList,
 	PreferenceHide,
+	TargetContent,
 	decideLabelModeration,
 	decideMutedKeywordModeration,
-	finalizeModeration,
+	getModerationUI,
 } from '../moderation';
 
 import {
@@ -470,12 +472,12 @@ const createLabelPostFilter = (opts?: ModerationOptions): PostFilter | undefined
 		record.embed;
 
 		const accu: ModerationCause[] = [];
-		decideLabelModeration(accu, post.labels, post.author.did, opts);
+		decideLabelModeration(accu, TargetContent, post.labels, post.author.did, opts);
 		decideMutedKeywordModeration(accu, text, isFollowing, PreferenceHide, opts);
 
-		const decision = finalizeModeration(accu);
+		const decision = getModerationUI(accu, ContextContentList);
 
-		return !decision?.f;
+		return decision.f.length === 0;
 	};
 };
 
