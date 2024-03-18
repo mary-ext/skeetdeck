@@ -79,27 +79,25 @@ const Onboarding = () => {
 								<h1 class="text-xl font-semibold">Welcome to {brandName}!</h1>
 								<p class="mt-1 text-sm text-muted-fg">To begin, let's add your Bluesky account.</p>
 
-								<div class="-mx-4 mt-4">
+								<div class="mt-4 flex flex-col divide-y divide-secondary/30 overflow-hidden rounded bg-secondary/20">
 									<For each={multiagent.accounts}>
-										{(account) => {
-											return (
-												<div class="flex items-center gap-4 px-4 py-3">
-													<img
-														src={account.profile?.avatar || DefaultUserAvatar}
-														class="h-10 w-10 shrink-0 rounded-full"
-													/>
+										{(account) => (
+											<div class="flex items-center gap-3 px-4 py-3 text-left text-sm">
+												<img
+													src={account.profile?.avatar || DefaultUserAvatar}
+													class="h-8 w-8 shrink-0 rounded-full"
+												/>
 
-													<div class="flex min-w-0 grow flex-col text-sm">
-														<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold empty:hidden">
-															{account.profile?.displayName}
-														</p>
-														<p class="overflow-hidden text-ellipsis whitespace-nowrap text-muted-fg">
-															{'@' + account.session.handle}
-														</p>
-													</div>
+												<div class="flex min-w-0 grow flex-col text-sm">
+													<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold empty:hidden">
+														{account.profile?.displayName}
+													</p>
+													<p class="overflow-hidden text-ellipsis whitespace-nowrap text-de text-muted-fg">
+														{'@' + account.session.handle}
+													</p>
 												</div>
-											);
-										}}
+											</div>
+										)}
 									</For>
 
 									<button
@@ -108,11 +106,12 @@ const Onboarding = () => {
 										}}
 										class={
 											/* @once */ Interactive({
-												class: `flex w-full items-center gap-3 px-4 py-3 text-left text-sm`,
+												variant: 'muted',
+												class: `flex items-center gap-3 px-4 py-3 text-left text-sm disabled:opacity-50`,
 											})
 										}
 									>
-										<AddIcon class="text-lg" />
+										<AddIcon class="w-8 shrink-0 text-lg text-muted-fg" />
 										<span>Add account</span>
 									</button>
 								</div>
