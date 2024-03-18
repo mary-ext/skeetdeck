@@ -4,8 +4,12 @@ import { render } from 'solid-js/web';
 import { RouterView, configureRouter } from '@pkg/solid-navigation';
 import { QueryClientProvider } from '@pkg/solid-query';
 
-import { MetaProvider } from '~/com/lib/meta';
+import type { ModerationOptions } from '~/api/moderation';
+
 import { ModalProvider } from '~/com/globals/modals';
+import * as shared from '~/com/globals/shared';
+
+import { MetaProvider } from '~/com/lib/meta';
 
 import { useMediaQuery } from '~/utils/media-query';
 
@@ -139,6 +143,28 @@ const App = () => {
 				},
 			},
 		],
+	});
+}
+
+// Set up common preferences
+{
+	const moderation = preferences.moderation;
+	const createModerationOptions = (): ModerationOptions => {
+		return {
+			labels: moderation.labels,
+			services: moderation.services,
+			keywords: moderation.keywords,
+			hideReposts: moderation.hideReposts,
+			tempMutes: moderation.tempMutes,
+		};
+	};
+
+	shared.setLanguagePreferences(preferences.language);
+	shared.setModerationOptions(createModerationOptions());
+	shared.setTranslationPreferences(preferences.translation);
+
+	shared.setBustModerationListener(() => {
+		shared.setModerationOptions({ ...shared.getModerationOptions(), ...createModerationOptions() });
 	});
 }
 
