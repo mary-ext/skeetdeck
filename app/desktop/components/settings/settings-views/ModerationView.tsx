@@ -4,7 +4,7 @@ import { multiagent } from '~/api/globals/agent';
 
 import { GLOBAL_LABELS } from '~/api/moderation';
 
-import { useBustRevCache } from '~/com/components/SharedPreferences';
+import { bustModeration } from '~/com/globals/shared';
 
 // import AddIcon from '~/com/icons/baseline-add';
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
@@ -30,8 +30,6 @@ import LabelItem from './content-filters/components/LabelItem';
 
 const ModerationView = () => {
 	const router = useViewRouter();
-
-	const bustRef = useBustRevCache();
 
 	const prefs = preferences.moderation.labels;
 	const services = preferences.moderation.services;
@@ -113,7 +111,7 @@ const ModerationView = () => {
 									onChange={(next) => {
 										batch(() => {
 											prefs[id] = next;
-											bustRef();
+											bustModeration();
 										});
 									}}
 								/>

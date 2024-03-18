@@ -6,7 +6,7 @@ import { preferences } from '~/desktop/globals/settings';
 
 import { formatAbsDateTime } from '~/utils/intl/time';
 
-import { useBustRevCache } from '~/com/components/SharedPreferences';
+import { bustModeration } from '~/com/globals/shared';
 
 import { IconButton } from '~/com/primitives/icon-button';
 
@@ -15,15 +15,13 @@ import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import DefaultLabelerAvatar from '~/com/assets/default-labeler-avatar.svg?url';
 
 import { type ViewParams, VIEW_LABELER_CONFIG, VIEW_MODERATION, useViewRouter } from '../_router';
-import { ListBox, ListBoxItem, ListGroup, ListGroupBlurb, ListGroupHeader } from '../_styles';
+import { ListBox, ListGroup, ListGroupBlurb, ListGroupHeader } from '../_styles';
 
 import LabelItem from './components/LabelItem';
 
 const LabelerConfigView = () => {
 	const router = useViewRouter();
 	const { did } = router.current as ViewParams<typeof VIEW_LABELER_CONFIG>;
-
-	const bustRef = useBustRevCache();
 
 	const moderation = preferences.moderation;
 	const services = moderation.services;
@@ -122,7 +120,7 @@ const LabelerConfigView = () => {
 																onChange={(next) => {
 																	batch(() => {
 																		prefs[identifier] = next;
-																		bustRef();
+																		bustModeration();
 																	});
 																}}
 															/>
