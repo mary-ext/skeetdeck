@@ -1,7 +1,7 @@
 import { type DidDocument } from '@mary/bluesky-client';
 
 import type { At } from './atp-schema';
-import { appView } from './globals/agent';
+import { publicAppView } from './globals/agent';
 import { isDid } from './utils/misc';
 
 const HOST_RE = /^([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]+))$/;
@@ -16,7 +16,7 @@ export const getDidInfo = async (identifier: string): Promise<DidDocument> => {
 	if (isDid(identifier)) {
 		did = identifier;
 	} else {
-		const response = await appView.get('com.atproto.identity.resolveHandle', {
+		const response = await publicAppView.get('com.atproto.identity.resolveHandle', {
 			params: {
 				handle: identifier,
 			},

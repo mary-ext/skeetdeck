@@ -1,7 +1,7 @@
 import { batch } from 'solid-js';
 
 import type { AppBskyLabelerDefs } from '~/api/atp-schema';
-import { appView } from '~/api/globals/agent';
+import { publicAppView } from '~/api/globals/agent';
 
 import { interpretServiceDefinition, mergeServiceDefinition } from '~/api/moderation/service';
 
@@ -20,7 +20,7 @@ const requestLock = async () => {
 
 		let views: AppBskyLabelerDefs.LabelerViewDetailed[] | undefined;
 		try {
-			const response = await appView.get('app.bsky.labeler.getServices', {
+			const response = await publicAppView.get('app.bsky.labeler.getServices', {
 				params: {
 					dids: moderation.services.map((service) => service.did),
 					detailed: true,
