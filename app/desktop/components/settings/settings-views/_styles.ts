@@ -16,4 +16,7 @@ export const ListBoxItem = Interactive({
 export const ListBoxItemReadonly = Interactive({
 	variant: 'muted',
 	class: `flex items-center gap-3 px-4 py-3 text-left text-sm`,
-})
+});
+
+export const ListBoxItemIcon = `shrink-0 text-lg text-muted-fg`;
+export const ListBoxItemChevron = `shrink-0 text-xl text-muted-fg`;

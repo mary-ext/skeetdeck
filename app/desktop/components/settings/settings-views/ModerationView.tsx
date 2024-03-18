@@ -24,7 +24,15 @@ import {
 	VIEW_TEMPORARY_MUTES,
 	useViewRouter,
 } from './_router';
-import { ListBox, ListBoxItem, ListGroup, ListGroupBlurb, ListGroupHeader } from './_styles';
+import {
+	ListBox,
+	ListBoxItem,
+	ListBoxItemChevron,
+	ListBoxItemIcon,
+	ListGroup,
+	ListGroupBlurb,
+	ListGroupHeader,
+} from './_styles';
 
 import LabelItem from './content-filters/components/LabelItem';
 
@@ -61,7 +69,7 @@ const ModerationView = () => {
 										</p>
 									</div>
 
-									<ChevronRightIcon class="shrink-0 text-xl text-muted-fg" />
+									<ChevronRightIcon class={ListBoxItemChevron} />
 								</button>
 							)}
 						</For>
@@ -73,21 +81,21 @@ const ModerationView = () => {
 
 					<div class={ListBox}>
 						<button onClick={() => router.move({ type: VIEW_KEYWORD_FILTERS })} class={ListBoxItem}>
-							<FilterAltOutlinedIcon class="shrink-0 text-lg text-muted-fg" />
+							<FilterAltOutlinedIcon class={ListBoxItemIcon} />
 							<span class="grow">Keyword filters</span>
-							<ChevronRightIcon class="shrink-0 text-xl text-muted-fg" />
+							<ChevronRightIcon class={ListBoxItemChevron} />
 						</button>
 
 						<button onClick={() => router.move({ type: VIEW_TEMPORARY_MUTES })} class={ListBoxItem}>
-							<VisibilityOffOutlinedIcon class="shrink-0 text-lg text-muted-fg" />
+							<VisibilityOffOutlinedIcon class={ListBoxItemIcon} />
 							<span class="grow">Silenced users</span>
-							<ChevronRightIcon class="shrink-0 text-xl text-muted-fg" />
+							<ChevronRightIcon class={ListBoxItemChevron} />
 						</button>
 
 						<button onClick={() => router.move({ type: VIEW_HIDDEN_REPOSTERS })} class={ListBoxItem}>
-							<RepeatOffIcon class="shrink-0 text-lg text-muted-fg" />
+							<RepeatOffIcon class={ListBoxItemIcon} />
 							<span class="grow">Hidden reposters</span>
-							<ChevronRightIcon class="shrink-0 text-xl text-muted-fg" />
+							<ChevronRightIcon class={ListBoxItemChevron} />
 						</button>
 					</div>
 				</div>
