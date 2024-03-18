@@ -26,9 +26,9 @@ import {
 } from './_router';
 import {
 	ListBox,
-	ListBoxItem,
 	ListBoxItemChevron,
 	ListBoxItemIcon,
+	ListBoxItemInteractive,
 	ListGroup,
 	ListGroupBlurb,
 	ListGroupHeader,
@@ -54,7 +54,10 @@ const ModerationView = () => {
 					<fieldset disabled class={ListBox}>
 						<For each={multiagent.accounts}>
 							{(account) => (
-								<button onClick={() => router.move({ type: VIEW_KEYWORD_FILTERS })} class={ListBoxItem}>
+								<button
+									onClick={() => router.move({ type: VIEW_KEYWORD_FILTERS })}
+									class={ListBoxItemInteractive}
+								>
 									<img
 										src={account.profile?.avatar || DefaultUserAvatar}
 										class="h-8 w-8 shrink-0 rounded-full"
@@ -80,19 +83,28 @@ const ModerationView = () => {
 					<p class={ListGroupHeader}>Additional moderation tools</p>
 
 					<div class={ListBox}>
-						<button onClick={() => router.move({ type: VIEW_KEYWORD_FILTERS })} class={ListBoxItem}>
+						<button
+							onClick={() => router.move({ type: VIEW_KEYWORD_FILTERS })}
+							class={ListBoxItemInteractive}
+						>
 							<FilterAltOutlinedIcon class={ListBoxItemIcon} />
 							<span class="grow">Keyword filters</span>
 							<ChevronRightIcon class={ListBoxItemChevron} />
 						</button>
 
-						<button onClick={() => router.move({ type: VIEW_TEMPORARY_MUTES })} class={ListBoxItem}>
+						<button
+							onClick={() => router.move({ type: VIEW_TEMPORARY_MUTES })}
+							class={ListBoxItemInteractive}
+						>
 							<VisibilityOffOutlinedIcon class={ListBoxItemIcon} />
 							<span class="grow">Silenced users</span>
 							<ChevronRightIcon class={ListBoxItemChevron} />
 						</button>
 
-						<button onClick={() => router.move({ type: VIEW_HIDDEN_REPOSTERS })} class={ListBoxItem}>
+						<button
+							onClick={() => router.move({ type: VIEW_HIDDEN_REPOSTERS })}
+							class={ListBoxItemInteractive}
+						>
 							<RepeatOffIcon class={ListBoxItemIcon} />
 							<span class="grow">Hidden reposters</span>
 							<ChevronRightIcon class={ListBoxItemChevron} />
@@ -139,7 +151,7 @@ const ModerationView = () => {
 								return (
 									<button
 										onClick={() => router.move({ type: VIEW_LABELER_CONFIG, did: service.did })}
-										class={ListBoxItem}
+										class={ListBoxItemInteractive}
 									>
 										<img
 											src={profile.avatar || DefaultLabelerAvatar}
