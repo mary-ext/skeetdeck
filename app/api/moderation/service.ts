@@ -10,7 +10,7 @@ import {
 	type LabelPreference,
 	type LabelSeverity,
 	type ModerationService,
-	BlurAll,
+	BlurContent,
 	BlurMedia,
 	BlurNone,
 	FlagsAdultOnly,
@@ -113,7 +113,7 @@ const convertPreferenceValue = (value: string | undefined): LabelPreference => {
 
 const convertBlurValue = (value: string | undefined): LabelBlur => {
 	if (value === 'content') {
-		return BlurAll;
+		return BlurContent;
 	}
 
 	if (value === 'media') {

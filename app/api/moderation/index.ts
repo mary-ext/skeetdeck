@@ -17,7 +17,7 @@ export const BlurNone = 0;
 /** Only blur the media present in the content */
 export const BlurMedia = 1;
 /** Blur the entire content */
-export const BlurAll = 2;
+export const BlurContent = 2;
 
 export type LabelBlur = 0 | 1 | 2;
 
@@ -38,6 +38,22 @@ export const FlagsForced = 1 << 0;
 export const FlagsNoSelf = 1 << 1;
 /** Label is adult-only. */
 export const FlagsAdultOnly = 1 << 2;
+
+/** Label is intended for content */
+export const TargetContent = 0;
+/** Label is intended for profile */
+export const TargetProfile = 1;
+
+export type LabelTarget = 0 | 1;
+
+export const ContextContentView = 0;
+export const ContextContentMedia = 1;
+export const ContextContentList = 2;
+export const ContextProfileView = 3;
+export const ContextProfileMedia = 4;
+export const ContextProfileList = 5;
+
+export type ModerationContext = 0 | 1 | 2 | 3 | 4 | 5;
 
 export interface LabelLocale {
 	/** Locale code */
@@ -70,7 +86,7 @@ export const GLOBAL_LABELS: LabelDefinitionMapping = {
 	'!hide': {
 		i: '!hide',
 		d: PreferenceHide,
-		b: BlurAll,
+		b: BlurContent,
 		s: SeverityNone,
 		f: FlagsForced | FlagsNoSelf,
 		l: [{ i: 'en', n: `Hidden by moderators`, d: `` }],
@@ -144,6 +160,9 @@ export interface LabelModerationCause {
 	t: typeof CauseLabel;
 	p: 1 | 2 | 5 | 7 | 8;
 
+	/** Target of the label */
+	k: LabelTarget;
+
 	/** Label source */
 	s: ModerationService | undefined;
 	/** Label object */
@@ -182,30 +201,6 @@ export type ModerationCause =
 	| MutedPermanentModerationCause
 	| MutedTemporaryModerationCause
 	| MutedKeywordModerationCause;
-
-export interface ModerationContext {
-	/** Subject */
-	t: At.DID;
-	/** Whether subject is self */
-	m: boolean;
-}
-
-export interface ModerationDecision {
-	/** Moderation cause responsible for this decision */
-	s: ModerationCause;
-
-	/** Whether content should be filtered out */
-	f: boolean;
-
-	/** Whether content should be shown an alert */
-	a: boolean;
-	/** Whether content should be shown a light information */
-	i: boolean;
-	/** Whether content should be blurred (shown a warning), this applies to the whole content */
-	b: boolean;
-	/** Whether content should be blurred (shown a warning), this applies only to images/videos */
-	m: boolean;
-}
 
 export type KeywordFilterMatcher = [keyword: string, whole: boolean];
 
@@ -266,13 +261,20 @@ export interface ModerationOptions {
 
 export const decideLabelModeration = (
 	accu: ModerationCause[],
+	target: LabelTarget,
 	labels: Label[] | undefined,
 	userDid: At.DID,
 	opts: ModerationOptions,
 ) => {
-	if (labels) {
+	if (labels /* && labels.length > 0 */) {
 		const globalPrefs = opts.labels;
 		const services = Object.fromEntries(opts.services.map((service) => [service.did, service]));
+
+		// labels.sort((a, b) => {
+		// 	const aSelf = a.src === userDid;
+		// 	const bSelf = b.src === userDid;
+		// 	return aSelf === bSelf ? 0 : aSelf ? -1 : 1;
+		// });
 
 		for (let i = 0, il = labels.length; i < il; i++) {
 			const label = labels[i];
@@ -304,7 +306,7 @@ export const decideLabelModeration = (
 				prio = 1;
 			} else if (pref === PreferenceHide) {
 				prio = 2;
-			} else if (def.b === BlurAll) {
+			} else if (def.b === BlurContent) {
 				prio = def.f & FlagsAdultOnly ? 5 : 7;
 			} else if (def.b === BlurMedia) {
 				prio = 7;
@@ -319,6 +321,8 @@ export const decideLabelModeration = (
 			accu.push({
 				t: CauseLabel,
 				p: prio,
+
+				k: target,
 
 				s: service,
 				l: label,
@@ -407,29 +411,124 @@ export const decideMutedKeywordModeration = (
 	return accu;
 };
 
-export const finalizeModeration = (accu: ModerationCause[]): ModerationDecision | null => {
-	if (accu.length > 0) {
-		const cause = accu.sort((a, b) => a.p - b.p)[0];
+export interface ModerationDecision {
+	/** Whether it's overridable */
+	o: boolean;
 
-		// Other moderation cause types should result in a blur only.
-		const isLabelCause = cause.t === CauseLabel;
+	/** Filters */
+	f: ModerationCause[];
+	/** Blurs */
+	b: ModerationCause[];
+	/** Alerts */
+	a: ModerationCause[];
+	/** Informs */
+	i: ModerationCause[];
+}
 
-		const blur = isLabelCause ? cause.d.b : BlurAll;
-		const sev = isLabelCause ? cause.d.s : SeverityNone;
+export const finalizeModeration = (
+	causes: ModerationCause[],
+	context: ModerationContext,
+): ModerationDecision => {
+	const filters: ModerationCause[] = [];
+	const blurs: ModerationCause[] = [];
+	const alerts: ModerationCause[] = [];
+	const informs: ModerationCause[] = [];
 
-		return {
-			s: cause,
+	let overridable = true;
 
-			f: (isLabelCause || cause.t === CauseMutedKeyword) && cause.v === PreferenceHide,
-			a: sev === SeverityAlert,
-			i: sev === SeverityInform,
-			b: blur === BlurAll,
-			m: blur === BlurMedia,
-		};
+	for (let i = 0, il = causes.length; i < il; i++) {
+		const cause = causes[i];
+		const type = cause.t;
+
+		if (type === CauseLabel) {
+			const target = cause.k;
+			const def = cause.d;
+
+			const flags = def.f;
+			const blur = def.b;
+			const severity = def.s;
+
+			if (cause.v === PreferenceHide) {
+				if (
+					(context === ContextProfileList && target === TargetProfile) ||
+					(context === ContextContentList && (target === TargetContent || target === TargetProfile))
+				) {
+					filters.push(cause);
+				}
+			}
+
+			if (blur === BlurContent) {
+				if (context === ContextContentList || (context === ContextContentView && flags & FlagsAdultOnly)) {
+					blurs.push(cause);
+
+					if (flags & FlagsForced) {
+						overridable = false;
+					}
+				} else if (severity === SeverityAlert) {
+					alerts.push(cause);
+				} else if (severity === SeverityInform) {
+					informs.push(cause);
+				}
+			} else if (blur === BlurMedia) {
+				if (context === ContextContentMedia || context === ContextProfileMedia) {
+					blurs.push(cause);
+
+					if (flags & FlagsForced) {
+						overridable = false;
+					}
+				} else if (severity === SeverityAlert) {
+					alerts.push(cause);
+				} else if (severity === SeverityInform) {
+					informs.push(cause);
+				}
+			} else if (blur === BlurNone) {
+				if (severity === SeverityAlert) {
+					alerts.push(cause);
+				} else if (severity === SeverityInform) {
+					informs.push(cause);
+				}
+			}
+		}
 	}
 
-	return null;
+	return {
+		o: overridable,
+		f: filters.sort(sortByPriority),
+		b: blurs.sort(sortByPriority),
+		a: alerts,
+		i: informs,
+	};
 };
+
+const sortByPriority = (a: ModerationCause, b: ModerationCause) => {
+	return a.p - b.p;
+};
+
+// export const finalizeModeration = (accu: ModerationCause[]): ModerationDecision | null => {
+// 	accu.sort((a, b) => a.p - b.p);
+
+// 	if (accu.length > 0) {
+// 		const cause = accu.sort((a, b) => a.p - b.p)[0];
+
+// 		// Other moderation cause types should result in a blur only.
+// 		const isLabelCause = cause.t === CauseLabel;
+
+// 		const blur = isLabelCause ? cause.d.b : BlurAll;
+// 		const sev = isLabelCause ? cause.d.s : SeverityNone;
+
+// 		return {
+// 			s: cause,
+
+// 			f: (isLabelCause || cause.t === CauseMutedKeyword) && cause.v === PreferenceHide,
+// 			a: sev === SeverityAlert,
+// 			i: sev === SeverityInform,
+// 			b: blur === BlurAll,
+// 			m: blur === BlurMedia,
+// 		};
+// 	}
+
+// 	return null;
+// };
 
 export const isProfileTempMuted = (prefs: ModerationOptions, actor: At.DID): number | null => {
 	const date = prefs.tempMutes[actor];
