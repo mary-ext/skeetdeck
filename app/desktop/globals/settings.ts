@@ -110,9 +110,9 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 					defs: {},
 				},
 			],
-			keywords: [],
-			hideReposts: [],
-			tempMutes: {},
+			keywords: prev.moderation.keywords,
+			hideReposts: prev.filters.hideReposts,
+			tempMutes: prev.filters.tempMutes,
 		};
 
 		_next.$version = 10;
