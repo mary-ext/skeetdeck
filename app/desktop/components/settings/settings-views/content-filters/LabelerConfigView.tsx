@@ -5,8 +5,11 @@ import { GLOBAL_LABELS } from '~/api/moderation';
 import { preferences } from '~/desktop/globals/settings';
 
 import { formatAbsDateTime } from '~/utils/intl/time';
+import { modelChecked } from '~/utils/input';
 
 import { bustModeration } from '~/com/globals/shared';
+
+import Checkbox from '~/com/components/inputs/Checkbox';
 
 import { IconButton } from '~/com/primitives/icon-button';
 
@@ -15,7 +18,7 @@ import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import DefaultLabelerAvatar from '~/com/assets/default-labeler-avatar.svg?url';
 
 import { type ViewParams, VIEW_LABELER_CONFIG, VIEW_MODERATION, useViewRouter } from '../_router';
-import { ListBox, ListGroup, ListGroupBlurb, ListGroupHeader } from '../_styles';
+import { ListBox, ListBoxItemReadonly, ListGroup, ListGroupBlurb, ListGroupHeader } from '../_styles';
 
 import LabelItem from './components/LabelItem';
 
@@ -130,6 +133,22 @@ const LabelerConfigView = () => {
 											);
 										}}
 									</For>
+								</div>
+							</div>
+
+							<div class={ListGroup}>
+								<p class={ListGroupHeader}>Advanced</p>
+
+								<div class={ListBox}>
+									<label class={ListBoxItemReadonly}>
+										<span class="grow">Apply takedowns from this labeler</span>
+										<Checkbox
+											ref={modelChecked(
+												() => service.redact ?? false,
+												(next) => (service.redact = next || undefined),
+											)}
+										/>
+									</label>
 								</div>
 							</div>
 						</div>
