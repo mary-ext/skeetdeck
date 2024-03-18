@@ -411,7 +411,7 @@ export const decideMutedKeywordModeration = (
 	return accu;
 };
 
-export interface ModerationDecision {
+export interface ModerationUI {
 	/** Whether it's overridable */
 	o: boolean;
 
@@ -425,10 +425,10 @@ export interface ModerationDecision {
 	i: ModerationCause[];
 }
 
-export const finalizeModeration = (
+export const getModerationUI = (
 	causes: ModerationCause[],
 	context: ModerationContext,
-): ModerationDecision => {
+): ModerationUI => {
 	const filters: ModerationCause[] = [];
 	const blurs: ModerationCause[] = [];
 	const alerts: ModerationCause[] = [];
