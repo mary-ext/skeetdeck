@@ -15,8 +15,9 @@ import {
 	getTimelineLatestKey,
 } from '~/api/queries/get-timeline';
 
+import { getTimelineQueryMeta } from '../../globals/shared';
+
 import CircularProgress from '../CircularProgress';
-import { useSharedPreferences } from '../SharedPreferences';
 import { VirtualContainer } from '../VirtualContainer';
 
 import GenericErrorView from '../views/GenericErrorView';
@@ -38,8 +39,6 @@ const isTimelineStale = (
 };
 
 const TimelineList = (props: TimelineListProps) => {
-	const sharedPrefs = useSharedPreferences();
-
 	const queryClient = useQueryClient();
 
 	const timeline = createInfiniteQuery(() => ({
@@ -49,7 +48,7 @@ const TimelineList = (props: TimelineListProps) => {
 		getNextPageParam: (last) => last.cursor,
 		initialPageParam: undefined,
 		meta: {
-			timelineOpts: sharedPrefs,
+			timelineOpts: getTimelineQueryMeta(),
 		},
 	}));
 

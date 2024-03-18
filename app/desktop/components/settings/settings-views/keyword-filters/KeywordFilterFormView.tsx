@@ -12,8 +12,9 @@ import { createRadioModel, model, modelChecked } from '~/utils/input';
 import { getUniqueId } from '~/utils/misc';
 
 import { openModal } from '~/com/globals/modals';
+import { bustModeration } from '~/com/globals/shared';
 
-import { bustRevisionCache, preferences } from '../../../../globals/settings';
+import { preferences } from '../../../../globals/settings';
 
 import { BoxedIconButton } from '~/com/primitives/boxed-icon-button';
 import { Button } from '~/com/primitives/button';
@@ -89,7 +90,7 @@ const KeywordFilterFormView = () => {
 				});
 			}
 
-			bustRevisionCache();
+			bustModeration();
 			router.move({ type: VIEW_KEYWORD_FILTERS });
 		});
 	};
@@ -221,7 +222,7 @@ const KeywordFilterFormView = () => {
 													filters.splice(index, 1);
 												}
 
-												bustRevisionCache();
+												bustModeration();
 												router.move({ type: VIEW_KEYWORD_FILTERS });
 											});
 										}}

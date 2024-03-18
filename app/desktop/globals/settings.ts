@@ -7,8 +7,6 @@ import { getCurrentTid } from '~/api/utils/tid';
 
 import { createReactiveLocalStorage } from '~/utils/storage';
 
-import type { SharedPreferencesObject } from '~/com/components/SharedPreferences';
-
 import { type DeckConfig, type PaneConfig, PaneSize, SpecificPaneSize } from './panes';
 
 export interface ModerationPreferences extends Omit<ModerationOptions, '_filtersCache'> {
@@ -17,8 +15,6 @@ export interface ModerationPreferences extends Omit<ModerationOptions, '_filters
 
 export interface PreferencesSchema {
 	$version: 10;
-	/** Used for cache-busting moderation filters */
-	rev: number;
 	/** Onboarding mode */
 	onboarding: boolean;
 	/** Deck configuration */
@@ -53,7 +49,6 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 	if (version === 0) {
 		const object: PreferencesSchema = {
 			$version: 10,
-			rev: 0,
 			onboarding: true,
 			decks: [],
 			ui: {
@@ -100,6 +95,8 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 	if (version < 10) {
 		const _next = prev as PreferencesSchema;
 
+		delete prev.rev;
+
 		_next.moderation = {
 			updatedAt: 0,
 			labels: {},
@@ -123,34 +120,6 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 
 	return prev;
 });
-
-export const createSharedPreferencesObject = (): SharedPreferencesObject => {
-	const moderation = preferences.moderation;
-
-	return {
-		get rev() {
-			return preferences.rev;
-		},
-		set rev(next) {
-			preferences.rev = next;
-		},
-		// ModerationOpts contains internal state properties, we don't want them
-		// to be reflected back into persisted storage.
-		moderation: {
-			labels: moderation.labels,
-			services: moderation.services,
-			keywords: moderation.keywords,
-			hideReposts: moderation.hideReposts,
-			tempMutes: moderation.tempMutes,
-		},
-		language: preferences.language,
-		translation: preferences.translation,
-	};
-};
-
-export const bustRevisionCache = () => {
-	preferences.rev = ~~(Math.random() * 1024);
-};
 
 export const addPane = <T extends PaneConfig>(
 	deck: DeckConfig,

@@ -12,12 +12,12 @@ import { formatAbsDateTime } from '~/utils/intl/time';
 import { clsx } from '~/utils/misc';
 
 import { openModal } from '../../globals/modals';
+import { getModerationOptions } from '../../globals/shared';
 
 import { BoxedIconButton } from '../../primitives/boxed-icon-button';
 import { Button } from '../../primitives/button';
 
 import { LINK_LIST, LINK_PROFILE_EDIT, LINK_PROFILE_FOLLOWERS, LINK_PROFILE_FOLLOWS, Link } from '../Link';
-import { useSharedPreferences } from '../SharedPreferences';
 
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
 
@@ -39,8 +39,6 @@ export interface ProfileHeaderProps {
 }
 
 const ProfileHeader = (props: ProfileHeaderProps) => {
-	const { moderation } = useSharedPreferences();
-
 	const profile = props.profile;
 	const viewer = profile.viewer;
 
@@ -162,7 +160,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 				</div>
 
 				{(() => {
-					const isTemporarilyMuted = isProfileTempMuted(moderation, profile.did);
+					const isTemporarilyMuted = isProfileTempMuted(getModerationOptions(), profile.did);
 					if (isTemporarilyMuted !== null) {
 						return (
 							<div class="text-sm text-muted-fg">

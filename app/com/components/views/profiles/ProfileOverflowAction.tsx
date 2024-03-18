@@ -7,12 +7,12 @@ import type { SignalizedProfile } from '~/api/stores/profiles';
 import { isProfileTempMuted } from '~/api/moderation';
 
 import { openModal } from '../../../globals/modals';
+import { getModerationOptions } from '../../../globals/shared';
 
 import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
 
 import { Flyout } from '../../Flyout';
 import { LINK_PROFILE_FEEDS, LINK_PROFILE_LISTS, useLinking } from '../../Link';
-import { useSharedPreferences } from '../../SharedPreferences';
 
 import BlockIcon from '../../../icons/baseline-block';
 import LaunchIcon from '../../../icons/baseline-launch';
@@ -42,7 +42,6 @@ const isDesktop = import.meta.env.VITE_MODE === 'desktop';
 
 const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 	const linking = useLinking();
-	const { moderation } = useSharedPreferences();
 
 	return (() => {
 		const profile = props.profile;
@@ -51,11 +50,12 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 		const isSelf = profile.uid === did;
 		const isOwnAccount = createMemo(() => multiagent.accounts.some((account) => account.did === did));
 
-		const isTempMuted = () => isProfileTempMuted(moderation, did);
+		const isTempMuted = () => isProfileTempMuted(getModerationOptions(), did);
 		const isMuted = () => profile.viewer.muted.value;
 		const isBlocked = () => profile.viewer.blocking.value;
 
 		const isRepostHidden = createMemo(() => {
+			const moderation = getModerationOptions();
 			const index = moderation.hideReposts.indexOf(did);
 
 			if (index !== -1) {
@@ -119,6 +119,7 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 						{!isSelf && (
 							<button
 								onClick={() => {
+									const moderation = getModerationOptions();
 									const array = moderation.hideReposts;
 									const repostHidden = isRepostHidden();
 

@@ -9,10 +9,10 @@ import { formatCompact } from '~/utils/intl/number';
 import { formatAbsDateTime } from '~/utils/intl/time';
 import { clsx } from '~/utils/misc';
 
-import { openModal } from '~/com/globals/modals';
+import { openModal } from '../../globals/modals';
+import { getModerationOptions } from '../../globals/shared';
 
 import { LINK_LIST, LINK_PROFILE_FOLLOWERS, LINK_PROFILE_FOLLOWS, Link } from '../Link';
-import { useSharedPreferences } from '../SharedPreferences';
 
 import PersonAddIcon from '../../icons/baseline-person-add';
 import ShareIcon from '../../icons/baseline-share';
@@ -31,8 +31,6 @@ const MuteConfirmDialog = lazy(() => import('../dialogs/MuteConfirmDialog'));
 const SilenceConfirmDialog = lazy(() => import('../dialogs/SilenceConfirmDialog'));
 
 const ProfileHeader = (props: ProfileHeaderProps) => {
-	const { moderation } = useSharedPreferences();
-
 	const profile = props.profile;
 
 	const did = profile.did;
@@ -51,10 +49,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 							}}
 							class="group aspect-banner overflow-hidden bg-background"
 						>
-							<img
-								src={banner}
-								class={clsx([`h-full w-full object-cover group-hover:opacity-75`, verdict()?.m && `blur`])}
-							/>
+							<img src={banner} class={clsx([`h-full w-full object-cover group-hover:opacity-75`])} />
 						</button>
 					);
 				}
@@ -75,10 +70,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 									}}
 									class="group -mt-8 h-20 w-20 shrink-0 overflow-hidden rounded-full bg-background outline-2 outline-background outline focus-visible:outline-primary"
 								>
-									<img
-										src={avatar}
-										class={clsx([`h-full w-full group-hover:opacity-75`, verdict()?.m && `blur`])}
-									/>
+									<img src={avatar} class={clsx([`h-full w-full group-hover:opacity-75`])} />
 								</button>
 							);
 						}
@@ -119,7 +111,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 				</div>
 
 				{(() => {
-					const isTemporarilyMuted = isProfileTempMuted(moderation, did);
+					const isTemporarilyMuted = isProfileTempMuted(getModerationOptions(), did);
 					if (isTemporarilyMuted !== null) {
 						return (
 							<div class="text-sm text-muted-fg">

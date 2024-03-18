@@ -9,11 +9,11 @@ import { isProfileTempMuted } from '~/api/moderation';
 import { serializeRichText } from '~/api/richtext/utils';
 
 import { openModal } from '../../../globals/modals';
+import { getModerationOptions } from '../../../globals/shared';
 
 import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
 
 import { Flyout } from '../../Flyout';
-import { useSharedPreferences } from '../../SharedPreferences';
 
 import ContentCopyIcon from '../../../icons/baseline-content-copy';
 import DeleteOutlinedIcon from '../../../icons/outline-delete';
@@ -38,8 +38,6 @@ export interface PostOverflowActionProps {
 }
 
 const PostOverflowAction = (props: PostOverflowActionProps) => {
-	const { moderation } = useSharedPreferences();
-
 	const onTranslate = props.onTranslate;
 
 	return (() => {
@@ -51,7 +49,7 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 		const isSameAuthor = post.uid === authorDid;
 		const isOwnAccount = createMemo(() => multiagent.accounts.some((account) => account.did === authorDid));
 
-		const isTempMuted = () => isProfileTempMuted(moderation, author.did);
+		const isTempMuted = () => isProfileTempMuted(getModerationOptions(), author.did);
 		const isMuted = () => author.viewer.muted.value;
 
 		const getPostUrl = () => {

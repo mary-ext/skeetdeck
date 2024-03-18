@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { createMemo, createSignal } from 'solid-js';
 
 import { createQuery } from '@pkg/solid-query';
 
@@ -8,11 +8,13 @@ import type { TranslationPreferences } from '~/api/types';
 import { getTranslation, getTranslationKey } from '~/api/queries/get-translation';
 import type { SignalizedPost } from '~/api/stores/posts';
 
+import { languageNames } from '~/utils/intl/display-names';
+
+import { getTranslationPreferences } from '../../../globals/shared';
+
 import { Button } from '../../../primitives/button';
 
 import CircularProgress from '../../CircularProgress';
-import { useSharedPreferences } from '../../SharedPreferences';
-import { languageNames } from '~/utils/intl/display-names';
 
 export interface PostTranslationProps {
 	post: SignalizedPost;
@@ -50,10 +52,8 @@ export const getPreferredLanguage = (prefs: TranslationPreferences) => {
 };
 
 const PostTranslation = (props: PostTranslationProps) => {
-	const { translation } = useSharedPreferences();
-
 	const [source, _setSource] = createSignal('auto');
-	const target = getPreferredLanguage(translation);
+	const target = createMemo(() => getPreferredLanguage(getTranslationPreferences()));
 
 	const text = () => props.post.record.value.text;
 

@@ -9,9 +9,9 @@ import { produceTimelineFilter } from '~/api/updaters/timeline-filter';
 import { isProfileTempMuted } from '~/api/moderation';
 
 import { closeModal } from '../../globals/modals';
+import { bustModeration, getModerationOptions } from '../../globals/shared';
 
 import DialogOverlay from './DialogOverlay';
-import { useBustRevCache, useSharedPreferences } from '../SharedPreferences';
 
 import { Button } from '../../primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
@@ -24,26 +24,23 @@ export interface SilenceConfirmDialogProps {
 
 const SilenceConfirmDialog = (props: SilenceConfirmDialogProps) => {
 	const queryClient = useQueryClient();
-	const bustRev = useBustRevCache();
 
 	const profile = props.profile;
 	const did = profile.did;
 	const uid = profile.uid;
 
-	const { moderation } = useSharedPreferences();
-
 	const [duration, setDuration] = createSignal(1 * 24 * 60 * 60 * 1_000);
-	const silenced = createMemo(() => isProfileTempMuted(moderation, did) !== null);
+	const silenced = createMemo(() => isProfileTempMuted(getModerationOptions(), did) !== null);
 
 	const handleConfirm = () => {
-		const tempMutes = moderation.tempMutes;
+		const tempMutes = getModerationOptions().tempMutes;
 
 		closeModal();
 
 		if (silenced()) {
 			batch(() => {
 				delete tempMutes[did];
-				bustRev();
+				bustModeration();
 			});
 		} else {
 			const $duration = duration();
@@ -56,7 +53,7 @@ const SilenceConfirmDialog = (props: SilenceConfirmDialogProps) => {
 
 			batch(() => {
 				tempMutes[did] = Date.now() + $duration;
-				bustRev();
+				bustModeration();
 			});
 
 			queryClient.setQueriesData<InfiniteData<TimelinePage>>(

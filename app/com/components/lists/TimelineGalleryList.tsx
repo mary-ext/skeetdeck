@@ -15,9 +15,10 @@ import {
 	getTimelineLatestKey,
 } from '~/api/queries/get-timeline';
 
+import { getTimelineQueryMeta } from '../../globals/shared';
+
 import GenericErrorView from '../views/GenericErrorView';
 import CircularProgress from '../CircularProgress';
-import { useSharedPreferences } from '../SharedPreferences';
 
 import { loadMoreBtn, loadNewBtn } from '../../primitives/interactive';
 
@@ -36,8 +37,6 @@ const isTimelineStale = (
 };
 
 const TimelineGalleryList = (props: TimelineGalleryListProps) => {
-	const sharedPrefs = useSharedPreferences();
-
 	const queryClient = useQueryClient();
 
 	const timeline = createInfiniteQuery(() => ({
@@ -46,7 +45,7 @@ const TimelineGalleryList = (props: TimelineGalleryListProps) => {
 		getNextPageParam: (last) => last.cursor,
 		initialPageParam: undefined,
 		meta: {
-			timelineOpts: sharedPrefs,
+			timelineOpts: getTimelineQueryMeta(),
 		},
 	}));
 

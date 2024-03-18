@@ -10,9 +10,10 @@ import { formatCompact } from '~/utils/intl/number';
 import { formatAbsDateTime } from '~/utils/intl/time';
 import { clsx } from '~/utils/misc';
 
+import { getTranslationPreferences } from '../../globals/shared';
+
 import { LINK_LIST, LINK_POST_LIKED_BY, LINK_POST_REPOSTED_BY, LINK_PROFILE, Link } from '../Link';
 import RichTextRenderer from '../RichTextRenderer';
-import { useSharedPreferences } from '../SharedPreferences';
 
 import AccountCheckIcon from '../../icons/baseline-account-check';
 import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
@@ -38,7 +39,6 @@ export interface PermalinkPostProps {
 }
 
 const PermalinkPost = (props: PermalinkPostProps) => {
-	const preferences = useSharedPreferences();
 	const [showTl, setShowTl] = createSignal(false);
 
 	const post = props.post;
@@ -88,7 +88,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 					return <PostTranslation post={post} />;
 				}
 
-				if (needTranslation(post, preferences.translation)) {
+				if (needTranslation(post, getTranslationPreferences())) {
 					return (
 						<button onClick={() => setShowTl(true)} class="mt-1 text-sm text-accent hover:underline">
 							Translate post

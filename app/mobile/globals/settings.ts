@@ -10,8 +10,6 @@ import type { SharedPreferencesObject } from '~/com/components/SharedPreferences
 
 export interface PreferencesSchema {
 	$version: 1;
-	/** Used for cache-busting moderation filters */
-	rev: number;
 	/** UI configuration */
 	ui: {
 		/** Application theme */
@@ -42,7 +40,6 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 	if (version === 0) {
 		const object: PreferencesSchema = {
 			$version: 1,
-			rev: 0,
 			ui: {
 				theme: 'auto',
 			},
@@ -93,25 +90,3 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 
 	return prev;
 });
-
-export const createSharedPreferencesObject = (): SharedPreferencesObject => {
-	return {
-		get rev() {
-			return preferences.rev;
-		},
-		set rev(next) {
-			preferences.rev = next;
-		},
-		// ModerationOpts contains internal state properties, we don't want them
-		// to be reflected back into persisted storage.
-		moderation: {
-			...preferences.moderation,
-		},
-		language: preferences.language,
-		translation: preferences.translation,
-	};
-};
-
-export const bustRevisionCache = () => {
-	preferences.rev = ~~(Math.random() * 1024);
-};

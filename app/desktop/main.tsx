@@ -6,41 +6,27 @@ import { QueryClientProvider } from '@pkg/solid-query';
 
 import { multiagent } from '~/api/globals/agent';
 
+import type { ModerationOptions } from '~/api/moderation';
+
 import { useMediaQuery } from '~/utils/media-query';
 
 import { ModalProvider } from '~/com/globals/modals';
-import { MetaProvider } from '~/com/lib/meta';
+import * as shared from '~/com/globals/shared';
 
-import { SharedPreferences } from '~/com/components/SharedPreferences';
+import { MetaProvider } from '~/com/lib/meta';
 
 import ComposerContextProvider from './components/composer/ComposerContextProvider';
 
-import { createSharedPreferencesObject, preferences } from './globals/settings';
+import { preferences } from './globals/settings';
 import { queryClient } from './globals/query';
 
 import './styles/tailwind.css';
 
 import('./lib/moderation/update');
 
-configureRouter([
-	{
-		path: '/',
-		component: lazy(() => import('./views/Layout')),
-		children: [
-			{
-				path: '/',
-				component: lazy(() => import('./views/EmptyView')),
-			},
-			{
-				path: '/decks/:deck',
-				component: lazy(() => import('./views/DecksView')),
-			},
-		],
-	},
-]);
-
 const App = () => {
 	createRenderEffect(() => {
+		// Sets up the multiagent labeler header
 		multiagent.services.value = preferences.moderation.services.map((service) => ({
 			did: service.did,
 			redact: service.redact,
@@ -66,16 +52,54 @@ const App = () => {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<MetaProvider>
-				<SharedPreferences.Provider value={/* @once */ createSharedPreferencesObject()}>
-					<ComposerContextProvider>
-						<Router />
-						<ModalProvider />
-					</ComposerContextProvider>
-				</SharedPreferences.Provider>
+				<ComposerContextProvider>
+					<Router />
+					<ModalProvider />
+				</ComposerContextProvider>
 			</MetaProvider>
 		</QueryClientProvider>
 	);
 };
+
+// Set up the router
+configureRouter([
+	{
+		path: '/',
+		component: lazy(() => import('./views/Layout')),
+		children: [
+			{
+				path: '/',
+				component: lazy(() => import('./views/EmptyView')),
+			},
+			{
+				path: '/decks/:deck',
+				component: lazy(() => import('./views/DecksView')),
+			},
+		],
+	},
+]);
+
+// Set up common preferences
+{
+	const moderation = preferences.moderation;
+	const createModerationOptions = (): ModerationOptions => {
+		return {
+			labels: moderation.labels,
+			services: moderation.services,
+			keywords: moderation.keywords,
+			hideReposts: moderation.hideReposts,
+			tempMutes: moderation.tempMutes,
+		};
+	};
+
+	shared.setLanguagePreferences(preferences.language);
+	shared.setModerationOptions(createModerationOptions());
+	shared.setTranslationPreferences(preferences.translation);
+
+	shared.setBustModerationListener(() => {
+		shared.setModerationOptions({ ...shared.getModerationOptions(), ...createModerationOptions() });
+	});
+}
 
 // The scroll restoration that Firefox does makes it broken, there's nothing to
 // actually restore scroll position on anyway.

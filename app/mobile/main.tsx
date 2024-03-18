@@ -9,13 +9,12 @@ import { ModalProvider } from '~/com/globals/modals';
 
 import { useMediaQuery } from '~/utils/media-query';
 
-import { createSharedPreferencesObject, preferences } from './globals/settings';
+import { preferences } from './globals/settings';
 import { queryClient } from './globals/query';
 
 import './globals/router';
 
 import CircularProgress from '~/com/components/CircularProgress';
-import { SharedPreferences } from '~/com/components/SharedPreferences';
 
 import './styles/tailwind.css';
 
@@ -41,19 +40,17 @@ const App = () => {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<MetaProvider>
-				<SharedPreferences.Provider value={createSharedPreferencesObject()}>
-					<Root>
-						<RouterView
-							fallback={
-								<div class="grid grow place-items-center">
-									<CircularProgress />
-								</div>
-							}
-						/>
-					</Root>
+				<Root>
+					<RouterView
+						fallback={
+							<div class="grid grow place-items-center">
+								<CircularProgress />
+							</div>
+						}
+					/>
+				</Root>
 
-					<ModalProvider />
-				</SharedPreferences.Provider>
+				<ModalProvider />
 			</MetaProvider>
 		</QueryClientProvider>
 	);
