@@ -30,7 +30,7 @@ export interface ContentWarningProps {
 }
 
 const toggleBtn = Interactive({
-	class: `flex h-11 w-full items-center gap-3 rounded-md border border-divider px-3`,
+	class: `border border-divider flex h-11 w-full items-center gap-3 rounded-md px-3 text-primary/85 hover:text-primary`,
 });
 
 const ContentWarning = (props: ContentWarningProps) => {
@@ -74,7 +74,7 @@ const ContentWarning = (props: ContentWarningProps) => {
 					<Icon class="shrink-0 text-base text-muted-fg" />
 					<span class="grow overflow-hidden text-ellipsis whitespace-nowrap text-left text-sm">{title}</span>
 
-					<span hidden={forced} class="text-de font-medium text-accent">
+					<span hidden={forced} class="text-de font-medium text-muted-fg">
 						{!override() ? `Show` : `Hide`}
 					</span>
 				</button>
@@ -84,13 +84,9 @@ const ContentWarning = (props: ContentWarningProps) => {
 						const source = blur.s;
 
 						return (
-							<div class="mt-1 text-de text-muted-fg">
-								Applied by{' '}
-								{source ? (
-									<button class="text-accent hover:underline">{/* @once */ renderLabelSource(source)}</button>
-								) : (
-									`the author`
-								)}
+							<div class="mt-1.5 text-de text-muted-fg">
+								Applied by <span>{source ? renderLabelSource(source) : `the author`}</span>.{' '}
+								<button class="text-accent hover:underline">Learn more</button>
 							</div>
 						);
 					}
