@@ -32,6 +32,7 @@ import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import Embed from '../embeds/Embed';
 import ContentWarning from '../moderation/ContentWarning';
+import LabelsOnMe from '../moderation/LabelsOnMe';
 
 import PostOverflowAction from './posts/PostOverflowAction';
 import ReplyAction from './posts/ReplyAction';
@@ -60,8 +61,11 @@ const Post = (props: PostProps) => {
 	const record = post.record;
 	const viewer = post.viewer;
 
-	const authorPermalink: ProfileLinking = { type: LINK_PROFILE, actor: author.did };
-	const postPermalink: PostLinking = { type: LINK_POST, actor: author.did, rkey: getRecordId(post.uri) };
+	const uid = author.uid;
+	const did = author.did;
+
+	const authorPermalink: ProfileLinking = { type: LINK_PROFILE, actor: did };
+	const postPermalink: PostLinking = { type: LINK_POST, actor: did, rkey: getRecordId(post.uri) };
 
 	const handleClick = (ev: MouseEvent | KeyboardEvent) => {
 		if (!props.interactive || !isElementClicked(ev)) {
@@ -217,6 +221,8 @@ const Post = (props: PostProps) => {
 							</TimeAgo>
 						</div>
 					</div>
+
+					{did === uid && <LabelsOnMe uid={uid} labels={post.labels.value} class="mb-2 mt-1" />}
 
 					<PostContent post={post} postPermalink={postPermalink} timelineDid={() => props.timelineDid} />
 
