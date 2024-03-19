@@ -6,6 +6,16 @@ import { GLOBAL_LABELS } from '~/api/moderation';
 
 import { bustModeration } from '~/com/globals/shared';
 
+import {
+	ListBox,
+	ListBoxItemChevron,
+	ListBoxItemIcon,
+	ListBoxItemInteractive,
+	ListGroup,
+	ListGroupBlurb,
+	ListGroupHeader,
+} from '~/com/primitives/list-box';
+
 // import AddIcon from '~/com/icons/baseline-add';
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 import FilterAltOutlinedIcon from '~/com/icons/outline-filter-alt';
@@ -24,15 +34,6 @@ import {
 	VIEW_TEMPORARY_MUTES,
 	useViewRouter,
 } from './_router';
-import {
-	ListBox,
-	ListBoxItemChevron,
-	ListBoxItemIcon,
-	ListBoxItemInteractive,
-	ListGroup,
-	ListGroupBlurb,
-	ListGroupHeader,
-} from './_styles';
 
 import LabelItem from './content-filters/components/LabelItem';
 

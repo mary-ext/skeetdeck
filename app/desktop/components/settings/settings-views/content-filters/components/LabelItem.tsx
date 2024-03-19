@@ -22,12 +22,12 @@ import { clsx } from '~/utils/misc';
 
 import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
 
+import { ListBoxItemReadonly } from '~/com/primitives/list-box';
 import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 
 import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down';
 import CheckIcon from '~/com/icons/baseline-check';
 
-import { ListBoxItemReadonly } from '../../_styles';
 import InfoOutlinedIcon from '~/com/icons/outline-info';
 
 export interface LabelItemProps {

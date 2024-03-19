@@ -1,4 +1,4 @@
-import { Interactive } from '~/com/primitives/interactive';
+import { Interactive } from './interactive';
 
 export const ListGroup = `flex flex-col gap-2`;
 

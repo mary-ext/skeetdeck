@@ -12,13 +12,19 @@ import { bustModeration } from '~/com/globals/shared';
 import Checkbox from '~/com/components/inputs/Checkbox';
 
 import { IconButton } from '~/com/primitives/icon-button';
+import {
+	ListBox,
+	ListBoxItemReadonly,
+	ListGroup,
+	ListGroupBlurb,
+	ListGroupHeader,
+} from '~/com/primitives/list-box';
 
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 
 import DefaultLabelerAvatar from '~/com/assets/default-labeler-avatar.svg?url';
 
 import { type ViewParams, VIEW_LABELER_CONFIG, VIEW_MODERATION, useViewRouter } from '../_router';
-import { ListBox, ListBoxItemReadonly, ListGroup, ListGroupBlurb, ListGroupHeader } from '../_styles';
 
 import LabelItem from './components/LabelItem';
 
