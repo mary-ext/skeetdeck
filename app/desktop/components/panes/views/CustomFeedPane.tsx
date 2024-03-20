@@ -13,7 +13,7 @@ import { IconButton } from '~/com/primitives/icon-button';
 import TimelineList from '~/com/components/lists/TimelineList';
 import { VirtualContainer } from '~/com/components/VirtualContainer';
 
-import InfoIcon from '~/com/icons/baseline-info';
+import InfoOutlinedIcon from '~/com/icons/outline-info';
 import SettingsOutlinedIcon from '~/com/icons/outline-settings';
 
 import { usePaneContext } from '../PaneContext';
@@ -40,7 +40,7 @@ const CustomFeedPane = () => {
 					onClick={() => (pane.infoVisible = !pane.infoVisible)}
 					class={/* @once */ IconButton({ color: 'muted' })}
 				>
-					<InfoIcon />
+					<InfoOutlinedIcon />
 				</button>
 
 				<button

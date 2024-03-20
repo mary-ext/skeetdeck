@@ -16,7 +16,7 @@ import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 import { usePaneContext } from '../PaneContext';
 
-import EditIcon from '~/com/icons/baseline-edit';
+import EditOutlinedIcon from '~/com/icons/outline-edit';
 import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 
 import ListOverflowAction from './actions/ListOverflowAction';
@@ -140,7 +140,7 @@ const ListHeader = (props: ListHeaderProps) => {
 									}}
 									class={/* @once */ BoxedIconButton()}
 								>
-									<EditIcon />
+									<EditOutlinedIcon />
 								</button>
 							)
 						}
