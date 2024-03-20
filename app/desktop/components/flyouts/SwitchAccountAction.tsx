@@ -50,17 +50,17 @@ const SwitchAccountAction = (props: SwitchAccountActionProps) => {
 									class="h-9 w-9 shrink-0 rounded-full"
 								/>
 
-								<div class="min-w-0 grow text-sm">
+								<div class="mx-1 min-w-0 grow text-sm">
 									<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold empty:hidden">
 										{account.profile?.displayName}
 									</p>
-									<p class="overflow-hidden text-ellipsis whitespace-nowrap text-muted-fg">
+									<p class="overflow-hidden text-ellipsis whitespace-nowrap text-de text-muted-fg">
 										{'@' + account.session.handle}
 									</p>
 								</div>
 
 								<CheckIcon
-									class={clsx([`text-base text-accent`, account.did !== props.value && `invisible`])}
+									class={clsx([`shrink-0 text-base text-accent`, account.did !== props.value && `invisible`])}
 								/>
 							</button>
 						)}
