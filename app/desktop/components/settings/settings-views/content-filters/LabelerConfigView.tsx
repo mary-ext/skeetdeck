@@ -64,28 +64,26 @@ const LabelerConfigView = () => {
 							<div class={ListGroup}>
 								<p class={ListGroupHeader}>About this label provider</p>
 
-								<div class={ListBox}>
-									<div class="px-4 py-3">
-										<div class="flex gap-3">
-											<img
-												src={profile.avatar || DefaultLabelerAvatar}
-												class="mt-1 h-8 w-8 shrink-0 self-start rounded-md"
-											/>
+								<div class="mt-2">
+									<div class="flex items-start gap-4">
+										<img
+											src={profile.avatar || DefaultLabelerAvatar}
+											class="h-12 w-12 shrink-0 self-start rounded-md"
+										/>
 
-											<div class="flex min-w-0 grow flex-col text-sm">
-												<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold empty:hidden">
-													{profile.displayName}
-												</p>
-												<p class="overflow-hidden text-ellipsis whitespace-nowrap text-de text-muted-fg">
-													{'@' + profile.handle}
-												</p>
-											</div>
+										<div class="mt-0.5 flex min-w-0 grow flex-col text-sm">
+											<p class="overflow-hidden text-ellipsis text-base font-medium empty:hidden">
+												{profile.displayName}
+											</p>
+											<p class="overflow-hidden text-ellipsis text-sm text-muted-fg">
+												{'@' + profile.handle}
+											</p>
 										</div>
-
-										<p class="mt-2 text-ellipsis whitespace-pre-wrap text-de empty:hidden">
-											{profile.description}
-										</p>
 									</div>
+
+									<p class="mt-4 text-ellipsis whitespace-pre-wrap text-sm empty:hidden">
+										{profile.description}
+									</p>
 								</div>
 							</div>
 
