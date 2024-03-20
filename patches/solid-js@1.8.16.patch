@@ -1,5 +1,5 @@
 diff --git a/dist/solid.js b/dist/solid.js
-index 92c45d7299a6a15556c3274dae7ebf07817a1976..9ce41bbb6140375bc3d0f6a05477e05323ee94ff 100644
+index 7350fc223921ca774966b22cb77e8542e28b0e25..bfa0e6c2a0056e256fe31b4c8aebade1cdfcce8b 100644
 --- a/dist/solid.js
 +++ b/dist/solid.js
 @@ -1573,7 +1573,6 @@ function Show(props) {
