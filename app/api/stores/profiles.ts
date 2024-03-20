@@ -63,7 +63,7 @@ export class SignalizedProfile {
 		this.followersCount = signal((isDetailed && profile.followersCount) || 0);
 		this.followsCount = signal((isDetailed && profile.followsCount) || 0);
 		this.postsCount = signal((isDetailed && profile.postsCount) || 0);
-		this.associated = signal(isDetailed ? getAssociated(profile.associated) : undefined, EQUALS_DEQUAL);
+		this.associated = signal(getAssociated(profile.associated), EQUALS_DEQUAL);
 		this.labels = signal(profile.labels || [], EQUALS_DEQUAL);
 
 		this.viewer = {
@@ -110,6 +110,7 @@ export const mergeProfile = (
 		val.handle.value = profile.handle;
 		val.displayName.value = profile.displayName;
 		val.avatar.value = profile.avatar;
+		val.associated.value = getAssociated(profile.associated);
 		val.labels.value = profile.labels || [];
 
 		val.viewer.muted.value = profile.viewer?.muted;
@@ -129,7 +130,6 @@ export const mergeProfile = (
 			val.followersCount.value = profile.followersCount ?? 0;
 			val.followsCount.value = profile.followsCount ?? 0;
 			val.postsCount.value = profile.postsCount ?? 0;
-			val.associated.value = getAssociated(profile.associated);
 		}
 	}
 
