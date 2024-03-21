@@ -71,7 +71,7 @@ export const createMultipleChoiceModel = <T>(getter: Accessor<T[]>, setter: (nex
 	};
 };
 
-export const autofocus = (node: HTMLInputElement) => {
+export const autofocus = (node: HTMLInputElement | HTMLTextAreaElement | HTMLButtonElement) => {
 	createEffect(() => {
 		node.focus();
 	});
