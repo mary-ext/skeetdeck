@@ -54,13 +54,13 @@ const enum ReportType {
 	FEED = 1 << 3,
 }
 
-export type ReportMessage =
+export type ReportTarget =
 	| { type: 'feed'; uri: At.Uri; cid: string }
 	| { type: 'list'; uri: At.Uri; cid: string }
 	| { type: 'post'; uri: At.Uri; cid: string }
 	| { type: 'profile'; did: At.DID };
 
-const REPORT_MAPPING: Record<ReportMessage['type'], ReportType> = {
+const REPORT_MAPPING: Record<ReportTarget['type'], ReportType> = {
 	feed: ReportType.FEED,
 	list: ReportType.LIST,
 	post: ReportType.POST,
@@ -129,7 +129,7 @@ export interface ReportDialogProps {
 	/** Expected to be static */
 	uid: At.DID;
 	/** Expected to be static */
-	report: ReportMessage;
+	report: ReportTarget;
 }
 
 const DMCA_LINK = 'https://bsky.social/about/support/copyright';
@@ -504,7 +504,7 @@ const ReportDialog = (props: ReportDialogProps) => {
 
 								<div class={/* @once */ DialogActions()}>
 									<button
-										ref={autofocus}
+										ref={refs(autofocus)}
 										onClick={closeModal}
 										class={/* @once */ Button({ variant: 'primary' })}
 									>
