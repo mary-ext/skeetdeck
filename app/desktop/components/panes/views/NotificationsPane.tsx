@@ -46,7 +46,7 @@ const isNotificationsStale = (
 	timelineData: InfiniteData<NotificationsPage> | undefined,
 	latestData: NotificationsLatestResult | undefined,
 ) => {
-	return latestData ? latestData.cid !== timelineData?.pages[0].cid : false;
+	return latestData?.cid ? latestData.cid !== timelineData?.pages[0].cid : false;
 };
 
 const NotificationsPane = () => {
