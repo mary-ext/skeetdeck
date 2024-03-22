@@ -55,15 +55,15 @@ const TimelineGalleryList = (props: TimelineGalleryListProps) => {
 		return {
 			queryKey: getTimelineLatestKey(props.uid, props.params),
 			queryFn: getTimelineLatest,
-			staleTime: 10_000,
+			staleTime: 30_000,
 			enabled: $timeline !== undefined,
 			refetchOnWindowFocus: (query) => {
 				return !isTimelineStale($timeline, query.state.data);
 			},
 			refetchInterval: (query) => {
 				if (!isTimelineStale($timeline, query.state.data)) {
-					// 30 seconds, or 3 minutes
-					return !document.hidden ? 30_000 : 3 * 60_000;
+					// 1 minute, or 5 minutes
+					return !document.hidden ? 60_000 : 5 * 60_000;
 				}
 
 				return false;

@@ -71,7 +71,7 @@ const NotificationsPane = () => {
 		return {
 			queryKey: getNotificationsLatestKey(pane.uid),
 			queryFn: getNotificationsLatest,
-			staleTime: 10_000,
+			staleTime: 30_000,
 			enabled: $notifications !== undefined,
 			refetchOnWindowFocus: (query) => {
 				return !isNotificationsStale($notifications, query.state.data);
