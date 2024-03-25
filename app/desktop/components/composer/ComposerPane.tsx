@@ -964,8 +964,9 @@ const ComposerPane = () => {
 
 													<div class="grow"></div>
 
-													{index() !== 0 && (
+													{index() !== 0 && length() === 0 && (
 														<button
+															title="Remove this post"
 															onClick={(ev) => {
 																{
 																	const target = ev.currentTarget;
@@ -978,7 +979,7 @@ const ComposerPane = () => {
 																posts.splice(index(), 1);
 															}}
 															class={
-																/* @once */ IconButton({ edge: 'right', class: '-my-1.5 text-primary/85' })
+																/* @once */ IconButton({ edge: 'right', color: 'muted', class: '-my-1.5' })
 															}
 														>
 															<CloseIcon />
