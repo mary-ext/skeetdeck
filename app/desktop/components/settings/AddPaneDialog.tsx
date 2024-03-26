@@ -1,8 +1,9 @@
 import { type Component, Match, Show, Switch, createSignal } from 'solid-js';
 
+import * as TID from '@mary/atproto-tid';
+
 import type { At } from '~/api/atp-schema';
 import { getAccountHandle, multiagent } from '~/api/globals/agent';
-import { getCurrentTid } from '~/api/utils/tid';
 
 import { FILTER_ALL } from '~/api/queries/get-notifications';
 
@@ -72,7 +73,7 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 			// @ts-expect-error
 			const pane: PaneConfig = {
 				...partial,
-				id: getCurrentTid(),
+				id: TID.now(),
 				size: SpecificPaneSize.INHERIT,
 				title: null,
 				uid: $user,

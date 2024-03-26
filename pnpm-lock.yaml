@@ -56,9 +56,18 @@ importers:
       '@floating-ui/utils':
         specifier: ^0.2.1
         version: 0.2.1
+      '@mary/atproto-cid':
+        specifier: npm:@jsr/mary__atproto-cid@^0.1.3
+        version: /@jsr/mary__atproto-cid@0.1.3
+      '@mary/atproto-tid':
+        specifier: npm:@jsr/mary__atproto-tid@^0.1.1
+        version: /@jsr/mary__atproto-tid@0.1.1
       '@mary/bluesky-client':
         specifier: npm:@jsr/mary__bluesky-client@^0.5.7
         version: /@jsr/mary__bluesky-client@0.5.7
+      '@mary/exif-rm':
+        specifier: npm:@jsr/mary__exif-rm@^0.2.1
+        version: /@jsr/mary__exif-rm@0.2.1
       '@pkg/emoji-db':
         specifier: workspace:^
         version: link:../packages/emoji-db
@@ -1698,8 +1707,26 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
 
+  /@jsr/mary__atproto-cid@0.1.3:
+    resolution: {integrity: sha512-ch0kPJcUJ/+8IndKyz7q5aZfhb00sThgA7kjODO0IBtiImHi6SoYthM9WCBqYB2Y5pF8lQc4ZT8s1hgXJ5jf0A==, tarball: https://npm.jsr.io/~/7/@jsr/mary__atproto-cid/0.1.3.tgz}
+    dependencies:
+      '@jsr/mary__varint': 0.1.0
+    dev: false
+
+  /@jsr/mary__atproto-tid@0.1.1:
+    resolution: {integrity: sha512-8T4vjlpG4vruBU3COOC208Z7LC5Gpp6IFyKmyvm/IXI3p/zKz8IBjWpFM4cJiAbAJbE+Ga8eZ2Hs8VFmWeNT9g==, tarball: https://npm.jsr.io/~/7/@jsr/mary__atproto-tid/0.1.1.tgz}
+    dev: false
+
   /@jsr/mary__bluesky-client@0.5.7:
     resolution: {integrity: sha512-Ot3MkkQ8xaPaXmn0C5atzy8JAYM28wLML51yQpDwECGw2tPiA177ly23Ok50IxJ70OdRsAJ/k3KtzkDrxbUDJA==, tarball: https://npm.jsr.io/~/7/@jsr/mary__bluesky-client/0.5.7.tgz}
+    dev: false
+
+  /@jsr/mary__exif-rm@0.2.1:
+    resolution: {integrity: sha512-Qpq/jYjkNCPQAp1ApDTNKjLfa9FDrEVumhY9ehuYWV2N00w/HqKQhkMvA+IqzxpWCDLoMwKah0hn7tau4XNBvA==, tarball: https://npm.jsr.io/~/7/@jsr/mary__exif-rm/0.2.1.tgz}
+    dev: false
+
+  /@jsr/mary__varint@0.1.0:
+    resolution: {integrity: sha512-mXxzT3ojsZi4NzzgVTogM+0KI7lI2FSgVDeC5MbxQHZPlv/v7n4i2QS7/ya4n7BtuDYo1eMnMmtDFUIwQ1DptQ==, tarball: https://npm.jsr.io/~/7/@jsr/mary__varint/0.1.0.tgz}
     dev: false
 
   /@nodelib/fs.scandir@2.1.5:

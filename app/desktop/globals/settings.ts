@@ -1,9 +1,9 @@
+import * as TID from '@mary/atproto-tid';
+
 import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults';
 import type { LanguagePreferences, TranslationPreferences } from '~/api/types';
 
 import type { ModerationOptions } from '~/api/moderation';
-
-import { getCurrentTid } from '~/api/utils/tid';
 
 import { createReactiveLocalStorage } from '~/utils/storage';
 
@@ -129,7 +129,7 @@ export const addPane = <T extends PaneConfig>(
 	// @ts-expect-error
 	const pane: PaneConfig = {
 		...partial,
-		id: getCurrentTid(),
+		id: TID.now(),
 		size: SpecificPaneSize.INHERIT,
 		title: null,
 	};

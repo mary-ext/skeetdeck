@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js';
 
-import { getCurrentTid } from '~/api/utils/tid';
+import * as TID from '@mary/atproto-tid';
 
 import { closeModal } from '~/com/globals/modals';
 
@@ -45,7 +45,7 @@ const SaveDraftDialog = (props: SaveDraftDialogProps) => {
 		const shouldClear = clear();
 
 		const state = context.state;
-		const id = getCurrentTid();
+		const id = TID.now();
 
 		const serialized: ComposerDraft = {
 			id: id,

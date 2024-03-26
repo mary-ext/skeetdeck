@@ -3,11 +3,11 @@ import { For, Show, Suspense, batch, lazy } from 'solid-js';
 import { offset } from '@floating-ui/dom';
 import { DragDropProvider, DragDropSensors, SortableProvider, createSortable } from '@thisbeyond/solid-dnd';
 
+import * as TID from '@mary/atproto-tid';
 import { ShowFreeze } from '@pkg/solid-freeze';
 import { type RouteComponentProps, location, navigate } from '@pkg/solid-page-router';
 
 import { multiagent } from '~/api/globals/agent';
-import { getCurrentTid } from '~/api/utils/tid';
 
 import { openModal } from '~/com/globals/modals';
 import { Title } from '~/com/lib/meta';
@@ -107,7 +107,7 @@ const DashboardLayout = (props: RouteComponentProps) => {
 
 												if (!deck) {
 													decks.push({
-														id: getCurrentTid(),
+														id: TID.now(),
 														name: 'New deck',
 														emoji: '⭐',
 														panes: [],

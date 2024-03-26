@@ -1,7 +1,7 @@
+import * as TID from '@mary/atproto-tid';
+
 import type { At } from '~/api/atp-schema';
 import { getAccountData } from '~/api/globals/agent';
-
-import { getCurrentTid } from '~/api/utils/tid';
 
 import {
 	type DeckConfig,
@@ -15,7 +15,7 @@ import { FILTER_ALL } from '~/api/queries/get-notifications';
 
 export const createEmptyDeck = (): DeckConfig => {
 	return {
-		id: getCurrentTid(),
+		id: TID.now(),
 		name: 'Personal',
 		emoji: '⭐',
 		panes: [],
@@ -26,13 +26,13 @@ export const createStarterDeck = (uid: At.DID): DeckConfig => {
 	const data = getAccountData(uid)!;
 
 	return {
-		id: getCurrentTid(),
+		id: TID.now(),
 		name: 'Personal',
 		emoji: '⭐',
 		panes: [
 			{
 				type: PANE_TYPE_HOME,
-				id: getCurrentTid(),
+				id: TID.now(),
 				uid: uid,
 				size: SpecificPaneSize.INHERIT,
 				title: null,
@@ -42,7 +42,7 @@ export const createStarterDeck = (uid: At.DID): DeckConfig => {
 			},
 			{
 				type: PANE_TYPE_NOTIFICATIONS,
-				id: getCurrentTid(),
+				id: TID.now(),
 				uid: uid,
 				size: SpecificPaneSize.INHERIT,
 				title: null,
@@ -50,7 +50,7 @@ export const createStarterDeck = (uid: At.DID): DeckConfig => {
 			},
 			{
 				type: PANE_TYPE_PROFILE,
-				id: getCurrentTid(),
+				id: TID.now(),
 				uid: uid,
 				size: SpecificPaneSize.INHERIT,
 				title: null,
