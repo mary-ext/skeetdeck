@@ -1,10 +1,17 @@
-import type { JSX } from 'solid-js';
+import { type JSX, lazy } from 'solid-js';
 
 import type { At, ComAtprotoLabelDefs } from '~/api/atp-schema';
-import InfoOutlinedIcon from '~/com/icons/outline-info';
+
+import InfoOutlinedIcon from '../../icons/outline-info';
+import { openModal } from '~/com/globals/modals';
+
+import type { ReportTarget } from '../dialogs/LabelsOnMeDialog';
+
+const LabelsOnMeDialog = lazy(() => import('../dialogs/LabelsOnMeDialog'));
 
 export interface LabelsOnMeProps {
 	uid: At.DID;
+	report: ReportTarget;
 	labels: ComAtprotoLabelDefs.Label[] | undefined;
 	class?: string;
 }
@@ -27,7 +34,12 @@ const LabelsOnMe = (props: LabelsOnMeProps) => {
 
 		return (
 			<div class={props.class}>
-				<button class="flex items-center gap-2 rounded-md bg-secondary/30 px-2 text-de leading-6 text-primary/85 hover:bg-secondary/40 hover:text-primary">
+				<button
+					onClick={() => {
+						openModal(() => <LabelsOnMeDialog uid={uid} labels={filteredLabels} report={props.report} />);
+					}}
+					class="flex items-center gap-2 rounded-md bg-secondary/30 px-2 text-de leading-6 text-primary/85 hover:bg-secondary/40 hover:text-primary"
+				>
 					<InfoOutlinedIcon />
 					<span>{`${count} ${count === 1 ? `label` : `labels`} placed on this content`}</span>
 				</button>

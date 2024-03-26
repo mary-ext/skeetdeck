@@ -222,7 +222,14 @@ const Post = (props: PostProps) => {
 						</div>
 					</div>
 
-					{did === uid && <LabelsOnMe uid={uid} labels={post.labels.value} class="mb-2 mt-1" />}
+					{did === uid && (
+						<LabelsOnMe
+							uid={uid}
+							report={{ type: 'post', uri: post.uri, cid: post.cid.value }}
+							labels={post.labels.value}
+							class="mb-2 mt-1"
+						/>
+					)}
 
 					<PostContent post={post} postPermalink={postPermalink} timelineDid={() => props.timelineDid} />
 
