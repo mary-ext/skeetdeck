@@ -58,7 +58,7 @@ export const ContextProfileList = 5;
 export type ModerationContext = 0 | 1 | 2 | 3 | 4 | 5;
 
 const BehaviorBlur = 0;
-const BehaviorBlurIfAdult = 1;
+const BehaviorBlurIfAdultOrAlert = 1;
 const BehaviorAlertOrInform = 2;
 
 type ModerationBehavior = 0 | 1 | 2;
@@ -151,7 +151,7 @@ const LABEL_BEHAVIORAL_MAPPING: LabelBehavioralMapping = {
 			[ContextProfileList]: BehaviorAlertOrInform,
 			[ContextProfileView]: BehaviorAlertOrInform,
 			[ContextContentList]: BehaviorBlur,
-			[ContextContentView]: BehaviorBlurIfAdult,
+			[ContextContentView]: BehaviorBlurIfAdultOrAlert,
 		},
 		[TargetProfile]: {
 			[ContextProfileList]: BehaviorAlertOrInform,
@@ -159,7 +159,7 @@ const LABEL_BEHAVIORAL_MAPPING: LabelBehavioralMapping = {
 		},
 		[TargetContent]: {
 			[ContextContentList]: BehaviorBlur,
-			[ContextContentView]: BehaviorBlurIfAdult,
+			[ContextContentView]: BehaviorBlurIfAdultOrAlert,
 		},
 	},
 	[BlurMedia]: {
@@ -518,13 +518,13 @@ export const getModerationUI = (causes: ModerationCause[], context: ModerationCo
 				}
 			}
 
-			if (behavior === BehaviorBlur || (behavior === BehaviorBlurIfAdult && flags & FlagsAdultOnly)) {
+			if (behavior === BehaviorBlur || (behavior === BehaviorBlurIfAdultOrAlert && flags & FlagsAdultOnly)) {
 				blurs.push(cause);
 
 				if (flags & FlagsForced) {
 					overridable = false;
 				}
-			} else if (behavior === BehaviorAlertOrInform) {
+			} else if (behavior === BehaviorAlertOrInform || behavior === BehaviorBlurIfAdultOrAlert) {
 				if (severity === SeverityAlert) {
 					alerts.push(cause);
 				} else if (severity === SeverityInform) {
