@@ -1,4 +1,5 @@
 import { batch } from 'solid-js';
+import { reconcile, unwrap } from 'solid-js/store';
 
 import { mapDefined } from '~/utils/misc';
 
@@ -83,12 +84,12 @@ export const mergeServiceDefinition = (prev: ModerationService, next: Moderation
 	batch(() => {
 		if (prev.indexedAt !== next.indexedAt) {
 			prev.indexedAt = next.indexedAt;
-			prev.defs = next.defs;
+			reconcile(next.defs, { merge: true, key: 'i' })(unwrap(prev.defs));
 			prev.vals = next.vals;
 		}
 
 		if (prev.profile.indexedAt !== next.profile.indexedAt) {
-			Object.assign(prev.profile, next.profile);
+			reconcile(next.profile, { merge: true })(unwrap(prev.profile));
 		}
 	});
 };
