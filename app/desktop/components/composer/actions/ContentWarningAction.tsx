@@ -42,7 +42,7 @@ const ContentWarningAction = (props: ContentWarningActionProps) => {
 
 							<CheckIcon
 								class={clsx([
-									`text-base text-accent`,
+									`shrink-0 text-base text-accent`,
 									(value !== undefined ? !selected.includes(value) : selected.length !== 0) && `invisible`,
 								])}
 							/>
