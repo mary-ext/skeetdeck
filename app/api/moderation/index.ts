@@ -41,10 +41,12 @@ export const FlagsAdultOnly = 1 << 2;
 
 /** Label is intended for content */
 export const TargetContent = 0;
-/** Label is intended for profile */
+/** Label is intended for profile itself */
 export const TargetProfile = 1;
+/** Label is intended for the whole account */
+export const TargetAccount = 2;
 
-export type LabelTarget = 0 | 1;
+export type LabelTarget = 0 | 1 | 2;
 
 export const ContextContentView = 0;
 export const ContextContentMedia = 1;
@@ -54,6 +56,12 @@ export const ContextProfileMedia = 4;
 export const ContextProfileList = 5;
 
 export type ModerationContext = 0 | 1 | 2 | 3 | 4 | 5;
+
+const BehaviorBlur = 0;
+const BehaviorBlurIfAdult = 1;
+const BehaviorAlertOrInform = 2;
+
+type ModerationBehavior = 0 | 1 | 2;
 
 export interface LabelLocale {
 	/** Locale code */
@@ -130,6 +138,60 @@ export const GLOBAL_LABELS: LabelDefinitionMapping = {
 		s: SeverityNone,
 		f: FlagsNone,
 		l: [{ i: 'en', n: `Nudity`, d: `Artistic or non-erotic nudity` }],
+	},
+};
+
+type LabelBehavioralMapping = {
+	[K in LabelBlur]: { [K in LabelTarget]: { [K in ModerationContext]?: ModerationBehavior } };
+};
+
+const LABEL_BEHAVIORAL_MAPPING: LabelBehavioralMapping = {
+	[BlurContent]: {
+		[TargetAccount]: {
+			[ContextProfileList]: BehaviorAlertOrInform,
+			[ContextProfileView]: BehaviorAlertOrInform,
+			[ContextContentList]: BehaviorBlur,
+			[ContextContentView]: BehaviorBlurIfAdult,
+		},
+		[TargetProfile]: {
+			[ContextProfileList]: BehaviorAlertOrInform,
+			[ContextProfileView]: BehaviorAlertOrInform,
+		},
+		[TargetContent]: {
+			[ContextContentList]: BehaviorBlur,
+			[ContextContentView]: BehaviorBlurIfAdult,
+		},
+	},
+	[BlurMedia]: {
+		[TargetAccount]: {
+			[ContextProfileList]: BehaviorAlertOrInform,
+			[ContextProfileView]: BehaviorAlertOrInform,
+			[ContextProfileMedia]: BehaviorBlur,
+		},
+		[TargetProfile]: {
+			[ContextProfileList]: BehaviorAlertOrInform,
+			[ContextProfileView]: BehaviorAlertOrInform,
+			[ContextProfileMedia]: BehaviorBlur,
+		},
+		[TargetContent]: {
+			[ContextContentMedia]: BehaviorBlur,
+		},
+	},
+	[BlurNone]: {
+		[TargetAccount]: {
+			[ContextProfileList]: BehaviorAlertOrInform,
+			[ContextProfileView]: BehaviorAlertOrInform,
+			[ContextContentList]: BehaviorAlertOrInform,
+			[ContextContentView]: BehaviorAlertOrInform,
+		},
+		[TargetProfile]: {
+			[ContextProfileList]: BehaviorAlertOrInform,
+			[ContextProfileView]: BehaviorAlertOrInform,
+		},
+		[TargetContent]: {
+			[ContextContentList]: BehaviorAlertOrInform,
+			[ContextContentView]: BehaviorAlertOrInform,
+		},
 	},
 };
 
@@ -445,6 +507,8 @@ export const getModerationUI = (causes: ModerationCause[], context: ModerationCo
 			const blur = def.b;
 			const severity = def.s;
 
+			const behavior = LABEL_BEHAVIORAL_MAPPING[blur][target][context];
+
 			if (cause.v === PreferenceHide) {
 				if (
 					(context === ContextProfileList && target === TargetProfile) ||
@@ -454,31 +518,13 @@ export const getModerationUI = (causes: ModerationCause[], context: ModerationCo
 				}
 			}
 
-			if (blur === BlurContent) {
-				if (context === ContextContentList || (context === ContextContentView && flags & FlagsAdultOnly)) {
-					blurs.push(cause);
+			if (behavior === BehaviorBlur || (behavior === BehaviorBlurIfAdult && flags & FlagsAdultOnly)) {
+				blurs.push(cause);
 
-					if (flags & FlagsForced) {
-						overridable = false;
-					}
-				} else if (severity === SeverityAlert) {
-					alerts.push(cause);
-				} else if (severity === SeverityInform) {
-					informs.push(cause);
+				if (flags & FlagsForced) {
+					overridable = false;
 				}
-			} else if (blur === BlurMedia) {
-				if (context === ContextContentMedia || context === ContextProfileMedia) {
-					blurs.push(cause);
-
-					if (flags & FlagsForced) {
-						overridable = false;
-					}
-				} else if (severity === SeverityAlert) {
-					alerts.push(cause);
-				} else if (severity === SeverityInform) {
-					informs.push(cause);
-				}
-			} else if (blur === BlurNone) {
+			} else if (behavior === BehaviorAlertOrInform) {
 				if (severity === SeverityAlert) {
 					alerts.push(cause);
 				} else if (severity === SeverityInform) {

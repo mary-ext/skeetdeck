@@ -5,6 +5,7 @@ import type { SignalizedProfile } from '../../stores/profiles';
 import {
 	type ModerationCause,
 	type ModerationOptions,
+	TargetAccount,
 	TargetProfile,
 	decideLabelModeration,
 	decideMutedPermanentModeration,
@@ -25,7 +26,11 @@ export const moderateProfile = (profile: SignalizedProfile, opts: ModerationOpti
 		const accu: ModerationCause[] = [];
 		const did = profile.did;
 
-		decideLabelModeration(accu, TargetProfile, labels, did, opts);
+		const profileLabels = labels.filter((label) => label.uri.endsWith('/app.bsky.actor.profile/self'));
+		const accountLabels = labels.filter((label) => !label.uri.endsWith('/app.bsky.actor.profile/self'));
+
+		decideLabelModeration(accu, TargetProfile, profileLabels, did, opts);
+		decideLabelModeration(accu, TargetAccount, accountLabels, did, opts);
 		decideMutedPermanentModeration(accu, isMuted);
 		decideMutedTemporaryModeration(accu, did, opts);
 
