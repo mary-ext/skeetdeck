@@ -94,7 +94,7 @@ export const GLOBAL_LABELS: LabelDefinitionMapping = {
 	'!warn': {
 		i: '!warn',
 		d: PreferenceWarn,
-		b: BlurNone,
+		b: BlurContent,
 		s: SeverityAlert,
 		f: FlagsNoSelf,
 		l: [{ i: 'en', n: `Content warning`, d: `` }],
