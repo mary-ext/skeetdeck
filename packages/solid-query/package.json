@@ -20,7 +20,7 @@
 	},
 	"devDependencies": {
 		"solid-js": "^1.8.16",
-		"vite": "^5.1.6",
+		"vite": "^5.2.6",
 		"vite-plugin-solid": "^2.10.2"
 	}
 }
