@@ -8,7 +8,12 @@ import { getRecordId } from '~/api/utils/misc';
 
 import { updatePostLike } from '~/api/mutations/like-post';
 
-import { ContextContentList, getModerationUI } from '~/api/moderation';
+import {
+	type ModerationCause,
+	ContextContentList,
+	ContextProfileMedia,
+	getModerationUI,
+} from '~/api/moderation';
 import { moderatePost } from '~/api/moderation/entities/post';
 
 import { formatCompact } from '~/utils/intl/number';
@@ -66,6 +71,12 @@ const Post = (props: PostProps) => {
 
 	const authorPermalink: ProfileLinking = { type: LINK_PROFILE, actor: did };
 	const postPermalink: PostLinking = { type: LINK_POST, actor: did, rkey: getRecordId(post.uri) };
+
+	const causes = createMemo(() => moderatePost(post, getModerationOptions()));
+	const shouldBlurAvatar = createMemo(() => {
+		const ui = getModerationUI(causes(), ContextProfileMedia);
+		return ui.b.length > 0;
+	});
 
 	const handleClick = (ev: MouseEvent | KeyboardEvent) => {
 		if (!props.interactive || !isElementClicked(ev)) {
@@ -167,7 +178,10 @@ const Post = (props: PostProps) => {
 			<div class="flex gap-3">
 				<div class="relative flex shrink-0 flex-col items-center">
 					<Link to={authorPermalink} class="h-9 w-9 overflow-hidden rounded-full hover:opacity-80">
-						<img src={author.avatar.value || DefaultAvatar} class={clsx([`h-full w-full`])} />
+						<img
+							src={author.avatar.value || DefaultAvatar}
+							class={clsx([`h-full w-full`, !!author.avatar.value && shouldBlurAvatar() && `blur`])}
+						/>
 					</Link>
 
 					{(() => {
@@ -231,7 +245,7 @@ const Post = (props: PostProps) => {
 						/>
 					)}
 
-					<PostContent post={post} postPermalink={postPermalink} timelineDid={() => props.timelineDid} />
+					<PostContent post={post} postPermalink={postPermalink} causes={causes} />
 
 					<div class="mt-3 flex flex-wrap items-center gap-1.5 text-de text-primary/85 empty:hidden">
 						{(() => {
@@ -343,13 +357,12 @@ export default Post;
 interface PostContentProps {
 	post: SignalizedPost;
 	postPermalink: PostLinking;
-	timelineDid: Accessor<At.DID | undefined>;
+	causes: Accessor<ModerationCause[]>;
 }
 
-const PostContent = ({ post, postPermalink, timelineDid: _timelineDid }: PostContentProps) => {
+const PostContent = ({ post, postPermalink, causes }: PostContentProps) => {
 	const embed = post.embed;
 
-	const causes = createMemo(() => moderatePost(post, getModerationOptions()));
 	const ui = createMemo(() => getModerationUI(causes(), ContextContentList));
 
 	return (
