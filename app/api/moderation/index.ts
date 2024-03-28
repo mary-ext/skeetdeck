@@ -50,11 +50,17 @@ export const TargetAccount = 2;
 
 export type LabelTarget = 0 | 1 | 2;
 
+/** Concerns viewing a post in full */
 export const ContextContentView = 0;
+/** Concerns the media of a post */
 export const ContextContentMedia = 1;
+/** Concerns post feed */
 export const ContextContentList = 2;
+/** Concerns viewing a profile in full */
 export const ContextProfileView = 3;
+/** Concerns avatar and banner of a profile */
 export const ContextProfileMedia = 4;
+/** Concerns profile listing (follows, liked by, reposted by, etc...) */
 export const ContextProfileList = 5;
 
 export type ModerationContext = 0 | 1 | 2 | 3 | 4 | 5;
