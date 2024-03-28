@@ -1,15 +1,19 @@
-import { type JSX, lazy } from 'solid-js';
+import { type JSX, lazy, createMemo } from 'solid-js';
 
 import type { AppBskyEmbedImages } from '~/api/atp-schema';
 import { getRecordId } from '~/api/utils/misc';
 
 import type { SignalizedPost } from '~/api/stores/posts';
 
+import { ContextContentMedia, getModerationUI } from '~/api/moderation';
+import { moderatePost } from '~/api/moderation/entities/post';
+
 import { formatCompact } from '~/utils/intl/number';
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction';
 import { clsx } from '~/utils/misc';
 
 import { openModal } from '../../globals/modals';
+import { getModerationOptions } from '../../globals/shared';
 
 import { LINK_POST, useLinking } from '../Link';
 
@@ -48,6 +52,12 @@ const GalleryItem = (props: GalleryItemProps) => {
 			return null;
 		}
 
+		const shouldBlur = createMemo(() => {
+			const causes = moderatePost(post, getModerationOptions());
+			const ui = getModerationUI(causes, ContextContentMedia);
+			return ui.b.length > 0;
+		});
+
 		const img = images[0];
 		const multiple = images.length > 1;
 
@@ -75,7 +85,7 @@ const GalleryItem = (props: GalleryItemProps) => {
 				onKeyDown={handleClick}
 				class="group relative aspect-square w-full min-w-0 cursor-pointer select-none overflow-hidden bg-muted text-white"
 			>
-				<img src={img.thumb} class={clsx([`h-full w-full object-cover`])} />
+				<img src={img.thumb} class={clsx([`h-full w-full object-cover`, shouldBlur() && `scale-110 blur`])} />
 
 				{isDesktop && (
 					<div class="invisible absolute inset-0 grid place-items-center bg-black/50 group-hover:visible">
@@ -93,7 +103,7 @@ const GalleryItem = (props: GalleryItemProps) => {
 				)}
 
 				<div class="absolute left-0 right-0 top-0 m-2 flex items-center justify-end gap-2 text-lg">
-					{false && <VisibilityIcon class="drop-shadow" />}
+					{shouldBlur() && <VisibilityIcon class="drop-shadow" />}
 					{multiple && <CheckboxMultipleBlankIcon class="drop-shadow" />}
 				</div>
 			</div>
