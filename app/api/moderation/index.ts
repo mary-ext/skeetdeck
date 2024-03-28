@@ -587,32 +587,6 @@ const sortByPriority = (a: ModerationCause, b: ModerationCause) => {
 	return a.p - b.p;
 };
 
-// export const finalizeModeration = (accu: ModerationCause[]): ModerationDecision | null => {
-// 	accu.sort((a, b) => a.p - b.p);
-
-// 	if (accu.length > 0) {
-// 		const cause = accu.sort((a, b) => a.p - b.p)[0];
-
-// 		// Other moderation cause types should result in a blur only.
-// 		const isLabelCause = cause.t === CauseLabel;
-
-// 		const blur = isLabelCause ? cause.d.b : BlurAll;
-// 		const sev = isLabelCause ? cause.d.s : SeverityNone;
-
-// 		return {
-// 			s: cause,
-
-// 			f: (isLabelCause || cause.t === CauseMutedKeyword) && cause.v === PreferenceHide,
-// 			a: sev === SeverityAlert,
-// 			i: sev === SeverityInform,
-// 			b: blur === BlurAll,
-// 			m: blur === BlurMedia,
-// 		};
-// 	}
-
-// 	return null;
-// };
-
 export const isProfileTempMuted = (prefs: ModerationOptions, actor: At.DID): number | null => {
 	const date = prefs.tempMutes[actor];
 	return date !== undefined && Date.now() < date ? date : null;
