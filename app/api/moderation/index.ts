@@ -18,8 +18,10 @@ export const BlurNone = 0;
 export const BlurMedia = 1;
 /** Blur the entire content */
 export const BlurContent = 2;
+/** Special blur value, guaranteed blurring of profile and content */
+export const BlurForced = 3;
 
-export type LabelBlur = 0 | 1 | 2;
+export type LabelBlur = 0 | 1 | 2 | 3;
 
 /** Don't inform the user */
 export const SeverityNone = 0;
@@ -94,7 +96,7 @@ export const GLOBAL_LABELS: LabelDefinitionMapping = {
 	'!hide': {
 		i: '!hide',
 		d: PreferenceHide,
-		b: BlurContent,
+		b: BlurForced,
 		s: SeverityNone,
 		f: FlagsForced | FlagsNoSelf,
 		l: [{ i: 'en', n: `Hidden by moderators`, d: `` }],
@@ -102,7 +104,7 @@ export const GLOBAL_LABELS: LabelDefinitionMapping = {
 	'!warn': {
 		i: '!warn',
 		d: PreferenceWarn,
-		b: BlurContent,
+		b: BlurForced,
 		s: SeverityAlert,
 		f: FlagsNoSelf,
 		l: [{ i: 'en', n: `Content warning`, d: `` }],
@@ -146,6 +148,22 @@ type LabelBehavioralMapping = {
 };
 
 const LABEL_BEHAVIORAL_MAPPING: LabelBehavioralMapping = {
+	[BlurForced]: {
+		[TargetAccount]: {
+			[ContextProfileList]: BehaviorBlur,
+			[ContextProfileView]: BehaviorBlur,
+			[ContextContentList]: BehaviorBlur,
+			[ContextContentView]: BehaviorBlur,
+		},
+		[TargetProfile]: {
+			[ContextProfileList]: BehaviorBlur,
+			[ContextProfileView]: BehaviorBlur,
+		},
+		[TargetContent]: {
+			[ContextContentList]: BehaviorBlur,
+			[ContextContentView]: BehaviorBlur,
+		},
+	},
 	[BlurContent]: {
 		[TargetAccount]: {
 			[ContextProfileList]: BehaviorAlertOrInform,
