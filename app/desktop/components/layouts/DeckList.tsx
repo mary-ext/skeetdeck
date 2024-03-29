@@ -1,4 +1,5 @@
 import { For, batch, createEffect, createMemo, createSignal, onCleanup } from 'solid-js';
+import { Portal } from 'solid-js/web';
 
 import {
 	draggable,
@@ -19,13 +20,14 @@ import { location } from '@pkg/solid-page-router';
 
 import { Interactive } from '~/com/primitives/interactive';
 
-import { assert, clsx } from '~/utils/misc';
+import { clsx } from '~/utils/misc';
 
 import type { DeckConfig } from '../../globals/panes';
-import { Portal } from 'solid-js/web';
 
-// I don't expect <DeckList> to be used more than once here, so it's fine to
-// define the symbol outside like this.
+import { isDndPaneItem } from '../panes/DeckContext';
+
+// I don't expect <DeckList> to be used more than once here, so there's just
+// this one symbol being used.
 const dndDeckId = Symbol();
 
 interface DndDeckItem {
@@ -45,7 +47,7 @@ const DeckList = (props: { decks: DeckConfig[] }) => {
 		onCleanup(
 			monitorForElements({
 				canMonitor: ({ source }) => {
-					return dndDeckId in source.data;
+					return isDndDeckItem(source.data);
 				},
 				onDrop: ({ location, source }) => {
 					const target = location.current.dropTargets[0];
@@ -82,6 +84,42 @@ const DeckList = (props: { decks: DeckConfig[] }) => {
 
 					batch(() => {
 						decks.splice(finishIndex, 0, ...decks.splice(startIndex, 1));
+					});
+				},
+			}),
+		);
+
+		onCleanup(
+			monitorForElements({
+				canMonitor: ({ source }) => {
+					return isDndPaneItem(source.data);
+				},
+				onDrop: ({ location, source }) => {
+					const target = location.current.dropTargets[0];
+					if (!target) {
+						return;
+					}
+
+					const sourceData = source.data;
+					const targetData = target.data;
+
+					if (!isDndPaneItem(sourceData) || !isDndDeckItem(targetData) || sourceData.deck === targetData.id) {
+						return;
+					}
+
+					const fromDeck = decks.find((deck) => deck.id === sourceData.deck);
+					const toDeck = decks.find((deck) => deck.id === targetData.id);
+
+					const index = sourceData.index;
+					const paneConfig = fromDeck?.panes[index];
+
+					if (!fromDeck || !toDeck || paneConfig?.id !== sourceData.pane) {
+						return;
+					}
+
+					batch(() => {
+						fromDeck.panes.splice(index, 1);
+						toDeck.panes.push(paneConfig);
 					});
 				},
 			}),
@@ -125,7 +163,9 @@ const DeckButton = (props: { deck: DeckConfig; index: () => number }) => {
 	const href = `/decks/${id}`;
 
 	const [state, setState] = createSignal<DeckState>(idleState);
-	const [closestEdge, setClosestEdge] = createSignal<Edge | null>(null);
+	const [dndEdge, setDndEdge] = createSignal<Edge | null>(null);
+
+	const [paneDropping, setPaneDropping] = createSignal(false);
 
 	const isDragging = createMemo(() => {
 		return state().k === DeckStateKind.DRAGGING;
@@ -160,7 +200,8 @@ const DeckButton = (props: { deck: DeckConfig; index: () => number }) => {
 						dropTargetForElements({
 							element,
 							canDrop: ({ source }) => {
-								return dndDeckId in source.data;
+								const data = source.data;
+								return isDndDeckItem(data) || (isDndPaneItem(data) && data.deck !== id);
 							},
 							getData: ({ input }) => {
 								return attachClosestEdge(data, {
@@ -170,32 +211,42 @@ const DeckButton = (props: { deck: DeckConfig; index: () => number }) => {
 								});
 							},
 							onDrag: ({ self, source }) => {
-								if (source.element === element) {
-									setClosestEdge(null);
-									return;
+								const data = source.data;
+
+								if (isDndDeckItem(data)) {
+									if (source.element === element) {
+										setDndEdge(null);
+										return;
+									}
+
+									const closestEdge = extractClosestEdge(self.data);
+									const sourceIndex = data.index;
+
+									const isItemBeforeSource = index === sourceIndex - 1;
+									const isItemAfterSource = index === sourceIndex + 1;
+
+									const isDropIndicatorHidden =
+										(isItemBeforeSource && closestEdge === 'bottom') ||
+										(isItemAfterSource && closestEdge === 'top');
+
+									if (isDropIndicatorHidden) {
+										setDndEdge(null);
+										return;
+									}
+
+									setDndEdge(closestEdge);
+								} else if (isDndPaneItem(data)) {
+									setPaneDropping(true);
 								}
-
-								const closestEdge = extractClosestEdge(self.data);
-								const sourceIndex = source.data.index;
-
-								assert(typeof sourceIndex === 'number');
-
-								const isItemBeforeSource = index === sourceIndex - 1;
-								const isItemAfterSource = index === sourceIndex + 1;
-
-								const isDropIndicatorHidden =
-									(isItemBeforeSource && closestEdge === 'bottom') ||
-									(isItemAfterSource && closestEdge === 'top');
-
-								if (isDropIndicatorHidden) {
-									setClosestEdge(null);
-									return;
-								}
-
-								setClosestEdge(closestEdge);
 							},
-							onDragLeave: () => setClosestEdge(null),
-							onDrop: () => setClosestEdge(null),
+							onDragLeave: () => {
+								setDndEdge(null);
+								setPaneDropping(false);
+							},
+							onDrop: () => {
+								setDndEdge(null);
+								setPaneDropping(false);
+							},
 						}),
 					);
 				});
@@ -220,13 +271,21 @@ const DeckButton = (props: { deck: DeckConfig; index: () => number }) => {
 			</a>
 
 			{(() => {
-				const $closestEdge = closestEdge();
+				const $closestEdge = dndEdge();
 
 				if ($closestEdge !== null) {
 					const top = $closestEdge === 'top';
 
 					return (
 						<div class="absolute h-0.5 w-full bg-accent" style={`${top ? 'top' : 'bottom'}: -1px`}></div>
+					);
+				}
+			})()}
+
+			{(() => {
+				if (paneDropping()) {
+					return (
+						<div class="pointer-events-none absolute inset-0 border-2 border-dashed border-muted-fg"></div>
 					);
 				}
 			})()}
