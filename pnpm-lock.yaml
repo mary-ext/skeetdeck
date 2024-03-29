@@ -98,9 +98,6 @@ importers:
       '@solid-primitives/event-listener':
         specifier: ^2.3.3
         version: 2.3.3(solid-js@1.8.16)
-      '@thisbeyond/solid-dnd':
-        specifier: ^0.7.5
-        version: 0.7.5(solid-js@1.8.16)
       cborg:
         specifier: 4.0.7
         version: 4.0.7(patch_hash=dz6b6r6dc4jadjfng7vtgi53hy)
@@ -1989,15 +1986,6 @@ packages:
     resolution: {integrity: sha512-Lzw8FUtnLCc9Jwz0sw9xOjZB+/mCCmJev38v2wHMUl/ioXNIhnNWeMxu0NKUjIhAd62IRB3eAtvxAGDJ55UkyA==}
     dev: false
     patched: true
-
-  /@thisbeyond/solid-dnd@0.7.5(solid-js@1.8.16):
-    resolution: {integrity: sha512-DfI5ff+yYGpK9M21LhYwIPlbP2msKxN2ARwuu6GF8tT1GgNVDTI8VCQvH4TJFoVApP9d44izmAcTh/iTCH2UUw==}
-    engines: {node: '>=18.0.0', pnpm: '>=8.6.0'}
-    peerDependencies:
-      solid-js: ^1.5
-    dependencies:
-      solid-js: 1.8.16(patch_hash=wunpcbjxb5h4ujg4psj63uuluq)
-    dev: false
 
   /@types/babel__core@7.20.5:
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
