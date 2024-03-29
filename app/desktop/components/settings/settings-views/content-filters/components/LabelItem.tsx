@@ -53,9 +53,7 @@ const LabelItem = (props: LabelItemProps) => {
 			<button disabled={props.global} class={ListBoxItemReadonly}>
 				<div class="flex min-w-0 grow flex-col text-sm">
 					<div class="flex justify-between gap-3">
-						<span class="overflow-hidden text-ellipsis whitespace-nowrap">
-							{/* @once */ locale.n}
-						</span>
+						<span class="overflow-hidden text-ellipsis whitespace-nowrap">{/* @once */ locale.n}</span>
 
 						<span class="flex min-w-0 shrink-0 items-center gap-0.5 self-start text-muted-fg">
 							<span class="text-de">{renderValueDef(def, value())}</span>

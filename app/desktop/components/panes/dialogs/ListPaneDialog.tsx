@@ -38,7 +38,7 @@ const ListPaneDialog = (props: ListPaneDialogProps) => {
 
 	const linking = useLinking();
 
-	const { deck } = useDeckContext()
+	const { deck } = useDeckContext();
 	const { pane, index } = usePaneContext();
 	const modal = usePaneModalState();
 
