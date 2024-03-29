@@ -1,11 +1,10 @@
-import { For, Show, Suspense, batch, lazy } from 'solid-js';
+import { Show, Suspense, lazy } from 'solid-js';
 
 import { offset } from '@floating-ui/dom';
-import { DragDropProvider, DragDropSensors, SortableProvider, createSortable } from '@thisbeyond/solid-dnd';
 
 import * as TID from '@mary/atproto-tid';
 import { ShowFreeze } from '@pkg/solid-freeze';
-import { type RouteComponentProps, location, navigate } from '@pkg/solid-page-router';
+import { type RouteComponentProps, navigate } from '@pkg/solid-page-router';
 
 import { multiagent } from '~/api/globals/agent';
 
@@ -15,14 +14,13 @@ import { Title } from '~/com/lib/meta';
 import {
 	type ProfilePaneConfig,
 	type SearchPaneConfig,
-	PANE_TYPE_SEARCH,
 	PANE_TYPE_PROFILE,
+	PANE_TYPE_SEARCH,
 	ProfilePaneTab,
 } from '../globals/panes';
 import { addPane, preferences } from '../globals/settings';
 
 import { updateSW, updateStatus } from '~/utils/service-worker';
-import { clsx } from '~/utils/misc';
 
 import { Interactive } from '~/com/primitives/interactive';
 
@@ -37,7 +35,8 @@ import SystemUpdateAltIcon from '~/com/icons/baseline-system-update-alt';
 import TableLargeAddIcon from '~/com/icons/baseline-table-large-add';
 
 import { useComposer } from '../components/composer/ComposerContext';
-import { ConstrainXDragAxis } from '../utils/dnd';
+
+import DeckList from '../components/layouts/DeckList';
 
 const ComposerPane = lazy(() => import('../components/composer/ComposerPane'));
 
@@ -47,10 +46,6 @@ const SettingsDialog = lazy(() => import('../components/settings/SettingsDialog'
 const SearchFlyout = lazy(() => import('../components/flyouts/SearchFlyout'));
 
 const brandName = import.meta.env.VITE_BRAND_NAME;
-
-const deckButton = Interactive({
-	class: `group relative grid h-11 shrink-0 select-none place-items-center text-lg`,
-});
 
 const menuIconButton = Interactive({
 	class: `grid h-11 shrink-0 place-items-center text-lg disabled:opacity-50`,
@@ -161,56 +156,7 @@ const DashboardLayout = (props: RouteComponentProps) => {
 						<TableLargeAddIcon class="mx-auto" />
 					</button>
 
-					<DragDropProvider
-						onDragEnd={({ draggable, droppable }) => {
-							if (draggable && droppable) {
-								const fromIndex = decks.findIndex((deck) => deck.id === draggable.id);
-								const toIndex = decks.findIndex((deck) => deck.id === droppable.id);
-
-								if (fromIndex !== toIndex) {
-									batch(() => {
-										decks.splice(toIndex, 0, ...decks.splice(fromIndex, 1));
-									});
-								}
-							}
-						}}
-					>
-						<DragDropSensors />
-						<ConstrainXDragAxis enabled />
-
-						<SortableProvider ids={decks.map((deck) => deck.id)}>
-							<For each={preferences.decks}>
-								{(deck) => {
-									const id = deck.id;
-
-									const sortable = createSortable(id);
-									const href = `/decks/${id}`;
-
-									return (
-										<div ref={sortable} class={clsx([sortable.isActiveDraggable && `z-10 cursor-grabbing`])}>
-											<a
-												title={deck.name}
-												href={href}
-												class={deckButton}
-												data-link="replace"
-												draggable="false"
-												inert={sortable.isActiveDraggable}
-											>
-												<div
-													class={clsx([
-														`pointer-events-none absolute inset-0 border-l-3 border-accent`,
-														location.pathname !== href && `hidden`,
-													])}
-												></div>
-
-												<span>{deck.emoji}</span>
-											</a>
-										</div>
-									);
-								}}
-							</For>
-						</SortableProvider>
-					</DragDropProvider>
+					<DeckList decks={preferences.decks} />
 				</div>
 
 				{updateStatus() !== 0 && (
