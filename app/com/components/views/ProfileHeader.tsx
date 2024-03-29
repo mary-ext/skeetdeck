@@ -1,11 +1,17 @@
-import { type JSX, lazy } from 'solid-js';
+import { type JSX, lazy, createMemo } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
-import { isProfileTempMuted } from '~/api/moderation';
+import {
+	ContextProfileMedia,
+	ContextProfileView,
+	getModerationUI,
+	isProfileTempMuted,
+} from '~/api/moderation';
+import { moderateProfile } from '~/api/moderation/entities/profile';
 
 import { formatCompact } from '~/utils/intl/number';
 import { formatAbsDateTime } from '~/utils/intl/time';
@@ -23,7 +29,9 @@ import MoreHorizIcon from '../../icons/baseline-more-horiz';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
+import ModerationAlerts from '../moderation/ModerationAlerts';
 import ProfileFollowButton from '../ProfileFollowButton';
+
 import ProfileOverflowAction from './profiles/ProfileOverflowAction';
 import ProfileHandleAction from './profiles/ProfileHandleAction';
 
@@ -42,6 +50,19 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 	const profile = props.profile;
 	const viewer = profile.viewer;
 
+	const causes = createMemo(() => {
+		return moderateProfile(profile, getModerationOptions());
+	});
+
+	const ui = createMemo(() => {
+		return getModerationUI(causes(), ContextProfileView);
+	});
+
+	const shouldBlurMedia = createMemo(() => {
+		const ui = getModerationUI(causes(), ContextProfileMedia);
+		return ui.b.length > 0;
+	});
+
 	return (
 		<div class="flex flex-col">
 			{(() => {
@@ -55,7 +76,13 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 							}}
 							class="group aspect-banner overflow-hidden bg-background"
 						>
-							<img src={banner} class={clsx([`h-full w-full object-cover group-hover:opacity-75`])} />
+							<img
+								src={banner}
+								class={clsx([
+									`h-full w-full object-cover group-hover:opacity-75`,
+									shouldBlurMedia() && `blur`,
+								])}
+							/>
 						</button>
 					);
 				}
@@ -76,7 +103,10 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 									}}
 									class="group -mt-11 h-20 w-20 shrink-0 overflow-hidden rounded-full bg-background outline-2 outline-background outline focus-visible:outline-primary"
 								>
-									<img src={avatar} class={clsx([`h-full w-full group-hover:opacity-75`])} />
+									<img
+										src={avatar}
+										class={clsx([`h-full w-full group-hover:opacity-75`, shouldBlurMedia() && `blur`])}
+									/>
 								</button>
 							);
 						}
@@ -144,6 +174,8 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 						})()}
 					</p>
 				</div>
+
+				<ModerationAlerts ui={ui()} />
 
 				<div class="whitespace-pre-wrap break-words text-sm empty:hidden">{profile.description.value}</div>
 
