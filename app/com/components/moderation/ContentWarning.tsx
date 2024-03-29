@@ -1,4 +1,4 @@
-import { type Component, type ComponentProps, type JSX, createSignal } from 'solid-js';
+import { type Component, type ComponentProps, type JSX, createSignal, lazy } from 'solid-js';
 
 import {
 	type ModerationCause,
@@ -13,12 +13,16 @@ import {
 	getLocalizedLabel,
 } from '~/api/moderation';
 
+import { openModal } from '../../globals/modals';
+
 import { Interactive } from '../../primitives/interactive';
 
 import FilterAltOutlinedIcon from '../../icons/outline-filter-alt';
 import InfoOutlinedIcon from '../../icons/outline-info';
 import PersonOffOutlinedIcon from '../../icons/outline-person-off';
 import ReportProblemOutlinedIcon from '../../icons/outline-report-problem';
+
+const LabelDetailsDialog = lazy(() => import('../dialogs/LabelDetailsDialog'));
 
 export interface ContentWarningProps {
 	ui: ModerationUI | undefined;
@@ -86,7 +90,14 @@ const ContentWarning = (props: ContentWarningProps) => {
 						return (
 							<div class="mt-1.5 text-de text-muted-fg">
 								Applied by <span>{source ? renderLabelSource(source) : `the author`}</span>.{' '}
-								<button class="text-accent hover:underline">Learn more</button>
+								<button
+									onClick={() => {
+										openModal(() => <LabelDetailsDialog cause={blur} />);
+									}}
+									class="text-accent hover:underline"
+								>
+									Learn more
+								</button>
 							</div>
 						);
 					}
