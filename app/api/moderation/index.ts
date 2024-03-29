@@ -571,7 +571,7 @@ export const getModerationUI = (causes: ModerationCause[], context: ModerationCo
 				filters.push(cause);
 			}
 
-			if (context !== ContextContentMedia) {
+			if (context !== ContextContentMedia && context !== ContextProfileMedia) {
 				blurs.push(cause);
 			}
 		}
