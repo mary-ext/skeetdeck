@@ -18,7 +18,12 @@ export const dndPaneId = Symbol();
 
 export interface DndPaneItem {
 	[dndPaneId]: true;
+	instance: symbol;
 	deck: string;
 	pane: string;
 	index: number;
 }
+
+export const isDndPaneItem = (data: any): data is DndPaneItem => {
+	return dndPaneId in data;
+};
