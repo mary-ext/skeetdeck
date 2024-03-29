@@ -37,6 +37,7 @@ import ReplyAction from '../items/posts/ReplyAction';
 
 import PostTranslation, { needTranslation } from './posts/PostTranslation';
 import LabelsOnMe from '../moderation/LabelsOnMe';
+import ModerationAlerts from '../moderation/ModerationAlerts';
 
 export interface PermalinkPostProps {
 	/** Expected to be static */
@@ -100,6 +101,8 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 					class="mb-1"
 				/>
 			)}
+
+			<ModerationAlerts ui={ui()} class="mb-2" />
 
 			<ContentWarning ui={ui()} ignoreMute containerClass="mb-3" outerClass="mb-3" innerClass="mt-2">
 				<div class="overflow-hidden whitespace-pre-wrap break-words text-base empty:hidden">

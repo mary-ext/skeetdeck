@@ -38,6 +38,7 @@ import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 import Embed from '../embeds/Embed';
 import ContentWarning from '../moderation/ContentWarning';
 import LabelsOnMe from '../moderation/LabelsOnMe';
+import ModerationAlerts from '../moderation/ModerationAlerts';
 
 import PostOverflowAction from './posts/PostOverflowAction';
 import ReplyAction from './posts/ReplyAction';
@@ -241,7 +242,7 @@ const Post = (props: PostProps) => {
 							uid={uid}
 							report={{ type: 'post', uri: post.uri, cid: post.cid.value }}
 							labels={post.labels.value}
-							class="mb-2 mt-1"
+							class="mb-1 mt-1"
 						/>
 					)}
 
@@ -366,48 +367,52 @@ const PostContent = ({ post, postPermalink, causes }: PostContentProps) => {
 	const ui = createMemo(() => getModerationUI(causes(), ContextContentList));
 
 	return (
-		<ContentWarning
-			ui={ui()}
-			ignoreMute
-			containerClass="mt-2"
-			innerClass="mt-3"
-			children={(() => {
-				let content: HTMLDivElement | undefined;
+		<>
+			<ModerationAlerts ui={ui()} class="mt-1" />
 
-				return (
-					<>
-						<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
-							<RichTextRenderer
-								item={post}
-								get={(item) => {
-									const record = item.record.value;
-									return { t: record.text, f: record.facets };
+			<ContentWarning
+				ui={ui()}
+				ignoreMute
+				containerClass="mt-2"
+				innerClass="mt-3"
+				children={(() => {
+					let content: HTMLDivElement | undefined;
+
+					return (
+						<>
+							<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
+								<RichTextRenderer
+									item={post}
+									get={(item) => {
+										const record = item.record.value;
+										return { t: record.text, f: record.facets };
+									}}
+								/>
+							</div>
+
+							<Link
+								ref={(node) => {
+									node.style.display = post.$truncated !== false ? 'block' : 'none';
+
+									createEffect(() => {
+										const delta = content!.scrollHeight - content!.clientHeight;
+										const next = delta > 10 && !!post.record.value.text;
+
+										post.$truncated = next;
+										node.style.display = next ? 'block' : 'none';
+									});
 								}}
-							/>
-						</div>
+								to={postPermalink}
+								class="text-sm text-accent hover:underline"
+							>
+								Show more
+							</Link>
 
-						<Link
-							ref={(node) => {
-								node.style.display = post.$truncated !== false ? 'block' : 'none';
-
-								createEffect(() => {
-									const delta = content!.scrollHeight - content!.clientHeight;
-									const next = delta > 10 && !!post.record.value.text;
-
-									post.$truncated = next;
-									node.style.display = next ? 'block' : 'none';
-								});
-							}}
-							to={postPermalink}
-							class="text-sm text-accent hover:underline"
-						>
-							Show more
-						</Link>
-
-						{embed.value && <Embed post={post} causes={causes()} />}
-					</>
-				);
-			})()}
-		/>
+							{embed.value && <Embed post={post} causes={causes()} />}
+						</>
+					);
+				})()}
+			/>
+		</>
 	);
 };
