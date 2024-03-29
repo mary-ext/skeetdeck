@@ -24,6 +24,7 @@ import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add
 import { type ProfilePaneConfig, PANE_TYPE_PROFILE, ProfilePaneTab } from '../../../globals/panes';
 import { addPane, preferences } from '../../../globals/settings';
 
+import { useDeckContext } from '../DeckContext';
 import { usePaneContext, usePaneModalState } from '../PaneContext';
 import PaneDialog from '../PaneDialog';
 import PaneDialogHeader from '../PaneDialogHeader';
@@ -45,7 +46,8 @@ const enum ProfileTab {
 const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 	const { actor } = props;
 
-	const { deck, pane, index, openModal: openPaneModal } = usePaneContext();
+	const { deck } = useDeckContext();
+	const { pane, index, openModal: openPaneModal } = usePaneContext();
 	const modal = usePaneModalState();
 
 	const ui = preferences.ui;

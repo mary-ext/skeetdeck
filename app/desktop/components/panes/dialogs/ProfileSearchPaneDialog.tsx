@@ -13,6 +13,7 @@ import { IconButton } from '~/com/primitives/icon-button';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
 
+import { useDeckContext } from '../DeckContext';
 import { usePaneContext, usePaneModalState } from '../PaneContext';
 import PaneDialog from '../PaneDialog';
 
@@ -24,7 +25,8 @@ export interface ProfileSearchPaneDialogProps {
 const ProfileSearchPaneDialog = (props: ProfileSearchPaneDialogProps) => {
 	const profile = props.profile;
 
-	const { deck, pane } = usePaneContext();
+	const { deck } = useDeckContext();
+	const { pane } = usePaneContext();
 	const modal = usePaneModalState();
 
 	const [search, setSearch] = createSignal('');

@@ -7,6 +7,7 @@ import { Title } from '~/com/lib/meta';
 
 import { preferences } from '../globals/settings';
 
+import { DeckContextProvider } from '../components/panes/DeckContextProvider';
 import { PaneContextProvider } from '../components/panes/PaneContextProvider';
 import PaneFallback from '../components/panes/PaneFallback';
 import PaneRouter from '../components/panes/PaneRouter';
@@ -36,22 +37,23 @@ const DecksView = (props: RouteComponentProps) => {
 				<div class="flex grow gap-1 overflow-x-auto bg-background-dark px-1">
 					<Title render={() => `Skeetdeck - ${deck.name}`} />
 
-					<For each={deck.panes}>
-						{(pane, idx) => (
-							<PaneContextProvider
-								deck={deck}
-								pane={pane}
-								index={idx}
-								onDelete={() => {
-									deck.panes.splice(idx(), 1);
-								}}
-							>
-								<Suspense fallback={<PaneFallback />}>
-									<PaneRouter pane={pane} />
-								</Suspense>
-							</PaneContextProvider>
-						)}
-					</For>
+					<DeckContextProvider deck={deck}>
+						<For each={deck.panes}>
+							{(pane, idx) => (
+								<PaneContextProvider
+									pane={pane}
+									index={idx}
+									onDelete={() => {
+										deck.panes.splice(idx(), 1);
+									}}
+								>
+									<Suspense fallback={<PaneFallback />}>
+										<PaneRouter pane={pane} />
+									</Suspense>
+								</PaneContextProvider>
+							)}
+						</For>
+					</DeckContextProvider>
 
 					<div class="grid w-72 shrink-0 place-items-center">
 						<div>

@@ -1,11 +1,10 @@
 import { type Accessor, type JSX, For, Suspense, createSignal } from 'solid-js';
 
 import { signal } from '~/utils/signals';
-import { clsx } from '~/utils/misc';
 
 import CircularProgress from '~/com/components/CircularProgress';
 
-import type { BasePaneConfig, DeckConfig } from '../../globals/panes';
+import type { BasePaneConfig } from '../../globals/panes';
 
 import { PaneLinkingProvider } from './PaneLinkingProvider';
 
@@ -19,8 +18,6 @@ import {
 
 export interface PaneContextProviderProps {
 	/** Expected to be static */
-	deck: DeckConfig;
-	/** Expected to be static */
 	pane: BasePaneConfig;
 	/** Expected to be static */
 	index: Accessor<number>;
@@ -32,7 +29,7 @@ export interface PaneContextProviderProps {
 export const PaneContextProvider = (props: PaneContextProviderProps) => {
 	let _id = 0;
 
-	const { deck, pane, index } = props;
+	const { pane, index } = props;
 
 	const [modals, setModals] = createSignal<PaneModalState[]>([]);
 
@@ -51,7 +48,6 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 	};
 
 	const paneContext: PaneContextObject = {
-		deck: deck,
 		pane: pane,
 		index: index,
 		deletePane: props.onDelete,
@@ -61,7 +57,7 @@ export const PaneContextProvider = (props: PaneContextProviderProps) => {
 	return (
 		<PaneContext.Provider value={paneContext}>
 			<PaneLinkingProvider>
-				<div class={clsx([`relative`])}>
+				<div class="relative">
 					<div class="flex h-full" inert={modals().length > 0}>
 						{props.children}
 					</div>

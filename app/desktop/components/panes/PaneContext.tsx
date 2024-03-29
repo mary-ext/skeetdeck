@@ -2,7 +2,7 @@ import { type Accessor, type JSX, createContext, useContext } from 'solid-js';
 
 import { type Signal } from '~/utils/signals';
 
-import type { BasePaneConfig, DeckConfig } from '../../globals/panes';
+import type { BasePaneConfig } from '../../globals/panes';
 
 export type PaneModalComponent = () => JSX.Element;
 
@@ -30,7 +30,6 @@ export const usePaneModalState = () => {
 };
 
 export interface PaneContextObject<T extends BasePaneConfig = BasePaneConfig> {
-	deck: DeckConfig;
 	pane: T;
 	index: Accessor<number>;
 	deletePane(): void;

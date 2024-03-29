@@ -13,6 +13,7 @@ import { IconButton } from '~/com/primitives/icon-button';
 
 import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
 
+import { useDeckContext } from '../DeckContext';
 import { usePaneContext, usePaneModalState } from '../PaneContext';
 import PaneDialog from '../PaneDialog';
 import PaneDialogHeader from '../PaneDialogHeader';
@@ -29,7 +30,8 @@ export interface ThreadPaneDialogProps {
 const ThreadPaneDialog = (props: ThreadPaneDialogProps) => {
 	const { actor, rkey } = props;
 
-	const { pane, deck, index } = usePaneContext();
+	const { deck } = useDeckContext();
+	const { pane, index } = usePaneContext();
 	const modal = usePaneModalState();
 
 	const ui = preferences.ui;
