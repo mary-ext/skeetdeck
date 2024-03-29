@@ -65,8 +65,11 @@ export const ContextProfileList = 5;
 
 export type ModerationContext = 0 | 1 | 2 | 3 | 4 | 5;
 
+/** Label should cause blurring */
 const BehaviorBlur = 0;
+/** Label should cause blurring if it has the adult flag, fallback to alert/inform if it isn't */
 const BehaviorBlurIfAdultOrAlert = 1;
+/** Label should be alerted/informed */
 const BehaviorAlertOrInform = 2;
 
 type ModerationBehavior = 0 | 1 | 2;
