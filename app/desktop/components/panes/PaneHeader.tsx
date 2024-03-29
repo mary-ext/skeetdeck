@@ -2,8 +2,6 @@ import { type JSX } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent';
 
-import { clsx } from '~/utils/misc';
-
 import DragIndicatorIcon from '~/com/icons/baseline-drag-indicator';
 
 import { IconButton } from '~/com/primitives/icon-button';
@@ -17,7 +15,7 @@ export interface PaneHeaderProps {
 }
 
 const PaneHeader = (props: PaneHeaderProps) => {
-	const { sortable, pane } = usePaneContext();
+	const { pane } = usePaneContext();
 
 	const account = () => {
 		const uid = pane.uid;
@@ -31,14 +29,8 @@ const PaneHeader = (props: PaneHeaderProps) => {
 	};
 
 	return (
-		<div
-			class={clsx([
-				`flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4`,
-				sortable.isActiveDraggable && `bg-secondary/30`,
-			])}
-		>
+		<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
 			<button
-				{...sortable.dragActivators}
 				title="Click and drag to reorder this column"
 				class={/* @once */ IconButton({ edge: 'left', color: 'muted', class: 'cursor-grab' })}
 			>

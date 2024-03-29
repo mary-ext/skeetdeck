@@ -1,13 +1,11 @@
-import { For, Show, Suspense, batch, lazy } from 'solid-js';
+import { For, Show, Suspense, lazy } from 'solid-js';
 
 import { type RouteComponentProps, Navigate } from '@pkg/solid-page-router';
-import { DragDropProvider, DragDropSensors, SortableProvider } from '@thisbeyond/solid-dnd';
 
 import { openModal } from '~/com/globals/modals';
 import { Title } from '~/com/lib/meta';
 
 import { preferences } from '../globals/settings';
-import { ConstrainYDragAxis } from '../utils/dnd';
 
 import { PaneContextProvider } from '../components/panes/PaneContextProvider';
 import PaneFallback from '../components/panes/PaneFallback';
@@ -37,44 +35,23 @@ const DecksView = (props: RouteComponentProps) => {
 			{(deck) => (
 				<div class="flex grow gap-1 overflow-x-auto bg-background-dark px-1">
 					<Title render={() => `Skeetdeck - ${deck.name}`} />
-					<DragDropProvider
-						onDragEnd={({ draggable, droppable }) => {
-							if (draggable && droppable) {
-								const panes = deck.panes;
 
-								const fromIndex = panes.findIndex((pane) => pane.id === draggable.id);
-								const toIndex = panes.findIndex((pane) => pane.id === droppable.id);
-
-								if (fromIndex !== toIndex) {
-									batch(() => {
-										panes.splice(toIndex, 0, ...panes.splice(fromIndex, 1));
-									});
-								}
-							}
-						}}
-					>
-						<DragDropSensors />
-						<ConstrainYDragAxis enabled />
-
-						<SortableProvider ids={deck.panes.map((pane) => pane.id)}>
-							<For each={deck.panes}>
-								{(pane, idx) => (
-									<PaneContextProvider
-										deck={deck}
-										pane={pane}
-										index={idx}
-										onDelete={() => {
-											deck.panes.splice(idx(), 1);
-										}}
-									>
-										<Suspense fallback={<PaneFallback />}>
-											<PaneRouter pane={pane} />
-										</Suspense>
-									</PaneContextProvider>
-								)}
-							</For>
-						</SortableProvider>
-					</DragDropProvider>
+					<For each={deck.panes}>
+						{(pane, idx) => (
+							<PaneContextProvider
+								deck={deck}
+								pane={pane}
+								index={idx}
+								onDelete={() => {
+									deck.panes.splice(idx(), 1);
+								}}
+							>
+								<Suspense fallback={<PaneFallback />}>
+									<PaneRouter pane={pane} />
+								</Suspense>
+							</PaneContextProvider>
+						)}
+					</For>
 
 					<div class="grid w-72 shrink-0 place-items-center">
 						<div>
