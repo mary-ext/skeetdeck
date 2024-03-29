@@ -19,7 +19,6 @@ import { location } from '@pkg/solid-page-router';
 
 import { Interactive } from '~/com/primitives/interactive';
 
-import { type ItemPosition, getItemPosition } from '~/utils/dnd';
 import { assert, clsx } from '~/utils/misc';
 
 import type { DeckConfig } from '../../globals/panes';
@@ -92,7 +91,7 @@ const DeckList = (props: { decks: DeckConfig[] }) => {
 	return (
 		<For each={props.decks}>
 			{(deck, index) => {
-				return <DeckButton deck={deck} index={index} pos={getItemPosition(index(), props.decks)} />;
+				return <DeckButton deck={deck} index={index} />;
 			}}
 		</For>
 	);
@@ -118,7 +117,7 @@ const deckBtn = Interactive({
 	class: `group relative grid h-11 shrink-0 select-none place-items-center text-lg`,
 });
 
-const DeckButton = (props: { deck: DeckConfig; index: () => number; pos: ItemPosition }) => {
+const DeckButton = (props: { deck: DeckConfig; index: () => number }) => {
 	const deck = props.deck;
 	const getIndex = props.index;
 
