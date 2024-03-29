@@ -1,4 +1,4 @@
-import { For, batch, createEffect, createSignal, onCleanup } from 'solid-js';
+import { For, batch, createEffect, createMemo, createSignal, onCleanup } from 'solid-js';
 
 import {
 	draggable,
@@ -128,6 +128,10 @@ const DeckButton = (props: { deck: DeckConfig; index: () => number; pos: ItemPos
 	const [state, setState] = createSignal<DeckState>(idleState);
 	const [closestEdge, setClosestEdge] = createSignal<Edge | null>(null);
 
+	const isDragging = createMemo(() => {
+		return state().k === DeckStateKind.DRAGGING;
+	});
+
 	return (
 		<div
 			ref={(element) => {
@@ -197,9 +201,15 @@ const DeckButton = (props: { deck: DeckConfig; index: () => number; pos: ItemPos
 					);
 				});
 			}}
-			class={clsx([`z-10 cursor-grabbing`])}
+			class="relative"
 		>
-			<a title={deck.name} href={href} class={deckBtn} data-link="replace" draggable="false">
+			<a
+				title={deck.name}
+				href={href}
+				class={clsx([deckBtn, isDragging() && `pointer-events-none opacity-50`])}
+				data-link="replace"
+				draggable="false"
+			>
 				<div
 					class={clsx([
 						`pointer-events-none absolute inset-0 border-l-3 border-accent`,
@@ -208,19 +218,19 @@ const DeckButton = (props: { deck: DeckConfig; index: () => number; pos: ItemPos
 				></div>
 
 				<span>{deck.emoji}</span>
-
-				{(() => {
-					const $closestEdge = closestEdge();
-
-					if ($closestEdge !== null) {
-						const top = $closestEdge === 'top';
-
-						return (
-							<div class="absolute h-0.5 w-full bg-accent" style={`${top ? 'top' : 'bottom'}: -1px`}></div>
-						);
-					}
-				})()}
 			</a>
+
+			{(() => {
+				const $closestEdge = closestEdge();
+
+				if ($closestEdge !== null) {
+					const top = $closestEdge === 'top';
+
+					return (
+						<div class="absolute h-0.5 w-full bg-accent" style={`${top ? 'top' : 'bottom'}: -1px`}></div>
+					);
+				}
+			})()}
 
 			{(() => {
 				const $state = state();
