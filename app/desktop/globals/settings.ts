@@ -140,11 +140,3 @@ export const addPane = <T extends PaneConfig>(
 		deck.panes.push(pane);
 	}
 };
-
-export const resolvePaneSize = (size: SpecificPaneSize): PaneSize => {
-	if (size === SpecificPaneSize.INHERIT) {
-		return preferences.ui.defaultPaneSize;
-	}
-
-	return size as any as PaneSize;
-};

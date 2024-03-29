@@ -15,6 +15,7 @@ import { usePaneContext } from '../PaneContext';
 import Pane from '../Pane';
 import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
+import PaneHeader from '../PaneHeader';
 
 import ThreadView from '../partials/ThreadView';
 
@@ -51,20 +52,17 @@ const ThreadPane = () => {
 	});
 
 	return [
-		<Pane
-			title="Thread"
-			actions={
-				<>
-					<button
-						title="Column settings"
-						onClick={() => setIsSettingsOpen(!isSettingsOpen())}
-						class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
-					>
-						<SettingsOutlinedIcon />
-					</button>
-				</>
-			}
-		>
+		<Pane>
+			<PaneHeader title="Thread">
+				<button
+					title="Column settings"
+					onClick={() => setIsSettingsOpen(!isSettingsOpen())}
+					class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
+				>
+					<SettingsOutlinedIcon />
+				</button>
+			</PaneHeader>
+
 			<PaneBody>
 				<ThreadView actor={pane.thread.actor} thread={thread} />
 			</PaneBody>

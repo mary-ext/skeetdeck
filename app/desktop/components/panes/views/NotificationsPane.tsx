@@ -37,6 +37,7 @@ import { usePaneContext } from '../PaneContext';
 import Pane from '../Pane';
 import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
+import PaneHeader from '../PaneHeader';
 
 const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));
 const NotificationsPaneSettings = lazy(() => import('../settings/NotificationsPaneSettings'));
@@ -143,34 +144,31 @@ const NotificationsPane = () => {
 	}, 0 as const);
 
 	return [
-		<Pane
-			title="Notifications"
-			actions={
-				<>
-					<button
-						title="Mark notifications as read"
-						onClick={() => read.mutate()}
-						disabled={
-							read.isPending ||
-							notifications.isLoading ||
-							notifications.isRefetching ||
-							!notifications.data?.pages[0].date
-						}
-						class={/* @once */ IconButton({ color: 'muted' })}
-					>
-						<CheckAllIcon />
-					</button>
+		<Pane>
+			<PaneHeader title={pane.title || 'Notifications'}>
+				<button
+					title="Mark notifications as read"
+					onClick={() => read.mutate()}
+					disabled={
+						read.isPending ||
+						notifications.isLoading ||
+						notifications.isRefetching ||
+						!notifications.data?.pages[0].date
+					}
+					class={/* @once */ IconButton({ color: 'muted' })}
+				>
+					<CheckAllIcon />
+				</button>
 
-					<button
-						title="Column settings"
-						onClick={() => setIsSettingsOpen(!isSettingsOpen())}
-						class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
-					>
-						<SettingsOutlinedIcon />
-					</button>
-				</>
-			}
-		>
+				<button
+					title="Column settings"
+					onClick={() => setIsSettingsOpen(!isSettingsOpen())}
+					class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
+				>
+					<SettingsOutlinedIcon />
+				</button>
+			</PaneHeader>
+
 			<PaneBody>
 				<Switch>
 					<Match when={read.isPending || notifications.isRefetching}>

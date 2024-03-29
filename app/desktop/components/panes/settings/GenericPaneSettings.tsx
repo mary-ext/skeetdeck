@@ -20,14 +20,12 @@ import AccountSwitchIcon from '~/com/icons/baseline-account-switch';
 import DeleteIcon from '~/com/icons/baseline-delete';
 import SwapVertIcon from '~/com/icons/baseline-swap-vert';
 
-import { useDeckContext } from '../DeckContext';
 import { usePaneContext } from '../PaneContext';
 import SwitchAccountAction from '../../flyouts/SwitchAccountAction';
 import SwitchDeckAction from '../../flyouts/SwitchDeckAction';
 
 const GenericPaneSettings = () => {
-	const { deck } = useDeckContext();
-	const { pane, deletePane } = usePaneContext();
+	const { deck, pane, deletePane } = usePaneContext();
 
 	const id = getUniqueId();
 

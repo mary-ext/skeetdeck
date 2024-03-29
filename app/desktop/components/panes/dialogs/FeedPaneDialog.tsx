@@ -13,7 +13,6 @@ import TimelineList from '~/com/components/lists/TimelineList';
 
 import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
 
-import { useDeckContext } from '../DeckContext';
 import { usePaneContext, usePaneModalState } from '../PaneContext';
 import PaneDialog from '../PaneDialog';
 import PaneDialogHeader from '../PaneDialogHeader';
@@ -30,8 +29,7 @@ export interface FeedPaneDialogProps {
 const FeedPaneDialog = (props: FeedPaneDialogProps) => {
 	const { actor, rkey } = props;
 
-	const { deck } = useDeckContext();
-	const { pane, index } = usePaneContext();
+	const { deck, pane, index } = usePaneContext();
 	const modal = usePaneModalState();
 
 	const uri = `at://${actor}/app.bsky.feed.generator/${rkey}`;

@@ -138,14 +138,3 @@ export interface DeckConfig {
 	emoji: string;
 	panes: PaneConfig[];
 }
-
-export const getPaneSizeWidth = (size: PaneSize): number => {
-	if (size === PaneSize.MEDIUM) {
-		return 384;
-	}
-	if (size === PaneSize.LARGE) {
-		return 480;
-	}
-
-	return 336;
-};

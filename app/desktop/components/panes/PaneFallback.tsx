@@ -1,22 +1,14 @@
 import CircularProgress from '~/com/components/CircularProgress';
 
-import { getPaneSizeWidth } from '../../globals/panes';
-import { resolvePaneSize } from '../../globals/settings';
-
-import { usePaneContext } from './PaneContext';
+import Pane from './Pane';
 
 const PaneFallback = () => {
-	const { pane } = usePaneContext();
-
 	return (
-		<div
-			class="flex shrink-0 flex-col bg-background"
-			style={{ width: getPaneSizeWidth(resolvePaneSize(pane.size)) + 'px' }}
-		>
+		<Pane>
 			<div class="grid grow place-items-center">
 				<CircularProgress />
 			</div>
-		</div>
+		</Pane>
 	);
 };
 

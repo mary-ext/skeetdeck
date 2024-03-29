@@ -12,6 +12,7 @@ import { usePaneContext } from '../PaneContext';
 import Pane from '../Pane';
 import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
+import PaneHeader from '../PaneHeader';
 
 const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));
 const SearchPaneSettings = lazy(() => import('../settings/SearchPaneSettings'));
@@ -40,21 +41,17 @@ const SearchPane = () => {
 	const { pane } = usePaneContext<SearchPaneConfig>();
 
 	return [
-		<Pane
-			title={pane.query}
-			subtitle="Search"
-			actions={
-				<>
-					<button
-						title="Column settings"
-						onClick={() => setIsSettingsOpen(!isSettingsOpen())}
-						class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
-					>
-						<SettingsOutlinedIcon />
-					</button>
-				</>
-			}
-		>
+		<Pane>
+			<PaneHeader title={pane.query} subtitle="Search">
+				<button
+					title="Column settings"
+					onClick={() => setIsSettingsOpen(!isSettingsOpen())}
+					class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
+				>
+					<SettingsOutlinedIcon />
+				</button>
+			</PaneHeader>
+
 			<PaneBody>
 				<TimelineList
 					uid={pane.uid}
