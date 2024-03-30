@@ -493,6 +493,8 @@ const createLanguagePostFilter = (prefs?: LanguagePreferences): PostFilter | und
 		return;
 	}
 
+	const cache: Record<string, string | null | undefined> = Object.create(null);
+
 	return (item) => {
 		const record = item.post.record as PostRecord;
 		const langs = record.langs;
@@ -505,7 +507,24 @@ const createLanguagePostFilter = (prefs?: LanguagePreferences): PostFilter | und
 			return allowUnspecified;
 		}
 
-		return langs.some((code) => languages!.includes(code));
+		return langs.some((code) => {
+			let tag = cache[code];
+
+			if (tag === undefined) {
+				try {
+					tag = cache[code] = new Intl.Locale(code).language;
+				} catch {
+					cache[code] = null;
+					return;
+				}
+			}
+
+			if (tag === null) {
+				return false;
+			}
+
+			return languages.includes(tag);
+		});
 	};
 };
 
