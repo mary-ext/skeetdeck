@@ -58,7 +58,7 @@ const PostTranslation = (props: PostTranslationProps) => {
 	const text = () => props.post.record.value.text;
 
 	const trans = createQuery(() => ({
-		queryKey: getTranslationKey(source(), target, text()),
+		queryKey: getTranslationKey(source(), target(), text()),
 		queryFn: getTranslation,
 	}));
 
