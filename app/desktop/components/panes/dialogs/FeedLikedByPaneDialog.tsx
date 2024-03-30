@@ -5,6 +5,10 @@ import type { At } from '~/api/atp-schema';
 import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info';
 import { getLikes, getLikesKey } from '~/api/queries/get-likes';
 
+import { moderateProfileList } from '~/api/moderation/utils';
+
+import { getModerationOptions } from '~/com/globals/shared';
+
 import ProfileList from '~/com/components/lists/ProfileList';
 import { LINK_PROFILE, useLinking } from '~/com/components/Link';
 
@@ -62,7 +66,10 @@ const FeedLikedByPaneDialog = (props: FeedLikedByPaneDialogProps) => {
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<ProfileList
-					profiles={likes.data?.pages.flatMap((page) => page.profiles)}
+					profiles={moderateProfileList(
+						likes.data?.pages.flatMap((page) => page.profiles),
+						getModerationOptions(),
+					)}
 					fetching={likes.isFetching}
 					error={likes.error}
 					hasMore={likes.hasNextPage}

@@ -10,6 +10,10 @@ import {
 	getProfileFollowersKey,
 } from '~/api/queries/get-profile-followers';
 
+import { moderateProfileList } from '~/api/moderation/utils';
+
+import { getModerationOptions } from '~/com/globals/shared';
+
 import { ProfileFollowAccessory } from '~/com/components/items/ProfileItem';
 import ProfileList from '~/com/components/lists/ProfileList';
 import { LINK_PROFILE, useLinking } from '~/com/components/Link';
@@ -61,7 +65,10 @@ const ProfileFollowersPaneDialog = (props: ProfileFollowersPaneDialogProps) => {
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<ProfileList
 					asideAccessory={ProfileFollowAccessory}
-					profiles={followers.data?.pages.flatMap((page) => page.profiles)}
+					profiles={moderateProfileList(
+						followers.data?.pages.flatMap((page) => page.profiles),
+						getModerationOptions(),
+					)}
 					fetching={followers.isFetching}
 					error={followers.error}
 					hasMore={followers.hasNextPage}
