@@ -538,8 +538,8 @@ export const getModerationUI = (causes: ModerationCause[], context: ModerationCo
 
 			if (cause.v === PreferenceHide) {
 				if (
-					(context === ContextProfileList && target === TargetProfile) ||
-					(context === ContextContentList && (target === TargetContent || target === TargetProfile))
+					(context === ContextProfileList && target === TargetAccount) ||
+					(context === ContextContentList && (target === TargetContent || target === TargetAccount))
 				) {
 					filters.push(cause);
 				}
