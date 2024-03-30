@@ -515,7 +515,7 @@ const createLanguagePostFilter = (prefs?: LanguagePreferences): PostFilter | und
 					tag = cache[code] = new Intl.Locale(code).language;
 				} catch {
 					cache[code] = null;
-					return;
+					return false;
 				}
 			}
 
