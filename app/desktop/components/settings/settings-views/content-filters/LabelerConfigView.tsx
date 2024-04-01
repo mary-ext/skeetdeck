@@ -145,7 +145,8 @@ const LabelerConfigView = () => {
 
 								<div class={ListBox}>
 									<label class={ListBoxItemReadonly}>
-										<span class="grow">Apply takedowns from this provider</span>
+										<span class="grow font-medium">Apply takedowns from this provider</span>
+
 										<Checkbox
 											ref={modelChecked(
 												() => service.redact ?? false,
