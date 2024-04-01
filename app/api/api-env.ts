@@ -7,10 +7,8 @@ declare module '@pkg/solid-query' {
 	interface Register {
 		queryMeta: {
 			batched?: boolean;
-			timelineOpts?: {
-				moderation: ModerationOptions;
-				language: LanguagePreferences;
-			};
+			moderation?: ModerationOptions;
+			language?: LanguagePreferences;
 		};
 	}
 }

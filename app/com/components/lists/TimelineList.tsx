@@ -48,7 +48,7 @@ const TimelineList = (props: TimelineListProps) => {
 		getNextPageParam: (last) => last.cursor,
 		initialPageParam: undefined,
 		meta: {
-			timelineOpts: getTimelineQueryMeta(),
+			...getTimelineQueryMeta(),
 		},
 	}));
 

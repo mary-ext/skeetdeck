@@ -135,7 +135,7 @@ export const getTimeline = wrapInfiniteQuery(
 		const [, uid, params, limit] = ctx.queryKey;
 		const pageParam = ctx.pageParam;
 
-		const { language, moderation } = ctx.meta?.timelineOpts || {};
+		const { language, moderation } = ctx.meta || {};
 
 		const type = params.type;
 
@@ -282,8 +282,8 @@ const fetchPage = async (
 	const signal = context.signal;
 
 	let headers: Record<string, string> | undefined;
-	if (context.meta?.timelineOpts) {
-		const prefs = context.meta.timelineOpts.language;
+	if (context.meta?.language) {
+		const prefs = context.meta.language;
 		const langs = resolveLanguages(prefs.languages, prefs.useSystemLanguages);
 
 		headers = { ['accept-language']: langs.join(',') };
