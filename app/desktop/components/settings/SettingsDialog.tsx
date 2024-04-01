@@ -12,6 +12,7 @@ import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
 import CircularProgress from '~/com/components/CircularProgress';
 
 import AccessibilityIcon from '~/com/icons/baseline-accessibility';
+import BackHandIcon from '~/com/icons/baseline-back-hand';
 import CloseIcon from '~/com/icons/baseline-close';
 import ColorLensIcon from '~/com/icons/baseline-color-lens';
 import InfoIcon from '~/com/icons/baseline-info';
@@ -32,7 +33,6 @@ import {
 	useViewRouter,
 } from './settings-views/_router';
 import SettingsRouterView from './settings-views/SettingsRouterView';
-import BackHandOutlinedIcon from '~/com/icons/outline-back-hand';
 
 const SettingsDialog = () => {
 	const [view, setView] = createSignal<View>({ type: VIEW_ACCOUNTS });
@@ -74,7 +74,7 @@ const SettingsDialog = () => {
 								<SideItem to={VIEW_LANGAUGE} icon={LanguageIcon}>
 									Language
 								</SideItem>
-								<SideItem to={VIEW_MODERATION} icon={BackHandOutlinedIcon}>
+								<SideItem to={VIEW_MODERATION} icon={BackHandIcon}>
 									Moderation
 								</SideItem>
 
