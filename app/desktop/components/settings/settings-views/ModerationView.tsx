@@ -16,7 +16,7 @@ import {
 	ListGroupHeader,
 } from '~/com/primitives/list-box';
 
-// import AddIcon from '~/com/icons/baseline-add';
+import AddIcon from '~/com/icons/baseline-add';
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 import FilterAltOutlinedIcon from '~/com/icons/outline-filter-alt';
 import RepeatOffIcon from '~/com/icons/baseline-repeat-off';
@@ -175,10 +175,10 @@ const ModerationView = () => {
 							}}
 						</For>
 
-						{/* <button class={selectItem}>
+						<button disabled class={ListBoxItemInteractive}>
 							<AddIcon class="w-8 shrink-0 text-lg text-muted-fg" />
-							<span class="grow">Add new provider</span>
-						</button> */}
+							<span class="grow font-medium">Explore new providers</span>
+						</button>
 					</div>
 
 					<p class={ListGroupBlurb}>
