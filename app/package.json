@@ -12,7 +12,11 @@
 	"dependencies": {
 		"@floating-ui/dom": "^1.6.3",
 		"@floating-ui/utils": "^0.2.1",
-		"@mary/bluesky-client": "npm:@jsr/mary__bluesky-client@^0.5.6",
+		"@mary/atproto-cid": "npm:@jsr/mary__atproto-cid@^0.1.4",
+		"@mary/atproto-tid": "npm:@jsr/mary__atproto-tid@^0.1.1",
+		"@mary/base32": "npm:@jsr/mary__base32@^0.1.0",
+		"@mary/bluesky-client": "npm:@jsr/mary__bluesky-client@^0.5.7",
+		"@mary/exif-rm": "npm:@jsr/mary__exif-rm@^0.2.1",
 		"@pkg/emoji-db": "workspace:^",
 		"@pkg/solid-freeze": "workspace:^",
 		"@pkg/solid-navigation": "workspace:^",
@@ -25,19 +29,19 @@
 		"idb": "^8.0.0",
 		"immer": "^10.0.4",
 		"solid-floating-ui": "^0.2.1",
-		"solid-js": "^1.8.15",
+		"solid-js": "^1.8.16",
 		"solid-textarea-autosize": "^0.0.5",
-		"tldts": "^6.1.13"
+		"tldts": "^6.1.14"
 	},
 	"devDependencies": {
 		"@types/dom-close-watcher": "^1.0.0",
 		"@types/dom-navigation": "^1.0.3",
-		"@types/node": "^20.11.27",
-		"autoprefixer": "^10.4.18",
-		"postcss": "^8.4.35",
-		"terser": "^5.29.1",
-		"vite": "^5.1.6",
+		"@types/node": "^20.11.30",
+		"autoprefixer": "^10.4.19",
+		"postcss": "^8.4.38",
+		"terser": "^5.29.2",
+		"vite": "^5.2.6",
 		"vite-plugin-pwa": "0.17.4",
-		"vite-plugin-solid": "^2.10.1"
+		"vite-plugin-solid": "^2.10.2"
 	}
 }

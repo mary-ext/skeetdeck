@@ -40,7 +40,7 @@
 		--muted-fg: 161 161 170; /* zinc-400 */
 
 		--input: 82 82 91; /* zinc-600 */
-		--divider: 51 51 56 /* zinc-750 */;
+		--divider: 51 51 56; /* zinc-750 */
 	}
 
 	[hidden] {

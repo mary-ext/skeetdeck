@@ -1,8 +1,10 @@
 import { type JSX, For, Show, batch, createEffect, createMemo, createSignal, untrack, lazy } from 'solid-js';
 import { unwrap } from 'solid-js/store';
 
-import { createQuery, useQueryClient } from '@pkg/solid-query';
 import { makeEventListener } from '@solid-primitives/event-listener';
+
+import * as TID from '@mary/atproto-tid';
+import { createQuery, useQueryClient } from '@pkg/solid-query';
 
 import type {
 	AppBskyEmbedExternal,
@@ -15,7 +17,6 @@ import type {
 } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { extractAppLink } from '~/api/utils/links';
-import { getCurrentTid } from '~/api/utils/tid';
 import { formatQueryError, getCollectionId, isDid } from '~/api/utils/misc';
 
 import type { ThreadData } from '~/api/models/threads';
@@ -366,7 +367,7 @@ const ComposerPane = () => {
 						date.setMilliseconds(i);
 
 						const draft = posts[i];
-						const rkey = getCurrentTid();
+						const rkey = TID.now();
 						const uri = `at://${uid}/app.bsky.feed.post/${rkey}`;
 
 						const rt = RESOLVED_RT.get(getPostRt(draft))!;
@@ -964,8 +965,9 @@ const ComposerPane = () => {
 
 													<div class="grow"></div>
 
-													{index() !== 0 && (
+													{index() !== 0 && length() === 0 && (
 														<button
+															title="Remove this post"
 															onClick={(ev) => {
 																{
 																	const target = ev.currentTarget;
@@ -978,7 +980,7 @@ const ComposerPane = () => {
 																posts.splice(index(), 1);
 															}}
 															class={
-																/* @once */ IconButton({ edge: 'right', class: '-my-1.5 text-primary/85' })
+																/* @once */ IconButton({ edge: 'right', color: 'muted', class: '-my-1.5' })
 															}
 														>
 															<CloseIcon />

@@ -1,8 +1,8 @@
 import * as cborg from 'cborg';
 
-import { assert } from '~/utils/misc';
+import * as base32 from '@mary/base32';
 
-import * as base32 from './base32';
+import { assert } from '~/utils/misc';
 
 const decodeCidToBytes = (source: string) => {
 	// Make sure we're dealing with serialized base32 here.

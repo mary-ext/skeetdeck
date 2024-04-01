@@ -1,4 +1,4 @@
-import { removeExif } from './image/exif-remover';
+import { remove as removeExif } from '@mary/exif-rm';
 
 import type { Signal } from './signals';
 
@@ -32,7 +32,7 @@ export interface CompressProfileImageOptions {
 
 export const compressPostImage = async (blob: Blob): Promise<CompressResult> => {
 	{
-		const exifRemoved = removeExif(await blob.arrayBuffer());
+		const exifRemoved = removeExif(new Uint8Array(await blob.arrayBuffer()));
 
 		// have the images be read again below, to make sure the exif removal code
 		// is working as intended.
@@ -74,7 +74,7 @@ export const compressProfileImage = async (
 	const isEligible = type === 'image/jpeg' || type === 'image/png';
 
 	if (isEligible) {
-		const exifRemoved = removeExif(await blob.arrayBuffer());
+		const exifRemoved = removeExif(new Uint8Array(await blob.arrayBuffer()));
 
 		if (exifRemoved !== null) {
 			blob = new Blob([exifRemoved], { type: blob.type });

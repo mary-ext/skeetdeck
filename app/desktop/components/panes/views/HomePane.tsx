@@ -12,7 +12,6 @@ import { usePaneContext } from '../PaneContext';
 import Pane from '../Pane';
 import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
-import PaneHeader from '../PaneHeader';
 
 const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));
 const HomePaneSettings = lazy(() => import('../settings/HomePaneSettings'));
@@ -23,17 +22,20 @@ const HomePane = () => {
 	const { pane } = usePaneContext<HomePaneConfig>();
 
 	return [
-		<Pane>
-			<PaneHeader title="Home">
-				<button
-					title="Column settings"
-					onClick={() => setIsSettingsOpen(!isSettingsOpen())}
-					class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
-				>
-					<SettingsOutlinedIcon />
-				</button>
-			</PaneHeader>
-
+		<Pane
+			title="Home"
+			actions={
+				<>
+					<button
+						title="Column settings"
+						onClick={() => setIsSettingsOpen(!isSettingsOpen())}
+						class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
+					>
+						<SettingsOutlinedIcon />
+					</button>
+				</>
+			}
+		>
 			<PaneBody>
 				<TimelineList
 					uid={pane.uid}

@@ -5,7 +5,7 @@ import { createMutation, useQueryClient } from '@pkg/solid-query';
 
 import TextareaAutosize from 'solid-textarea-autosize';
 
-import type { AppBskyActorProfile, Brand, ComAtprotoLabelDefs } from '~/api/atp-schema';
+import type { AppBskyActorProfile } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { formatQueryError } from '~/api/utils/misc';
 
@@ -18,14 +18,12 @@ import { graphemeLen } from '~/api/richtext/intl';
 
 import { formatLong } from '~/utils/intl/number';
 import { model } from '~/utils/input';
-import { mapDefined } from '~/utils/misc';
 
 import { Button } from '~/com/primitives/button';
 import { Input } from '~/com/primitives/input';
 import { Textarea } from '~/com/primitives/textarea';
 
 import AddPhotoButton from '~/com/components/inputs/AddPhotoButton';
-import Checkbox from '~/com/components/inputs/Checkbox';
 import BlobImage from '~/com/components/BlobImage';
 
 import { usePaneModalState } from '../PaneContext';
@@ -38,8 +36,6 @@ export interface ProfileSettingsPaneDialogProps {
 }
 
 const MAX_DESC_LENGTH = 300;
-
-const NoUnauthenticatedLabel = '!no-unauthenticated';
 
 const profileRecordType = 'app.bsky.actor.profile';
 
@@ -60,10 +56,6 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 	const actualDesc = createMemo(() => desc().replace(EOF_WS_RE, ''));
 	const length = createMemo(() => graphemeLen(actualDesc()));
 
-	const [labels, setLabels] = signal(
-		mapDefined(prof.labels.value, (x) => (x.src === prof.did ? x.val : undefined)),
-	);
-
 	const profileMutation = createMutation(() => ({
 		mutationFn: async () => {
 			let prev: ProfileRecord | undefined;
@@ -75,7 +67,6 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 			const $banner = banner();
 			const $name = name();
 			const $description = actualDesc();
-			const $labels = labels();
 
 			const agent = await multiagent.connect(uid);
 
@@ -117,11 +108,6 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 							? await uploadBlob<any>(uid, $banner)
 							: prev?.banner;
 
-				const nextLabels: Brand.Union<ComAtprotoLabelDefs.SelfLabels> | undefined =
-					$labels.length > 0
-						? { $type: 'com.atproto.label.defs#selfLabels', values: $labels.map((val) => ({ val: val })) }
-						: undefined;
-
 				let record: ProfileRecord | undefined = prev;
 
 				if (record) {
@@ -129,14 +115,13 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 					record.banner = nextBanner;
 					record.displayName = $name;
 					record.description = $description;
-					record.labels = nextLabels;
+					record.labels = record.labels;
 				} else {
 					record = {
 						avatar: nextAvatar,
 						banner: nextBanner,
 						displayName: $name,
 						description: $description,
-						labels: nextLabels,
 					};
 				}
 
@@ -258,38 +243,6 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 							class={/* @once */ Textarea()}
 						/>
 					</label>
-
-					<hr class="mt-4 border-divider" />
-
-					<div class="px-4 py-3">
-						<label class="flex min-w-0 justify-between gap-4">
-							<span class="text-sm">Request limited visibility of my account</span>
-
-							<Checkbox
-								checked={labels().includes(NoUnauthenticatedLabel)}
-								onChange={(ev) => {
-									const next = ev.target.checked;
-									const array = labels();
-
-									if (next) {
-										setLabels(array.concat(NoUnauthenticatedLabel));
-									} else {
-										setLabels(removeItem(array, NoUnauthenticatedLabel));
-									}
-								}}
-							/>
-						</label>
-
-						<p class="mr-8 text-de text-muted-fg">
-							This option tells every app, including Bluesky app, that you don't want your account to be seen
-							by users who aren't currently signed in to an account.
-						</p>
-
-						<p class="mr-8 mt-1 text-de font-bold text-muted-fg">
-							Honoring this request is voluntary — your profile and posts will remain publicly available, and
-							some apps may show your account regardless.
-						</p>
-					</div>
 				</fieldset>
 			</form>
 		</PaneDialog>
@@ -297,13 +250,3 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 };
 
 export default ProfileSettingsPaneDialog;
-
-const removeItem = <T,>(array: T[], item: T): T[] => {
-	const index = array.indexOf(item);
-
-	if (index !== -1) {
-		return array.toSpliced(index, 1);
-	}
-
-	return array;
-};

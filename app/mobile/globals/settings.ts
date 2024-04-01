@@ -1,10 +1,8 @@
 import type { At } from '~/api/atp-schema';
-import type { FilterPreferences, LanguagePreferences, TranslationPreferences } from '~/api/types';
-
 import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults';
+import type { LanguagePreferences, TranslationPreferences } from '~/api/types';
 
-import { PreferenceWarn } from '~/api/moderation/enums';
-import type { ModerationOpts } from '~/api/moderation/types';
+import type { ModerationOptions } from '~/api/moderation';
 
 import { createReactiveLocalStorage } from '~/utils/storage';
 
@@ -12,8 +10,6 @@ import type { SharedPreferencesObject } from '~/com/components/SharedPreferences
 
 export interface PreferencesSchema {
 	$version: 1;
-	/** Used for cache-busting moderation filters */
-	rev: number;
 	/** UI configuration */
 	ui: {
 		/** Application theme */
@@ -31,9 +27,7 @@ export interface PreferencesSchema {
 		saved: { uri: At.Uri; name: string; pinned: boolean }[];
 	};
 	/** Content moderation */
-	moderation: Omit<ModerationOpts, '_filtersCache'>;
-	/** Filter configuration */
-	filters: FilterPreferences;
+	moderation: ModerationOptions;
 	/** Language configuration */
 	language: LanguagePreferences;
 	/** Translation configuration */
@@ -46,7 +40,6 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 	if (version === 0) {
 		const object: PreferencesSchema = {
 			$version: 1,
-			rev: 0,
 			ui: {
 				theme: 'auto',
 			},
@@ -65,40 +58,18 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 				],
 			},
 			moderation: {
-				globals: {
-					labels: {
-						porn: PreferenceWarn,
-						sexual: PreferenceWarn,
-						nudity: PreferenceWarn,
-						nsfl: PreferenceWarn,
-						corpse: PreferenceWarn,
-						gore: PreferenceWarn,
-						torture: PreferenceWarn,
-						'self-harm': PreferenceWarn,
-						intolerant: PreferenceWarn,
-						'intolerant-race': PreferenceWarn,
-						'intolerant-gender': PreferenceWarn,
-						'intolerant-sexual-orientation': PreferenceWarn,
-						'intolerant-religion': PreferenceWarn,
-						'icon-intolerant': PreferenceWarn,
-						threat: PreferenceWarn,
-						spoiler: PreferenceWarn,
-						spam: PreferenceWarn,
-						'account-security': PreferenceWarn,
-						'net-abuse': PreferenceWarn,
-						impersonation: PreferenceWarn,
-						scam: PreferenceWarn,
+				labels: {},
+				services: [
+					{
+						did: DEFAULT_MODERATION_LABELER,
+						redact: true,
+						profile: { handle: 'moderation.bsky.app' },
+						prefs: {},
+						vals: [],
+						defs: {},
 					},
-				},
-				// users: {},
-				labelers: {
-					[DEFAULT_MODERATION_LABELER]: {
-						labels: {},
-					},
-				},
+				],
 				keywords: [],
-			},
-			filters: {
 				hideReposts: [],
 				tempMutes: {},
 			},
@@ -119,26 +90,3 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 
 	return prev;
 });
-
-export const createSharedPreferencesObject = (): SharedPreferencesObject => {
-	return {
-		get rev() {
-			return preferences.rev;
-		},
-		set rev(next) {
-			preferences.rev = next;
-		},
-		// ModerationOpts contains internal state properties, we don't want them
-		// to be reflected back into persisted storage.
-		moderation: {
-			...preferences.moderation,
-		},
-		filters: preferences.filters,
-		language: preferences.language,
-		translation: preferences.translation,
-	};
-};
-
-export const bustRevisionCache = () => {
-	preferences.rev = ~~(Math.random() * 1024);
-};

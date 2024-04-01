@@ -15,9 +15,10 @@ import {
 	getTimelineLatestKey,
 } from '~/api/queries/get-timeline';
 
+import { getTimelineQueryMeta } from '../../globals/shared';
+
 import GenericErrorView from '../views/GenericErrorView';
 import CircularProgress from '../CircularProgress';
-import { useSharedPreferences } from '../SharedPreferences';
 
 import { loadMoreBtn, loadNewBtn } from '../../primitives/interactive';
 
@@ -32,12 +33,10 @@ const isTimelineStale = (
 	timelineData: InfiniteData<TimelinePage> | undefined,
 	latestData: TimelineLatestResult | undefined,
 ) => {
-	return latestData && timelineData ? latestData.cid !== timelineData?.pages[0].cid : false;
+	return latestData?.cid && timelineData ? latestData.cid !== timelineData?.pages[0].cid : false;
 };
 
 const TimelineGalleryList = (props: TimelineGalleryListProps) => {
-	const sharedPrefs = useSharedPreferences();
-
 	const queryClient = useQueryClient();
 
 	const timeline = createInfiniteQuery(() => ({
@@ -46,7 +45,7 @@ const TimelineGalleryList = (props: TimelineGalleryListProps) => {
 		getNextPageParam: (last) => last.cursor,
 		initialPageParam: undefined,
 		meta: {
-			timelineOpts: sharedPrefs,
+			timelineOpts: getTimelineQueryMeta(),
 		},
 	}));
 
@@ -56,15 +55,15 @@ const TimelineGalleryList = (props: TimelineGalleryListProps) => {
 		return {
 			queryKey: getTimelineLatestKey(props.uid, props.params),
 			queryFn: getTimelineLatest,
-			staleTime: 10_000,
+			staleTime: 30_000,
 			enabled: $timeline !== undefined,
 			refetchOnWindowFocus: (query) => {
 				return !isTimelineStale($timeline, query.state.data);
 			},
 			refetchInterval: (query) => {
 				if (!isTimelineStale($timeline, query.state.data)) {
-					// 30 seconds, or 3 minutes
-					return !document.hidden ? 30_000 : 3 * 60_000;
+					// 1 minute, or 5 minutes
+					return !document.hidden ? 60_000 : 5 * 60_000;
 				}
 
 				return false;

@@ -1,22 +1,18 @@
-import { createEffect, createMemo } from 'solid-js';
+import { createEffect } from 'solid-js';
 
 import { getRecordId } from '~/api/utils/misc';
 
 import type { SignalizedPost } from '~/api/stores/posts';
 import { updatePostLike } from '~/api/mutations/like-post';
 
-import { getProfileModDecision } from '../../moderation/profile';
-
 import { formatCompact } from '~/utils/intl/number';
 import { clsx } from '~/utils/misc';
 
 import { type PostLinking, type ProfileLinking, LINK_POST, LINK_PROFILE, Link } from '../Link';
 import RichTextRenderer from '../RichTextRenderer';
-import { useSharedPreferences } from '../SharedPreferences';
 import TimeAgo from '../TimeAgo';
 
 import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
-import ErrorIcon from '../../icons/baseline-error';
 import FavoriteIcon from '../../icons/baseline-favorite';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
@@ -25,7 +21,6 @@ import RepeatIcon from '../../icons/baseline-repeat';
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import Embed from '../embeds/Embed';
-import PostWarning from '../moderation/PostWarning';
 
 import PostOverflowAction from './posts/PostOverflowAction';
 import ReplyAction from './posts/ReplyAction';
@@ -57,10 +52,6 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 		rkey: getRecordId(post.uri),
 	};
 
-	const profileVerdict = createMemo(() => {
-		return getProfileModDecision(author, useSharedPreferences());
-	});
-
 	return (
 		<div class="flex min-w-0 gap-2 py-2">
 			<div class="relative flex shrink-0 flex-col items-center">
@@ -73,24 +64,6 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 				</Link>
 
 				{hasChildren && <div class="absolute -bottom-2 left-2 top-6 grow border-l-2 border-muted" />}
-
-				{(() => {
-					const verdict = profileVerdict();
-
-					if (verdict) {
-						return (
-							<div
-								class={
-									/* @once */
-									`absolute -right-1 top-3 rounded-full bg-background ` +
-									(verdict.a ? `text-red-500` : `text-muted-fg`)
-								}
-							>
-								<ErrorIcon class="text-sm" />
-							</div>
-						);
-					}
-				})()}
 			</div>
 			<div class="min-w-0 grow">
 				<div class="mb-0.5 flex items-center justify-between gap-4">
@@ -208,41 +181,37 @@ const PostContent = ({ post, permalink }: PostContentProps) => {
 	let content: HTMLDivElement | undefined;
 
 	return (
-		<PostWarning post={post}>
-			{(decision) => (
-				<>
-					<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
-						<RichTextRenderer
-							item={post}
-							get={(item) => {
-								const record = item.record.value;
-								return { t: record.text, f: record.facets };
-							}}
-						/>
-					</div>
+		<>
+			<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
+				<RichTextRenderer
+					item={post}
+					get={(item) => {
+						const record = item.record.value;
+						return { t: record.text, f: record.facets };
+					}}
+				/>
+			</div>
 
-					<Link
-						ref={(node) => {
-							node.style.display = post.$truncated !== false ? 'block' : 'none';
+			<Link
+				ref={(node) => {
+					node.style.display = post.$truncated !== false ? 'block' : 'none';
 
-							createEffect(() => {
-								const delta = content!.scrollHeight - content!.clientHeight;
+					createEffect(() => {
+						const delta = content!.scrollHeight - content!.clientHeight;
 
-								const next = delta > 10 && !!post.record.value.text;
+						const next = delta > 10 && !!post.record.value.text;
 
-								post.$truncated = next;
-								node.style.display = next ? 'block' : 'none';
-							});
-						}}
-						to={permalink}
-						class="text-sm text-accent hover:underline"
-					>
-						Show more
-					</Link>
+						post.$truncated = next;
+						node.style.display = next ? 'block' : 'none';
+					});
+				}}
+				to={permalink}
+				class="text-sm text-accent hover:underline"
+			>
+				Show more
+			</Link>
 
-					{post.embed.value && <Embed post={post} decision={decision} />}
-				</>
-			)}
-		</PostWarning>
+			{post.embed.value && <Embed post={post} />}
+		</>
 	);
 };

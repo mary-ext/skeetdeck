@@ -13,14 +13,13 @@ import { IconButton } from '~/com/primitives/icon-button';
 import TimelineList from '~/com/components/lists/TimelineList';
 import { VirtualContainer } from '~/com/components/VirtualContainer';
 
-import InfoIcon from '~/com/icons/baseline-info';
+import InfoOutlinedIcon from '~/com/icons/outline-info';
 import SettingsOutlinedIcon from '~/com/icons/outline-settings';
 
 import { usePaneContext } from '../PaneContext';
 import Pane from '../Pane';
 import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
-import PaneHeader from '../PaneHeader';
 
 const CustomFeedPaneSettings = lazy(() => import('../settings/CustomFeedPaneSettings'));
 const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));
@@ -33,25 +32,29 @@ const CustomFeedPane = () => {
 	const { pane } = usePaneContext<CustomFeedPaneConfig>();
 
 	return [
-		<Pane>
-			<PaneHeader title={pane.feed.name} subtitle="Feed">
-				<button
-					title={`${pane.infoVisible ? `Hide` : `Show`} feed information`}
-					onClick={() => (pane.infoVisible = !pane.infoVisible)}
-					class={/* @once */ IconButton({ color: 'muted' })}
-				>
-					<InfoIcon />
-				</button>
+		<Pane
+			title={pane.feed.name}
+			subtitle="Feed"
+			actions={
+				<>
+					<button
+						title={`${pane.infoVisible ? `Hide` : `Show`} feed information`}
+						onClick={() => (pane.infoVisible = !pane.infoVisible)}
+						class={/* @once */ IconButton({ color: 'muted' })}
+					>
+						<InfoOutlinedIcon />
+					</button>
 
-				<button
-					title="Column settings"
-					onClick={() => setIsSettingsOpen(!isSettingsOpen())}
-					class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
-				>
-					<SettingsOutlinedIcon />
-				</button>
-			</PaneHeader>
-
+					<button
+						title="Column settings"
+						onClick={() => setIsSettingsOpen(!isSettingsOpen())}
+						class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
+					>
+						<SettingsOutlinedIcon />
+					</button>
+				</>
+			}
+		>
 			<PaneBody>
 				{(() => {
 					if (pane.infoVisible) {

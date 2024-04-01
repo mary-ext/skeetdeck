@@ -1,19 +1,20 @@
 import { type Signal, For, createSignal, batch } from 'solid-js';
 
 import {
+	type KeywordFilterMatcher,
+	type KeywordPreference,
 	PreferenceHide,
 	PreferenceIgnore,
 	PreferenceWarn,
-	type KeywordPreference,
-} from '~/api/moderation/enums';
-import type { ModerationFilterKeywordOpts } from '~/api/moderation/types';
+} from '~/api/moderation';
 
 import { createRadioModel, model, modelChecked } from '~/utils/input';
 import { getUniqueId } from '~/utils/misc';
 
 import { openModal } from '~/com/globals/modals';
+import { bustModeration } from '~/com/globals/shared';
 
-import { bustRevisionCache, preferences } from '../../../../globals/settings';
+import { preferences } from '../../../../globals/settings';
 
 import { BoxedIconButton } from '~/com/primitives/boxed-icon-button';
 import { Button } from '~/com/primitives/button';
@@ -67,7 +68,7 @@ const KeywordFilterFormView = () => {
 		batch(() => {
 			const $name = name();
 			const $pref = +pref() as KeywordPreference;
-			const $matchers = matchers().map<ModerationFilterKeywordOpts>(([kw, whole]) => [kw[0](), whole[0]()]);
+			const $matchers = matchers().map<KeywordFilterMatcher>(([kw, whole]) => [kw[0](), whole[0]()]);
 			const $noFollows = noFollows();
 			const $match = createRegexMatcher($matchers);
 
@@ -89,7 +90,7 @@ const KeywordFilterFormView = () => {
 				});
 			}
 
-			bustRevisionCache();
+			bustModeration();
 			router.move({ type: VIEW_KEYWORD_FILTERS });
 		});
 	};
@@ -221,7 +222,7 @@ const KeywordFilterFormView = () => {
 													filters.splice(index, 1);
 												}
 
-												bustRevisionCache();
+												bustModeration();
 												router.move({ type: VIEW_KEYWORD_FILTERS });
 											});
 										}}
@@ -254,7 +255,7 @@ const escape = (str: string) => {
 const WORD_START_RE = /^[\p{M}\p{L}\p{N}\p{Pc}]/u;
 const WORD_END_RE = /[\p{M}\p{L}\p{N}\p{Pc}]$/u;
 
-export const createRegexMatcher = (matchers: ModerationFilterKeywordOpts[]) => {
+export const createRegexMatcher = (matchers: KeywordFilterMatcher[]) => {
 	let str = '';
 
 	let pfx = '';

@@ -1,26 +1,21 @@
-import { createMemo, lazy } from 'solid-js';
+import { lazy } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
-import { renderLabelName } from '~/api/display';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
-import { CauseLabel } from '~/api/moderation/action';
+import { isProfileTempMuted } from '~/api/moderation';
 
 import { formatCompact } from '~/utils/intl/number';
 import { formatAbsDateTime } from '~/utils/intl/time';
 import { clsx } from '~/utils/misc';
 
-import { openModal } from '~/com/globals/modals';
-
-import { getProfileModDecision } from '~/com/moderation/profile';
+import { openModal } from '../../globals/modals';
+import { getModerationOptions } from '../../globals/shared';
 
 import { LINK_LIST, LINK_PROFILE_FOLLOWERS, LINK_PROFILE_FOLLOWS, Link } from '../Link';
-import { isProfileTempMuted, useSharedPreferences } from '../SharedPreferences';
 
-import ErrorIcon from '../../icons/baseline-error';
-import VisibilityOutlinedIcon from '../../icons/outline-visibility';
-import ShareIcon from '../../icons/baseline-share';
 import PersonAddIcon from '../../icons/baseline-person-add';
+import ShareIcon from '../../icons/baseline-share';
 
 import { BoxedIconButton } from '../../primitives/boxed-icon-button';
 
@@ -36,18 +31,10 @@ const MuteConfirmDialog = lazy(() => import('../dialogs/MuteConfirmDialog'));
 const SilenceConfirmDialog = lazy(() => import('../dialogs/SilenceConfirmDialog'));
 
 const ProfileHeader = (props: ProfileHeaderProps) => {
-	const { filters } = useSharedPreferences();
-
 	const profile = props.profile;
 
 	const did = profile.did;
 	const viewer = profile.viewer;
-
-	const verdict = createMemo(() => {
-		const decision = getProfileModDecision(profile, useSharedPreferences());
-
-		return decision;
-	});
 
 	return (
 		<div class="flex flex-col">
@@ -62,10 +49,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 							}}
 							class="group aspect-banner overflow-hidden bg-background"
 						>
-							<img
-								src={banner}
-								class={clsx([`h-full w-full object-cover group-hover:opacity-75`, verdict()?.m && `blur`])}
-							/>
+							<img src={banner} class={clsx([`h-full w-full object-cover group-hover:opacity-75`])} />
 						</button>
 					);
 				}
@@ -86,10 +70,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 									}}
 									class="group -mt-8 h-20 w-20 shrink-0 overflow-hidden rounded-full bg-background outline-2 outline-background outline focus-visible:outline-primary"
 								>
-									<img
-										src={avatar}
-										class={clsx([`h-full w-full group-hover:opacity-75`, verdict()?.m && `blur`])}
-									/>
+									<img src={avatar} class={clsx([`h-full w-full group-hover:opacity-75`])} />
 								</button>
 							);
 						}
@@ -130,7 +111,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 				</div>
 
 				{(() => {
-					const isTemporarilyMuted = isProfileTempMuted(filters, did);
+					const isTemporarilyMuted = isProfileTempMuted(getModerationOptions(), did);
 					if (isTemporarilyMuted !== null) {
 						return (
 							<div class="text-sm text-muted-fg">
@@ -216,32 +197,6 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 							</div>
 						);
 					}
-				})()}
-
-				{(() => {
-					const $verdict = verdict();
-
-					if (!$verdict) {
-						return null;
-					}
-
-					const source = $verdict.s;
-					if (source.t !== CauseLabel) {
-						return null;
-					}
-
-					return (
-						<div class="flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider p-3 text-left">
-							{
-								/* @once */ $verdict.a ? (
-									<ErrorIcon class="shrink-0 text-lg text-red-500" />
-								) : (
-									<VisibilityOutlinedIcon class="shrink-0 text-lg text-muted-fg" />
-								)
-							}
-							<span class="grow text-sm">{/* @once */ renderLabelName(source.l.val)}</span>
-						</div>
-					);
 				})()}
 
 				<div class="flex gap-3">

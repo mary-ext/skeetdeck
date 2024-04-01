@@ -1,4 +1,4 @@
-import { type Accessor, createEffect } from 'solid-js';
+import { type Accessor, createEffect, onMount } from 'solid-js';
 
 import type { CreateMutationResult } from '@pkg/solid-query';
 
@@ -71,8 +71,8 @@ export const createMultipleChoiceModel = <T>(getter: Accessor<T[]>, setter: (nex
 	};
 };
 
-export const autofocus = (node: HTMLInputElement) => {
-	createEffect(() => {
+export const autofocus = (node: HTMLInputElement | HTMLTextAreaElement | HTMLButtonElement) => {
+	onMount(() => {
 		node.focus();
 	});
 };

@@ -1,33 +1,37 @@
 import { type JSX, lazy, createMemo } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
-import { renderLabelName } from '~/api/display';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
-import { CauseLabel } from '~/api/moderation/action';
-import { getProfileModDecision } from '../../moderation/profile';
+import {
+	ContextProfileMedia,
+	ContextProfileView,
+	getModerationUI,
+	isProfileTempMuted,
+} from '~/api/moderation';
+import { moderateProfile } from '~/api/moderation/entities/profile';
 
 import { formatCompact } from '~/utils/intl/number';
 import { formatAbsDateTime } from '~/utils/intl/time';
 import { clsx } from '~/utils/misc';
 
-import { openModal } from '~/com/globals/modals';
+import { openModal } from '../../globals/modals';
+import { getModerationOptions } from '../../globals/shared';
 
 import { BoxedIconButton } from '../../primitives/boxed-icon-button';
 import { Button } from '../../primitives/button';
 
 import { LINK_LIST, LINK_PROFILE_EDIT, LINK_PROFILE_FOLLOWERS, LINK_PROFILE_FOLLOWS, Link } from '../Link';
-import { isProfileTempMuted, useSharedPreferences } from '../SharedPreferences';
 
-import ErrorOutlinedIcon from '../../icons/outline-error';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
-import VisibilityOutlinedIcon from '../../icons/outline-visibility';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
+import ModerationAlerts from '../moderation/ModerationAlerts';
 import ProfileFollowButton from '../ProfileFollowButton';
+
 import ProfileOverflowAction from './profiles/ProfileOverflowAction';
 import ProfileHandleAction from './profiles/ProfileHandleAction';
 
@@ -43,15 +47,20 @@ export interface ProfileHeaderProps {
 }
 
 const ProfileHeader = (props: ProfileHeaderProps) => {
-	const { filters } = useSharedPreferences();
-
 	const profile = props.profile;
 	const viewer = profile.viewer;
 
-	const verdict = createMemo(() => {
-		const decision = getProfileModDecision(profile, useSharedPreferences());
+	const causes = createMemo(() => {
+		return moderateProfile(profile, getModerationOptions());
+	});
 
-		return decision;
+	const ui = createMemo(() => {
+		return getModerationUI(causes(), ContextProfileView);
+	});
+
+	const shouldBlurMedia = createMemo(() => {
+		const ui = getModerationUI(causes(), ContextProfileMedia);
+		return ui.b.length > 0;
 	});
 
 	return (
@@ -69,7 +78,10 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 						>
 							<img
 								src={banner}
-								class={clsx([`h-full w-full object-cover group-hover:opacity-75`, verdict()?.m && `blur`])}
+								class={clsx([
+									`h-full w-full object-cover group-hover:opacity-75`,
+									shouldBlurMedia() && `blur`,
+								])}
 							/>
 						</button>
 					);
@@ -93,7 +105,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 								>
 									<img
 										src={avatar}
-										class={clsx([`h-full w-full group-hover:opacity-75`, verdict()?.m && `blur`])}
+										class={clsx([`h-full w-full group-hover:opacity-75`, shouldBlurMedia() && `blur`])}
 									/>
 								</button>
 							);
@@ -163,6 +175,8 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 					</p>
 				</div>
 
+				<ModerationAlerts ui={ui()} />
+
 				<div class="whitespace-pre-wrap break-words text-sm empty:hidden">{profile.description.value}</div>
 
 				<div class="flex flex-wrap gap-4 text-sm">
@@ -178,7 +192,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 				</div>
 
 				{(() => {
-					const isTemporarilyMuted = isProfileTempMuted(filters, profile.did);
+					const isTemporarilyMuted = isProfileTempMuted(getModerationOptions(), profile.did);
 					if (isTemporarilyMuted !== null) {
 						return (
 							<div class="text-sm text-muted-fg">
@@ -264,32 +278,6 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 							</div>
 						);
 					}
-				})()}
-
-				{(() => {
-					const $verdict = verdict();
-
-					if (!$verdict) {
-						return null;
-					}
-
-					const source = $verdict.s;
-					if (source.t !== CauseLabel) {
-						return null;
-					}
-
-					return (
-						<div class="flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-md border border-divider p-3 text-left">
-							{
-								/* @once */ $verdict.a ? (
-									<ErrorOutlinedIcon class="shrink-0 text-lg text-red-500" />
-								) : (
-									<VisibilityOutlinedIcon class="shrink-0 text-lg text-muted-fg" />
-								)
-							}
-							<span class="grow text-sm">{/* @once */ renderLabelName(source.l.val)}</span>
-						</div>
-					);
 				})()}
 			</div>
 		</div>

@@ -15,7 +15,6 @@ import { usePaneContext } from '../PaneContext';
 import Pane from '../Pane';
 import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
-import PaneHeader from '../PaneHeader';
 
 const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));
 const ProfilePaneTabSettings = lazy(() => import('../settings/ProfilePaneTabSettings'));
@@ -28,17 +27,21 @@ const ProfilePane = () => {
 	const ui = preferences.ui;
 
 	return [
-		<Pane>
-			<PaneHeader title={'@' + pane.profile.handle} subtitle="Profile">
-				<button
-					title="Column settings"
-					onClick={() => setIsSettingsOpen(!isSettingsOpen())}
-					class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
-				>
-					<SettingsOutlinedIcon />
-				</button>
-			</PaneHeader>
-
+		<Pane
+			title={'@' + pane.profile.handle}
+			subtitle="Profile"
+			actions={
+				<>
+					<button
+						title="Column settings"
+						onClick={() => setIsSettingsOpen(!isSettingsOpen())}
+						class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}
+					>
+						<SettingsOutlinedIcon />
+					</button>
+				</>
+			}
+		>
 			<PaneBody>
 				<TabbedPanel
 					selected={pane.tab}

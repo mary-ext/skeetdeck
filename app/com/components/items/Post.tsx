@@ -8,19 +8,25 @@ import { getRecordId } from '~/api/utils/misc';
 
 import { updatePostLike } from '~/api/mutations/like-post';
 
-import { getProfileModDecision } from '../../moderation/profile';
+import {
+	type ModerationCause,
+	ContextContentList,
+	ContextProfileMedia,
+	getModerationUI,
+} from '~/api/moderation';
+import { moderatePost } from '~/api/moderation/entities/post';
 
 import { formatCompact } from '~/utils/intl/number';
 import { isElementClicked } from '~/utils/interaction';
 import { clsx } from '~/utils/misc';
 
+import { getModerationOptions } from '../../globals/shared';
+
 import { type PostLinking, type ProfileLinking, LINK_PROFILE, LINK_POST, Link, useLinking } from '../Link';
 import RichTextRenderer from '../RichTextRenderer';
-import { useSharedPreferences } from '../SharedPreferences';
 import TimeAgo from '../TimeAgo';
 
 import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
-import ErrorIcon from '../../icons/baseline-error';
 import FavoriteIcon from '../../icons/baseline-favorite';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
@@ -29,8 +35,10 @@ import RepeatIcon from '../../icons/baseline-repeat';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
-import PostWarning from '../moderation/PostWarning';
 import Embed from '../embeds/Embed';
+import ContentWarning from '../moderation/ContentWarning';
+import LabelsOnMe from '../moderation/LabelsOnMe';
+import ModerationAlerts from '../moderation/ModerationAlerts';
 
 import PostOverflowAction from './posts/PostOverflowAction';
 import ReplyAction from './posts/ReplyAction';
@@ -59,11 +67,16 @@ const Post = (props: PostProps) => {
 	const record = post.record;
 	const viewer = post.viewer;
 
-	const authorPermalink: ProfileLinking = { type: LINK_PROFILE, actor: author.did };
-	const postPermalink: PostLinking = { type: LINK_POST, actor: author.did, rkey: getRecordId(post.uri) };
+	const uid = author.uid;
+	const did = author.did;
 
-	const profileVerdict = createMemo(() => {
-		return getProfileModDecision(author, useSharedPreferences());
+	const authorPermalink: ProfileLinking = { type: LINK_PROFILE, actor: did };
+	const postPermalink: PostLinking = { type: LINK_POST, actor: did, rkey: getRecordId(post.uri) };
+
+	const causes = createMemo(() => moderatePost(post, getModerationOptions()));
+	const shouldBlurAvatar = createMemo(() => {
+		const ui = getModerationUI(causes(), ContextProfileMedia);
+		return ui.b.length > 0;
 	});
 
 	const handleClick = (ev: MouseEvent | KeyboardEvent) => {
@@ -82,7 +95,6 @@ const Post = (props: PostProps) => {
 			class={clsx([
 				`relative border-divider px-4 outline-2 -outline-offset-2 outline-primary focus-visible:outline`,
 				!props.next && `border-b`,
-				!isMobile && props.interactive && `hover:bg-secondary/10`,
 			])}
 		>
 			{(() => {
@@ -169,26 +181,9 @@ const Post = (props: PostProps) => {
 					<Link to={authorPermalink} class="h-9 w-9 overflow-hidden rounded-full hover:opacity-80">
 						<img
 							src={author.avatar.value || DefaultAvatar}
-							class={clsx([`h-full w-full`, !!author.avatar.value && profileVerdict()?.m && `blur`])}
+							class={clsx([`h-full w-full`, !!author.avatar.value && shouldBlurAvatar() && `blur`])}
 						/>
 					</Link>
-					{(() => {
-						const verdict = profileVerdict();
-
-						if (verdict) {
-							return (
-								<div
-									class={
-										/* @once */
-										`absolute right-0 top-6 rounded-full bg-background ` +
-										(verdict.a ? `text-red-500` : `text-muted-fg`)
-									}
-								>
-									<ErrorIcon class="text-base" />
-								</div>
-							);
-						}
-					})()}
 
 					{(() => {
 						if (props.next) {
@@ -242,7 +237,16 @@ const Post = (props: PostProps) => {
 						</div>
 					</div>
 
-					<PostContent post={post} postPermalink={postPermalink} timelineDid={() => props.timelineDid} />
+					{did === uid && (
+						<LabelsOnMe
+							uid={uid}
+							report={{ type: 'post', uri: post.uri, cid: post.cid.value }}
+							labels={post.labels.value}
+							class="mb-1 mt-1"
+						/>
+					)}
+
+					<PostContent post={post} postPermalink={postPermalink} causes={causes} />
 
 					<div class="mt-3 flex flex-wrap items-center gap-1.5 text-de text-primary/85 empty:hidden">
 						{(() => {
@@ -354,49 +358,61 @@ export default Post;
 interface PostContentProps {
 	post: SignalizedPost;
 	postPermalink: PostLinking;
-	timelineDid: Accessor<At.DID | undefined>;
+	causes: Accessor<ModerationCause[]>;
 }
 
-const PostContent = ({ post, postPermalink, timelineDid }: PostContentProps) => {
+const PostContent = ({ post, postPermalink, causes }: PostContentProps) => {
 	const embed = post.embed;
 
-	let content: HTMLDivElement | undefined;
+	const ui = createMemo(() => getModerationUI(causes(), ContextContentList));
 
 	return (
-		<PostWarning post={post} timelineDid={timelineDid()}>
-			{(decision) => (
-				<>
-					<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
-						<RichTextRenderer
-							item={post}
-							get={(item) => {
-								const record = item.record.value;
-								return { t: record.text, f: record.facets };
-							}}
-						/>
-					</div>
+		<>
+			<ModerationAlerts ui={ui()} class="mt-1" />
 
-					<Link
-						ref={(node) => {
-							node.style.display = post.$truncated !== false ? 'block' : 'none';
+			<ContentWarning
+				ui={ui()}
+				ignoreMute
+				containerClass="mt-2"
+				innerClass="mt-3"
+				children={(() => {
+					let content: HTMLDivElement | undefined;
 
-							createEffect(() => {
-								const delta = content!.scrollHeight - content!.clientHeight;
-								const next = delta > 10 && !!post.record.value.text;
+					return (
+						<>
+							<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
+								<RichTextRenderer
+									item={post}
+									get={(item) => {
+										const record = item.record.value;
+										return { t: record.text, f: record.facets };
+									}}
+								/>
+							</div>
 
-								post.$truncated = next;
-								node.style.display = next ? 'block' : 'none';
-							});
-						}}
-						to={postPermalink}
-						class="text-sm text-accent hover:underline"
-					>
-						Show more
-					</Link>
+							<Link
+								ref={(node) => {
+									node.style.display = post.$truncated !== false ? 'block' : 'none';
 
-					{embed.value && <Embed post={post} decision={decision} />}
-				</>
-			)}
-		</PostWarning>
+									createEffect(() => {
+										const delta = content!.scrollHeight - content!.clientHeight;
+										const next = delta > 10 && !!post.record.value.text;
+
+										post.$truncated = next;
+										node.style.display = next ? 'block' : 'none';
+									});
+								}}
+								to={postPermalink}
+								class="text-sm text-accent hover:underline"
+							>
+								Show more
+							</Link>
+
+							{embed.value && <Embed post={post} causes={causes()} />}
+						</>
+					);
+				})()}
+			/>
+		</>
 	);
 };

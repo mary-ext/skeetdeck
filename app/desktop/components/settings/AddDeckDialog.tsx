@@ -1,10 +1,9 @@
 import { createSignal } from 'solid-js';
 
+import * as TID from '@mary/atproto-tid';
 import { navigate } from '@pkg/solid-page-router';
 
 import { preferences } from '../../globals/settings';
-
-import { getCurrentTid } from '~/api/utils/tid';
 
 import { closeModal } from '~/com/globals/modals';
 import { model } from '~/utils/input';
@@ -23,7 +22,7 @@ const AddDeckDialog = () => {
 	const [emoji, setEmoji] = createSignal('⭐');
 
 	const handleSubmit = (ev: SubmitEvent) => {
-		const tid = getCurrentTid();
+		const tid = TID.now();
 
 		const $name = name();
 		const $emoji = emoji();

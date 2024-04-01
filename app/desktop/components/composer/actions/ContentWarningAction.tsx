@@ -42,7 +42,7 @@ const ContentWarningAction = (props: ContentWarningActionProps) => {
 
 							<CheckIcon
 								class={clsx([
-									`text-base text-accent`,
+									`shrink-0 text-base text-accent`,
 									(value !== undefined ? !selected.includes(value) : selected.length !== 0) && `invisible`,
 								])}
 							/>
@@ -57,15 +57,10 @@ const ContentWarningAction = (props: ContentWarningActionProps) => {
 						</div>
 
 						{/* @once */ renderItem(undefined, `None`, `Content is suitable for everyone`)}
-						{
-							/* @once */ renderItem(
-								'sexual',
-								`Sexually suggestive`,
-								`Not pornographic but still sexual in nature`,
-							)
-						}
+						{/* @once */ renderItem('sexual', `Sexually suggestive`, `Not pornographic but sexual in nature`)}
 						{/* @once */ renderItem('nudity', `Nudity`, `Artistic or non-erotic nudity`)}
 						{/* @once */ renderItem('porn', `Pornography`, `Erotic nudity or explicit sexual activity`)}
+						{/* @once */ renderItem('graphic-media', `Graphic media`, `Disturbing content`)}
 					</div>
 				);
 			}}

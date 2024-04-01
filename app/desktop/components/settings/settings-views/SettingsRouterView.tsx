@@ -4,17 +4,17 @@ import {
 	type ViewType,
 	VIEW_ABOUT,
 	VIEW_ACCESSIBILITY,
+	VIEW_ACCOUNT_MODERATION,
 	VIEW_ACCOUNTS,
 	VIEW_ADDITIONAL_LANGUAGE,
 	VIEW_APPEARANCE,
-	VIEW_CONTENT_FILTERS,
 	VIEW_EXCLUDED_TRANSLATION,
 	VIEW_HIDDEN_REPOSTERS,
 	VIEW_KEYWORD_FILTER_FORM,
 	VIEW_KEYWORD_FILTERS,
-	VIEW_LABEL_CONFIG,
+	VIEW_LABELER_CONFIG,
 	VIEW_LANGAUGE,
-	VIEW_SUBSCRIBED_LABELERS,
+	VIEW_MODERATION,
 	VIEW_TEMPORARY_MUTES,
 	useViewRouter,
 } from './_router';
@@ -23,13 +23,14 @@ const AboutView = lazy(() => import('./AboutView'));
 const AccessibilityView = lazy(() => import('./AccessibilityView'));
 const AccountsView = lazy(() => import('./AccountsView'));
 const AppearanceView = lazy(() => import('./AppearanceView'));
-const ContentFiltersView = lazy(() => import('./ContentFiltersView'));
 const KeywordFiltersView = lazy(() => import('./KeywordFiltersView'));
 const LanguageView = lazy(() => import('./LanguageView'));
+const ModerationView = lazy(() => import('./ModerationView'));
+
+const AccountModerationView = lazy(() => import('./moderation/AccountModerationView'))
 
 const HiddenRepostersView = lazy(() => import('./content-filters/HiddenRepostersView'));
-const LabelConfigView = lazy(() => import('./content-filters/LabelConfigView'));
-const SubscribedLabelersView = lazy(() => import('./content-filters/SubscribedLabelersView'));
+const LabelConfigView = lazy(() => import('./content-filters/LabelerConfigView'));
 const TemporaryMutesView = lazy(() => import('./content-filters/TemporaryMutesView'));
 
 const KeywordFilterFormView = lazy(() => import('./keyword-filters/KeywordFilterFormView'));
@@ -42,13 +43,14 @@ const views: Record<ViewType, Component> = {
 	[VIEW_ACCESSIBILITY]: AccessibilityView,
 	[VIEW_ACCOUNTS]: AccountsView,
 	[VIEW_APPEARANCE]: AppearanceView,
-	[VIEW_CONTENT_FILTERS]: ContentFiltersView,
+	[VIEW_MODERATION]: ModerationView,
 	[VIEW_KEYWORD_FILTERS]: KeywordFiltersView,
 	[VIEW_LANGAUGE]: LanguageView,
 
+	[VIEW_ACCOUNT_MODERATION]: AccountModerationView,
+
 	[VIEW_HIDDEN_REPOSTERS]: HiddenRepostersView,
-	[VIEW_LABEL_CONFIG]: LabelConfigView,
-	[VIEW_SUBSCRIBED_LABELERS]: SubscribedLabelersView,
+	[VIEW_LABELER_CONFIG]: LabelConfigView,
 	[VIEW_TEMPORARY_MUTES]: TemporaryMutesView,
 
 	[VIEW_KEYWORD_FILTER_FORM]: KeywordFilterFormView,

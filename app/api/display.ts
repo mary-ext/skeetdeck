@@ -12,6 +12,7 @@ export const renderListPurpose = (purpose: AppBskyGraphDefs.ListPurpose) => {
 	return ListPurposeLabels[purpose] ?? 'Unknown list';
 };
 
+/** @deprecated */
 export const LabelNames: Record<string, string> = {
 	// system
 	'!hide': 'Hidden by moderators',
@@ -58,10 +59,12 @@ export const LabelNames: Record<string, string> = {
 	scam: 'Scam',
 };
 
+/** @deprecated */
 export const renderLabelName = (name: string) => {
 	return LabelNames[name] ?? name;
 };
 
+/** @deprecated */
 export const LabelGroupNames: Record<string, string> = {
 	sexual: 'Adult content',
 	violence: 'Violence',
@@ -72,6 +75,7 @@ export const LabelGroupNames: Record<string, string> = {
 	misinfo: 'Misinformation',
 };
 
+/** @deprecated */
 export const renderLabelGroupName = (name: string) => {
 	return LabelGroupNames[name] ?? name;
 };

@@ -1,5 +1,6 @@
 import { For, createEffect, createMemo, createSignal, lazy } from 'solid-js';
 
+import * as TID from '@mary/atproto-tid';
 import {
 	type InfiniteData,
 	createInfiniteQuery,
@@ -11,7 +12,6 @@ import {
 import type { AppBskyGraphListitem, Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { multiagent, renderAccountName } from '~/api/globals/agent';
 import { renderListPurpose } from '~/api/display';
-import { getCurrentTid } from '~/api/utils/tid';
 import { getCurrentDate, getRecordId } from '~/api/utils/misc';
 
 import type { ListMembersPage } from '~/api/queries/get-list-members';
@@ -137,7 +137,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 				creations.push({
 					$type: 'com.atproto.repo.applyWrites#create',
 					collection: 'app.bsky.graph.listitem',
-					rkey: getCurrentTid(),
+					rkey: TID.now(),
 					value: record,
 				});
 			}

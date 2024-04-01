@@ -12,10 +12,10 @@
 		"patchedDependencies": {
 			"@tanstack/query-core@5.17.19": "patches/@tanstack__query-core@5.17.19.patch",
 			"cborg@4.0.7": "patches/cborg@4.0.6.patch",
-			"solid-js@1.8.15": "patches/solid-js@1.8.15.patch",
+			"solid-js@1.8.16": "patches/solid-js@1.8.16.patch",
 			"solid-textarea-autosize@0.0.5": "patches/solid-textarea-autosize@0.0.5.patch",
 			"vite-plugin-pwa@0.17.4": "patches/vite-plugin-pwa@0.17.4.patch",
-			"vite@5.1.6": "patches/vite@5.1.6.patch",
+			"vite@5.2.6": "patches/vite@5.2.6.patch",
 			"workbox-precaching@7.0.0": "patches/workbox-precaching@7.0.0.patch"
 		},
 		"overrides": {
