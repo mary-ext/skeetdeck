@@ -27,7 +27,7 @@ const KeywordFiltersView = lazy(() => import('./KeywordFiltersView'));
 const LanguageView = lazy(() => import('./LanguageView'));
 const ModerationView = lazy(() => import('./ModerationView'));
 
-const AccountModerationView = lazy(() => import('./moderation/AccountModerationView'))
+const AccountModerationView = lazy(() => import('./moderation/AccountModerationView'));
 
 const HiddenRepostersView = lazy(() => import('./content-filters/HiddenRepostersView'));
 const LabelConfigView = lazy(() => import('./content-filters/LabelerConfigView'));
