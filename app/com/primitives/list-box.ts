@@ -8,7 +8,9 @@ export const ListGroupBlurb = `text-de text-muted-fg`;
 
 export const ListBox = `flex flex-col divide-y divide-secondary/30 overflow-hidden rounded bg-secondary/20`;
 
-export const ListBoxItem = `flex items-center gap-3 px-4 py-3 text-left text-sm`;
+export const ListBoxBlock = `px-4 py-3 text-left text-sm`;
+
+export const ListBoxItem = `${ListBoxBlock} flex items-center gap-3`;
 
 export const ListBoxItemInteractive = Interactive({
 	variant: 'muted',
