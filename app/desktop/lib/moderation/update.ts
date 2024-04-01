@@ -16,7 +16,9 @@ const requestLock = async () => {
 
 		const delta = nextUpdatedAt - Date.now();
 
-		await new Promise((resolve) => setTimeout(resolve, delta));
+		if (delta > 0) {
+			await new Promise((resolve) => setTimeout(resolve, delta));
+		}
 
 		let views: AppBskyLabelerDefs.LabelerViewDetailed[] | undefined;
 		try {
