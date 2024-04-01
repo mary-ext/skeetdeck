@@ -380,7 +380,15 @@ export const decideLabelModeration = (
 				def = service.defs[val];
 			}
 
-			if (!def || (isSelfLabeled && def.f & FlagsNoSelf)) {
+			// skip if:
+			// - we don't have the definitions for this label value
+			// - this is self-labeled, and the definition says it can't be used for it
+			// - the service isn't reporting that it's using this global label definition
+			if (
+				!def ||
+				(isSelfLabeled && def.f & FlagsNoSelf) ||
+				(service && isGlobalDef && !service.vals.includes(val))
+			) {
 				continue;
 			}
 
