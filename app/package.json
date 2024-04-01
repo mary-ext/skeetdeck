@@ -4,7 +4,6 @@
 	"name": "app",
 	"scripts": {
 		"dev:desktop": "vite -c vite-desktop.config.ts",
-		"dev:mobile": "vite -c vite-mobile.config.ts",
 		"build:desktop": "vite build -c vite-desktop.config.ts",
 		"preview:desktop": "vite preview -c vite-desktop.config.ts",
 		"lint": "tsc"
