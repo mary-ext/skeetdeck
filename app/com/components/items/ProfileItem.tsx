@@ -1,9 +1,14 @@
-import { type JSX } from 'solid-js';
+import { type JSX, createMemo } from 'solid-js';
 
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
+import { ContextProfileMedia, getModerationUI } from '~/api/moderation';
+import { moderateProfile } from '~/api/moderation/entities/profile';
+
 import { INTERACTION_TAGS, isElementAltClicked, isElementClicked } from '~/utils/interaction';
 import { clsx } from '~/utils/misc';
+
+import { getModerationOptions } from '../../globals/shared';
 
 import { Interactive } from '../../primitives/interactive';
 
@@ -36,6 +41,12 @@ export const ProfileItem = (props: ProfileItemProps) => {
 
 	const onClick = props.onClick;
 
+	const shouldBlurAvatar = createMemo(() => {
+		const causes = moderateProfile(profile(), getModerationOptions());
+		const ui = getModerationUI(causes, ContextProfileMedia);
+		return ui.b.length > 0;
+	});
+
 	const handleClick = (ev: MouseEvent | KeyboardEvent) => {
 		if (!isElementClicked(ev, INTERACTION_TAGS)) {
 			return;
@@ -55,7 +66,13 @@ export const ProfileItem = (props: ProfileItemProps) => {
 		>
 			<div class="relative shrink-0">
 				<div class="h-10 w-10 overflow-hidden rounded-full">
-					<img src={profile().avatar.value || DefaultAvatar} class={clsx([`h-full w-full object-cover`])} />
+					<img
+						src={profile().avatar.value || DefaultAvatar}
+						class={clsx([
+							`h-full w-full object-cover`,
+							profile().avatar.value && shouldBlurAvatar() && `blur`,
+						])}
+					/>
 				</div>
 			</div>
 
