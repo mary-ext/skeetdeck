@@ -144,7 +144,7 @@ export const GLOBAL_LABELS: LabelDefinitionMapping = {
 	},
 	nudity: {
 		i: 'nudity',
-		d: PreferenceIgnore,
+		d: PreferenceWarn,
 		b: BlurMedia,
 		s: SeverityNone,
 		f: FlagsNone,
