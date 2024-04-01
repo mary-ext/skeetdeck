@@ -28,6 +28,7 @@ import DefaultLabelerAvatar from '~/com/assets/default-labeler-avatar.svg?url';
 import { preferences } from '../../../globals/settings';
 
 import {
+	VIEW_ACCOUNT_MODERATION,
 	VIEW_HIDDEN_REPOSTERS,
 	VIEW_KEYWORD_FILTERS,
 	VIEW_LABELER_CONFIG,
@@ -52,11 +53,11 @@ const ModerationView = () => {
 				<div class={ListGroup}>
 					<p class={ListGroupHeader}>Account moderation</p>
 
-					<fieldset disabled class={ListBox}>
+					<fieldset class={ListBox}>
 						<For each={multiagent.accounts}>
 							{(account) => (
 								<button
-									onClick={() => router.move({ type: VIEW_KEYWORD_FILTERS })}
+									onClick={() => router.move({ type: VIEW_ACCOUNT_MODERATION, did: account.did })}
 									class={ListBoxItemInteractive}
 								>
 									<img
@@ -65,7 +66,7 @@ const ModerationView = () => {
 									/>
 
 									<div class="flex min-w-0 grow flex-col text-sm">
-										<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold empty:hidden">
+										<p class="overflow-hidden text-ellipsis whitespace-nowrap font-medium empty:hidden">
 											{account.profile?.displayName}
 										</p>
 										<p class="overflow-hidden text-ellipsis whitespace-nowrap text-de text-muted-fg">
@@ -89,7 +90,7 @@ const ModerationView = () => {
 							class={ListBoxItemInteractive}
 						>
 							<FilterAltOutlinedIcon class={ListBoxItemIcon} />
-							<span class="grow">Keyword filters</span>
+							<span class="grow font-medium">Keyword filters</span>
 							<ChevronRightIcon class={ListBoxItemChevron} />
 						</button>
 
@@ -98,7 +99,7 @@ const ModerationView = () => {
 							class={ListBoxItemInteractive}
 						>
 							<VisibilityOffOutlinedIcon class={ListBoxItemIcon} />
-							<span class="grow">Silenced users</span>
+							<span class="grow font-medium">Silenced users</span>
 							<ChevronRightIcon class={ListBoxItemChevron} />
 						</button>
 
@@ -107,7 +108,7 @@ const ModerationView = () => {
 							class={ListBoxItemInteractive}
 						>
 							<RepeatOffIcon class={ListBoxItemIcon} />
-							<span class="grow">Hidden reposters</span>
+							<span class="grow font-medium">Hidden reposters</span>
 							<ChevronRightIcon class={ListBoxItemChevron} />
 						</button>
 					</div>
@@ -160,7 +161,7 @@ const ModerationView = () => {
 										/>
 
 										<div class="flex min-w-0 grow flex-col text-sm">
-											<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold empty:hidden">
+											<p class="overflow-hidden text-ellipsis whitespace-nowrap font-medium empty:hidden">
 												{profile.displayName}
 											</p>
 											<p class="overflow-hidden text-ellipsis whitespace-nowrap text-de text-muted-fg">

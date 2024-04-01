@@ -1,4 +1,4 @@
-import { type ComponentProps, type JSX, createSignal, Suspense } from 'solid-js';
+import { type ComponentProps, type JSX, Suspense, createSignal } from 'solid-js';
 
 import { clsx } from '~/utils/misc';
 
@@ -14,11 +14,9 @@ import CircularProgress from '~/com/components/CircularProgress';
 import AccessibilityIcon from '~/com/icons/baseline-accessibility';
 import CloseIcon from '~/com/icons/baseline-close';
 import ColorLensIcon from '~/com/icons/baseline-color-lens';
-import FilterAltIcon from '~/com/icons/baseline-filter-alt';
 import InfoIcon from '~/com/icons/baseline-info';
 import LanguageIcon from '~/com/icons/baseline-language';
 import PeopleIcon from '~/com/icons/baseline-people';
-import VisibilityIcon from '~/com/icons/baseline-visibility';
 
 import {
 	type RouterState,
@@ -30,7 +28,6 @@ import {
 	VIEW_ACCOUNTS,
 	VIEW_APPEARANCE,
 	VIEW_MODERATION,
-	VIEW_KEYWORD_FILTERS,
 	VIEW_LANGAUGE,
 	useViewRouter,
 } from './settings-views/_router';
