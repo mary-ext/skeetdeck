@@ -10,8 +10,6 @@ import {
 	getProfileFollowsKey,
 } from '~/api/queries/get-profile-follows';
 
-import { moderateProfileList } from '~/api/moderation/utils';
-
 import { getModerationOptions } from '~/com/globals/shared';
 
 import { ProfileFollowAccessory } from '~/com/components/items/ProfileItem';
@@ -42,6 +40,9 @@ const ProfileFollowsPaneDialog = (props: ProfileFollowsPaneDialogProps) => {
 			initialPageParam: undefined,
 			getNextPageParam: (last) => last.cursor,
 			placeholderData: () => getInitialProfileFollows(key),
+			meta: {
+				moderation: getModerationOptions(),
+			},
 		};
 	});
 
@@ -65,10 +66,7 @@ const ProfileFollowsPaneDialog = (props: ProfileFollowsPaneDialogProps) => {
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<ProfileList
 					asideAccessory={ProfileFollowAccessory}
-					profiles={moderateProfileList(
-						follows.data?.pages.flatMap((page) => page.profiles),
-						getModerationOptions(),
-					)}
+					profiles={follows.data?.pages.flatMap((page) => page.profiles)}
 					fetching={follows.isFetching}
 					error={follows.error}
 					hasMore={follows.hasNextPage}

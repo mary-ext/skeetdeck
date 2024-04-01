@@ -1,13 +1,13 @@
 import type { SignalizedProfile } from '../stores/profiles';
 
-import { ContextProfileList, getModerationUI, type ModerationOptions } from '.';
+import { type ModerationOptions, ContextProfileList, getModerationUI } from '.';
 import { moderateProfile } from './entities/profile';
 
 export const moderateProfileList = (
 	profiles: SignalizedProfile[] | undefined,
-	opts: ModerationOptions,
+	opts: ModerationOptions | undefined,
 ): SignalizedProfile[] | undefined => {
-	if (profiles) {
+	if (opts && profiles) {
 		return profiles.filter((profile) => {
 			const causes = moderateProfile(profile, opts);
 			const ui = getModerationUI(causes, ContextProfileList);
@@ -15,4 +15,6 @@ export const moderateProfileList = (
 			return ui.f.length === 0;
 		});
 	}
+
+	return profiles;
 };

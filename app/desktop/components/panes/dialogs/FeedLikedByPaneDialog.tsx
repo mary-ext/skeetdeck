@@ -5,8 +5,6 @@ import type { At } from '~/api/atp-schema';
 import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info';
 import { getLikes, getLikesKey } from '~/api/queries/get-likes';
 
-import { moderateProfileList } from '~/api/moderation/utils';
-
 import { getModerationOptions } from '~/com/globals/shared';
 
 import ProfileList from '~/com/components/lists/ProfileList';
@@ -48,6 +46,9 @@ const FeedLikedByPaneDialog = (props: FeedLikedByPaneDialogProps) => {
 			queryFn: getLikes,
 			initialPageParam: undefined,
 			getNextPageParam: (last) => last.cursor,
+			meta: {
+				moderation: getModerationOptions(),
+			},
 		};
 	});
 
@@ -66,10 +67,7 @@ const FeedLikedByPaneDialog = (props: FeedLikedByPaneDialogProps) => {
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<ProfileList
-					profiles={moderateProfileList(
-						likes.data?.pages.flatMap((page) => page.profiles),
-						getModerationOptions(),
-					)}
+					profiles={likes.data?.pages.flatMap((page) => page.profiles)}
 					fetching={likes.isFetching}
 					error={likes.error}
 					hasMore={likes.hasNextPage}

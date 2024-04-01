@@ -4,8 +4,6 @@ import type { At } from '~/api/atp-schema';
 
 import { getPostReposts, getPostRepostsKey } from '~/api/queries/get-post-reposts';
 
-import { moderateProfileList } from '~/api/moderation/utils';
-
 import { getModerationOptions } from '~/com/globals/shared';
 
 import ProfileList from '~/com/components/lists/ProfileList';
@@ -36,6 +34,9 @@ const PostRepostedByPaneDialog = (props: PostRepostedByDialogProps) => {
 			queryFn: getPostReposts,
 			initialPageParam: undefined,
 			getNextPageParam: (last) => last.cursor,
+			meta: {
+				moderation: getModerationOptions(),
+			},
 		};
 	});
 
@@ -45,10 +46,7 @@ const PostRepostedByPaneDialog = (props: PostRepostedByDialogProps) => {
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<ProfileList
-					profiles={moderateProfileList(
-						reposts.data?.pages.flatMap((page) => page.profiles),
-						getModerationOptions(),
-					)}
+					profiles={reposts.data?.pages.flatMap((page) => page.profiles)}
 					fetching={reposts.isFetching}
 					error={reposts.error}
 					hasMore={reposts.hasNextPage}

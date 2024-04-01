@@ -5,6 +5,8 @@ import { multiagent } from '../globals/agent';
 
 import { getCachedProfile, mergeProfile } from '../stores/profiles';
 
+import { moderateProfileList } from '../moderation/utils';
+
 export const getProfileFollowersKey = (uid: At.DID, actor: string, limit = 25) => {
 	return ['getProfileFollowers', uid, actor, limit] as const;
 };
@@ -29,7 +31,10 @@ export const getProfileFollowers = async (
 	return {
 		cursor: data.cursor,
 		subject: mergeProfile(uid, data.subject),
-		profiles: data.followers.map((actor) => mergeProfile(uid, actor)),
+		profiles: moderateProfileList(
+			data.followers.map((actor) => mergeProfile(uid, actor)),
+			ctx.meta?.moderation,
+		),
 	};
 };
 

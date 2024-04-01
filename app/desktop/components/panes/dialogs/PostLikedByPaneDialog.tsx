@@ -4,8 +4,6 @@ import type { At } from '~/api/atp-schema';
 
 import { getLikes, getLikesKey } from '~/api/queries/get-likes';
 
-import { moderateProfileList } from '~/api/moderation/utils';
-
 import { getModerationOptions } from '~/com/globals/shared';
 
 import ProfileList from '~/com/components/lists/ProfileList';
@@ -36,6 +34,9 @@ const PostLikedByPaneDialog = (props: PostLikedByDialogProps) => {
 			queryFn: getLikes,
 			initialPageParam: undefined,
 			getNextPageParam: (last) => last.cursor,
+			meta: {
+				moderation: getModerationOptions(),
+			},
 		};
 	});
 
@@ -45,10 +46,7 @@ const PostLikedByPaneDialog = (props: PostLikedByDialogProps) => {
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<ProfileList
-					profiles={moderateProfileList(
-						likes.data?.pages.flatMap((page) => page.profiles),
-						getModerationOptions(),
-					)}
+					profiles={likes.data?.pages.flatMap((page) => page.profiles)}
 					fetching={likes.isFetching}
 					error={likes.error}
 					hasMore={likes.hasNextPage}

@@ -5,6 +5,8 @@ import { multiagent } from '../globals/agent';
 
 import { mergeProfile } from '../stores/profiles';
 
+import { moderateProfileList } from '../moderation/utils';
+
 export const getPostRepostsKey = (uid: At.DID, uri: string, limit = 25) => {
 	return ['getPostReposts', uid, uri, limit] as const;
 };
@@ -26,6 +28,9 @@ export const getPostReposts = async (ctx: QC<ReturnType<typeof getPostRepostsKey
 
 	return {
 		cursor: data.cursor,
-		profiles: data.repostedBy.map((actor) => mergeProfile(uid, actor)),
+		profiles: moderateProfileList(
+			data.repostedBy.map((actor) => mergeProfile(uid, actor)),
+			ctx.meta?.moderation,
+		),
 	};
 };
