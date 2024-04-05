@@ -124,7 +124,7 @@ export const GLOBAL_LABELS: LabelDefinitionMapping = {
 		b: BlurMedia,
 		s: SeverityNone,
 		f: FlagsAdultOnly,
-		l: [{ i: 'en', n: `Pornography`, d: `Erotic nudity or explicit sexual activity` }],
+		l: [{ i: 'en', n: `Adult content`, d: `Erotic nudity or explicit sexual activity` }],
 	},
 	sexual: {
 		i: 'sexual',

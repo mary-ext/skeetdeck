@@ -100,7 +100,7 @@ const REPORT_OPTIONS: ReportOption[] = [
 		flags: ReportType.POST,
 		value: 'com.atproto.moderation.defs#reasonSexual',
 		name: 'Unwanted sexual content',
-		desc: 'Nudity or pornography not labeled as such',
+		desc: 'Nudity or adult content not labeled as such',
 	},
 
 	{
