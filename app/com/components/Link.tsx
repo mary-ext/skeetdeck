@@ -23,7 +23,7 @@ export const LINK_TAG = 15;
 export interface ExternalLinking {
 	type: typeof LINK_EXTERNAL;
 	url: string;
-	valid: boolean;
+	text: string;
 }
 
 export interface FeedLinking {

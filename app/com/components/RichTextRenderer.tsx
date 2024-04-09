@@ -1,6 +1,5 @@
 import { createMemo, type JSX } from 'solid-js';
 
-import { isLinkValid } from '~/api/richtext/renderer';
 import { segmentRichText } from '~/api/richtext/segmentize';
 import type { Facet, RichTextSegment } from '~/api/richtext/types';
 
@@ -96,13 +95,10 @@ const renderRichText = (segments: RichTextSegment[]): RichTextUiSegment[] => {
 				tag: tag.tag,
 			};
 		} else if (link) {
-			const uri = link.uri;
-			const valid = isLinkValid(uri, text);
-
 			to = {
 				type: LINK_EXTERNAL,
-				url: uri,
-				valid: valid,
+				url: link.uri,
+				text: text,
 			};
 		}
 

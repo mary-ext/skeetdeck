@@ -1,5 +1,7 @@
 import { type JSX, lazy, batch } from 'solid-js';
 
+import { isLinkValid } from '~/api/richtext/renderer';
+
 import { isCtrlKeyPressed, isElementAltClicked } from '~/utils/interaction';
 
 import { openModal } from '~/com/globals/modals';
@@ -100,7 +102,7 @@ export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {
 
 				if (to.type === LINK_EXTERNAL) {
 					const url = to.url;
-					const valid = to.valid;
+					const text = to.text;
 
 					return (
 						<a
@@ -108,10 +110,12 @@ export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {
 							// @ts-expect-error
 							to={null}
 							href={url}
+							data-href={url}
+							data-text={text}
 							target="_blank"
 							rel="noopener noreferrer nofollow"
-							onClick={!valid ? handleInvalidLink : undefined}
-							onAuxClick={!valid ? handleInvalidLink : undefined}
+							onClick={handleLinkClick}
+							onAuxClick={handleLinkClick}
 						/>
 					);
 				}
@@ -155,20 +159,35 @@ const isEnterPressed = (ev: KeyboardEvent) => {
 	return key === 'Enter' || key === 'Space';
 };
 
-interface InvalidAnchorElement extends HTMLAnchorElement {
+interface ExternalAnchorElement extends HTMLAnchorElement {
 	_ignored?: boolean;
+	_valid?: boolean;
 }
 
-const handleInvalidLink: JSX.EventHandler<HTMLAnchorElement, MouseEvent> = (ev) => {
-	const target = ev.currentTarget as InvalidAnchorElement;
+const handleLinkClick: JSX.EventHandler<HTMLAnchorElement, MouseEvent> = (ev) => {
+	const target = ev.currentTarget as ExternalAnchorElement;
 
 	if (target._ignored || (ev.type === 'auxclick' && (ev as MouseEvent).button !== 1)) {
+		return;
+	}
+
+	let valid = target._valid;
+
+	if (valid === undefined) {
+		const text = target.dataset.text!;
+		const href = target.dataset.href!;
+
+		valid = target._valid = isLinkValid(href, text);
+	}
+
+	if (valid) {
 		return;
 	}
 
 	const alt = isElementAltClicked(ev);
 
 	ev.preventDefault();
+
 	openModal(() => (
 		<LinkWarningDialog
 			url={/* @once */ target.href}
