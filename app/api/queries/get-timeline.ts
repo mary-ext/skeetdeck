@@ -1,8 +1,6 @@
-import { BskyXRPC } from '@mary/bluesky-client';
-
 import type { QueryFunctionContext as QC } from '@pkg/solid-query';
 
-import { assert, mapDefined } from '~/utils/misc';
+import { assert } from '~/utils/misc';
 
 import type { AppBskyFeedGetTimeline, AppBskyFeedPost, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
@@ -34,10 +32,7 @@ import {
 import type { LanguagePreferences } from '../types';
 
 import _getDid from './_did';
-import { fetchPost } from './get-post';
 import type { AgentInstance } from '../classes/multiagent';
-
-const PALOMAR_SERVICE = 'https://palomar.bsky.social';
 
 export interface HomeTimelineParams {
 	type: 'home';
@@ -94,8 +89,6 @@ export interface TimelinePage {
 export interface TimelineLatestResult {
 	cid: string | undefined;
 }
-
-type TimelineResponse = AppBskyFeedGetTimeline.Output & { cid?: string };
 
 type PostRecord = AppBskyFeedPost.Record;
 
@@ -215,7 +208,7 @@ export const getTimeline = wrapInfiniteQuery(
 
 			count += countPosts(result);
 
-			cid ||= timeline.cid || (feed.length > 0 ? feed[0].post.cid : undefined);
+			cid ||= feed.length > 0 ? feed[0].post.cid : undefined;
 
 			if (empty >= MAX_EMPTY) {
 				break;
@@ -245,23 +238,6 @@ export const getTimelineLatestKey = (uid: At.DID, params: TimelineParams) => {
 export const getTimelineLatest = async (ctx: QC<ReturnType<typeof getTimelineLatestKey>>) => {
 	const [, uid, params] = ctx.queryKey;
 
-	// Short-circuit search timeline so that we don't go through the hydration
-	if (params.type === 'search') {
-		const rpc = new BskyXRPC({ service: PALOMAR_SERVICE });
-
-		const response = await rpc.get('app.bsky.unspecced.searchPostsSkeleton', {
-			signal: ctx.signal,
-			params: {
-				q: params.query,
-				limit: 1,
-			},
-		});
-
-		const skeletons = response.data.posts;
-
-		return { cid: skeletons.length > 0 ? skeletons[0].uri : undefined };
-	}
-
 	const agent = await multiagent.connect(uid);
 
 	const timeline = await fetchPage(agent, params, 1, undefined, ctx);
@@ -272,12 +248,12 @@ export const getTimelineLatest = async (ctx: QC<ReturnType<typeof getTimelineLat
 
 //// Raw fetch
 const fetchPage = async (
-	{ auth, rpc }: AgentInstance,
+	{ rpc }: AgentInstance,
 	params: TimelineParams,
 	limit: number,
 	cursor: string | undefined,
 	context: QC,
-): Promise<TimelineResponse> => {
+): Promise<AppBskyFeedGetTimeline.Output> => {
 	const type = params.type;
 	const signal = context.signal;
 
@@ -358,31 +334,19 @@ const fetchPage = async (
 			return response.data;
 		}
 	} else if (type === 'search') {
-		const palomar = new BskyXRPC({ service: PALOMAR_SERVICE });
-
-		const skeleton = await palomar.get('app.bsky.unspecced.searchPostsSkeleton', {
+		const response = await rpc.get('app.bsky.feed.searchPosts', {
 			signal: signal,
-			headers: headers,
 			params: {
+				sort: 'latest',
 				q: params.query,
 				cursor: cursor,
 				limit: limit,
 			},
 		});
 
-		const data = skeleton.data;
-		const skeletons = data.posts;
+		const data = response.data;
 
-		const uid = auth.session!.did;
-		const results = await Promise.allSettled(skeletons.map((post) => fetchPost([uid, post.uri])));
-
-		signal?.throwIfAborted();
-
-		return {
-			cid: skeletons.length > 0 ? skeletons[0].uri : undefined,
-			cursor: data.cursor,
-			feed: mapDefined(results, (x) => (x.status === 'fulfilled' ? { post: x.value } : undefined)),
-		};
+		return { cursor: data.cursor, feed: data.posts.map((view) => ({ post: view })) };
 	} else {
 		assert(false, `Unknown type: ${type}`);
 	}
