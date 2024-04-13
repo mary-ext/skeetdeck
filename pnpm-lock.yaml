@@ -66,8 +66,8 @@ importers:
         specifier: npm:@jsr/mary__base32@^0.1.0
         version: /@jsr/mary__base32@0.1.0
       '@mary/bluesky-client':
-        specifier: npm:@jsr/mary__bluesky-client@^0.5.7
-        version: /@jsr/mary__bluesky-client@0.5.7
+        specifier: npm:@jsr/mary__bluesky-client@^0.5.8
+        version: /@jsr/mary__bluesky-client@0.5.8
       '@mary/exif-rm':
         specifier: npm:@jsr/mary__exif-rm@^0.2.1
         version: /@jsr/mary__exif-rm@0.2.1
@@ -1725,8 +1725,8 @@ packages:
     resolution: {integrity: sha512-QuCtLFgJGcHqZvOZkfVvyfIHflAcKM1u17LwZgPhK0u/VJbM61IxvCspdOm8rx6ZpnwhPMDHRgROAEbyBxDc4A==, tarball: https://npm.jsr.io/~/7/@jsr/mary__base32/0.1.0.tgz}
     dev: false
 
-  /@jsr/mary__bluesky-client@0.5.7:
-    resolution: {integrity: sha512-Ot3MkkQ8xaPaXmn0C5atzy8JAYM28wLML51yQpDwECGw2tPiA177ly23Ok50IxJ70OdRsAJ/k3KtzkDrxbUDJA==, tarball: https://npm.jsr.io/~/7/@jsr/mary__bluesky-client/0.5.7.tgz}
+  /@jsr/mary__bluesky-client@0.5.8:
+    resolution: {integrity: sha512-P4z3IjJz2713CI3Bdv4Bw+xpuNWyCdIIyINcaLI9MOEyBRGTciJjjz3w0ST/+1Ch3lBC6s8UP/bfMMeOgMTUUA==, tarball: https://npm.jsr.io/~/7/@jsr/mary__bluesky-client/0.5.8.tgz}
     dev: false
 
   /@jsr/mary__exif-rm@0.2.1:
