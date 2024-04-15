@@ -43,7 +43,8 @@ export const followAbortSignal = (signals: (AbortSignal | undefined)[]) => {
 		}
 
 		if (signal.aborted) {
-			return signal;
+			controller.abort(signal.reason);
+			break;
 		}
 
 		signal.addEventListener('abort', () => controller.abort(signal.reason), { signal: own });
