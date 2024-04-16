@@ -74,12 +74,12 @@ importers:
       '@mary/exif-rm':
         specifier: npm:@jsr/mary__exif-rm@^0.2.1
         version: /@jsr/mary__exif-rm@0.2.1
+      '@mary/solid-freeze':
+        specifier: workspace:@externdefs/solid-freeze@^
+        version: link:../packages/solid-freeze
       '@mary/solid-query':
         specifier: workspace:@externdefs/solid-query@^
         version: link:../packages/solid-query
-      '@pkg/solid-freeze':
-        specifier: workspace:^
-        version: link:../packages/solid-freeze
       '@pkg/solid-navigation':
         specifier: workspace:^
         version: link:../packages/solid-navigation
@@ -158,8 +158,8 @@ importers:
 
   packages/solid-navigation:
     dependencies:
-      '@pkg/solid-freeze':
-        specifier: workspace:^
+      '@mary/solid-freeze':
+        specifier: workspace:@externdefs/solid-freeze@^
         version: link:../solid-freeze
     devDependencies:
       '@types/dom-navigation':

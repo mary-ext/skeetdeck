@@ -1,6 +1,6 @@
 import { type JSX, For, children, createMemo } from 'solid-js';
 
-import { Freeze } from '@pkg/solid-freeze';
+import { Freeze } from '@mary/solid-freeze';
 
 import { clsx } from '~/utils/misc';
 

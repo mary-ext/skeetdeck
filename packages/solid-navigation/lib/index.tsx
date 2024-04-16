@@ -11,7 +11,7 @@ import {
 	useContext,
 } from 'solid-js';
 
-import { Freeze } from '@pkg/solid-freeze';
+import { Freeze } from '@mary/solid-freeze';
 
 // `@types/dom-navigation` isn't declaring one.
 declare var navigation: Navigation;

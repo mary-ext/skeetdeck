@@ -4,7 +4,7 @@ import { offset } from '@floating-ui/dom';
 import { DragDropProvider, DragDropSensors, SortableProvider, createSortable } from '@thisbeyond/solid-dnd';
 
 import * as TID from '@mary/atproto-tid';
-import { ShowFreeze } from '@pkg/solid-freeze';
+import { ShowFreeze } from '@mary/solid-freeze';
 import { type RouteComponentProps, location, navigate } from '@pkg/solid-page-router';
 
 import { multiagent } from '~/api/globals/agent';
