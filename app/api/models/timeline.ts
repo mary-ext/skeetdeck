@@ -191,12 +191,3 @@ export const createUnjoinedSlices = (
 
 	return slices;
 };
-
-// export interface PostUiItem {
-// 	uid: DID;
-// 	post: SignalizedPost;
-// 	parent?: SignalizedPost;
-// 	reason?: SignalizedTimelineItem['reason'];
-// 	prev?: boolean;
-// 	next?: boolean;
-// }
