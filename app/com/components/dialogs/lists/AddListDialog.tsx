@@ -1,6 +1,6 @@
 import { createEffect, createMemo, createSignal } from 'solid-js';
 
-import { createMutation } from '@pkg/solid-query';
+import { createMutation } from '@externdefs/solid-query';
 
 import type { AppBskyGraphDefs, AppBskyGraphList, At } from '~/api/atp-schema';
 import { getAccountHandle, multiagent } from '~/api/globals/agent';

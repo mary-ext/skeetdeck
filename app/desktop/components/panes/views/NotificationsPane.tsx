@@ -6,7 +6,7 @@ import {
 	createQuery,
 	useQueryClient,
 	createMutation,
-} from '@pkg/solid-query';
+} from '@externdefs/solid-query';
 
 import { getQueryErrorInfo, resetInfiniteData } from '~/api/utils/query';
 

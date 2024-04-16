@@ -1,4 +1,4 @@
-import { type InfiniteData } from '@pkg/solid-query';
+import { type InfiniteData } from '@externdefs/solid-query';
 
 import type { At } from '~/api/atp-schema';
 import { produce } from '~/utils/immer';

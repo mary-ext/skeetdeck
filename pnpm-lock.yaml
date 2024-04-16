@@ -83,7 +83,7 @@ importers:
       '@pkg/solid-page-router':
         specifier: workspace:^
         version: link:../packages/solid-page-router
-      '@pkg/solid-query':
+      '@externdefs/solid-query':
         specifier: workspace:^
         version: link:../packages/solid-query
       '@pkg/solid-use-gesture':

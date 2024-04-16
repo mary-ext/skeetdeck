@@ -13,7 +13,7 @@ export default defineConfig({
 			formats: ['es'],
 		},
 		rollupOptions: {
-			external: ['solid-js'],
+			external: ['solid-js', '@tanstack/query-core'],
 		},
 		minify: false,
 		sourcemap: true,

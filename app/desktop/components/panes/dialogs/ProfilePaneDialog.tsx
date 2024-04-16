@@ -1,6 +1,6 @@
 import { Match, Switch, createSignal, lazy } from 'solid-js';
 
-import { createQuery } from '@pkg/solid-query';
+import { createQuery } from '@externdefs/solid-query';
 
 import type { At } from '~/api/atp-schema';
 import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';

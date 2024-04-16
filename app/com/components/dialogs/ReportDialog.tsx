@@ -2,7 +2,7 @@ import { For, Show, batch, createMemo, createSignal } from 'solid-js';
 
 import { withProxy } from '@mary/bluesky-client/xrpc';
 
-import { createMutation } from '@pkg/solid-query';
+import { createMutation } from '@externdefs/solid-query';
 
 import TextareaAutosize from 'solid-textarea-autosize';
 

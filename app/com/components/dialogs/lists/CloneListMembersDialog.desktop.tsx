@@ -1,7 +1,7 @@
 import { For, createEffect, createSignal, lazy } from 'solid-js';
 import { createMutable } from 'solid-js/store';
 
-import { createInfiniteQuery, useQueryClient } from '@pkg/solid-query';
+import { createInfiniteQuery, useQueryClient } from '@externdefs/solid-query';
 
 import type { AppBskyGraphListitem, At, Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { multiagent, renderAccountName } from '~/api/globals/agent';

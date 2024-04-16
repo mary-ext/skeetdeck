@@ -3,7 +3,7 @@ import { batch, createEffect, createMemo, createSignal } from 'solid-js';
 import TextareaAutosize from 'solid-textarea-autosize';
 
 import { withProxy } from '@mary/bluesky-client/xrpc';
-import { createMutation } from '@pkg/solid-query';
+import { createMutation } from '@externdefs/solid-query';
 
 import type {
 	At,

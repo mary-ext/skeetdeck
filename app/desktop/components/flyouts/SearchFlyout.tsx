@@ -1,6 +1,6 @@
 import { type JSX, For, createMemo, createSignal } from 'solid-js';
 
-import { createQuery } from '@pkg/solid-query';
+import { createQuery } from '@externdefs/solid-query';
 
 import type { AppBskyActorDefs, At } from '~/api/atp-schema';
 

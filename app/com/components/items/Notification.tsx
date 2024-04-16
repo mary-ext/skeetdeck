@@ -1,6 +1,6 @@
 import { type Accessor, type JSX, Match, Switch, createSignal } from 'solid-js';
 
-import { createQuery } from '@pkg/solid-query';
+import { createQuery } from '@externdefs/solid-query';
 
 import type { At } from '~/api/atp-schema';
 import type {

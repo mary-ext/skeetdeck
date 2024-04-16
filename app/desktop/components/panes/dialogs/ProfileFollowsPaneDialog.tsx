@@ -1,6 +1,6 @@
 import { createMemo } from 'solid-js';
 
-import { createInfiniteQuery } from '@pkg/solid-query';
+import { createInfiniteQuery } from '@externdefs/solid-query';
 
 import type { At } from '~/api/atp-schema';
 

@@ -1,4 +1,4 @@
-import type { QueryFunctionContext as QC } from '@pkg/solid-query';
+import type { QueryFunctionContext as QC } from '@externdefs/solid-query';
 
 import { compressPostImage } from '~/utils/image';
 import { followAbortSignal } from '../utils/misc';

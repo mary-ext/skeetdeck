@@ -1,6 +1,6 @@
 import { batch, createMemo, createSignal } from 'solid-js';
 
-import { useQueryClient, type InfiniteData } from '@pkg/solid-query';
+import { useQueryClient, type InfiniteData } from '@externdefs/solid-query';
 
 import type { SignalizedProfile } from '~/api/stores/profiles';
 import type { TimelinePage, getTimelineKey } from '~/api/queries/get-timeline';

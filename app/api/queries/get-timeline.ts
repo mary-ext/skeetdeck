@@ -1,4 +1,4 @@
-import type { QueryFunctionContext as QC } from '@pkg/solid-query';
+import type { QueryFunctionContext as QC } from '@externdefs/solid-query';
 
 import { assert } from '~/utils/misc';
 

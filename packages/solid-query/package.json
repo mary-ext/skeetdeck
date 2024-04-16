@@ -1,16 +1,27 @@
 {
-	"private": true,
 	"type": "module",
-	"name": "@pkg/solid-query",
+	"name": "@externdefs/solid-query",
+	"description": "Personal-use fork of @tanstack/solid-query",
 	"version": "0.1.0",
+	"author": "externdefs",
+	"license": "MIT",
+	"repository": {
+		"url": "https://codeberg.org/mary-ext/skeetdeck",
+		"directory": "packages/solid-query"
+	},
+	"files": [
+		"dist"
+	],
 	"exports": {
 		".": {
-			"default": "./lib/index.ts"
+			"default": "./dist/solid-query.js",
+			"types": "./types/index.d.ts"
 		}
 	},
 	"scripts": {
 		"dev": "vite",
-		"unused:build": "rm -r types/; vite build && tsc"
+		"build": "rm -r types/; vite build && tsc",
+		"install": "pnpm run build"
 	},
 	"peerDependencies": {
 		"solid-js": "^1.8.5"

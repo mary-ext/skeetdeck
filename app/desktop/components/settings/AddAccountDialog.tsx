@@ -3,7 +3,7 @@ import { createEffect, createSignal, lazy } from 'solid-js';
 import { getPdsEndpoint } from '@mary/bluesky-client';
 import { XRPCError } from '@mary/bluesky-client/xrpc';
 
-import { createMutation } from '@pkg/solid-query';
+import { createMutation } from '@externdefs/solid-query';
 
 import { getDidInfo } from '~/api/did';
 import { multiagent } from '~/api/globals/agent';

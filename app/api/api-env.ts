@@ -1,9 +1,9 @@
-import '@pkg/solid-query';
+import '@externdefs/solid-query';
 
 import type { ModerationOptions } from './moderation';
 import type { LanguagePreferences } from './types';
 
-declare module '@pkg/solid-query' {
+declare module '@externdefs/solid-query' {
 	interface Register {
 		queryMeta: {
 			batched?: boolean;

@@ -1,4 +1,4 @@
-import { QueryClient } from '@pkg/solid-query';
+import { QueryClient } from '@externdefs/solid-query';
 
 export const queryClient = new QueryClient({
 	defaultOptions: {

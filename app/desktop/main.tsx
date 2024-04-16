@@ -2,7 +2,7 @@ import { createRenderEffect, lazy } from 'solid-js';
 import { render } from 'solid-js/web';
 
 import { Router, configureRouter } from '@pkg/solid-page-router';
-import { QueryClientProvider } from '@pkg/solid-query';
+import { QueryClientProvider } from '@externdefs/solid-query';
 
 import { multiagent } from '~/api/globals/agent';
 

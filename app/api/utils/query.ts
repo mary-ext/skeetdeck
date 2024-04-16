@@ -3,7 +3,7 @@ import {
 	type QueryClient,
 	type QueryFunctionContext,
 	type QueryKey,
-} from '@pkg/solid-query';
+} from '@externdefs/solid-query';
 
 export const resetInfiniteData = (client: QueryClient, key: QueryKey) => {
 	client.setQueryData<InfiniteData<unknown>>(key, (data) => {

@@ -1,6 +1,6 @@
 import { batch, createEffect, createSignal } from 'solid-js';
 
-import { type InfiniteData, createMutation } from '@pkg/solid-query';
+import { type InfiniteData, createMutation } from '@externdefs/solid-query';
 
 import type { AppBskyEmbedImages, AppBskyFeedThreadgate, Brand } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';

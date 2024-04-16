@@ -1,4 +1,4 @@
-import { type InfiniteData, useQueryClient, createMutation } from '@pkg/solid-query';
+import { type InfiniteData, useQueryClient, createMutation } from '@externdefs/solid-query';
 
 import { multiagent } from '~/api/globals/agent';
 import { getRecordId } from '~/api/utils/misc';

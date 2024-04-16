@@ -1,6 +1,6 @@
 import { createMemo, createSignal } from 'solid-js';
 
-import { createQuery } from '@pkg/solid-query';
+import { createQuery } from '@externdefs/solid-query';
 
 import { systemLanguages } from '~/api/globals/platform';
 import type { TranslationPreferences } from '~/api/types';
