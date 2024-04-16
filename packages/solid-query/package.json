@@ -21,7 +21,8 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "rm -r types/; vite build && tsc",
-		"install": "pnpm run build"
+		"install": "pnpm run build",
+		"prepublish": "pnpm run build"
 	},
 	"peerDependencies": {
 		"solid-js": "^1.8.5"
