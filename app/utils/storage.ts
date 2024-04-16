@@ -20,7 +20,7 @@ const parse = <T>(raw: string | null, migrate: MigrateFn<T>): T => {
 export const createReactiveLocalStorage = <T extends StoreNode>(name: string, migrate: MigrateFn<T>) => {
 	const mutable = createMutable<T>(parse(localStorage.getItem(name), migrate));
 
-	let writable = true;
+	let writable = false;
 
 	createRoot(() => {
 		createEffect(() => {
@@ -41,5 +41,6 @@ export const createReactiveLocalStorage = <T extends StoreNode>(name: string, mi
 		}
 	});
 
+	writable = true;
 	return mutable;
 };
