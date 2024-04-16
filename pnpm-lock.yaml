@@ -86,9 +86,6 @@ importers:
       '@pkg/solid-page-router':
         specifier: workspace:^
         version: link:../packages/solid-page-router
-      '@pkg/solid-use-gesture':
-        specifier: workspace:^
-        version: link:../packages/solid-use-gesture
       '@solid-primitives/event-listener':
         specifier: ^2.3.3
         version: 2.3.3(solid-js@1.8.16)
@@ -195,22 +192,6 @@ importers:
       '@tanstack/query-core':
         specifier: 5.17.19
         version: 5.17.19(patch_hash=g2ughl2kfxjzh4u2yff3gobzsu)
-    devDependencies:
-      solid-js:
-        specifier: ^1.8.16
-        version: 1.8.16(patch_hash=wunpcbjxb5h4ujg4psj63uuluq)
-      vite:
-        specifier: ^5.2.6
-        version: 5.2.6(patch_hash=jvilcmekot7ewtzglyemqd7bpy)(@types/node@20.12.2)(terser@5.30.1)
-      vite-plugin-solid:
-        specifier: ^2.10.2
-        version: 2.10.2(solid-js@1.8.16)(vite@5.2.6)
-
-  packages/solid-use-gesture:
-    dependencies:
-      '@use-gesture/core':
-        specifier: ^10.3.1
-        version: 10.3.1
     devDependencies:
       solid-js:
         specifier: ^1.8.16
@@ -2035,10 +2016,6 @@ packages:
   /@types/trusted-types@2.0.7:
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
     dev: true
-
-  /@use-gesture/core@10.3.1:
-    resolution: {integrity: sha512-WcINiDt8WjqBdUXye25anHiNxPc0VOrlT8F6LLkU6cycrOGUDyY/yyFmsg3k8i5OLvv25llc0QC45GhR/C8llw==}
-    dev: false
 
   /acorn@8.11.3:
     resolution: {integrity: sha512-Y9rRfJG5jcKOE0CLisYbojUjIrIEE7AGMzA/Sm4BslANhbS+cDMpgBdcPT91oJ7OuJ9hYJBx59RjbhxVnrF8Xg==}
