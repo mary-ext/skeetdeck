@@ -9,6 +9,8 @@
 		"lint": "tsc"
 	},
 	"dependencies": {
+		"@externdefs/emoji-db": "workspace:^",
+		"@externdefs/solid-query": "workspace:^",
 		"@floating-ui/dom": "^1.6.3",
 		"@floating-ui/utils": "^0.2.1",
 		"@mary/atproto-cid": "npm:@jsr/mary__atproto-cid@^0.1.4",
@@ -16,11 +18,9 @@
 		"@mary/base32": "npm:@jsr/mary__base32@^0.1.0",
 		"@mary/bluesky-client": "npm:@jsr/mary__bluesky-client@^0.5.8",
 		"@mary/exif-rm": "npm:@jsr/mary__exif-rm@^0.2.1",
-		"@externdefs/emoji-db": "workspace:^",
 		"@pkg/solid-freeze": "workspace:^",
 		"@pkg/solid-navigation": "workspace:^",
 		"@pkg/solid-page-router": "workspace:^",
-		"@externdefs/solid-query": "workspace:^",
 		"@solid-primitives/event-listener": "^2.3.3",
 		"@thisbeyond/solid-dnd": "^0.7.5",
 		"cborg": "4.0.7",
