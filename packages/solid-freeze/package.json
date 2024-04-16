@@ -2,7 +2,7 @@
 	"type": "module",
 	"name": "@externdefs/solid-freeze",
 	"description": "Suspend rendering on Solid.js component subtrees",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"author": "externdefs",
 	"license": "MIT",
 	"repository": {
@@ -22,8 +22,7 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "rm -r types/; vite build && tsc",
-		"install": "pnpm run build",
-		"prepublish": "pnpm run build"
+		"prepare": "pnpm run build"
 	},
 	"peerDependencies": {
 		"solid-js": "^1.8.5"
