@@ -1,19 +1,22 @@
 {
-	"private": true,
 	"type": "module",
-	"name": "@pkg/emoji-db",
+	"name": "@externdefs/emoji-db",
+	"description": "Emoji DB",
 	"version": "0.1.0",
+	"author": "externdefs",
+	"license": "MIT",
+	"repository": {
+		"url": "https://codeberg.org/mary-ext/skeetdeck",
+		"directory": "packages/emoji-db"
+	},
+	"files": [
+		"lib/",
+		"types/"
+	],
 	"exports": {
 		".": {
 			"default": "./lib/Database.js",
 			"types": "./types/database.d.ts"
 		}
-	},
-	"scripts": {
-		"dev": "vite",
-		"unused:build": "rm -r types/; vite build && tsc"
-	},
-	"devDependencies": {
-		"vite": "^5.2.6"
 	}
 }
