@@ -19,7 +19,6 @@
 		"@mary/exif-rm": "npm:@jsr/mary__exif-rm@^0.2.1",
 		"@mary/solid-freeze": "workspace:@externdefs/solid-freeze@^",
 		"@mary/solid-query": "workspace:@externdefs/solid-query@^",
-		"@pkg/solid-navigation": "workspace:^",
 		"@pkg/solid-page-router": "workspace:^",
 		"@solid-primitives/event-listener": "^2.3.3",
 		"@thisbeyond/solid-dnd": "^0.7.5",
