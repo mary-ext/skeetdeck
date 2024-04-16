@@ -2,7 +2,7 @@
 	"type": "module",
 	"name": "@externdefs/solid-query",
 	"description": "Personal-use fork of @tanstack/solid-query",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"author": "externdefs",
 	"license": "MIT",
 	"repository": {
@@ -10,7 +10,8 @@
 		"directory": "packages/solid-query"
 	},
 	"files": [
-		"dist"
+		"dist/",
+		"types/"
 	],
 	"exports": {
 		".": {
