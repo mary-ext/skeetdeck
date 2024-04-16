@@ -1,6 +1,6 @@
 import { createEffect, createMemo, lazy, createSignal as signal } from 'solid-js';
 
-import { type InfiniteData, createMutation, useQueryClient } from '@externdefs/solid-query';
+import { type InfiniteData, createMutation, useQueryClient } from '@mary/solid-query';
 
 import type { AppBskyGraphList, Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';

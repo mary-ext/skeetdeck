@@ -1,6 +1,6 @@
 import { Show, createMemo } from 'solid-js';
 
-import { createMutation, createQuery } from '@externdefs/solid-query';
+import { createMutation, createQuery } from '@mary/solid-query';
 
 import { multiagent } from '~/api/globals/agent';
 

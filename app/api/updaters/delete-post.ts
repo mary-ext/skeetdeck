@@ -1,4 +1,4 @@
-import type { InfiniteData } from '@externdefs/solid-query';
+import type { InfiniteData } from '@mary/solid-query';
 
 import { produce } from '~/utils/immer';
 

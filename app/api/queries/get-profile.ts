@@ -1,4 +1,4 @@
-import type { QueryFunctionContext as QC } from '@externdefs/solid-query';
+import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import type { AppBskyActorDefs, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';

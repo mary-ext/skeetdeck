@@ -4,7 +4,7 @@ import { unwrap } from 'solid-js/store';
 import { makeEventListener } from '@solid-primitives/event-listener';
 
 import * as TID from '@mary/atproto-tid';
-import { createQuery, useQueryClient } from '@externdefs/solid-query';
+import { createQuery, useQueryClient } from '@mary/solid-query';
 
 import type {
 	AppBskyEmbedExternal,

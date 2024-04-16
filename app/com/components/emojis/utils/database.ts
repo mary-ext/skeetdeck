@@ -1,4 +1,4 @@
-import Database, { type Emoji, type EmojiSkin, type SkinTone } from '@externdefs/emoji-db';
+import Database, { type Emoji, type EmojiSkin, type SkinTone } from '@mary/emoji-db';
 
 import { mapDefined } from '~/utils/misc';
 

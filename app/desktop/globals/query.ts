@@ -1,4 +1,4 @@
-import { QueryClient } from '@externdefs/solid-query';
+import { QueryClient } from '@mary/solid-query';
 
 export const queryClient = new QueryClient({
 	defaultOptions: {

@@ -1,4 +1,4 @@
-import { createInfiniteQuery, createQuery } from '@externdefs/solid-query';
+import { createInfiniteQuery, createQuery } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
 

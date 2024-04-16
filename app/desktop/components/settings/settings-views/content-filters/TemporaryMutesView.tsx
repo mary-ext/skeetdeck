@@ -1,7 +1,7 @@
 import { For, Suspense, SuspenseList, createMemo, createSignal } from 'solid-js';
 
 import { useSuspend } from '@pkg/solid-freeze';
-import { createQuery } from '@externdefs/solid-query';
+import { createQuery } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';

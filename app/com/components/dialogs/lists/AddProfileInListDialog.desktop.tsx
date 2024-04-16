@@ -7,7 +7,7 @@ import {
 	createMutation,
 	createQuery,
 	useQueryClient,
-} from '@externdefs/solid-query';
+} from '@mary/solid-query';
 
 import type { AppBskyGraphListitem, Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { multiagent, renderAccountName } from '~/api/globals/agent';

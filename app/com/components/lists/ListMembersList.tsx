@@ -1,6 +1,6 @@
 import { type JSX, For } from 'solid-js';
 
-import { type InfiniteData, createInfiniteQuery, useQueryClient } from '@externdefs/solid-query';
+import { type InfiniteData, createInfiniteQuery, useQueryClient } from '@mary/solid-query';
 
 import { multiagent } from '~/api/globals/agent';
 import { getRecordId } from '~/api/utils/misc';

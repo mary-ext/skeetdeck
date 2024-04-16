@@ -1,6 +1,6 @@
 import { createMemo } from 'solid-js';
 
-import { createQuery } from '@externdefs/solid-query';
+import { createQuery } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
 

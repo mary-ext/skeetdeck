@@ -1,6 +1,6 @@
 import { createEffect, createMemo } from 'solid-js';
 
-import { createInfiniteQuery, createMutation, createQuery } from '@externdefs/solid-query';
+import { createInfiniteQuery, createMutation, createQuery } from '@mary/solid-query';
 
 import type { Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';

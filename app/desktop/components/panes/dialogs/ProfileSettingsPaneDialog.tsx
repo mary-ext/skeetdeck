@@ -1,7 +1,7 @@
 import { createMemo, createSignal as signal } from 'solid-js';
 
 import { XRPCError } from '@mary/bluesky-client/xrpc';
-import { createMutation, useQueryClient } from '@externdefs/solid-query';
+import { createMutation, useQueryClient } from '@mary/solid-query';
 
 import TextareaAutosize from 'solid-textarea-autosize';
 

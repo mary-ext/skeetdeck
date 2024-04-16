@@ -50,12 +50,6 @@ importers:
 
   app:
     dependencies:
-      '@externdefs/emoji-db':
-        specifier: workspace:^
-        version: link:../packages/emoji-db
-      '@externdefs/solid-query':
-        specifier: workspace:^
-        version: link:../packages/solid-query
       '@floating-ui/dom':
         specifier: ^1.6.3
         version: 1.6.3
@@ -74,9 +68,15 @@ importers:
       '@mary/bluesky-client':
         specifier: npm:@jsr/mary__bluesky-client@^0.5.8
         version: /@jsr/mary__bluesky-client@0.5.8
+      '@mary/emoji-db':
+        specifier: workspace:@externdefs/emoji-db@^
+        version: link:../packages/emoji-db
       '@mary/exif-rm':
         specifier: npm:@jsr/mary__exif-rm@^0.2.1
         version: /@jsr/mary__exif-rm@0.2.1
+      '@mary/solid-query':
+        specifier: workspace:@externdefs/solid-query@^
+        version: link:../packages/solid-query
       '@pkg/solid-freeze':
         specifier: workspace:^
         version: link:../packages/solid-freeze

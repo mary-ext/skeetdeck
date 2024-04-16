@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js';
 
 import { BskyXRPC } from '@mary/bluesky-client';
-import { createMutation } from '@externdefs/solid-query';
+import { createMutation } from '@mary/solid-query';
 
 import { type DataServer, DEFAULT_DATA_SERVERS } from '~/api/globals/defaults';
 import { formatQueryError } from '~/api/utils/misc';

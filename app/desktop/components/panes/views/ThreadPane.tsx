@@ -1,6 +1,6 @@
 import { type JSX, createMemo, createSignal, lazy } from 'solid-js';
 
-import { createQuery } from '@externdefs/solid-query';
+import { createQuery } from '@mary/solid-query';
 
 import { getInitialPostThread, getPostThread, getPostThreadKey } from '~/api/queries/get-post-thread';
 

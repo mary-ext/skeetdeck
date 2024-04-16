@@ -1,6 +1,6 @@
 import { For, Match, Switch, createEffect } from 'solid-js';
 
-import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@externdefs/solid-query';
+import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
 import { getQueryErrorInfo, resetInfiniteData } from '~/api/utils/query';

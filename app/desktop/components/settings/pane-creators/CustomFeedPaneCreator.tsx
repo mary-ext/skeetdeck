@@ -1,6 +1,6 @@
 import { For, Match, Switch, createSignal } from 'solid-js';
 
-import { createInfiniteQuery } from '@externdefs/solid-query';
+import { createInfiniteQuery } from '@mary/solid-query';
 
 import type { AppBskyUnspeccedGetPopularFeedGenerators, At } from '~/api/atp-schema';
 import { multiagent, renderAccountName } from '~/api/globals/agent';

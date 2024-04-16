@@ -1,6 +1,6 @@
 import { type JSX, createSignal, lazy } from 'solid-js';
 
-import { createQuery } from '@externdefs/solid-query';
+import { createQuery } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
 import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/get-list-info';

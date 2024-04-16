@@ -1,6 +1,6 @@
 import { type JSX, For } from 'solid-js';
 
-import { useQueryClient } from '@externdefs/solid-query';
+import { useQueryClient } from '@mary/solid-query';
 
 import type { MultiagentAccountData } from '~/api/classes/multiagent';
 import { multiagent } from '~/api/globals/agent.js';

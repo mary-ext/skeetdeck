@@ -1,4 +1,4 @@
-import type { QueryFunctionContext as QC } from '@externdefs/solid-query';
+import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 const BASE_URL = 'https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&dj=1&source=input';
 

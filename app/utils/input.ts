@@ -1,6 +1,6 @@
 import { type Accessor, createEffect, onMount } from 'solid-js';
 
-import type { CreateMutationResult } from '@externdefs/solid-query';
+import type { CreateMutationResult } from '@mary/solid-query';
 
 export const refs = <T>(...fns: Array<(node: T) => void>) => {
 	return (node: T) => {

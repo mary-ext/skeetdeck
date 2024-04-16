@@ -1,6 +1,6 @@
 import { Match, Switch, createSignal } from 'solid-js';
 
-import { createInfiniteQuery } from '@externdefs/solid-query';
+import { createInfiniteQuery } from '@mary/solid-query';
 
 import { getSuggestedFollows, getSuggestedFollowsKey } from '~/api/queries/get-suggested-follows';
 import { searchProfiles, searchProfilesKey } from '~/api/queries/search-profiles';
