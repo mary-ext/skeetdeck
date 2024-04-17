@@ -1,7 +1,5 @@
 import { type JSX, createSignal, lazy } from 'solid-js';
 
-import { getAccountHandle } from '~/api/globals/agent';
-
 import type { SearchPaneConfig } from '../../../globals/panes';
 
 import { IconButton } from '~/com/primitives/icon-button';
@@ -44,9 +42,7 @@ const SearchPane = () => {
 					uid={pane.uid}
 					params={{
 						type: 'search',
-						query: transformSearchQuery(pane.query, {
-							handle: getAccountHandle(pane.uid),
-						}),
+						query: transformSearchQuery(pane.query),
 					}}
 				/>
 			</PaneBody>
@@ -69,7 +65,7 @@ export default SearchPane;
 
 const DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
 
-const transformSearchQuery = (query: string, { handle }: { handle: string | null }) => {
+const transformSearchQuery = (query: string) => {
 	// https://github.com/bluesky-social/indigo/blob/421e4da5307f4fcba51f25b5c5982c8b9841f7f6/search/parse_query.go#L15-L21
 	let quoted = false;
 	const parts = fieldsfunc(query, (rune) => {
@@ -111,13 +107,6 @@ const transformSearchQuery = (query: string, { handle }: { handle: string | null
 			}
 
 			parts[i] = `${operator}:${date.toISOString()}`;
-		} else if (
-			handle !== null &&
-			value === 'me' &&
-			(operator === 'from' || operator === 'to' || operator === 'mentions')
-		) {
-			// Remove this once backend passes around the viewer parameter
-			parts[i] = `${operator}:${handle}`;
 		}
 	}
 
