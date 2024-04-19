@@ -457,8 +457,6 @@ const createLanguagePostFilter = (prefs?: LanguagePreferences): PostFilter | und
 		return;
 	}
 
-	const cache: Record<string, string | null | undefined> = Object.create(null);
-
 	return (item) => {
 		const record = item.post.record as PostRecord;
 		const langs = record.langs;
@@ -472,22 +470,10 @@ const createLanguagePostFilter = (prefs?: LanguagePreferences): PostFilter | und
 		}
 
 		return langs.some((code) => {
-			let tag = cache[code];
+			const idx = code.indexOf('-');
+			const lng = idx === -1 ? code : code.slice(0, idx);
 
-			if (tag === undefined) {
-				try {
-					tag = cache[code] = new Intl.Locale(code).language;
-				} catch {
-					cache[code] = null;
-					return false;
-				}
-			}
-
-			if (tag === null) {
-				return false;
-			}
-
-			return languages.includes(tag);
+			return languages.includes(lng);
 		});
 	};
 };
