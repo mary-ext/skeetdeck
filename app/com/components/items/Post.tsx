@@ -53,7 +53,6 @@ export interface PostProps {
 	next?: boolean;
 	interactive?: boolean;
 	highlight?: boolean;
-	timelineDid?: At.DID;
 }
 
 const isMobile = import.meta.env.VITE_MODE === 'mobile';

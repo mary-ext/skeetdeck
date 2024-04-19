@@ -1,4 +1,4 @@
-import { For, Match, Switch, createEffect, createMemo } from 'solid-js';
+import { For, Match, Switch, createEffect } from 'solid-js';
 
 import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@mary/solid-query';
 
@@ -74,11 +74,6 @@ const TimelineList = (props: TimelineListProps) => {
 		};
 	});
 
-	const authorDid = createMemo(() => {
-		const params = props.params;
-		return params.type === 'profile' ? params.actor : undefined;
-	});
-
 	createEffect((prev: typeof timeline.data | 0) => {
 		const next = timeline.data;
 
@@ -133,7 +128,6 @@ const TimelineList = (props: TimelineListProps) => {
 									reason={/* @once */ item.reason}
 									prev={idx !== 0}
 									next={idx !== len - 1}
-									timelineDid={authorDid()}
 								/>
 							</VirtualContainer>
 						));
