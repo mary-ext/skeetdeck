@@ -24,7 +24,7 @@ index 6ef9599fd446b7fa98a292f85160b46be88c0295..c9e3957446a81f4fee1da9ac9da779d5
 -  return true;
 +
 +  const proto = Object.getPrototypeOf(o);
-+  return (proto === null || proto === Object) && Object.isExtensible(o);
++  return (proto === Object.prototype || proto === null) && Object.isExtensible(o);
  }
  function hasObjectPrototype(o) {
    return Object.prototype.toString.call(o) === "[object Object]";

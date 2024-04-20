@@ -10,7 +10,7 @@ overrides:
 
 patchedDependencies:
   '@tanstack/query-core@5.17.19':
-    hash: g2ughl2kfxjzh4u2yff3gobzsu
+    hash: v3r5daycwz67li5mxwjnajy7bm
     path: patches/@tanstack__query-core@5.17.19.patch
   cborg@4.0.7:
     hash: dz6b6r6dc4jadjfng7vtgi53hy
@@ -169,7 +169,7 @@ importers:
     dependencies:
       '@tanstack/query-core':
         specifier: 5.17.19
-        version: 5.17.19(patch_hash=g2ughl2kfxjzh4u2yff3gobzsu)
+        version: 5.17.19(patch_hash=v3r5daycwz67li5mxwjnajy7bm)
     devDependencies:
       solid-js:
         specifier: ^1.8.16
@@ -3174,7 +3174,7 @@ snapshots:
       magic-string: 0.25.9
       string.prototype.matchall: '@nolyfill/string.prototype.matchall@1.0.28'
 
-  '@tanstack/query-core@5.17.19(patch_hash=g2ughl2kfxjzh4u2yff3gobzsu)': {}
+  '@tanstack/query-core@5.17.19(patch_hash=v3r5daycwz67li5mxwjnajy7bm)': {}
 
   '@thisbeyond/solid-dnd@0.7.5(solid-js@1.8.16(patch_hash=wunpcbjxb5h4ujg4psj63uuluq))':
     dependencies:
