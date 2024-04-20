@@ -227,7 +227,7 @@ const ComposerPane = () => {
 
 		// These two variables are necessary for invalidation/mutation purposes
 		const uris: string[] = [];
-		let topReplyTo: AppBskyFeedPost.ReplyRef | undefined;
+		let topReply: AppBskyFeedPost.ReplyRef | undefined;
 
 		try {
 			// 1. Crawl through the posts, resolve all the facets and blobs
@@ -339,34 +339,31 @@ const ComposerPane = () => {
 
 				// Create post records
 				{
-					let replyTo: AppBskyFeedPost.ReplyRef | undefined;
+					let reply: AppBskyFeedPost.ReplyRef | undefined;
 
 					// Resolve the record
 					if (replying.data) {
 						const post = replying.data!;
-						const replyRel = post.record.value.reply;
+						const curr = post.record.value.reply;
 
 						const ref: StrongRef = {
 							cid: post.cid.value,
 							uri: post.uri,
 						};
 
-						topReplyTo = replyTo = {
-							root: replyRel?.root || ref,
+						topReply = reply = {
+							root: curr ? curr.root : ref,
 							parent: ref,
 						};
 					}
 
-					for (let i = 0, il = posts.length; i < il; i++) {
-						// Careful, `cborg` does not like undefined values, and we need to use
-						// it to calculate the correct CID values for StrongRef in replies.
-
+					for (let idx = 0, len = posts.length; idx < len; idx++) {
 						// The timeline arbitrarily sorts the posts if they share the same
 						// createdAt date, we'll increment the date by one milisecond for
 						// each post in the chain.
-						date.setMilliseconds(i);
+						date.setMilliseconds(idx);
 
-						const draft = posts[i];
+						const draft = posts[idx];
 						const rkey = TID.now();
 						const uri = `at://${uid}/app.bsky.feed.post/${rkey}`;
 
@@ -443,33 +440,21 @@ const ComposerPane = () => {
 							createdAt: date.toISOString(),
 							text: rt.text,
 							facets: rt.facets,
+							reply: reply,
+							embed: embed,
+							tags: draft.tags.length > 0 ? draft.tags : undefined,
+							langs: draft.languages.length > 0 ? draft.languages : undefined,
+							labels:
+								draft.labels.length > 0
+									? {
+											$type: 'com.atproto.label.defs#selfLabels',
+											values: draft.labels.map((v) => ({ val: v })),
+										}
+									: undefined,
 						};
 
-						if (replyTo) {
-							record.reply = replyTo;
-						}
-
-						if (embed) {
-							record.embed = embed;
-						}
-
-						if (draft.tags.length > 0) {
-							record.tags = draft.tags;
-						}
-
-						if (draft.languages.length > 0) {
-							record.langs = draft.languages;
-						}
-
-						if (draft.labels.length > 0) {
-							record.labels = {
-								$type: 'com.atproto.label.defs#selfLabels',
-								values: draft.labels.map((v) => ({ val: v })),
-							};
-						}
-
 						// No need to calculate CID for the last post
-						if (i !== il - 1) {
+						if (idx !== len - 1) {
 							const { serializeRecordCid } = await (cidPromise ||= import('./utils/cid'));
 
 							const serialized = await serializeRecordCid(record);
@@ -479,8 +464,8 @@ const ComposerPane = () => {
 								uri: uri,
 							};
 
-							replyTo = {
-								root: replyTo ? replyTo.root : ref,
+							reply = {
+								root: reply ? reply.root : ref,
 								parent: ref,
 							};
 						}
@@ -546,7 +531,7 @@ const ComposerPane = () => {
 		{
 			// 1. If it's attached to a reply, let's insert it to the threads.
 			if (replying.data) {
-				const rootUri = topReplyTo!.root.uri;
+				const rootUri = topReply!.root.uri;
 				const parentUri = replying.data.uri;
 
 				const results = await Promise.allSettled([
