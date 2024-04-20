@@ -18,7 +18,7 @@ jobs:
       - name: Setup pnpm
         uses: https://github.com/pnpm/action-setup@v3.0.0
         with:
-          version: 8
+          version: 9
 
       - name: Configure Node.js
         uses: actions/setup-node@v4
