@@ -87,13 +87,13 @@ export const producePostDelete = (postUri: string) => {
 			if (x.type === 'post' && x.item.uri === postUri) {
 				const parentUri = x.parentUri;
 
-				// We've found the post, now let's find where the rabbit-hole ends.
+				// We've found the post, now let's remove our children
 				{
 					const depth = x.depth;
 					let amount = 1;
 
-					// Anything that's >depth is ours, we immediately break when it finds
-					// an item that isn't.
+					// Anything that's >depth is ours,
+					// break when we iterate over an item that isn't.
 					for (let j = i + 1; j < il; j++) {
 						const c = descendants[j];
 
@@ -104,6 +104,7 @@ export const producePostDelete = (postUri: string) => {
 						amount++;
 					}
 
+					// Remove them
 					descendants.splice(i, amount);
 				}
 
