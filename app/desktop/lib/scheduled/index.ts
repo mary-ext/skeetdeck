@@ -115,7 +115,7 @@ const start = () => {
 
 const sleep = (ms: number, signal?: AbortSignal): Promise<void> => {
 	return new Promise((resolve) => {
-		if (ms < 1) {
+		if (ms < 1 || signal?.aborted) {
 			return;
 		}
 
