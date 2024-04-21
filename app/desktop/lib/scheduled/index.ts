@@ -105,8 +105,12 @@ const start = () => {
 
 const sleep = (ms: number, signal?: AbortSignal): Promise<void> => {
 	return new Promise((resolve) => {
-		if (ms < 1 || signal?.aborted) {
+		if (signal?.aborted) {
 			return;
+		}
+
+		if (ms < 1) {
+			return resolve();
 		}
 
 		const c = () => clearTimeout(timeout);
