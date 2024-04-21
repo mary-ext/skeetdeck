@@ -22,7 +22,7 @@ import { queryClient } from './globals/query';
 
 import './styles/tailwind.css';
 
-import('./lib/moderation/update');
+import('./lib/scheduled');
 
 const App = () => {
 	createRenderEffect(() => {
