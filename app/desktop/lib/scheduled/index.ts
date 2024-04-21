@@ -76,19 +76,9 @@ const start = () => {
 
 			const tempMutes = preferences.moderation.tempMutes;
 
-			let nextAt = Infinity;
-
-			for (const key in tempMutes) {
-				let value = tempMutes[key as At.DID];
-
-				if (value === undefined) {
-					value = 0;
-				}
-
-				if (value < nextAt) {
-					nextAt = value;
-				}
-			}
+			const nextAt = Object.values(tempMutes).reduce<number>((time, x) => {
+				return x !== undefined && x < time ? x : time;
+			}, Infinity);
 
 			if (nextAt === Infinity) {
 				return;
