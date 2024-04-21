@@ -1,4 +1,4 @@
-import { type Signal, For, createSignal, batch, createEffect } from 'solid-js';
+import { type Signal, For, batch, createEffect, createSignal, onMount } from 'solid-js';
 
 import {
 	type KeywordFilterMatcher,
@@ -8,7 +8,7 @@ import {
 } from '~/api/moderation';
 
 import { formatAbsDateTime } from '~/utils/intl/time';
-import { createRadioModel, model } from '~/utils/input';
+import { createRadioModel, model, refs } from '~/utils/input';
 import { getUniqueId } from '~/utils/misc';
 
 import { openModal } from '~/com/globals/modals';
@@ -16,13 +16,13 @@ import { bustModeration } from '~/com/globals/shared';
 
 import { preferences } from '../../../../globals/settings';
 
-import { BoxedIconButton } from '~/com/primitives/boxed-icon-button';
 import { Button } from '~/com/primitives/button';
 import { IconButton } from '~/com/primitives/icon-button';
 import { Input } from '~/com/primitives/input';
 import { Interactive } from '~/com/primitives/interactive';
 import {
 	ListBox,
+	ListBoxItem,
 	ListBoxItemInteractive,
 	ListBoxItemReadonly,
 	ListGroup,
@@ -34,7 +34,7 @@ import Radio from '~/com/components/inputs/Radio';
 
 import AddIcon from '~/com/icons/baseline-add';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
-import DeleteIcon from '~/com/icons/baseline-delete';
+import CloseIcon from '~/com/icons/baseline-close';
 import FormatLetterMatchesIcon from '~/com/icons/baseline-format-letter-matches';
 
 import { type ViewParams, VIEW_KEYWORD_FILTER_FORM, VIEW_KEYWORD_FILTERS, useViewRouter } from '../_router';
@@ -51,6 +51,8 @@ const createKeywordState = (keyword: string, whole: boolean): KeywordState => {
 
 const KeywordFilterFormView = () => {
 	let dateInput: HTMLInputElement;
+
+	let canAutofocus = false;
 
 	const router = useViewRouter();
 	const params = router.current as ViewParams<typeof VIEW_KEYWORD_FILTER_FORM>;
@@ -108,6 +110,10 @@ const KeywordFilterFormView = () => {
 			router.move({ type: VIEW_KEYWORD_FILTERS });
 		});
 	};
+
+	onMount(() => {
+		canAutofocus = true;
+	});
 
 	return (
 		<form onSubmit={handleSubmit} class="contents">
@@ -199,57 +205,62 @@ const KeywordFilterFormView = () => {
 					</div>
 				</div>
 
-				<div class="flex flex-col gap-3">
+				<div class={ListGroup}>
 					<label class={ListGroupHeader}>Phrases</label>
 
-					<For
-						each={matchers()}
-						fallback={<p class="flex h-9 items-center text-sm text-muted-fg">No phrases added</p>}
-					>
-						{([[keyword, setKeyword], [whole, setWhole]], index) => (
-							<div class="flex min-w-0 items-center gap-3">
-								<div class="relative grow">
+					<div class={ListBox}>
+						<For
+							each={matchers()}
+							fallback={
+								<div class={ListBoxItem}>
+									<p class="text-de text-muted-fg">No phrases added yet.</p>
+								</div>
+							}
+						>
+							{([[keyword, setKeyword], [whole, setWhole]], index) => (
+								<div class="flex gap-2 px-2 py-1.5">
 									<input
-										ref={model(keyword, setKeyword)}
-										type="text"
-										required
-										class={Input()}
-										style="padding-right: 64px"
+										ref={refs<HTMLInputElement>(model(keyword, setKeyword), (node) => {
+											if (canAutofocus) {
+												onMount(() => node.focus());
+											}
+										})}
+										placeholder="A phrase, word, or tag..."
+										class="grow rounded bg-transparent px-2 py-1.5 text-sm text-primary outline-2 outline-accent outline-none placeholder:text-muted-fg focus:outline"
 									/>
 
-									<button
-										type="button"
-										title={`Match the whole word`}
-										aria-pressed={whole()}
-										onClick={() => setWhole(!whole())}
-										class={wholeMatchBtn}
-									>
-										<FormatLetterMatchesIcon class={!whole() ? `text-muted-fg` : `text-accent`} />
-									</button>
+									<div class="flex">
+										<button
+											type="button"
+											title="Match the whole word"
+											aria-pressed={whole()}
+											onClick={() => setWhole(!whole())}
+											class={/* @once */ IconButton()}
+										>
+											<FormatLetterMatchesIcon class={!whole() ? `text-muted-fg` : `text-accent`} />
+										</button>
+										<button
+											type="button"
+											title="Remove this phrase"
+											onClick={() => setMatchers(matchers().toSpliced(index(), 1))}
+											class={/* @once */ IconButton()}
+										>
+											<CloseIcon />
+										</button>
+									</div>
 								</div>
+							)}
+						</For>
 
-								<button
-									type="button"
-									title="Remove this phrase"
-									onClick={() => {
-										setMatchers(matchers().toSpliced(index(), 1));
-									}}
-									class={/* @once */ BoxedIconButton()}
-								>
-									<DeleteIcon />
-								</button>
-							</div>
-						)}
-					</For>
-
-					<button
-						type="button"
-						onClick={() => setMatchers([...matchers(), createKeywordState('', true)])}
-						class={/* @once */ Button({ variant: 'outline', class: 'self-start' })}
-					>
-						<AddIcon class="-ml-1 mr-2 text-lg" />
-						<span>Add phrase</span>
-					</button>
+						<button
+							type="button"
+							onClick={() => setMatchers([...matchers(), createKeywordState('', true)])}
+							class={ListBoxItemInteractive}
+						>
+							<AddIcon class="w-8 shrink-0 text-lg text-muted-fg" />
+							<span class="grow font-medium">Add new phrase</span>
+						</button>
+					</div>
 				</div>
 
 				{conf && (
