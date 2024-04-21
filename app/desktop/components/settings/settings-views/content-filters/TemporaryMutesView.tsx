@@ -47,21 +47,20 @@ const TemporaryMutesView = () => {
 
 	const profiles = createMemo<ProfileMuteItem[]>((prev) => {
 		// 1. create a set from the previous iteration
-		const seen = new Map(prev.map((x) => [x.did, x.muted]));
+		const set = new Map(prev.map((x) => [x.did, x.muted]));
 
 		// 2. go through the tempMutes object
-		const now = Date.now();
 		const next: ProfileMuteItem[] = prev.slice();
 
 		for (const _did in tempMutes) {
-			// assert _did as an actual DID because TypeScript converted to to string indices
+			// TypeScript always asserts object keys as string, assert it as DID
 			const did = _did as At.DID;
 			const val = tempMutes[did];
 
-			if (val != null && now < val) {
-				// this user is actually muted
+			if (val) {
+				// this user is muted
 
-				const state = seen.get(did);
+				const state = set.get(did);
 				if (state) {
 					// user is already in array, make sure it's muted in the UI
 					state.value = true;
@@ -73,7 +72,7 @@ const TemporaryMutesView = () => {
 				// user is no longer muted, but still in the object for reasons
 				// @todo: should we clear it up here?
 
-				const state = seen.get(did);
+				const state = set.get(did);
 				if (state) {
 					// user is in array, make sure it's unmuted in the UI
 					state.value = false;
@@ -82,13 +81,13 @@ const TemporaryMutesView = () => {
 
 			// remove from map because we've already worked on them, we'll be reusing
 			// this map for the loop below
-			seen.delete(did);
+			set.delete(did);
 		}
 
 		// 3. go through the array itself
 		for (let i = 0, ilen = next.length; i < ilen; i++) {
 			const item = next[i];
-			const state = seen.get(item.did);
+			const state = set.get(item.did);
 
 			if (state) {
 				// it's still in the seen map, so it didn't get processed by above
