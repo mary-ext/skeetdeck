@@ -119,16 +119,14 @@ const sleep = (ms: number, signal?: AbortSignal): Promise<void> => {
 			return;
 		}
 
-		const controller = new AbortController();
-		const own = controller.signal;
+		const c = () => clearTimeout(timeout);
 
 		const timeout = setTimeout(() => {
 			resolve();
-			controller.abort();
+			signal?.removeEventListener('abort', c);
 		}, ms);
 
-		own.addEventListener('abort', () => clearTimeout(timeout));
-		signal?.addEventListener('abort', () => controller.abort(signal.reason), { signal: own });
+		signal?.addEventListener('abort', c);
 	});
 };
 
