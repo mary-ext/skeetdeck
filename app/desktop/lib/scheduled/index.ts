@@ -114,11 +114,11 @@ const start = () => {
 };
 
 const sleep = (ms: number, signal?: AbortSignal): Promise<void> => {
-	if (ms < 1) {
-		return Promise.resolve();
-	}
-
 	return new Promise((resolve) => {
+		if (ms < 1) {
+			return;
+		}
+
 		const controller = new AbortController();
 		const own = controller.signal;
 
