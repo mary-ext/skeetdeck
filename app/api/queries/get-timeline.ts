@@ -504,23 +504,9 @@ const createTempMutePostFilter = (
 		return;
 	}
 
-	const now = Date.now();
-
 	const mutes = prefs.tempMutes;
-	let hasMutes = false;
 
-	// check if there are any outdated mutes before proceeding
-	for (const did in mutes) {
-		const date = mutes[did as At.DID];
-
-		if (date === undefined || now >= date) {
-			delete mutes[did as At.DID];
-		} else {
-			hasMutes = true;
-		}
-	}
-
-	if (!hasMutes) {
+	if (Object.keys(mutes).length === 0) {
 		return;
 	}
 
@@ -530,14 +516,14 @@ const createTempMutePostFilter = (
 		if (reason) {
 			const did = reason.by.did;
 
-			if (did !== uid && mutes![did] && now < mutes![did]!) {
+			if (did !== uid && mutes![did]) {
 				return false;
 			}
 		}
 
 		const did = item.post.author.did;
 
-		if (did !== uid && mutes![did] && now < mutes![did]!) {
+		if (did !== uid && mutes![did]) {
 			return false;
 		}
 
