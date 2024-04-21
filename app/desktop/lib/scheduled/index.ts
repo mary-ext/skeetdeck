@@ -100,6 +100,41 @@ const start = () => {
 				});
 			});
 		});
+
+		// Temporary keyword filter update
+		createEffect(() => {
+			const signal = createAbort(parent);
+
+			const keywords = preferences.moderation.keywords;
+
+			const nextAt = keywords.reduce((time, filter) => {
+				const x = filter.expires;
+				return x !== undefined && x < time ? x : time;
+			}, Infinity);
+
+			if (nextAt === Infinity) {
+				return;
+			}
+
+			const delta = nextAt - Date.now();
+
+			sleep(delta, signal).then(() => {
+				batch(() => {
+					const now = Date.now();
+
+					let idx = keywords.length;
+					while (idx--) {
+						const filter = keywords[idx];
+						const x = filter.expires;
+
+						if (x !== undefined && x <= now) {
+							filter.pref = 1;
+							filter.expires = undefined;
+						}
+					}
+				});
+			});
+		});
 	});
 };
 

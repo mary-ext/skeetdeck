@@ -305,6 +305,7 @@ export interface KeywordFilter {
 
 	// These are used in the preferences UI
 	id: string;
+	expires: number | undefined;
 	matchers: KeywordFilterMatcher[];
 }
 

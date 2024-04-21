@@ -1,14 +1,14 @@
-import { type Signal, For, createSignal, batch } from 'solid-js';
+import { type Signal, For, createSignal, batch, createEffect } from 'solid-js';
 
 import {
 	type KeywordFilterMatcher,
-	type KeywordPreference,
 	PreferenceHide,
 	PreferenceIgnore,
 	PreferenceWarn,
 } from '~/api/moderation';
 
-import { createRadioModel, model, modelChecked } from '~/utils/input';
+import { formatAbsDateTime } from '~/utils/intl/time';
+import { createRadioModel, model } from '~/utils/input';
 import { getUniqueId } from '~/utils/misc';
 
 import { openModal } from '~/com/globals/modals';
@@ -21,9 +21,15 @@ import { Button } from '~/com/primitives/button';
 import { IconButton } from '~/com/primitives/icon-button';
 import { Input } from '~/com/primitives/input';
 import { Interactive } from '~/com/primitives/interactive';
+import {
+	ListBox,
+	ListBoxItemInteractive,
+	ListBoxItemReadonly,
+	ListGroup,
+	ListGroupHeader,
+} from '~/com/primitives/list-box';
 
 import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
-import Checkbox from '~/com/components/inputs/Checkbox';
 import Radio from '~/com/components/inputs/Radio';
 
 import AddIcon from '~/com/icons/baseline-add';
@@ -36,7 +42,7 @@ import { type ViewParams, VIEW_KEYWORD_FILTER_FORM, VIEW_KEYWORD_FILTERS, useVie
 type KeywordState = [keyword: Signal<string>, whole: Signal<boolean>];
 
 const wholeMatchBtn = Interactive({
-	class: `absolute inset-y-0 right-0 grid w-9 place-items-center rounded-r-md text-base`,
+	class: `absolute inset-y-0 right-0 grid w-9 place-items-center text-base`,
 });
 
 const createKeywordState = (keyword: string, whole: boolean): KeywordState => {
@@ -44,6 +50,8 @@ const createKeywordState = (keyword: string, whole: boolean): KeywordState => {
 };
 
 const KeywordFilterFormView = () => {
+	let dateInput: HTMLInputElement;
+
 	const router = useViewRouter();
 	const params = router.current as ViewParams<typeof VIEW_KEYWORD_FILTER_FORM>;
 
@@ -53,21 +61,25 @@ const KeywordFilterFormView = () => {
 	const id = getUniqueId();
 
 	const [name, setName] = createSignal(conf ? conf.name : '');
-	const [pref, setPref] = createSignal(conf ? '' + conf.pref : '2');
+	const [pref, setPref] = createSignal(conf ? conf.pref : PreferenceWarn);
 	const [noFollows, setNoFollows] = createSignal(conf ? conf.noFollows : false);
+
+	const [expiresAt, setExpiresAt] = createSignal(conf?.expires ? new Date(conf.expires) : undefined);
 
 	const [matchers, setMatchers] = createSignal<KeywordState[]>(
 		conf ? conf.matchers.map((m) => createKeywordState(m[0], m[1])) : [createKeywordState('', true)],
 	);
 
 	const prefModel = createRadioModel(pref, setPref);
+	const noFollowModel = createRadioModel(noFollows, setNoFollows);
 
 	const handleSubmit = (ev: SubmitEvent) => {
 		ev.preventDefault();
 
 		batch(() => {
 			const $name = name();
-			const $pref = +pref() as KeywordPreference;
+			const $pref = pref();
+			const $expiresAt = expiresAt();
 			const $matchers = matchers().map<KeywordFilterMatcher>(([kw, whole]) => [kw[0](), whole[0]()]);
 			const $noFollows = noFollows();
 			const $match = createRegexMatcher($matchers);
@@ -75,6 +87,7 @@ const KeywordFilterFormView = () => {
 			if (conf) {
 				conf.name = $name;
 				conf.pref = $pref;
+				conf.expires = $pref !== PreferenceIgnore ? $expiresAt?.getTime() : undefined;
 				conf.match = $match;
 				conf.noFollows = $noFollows;
 				conf.matchers = $matchers;
@@ -84,6 +97,7 @@ const KeywordFilterFormView = () => {
 
 					name: $name,
 					pref: $pref,
+					expires: $pref !== PreferenceIgnore ? $expiresAt?.getTime() : undefined,
 					match: $match,
 					noFollows: $noFollows,
 					matchers: $matchers,
@@ -114,39 +128,79 @@ const KeywordFilterFormView = () => {
 				</button>
 			</div>
 
-			<div class="flex grow flex-col overflow-y-auto">
-				<label class="mx-4 mt-4 block">
-					<span class="mb-2 block text-sm font-medium leading-6 text-primary">Filter name</span>
+			<div class="flex grow flex-col gap-6 overflow-y-auto p-4">
+				<div class={ListGroup}>
+					<label class={ListGroupHeader}>Filter name</label>
 					<input ref={model(name, setName)} type="text" required class={/* @once */ Input()} />
-				</label>
+				</div>
 
-				<div class="mt-4 flex flex-col gap-3 px-4 py-3 text-sm">
-					<p class="font-medium leading-6 text-primary">Filter preference</p>
+				<div class={ListGroup}>
+					<label class={ListGroupHeader}>Filter preference</label>
 
-					<label class="flex items-center justify-between gap-2">
-						<span>Disable filter for now</span>
-						<Radio ref={prefModel('' + PreferenceIgnore)} name={id} />
-					</label>
-					<label class="flex items-center justify-between gap-2">
-						<span>Hide posts behind a warning</span>
-						<Radio ref={prefModel('' + PreferenceWarn)} name={id} />
-					</label>
-					<label class="flex items-center justify-between gap-2">
-						<span>Remove posts completely</span>
-						<Radio ref={prefModel('' + PreferenceHide)} name={id} />
-					</label>
-
-					<div class="mt-3">
-						<label class="flex min-w-0 justify-between gap-4">
-							<span class="text-sm">Don't filter posts from people I follow</span>
-
-							<Checkbox ref={modelChecked(noFollows, setNoFollows)} />
+					<div class={ListBox}>
+						<label class={ListBoxItemReadonly}>
+							<span class="grow font-medium">Disable this filter</span>
+							<Radio ref={prefModel(PreferenceIgnore)} name={id + 'p'} />
 						</label>
+
+						<label class={ListBoxItemReadonly}>
+							<span class="grow font-medium">Cover posts behind warning</span>
+							<Radio ref={prefModel(PreferenceWarn)} name={id + 'p'} />
+						</label>
+
+						<label class={ListBoxItemReadonly}>
+							<span class="grow font-medium">Hide posts entirely</span>
+							<Radio ref={prefModel(PreferenceHide)} name={id + 'p'} />
+						</label>
+					</div>
+
+					<div class={ListBox}>
+						<label class={ListBoxItemReadonly}>
+							<span class="grow font-medium">From everyone</span>
+							<Radio ref={noFollowModel(false)} name={id + 'f'} />
+						</label>
+
+						<label class={ListBoxItemReadonly}>
+							<span class="grow font-medium">From people I don't follow</span>
+							<Radio ref={noFollowModel(true)} name={id + 'f'} />
+						</label>
+					</div>
+
+					<div class={ListBox}>
+						<button
+							disabled={pref() === PreferenceIgnore}
+							type="button"
+							onClick={() => dateInput!.showPicker()}
+							class={ListBoxItemInteractive + ' relative'}
+						>
+							<span class="grow font-medium">Expire after</span>
+							<span class="text-de text-muted-fg">
+								{(() => {
+									const date = expiresAt();
+
+									if (date) {
+										return formatAbsDateTime(date.getTime());
+									}
+
+									return `Never`;
+								})()}
+							</span>
+							<input
+								ref={(node) => {
+									dateInput = node;
+									modelDate(expiresAt, setExpiresAt)(node);
+								}}
+								type="datetime-local"
+								min={getISOLocalString(new Date())}
+								tabindex={-1}
+								class="invisible absolute inset-0"
+							/>
+						</button>
 					</div>
 				</div>
 
-				<div class="mt-4 flex flex-col gap-3 px-4">
-					<p class="text-sm font-medium leading-6 text-primary">Phrases</p>
+				<div class="flex flex-col gap-3">
+					<label class={ListGroupHeader}>Phrases</label>
 
 					<For
 						each={matchers()}
@@ -159,7 +213,8 @@ const KeywordFilterFormView = () => {
 										ref={model(keyword, setKeyword)}
 										type="text"
 										required
-										class={/* @once */ Input({ class: 'pr-9' })}
+										class={Input()}
+										style="padding-right: 64px"
 									/>
 
 									<button
@@ -198,46 +253,42 @@ const KeywordFilterFormView = () => {
 				</div>
 
 				{conf && (
-					<div class="contents">
-						<div class="mx-4 mt-4 grow border-b border-divider"></div>
+					<div class={ListGroup}>
+						<div class={ListBox}>
+							<button
+								type="button"
+								onClick={() => {
+									openModal(() => (
+										<ConfirmDialog
+											title={`Delete this keyword filter?`}
+											body={
+												<>
+													Are you sure you want to delete{' '}
+													<span class="font-bold">{/* @once */ conf.name}</span>? This will affect posts that
+													were previously hidden by this keyword filter.
+												</>
+											}
+											confirmation={`Delete`}
+											onConfirm={() => {
+												batch(() => {
+													const index = filters.findIndex((filter) => filter.id === params.id);
 
-						<button
-							type="button"
-							onClick={() => {
-								openModal(() => (
-									<ConfirmDialog
-										title={`Delete this keyword filter?`}
-										body={
-											<>
-												Are you sure you want to delete <span class="font-bold">{/* @once */ conf.name}</span>
-												? This will affect posts that were previously hidden by this keyword filter.
-											</>
-										}
-										confirmation={`Delete`}
-										onConfirm={() => {
-											batch(() => {
-												const index = filters.findIndex((filter) => filter.id === params.id);
+													if (index !== -1) {
+														filters.splice(index, 1);
+													}
 
-												if (index !== -1) {
-													filters.splice(index, 1);
-												}
-
-												bustModeration();
-												router.move({ type: VIEW_KEYWORD_FILTERS });
-											});
-										}}
-									/>
-								));
-							}}
-							class={
-								/* @once */ Interactive({
-									variant: 'danger',
-									class: `p-4 text-sm text-red-500 disabled:opacity-50`,
-								})
-							}
-						>
-							Delete filter
-						</button>
+													bustModeration();
+													router.move({ type: VIEW_KEYWORD_FILTERS });
+												});
+											}}
+										/>
+									));
+								}}
+								class={ListBoxItemInteractive}
+							>
+								<span class="font-medium text-red-400">Delete filter</span>
+							</button>
+						</div>
 					</div>
 				)}
 			</div>
@@ -246,6 +297,33 @@ const KeywordFilterFormView = () => {
 };
 
 export default KeywordFilterFormView;
+
+const getISOLocalString = (date: Date): string => {
+	return date.toLocaleString('sv', { dateStyle: 'short', timeStyle: 'short' }).replace(' ', 'T');
+};
+
+const modelDate = (getter: () => Date | undefined, setter: (next: Date | undefined) => void) => {
+	return (node: HTMLInputElement) => {
+		createEffect(() => {
+			const inst = getter();
+
+			node.value = inst !== undefined ? getISOLocalString(inst) : '';
+		});
+
+		node.addEventListener('input', () => {
+			const value = node.value;
+
+			if (value === '') {
+				setter(undefined);
+			} else {
+				const [year, month, date, hour, minute] = value.split(/[-T:]/g);
+				const inst = new Date(+year, +month - 1, +date, +hour, +minute);
+
+				setter(inst);
+			}
+		});
+	};
+};
 
 const ESCAPE_RE = /[.*+?^${}()|[\]\\]/g;
 const escape = (str: string) => {
