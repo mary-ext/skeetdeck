@@ -217,6 +217,8 @@ const KeywordFilterFormView = () => {
 												onMount(() => node.focus());
 											}
 										})}
+										type="text"
+										required
 										placeholder="A phrase, word, or tag..."
 										class="grow rounded bg-transparent px-2 py-1.5 text-sm text-primary outline-2 outline-accent outline-none placeholder:text-muted-fg focus:outline"
 									/>
