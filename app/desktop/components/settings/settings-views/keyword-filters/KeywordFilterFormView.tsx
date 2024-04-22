@@ -161,18 +161,6 @@ const KeywordFilterFormView = () => {
 					</div>
 
 					<div class={ListBox}>
-						<label class={ListBoxItemReadonly}>
-							<span class="grow font-medium">From everyone</span>
-							<Radio ref={noFollowModel(false)} name={id + 'f'} />
-						</label>
-
-						<label class={ListBoxItemReadonly}>
-							<span class="grow font-medium">From people I don't follow</span>
-							<Radio ref={noFollowModel(true)} name={id + 'f'} />
-						</label>
-					</div>
-
-					<div class={ListBox}>
 						<button
 							disabled={pref() === PreferenceIgnore}
 							type="button"
@@ -202,6 +190,18 @@ const KeywordFilterFormView = () => {
 								class="invisible absolute inset-0"
 							/>
 						</button>
+					</div>
+
+					<div class={ListBox}>
+						<label class={ListBoxItemReadonly}>
+							<span class="grow font-medium">From everyone</span>
+							<Radio ref={noFollowModel(false)} name={id + 'f'} />
+						</label>
+
+						<label class={ListBoxItemReadonly}>
+							<span class="grow font-medium">From people I don't follow</span>
+							<Radio ref={noFollowModel(true)} name={id + 'f'} />
+						</label>
 					</div>
 				</div>
 
