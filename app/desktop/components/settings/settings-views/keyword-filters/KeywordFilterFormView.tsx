@@ -179,6 +179,10 @@ const KeywordFilterFormView = () => {
 							</span>
 						</button>
 					</div>
+				</div>
+
+				<div class={ListGroup}>
+					<label class={ListGroupHeader}>Filter target</label>
 
 					<div class={ListBox}>
 						<label class={ListBoxItemReadonly}>
