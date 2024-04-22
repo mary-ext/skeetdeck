@@ -78,11 +78,10 @@ const AppearanceView = () => {
 								<p class="text-de text-muted-fg">This will not affect feeds/lists panes</p>
 							</div>
 							<Checkbox
-								checked={ui.profileMediaGrid}
-								onChange={(ev) => {
-									const next = ev.target.checked;
-									ui.profileMediaGrid = next;
-								}}
+								ref={modelChecked(
+									() => ui.profileMediaGrid,
+									(next) => (ui.profileMediaGrid = next),
+								)}
 							/>
 						</label>
 
@@ -93,11 +92,10 @@ const AppearanceView = () => {
 							</div>
 
 							<Checkbox
-								checked={ui.threadedReplies}
-								onChange={(ev) => {
-									const next = ev.target.checked;
-									ui.threadedReplies = next;
-								}}
+								ref={modelChecked(
+									() => ui.threadedReplies,
+									(next) => (ui.threadedReplies = next),
+								)}
 							/>
 						</label>
 					</div>
