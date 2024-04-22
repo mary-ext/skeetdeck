@@ -65,7 +65,7 @@ const SettingsDialog = () => {
 									Accounts
 								</SideItem>
 								<SideItem to={VIEW_APPEARANCE} icon={ColorLensIcon}>
-									Appearance
+									Interface
 								</SideItem>
 								<SideItem to={VIEW_LANGAUGE} icon={LanguageIcon}>
 									Language
