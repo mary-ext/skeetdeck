@@ -11,7 +11,6 @@ import { Interactive } from '~/com/primitives/interactive';
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
 import CircularProgress from '~/com/components/CircularProgress';
 
-import AccessibilityIcon from '~/com/icons/baseline-accessibility';
 import BackHandIcon from '~/com/icons/baseline-back-hand';
 import CloseIcon from '~/com/icons/baseline-close';
 import ColorLensIcon from '~/com/icons/baseline-color-lens';
