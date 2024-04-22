@@ -9,7 +9,6 @@ export const VIEW_APPEARANCE = 2;
 export const VIEW_LANGAUGE = 3;
 export const VIEW_MODERATION = 4;
 export const VIEW_KEYWORD_FILTERS = 5;
-export const VIEW_ACCESSIBILITY = 6;
 
 // Account moderation
 export const VIEW_ACCOUNT_MODERATION = 7;
@@ -31,7 +30,6 @@ export const VIEW_EXCLUDED_TRANSLATION = 16;
 
 export type ViewType =
 	| typeof VIEW_ABOUT
-	| typeof VIEW_ACCESSIBILITY
 	// | typeof VIEW_ACCOUNT_BLOCKS
 	| typeof VIEW_ACCOUNT_MODERATION
 	// | typeof VIEW_ACCOUNT_MODERATION_LISTS
@@ -56,7 +54,6 @@ export type View =
 	| { type: typeof VIEW_LANGAUGE }
 	| { type: typeof VIEW_MODERATION }
 	| { type: typeof VIEW_KEYWORD_FILTERS }
-	| { type: typeof VIEW_ACCESSIBILITY }
 	// Account moderation
 	// | { type: typeof VIEW_ACCOUNT_BLOCKS; did: At.DID }
 	// | { type: typeof VIEW_ACCOUNT_MODERATION_LISTS; did: At.DID }

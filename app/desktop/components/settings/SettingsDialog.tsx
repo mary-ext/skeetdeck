@@ -25,7 +25,6 @@ import {
 	type ViewType,
 	RouterContext,
 	VIEW_ABOUT,
-	VIEW_ACCESSIBILITY,
 	VIEW_ACCOUNTS,
 	VIEW_APPEARANCE,
 	VIEW_MODERATION,
@@ -67,9 +66,6 @@ const SettingsDialog = () => {
 								</SideItem>
 								<SideItem to={VIEW_APPEARANCE} icon={ColorLensIcon}>
 									Appearance
-								</SideItem>
-								<SideItem to={VIEW_ACCESSIBILITY} icon={AccessibilityIcon}>
-									Accessibility
 								</SideItem>
 								<SideItem to={VIEW_LANGAUGE} icon={LanguageIcon}>
 									Language

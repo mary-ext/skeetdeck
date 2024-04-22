@@ -3,7 +3,6 @@ import { type Component, type JSX, lazy } from 'solid-js';
 import {
 	type ViewType,
 	VIEW_ABOUT,
-	VIEW_ACCESSIBILITY,
 	VIEW_ACCOUNT_MODERATION,
 	VIEW_ACCOUNTS,
 	VIEW_ADDITIONAL_LANGUAGE,
@@ -20,7 +19,6 @@ import {
 } from './_router';
 
 const AboutView = lazy(() => import('./AboutView'));
-const AccessibilityView = lazy(() => import('./AccessibilityView'));
 const AccountsView = lazy(() => import('./AccountsView'));
 const AppearanceView = lazy(() => import('./AppearanceView'));
 const KeywordFiltersView = lazy(() => import('./KeywordFiltersView'));
@@ -40,7 +38,6 @@ const ExcludedTranslationView = lazy(() => import('./languages/ExcludedTranslati
 
 const views: Record<ViewType, Component> = {
 	[VIEW_ABOUT]: AboutView,
-	[VIEW_ACCESSIBILITY]: AccessibilityView,
 	[VIEW_ACCOUNTS]: AccountsView,
 	[VIEW_APPEARANCE]: AppearanceView,
 	[VIEW_MODERATION]: ModerationView,
