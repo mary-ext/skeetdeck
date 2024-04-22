@@ -4,9 +4,10 @@ import { getUniqueId } from '~/utils/misc';
 import { PaneSize } from '~/desktop/globals/panes';
 import { preferences } from '~/desktop/globals/settings';
 
+import { ListBox, ListBoxItemReadonly, ListGroup, ListGroupHeader } from '~/com/primitives/list-box';
+
 import Radio from '~/com/components/inputs/Radio';
 import Checkbox from '~/com/components/inputs/Checkbox';
-import { ListBox, ListBoxItemReadonly, ListGroup, ListGroupHeader } from '~/com/primitives/list-box';
 
 const AppearanceView = () => {
 	const ui = preferences.ui;
