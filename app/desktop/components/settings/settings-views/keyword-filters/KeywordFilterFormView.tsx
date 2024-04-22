@@ -236,6 +236,7 @@ const KeywordFilterFormView = () => {
 										<button
 											type="button"
 											title="Remove this phrase"
+											disabled={matchers().length === 1}
 											onClick={() => setMatchers(matchers().toSpliced(index(), 1))}
 											class={/* @once */ IconButton()}
 										>
