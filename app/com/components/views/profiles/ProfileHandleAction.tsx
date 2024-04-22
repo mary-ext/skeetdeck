@@ -28,15 +28,17 @@ const ProfileHandleAction = (props: ProfileHandleActionProps) => {
 				<Flyout button={props.children} placement="bottom-start" middleware={offsetlessMiddlewares}>
 					{({ close, menuProps }) => (
 						<div {...menuProps} class={/* @once */ MenuRoot()}>
-							<a
-								href={`https://${profile.handle.value}`}
-								target="_blank"
-								onClick={close}
-								class={/* @once */ MenuItem()}
-							>
-								<LaunchIcon class={/* @once */ MenuItemIcon()} />
-								<span>Open website</span>
-							</a>
+							{profile.handle.value !== 'handle.invalid' && (
+								<a
+									href={`https://${profile.handle.value}`}
+									target="_blank"
+									onClick={close}
+									class={/* @once */ MenuItem()}
+								>
+									<LaunchIcon class={/* @once */ MenuItemIcon()} />
+									<span>Open website</span>
+								</a>
+							)}
 
 							<button
 								onClick={() => {
