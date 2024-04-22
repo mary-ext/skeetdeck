@@ -11,6 +11,8 @@ import AddIcon from '~/com/icons/baseline-add';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 
 import { VIEW_KEYWORD_FILTER_FORM, VIEW_MODERATION, useViewRouter } from './_router';
+import { ListBox, ListBoxItemChevron, ListBoxItemInteractive, ListGroup } from '~/com/primitives/list-box';
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 
 const selectItem = Interactive({
 	variant: 'muted',
@@ -43,51 +45,58 @@ const KeywordFiltersView = () => {
 					<AddIcon />
 				</button>
 			</div>
-			<div class="flex grow flex-col overflow-y-auto pb-4">
-				<For
-					each={filters}
-					fallback={<p class="p-4 text-de text-muted-fg">You don't have any keyword filters set up yet.</p>}
-				>
-					{(filter) => {
-						return (
-							<button
-								onClick={() => router.move({ type: VIEW_KEYWORD_FILTER_FORM, id: filter.id })}
-								class={selectItem}
-							>
-								<p class="font-bold">{filter.name}</p>
-								<p class="text-de text-muted-fg">
-									<span>
-										{(() => {
-											const count = filter.matchers.length;
+			<div class="flex grow flex-col gap-6 overflow-y-auto p-4">
+				{filters.length === 0 ? (
+					<div class="text-center text-sm text-muted-fg">No keyword filters added.</div>
+				) : (
+					<div class={ListBox}>
+						<For each={filters}>
+							{(filter) => {
+								return (
+									<button
+										onClick={() => router.move({ type: VIEW_KEYWORD_FILTER_FORM, id: filter.id })}
+										class={ListBoxItemInteractive}
+									>
+										<div class="grow">
+											<p class="font-bold">{filter.name}</p>
+											<p class="text-de text-muted-fg">
+												<span>
+													{(() => {
+														const count = filter.matchers.length;
 
-											if (count === 1) {
-												return `${count} keyword muted`;
-											} else {
-												return `${count} keywords muted`;
-											}
-										})()}
-									</span>
-									<span class="px-1">·</span>
-									<span>
-										{(() => {
-											const val = filter.pref;
+														if (count === 1) {
+															return `${count} keyword muted`;
+														} else {
+															return `${count} keywords muted`;
+														}
+													})()}
+												</span>
+												<span class="px-1">·</span>
+												<span>
+													{(() => {
+														const val = filter.pref;
 
-											if (val === PreferenceIgnore) {
-												return `Ignore`;
-											}
-											if (val === PreferenceWarn) {
-												return `Warn`;
-											}
-											if (val === PreferenceHide) {
-												return `Hide`;
-											}
-										})()}
-									</span>
-								</p>
-							</button>
-						);
-					}}
-				</For>
+														if (val === PreferenceIgnore) {
+															return `Ignore`;
+														}
+														if (val === PreferenceWarn) {
+															return `Warn`;
+														}
+														if (val === PreferenceHide) {
+															return `Hide`;
+														}
+													})()}
+												</span>
+											</p>
+										</div>
+
+										<ChevronRightIcon class={ListBoxItemChevron} />
+									</button>
+								);
+							}}
+						</For>
+					</div>
+				)}
 			</div>
 		</div>
 	);
