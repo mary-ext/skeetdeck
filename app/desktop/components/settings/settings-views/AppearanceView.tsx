@@ -1,4 +1,4 @@
-import { createRadioModel } from '~/utils/input';
+import { createRadioModel, modelChecked } from '~/utils/input';
 import { getUniqueId } from '~/utils/misc';
 
 import { PaneSize } from '~/desktop/globals/panes';
@@ -6,16 +6,11 @@ import { preferences } from '~/desktop/globals/settings';
 
 import Radio from '~/com/components/inputs/Radio';
 import Checkbox from '~/com/components/inputs/Checkbox';
-import {
-	ListBox,
-	ListBoxItemReadonly,
-	ListGroup,
-	ListGroupBlurb,
-	ListGroupHeader,
-} from '~/com/primitives/list-box';
+import { ListBox, ListBoxItemReadonly, ListGroup, ListGroupHeader } from '~/com/primitives/list-box';
 
 const AppearanceView = () => {
 	const ui = preferences.ui;
+	const a11y = preferences.a11y;
 
 	const themeId = getUniqueId();
 	const themeModel = createRadioModel(
@@ -32,7 +27,7 @@ const AppearanceView = () => {
 	return (
 		<div class="contents">
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
-				<h2 class="grow text-base font-bold">Appearance</h2>
+				<h2 class="grow text-base font-bold">Interface</h2>
 			</div>
 			<div class="flex grow flex-col gap-6 overflow-y-auto p-4">
 				<div class={ListGroup}>
@@ -103,6 +98,27 @@ const AppearanceView = () => {
 									const next = ev.target.checked;
 									ui.threadedReplies = next;
 								}}
+							/>
+						</label>
+					</div>
+				</div>
+
+				<div class={ListGroup}>
+					<p class={ListGroupHeader}>Accessibility</p>
+
+					<div class={ListBox}>
+						<label class={ListBoxItemReadonly}>
+							<div class="grow">
+								<p class="font-medium">Remind me to add image descriptions</p>
+								<p class="text-de text-muted-fg">
+									Enable reminder to add description to images before a post can be sent
+								</p>
+							</div>
+							<Checkbox
+								ref={modelChecked(
+									() => a11y.warnNoMediaAlt,
+									(next) => (a11y.warnNoMediaAlt = next),
+								)}
 							/>
 						</label>
 					</div>
