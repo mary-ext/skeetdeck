@@ -22,6 +22,7 @@ export interface ProfileHandleActionProps {
 const ProfileHandleAction = (props: ProfileHandleActionProps) => {
 	return (() => {
 		const profile = props.profile;
+		const isPlc = profile.did.startsWith('did:plc:');
 
 		if (import.meta.env.VITE_MODE === 'desktop') {
 			return (
@@ -62,16 +63,18 @@ const ProfileHandleAction = (props: ProfileHandleActionProps) => {
 								<span class="overflow-hidden text-ellipsis whitespace-nowrap">Copy DID</span>
 							</button>
 
-							<button
-								onClick={() => {
-									close();
-									openModal(() => <HandleHistoryDialog profile={profile} />);
-								}}
-								class={/* @once */ MenuItem()}
-							>
-								<HistoryIcon class={/* @once */ MenuItemIcon()} />
-								<span class="overflow-hidden text-ellipsis whitespace-nowrap">View handle history</span>
-							</button>
+							{isPlc && (
+								<button
+									onClick={() => {
+										close();
+										openModal(() => <HandleHistoryDialog profile={profile} />);
+									}}
+									class={/* @once */ MenuItem()}
+								>
+									<HistoryIcon class={/* @once */ MenuItemIcon()} />
+									<span class="overflow-hidden text-ellipsis whitespace-nowrap">View handle history</span>
+								</button>
+							)}
 						</div>
 					)}
 				</Flyout>
