@@ -19,7 +19,6 @@ import { preferences } from '../../../../globals/settings';
 import { Button } from '~/com/primitives/button';
 import { IconButton } from '~/com/primitives/icon-button';
 import { Input } from '~/com/primitives/input';
-import { Interactive } from '~/com/primitives/interactive';
 import {
 	ListBox,
 	ListBoxItem,
@@ -38,20 +37,15 @@ import CloseIcon from '~/com/icons/baseline-close';
 import FormatLetterMatchesIcon from '~/com/icons/baseline-format-letter-matches';
 
 import { type ViewParams, VIEW_KEYWORD_FILTER_FORM, VIEW_KEYWORD_FILTERS, useViewRouter } from '../_router';
+import DateTimeDialog from '~/desktop/components/dialogs/DateTimeDialog';
 
 type KeywordState = [keyword: Signal<string>, whole: Signal<boolean>];
-
-const wholeMatchBtn = Interactive({
-	class: `absolute inset-y-0 right-0 grid w-9 place-items-center text-base`,
-});
 
 const createKeywordState = (keyword: string, whole: boolean): KeywordState => {
 	return [createSignal(keyword), createSignal(whole)];
 };
 
 const KeywordFilterFormView = () => {
-	let dateInput: HTMLInputElement;
-
 	let canAutofocus = false;
 
 	const router = useViewRouter();
@@ -164,7 +158,11 @@ const KeywordFilterFormView = () => {
 						<button
 							disabled={pref() === PreferenceIgnore}
 							type="button"
-							onClick={() => dateInput!.showPicker()}
+							onClick={() =>
+								openModal(() => (
+									<DateTimeDialog value={expiresAt()} minDate={new Date()} onChange={setExpiresAt} />
+								))
+							}
 							class={ListBoxItemInteractive + ' relative'}
 						>
 							<span class="grow font-medium">Expire after</span>
@@ -179,16 +177,6 @@ const KeywordFilterFormView = () => {
 									return `Never`;
 								})()}
 							</span>
-							<input
-								ref={(node) => {
-									dateInput = node;
-									modelDate(expiresAt, setExpiresAt)(node);
-								}}
-								type="datetime-local"
-								min={getISOLocalString(new Date())}
-								tabindex={-1}
-								class="invisible absolute inset-0"
-							/>
 						</button>
 					</div>
 
@@ -308,33 +296,6 @@ const KeywordFilterFormView = () => {
 };
 
 export default KeywordFilterFormView;
-
-const getISOLocalString = (date: Date): string => {
-	return date.toLocaleString('sv', { dateStyle: 'short', timeStyle: 'short' }).replace(' ', 'T');
-};
-
-const modelDate = (getter: () => Date | undefined, setter: (next: Date | undefined) => void) => {
-	return (node: HTMLInputElement) => {
-		createEffect(() => {
-			const inst = getter();
-
-			node.value = inst !== undefined ? getISOLocalString(inst) : '';
-		});
-
-		node.addEventListener('input', () => {
-			const value = node.value;
-
-			if (value === '') {
-				setter(undefined);
-			} else {
-				const [year, month, date, hour, minute] = value.split(/[-T:]/g);
-				const inst = new Date(+year, +month - 1, +date, +hour, +minute);
-
-				setter(inst);
-			}
-		});
-	};
-};
 
 const ESCAPE_RE = /[.*+?^${}()|[\]\\]/g;
 const escape = (str: string) => {
