@@ -123,9 +123,9 @@ export class Multiagent {
 	async login({ service, identifier, password }: MultiagentLoginOptions): Promise<At.DID> {
 		const { rpc, auth, c: cleanup } = this.#createAgent(service);
 
-		try {
-			await auth.login({ identifier, password });
+		await auth.login({ identifier, password });
 
+		try {
 			const session = auth.session!;
 			const did = session.did;
 
