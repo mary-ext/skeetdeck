@@ -135,21 +135,17 @@ const LanguageView = () => {
 
 					<div class={ListBox}>
 						<label class={ListBoxItemReadonly}>
-							<div class="flex min-w-0 grow flex-col">
-								<div class="flex justify-between gap-3">
-									<span class="grow font-medium">Use my system's languages</span>
-									<Checkbox
-										ref={modelChecked(
-											() => langs.useSystemLanguages,
-											(next) => (langs.useSystemLanguages = next),
-										)}
-									/>
-								</div>
-
-								<p class="mt-1 text-de text-muted-fg">
-									Show posts that matches your browser's language preferences
-								</p>
+							<div class="grow">
+								<p class="font-medium">Use my system languages</p>
+								<p class="text-de text-muted-fg">Show posts according to browser preferences</p>
 							</div>
+
+							<Checkbox
+								ref={modelChecked(
+									() => langs.useSystemLanguages,
+									(next) => (langs.useSystemLanguages = next),
+								)}
+							/>
 						</label>
 
 						<button
@@ -175,21 +171,17 @@ const LanguageView = () => {
 						</button>
 
 						<label class={ListBoxItemReadonly}>
-							<div class="flex min-w-0 grow flex-col">
-								<div class="flex justify-between gap-3">
-									<span class="grow font-medium">Don't show undeclared posts</span>
-									<Checkbox
-										ref={modelChecked(
-											() => !langs.allowUnspecified,
-											(next) => (langs.allowUnspecified = !next),
-										)}
-									/>
-								</div>
-
-								<p class="mt-1 text-de text-muted-fg">
-									Hide posts that has not declared what language it is in
-								</p>
+							<div class="grow">
+								<p class="font-medium">Don't show undeclared posts</p>
+								<p class="text-de text-muted-fg">Hide posts that hasn't declared what language it's in</p>
 							</div>
+
+							<Checkbox
+								ref={modelChecked(
+									() => !langs.allowUnspecified,
+									(next) => (langs.allowUnspecified = !next),
+								)}
+							/>
 						</label>
 					</div>
 
