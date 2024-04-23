@@ -27,7 +27,7 @@ import {
 	VIEW_ACCOUNTS,
 	VIEW_INTERFACE,
 	VIEW_MODERATION,
-	VIEW_LANGAUGE,
+	VIEW_CONTENT,
 	useViewRouter,
 } from './settings-views/_router';
 import SettingsRouterView from './settings-views/SettingsRouterView';
@@ -66,8 +66,8 @@ const SettingsDialog = () => {
 								<SideItem to={VIEW_INTERFACE} icon={ColorLensIcon}>
 									Interface
 								</SideItem>
-								<SideItem to={VIEW_LANGAUGE} icon={LanguageIcon}>
-									Language
+								<SideItem to={VIEW_CONTENT} icon={LanguageIcon}>
+									Content
 								</SideItem>
 								<SideItem to={VIEW_MODERATION} icon={BackHandIcon}>
 									Moderation

@@ -6,13 +6,13 @@ import {
 	VIEW_ACCOUNT_MODERATION,
 	VIEW_ACCOUNTS,
 	VIEW_ADDITIONAL_LANGUAGE,
+	VIEW_CONTENT,
 	VIEW_EXCLUDED_TRANSLATION,
 	VIEW_HIDDEN_REPOSTERS,
 	VIEW_INTERFACE,
 	VIEW_KEYWORD_FILTER_FORM,
 	VIEW_KEYWORD_FILTERS,
 	VIEW_LABELER_CONFIG,
-	VIEW_LANGAUGE,
 	VIEW_MODERATION,
 	VIEW_TEMPORARY_MUTES,
 	useViewRouter,
@@ -20,9 +20,9 @@ import {
 
 const AboutView = lazy(() => import('./AboutView'));
 const AccountsView = lazy(() => import('./AccountsView'));
+const ContentView = lazy(() => import('./ContentView'));
 const InterfaceView = lazy(() => import('./InterfaceView'));
 const KeywordFiltersView = lazy(() => import('./KeywordFiltersView'));
-const LanguageView = lazy(() => import('./LanguageView'));
 const ModerationView = lazy(() => import('./ModerationView'));
 
 const AccountModerationView = lazy(() => import('./moderation/AccountModerationView'));
@@ -42,7 +42,7 @@ const views: Record<ViewType, Component> = {
 	[VIEW_INTERFACE]: InterfaceView,
 	[VIEW_MODERATION]: ModerationView,
 	[VIEW_KEYWORD_FILTERS]: KeywordFiltersView,
-	[VIEW_LANGAUGE]: LanguageView,
+	[VIEW_CONTENT]: ContentView,
 
 	[VIEW_ACCOUNT_MODERATION]: AccountModerationView,
 

@@ -6,7 +6,7 @@ import type { At } from '~/api/atp-schema';
 export const VIEW_ABOUT = 0;
 export const VIEW_ACCOUNTS = 1;
 export const VIEW_INTERFACE = 2;
-export const VIEW_LANGAUGE = 3;
+export const VIEW_CONTENT = 3;
 export const VIEW_MODERATION = 4;
 export const VIEW_KEYWORD_FILTERS = 5;
 
@@ -36,13 +36,13 @@ export type ViewType =
 	// | typeof VIEW_ACCOUNT_MUTES
 	| typeof VIEW_ACCOUNTS
 	| typeof VIEW_ADDITIONAL_LANGUAGE
-	| typeof VIEW_INTERFACE
+	| typeof VIEW_CONTENT
 	| typeof VIEW_EXCLUDED_TRANSLATION
 	| typeof VIEW_HIDDEN_REPOSTERS
+	| typeof VIEW_INTERFACE
 	| typeof VIEW_KEYWORD_FILTER_FORM
 	| typeof VIEW_KEYWORD_FILTERS
 	| typeof VIEW_LABELER_CONFIG
-	| typeof VIEW_LANGAUGE
 	| typeof VIEW_MODERATION
 	| typeof VIEW_TEMPORARY_MUTES;
 
@@ -51,7 +51,7 @@ export type View =
 	| { type: typeof VIEW_ABOUT }
 	| { type: typeof VIEW_ACCOUNTS }
 	| { type: typeof VIEW_INTERFACE }
-	| { type: typeof VIEW_LANGAUGE }
+	| { type: typeof VIEW_CONTENT }
 	| { type: typeof VIEW_MODERATION }
 	| { type: typeof VIEW_KEYWORD_FILTERS }
 	// Account moderation
