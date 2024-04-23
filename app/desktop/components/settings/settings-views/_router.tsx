@@ -5,7 +5,7 @@ import type { At } from '~/api/atp-schema';
 // Root
 export const VIEW_ABOUT = 0;
 export const VIEW_ACCOUNTS = 1;
-export const VIEW_APPEARANCE = 2;
+export const VIEW_INTERFACE = 2;
 export const VIEW_LANGAUGE = 3;
 export const VIEW_MODERATION = 4;
 export const VIEW_KEYWORD_FILTERS = 5;
@@ -36,7 +36,7 @@ export type ViewType =
 	// | typeof VIEW_ACCOUNT_MUTES
 	| typeof VIEW_ACCOUNTS
 	| typeof VIEW_ADDITIONAL_LANGUAGE
-	| typeof VIEW_APPEARANCE
+	| typeof VIEW_INTERFACE
 	| typeof VIEW_EXCLUDED_TRANSLATION
 	| typeof VIEW_HIDDEN_REPOSTERS
 	| typeof VIEW_KEYWORD_FILTER_FORM
@@ -50,7 +50,7 @@ export type View =
 	// Root
 	| { type: typeof VIEW_ABOUT }
 	| { type: typeof VIEW_ACCOUNTS }
-	| { type: typeof VIEW_APPEARANCE }
+	| { type: typeof VIEW_INTERFACE }
 	| { type: typeof VIEW_LANGAUGE }
 	| { type: typeof VIEW_MODERATION }
 	| { type: typeof VIEW_KEYWORD_FILTERS }

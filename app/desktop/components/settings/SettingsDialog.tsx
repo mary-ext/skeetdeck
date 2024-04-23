@@ -25,7 +25,7 @@ import {
 	RouterContext,
 	VIEW_ABOUT,
 	VIEW_ACCOUNTS,
-	VIEW_APPEARANCE,
+	VIEW_INTERFACE,
 	VIEW_MODERATION,
 	VIEW_LANGAUGE,
 	useViewRouter,
@@ -63,7 +63,7 @@ const SettingsDialog = () => {
 								<SideItem to={VIEW_ACCOUNTS} icon={PeopleIcon}>
 									Accounts
 								</SideItem>
-								<SideItem to={VIEW_APPEARANCE} icon={ColorLensIcon}>
+								<SideItem to={VIEW_INTERFACE} icon={ColorLensIcon}>
 									Interface
 								</SideItem>
 								<SideItem to={VIEW_LANGAUGE} icon={LanguageIcon}>
