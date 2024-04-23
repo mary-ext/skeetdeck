@@ -193,10 +193,7 @@ const LanguageView = () => {
 						</label>
 					</div>
 
-					<p class={ListGroupBlurb}>
-						Adjusts the content you see on Bluesky. Removing all languages will result in all posts being
-						shown.
-					</p>
+					<p class={ListGroupBlurb}>Removing all languages will result in all posts being shown.</p>
 				</div>
 
 				<div class={ListGroup}>
