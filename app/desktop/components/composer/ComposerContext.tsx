@@ -101,7 +101,7 @@ export const createPostState = (preferences: PreferencesSchema): PostState => {
 export const createComposerState = (preferences: PreferencesSchema): ComposerState => {
 	return {
 		reply: undefined,
-		gate: { type: 'e' },
+		gate: { type: preferences.ui.defaultReplyGate },
 		posts: [createPostState(preferences)],
 	};
 };

@@ -14,7 +14,7 @@ export interface ModerationPreferences extends Omit<ModerationOptions, '_filters
 }
 
 export interface PreferencesSchema {
-	$version: 10;
+	$version: 11;
 	/** Onboarding mode */
 	onboarding: boolean;
 	/** Deck configuration */
@@ -29,6 +29,8 @@ export interface PreferencesSchema {
 		profileMediaGrid: boolean;
 		/** Show thread replies in a threaded view */
 		threadedReplies: boolean;
+		/** Who can reply to your posts */
+		defaultReplyGate: 'e' | 'm' | 'f';
 	};
 	/** Accessibility configuration */
 	a11y: {
@@ -48,7 +50,7 @@ const PREF_KEY = 'rantai_prefs';
 export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KEY, (version, prev) => {
 	if (version === 0) {
 		const object: PreferencesSchema = {
-			$version: 10,
+			$version: 11,
 			onboarding: true,
 			decks: [],
 			ui: {
@@ -56,6 +58,7 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 				defaultPaneSize: PaneSize.MEDIUM,
 				profileMediaGrid: true,
 				threadedReplies: false,
+				defaultReplyGate: 'e',
 			},
 			a11y: {
 				warnNoMediaAlt: true,
@@ -114,8 +117,13 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 			hideReposts: prev.filters.hideReposts,
 			tempMutes: prev.filters.tempMutes,
 		};
+	}
 
-		_next.$version = 10;
+	if (version < 11) {
+		const _next = prev as PreferencesSchema;
+
+		_next.ui.defaultReplyGate = 'e';
+		_next.$version = 11;
 	}
 
 	return prev;
