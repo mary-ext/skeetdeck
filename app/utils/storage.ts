@@ -3,24 +3,31 @@ import { type StoreNode, createMutable, modifyMutable, reconcile } from 'solid-j
 
 type MigrateFn<T> = (version: number, prev: any) => T;
 
-const parse = <T>(raw: string | null, migrate: MigrateFn<T>): T => {
+const parse = <T>(raw: string | null, migrate: MigrateFn<T>): [data: T, migrated: boolean] => {
 	if (raw !== null) {
 		try {
 			const persisted = JSON.parse(raw);
 
 			if (persisted != null) {
-				return migrate(persisted.$version || 0, persisted);
+				const version = persisted.$version || 0;
+
+				const data = migrate(version, persisted);
+				const migrated = (data as any).$version !== version;
+
+				return [data, migrated];
 			}
 		} catch {}
 	}
 
-	return migrate(0, null);
+	return [migrate(0, null), false];
 };
 
 export const createReactiveLocalStorage = <T extends StoreNode>(name: string, migrate: MigrateFn<T>) => {
-	const mutable = createMutable<T>(parse(localStorage.getItem(name), migrate));
+	const [initialData, migrated] = parse(localStorage.getItem(name), migrate);
 
-	let writable = false;
+	const mutable = createMutable<T>(initialData);
+
+	let writable = migrated;
 
 	createRoot(() => {
 		createEffect(() => {
@@ -36,7 +43,7 @@ export const createReactiveLocalStorage = <T extends StoreNode>(name: string, mi
 		if (ev.key === name) {
 			// Prevent our own effects from running, since this is already persisted.
 			writable = false;
-			modifyMutable(mutable, reconcile(parse(ev.newValue, migrate), { merge: true }));
+			modifyMutable(mutable, reconcile(parse(ev.newValue, migrate)[0], { merge: true }));
 			writable = true;
 		}
 	});
