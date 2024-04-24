@@ -34,7 +34,7 @@ const AppearanceView = () => {
 								},
 								{
 									value: 'dark',
-									label: `dark`,
+									label: `Dark`,
 								},
 							]}
 						/>
