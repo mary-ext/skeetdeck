@@ -1,4 +1,4 @@
-import { type ComponentProps, type JSX, Suspense, createSignal } from 'solid-js';
+import { type ComponentProps, type JSX, Suspense, createSignal, startTransition } from 'solid-js';
 
 import { clsx } from '~/utils/misc';
 
@@ -40,7 +40,9 @@ const SettingsDialog = () => {
 			return view();
 		},
 		move: (next) => {
-			setView(next);
+			startTransition(() => {
+				setView(next);
+			});
 		},
 	};
 
