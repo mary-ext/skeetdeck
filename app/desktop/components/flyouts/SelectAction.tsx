@@ -8,14 +8,15 @@ import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
 
 import CheckIcon from '~/com/icons/baseline-check';
 
-export interface SelectItem<T> {
+export interface SelectOption<T> {
 	value: T;
+	short?: string;
 	label: JSX.Element;
 }
 
 export interface SelectActionProps<T> {
 	value?: T;
-	options: SelectItem<T>[];
+	options: SelectOption<T>[];
 	onChange: (next: T) => void;
 	children: JSX.Element;
 }

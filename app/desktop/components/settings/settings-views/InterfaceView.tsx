@@ -8,6 +8,26 @@ import { ListBox, ListBoxItemReadonly, ListGroup, ListGroupHeader } from '~/com/
 
 import Radio from '~/com/components/inputs/Radio';
 import Checkbox from '~/com/components/inputs/Checkbox';
+import type { SelectOption } from '../../flyouts/SelectAction';
+
+const getThemeOptions = () => {
+	const options: SelectOption<'auto' | 'light' | 'dark'>[] = [
+		{
+			value: 'auto',
+			label: 'System default',
+		},
+		{
+			value: 'light',
+			label: 'Light',
+		},
+		{
+			value: 'dark',
+			label: 'dark',
+		},
+	];
+
+	return options;
+};
 
 const AppearanceView = () => {
 	const ui = preferences.ui;
@@ -32,7 +52,7 @@ const AppearanceView = () => {
 			</div>
 			<div class="flex grow flex-col gap-6 overflow-y-auto p-4">
 				<div class={ListGroup}>
-					<p class={ListGroupHeader}>Application theme</p>
+					<p class={ListGroupHeader}>Appearance</p>
 
 					<div class={ListBox}>
 						<label class={ListBoxItemReadonly}>

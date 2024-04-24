@@ -19,106 +19,11 @@ import {
 
 import Checkbox from '~/com/components/inputs/Checkbox';
 
-import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down';
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 
 import { VIEW_ADDITIONAL_LANGUAGE, VIEW_EXCLUDED_TRANSLATION, useViewRouter } from './_router';
 
-import type { SelectItem } from '../../flyouts/SelectAction';
-import SelectAction from '../../flyouts/SelectAction';
-
-const getLanguageLabel = (code: string, isTranslate: boolean) => {
-	if (code === 'none') {
-		return !isTranslate ? 'None' : `Disabled`;
-	}
-
-	if (code === 'system') {
-		return `System default (${languageNames.of(systemLanguages[0])})`;
-	}
-
-	const eng = languageNamesStrict.of(code);
-
-	if (!eng) {
-		return `Unknown (${code})`;
-	}
-
-	return eng;
-};
-
-const getReplyGateLabel = (code: 'e' | 'm' | 'f'): string => {
-	if (code === 'm') {
-		return `Mentioned users only`;
-	}
-
-	if (code === 'f') {
-		return `Followed users only`;
-	}
-
-	return `Everyone`;
-};
-
-const getAvailableLanguages = (isTranslate: boolean) => {
-	const availableLanguages: SelectItem<string>[] = [
-		{
-			value: 'none',
-			label: !isTranslate ? `None` : `Disabled`,
-		},
-		{
-			value: 'system',
-			get label() {
-				const lang = languageNames.of(systemLanguages[0]);
-
-				return (
-					<>
-						<p>System default</p>
-						<p class="text-de text-muted-fg">{lang}</p>
-					</>
-				);
-			},
-		},
-		...mapDefined(CODE2S, (code) => {
-			const eng = languageNamesStrict.of(code);
-			const native = getNativeLanguageName(code);
-
-			if (!eng || !native) {
-				return;
-			}
-
-			return {
-				value: code,
-				get label() {
-					return (
-						<>
-							<p>{eng}</p>
-							<p class="text-de text-muted-fg">{native}</p>
-						</>
-					);
-				},
-			};
-		}),
-	];
-
-	return availableLanguages;
-};
-
-const getReplyGateOptions = () => {
-	const options: SelectItem<'e' | 'm' | 'f'>[] = [
-		{
-			value: 'e',
-			label: getReplyGateLabel('e'),
-		},
-		{
-			value: 'm',
-			label: getReplyGateLabel('m'),
-		},
-		{
-			value: 'f',
-			label: getReplyGateLabel('f'),
-		},
-	];
-
-	return options;
-};
+import { type SelectOption, SelectionItem } from './_components';
 
 const LanguageView = () => {
 	const router = useViewRouter();
@@ -137,35 +42,19 @@ const LanguageView = () => {
 					<p class={ListGroupHeader}>Content you post</p>
 
 					<div class={ListBox}>
-						<SelectAction
+						<SelectionItem
+							title="Post language"
 							value={langs.defaultPostLanguage}
-							options={getAvailableLanguages(false)}
+							options={getLanguageOptions(false)}
 							onChange={(next) => (langs.defaultPostLanguage = next)}
-						>
-							<button class={ListBoxItemInteractive}>
-								<span class="grow font-medium">Post language</span>
+						/>
 
-								<span class="flex min-w-0 shrink-0 items-center gap-0.5 self-start text-muted-fg">
-									<span class="text-de">{getLanguageLabel(langs.defaultPostLanguage, false)}</span>
-									<ArrowDropDownIcon class="-mr-1 text-base" />
-								</span>
-							</button>
-						</SelectAction>
-
-						<SelectAction
+						<SelectionItem
+							title="Who can reply to my posts"
 							value={ui.defaultReplyGate}
 							options={getReplyGateOptions()}
 							onChange={(next) => (ui.defaultReplyGate = next)}
-						>
-							<button class={ListBoxItemInteractive}>
-								<span class="grow font-medium">Who can reply to my posts</span>
-
-								<span class="flex min-w-0 shrink-0 items-center gap-0.5 self-start text-muted-fg">
-									<span class="text-de">{getReplyGateLabel(ui.defaultReplyGate)}</span>
-									<ArrowDropDownIcon class="-mr-1 text-base" />
-								</span>
-							</button>
-						</SelectAction>
+						/>
 					</div>
 
 					<p class={ListGroupBlurb}>This will not affect existing posts.</p>
@@ -233,20 +122,12 @@ const LanguageView = () => {
 					<p class={ListGroupHeader}>Content translation</p>
 
 					<div class={ListBox}>
-						<SelectAction
+						<SelectionItem
+							title="Translate to"
 							value={trans.to}
-							options={getAvailableLanguages(true)}
+							options={getLanguageOptions(true)}
 							onChange={(next) => (trans.to = next)}
-						>
-							<button class={ListBoxItemInteractive}>
-								<span class="grow font-medium">Translate to</span>
-
-								<span class="flex min-w-0 shrink-0 items-center gap-0.5 self-start text-muted-fg">
-									<span class="text-de">{getLanguageLabel(trans.to, true)}</span>
-									<ArrowDropDownIcon class="-mr-1 text-base" />
-								</span>
-							</button>
-						</SelectAction>
+						/>
 
 						<button
 							onClick={() => router.move({ type: VIEW_EXCLUDED_TRANSLATION })}
@@ -277,3 +158,68 @@ const LanguageView = () => {
 };
 
 export default LanguageView;
+
+const getLanguageOptions = (isTranslate: boolean) => {
+	const system = languageNames.of(systemLanguages[0]);
+
+	const options: SelectOption<string>[] = [
+		{
+			value: 'none',
+			label: !isTranslate ? `None` : `Disabled`,
+		},
+		{
+			value: 'system',
+			short: `System default (${system})`,
+			get label() {
+				return (
+					<>
+						<p>System default</p>
+						<p class="text-de text-muted-fg">{system}</p>
+					</>
+				);
+			},
+		},
+		...mapDefined(CODE2S, (code) => {
+			const eng = languageNamesStrict.of(code);
+			const native = getNativeLanguageName(code);
+
+			if (!eng || !native) {
+				return;
+			}
+
+			return {
+				value: code,
+				short: eng,
+				get label() {
+					return (
+						<>
+							<p>{eng}</p>
+							<p class="text-de text-muted-fg">{native}</p>
+						</>
+					);
+				},
+			};
+		}),
+	];
+
+	return options;
+};
+
+const getReplyGateOptions = () => {
+	const options: SelectOption<'e' | 'm' | 'f'>[] = [
+		{
+			value: 'e',
+			label: `Everyone`,
+		},
+		{
+			value: 'm',
+			label: `Mentioned users only`,
+		},
+		{
+			value: 'f',
+			label: `Followed users only`,
+		},
+	];
+
+	return options;
+};
