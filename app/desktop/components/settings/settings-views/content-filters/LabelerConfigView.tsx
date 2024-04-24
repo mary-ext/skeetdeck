@@ -5,26 +5,18 @@ import { GLOBAL_LABELS } from '~/api/moderation';
 import { preferences } from '~/desktop/globals/settings';
 
 import { formatAbsDateTime } from '~/utils/intl/time';
-import { modelChecked } from '~/utils/input';
 
 import { bustModeration } from '~/com/globals/shared';
 
-import Checkbox from '~/com/components/inputs/Checkbox';
-
 import { IconButton } from '~/com/primitives/icon-button';
-import {
-	ListBox,
-	ListBoxItemReadonly,
-	ListGroup,
-	ListGroupBlurb,
-	ListGroupHeader,
-} from '~/com/primitives/list-box';
+import { ListBox, ListGroup, ListGroupBlurb, ListGroupHeader } from '~/com/primitives/list-box';
 
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 
 import DefaultLabelerAvatar from '~/com/assets/default-labeler-avatar.svg?url';
 
 import { type ViewParams, VIEW_LABELER_CONFIG, VIEW_MODERATION, useViewRouter } from '../_router';
+import { CheckItem } from '../_components';
 
 import LabelItem from './components/LabelItem';
 
@@ -144,16 +136,11 @@ const LabelerConfigView = () => {
 								<p class={ListGroupHeader}>Advanced</p>
 
 								<div class={ListBox}>
-									<label class={ListBoxItemReadonly}>
-										<span class="grow font-medium">Apply takedowns from this provider</span>
-
-										<Checkbox
-											ref={modelChecked(
-												() => service.redact ?? false,
-												(next) => (service.redact = next || undefined),
-											)}
-										/>
-									</label>
+									<CheckItem
+										title="Apply takedowns from this provider"
+										value={service.redact}
+										onChange={(next) => (service.redact = next || undefined)}
+									/>
 								</div>
 							</div>
 						</div>
