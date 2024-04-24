@@ -1,7 +1,5 @@
 import { For, batch } from 'solid-js';
 
-import { multiagent } from '~/api/globals/agent';
-
 import { GLOBAL_LABELS } from '~/api/moderation';
 
 import { bustModeration } from '~/com/globals/shared';
@@ -22,13 +20,11 @@ import FilterAltOutlinedIcon from '~/com/icons/outline-filter-alt';
 import RepeatOffIcon from '~/com/icons/baseline-repeat-off';
 import VisibilityOffOutlinedIcon from '~/com/icons/outline-visibility-off';
 
-import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 import DefaultLabelerAvatar from '~/com/assets/default-labeler-avatar.svg?url';
 
 import { preferences } from '../../../globals/settings';
 
 import {
-	VIEW_ACCOUNT_MODERATION,
 	VIEW_HIDDEN_REPOSTERS,
 	VIEW_KEYWORD_FILTERS,
 	VIEW_LABELER_CONFIG,
@@ -50,37 +46,6 @@ const ModerationView = () => {
 				<h2 class="grow text-base font-bold">Moderation</h2>
 			</div>
 			<div class="flex grow flex-col gap-6 overflow-y-auto p-4">
-				<div class={ListGroup}>
-					<p class={ListGroupHeader}>Account moderation</p>
-
-					<fieldset class={ListBox}>
-						<For each={multiagent.accounts}>
-							{(account) => (
-								<button
-									onClick={() => router.move({ type: VIEW_ACCOUNT_MODERATION, did: account.did })}
-									class={ListBoxItemInteractive}
-								>
-									<img
-										src={account.profile?.avatar || DefaultUserAvatar}
-										class="h-8 w-8 shrink-0 rounded-full"
-									/>
-
-									<div class="flex min-w-0 grow flex-col text-sm">
-										<p class="overflow-hidden text-ellipsis whitespace-nowrap font-medium empty:hidden">
-											{account.profile?.displayName}
-										</p>
-										<p class="overflow-hidden text-ellipsis whitespace-nowrap text-de text-muted-fg">
-											{'@' + account.session.handle}
-										</p>
-									</div>
-
-									<ChevronRightIcon class={ListBoxItemChevron} />
-								</button>
-							)}
-						</For>
-					</fieldset>
-				</div>
-
 				<div class={ListGroup}>
 					<p class={ListGroupHeader}>Additional moderation tools</p>
 

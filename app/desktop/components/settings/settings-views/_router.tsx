@@ -10,8 +10,8 @@ export const VIEW_CONTENT = 3;
 export const VIEW_MODERATION = 4;
 export const VIEW_KEYWORD_FILTERS = 5;
 
-// Account moderation
-export const VIEW_ACCOUNT_MODERATION = 7;
+// Account configuration
+export const VIEW_ACCOUNT_CONFIG = 7;
 // export const VIEW_ACCOUNT_BLOCKS = 8;
 // export const VIEW_ACCOUNT_MUTES = 9;
 // export const VIEW_ACCOUNT_MODERATION_LISTS = 10;
@@ -31,7 +31,7 @@ export const VIEW_EXCLUDED_TRANSLATION = 16;
 export type ViewType =
 	| typeof VIEW_ABOUT
 	// | typeof VIEW_ACCOUNT_BLOCKS
-	| typeof VIEW_ACCOUNT_MODERATION
+	| typeof VIEW_ACCOUNT_CONFIG
 	// | typeof VIEW_ACCOUNT_MODERATION_LISTS
 	// | typeof VIEW_ACCOUNT_MUTES
 	| typeof VIEW_ACCOUNTS
@@ -57,7 +57,7 @@ export type View =
 	// Account moderation
 	// | { type: typeof VIEW_ACCOUNT_BLOCKS; did: At.DID }
 	// | { type: typeof VIEW_ACCOUNT_MODERATION_LISTS; did: At.DID }
-	| { type: typeof VIEW_ACCOUNT_MODERATION; did: At.DID }
+	| { type: typeof VIEW_ACCOUNT_CONFIG; did: At.DID }
 	// | { type: typeof VIEW_ACCOUNT_MUTES; did: At.DID }
 	// Content filters
 	| { type: typeof VIEW_HIDDEN_REPOSTERS }

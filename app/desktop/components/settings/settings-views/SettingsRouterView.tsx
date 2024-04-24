@@ -3,7 +3,7 @@ import { type Component, type JSX, lazy } from 'solid-js';
 import {
 	type ViewType,
 	VIEW_ABOUT,
-	VIEW_ACCOUNT_MODERATION,
+	VIEW_ACCOUNT_CONFIG,
 	VIEW_ACCOUNTS,
 	VIEW_ADDITIONAL_LANGUAGE,
 	VIEW_CONTENT,
@@ -25,7 +25,7 @@ const InterfaceView = lazy(() => import('./InterfaceView'));
 const KeywordFiltersView = lazy(() => import('./KeywordFiltersView'));
 const ModerationView = lazy(() => import('./ModerationView'));
 
-const AccountModerationView = lazy(() => import('./moderation/AccountModerationView'));
+const AccountConfigView = lazy(() => import('./account/AccountConfigView'));
 
 const HiddenRepostersView = lazy(() => import('./content-filters/HiddenRepostersView'));
 const LabelConfigView = lazy(() => import('./content-filters/LabelerConfigView'));
@@ -44,7 +44,7 @@ const views: Record<ViewType, Component> = {
 	[VIEW_KEYWORD_FILTERS]: KeywordFiltersView,
 	[VIEW_CONTENT]: ContentView,
 
-	[VIEW_ACCOUNT_MODERATION]: AccountModerationView,
+	[VIEW_ACCOUNT_CONFIG]: AccountConfigView,
 
 	[VIEW_HIDDEN_REPOSTERS]: HiddenRepostersView,
 	[VIEW_LABELER_CONFIG]: LabelConfigView,

@@ -28,13 +28,13 @@ import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 import PeopleOutlinedIcon from '~/com/icons/outline-people';
 import VolumeOffOutlinedIcon from '~/com/icons/outline-volume-off';
 
-import { type ViewParams, VIEW_ACCOUNT_MODERATION, VIEW_MODERATION, useViewRouter } from '../_router';
+import { type ViewParams, VIEW_ACCOUNT_CONFIG, VIEW_ACCOUNTS, useViewRouter } from '../_router';
 
 const NO_UNAUTHENTICATED_LABEL = '!no-unauthenticated';
 
 const AccountModerationView = () => {
 	const router = useViewRouter();
-	const { did } = router.current as ViewParams<typeof VIEW_ACCOUNT_MODERATION>;
+	const { did } = router.current as ViewParams<typeof VIEW_ACCOUNT_CONFIG>;
 
 	const account = createMemo(() => multiagent.accounts.find((account) => account.did === did));
 
@@ -43,7 +43,7 @@ const AccountModerationView = () => {
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
 				<button
 					title="Return to previous screen"
-					onClick={() => router.move({ type: VIEW_MODERATION })}
+					onClick={() => router.move({ type: VIEW_ACCOUNTS })}
 					class={/* @once */ IconButton({ edge: 'left' })}
 				>
 					<ArrowLeftIcon />
@@ -54,7 +54,7 @@ const AccountModerationView = () => {
 						return (
 							<div class="flex min-w-0 grow flex-col gap-0.5">
 								<p class="overflow-hidden text-ellipsis whitespace-nowrap text-base font-bold leading-5">
-									Account moderation
+									Account settings
 								</p>
 
 								<p class="overflow-hidden text-ellipsis whitespace-nowrap text-xs text-muted-fg">

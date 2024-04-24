@@ -8,19 +8,25 @@ import { multiagent } from '~/api/globals/agent.js';
 import { openModal } from '~/com/globals/modals';
 
 import { IconButton } from '~/com/primitives/icon-button';
+import { ListBox, ListBoxItemChevron, ListBoxItemInteractive, ListGroup } from '~/com/primitives/list-box';
 import { MenuItem, MenuRoot } from '~/com/primitives/menu';
 
 import { Flyout } from '~/com/components/Flyout';
 import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
 
 import AddIcon from '~/com/icons/baseline-add';
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
+import { VIEW_ACCOUNT_CONFIG, useViewRouter } from './_router';
+
 import AddAccountDialog from '../AddAccountDialog';
 
 const AccountsView = () => {
+	const router = useViewRouter();
+
 	return (
 		<div class="contents">
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
@@ -36,46 +42,49 @@ const AccountsView = () => {
 					<AddIcon />
 				</button>
 			</div>
-			<div class="grow overflow-y-auto">
-				<For
-					each={multiagent.accounts}
-					fallback={
-						<div class="grid h-13 shrink-0 place-items-center">
-							<p class="text-sm text-muted-fg">No signed-in accounts</p>
-						</div>
-					}
-				>
-					{(account) => {
-						const did = account.did;
+			<div class="flex grow flex-col gap-6 overflow-y-auto p-4">
+				{multiagent.accounts.length === 0 ? (
+					<div class="text-center text-sm text-muted-fg">No accounts added.</div>
+				) : (
+					<div class={ListBox}>
+						<For each={multiagent.accounts}>
+							{(account) => (
+								<div class="flex">
+									<button
+										onClick={() => router.move({ type: VIEW_ACCOUNT_CONFIG, did: account.did })}
+										class={`${ListBoxItemInteractive} grow`}
+									>
+										<img
+											src={account.profile?.avatar || DefaultUserAvatar}
+											class="h-8 w-8 shrink-0 rounded-full"
+										/>
 
-						return (
-							<div class="flex items-center gap-4 px-4 py-3">
-								<img
-									src={account.profile?.avatar || DefaultUserAvatar}
-									class="h-12 w-12 shrink-0 rounded-full"
-								/>
+										<div class="flex min-w-0 grow flex-col text-sm">
+											<p class="overflow-hidden text-ellipsis whitespace-nowrap font-medium empty:hidden">
+												{account.profile?.displayName}
+											</p>
+											<p class="overflow-hidden text-ellipsis whitespace-nowrap text-de text-muted-fg">
+												{'@' + account.session.handle}
+											</p>
+										</div>
 
-								<div class="flex min-w-0 grow flex-col text-sm">
-									<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold empty:hidden">
-										{account.profile?.displayName}
-									</p>
-									<p class="overflow-hidden text-ellipsis whitespace-nowrap text-muted-fg">
-										{'@' + account.session.handle}
-									</p>
-									{multiagent.active === did && <p class="text-muted-fg">Default account</p>}
+										<ChevronRightIcon class={ListBoxItemChevron} />
+									</button>
+
+									<div class="my-4 border-r border-secondary/30"></div>
+
+									<div class="flex items-center px-2">
+										<AccountActionMenu account={account}>
+											<button title="Actions" class={/* @once */ IconButton({ color: 'muted' })}>
+												<MoreHorizIcon />
+											</button>
+										</AccountActionMenu>
+									</div>
 								</div>
-
-								<div>
-									<AccountActionMenu account={account}>
-										<button title="Actions" class={/* @once */ IconButton({ edge: 'right', color: 'muted' })}>
-											<MoreHorizIcon />
-										</button>
-									</AccountActionMenu>
-								</div>
-							</div>
-						);
-					}}
-				</For>
+							)}
+						</For>
+					</div>
+				)}
 			</div>
 		</div>
 	);
