@@ -1,15 +1,15 @@
-import { type Signal, For, batch, createEffect, createSignal, onMount } from 'solid-js';
+import { type Signal, For, batch, createSignal, onMount } from 'solid-js';
 
 import {
 	type KeywordFilterMatcher,
 	PreferenceHide,
 	PreferenceIgnore,
 	PreferenceWarn,
+	type KeywordPreference,
 } from '~/api/moderation';
 
 import { formatAbsDateTime } from '~/utils/intl/time';
-import { createRadioModel, model, refs } from '~/utils/input';
-import { getUniqueId } from '~/utils/misc';
+import { model, refs } from '~/utils/input';
 
 import { openModal } from '~/com/globals/modals';
 import { bustModeration } from '~/com/globals/shared';
@@ -23,13 +23,13 @@ import {
 	ListBox,
 	ListBoxItem,
 	ListBoxItemInteractive,
-	ListBoxItemReadonly,
 	ListGroup,
 	ListGroupHeader,
 } from '~/com/primitives/list-box';
 
 import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
-import Radio from '~/com/components/inputs/Radio';
+
+import DateTimeDialog from '~/desktop/components/dialogs/DateTimeDialog';
 
 import AddIcon from '~/com/icons/baseline-add';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
@@ -37,7 +37,8 @@ import CloseIcon from '~/com/icons/baseline-close';
 import FormatLetterMatchesIcon from '~/com/icons/baseline-format-letter-matches';
 
 import { type ViewParams, VIEW_KEYWORD_FILTER_FORM, VIEW_KEYWORD_FILTERS, useViewRouter } from '../_router';
-import DateTimeDialog from '~/desktop/components/dialogs/DateTimeDialog';
+
+import { SelectionItem } from '../_components';
 
 type KeywordState = [keyword: Signal<string>, whole: Signal<boolean>];
 
@@ -54,8 +55,6 @@ const KeywordFilterFormView = () => {
 	const filters = preferences.moderation.keywords;
 	const conf = filters.find((filter) => filter.id === params.id);
 
-	const id = getUniqueId();
-
 	const [name, setName] = createSignal(conf ? conf.name : '');
 	const [pref, setPref] = createSignal(conf ? conf.pref : PreferenceWarn);
 	const [noFollows, setNoFollows] = createSignal(conf ? conf.noFollows : false);
@@ -65,9 +64,6 @@ const KeywordFilterFormView = () => {
 	const [matchers, setMatchers] = createSignal<KeywordState[]>(
 		conf ? conf.matchers.map((m) => createKeywordState(m[0], m[1])) : [createKeywordState('', true)],
 	);
-
-	const prefModel = createRadioModel(pref, setPref);
-	const noFollowModel = createRadioModel(noFollows, setNoFollows);
 
 	const handleSubmit = (ev: SubmitEvent) => {
 		ev.preventDefault();
@@ -135,26 +131,21 @@ const KeywordFilterFormView = () => {
 				</div>
 
 				<div class={ListGroup}>
-					<label class={ListGroupHeader}>Filter preference</label>
+					<label class={ListGroupHeader}>Preferences</label>
 
 					<div class={ListBox}>
-						<label class={ListBoxItemReadonly}>
-							<span class="grow font-medium">Disable this filter</span>
-							<Radio ref={prefModel(PreferenceIgnore)} name={id + 'p'} />
-						</label>
+						<SelectionItem<KeywordPreference>
+							title="Filter action"
+							description="What should be performed when a post matches the filter"
+							value={pref()}
+							onChange={setPref}
+							options={[
+								{ value: PreferenceIgnore, label: `Disabled` },
+								{ value: PreferenceWarn, label: `Cover posts behind warning` },
+								{ value: PreferenceHide, label: `Hide posts completely` },
+							]}
+						/>
 
-						<label class={ListBoxItemReadonly}>
-							<span class="grow font-medium">Cover posts behind warning</span>
-							<Radio ref={prefModel(PreferenceWarn)} name={id + 'p'} />
-						</label>
-
-						<label class={ListBoxItemReadonly}>
-							<span class="grow font-medium">Hide posts entirely</span>
-							<Radio ref={prefModel(PreferenceHide)} name={id + 'p'} />
-						</label>
-					</div>
-
-					<div class={ListBox}>
 						<button
 							disabled={pref() === PreferenceIgnore}
 							type="button"
@@ -178,22 +169,16 @@ const KeywordFilterFormView = () => {
 								})()}
 							</span>
 						</button>
-					</div>
-				</div>
 
-				<div class={ListGroup}>
-					<label class={ListGroupHeader}>Filter target</label>
-
-					<div class={ListBox}>
-						<label class={ListBoxItemReadonly}>
-							<span class="grow font-medium">From everyone</span>
-							<Radio ref={noFollowModel(false)} name={id + 'f'} />
-						</label>
-
-						<label class={ListBoxItemReadonly}>
-							<span class="grow font-medium">From people I don't follow</span>
-							<Radio ref={noFollowModel(true)} name={id + 'f'} />
-						</label>
+						<SelectionItem<boolean>
+							title="Match posts from"
+							value={noFollows()}
+							onChange={setNoFollows}
+							options={[
+								{ value: false, label: `Everyone` },
+								{ value: true, label: `People I don't follow` },
+							]}
+						/>
 					</div>
 				</div>
 
