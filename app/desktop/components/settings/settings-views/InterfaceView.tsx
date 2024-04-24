@@ -8,36 +8,12 @@ import { ListBox, ListBoxItemReadonly, ListGroup, ListGroupHeader } from '~/com/
 
 import Radio from '~/com/components/inputs/Radio';
 import Checkbox from '~/com/components/inputs/Checkbox';
-import type { SelectOption } from '../../flyouts/SelectAction';
 
-const getThemeOptions = () => {
-	const options: SelectOption<'auto' | 'light' | 'dark'>[] = [
-		{
-			value: 'auto',
-			label: 'System default',
-		},
-		{
-			value: 'light',
-			label: 'Light',
-		},
-		{
-			value: 'dark',
-			label: 'dark',
-		},
-	];
-
-	return options;
-};
+import { SelectionItem } from './_components';
 
 const AppearanceView = () => {
 	const ui = preferences.ui;
 	const a11y = preferences.a11y;
-
-	const themeId = getUniqueId();
-	const themeModel = createRadioModel(
-		() => ui.theme,
-		(next) => (ui.theme = next),
-	);
 
 	const columnSizeId = getUniqueId();
 	const paneSizeModel = createRadioModel(
@@ -55,42 +31,46 @@ const AppearanceView = () => {
 					<p class={ListGroupHeader}>Appearance</p>
 
 					<div class={ListBox}>
-						<label class={ListBoxItemReadonly}>
-							<span class="grow font-medium">Automatic</span>
-							<Radio ref={themeModel('auto')} name={themeId} />
-						</label>
-						<label class={ListBoxItemReadonly}>
-							<span class="grow font-medium">Light</span>
-							<Radio ref={themeModel('light')} name={themeId} />
-						</label>
-						<label class={ListBoxItemReadonly}>
-							<span class="grow font-medium">Dark</span>
-							<Radio ref={themeModel('dark')} name={themeId} />
-						</label>
+						<SelectionItem<typeof ui.theme>
+							title="Application theme"
+							value={ui.theme}
+							onChange={(next) => (ui.theme = next)}
+							options={[
+								{
+									value: 'auto',
+									label: `System default`,
+								},
+								{
+									value: 'light',
+									label: `Light`,
+								},
+								{
+									value: 'dark',
+									label: `dark`,
+								},
+							]}
+						/>
+
+						<SelectionItem<typeof ui.defaultPaneSize>
+							title="Default column size"
+							value={ui.defaultPaneSize}
+							onChange={(next) => (ui.defaultPaneSize = next)}
+							options={[
+								{
+									value: PaneSize.SMALL,
+									label: `Small`,
+								},
+								{
+									value: PaneSize.MEDIUM,
+									label: `Medium`,
+								},
+								{
+									value: PaneSize.LARGE,
+									label: `Large`,
+								},
+							]}
+						/>
 					</div>
-				</div>
-
-				<div class={ListGroup}>
-					<p class={ListGroupHeader}>Default column size</p>
-
-					<div class={ListBox}>
-						<label class={ListBoxItemReadonly}>
-							<span class="grow font-medium">Small</span>
-							<Radio ref={paneSizeModel(PaneSize.SMALL)} name={columnSizeId} />
-						</label>
-						<label class={ListBoxItemReadonly}>
-							<span class="grow font-medium">Medium</span>
-							<Radio ref={paneSizeModel(PaneSize.MEDIUM)} name={columnSizeId} />
-						</label>
-						<label class={ListBoxItemReadonly}>
-							<span class="grow font-medium">Large</span>
-							<Radio ref={paneSizeModel(PaneSize.LARGE)} name={columnSizeId} />
-						</label>
-					</div>
-				</div>
-
-				<div class={ListGroup}>
-					<p class={ListGroupHeader}>Appearance</p>
 
 					<div class={ListBox}>
 						<label class={ListBoxItemReadonly}>
@@ -108,7 +88,7 @@ const AppearanceView = () => {
 
 						<label class={ListBoxItemReadonly}>
 							<div class="grow">
-								<p class="font-medium">Show thread replies in threaded form</p>
+								<p class="font-medium">Show post replies in threaded form</p>
 								<p class="text-de text-muted-fg">This is an experimental feature</p>
 							</div>
 
