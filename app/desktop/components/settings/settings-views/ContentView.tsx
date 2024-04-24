@@ -92,7 +92,7 @@ const LanguageView = () => {
 						<CheckItem
 							title="Don't show undeclared posts"
 							description="Hide posts that hasn't delcared what language it's in"
-							value={langs.allowUnspecified}
+							value={!langs.allowUnspecified}
 							onChange={(next) => (langs.allowUnspecified = !next)}
 						/>
 					</div>
