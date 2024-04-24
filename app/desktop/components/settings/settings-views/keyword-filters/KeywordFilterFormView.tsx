@@ -135,7 +135,7 @@ const KeywordFilterFormView = () => {
 
 					<div class={ListBox}>
 						<SelectionItem<KeywordPreference>
-							title="Action to perform"
+							title="Filter action"
 							value={pref()}
 							onChange={setPref}
 							options={[
