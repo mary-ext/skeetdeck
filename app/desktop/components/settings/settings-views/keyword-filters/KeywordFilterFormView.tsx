@@ -135,14 +135,13 @@ const KeywordFilterFormView = () => {
 
 					<div class={ListBox}>
 						<SelectionItem<KeywordPreference>
-							title="Filter action"
-							description="What should be performed when a post matches the filter"
+							title="Action to perform"
 							value={pref()}
 							onChange={setPref}
 							options={[
 								{ value: PreferenceIgnore, label: `Disabled` },
-								{ value: PreferenceWarn, label: `Cover posts behind warning` },
-								{ value: PreferenceHide, label: `Hide posts completely` },
+								{ value: PreferenceWarn, label: `Cover behind warning` },
+								{ value: PreferenceHide, label: `Hide completely` },
 							]}
 						/>
 
