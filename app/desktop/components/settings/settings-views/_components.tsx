@@ -1,3 +1,5 @@
+import { createMemo } from 'solid-js';
+
 import { ListBoxItemInteractive, ListBoxItemReadonly } from '~/com/primitives/list-box';
 
 import Checkbox from '~/com/components/inputs/Checkbox';
@@ -14,6 +16,13 @@ export interface DropdownItemProps<T> extends Omit<SelectActionProps<T>, 'childr
 }
 
 export const SelectionItem = <T,>(props: DropdownItemProps<T>) => {
+	const matched = createMemo(() => {
+		const val = props.value;
+		const item = props.options.find((x) => x.value === val);
+
+		return item;
+	});
+
 	return (
 		<SelectAction value={props.value} options={props.options} onChange={props.onChange}>
 			<button type="button" class={ListBoxItemInteractive}>
@@ -24,8 +33,7 @@ export const SelectionItem = <T,>(props: DropdownItemProps<T>) => {
 						<span class="flex min-w-0 shrink-0 items-center gap-0.5 self-start text-muted-fg">
 							<span class="text-de">
 								{(() => {
-									const val = props.value;
-									const item = props.options.find((x) => x.value === val);
+									const item = matched();
 
 									if (item) {
 										return item.short || item.label;
