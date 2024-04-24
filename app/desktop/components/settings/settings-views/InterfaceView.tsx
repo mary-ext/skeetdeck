@@ -1,12 +1,10 @@
-import { createRadioModel, modelChecked } from '~/utils/input';
-import { getUniqueId } from '~/utils/misc';
+import { modelChecked } from '~/utils/input';
 
 import { PaneSize } from '~/desktop/globals/panes';
 import { preferences } from '~/desktop/globals/settings';
 
 import { ListBox, ListBoxItemReadonly, ListGroup, ListGroupHeader } from '~/com/primitives/list-box';
 
-import Radio from '~/com/components/inputs/Radio';
 import Checkbox from '~/com/components/inputs/Checkbox';
 
 import { SelectionItem } from './_components';
@@ -14,12 +12,6 @@ import { SelectionItem } from './_components';
 const AppearanceView = () => {
 	const ui = preferences.ui;
 	const a11y = preferences.a11y;
-
-	const columnSizeId = getUniqueId();
-	const paneSizeModel = createRadioModel(
-		() => ui.defaultPaneSize,
-		(next) => (ui.defaultPaneSize = next),
-	);
 
 	return (
 		<div class="contents">
