@@ -120,10 +120,10 @@ export class Multiagent {
 	/**
 	 * Login with a new account
 	 */
-	async login({ service, identifier, password }: MultiagentLoginOptions): Promise<At.DID> {
+	async login({ service, ...rest }: MultiagentLoginOptions): Promise<At.DID> {
 		const { rpc, auth, c: cleanup } = this.#createAgent(service);
 
-		await auth.login({ identifier, password });
+		await auth.login(rest);
 
 		try {
 			const session = auth.session!;

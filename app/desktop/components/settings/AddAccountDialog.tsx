@@ -1,10 +1,11 @@
-import { createEffect, createSignal, lazy } from 'solid-js';
+import { batch, createEffect, createSignal, lazy } from 'solid-js';
 
 import { getPdsEndpoint } from '@mary/bluesky-client';
 import { XRPCError } from '@mary/bluesky-client/xrpc';
 
 import { createMutation } from '@mary/solid-query';
 
+import type { At } from '~/api/atp-schema';
 import { getDidInfo } from '~/api/did';
 import { multiagent } from '~/api/globals/agent';
 import { DEFAULT_DATA_SERVERS } from '~/api/globals/defaults';
@@ -35,14 +36,34 @@ const enum Steps {
 	PASSWORD,
 }
 
+const formatEmailOtpCode = (code: string) => {
+	let str = code.toUpperCase();
+
+	if (!code.includes('-')) {
+		str = str.slice(0, 5) + '-' + code.slice(5);
+	}
+
+	return str;
+};
+
+const isOtpError = (err: unknown): boolean => {
+	return (
+		err instanceof XRPCError &&
+		(err.kind === 'AuthFactorTokenRequired' || err.message.includes('Token is invalid'))
+	);
+};
+
 const AddAccountDialog = () => {
 	const { disableBackdropClose } = useModalState();
 
 	const [step, setStep] = createSignal(Steps.IDENTIFIER);
+	const [tfaRequired, setTfaRequired] = createSignal(false);
+
+	const [service, setService] = createSignal(DEFAULT_DATA_SERVERS[0]);
 
 	const [identifier, setIdentifier] = createSignal('');
 	const [password, setPassword] = createSignal('');
-	const [service, setService] = createSignal(DEFAULT_DATA_SERVERS[0]);
+	const [code, setCode] = createSignal('');
 
 	const loginMutation = createMutation((queryClient) => {
 		return {
@@ -50,12 +71,19 @@ const AddAccountDialog = () => {
 				const $identifier = identifier().trim();
 				const $password = password();
 				const $service = service();
+				const $code = tfaRequired() ? code().trim() : undefined;
 
 				const uid = await multiagent.login({
 					service: $service.url,
 					identifier: $identifier,
 					password: $password,
+					code: $code,
 				});
+
+				return uid;
+			},
+			onSuccess(uid: At.DID) {
+				closeModal();
 
 				// Invalidate any queries involving this DID,
 				// in the case that we're signing in to an already added account.
@@ -68,14 +96,16 @@ const AddAccountDialog = () => {
 
 				// Fetch the profile while we're at it,
 				// let's set the GC time to 1 minute just in case.
-				await queryClient.fetchQuery({
+				queryClient.fetchQuery({
 					queryKey: getProfileKey(uid, uid),
 					queryFn: getProfile,
 					gcTime: 60 * 1_000,
 				});
 			},
-			onSuccess() {
-				closeModal();
+			onError(err) {
+				if (err instanceof XRPCError && err.kind === 'AuthFactorTokenRequired') {
+					setTfaRequired(true);
+				}
 			},
 		};
 	});
@@ -113,7 +143,7 @@ const AddAccountDialog = () => {
 		if ($step === Steps.IDENTIFIER) {
 			const noResolution = form.has('no_resolution');
 
-			// Normalize it here.
+			// Normalize identifier
 			const $identifier = identifier().trim().replace(/^@/, '');
 			setIdentifier($identifier);
 
@@ -126,6 +156,12 @@ const AddAccountDialog = () => {
 				pdsMutation.mutate({ ident: $identifier });
 			}
 		} else if ($step === Steps.PASSWORD) {
+			// Normalize OTP code
+			const $code = code();
+			if ($code !== '') {
+				setCode(formatEmailOtpCode($code));
+			}
+
 			loginMutation.mutate();
 		}
 	};
@@ -220,10 +256,15 @@ const AddAccountDialog = () => {
 
 					if ($step === Steps.PASSWORD) {
 						const goBack = () => {
-							setStep(Steps.IDENTIFIER);
+							batch(() => {
+								setStep(Steps.IDENTIFIER);
+								setTfaRequired(false);
 
-							setPassword('');
-							loginMutation.reset();
+								setPassword('');
+								setCode('');
+
+								loginMutation.reset();
+							});
 						};
 
 						return (
@@ -271,20 +312,60 @@ const AddAccountDialog = () => {
 									<label class="block">
 										<span class="mb-2 block text-sm font-medium leading-6 text-primary">Password</span>
 										<input
-											ref={refs(model(password, setPassword), mutationAutofocus(loginMutation))}
+											ref={refs(model(password, setPassword), (node) => {
+												createEffect((first: boolean) => {
+													const error = loginMutation.error;
+													const hasError = error && !isOtpError(error);
+
+													if (hasError || first) {
+														node.focus();
+													}
+
+													return false;
+												}, true);
+											})}
 											type="password"
 											required
 											placeholder="Password"
 											class={/* @once */ Input()}
 										/>
 
-										<p class="mt-2 text-de text-muted-fg">
-											Using an app password is recommended.{' '}
-											<a target="_blank" href={APP_PASSWORD_LINK} class="text-accent hover:underline">
-												Learn more
-											</a>
-										</p>
+										{!tfaRequired() && (
+											<p class="mt-2 text-de text-muted-fg">
+												Using an app password is recommended.{' '}
+												<a target="_blank" href={APP_PASSWORD_LINK} class="text-accent hover:underline">
+													Learn more
+												</a>
+											</p>
+										)}
 									</label>
+
+									{tfaRequired() && (
+										<label class="mb-px block">
+											<span class="mb-2 block text-sm font-medium leading-6 text-primary">One-time code</span>
+
+											<input
+												ref={refs(model(code, setCode), (node) => {
+													createEffect((first: boolean) => {
+														const error = loginMutation.error;
+														const hasError = error && isOtpError(error);
+
+														if (hasError || first) {
+															node.focus();
+														}
+
+														return false;
+													}, true);
+												})}
+												type="text"
+												required
+												autocomplete="one-time-code"
+												pattern="[a-zA-Z0-9]{5}-?[a-zA-Z0-9]{5}"
+												placeholder="AAAAA-BBBBB"
+												class={/* @once */ Input()}
+											/>
+										</label>
+									)}
 
 									<p class="text-de text-red-500 empty:hidden">
 										{(() => {
@@ -301,11 +382,18 @@ const AddAccountDialog = () => {
 											if (error instanceof XRPCError) {
 												const err = error.kind;
 
+												if (err === 'AuthenticationRequired') {
+													return `Invalid identifier or password`;
+												}
 												if (err === 'AccountTakedown') {
 													return `Account has been taken down`;
 												}
-												if (err === 'AuthenticationRequired') {
-													return `Invalid identifier or password`;
+
+												if (err === 'AuthFactorTokenRequired') {
+													return;
+												}
+												if (error.message.includes('Token is invalid')) {
+													return `Incorrect one-time code`;
 												}
 											}
 
