@@ -8,7 +8,7 @@ import { multiagent } from '~/api/globals/agent.js';
 import { openModal } from '~/com/globals/modals';
 
 import { IconButton } from '~/com/primitives/icon-button';
-import { ListBox, ListBoxItemChevron, ListBoxItemInteractive, ListGroup } from '~/com/primitives/list-box';
+import { ListBox, ListBoxItemChevron, ListBoxItemInteractive } from '~/com/primitives/list-box';
 import { MenuItem, MenuRoot } from '~/com/primitives/menu';
 
 import { Flyout } from '~/com/components/Flyout';
@@ -56,7 +56,7 @@ const AccountsView = () => {
 									>
 										<img
 											src={account.profile?.avatar || DefaultUserAvatar}
-											class="h-8 w-8 shrink-0 rounded-full"
+											class="mt-1 h-8 w-8 shrink-0 rounded-full"
 										/>
 
 										<div class="flex min-w-0 grow flex-col text-sm">
@@ -66,9 +66,13 @@ const AccountsView = () => {
 											<p class="overflow-hidden text-ellipsis whitespace-nowrap text-de text-muted-fg">
 												{'@' + account.session.handle}
 											</p>
+
+											{multiagent.active === account.did && (
+												<p class="text-de text-muted-fg">Primary account</p>
+											)}
 										</div>
 
-										<ChevronRightIcon class={ListBoxItemChevron} />
+										<ChevronRightIcon class={`${ListBoxItemChevron} self-center`} />
 									</button>
 
 									<div class="my-4 border-r border-secondary/30"></div>
@@ -116,7 +120,7 @@ const AccountActionMenu = (props: AccountActionMenuProps) => {
 						}}
 						class={/* @once */ MenuItem()}
 					>
-						Set as default
+						Set as primary
 					</button>
 					<button
 						onClick={() => {
