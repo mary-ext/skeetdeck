@@ -1,13 +1,9 @@
-import { modelChecked } from '~/utils/input';
-
 import { PaneSize } from '~/desktop/globals/panes';
 import { preferences } from '~/desktop/globals/settings';
 
-import { ListBox, ListBoxItemReadonly, ListGroup, ListGroupHeader } from '~/com/primitives/list-box';
+import { ListBox, ListGroup, ListGroupHeader } from '~/com/primitives/list-box';
 
-import Checkbox from '~/com/components/inputs/Checkbox';
-
-import { SelectionItem } from './_components';
+import { CheckItem, SelectionItem } from './_components';
 
 const AppearanceView = () => {
 	const ui = preferences.ui;
@@ -65,32 +61,19 @@ const AppearanceView = () => {
 					</div>
 
 					<div class={ListBox}>
-						<label class={ListBoxItemReadonly}>
-							<div class="grow">
-								<p class="grow font-medium">Show profile media in grid form</p>
-								<p class="text-de text-muted-fg">This will not affect feeds/lists panes</p>
-							</div>
-							<Checkbox
-								ref={modelChecked(
-									() => ui.profileMediaGrid,
-									(next) => (ui.profileMediaGrid = next),
-								)}
-							/>
-						</label>
+						<CheckItem
+							title="Show profile media in a grid"
+							description="This will not affect feeds/lists panes"
+							value={ui.profileMediaGrid}
+							onChange={(next) => (ui.profileMediaGrid = next)}
+						/>
 
-						<label class={ListBoxItemReadonly}>
-							<div class="grow">
-								<p class="font-medium">Show post replies in threaded form</p>
-								<p class="text-de text-muted-fg">This is an experimental feature</p>
-							</div>
-
-							<Checkbox
-								ref={modelChecked(
-									() => ui.threadedReplies,
-									(next) => (ui.threadedReplies = next),
-								)}
-							/>
-						</label>
+						<CheckItem
+							title="Show post replies in threaded form"
+							description="This is an experimental feature"
+							value={ui.threadedReplies}
+							onChange={(next) => (ui.threadedReplies = next)}
+						/>
 					</div>
 				</div>
 
@@ -98,20 +81,12 @@ const AppearanceView = () => {
 					<p class={ListGroupHeader}>Accessibility</p>
 
 					<div class={ListBox}>
-						<label class={ListBoxItemReadonly}>
-							<div class="grow">
-								<p class="font-medium">Remind me to add image descriptions</p>
-								<p class="text-de text-muted-fg">
-									Enable reminder to add description to images before a post can be sent
-								</p>
-							</div>
-							<Checkbox
-								ref={modelChecked(
-									() => a11y.warnNoMediaAlt,
-									(next) => (a11y.warnNoMediaAlt = next),
-								)}
-							/>
-						</label>
+						<CheckItem
+							title="Remind me to add image descriptions"
+							description="Enable reminder to add descriptions to images before any post can be sent"
+							value={a11y.warnNoMediaAlt}
+							onChange={(next) => (a11y.warnNoMediaAlt = next)}
+						/>
 					</div>
 				</div>
 			</div>

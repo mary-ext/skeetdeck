@@ -2,7 +2,6 @@ import { systemLanguages } from '~/api/globals/platform';
 
 import { getNativeLanguageName, languageNames, languageNamesStrict } from '~/utils/intl/display-names';
 import { CODE2S } from '~/utils/intl/languages';
-import { modelChecked } from '~/utils/input';
 import { mapDefined } from '~/utils/misc';
 
 import { preferences } from '~/desktop/globals/settings';
@@ -11,19 +10,16 @@ import {
 	ListBox,
 	ListBoxItemChevron,
 	ListBoxItemInteractive,
-	ListBoxItemReadonly,
 	ListGroup,
 	ListGroupBlurb,
 	ListGroupHeader,
 } from '~/com/primitives/list-box';
 
-import Checkbox from '~/com/components/inputs/Checkbox';
-
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 
 import { VIEW_ADDITIONAL_LANGUAGE, VIEW_EXCLUDED_TRANSLATION, useViewRouter } from './_router';
 
-import { type SelectOption, SelectionItem } from './_components';
+import { type SelectOption, CheckItem, SelectionItem } from './_components';
 
 const LanguageView = () => {
 	const router = useViewRouter();
@@ -64,19 +60,12 @@ const LanguageView = () => {
 					<p class={ListGroupHeader}>Content you see</p>
 
 					<div class={ListBox}>
-						<label class={ListBoxItemReadonly}>
-							<div class="grow">
-								<p class="font-medium">Use my system languages</p>
-								<p class="text-de text-muted-fg">Show posts according to browser preferences</p>
-							</div>
-
-							<Checkbox
-								ref={modelChecked(
-									() => langs.useSystemLanguages,
-									(next) => (langs.useSystemLanguages = next),
-								)}
-							/>
-						</label>
+						<CheckItem
+							title="Use my system languages"
+							description="Show posts according to browser preferences"
+							value={langs.useSystemLanguages}
+							onChange={(next) => (langs.useSystemLanguages = next)}
+						/>
 
 						<button
 							onClick={() => router.move({ type: VIEW_ADDITIONAL_LANGUAGE })}
@@ -100,19 +89,12 @@ const LanguageView = () => {
 							<ChevronRightIcon class={ListBoxItemChevron} />
 						</button>
 
-						<label class={ListBoxItemReadonly}>
-							<div class="grow">
-								<p class="font-medium">Don't show undeclared posts</p>
-								<p class="text-de text-muted-fg">Hide posts that hasn't declared what language it's in</p>
-							</div>
-
-							<Checkbox
-								ref={modelChecked(
-									() => !langs.allowUnspecified,
-									(next) => (langs.allowUnspecified = !next),
-								)}
-							/>
-						</label>
+						<CheckItem
+							title="Don't show undeclared posts"
+							description="Hide posts that hasn't delcared what language it's in"
+							value={langs.allowUnspecified}
+							onChange={(next) => (langs.allowUnspecified = !next)}
+						/>
 					</div>
 
 					<p class={ListGroupBlurb}>Removing all languages will result in all posts being shown.</p>
