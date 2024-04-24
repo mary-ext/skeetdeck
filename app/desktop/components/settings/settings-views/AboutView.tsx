@@ -24,7 +24,7 @@ const AboutView = () => {
 				</p>
 
 				<a target="_blank" href={GIT_SOURCE} class="mt-2 inline-block text-sm text-accent hover:underline">
-					GitHub repository
+					Source code
 				</a>
 
 				<p class="mt-2 text-de text-muted-fg">
