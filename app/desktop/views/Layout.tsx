@@ -121,6 +121,7 @@ const DashboardLayout = (props: RouteComponentProps) => {
 													addPane<SearchPaneConfig>(deck, {
 														type: PANE_TYPE_SEARCH,
 														query: item.query,
+														sort: 'latest',
 														uid: $uid,
 													});
 												} else if (item.type === 'profile') {

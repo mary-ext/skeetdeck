@@ -14,7 +14,7 @@ export interface ModerationPreferences extends Omit<ModerationOptions, '_filters
 }
 
 export interface PreferencesSchema {
-	$version: 11;
+	$version: 12;
 	/** Onboarding mode */
 	onboarding: boolean;
 	/** Deck configuration */
@@ -123,7 +123,20 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 		const _next = prev as PreferencesSchema;
 
 		_next.ui.defaultReplyGate = 'e';
-		_next.$version = 11;
+	}
+
+	if (version < 12) {
+		const _next = prev as PreferencesSchema;
+
+		for (const deck of _next.decks) {
+			for (const pane of deck.panes) {
+				if (pane.type === 'search') {
+					pane.sort = 'latest';
+				}
+			}
+		}
+
+		_next.$version = 12;
 	}
 
 	return prev;

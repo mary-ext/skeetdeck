@@ -43,6 +43,7 @@ const SearchPane = () => {
 					params={{
 						type: 'search',
 						query: transformSearchQuery(pane.query),
+						sort: pane.sort,
 					}}
 				/>
 			</PaneBody>

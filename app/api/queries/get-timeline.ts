@@ -66,6 +66,7 @@ export interface ProfileTimelineParams {
 export interface SearchTimelineParams {
 	type: 'search';
 	query: string;
+	sort: 'top' | 'latest';
 }
 
 export type TimelineParams =
@@ -337,7 +338,7 @@ const fetchPage = async (
 		const response = await rpc.get('app.bsky.feed.searchPosts', {
 			signal: signal,
 			params: {
-				sort: 'latest',
+				sort: params.sort,
 				q: params.query,
 				cursor: cursor,
 				limit: limit,

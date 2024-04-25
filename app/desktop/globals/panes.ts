@@ -113,6 +113,7 @@ export interface CustomListPaneConfig extends BasePaneConfig {
 export interface SearchPaneConfig extends BasePaneConfig {
 	readonly type: typeof PANE_TYPE_SEARCH;
 	query: string;
+	sort: 'top' | 'latest';
 }
 
 export interface ThreadPaneConfig extends BasePaneConfig {

@@ -67,6 +67,7 @@ const ProfileSearchPaneDialog = (props: ProfileSearchPaneDialogProps) => {
 							type: PANE_TYPE_SEARCH,
 							uid: pane.uid,
 							query: (me ? 'from:me' : handle !== 'invalid.handle' ? 'from:' + handle : did) + ' ' + search(),
+							sort: 'latest',
 						});
 
 						modal.close();
