@@ -65,8 +65,9 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 	return (
 		<article
 			ref={startMeasure}
-			class="virtual-item"
+			class={props.class}
 			style={{
+				contain: 'content',
 				height: shouldHide() ? `${_height ?? storedHeight()}px` : undefined,
 			}}
 			prop:$onintersect={handleIntersect}
