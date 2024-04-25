@@ -9,61 +9,65 @@ export interface VirtualContainerProps {
 }
 
 export const VirtualContainer = (props: VirtualContainerProps) => {
-	let entry: IntersectionObserverEntry | undefined;
-	let height: number | undefined;
+	let _entry: IntersectionObserverEntry | undefined;
+	let _height: number | undefined;
+	let _intersecting = false;
 
 	const estimateHeight = props.estimateHeight;
 
-	const [intersecting, setIntersecting] = createSignal(false);
-	const [cachedHeight, setCachedHeight] = createSignal(estimateHeight);
+	const [intersecting, setIntersecting] = createSignal(_intersecting);
+	const [storedHeight, setStoredHeight] = createSignal(estimateHeight);
 
-	const shouldHide = () => !intersecting() && cachedHeight() !== undefined;
+	const shouldHide = () => !intersecting() && (estimateHeight ?? storedHeight()) !== undefined;
 
 	const handleIntersect = (nextEntry: IntersectionObserverEntry) => {
-		const prev = intersecting();
-		const next = nextEntry.isIntersecting;
+		_entry = undefined;
 
-		entry = nextEntry;
+		const prev = _intersecting;
+		const next = nextEntry.isIntersecting;
 
 		if (!prev && next) {
 			// hidden -> visible
-			setIntersecting(next);
+			setIntersecting((_intersecting = next));
 		} else if (prev && !next) {
 			// visible -> hidden
 			// unmounting is cheap, but we don't need to immediately unmount it, say
 			// for scenarios where layout is still being figured out and we don't
 			// actually know where the virtual container is gonna end up.
+
+			_entry = nextEntry;
+
 			requestIdleCallback(() => {
 				// bail out if it's no longer us.
-				if (entry !== nextEntry) {
+				if (_entry !== nextEntry) {
 					return;
 				}
 
-				setIntersecting(next);
+				_entry = undefined;
+				setIntersecting((_intersecting = next));
 			});
 		}
 	};
 
 	const handleResize = (nextEntry: ResizeObserverEntry) => {
-		if (shouldHide()) {
+		if (!_intersecting) {
 			return;
 		}
 
 		const contentRect = nextEntry.contentRect;
-		const nextHeight = Math.trunc(contentRect.height * 1000) / 1000;
+		const nextHeight = ((contentRect.height * 1000) | 0) / 1000;
 
-		if (nextHeight !== height) {
-			setCachedHeight((height = nextHeight));
+		if (nextHeight !== _height) {
+			setStoredHeight((_height = nextHeight));
 		}
 	};
 
 	return (
 		<article
 			ref={startMeasure}
-			class={props.class}
+			class="virtual-item"
 			style={{
-				contain: 'content',
-				height: shouldHide() ? `${height ?? cachedHeight()}px` : undefined,
+				height: shouldHide() ? `${_height ?? storedHeight()}px` : undefined,
 			}}
 			prop:$onintersect={handleIntersect}
 			prop:$onresize={handleResize}
@@ -86,17 +90,3 @@ const startMeasure = (node: HTMLElement) => {
 		resizeObserver.unobserve(node);
 	});
 };
-
-declare class ContentVisibilityAutoStateChangeEvent extends Event {
-	readonly target: HTMLElement;
-	readonly currentTarget: HTMLElement;
-	readonly skipped: boolean;
-}
-
-declare module 'solid-js' {
-	namespace JSX {
-		interface ExplicitProperties {
-			oncontentvisibilityautostatechange: (ev: ContentVisibilityAutoStateChangeEvent) => void;
-		}
-	}
-}
