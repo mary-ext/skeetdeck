@@ -28,7 +28,7 @@ const resizeCallback: ResizeObserverCallback = (entries, observer) => {
 	}
 };
 
-export const scrollObserver = new IntersectionObserver(intersectionCallback, { rootMargin: '106.25% 0px' });
+export const scrollObserver = new IntersectionObserver(intersectionCallback);
 
 export const resizeObserver = new ResizeObserver(resizeCallback);
 
