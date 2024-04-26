@@ -22,11 +22,12 @@ export const VIEW_KEYWORD_FILTER_FORM = 11;
 // Content filters
 export const VIEW_HIDDEN_REPOSTERS = 12;
 export const VIEW_LABELER_CONFIG = 13;
-export const VIEW_TEMPORARY_MUTES = 14;
+export const VIEW_LABELER_POPULAR = 14;
+export const VIEW_TEMPORARY_MUTES = 15;
 
 // Languages
-export const VIEW_ADDITIONAL_LANGUAGE = 15;
-export const VIEW_EXCLUDED_TRANSLATION = 16;
+export const VIEW_ADDITIONAL_LANGUAGE = 16;
+export const VIEW_EXCLUDED_TRANSLATION = 17;
 
 export type ViewType =
 	| typeof VIEW_ABOUT
@@ -43,6 +44,7 @@ export type ViewType =
 	| typeof VIEW_KEYWORD_FILTER_FORM
 	| typeof VIEW_KEYWORD_FILTERS
 	| typeof VIEW_LABELER_CONFIG
+	| typeof VIEW_LABELER_POPULAR
 	| typeof VIEW_MODERATION
 	| typeof VIEW_TEMPORARY_MUTES;
 
@@ -62,6 +64,7 @@ export type View =
 	// Content filters
 	| { type: typeof VIEW_HIDDEN_REPOSTERS }
 	| { type: typeof VIEW_LABELER_CONFIG; did: At.DID }
+	| { type: typeof VIEW_LABELER_POPULAR }
 	| { type: typeof VIEW_TEMPORARY_MUTES }
 	// Keyword filter form
 	| { type: typeof VIEW_KEYWORD_FILTER_FORM; id: string | undefined }

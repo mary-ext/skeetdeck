@@ -13,6 +13,7 @@ import {
 	VIEW_KEYWORD_FILTER_FORM,
 	VIEW_KEYWORD_FILTERS,
 	VIEW_LABELER_CONFIG,
+	VIEW_LABELER_POPULAR,
 	VIEW_MODERATION,
 	VIEW_TEMPORARY_MUTES,
 	useViewRouter,
@@ -28,7 +29,8 @@ const ModerationView = lazy(() => import('./ModerationView'));
 const AccountConfigView = lazy(() => import('./account/AccountConfigView'));
 
 const HiddenRepostersView = lazy(() => import('./content-filters/HiddenRepostersView'));
-const LabelConfigView = lazy(() => import('./content-filters/LabelerConfigView'));
+const LabelerConfigView = lazy(() => import('./content-filters/LabelerConfigView'));
+const LabelerPopularView = lazy(() => import('./content-filters/LabelerPopularView'));
 const TemporaryMutesView = lazy(() => import('./content-filters/TemporaryMutesView'));
 
 const KeywordFilterFormView = lazy(() => import('./keyword-filters/KeywordFilterFormView'));
@@ -47,7 +49,8 @@ const views: Record<ViewType, Component> = {
 	[VIEW_ACCOUNT_CONFIG]: AccountConfigView,
 
 	[VIEW_HIDDEN_REPOSTERS]: HiddenRepostersView,
-	[VIEW_LABELER_CONFIG]: LabelConfigView,
+	[VIEW_LABELER_CONFIG]: LabelerConfigView,
+	[VIEW_LABELER_POPULAR]: LabelerPopularView,
 	[VIEW_TEMPORARY_MUTES]: TemporaryMutesView,
 
 	[VIEW_KEYWORD_FILTER_FORM]: KeywordFilterFormView,

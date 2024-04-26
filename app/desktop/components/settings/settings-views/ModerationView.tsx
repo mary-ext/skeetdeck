@@ -28,6 +28,7 @@ import {
 	VIEW_HIDDEN_REPOSTERS,
 	VIEW_KEYWORD_FILTERS,
 	VIEW_LABELER_CONFIG,
+	VIEW_LABELER_POPULAR,
 	VIEW_TEMPORARY_MUTES,
 	useViewRouter,
 } from './_router';
@@ -140,7 +141,10 @@ const ModerationView = () => {
 							}}
 						</For>
 
-						<button disabled class={ListBoxItemInteractive}>
+						<button
+							onClick={() => router.move({ type: VIEW_LABELER_POPULAR })}
+							class={ListBoxItemInteractive}
+						>
 							<AddIcon class="w-8 shrink-0 text-lg text-muted-fg" />
 							<span class="grow font-medium">Explore new providers</span>
 						</button>
