@@ -6,6 +6,7 @@ import { bustModeration } from '~/com/globals/shared';
 
 import {
 	ListBox,
+	ListBoxBlock,
 	ListBoxItemChevron,
 	ListBoxItemIcon,
 	ListBoxItemInteractive,
@@ -103,7 +104,14 @@ const ModerationView = () => {
 					<p class={ListGroupHeader}>Label providers</p>
 
 					<div class={ListBox}>
-						<For each={services}>
+						<For
+							each={services}
+							fallback={
+								<div class={ListBoxBlock}>
+									<p class="text-muted-fg">No label providers added.</p>
+								</div>
+							}
+						>
 							{(service) => {
 								const profile = service.profile;
 
@@ -132,10 +140,7 @@ const ModerationView = () => {
 							}}
 						</For>
 
-						<button
-							onClick={() => router.to({ type: VIEW_LABELER_POPULAR })}
-							class={ListBoxItemInteractive}
-						>
+						<button onClick={() => router.to({ type: VIEW_LABELER_POPULAR })} class={ListBoxItemInteractive}>
 							<AddIcon class="w-8 shrink-0 text-lg text-muted-fg" />
 							<span class="grow font-medium">Explore new providers</span>
 						</button>
