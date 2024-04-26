@@ -7,7 +7,11 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({
 	root: 'desktop',
 	plugins: [
-		solid(),
+		solid({
+			babel: {
+				plugins: [['babel-plugin-transform-typescript-const-enums']],
+			},
+		}),
 		VitePWA({
 			registerType: 'prompt',
 			injectRegister: null,
