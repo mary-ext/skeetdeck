@@ -51,28 +51,19 @@ const ModerationView = () => {
 					<p class={ListGroupHeader}>Additional moderation tools</p>
 
 					<div class={ListBox}>
-						<button
-							onClick={() => router.to({ type: VIEW_KEYWORD_FILTERS })}
-							class={ListBoxItemInteractive}
-						>
+						<button onClick={() => router.to({ type: VIEW_KEYWORD_FILTERS })} class={ListBoxItemInteractive}>
 							<FilterAltOutlinedIcon class={ListBoxItemIcon} />
 							<span class="grow font-medium">Keyword filters</span>
 							<ChevronRightIcon class={ListBoxItemChevron} />
 						</button>
 
-						<button
-							onClick={() => router.to({ type: VIEW_TEMPORARY_MUTES })}
-							class={ListBoxItemInteractive}
-						>
+						<button onClick={() => router.to({ type: VIEW_TEMPORARY_MUTES })} class={ListBoxItemInteractive}>
 							<VisibilityOffOutlinedIcon class={ListBoxItemIcon} />
 							<span class="grow font-medium">Silenced users</span>
 							<ChevronRightIcon class={ListBoxItemChevron} />
 						</button>
 
-						<button
-							onClick={() => router.to({ type: VIEW_HIDDEN_REPOSTERS })}
-							class={ListBoxItemInteractive}
-						>
+						<button onClick={() => router.to({ type: VIEW_HIDDEN_REPOSTERS })} class={ListBoxItemInteractive}>
 							<RepeatOffIcon class={ListBoxItemIcon} />
 							<span class="grow font-medium">Hidden reposters</span>
 							<ChevronRightIcon class={ListBoxItemChevron} />
