@@ -92,7 +92,7 @@ export const detectSnippet = (
 				s: SnippetSource.YOUTUBE,
 				d: d,
 				u: `https://www.youtube-nocookie.com/embed/${videoId}?start=${seek}&autoplay=1&playsinline=1`,
-				r: `16/9`,
+				r: d !== 'music.youtube.com' ? `16/9` : `1`,
 			};
 		}
 		// else if ((m = /^\/shorts\/([^/]+?)$/.exec(p))) {
