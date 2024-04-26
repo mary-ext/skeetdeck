@@ -15,6 +15,8 @@ import { bustModeration } from '~/com/globals/shared';
 import { IconButton } from '~/com/primitives/icon-button';
 import { ListBox, ListGroup, ListGroupBlurb, ListGroupHeader } from '~/com/primitives/list-box';
 
+import CircularProgress from '~/com/components/CircularProgress';
+
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 
 import DefaultLabelerAvatar from '~/com/assets/default-labeler-avatar.svg?url';
@@ -188,6 +190,12 @@ const LabelerConfigView = () => {
 							</div>
 						);
 					}}
+				</Match>
+
+				<Match when={query.isFetching}>
+					<div class="grid place-items-center p-4">
+						<CircularProgress />
+					</div>
 				</Match>
 			</Switch>
 		</div>

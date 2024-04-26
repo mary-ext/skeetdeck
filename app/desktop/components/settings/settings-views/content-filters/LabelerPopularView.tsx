@@ -51,7 +51,7 @@ const LabelerPopularView = () => {
 			<div class="flex grow flex-col gap-6 overflow-y-auto p-4">
 				<div>
 					{popular.isLoading && (
-						<div class="grid place-items-center py-3">
+						<div class="grid place-items-center">
 							<CircularProgress />
 						</div>
 					)}
