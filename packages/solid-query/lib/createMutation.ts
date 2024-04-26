@@ -16,7 +16,7 @@ export function createMutation<TData = unknown, TError = DefaultError, TVariable
 	const client = useQueryClient(queryClient);
 
 	const defaultedOptions = createMemo(() => {
-		return options(client);
+		return client.defaultMutationOptions(options(client));
 	});
 
 	const initialDefaultedOptions = untrack(defaultedOptions);
