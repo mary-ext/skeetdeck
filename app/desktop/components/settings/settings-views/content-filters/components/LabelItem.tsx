@@ -35,6 +35,7 @@ export interface LabelItemProps {
 	value: LabelPreference | undefined;
 	showDefault?: boolean;
 	global?: boolean;
+	disabled?: boolean;
 	onChange: (next: LabelPreference | undefined) => void;
 }
 
@@ -50,7 +51,7 @@ const LabelItem = (props: LabelItemProps) => {
 
 	return (
 		<LabelItemFlyout {...props} value={value()}>
-			<button disabled={props.global} class={ListBoxItemReadonly}>
+			<button disabled={props.disabled || props.global} class={ListBoxItemReadonly}>
 				<div class="flex min-w-0 grow flex-col text-sm">
 					<div class="flex justify-between gap-3">
 						<span class="overflow-hidden text-ellipsis whitespace-nowrap font-medium">
@@ -59,7 +60,10 @@ const LabelItem = (props: LabelItemProps) => {
 
 						<span class="flex min-w-0 shrink-0 items-center gap-0.5 self-start text-muted-fg">
 							<span class="text-de">{renderValueDef(def, value())}</span>
-							<ArrowDropDownIcon class={clsx(['-mr-1 text-base', props.global && `hidden`])} />
+
+							<ArrowDropDownIcon
+								class={clsx(['-mr-1 text-base', (props.disabled || props.global) && `hidden`])}
+							/>
 						</span>
 					</div>
 					<p class="mt-1 overflow-hidden text-ellipsis whitespace-pre-wrap text-de text-muted-fg empty:hidden">

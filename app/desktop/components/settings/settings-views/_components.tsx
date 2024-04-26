@@ -1,6 +1,6 @@
 import { createMemo } from 'solid-js';
 
-import { ListBoxItemInteractive, ListBoxItemReadonly } from '~/com/primitives/list-box';
+import { ListBoxItem, ListBoxItemInteractive, ListBoxItemReadonly } from '~/com/primitives/list-box';
 
 import Checkbox from '~/com/components/inputs/Checkbox';
 
@@ -58,6 +58,7 @@ export interface CheckItemProps {
 	title: string;
 	description?: string;
 	value?: boolean;
+	disabled?: boolean;
 	onChange: (next: boolean) => void;
 }
 
@@ -65,14 +66,18 @@ export const CheckItem = (props: CheckItemProps) => {
 	const onChange = props.onChange;
 
 	return (
-		<label class={ListBoxItemReadonly}>
+		<label class={!props.disabled ? ListBoxItemReadonly : ListBoxItem}>
 			<div class="grow">
 				<p class="grow font-medium">{props.title}</p>
 				<p class="text-de text-muted-fg">{props.description}</p>
 			</div>
 
 			<div class="ml-1 grid place-items-center">
-				<Checkbox checked={props.value} onInput={(ev) => onChange(ev.target.checked)} />
+				<Checkbox
+					disabled={props.disabled}
+					checked={props.value}
+					onInput={(ev) => onChange(ev.target.checked)}
+				/>
 			</div>
 		</label>
 	);
