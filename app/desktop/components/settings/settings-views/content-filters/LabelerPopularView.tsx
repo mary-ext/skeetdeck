@@ -8,14 +8,14 @@ import { formatCompact } from '~/utils/intl/number';
 
 import { IconButton } from '~/com/primitives/icon-button';
 import { Interactive } from '~/com/primitives/interactive';
-import { ListBox, ListBoxBlock, ListBoxItem, ListBoxItemInteractive } from '~/com/primitives/list-box';
+import { ListBox, ListBoxBlock, ListBoxItemInteractive } from '~/com/primitives/list-box';
 
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 
 import DefaultLabelerAvatar from '~/com/assets/default-labeler-avatar.svg?url';
 
-import { VIEW_LABELER_CONFIG, VIEW_MODERATION, useViewRouter } from '../_router';
+import { VIEW_LABELER_CONFIG, useViewRouter } from '../_router';
 import CircularProgress from '~/com/components/CircularProgress';
 
 const listItem = Interactive({
@@ -40,7 +40,7 @@ const LabelerPopularView = () => {
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
 				<button
 					title="Return to previous screen"
-					onClick={() => router.move({ type: VIEW_MODERATION })}
+					onClick={router.back}
 					class={/* @once */ IconButton({ edge: 'left' })}
 				>
 					<ArrowLeftIcon />
@@ -63,7 +63,7 @@ const LabelerPopularView = () => {
 
 								return (
 									<button
-										onClick={() => router.move({ type: VIEW_LABELER_CONFIG, did: profile.did })}
+										onClick={() => router.to({ type: VIEW_LABELER_CONFIG, did: profile.did })}
 										class={listItem}
 									>
 										<div class="flex items-center gap-3">

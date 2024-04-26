@@ -76,7 +76,10 @@ export type ViewParams<T extends ViewType, V = View> = V extends { type: T } ? O
 
 export interface RouterState {
 	readonly current: View;
-	move: (next: View) => void;
+	readonly canGoBack: boolean;
+	back(): void;
+	to(next: View): void;
+	replace(next: View): void;
 }
 
 export const RouterContext = createContext<RouterState>();

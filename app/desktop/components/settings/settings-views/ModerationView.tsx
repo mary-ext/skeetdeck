@@ -52,7 +52,7 @@ const ModerationView = () => {
 
 					<div class={ListBox}>
 						<button
-							onClick={() => router.move({ type: VIEW_KEYWORD_FILTERS })}
+							onClick={() => router.to({ type: VIEW_KEYWORD_FILTERS })}
 							class={ListBoxItemInteractive}
 						>
 							<FilterAltOutlinedIcon class={ListBoxItemIcon} />
@@ -61,7 +61,7 @@ const ModerationView = () => {
 						</button>
 
 						<button
-							onClick={() => router.move({ type: VIEW_TEMPORARY_MUTES })}
+							onClick={() => router.to({ type: VIEW_TEMPORARY_MUTES })}
 							class={ListBoxItemInteractive}
 						>
 							<VisibilityOffOutlinedIcon class={ListBoxItemIcon} />
@@ -70,7 +70,7 @@ const ModerationView = () => {
 						</button>
 
 						<button
-							onClick={() => router.move({ type: VIEW_HIDDEN_REPOSTERS })}
+							onClick={() => router.to({ type: VIEW_HIDDEN_REPOSTERS })}
 							class={ListBoxItemInteractive}
 						>
 							<RepeatOffIcon class={ListBoxItemIcon} />
@@ -118,7 +118,7 @@ const ModerationView = () => {
 
 								return (
 									<button
-										onClick={() => router.move({ type: VIEW_LABELER_CONFIG, did: service.did })}
+										onClick={() => router.to({ type: VIEW_LABELER_CONFIG, did: service.did })}
 										class={ListBoxItemInteractive}
 									>
 										<img
@@ -142,7 +142,7 @@ const ModerationView = () => {
 						</For>
 
 						<button
-							onClick={() => router.move({ type: VIEW_LABELER_POPULAR })}
+							onClick={() => router.to({ type: VIEW_LABELER_POPULAR })}
 							class={ListBoxItemInteractive}
 						>
 							<AddIcon class="w-8 shrink-0 text-lg text-muted-fg" />

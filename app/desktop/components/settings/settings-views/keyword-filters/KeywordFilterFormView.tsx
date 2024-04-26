@@ -36,7 +36,7 @@ import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import CloseIcon from '~/com/icons/baseline-close';
 import FormatLetterMatchesIcon from '~/com/icons/baseline-format-letter-matches';
 
-import { type ViewParams, VIEW_KEYWORD_FILTER_FORM, VIEW_KEYWORD_FILTERS, useViewRouter } from '../_router';
+import { type ViewParams, VIEW_KEYWORD_FILTER_FORM, useViewRouter } from '../_router';
 
 import { SelectionItem } from '../_components';
 
@@ -97,7 +97,7 @@ const KeywordFilterFormView = () => {
 			}
 
 			bustModeration();
-			router.move({ type: VIEW_KEYWORD_FILTERS });
+			router.back();
 		});
 	};
 
@@ -111,7 +111,7 @@ const KeywordFilterFormView = () => {
 				<button
 					type="button"
 					title="Return to previous screen"
-					onClick={() => router.move({ type: VIEW_KEYWORD_FILTERS })}
+					onClick={router.back}
 					class={/* @once */ IconButton({ edge: 'left' })}
 				>
 					<ArrowLeftIcon />
@@ -268,7 +268,7 @@ const KeywordFilterFormView = () => {
 													}
 
 													bustModeration();
-													router.move({ type: VIEW_KEYWORD_FILTERS });
+													router.back();
 												});
 											}}
 										/>

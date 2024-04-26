@@ -28,7 +28,7 @@ import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 import PeopleOutlinedIcon from '~/com/icons/outline-people';
 import VolumeOffOutlinedIcon from '~/com/icons/outline-volume-off';
 
-import { type ViewParams, VIEW_ACCOUNT_CONFIG, VIEW_ACCOUNTS, useViewRouter } from '../_router';
+import { type ViewParams, VIEW_ACCOUNT_CONFIG, useViewRouter } from '../_router';
 
 const NO_UNAUTHENTICATED_LABEL = '!no-unauthenticated';
 
@@ -43,7 +43,7 @@ const AccountModerationView = () => {
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
 				<button
 					title="Return to previous screen"
-					onClick={() => router.move({ type: VIEW_ACCOUNTS })}
+					onClick={router.back}
 					class={/* @once */ IconButton({ edge: 'left' })}
 				>
 					<ArrowLeftIcon />

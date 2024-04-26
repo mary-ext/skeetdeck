@@ -51,7 +51,7 @@ const AccountsView = () => {
 							{(account) => (
 								<div class="flex">
 									<button
-										onClick={() => router.move({ type: VIEW_ACCOUNT_CONFIG, did: account.did })}
+										onClick={() => router.to({ type: VIEW_ACCOUNT_CONFIG, did: account.did })}
 										class={`${ListBoxItemInteractive} grow`}
 									>
 										<img

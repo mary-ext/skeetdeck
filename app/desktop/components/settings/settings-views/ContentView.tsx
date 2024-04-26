@@ -68,7 +68,7 @@ const LanguageView = () => {
 						/>
 
 						<button
-							onClick={() => router.move({ type: VIEW_ADDITIONAL_LANGUAGE })}
+							onClick={() => router.to({ type: VIEW_ADDITIONAL_LANGUAGE })}
 							class={ListBoxItemInteractive}
 						>
 							<div class="grow">
@@ -112,7 +112,7 @@ const LanguageView = () => {
 						/>
 
 						<button
-							onClick={() => router.move({ type: VIEW_EXCLUDED_TRANSLATION })}
+							onClick={() => router.to({ type: VIEW_EXCLUDED_TRANSLATION })}
 							class={ListBoxItemInteractive}
 						>
 							<div class="grow">

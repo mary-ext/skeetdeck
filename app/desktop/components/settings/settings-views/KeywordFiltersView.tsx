@@ -29,7 +29,7 @@ const KeywordFiltersView = () => {
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
 				<button
 					title="Return to previous screen"
-					onClick={() => router.move({ type: VIEW_MODERATION })}
+					onClick={router.back}
 					class={/* @once */ IconButton({ edge: 'left' })}
 				>
 					<ArrowLeftIcon />
@@ -39,7 +39,7 @@ const KeywordFiltersView = () => {
 
 				<button
 					title="Add new keyword filter"
-					onClick={() => router.move({ type: VIEW_KEYWORD_FILTER_FORM, id: undefined })}
+					onClick={() => router.to({ type: VIEW_KEYWORD_FILTER_FORM, id: undefined })}
 					class={/* @once */ IconButton({ edge: 'right' })}
 				>
 					<AddIcon />
@@ -54,7 +54,7 @@ const KeywordFiltersView = () => {
 							{(filter) => {
 								return (
 									<button
-										onClick={() => router.move({ type: VIEW_KEYWORD_FILTER_FORM, id: filter.id })}
+										onClick={() => router.to({ type: VIEW_KEYWORD_FILTER_FORM, id: filter.id })}
 										class={ListBoxItemInteractive}
 									>
 										<div class="grow">

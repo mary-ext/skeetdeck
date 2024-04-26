@@ -33,16 +33,27 @@ import {
 import SettingsRouterView from './settings-views/SettingsRouterView';
 
 const SettingsDialog = () => {
-	const [view, setView] = createSignal<View>({ type: VIEW_ACCOUNTS });
+	const [views, setViews] = createSignal<View[]>([{ type: VIEW_ACCOUNTS }]);
 
 	const router: RouterState = {
 		get current() {
-			return view();
+			return views().at(-1)!;
 		},
-		move: (next) => {
-			startTransition(() => {
-				setView(next);
-			});
+		get canGoBack() {
+			return views().length > 1;
+		},
+		back() {
+			const $views = views();
+
+			if ($views.length > 1) {
+				setViews($views.slice(0, -1));
+			}
+		},
+		to(next) {
+			setViews(views().concat(next));
+		},
+		replace: (next) => {
+			setViews([next]);
 		},
 	};
 
@@ -127,9 +138,7 @@ const SideItem = (props: { icon?: IconComponent; to: StandaloneViewType; childre
 
 	return (
 		<button
-			onClick={() => {
-				router.move({ type: props.to });
-			}}
+			onClick={() => router.replace({ type: props.to })}
 			class={clsx([sideItem, router.current.type === props.to && `bg-secondary/20`])}
 		>
 			{(() => {

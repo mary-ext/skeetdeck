@@ -16,7 +16,7 @@ import AddIcon from '~/com/icons/baseline-add';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import DeleteIcon from '~/com/icons/baseline-delete';
 
-import { VIEW_CONTENT, useViewRouter } from '../_router';
+import { useViewRouter } from '../_router';
 
 const AdditionalLanguageView = () => {
 	const router = useViewRouter();
@@ -33,7 +33,7 @@ const AdditionalLanguageView = () => {
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
 				<button
 					title="Return to previous screen"
-					onClick={() => router.move({ type: VIEW_CONTENT })}
+					onClick={router.back}
 					class={/* @once */ IconButton({ edge: 'left' })}
 				>
 					<ArrowLeftIcon />

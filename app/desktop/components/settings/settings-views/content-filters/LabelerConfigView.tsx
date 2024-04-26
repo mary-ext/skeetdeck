@@ -19,7 +19,7 @@ import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 
 import DefaultLabelerAvatar from '~/com/assets/default-labeler-avatar.svg?url';
 
-import { type ViewParams, VIEW_LABELER_CONFIG, VIEW_MODERATION, useViewRouter } from '../_router';
+import { type ViewParams, VIEW_LABELER_CONFIG, useViewRouter } from '../_router';
 import { CheckItem } from '../_components';
 
 import LabelItem from './components/LabelItem';
@@ -62,7 +62,7 @@ const LabelerConfigView = () => {
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
 				<button
 					title="Return to previous screen"
-					onClick={() => router.move({ type: VIEW_MODERATION })}
+					onClick={router.back}
 					class={/* @once */ IconButton({ edge: 'left' })}
 				>
 					<ArrowLeftIcon />
