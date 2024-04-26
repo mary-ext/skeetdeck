@@ -108,7 +108,7 @@ const EmbedImage = (props: EmbedImageProps) => {
 		<div
 			class={clsx([
 				!borderless && `overflow-hidden rounded-md border border-divider`,
-				hasStandaloneImage() && `max-w-full self-baseline`,
+				hasStandaloneImage() && `max-w-full self-start`,
 			])}
 		>
 			{(() => {

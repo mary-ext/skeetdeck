@@ -182,7 +182,7 @@ const renderAvatars = (items: (FollowNotification | LikeNotification | RepostNot
 					onClick={() => setShow(!show())}
 					class={
 						/* @once */ Interactive({
-							class: `-m-1 flex items-center gap-2 self-baseline overflow-hidden rounded p-1`,
+							class: `-m-1 flex items-center gap-2 self-start overflow-hidden rounded p-1`,
 						})
 					}
 				>
