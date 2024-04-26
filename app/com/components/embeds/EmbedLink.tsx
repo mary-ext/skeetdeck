@@ -7,6 +7,7 @@ import { Interactive } from '../../primitives/interactive';
 import PlayIcon from '../../icons/baseline-play';
 
 import BlobImage from '../BlobImage';
+import CircularProgress from '../CircularProgress';
 
 type EmbeddedLink = AppBskyEmbedExternal.ViewExternal;
 
@@ -39,6 +40,7 @@ const EmbedLink = (props: EmbedLinkProps) => {
 
 		if (gifMatch) {
 			const [playing, setPlaying] = createSignal(false);
+			const [stalling, setStalling] = createSignal(false);
 			const [, rawId, rawFilename, height, width] = gifMatch;
 
 			const id = rawId.replace(/AAAAC$/, 'AAAP3');
@@ -65,22 +67,25 @@ const EmbedLink = (props: EmbedLinkProps) => {
 						}}
 						loop
 						src={`https://t.gifs.bsky.app/${id}/${filename}`}
+						onWaiting={() => setStalling(true)}
+						onPlaying={() => setStalling(false)}
 						class="h-full w-full"
 					/>
 
 					<button
 						title={!playing() ? 'Play GIF' : `Pause GIF`}
 						aria-description={alt}
-						onClick={() => {
-							setPlaying(!playing());
-						}}
+						onClick={() => setPlaying(!playing())}
 						class="absolute inset-0 grid place-items-center"
+						classList={{ 'bg-black/50': !playing() || stalling() }}
 					>
-						{!playing() && (
+						{!playing() ? (
 							<div class="grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-accent">
 								<PlayIcon class="text-2xl" />
 							</div>
-						)}
+						) : stalling() ? (
+							<CircularProgress size={32} />
+						) : null}
 					</button>
 				</div>
 			);
