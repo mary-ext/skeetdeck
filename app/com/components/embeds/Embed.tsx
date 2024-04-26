@@ -87,7 +87,7 @@ const Embed = (props: EmbedProps) => {
 							})()}
 							children={(() => {
 								return [
-									link && <EmbedLink link={link} />,
+									link && <EmbedLink link={link} interactive />,
 									images && <EmbedImage images={images} interactive />,
 								];
 							})()}

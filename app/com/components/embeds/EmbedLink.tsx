@@ -1,8 +1,10 @@
-import type { JSX } from 'solid-js';
+import { type JSX, createEffect, createSignal } from 'solid-js';
 
 import type { AppBskyEmbedExternal } from '~/api/atp-schema';
 
 import { Interactive } from '../../primitives/interactive';
+
+import PlayIcon from '../../icons/baseline-play';
 
 import BlobImage from '../BlobImage';
 
@@ -14,6 +16,7 @@ export interface EmbedLinkData extends Omit<EmbeddedLink, 'thumb'> {
 
 export interface EmbedLinkProps {
 	link: EmbedLinkData;
+	interactive?: boolean;
 }
 
 export const getDomain = (url: string) => {
@@ -26,12 +29,64 @@ export const getDomain = (url: string) => {
 };
 
 const embedLinkInteractive = Interactive({ variant: 'muted', class: `w-full rounded-md` });
+const BSKY_TENOR_RE = /^https:\/\/media\.tenor\.com\/([^/]+?AAAAC)\/([^\/]+?)\?hh=(\d+?)&ww=(\d+?)$/;
 
-export const EmbedLinkContent = (props: EmbedLinkProps) => {
+const EmbedLink = (props: EmbedLinkProps) => {
 	return (() => {
-		const { uri, thumb, title } = props.link;
+		const { uri, thumb, title, description } = props.link;
 
-		return (
+		const gifMatch = BSKY_TENOR_RE.exec(uri);
+
+		if (gifMatch) {
+			const [playing, setPlaying] = createSignal(false);
+			const [, rawId, rawFilename, height, width] = gifMatch;
+
+			const id = rawId.replace(/AAAAC$/, 'AAAP3');
+			const filename = rawFilename.replace(/\.gif$/, '.webm');
+
+			const alt = description.replace(/^ALT: /, '');
+
+			return (
+				<div
+					class="relative overflow-hidden rounded-md border border-divider"
+					style={{ 'aspect-ratio': `${width}/${height}` }}
+				>
+					<video
+						tabindex={-1}
+						ref={(node) => {
+							createEffect(() => {
+								if (playing()) {
+									node.play();
+								} else if (!node.paused) {
+									node.pause();
+									node.currentTime = 0;
+								}
+							});
+						}}
+						loop
+						src={`https://t.gifs.bsky.app/${id}/${filename}`}
+						class="h-full w-full"
+					/>
+
+					<button
+						title={!playing() ? 'Play GIF' : `Pause GIF`}
+						aria-description={alt}
+						onClick={() => {
+							setPlaying(!playing());
+						}}
+						class="absolute inset-0 grid place-items-center"
+					>
+						{!playing() && (
+							<div class="grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-accent">
+								<PlayIcon class="text-2xl" />
+							</div>
+						)}
+					</button>
+				</div>
+			);
+		}
+
+		const content = (
 			<div class="flex overflow-hidden rounded-md border border-divider">
 				{thumb && (
 					<BlobImage
@@ -46,15 +101,17 @@ export const EmbedLinkContent = (props: EmbedLinkProps) => {
 				</div>
 			</div>
 		);
-	}) as unknown as JSX.Element;
-};
 
-const EmbedLink = (props: EmbedLinkProps) => {
-	return (
-		<a href={props.link.uri} rel="noopener noreferrer nofollow" target="_blank" class={embedLinkInteractive}>
-			{/* @once */ EmbedLinkContent(props)}
-		</a>
-	);
+		if (props.interactive) {
+			return (
+				<a href={uri} rel="noopener noreferrer nofollow" target="_blank" class={embedLinkInteractive}>
+					{content}
+				</a>
+			);
+		}
+
+		return content;
+	}) as unknown as JSX.Element;
 };
 
 export default EmbedLink;

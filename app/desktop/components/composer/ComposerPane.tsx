@@ -58,7 +58,7 @@ import BlobImage from '~/com/components/BlobImage';
 import EmojiFlyout from '~/com/components/emojis/EmojiFlyout';
 
 import { EmbedFeedContent } from '~/com/components/embeds/EmbedFeed';
-import { EmbedLinkContent } from '~/com/components/embeds/EmbedLink';
+import EmbedLink from '~/com/components/embeds/EmbedLink';
 import { EmbedListContent } from '~/com/components/embeds/EmbedList';
 import { EmbedQuoteContent } from '~/com/components/embeds/EmbedQuote';
 
@@ -1298,7 +1298,7 @@ const EmbedExternal = (props: { url: string }) => {
 	return (() => {
 		const data = external.data;
 		if (data) {
-			return <EmbedLinkContent link={data} />;
+			return <EmbedLink link={data} />;
 		}
 
 		const error = external.error;
