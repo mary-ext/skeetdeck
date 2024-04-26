@@ -8,6 +8,7 @@ export const enum SnippetType {
 
 export const enum SnippetSource {
 	YOUTUBE,
+	SOUNDCLOUD,
 }
 
 interface LinkSnippet {
@@ -116,6 +117,17 @@ export const detectSnippet = (
 				d: d,
 				u: `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&playsinline=1`,
 				r: `16/9`,
+			};
+		}
+	} else if (d === 'soundcloud.com' || d === 'www.soundcloud.com') {
+		// SoundCloud embed
+		if ((m = /^\/([^/]+?)(?:\/(?!reposts$)([^/]+?)|\/sets\/([^/]+?))?$/.exec(p))) {
+			return {
+				t: SnippetType.IFRAME,
+				s: SnippetSource.SOUNDCLOUD,
+				d: d,
+				u: `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=true&visual=false&hide_related=true`,
+				r: m[3] ? `1/1` : `16/9`,
 			};
 		}
 	}
