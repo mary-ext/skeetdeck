@@ -1,1 +1,3 @@
 pnpm-lock.yaml
+/packages/solid-query/types/
+/packages/solid-freeze/types/
