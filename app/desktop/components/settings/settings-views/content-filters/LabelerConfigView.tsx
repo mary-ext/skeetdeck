@@ -1,4 +1,4 @@
-import { For, Match, Show, Switch, batch, createEffect, createMemo } from 'solid-js';
+import { For, Match, Show, Switch, batch, createEffect, createMemo, lazy } from 'solid-js';
 
 import { createQuery, useQueryClient } from '@mary/solid-query';
 
@@ -6,18 +6,21 @@ import { getLabelerInfo, getLabelerInfoKey } from '~/api/queries/get-labeler-inf
 
 import { GLOBAL_LABELS } from '~/api/moderation';
 
+import { openModal } from '~/com/globals/modals';
+import { bustModeration } from '~/com/globals/shared';
+
 import { preferences } from '~/desktop/globals/settings';
 
 import { formatAbsDateTime } from '~/utils/intl/time';
-
-import { bustModeration } from '~/com/globals/shared';
 
 import { IconButton } from '~/com/primitives/icon-button';
 import { ListBox, ListGroup, ListGroupBlurb, ListGroupHeader } from '~/com/primitives/list-box';
 
 import CircularProgress from '~/com/components/CircularProgress';
 
+import AddIcon from '~/com/icons/baseline-add';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+import DeleteIcon from '~/com/icons/baseline-delete';
 
 import DefaultLabelerAvatar from '~/com/assets/default-labeler-avatar.svg?url';
 
@@ -26,31 +29,34 @@ import { CheckItem } from '../_components';
 
 import LabelItem from './components/LabelItem';
 
+const ConfirmDialog = lazy(() => import('~/com/components/dialogs/ConfirmDialog'));
+
 const LabelerConfigView = () => {
 	const router = useViewRouter();
 	const { did } = router.current as ViewParams<typeof VIEW_LABELER_CONFIG>;
 
 	const moderation = preferences.moderation;
-	const services = moderation.services;
 	const globalPrefs = moderation.labels;
 
 	const queryClient = useQueryClient();
 
-	const foundService = createMemo(() => {
-		return services.find((service) => service.did === did);
+	const found = createMemo(() => {
+		return moderation.services.find((service) => service.did === did);
 	});
 
 	const query = createQuery(() => {
 		return {
 			queryKey: getLabelerInfoKey(did),
 			queryFn: getLabelerInfo,
-			initialData: foundService(),
+			initialData: found(),
 		};
 	});
 
+	const data = createMemo(() => query.data ?? found());
+
 	// Reset the query on any changes to `foundService`
 	createEffect((subsequent) => {
-		foundService();
+		found();
 
 		if (subsequent) {
 			queryClient.resetQueries({ exact: true, queryKey: getLabelerInfoKey(did) });
@@ -73,22 +79,82 @@ const LabelerConfigView = () => {
 				<div class="grow">
 					<h2 class="text-base font-bold leading-5">
 						{(() => {
-							const $profile = query.data?.profile;
+							const $profile = data()?.profile;
 							return $profile ? $profile.displayName || $profile.handle : `Label provider`;
 						})()}
 					</h2>
 					<p class="overflow-hidden text-ellipsis whitespace-nowrap text-xs text-muted-fg empty:hidden">
 						{(() => {
-							if (query.data) {
+							if (data()) {
 								return `Label provider`;
 							}
 						})()}
 					</p>
 				</div>
+
+				{data() && (
+					<button
+						title={!found() ? `Add this provider` : `Remove this provider`}
+						onClick={() => {
+							if (found()) {
+								// Removing labeler
+								openModal(() => (
+									<ConfirmDialog
+										title={(() => {
+											const profile = query.data!.profile;
+											return `Remove ${profile.displayName || profile.handle}?`;
+										})()}
+										body="Any preferences you've set will be lost."
+										confirmation="Remove"
+										onConfirm={() => {
+											const did = query.data!.did;
+											const index = moderation.services.findIndex((x) => x.did === did);
+
+											if (index !== -1) {
+												batch(() => {
+													moderation.services.splice(index, 1);
+													bustModeration();
+												});
+											}
+										}}
+									/>
+								));
+							} else if (moderation.services.length >= 10) {
+								// Reached maximum labeler limit
+
+								openModal(() => (
+									<ConfirmDialog
+										title="Maximum label providers reached"
+										body={
+											<>
+												You've reached the maximum amount of labelers that can be added. You need to remove
+												one of your added labelers first if you want to add this one.
+											</>
+										}
+										confirmation="Okay"
+									/>
+								));
+							} else if (query.data) {
+								// Adding labeler
+
+								batch(() => {
+									moderation.services.push(query.data!);
+									bustModeration();
+								});
+							}
+						}}
+						class={/* @once */ IconButton({ edge: 'right' })}
+					>
+						{(() => {
+							const Icon = found() ? DeleteIcon : AddIcon;
+							return <Icon />;
+						})()}
+					</button>
+				)}
 			</div>
 
 			<Switch>
-				<Match when={query.data} keyed>
+				<Match when={data()} keyed>
 					{(service) => {
 						const profile = service.profile;
 						const localPrefs = service.prefs;
@@ -157,7 +223,7 @@ const LabelerConfigView = () => {
 																	def={def}
 																	value={prefs[identifier]}
 																	showDefault={!global}
-																	disabled={!foundService()}
+																	disabled={!found()}
 																	global={global}
 																	onChange={(next) => {
 																		batch(() => {
@@ -182,7 +248,7 @@ const LabelerConfigView = () => {
 										<CheckItem
 											title="Apply takedowns from this provider"
 											value={service.redact}
-											disabled={!foundService()}
+											disabled={!found()}
 											onChange={(next) => (service.redact = next || undefined)}
 										/>
 									</div>

@@ -11,11 +11,13 @@ export interface ConfirmDialogProps {
 	title: string;
 	body: JSX.Element;
 	confirmation: string;
-	onConfirm: () => void;
+	onConfirm?: () => void;
 	unwrap?: boolean;
 }
 
 const ConfirmDialog = (props: ConfirmDialogProps) => {
+	const onConfirm = props.onConfirm;
+
 	return (
 		<DialogOverlay>
 			<div class={/* @once */ DialogRoot({ size: 'sm' })}>
@@ -28,13 +30,16 @@ const ConfirmDialog = (props: ConfirmDialogProps) => {
 				</div>
 
 				<div class={/* @once */ DialogActions()}>
-					<button onClick={closeModal} class={/* @once */ Button({ variant: 'ghost' })}>
-						Cancel
-					</button>
+					{onConfirm && (
+						<button onClick={closeModal} class={/* @once */ Button({ variant: 'ghost' })}>
+							Cancel
+						</button>
+					)}
+
 					<button
 						onClick={() => {
 							closeModal();
-							props.onConfirm();
+							props.onConfirm?.();
 						}}
 						class={/* @once */ Button({ variant: 'primary' })}
 					>
