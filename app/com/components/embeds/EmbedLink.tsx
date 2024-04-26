@@ -15,25 +15,18 @@ interface TenorData {
 	d: string;
 }
 
-type EmbeddedLink = AppBskyEmbedExternal.ViewExternal & { __tenor?: TenorData | null };
+type EmbeddedLink = AppBskyEmbedExternal.ViewExternal;
 
 export interface EmbedLinkData extends Omit<EmbeddedLink, 'thumb'> {
 	thumb?: Blob | string;
+	_t?: TenorData | null;
+	_d?: string;
 }
 
 export interface EmbedLinkProps {
 	link: EmbedLinkData;
 	interactive?: boolean;
 }
-
-export const getDomain = (url: string) => {
-	try {
-		const host = new URL(url).host;
-		return host.startsWith('www.') ? host.slice(4) : host;
-	} catch {
-		return url;
-	}
-};
 
 const embedLinkInteractive = Interactive({ variant: 'muted', class: `w-full rounded-md` });
 const BSKY_TENOR_RE = /^https:\/\/media\.tenor\.com\/([^/]+?AAAAC)\/([^\/]+?)\?hh=(\d+?)&ww=(\d+?)$/;
@@ -43,7 +36,8 @@ const EmbedLink = (props: EmbedLinkProps) => {
 		const link = props.link;
 		const { uri, thumb, title, description } = link;
 
-		let tenor: TenorData | null | undefined = link.__tenor;
+		let tenor = link._t;
+		let domain = link._d;
 
 		if (tenor === undefined) {
 			const HOST = 'https://t.gifs.bsky.app';
@@ -57,7 +51,7 @@ const EmbedLink = (props: EmbedLinkProps) => {
 					}
 				: null;
 
-			tenor = link.__tenor = result;
+			tenor = link._t = result;
 		}
 
 		if (tenor) {
@@ -108,6 +102,17 @@ const EmbedLink = (props: EmbedLinkProps) => {
 			);
 		}
 
+		if (!domain) {
+			try {
+				const host = new URL(uri).host;
+				domain = host.startsWith('www.') ? host.slice(4) : host;
+			} catch {
+				domain = uri;
+			}
+
+			link._d = domain;
+		}
+
 		const content = (
 			<div class="flex overflow-hidden rounded-md border border-divider">
 				{thumb && (
@@ -118,7 +123,7 @@ const EmbedLink = (props: EmbedLinkProps) => {
 				)}
 
 				<div class="flex min-w-0 flex-col justify-center gap-0.5 p-3 text-sm">
-					<p class="overflow-hidden text-ellipsis text-muted-fg">{/* @once */ getDomain(uri)}</p>
+					<p class="overflow-hidden text-ellipsis text-muted-fg">{domain}</p>
 					<p class="line-clamp-2 break-words empty:hidden">{title}</p>
 				</div>
 			</div>
