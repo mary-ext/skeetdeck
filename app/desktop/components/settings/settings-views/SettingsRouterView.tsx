@@ -1,6 +1,7 @@
-import { type Component, type JSX, lazy } from 'solid-js';
+import { type Component, lazy } from 'solid-js';
 
 import {
+	type View,
 	type ViewType,
 	VIEW_ABOUT,
 	VIEW_ACCOUNT_CONFIG,
@@ -16,7 +17,6 @@ import {
 	VIEW_LABELER_POPULAR,
 	VIEW_MODERATION,
 	VIEW_TEMPORARY_MUTES,
-	useViewRouter,
 } from './_router';
 
 const AboutView = lazy(() => import('./AboutView'));
@@ -59,17 +59,12 @@ const views: Record<ViewType, Component> = {
 	[VIEW_EXCLUDED_TRANSLATION]: ExcludedTranslationView,
 };
 
-const SettingsRouterView = () => {
-	const router = useViewRouter();
+const SettingsRouterView = ({ view }: { view: View }) => {
+	const Component = views[view.type];
 
-	return (() => {
-		const current = router.current;
-		const Component = views[current.type];
-
-		if (Component) {
-			return <Component />;
-		}
-	}) as unknown as JSX.Element;
+	if (Component) {
+		return <Component />;
+	}
 };
 
 export default SettingsRouterView;

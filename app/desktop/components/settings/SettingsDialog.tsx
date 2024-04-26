@@ -1,4 +1,6 @@
-import { type ComponentProps, type JSX, Suspense, createSignal, startTransition } from 'solid-js';
+import { type ComponentProps, type JSX, For, Suspense, createMemo, createSignal } from 'solid-js';
+
+import { Freeze } from '@mary/solid-freeze';
 
 import { clsx } from '~/utils/misc';
 
@@ -34,10 +36,11 @@ import SettingsRouterView from './settings-views/SettingsRouterView';
 
 const SettingsDialog = () => {
 	const [views, setViews] = createSignal<View[]>([{ type: VIEW_ACCOUNTS }]);
+	const current = createMemo(() => views().at(-1)!);
 
 	const router: RouterState = {
 		get current() {
-			return views().at(-1)!;
+			return current();
 		},
 		get canGoBack() {
 			return views().length > 1;
@@ -101,15 +104,21 @@ const SettingsDialog = () => {
 							</div>
 						</div>
 						<div class="flex grow flex-col overflow-hidden overflow-y-auto border-l border-divider">
-							<Suspense
-								fallback={
-									<div class="grid grow place-items-center">
-										<CircularProgress />
-									</div>
-								}
-							>
-								<SettingsRouterView />
-							</Suspense>
+							<For each={views()}>
+								{(view) => (
+									<Freeze freeze={current() !== view}>
+										<Suspense
+											fallback={
+												<div class="grid grow place-items-center">
+													<CircularProgress />
+												</div>
+											}
+										>
+											<SettingsRouterView view={view} />
+										</Suspense>
+									</Freeze>
+								)}
+							</For>
 						</div>
 					</div>
 				</div>
