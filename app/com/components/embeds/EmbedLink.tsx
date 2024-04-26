@@ -72,12 +72,13 @@ const EmbedLink = (props: EmbedLinkProps) => {
 						class="h-full w-full"
 					/>
 
+					<div hidden={!(!playing() || stalling())} class="absolute inset-0 bg-black/50"></div>
+
 					<button
 						title={!playing() ? 'Play GIF' : `Pause GIF`}
 						aria-description={alt}
 						onClick={() => setPlaying(!playing())}
-						class="absolute inset-0 grid place-items-center"
-						classList={{ 'bg-black/50': !playing() || stalling() }}
+						class="absolute inset-0 grid place-items-center rounded-md outline-2 -outline-offset-2 outline-white focus-visible:outline"
 					>
 						{!playing() ? (
 							<div class="grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-accent">
