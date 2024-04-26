@@ -37,16 +37,19 @@ const start = () => {
 
 			sleep(delta, signal).then(async () => {
 				let views: AppBskyLabelerDefs.LabelerViewDetailed[] | undefined;
-				try {
-					const response = await publicAppView.get('app.bsky.labeler.getServices', {
-						params: {
-							dids: services.map((service) => service.did),
-							detailed: true,
-						},
-					});
 
-					views = response.data.views as AppBskyLabelerDefs.LabelerViewDetailed[];
-				} catch {}
+				if (services.length > 0) {
+					try {
+						const response = await publicAppView.get('app.bsky.labeler.getServices', {
+							params: {
+								dids: services.map((service) => service.did),
+								detailed: true,
+							},
+						});
+
+						views = response.data.views as AppBskyLabelerDefs.LabelerViewDetailed[];
+					} catch {}
+				}
 
 				batch(() => {
 					if (views) {
