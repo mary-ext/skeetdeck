@@ -9,7 +9,13 @@ import PlayIcon from '../../icons/baseline-play';
 import BlobImage from '../BlobImage';
 import CircularProgress from '../CircularProgress';
 
-type EmbeddedLink = AppBskyEmbedExternal.ViewExternal;
+interface TenorData {
+	u: string;
+	r: string;
+	d: string;
+}
+
+type EmbeddedLink = AppBskyEmbedExternal.ViewExternal & { __tenor?: TenorData | null };
 
 export interface EmbedLinkData extends Omit<EmbeddedLink, 'thumb'> {
 	thumb?: Blob | string;
@@ -34,24 +40,34 @@ const BSKY_TENOR_RE = /^https:\/\/media\.tenor\.com\/([^/]+?AAAAC)\/([^\/]+?)\?h
 
 const EmbedLink = (props: EmbedLinkProps) => {
 	return (() => {
-		const { uri, thumb, title, description } = props.link;
+		const link = props.link;
+		const { uri, thumb, title, description } = link;
 
-		const gifMatch = BSKY_TENOR_RE.exec(uri);
+		let tenor: TenorData | null | undefined = link.__tenor;
 
-		if (gifMatch) {
+		if (tenor === undefined) {
+			const HOST = 'https://t.gifs.bsky.app';
+
+			const match = BSKY_TENOR_RE.exec(uri);
+			const result: TenorData | null = match
+				? {
+						u: HOST + '/' + match[1].replace(/AAAAC$/, 'AAAP3') + '/' + match[2].replace(/\.gif$/, '.webm'),
+						r: `${match[4]}/${match[3]}`,
+						d: description.replace(/^ALT: /, ''),
+					}
+				: null;
+
+			tenor = link.__tenor = result;
+		}
+
+		if (tenor) {
 			const [playing, setPlaying] = createSignal(false);
 			const [stalling, setStalling] = createSignal(false);
-			const [, rawId, rawFilename, height, width] = gifMatch;
-
-			const id = rawId.replace(/AAAAC$/, 'AAAP3');
-			const filename = rawFilename.replace(/\.gif$/, '.webm');
-
-			const alt = description.replace(/^ALT: /, '');
 
 			return (
 				<div
 					class="relative overflow-hidden rounded-md border border-divider"
-					style={{ 'aspect-ratio': `${width}/${height}` }}
+					style={/* @once */ { 'aspect-ratio': tenor.r }}
 				>
 					<video
 						tabindex={-1}
@@ -66,7 +82,7 @@ const EmbedLink = (props: EmbedLinkProps) => {
 							});
 						}}
 						loop
-						src={`https://t.gifs.bsky.app/${id}/${filename}`}
+						src={/* @once */ tenor.u}
 						onWaiting={() => setStalling(true)}
 						onPlaying={() => setStalling(false)}
 						class="h-full w-full"
@@ -76,7 +92,7 @@ const EmbedLink = (props: EmbedLinkProps) => {
 
 					<button
 						title={!playing() ? 'Play GIF' : `Pause GIF`}
-						aria-description={alt}
+						aria-description={/* @once */ tenor.d}
 						onClick={() => setPlaying(!playing())}
 						class="absolute inset-0 grid place-items-center rounded-md outline-2 -outline-offset-2 outline-white focus-visible:outline"
 					>
