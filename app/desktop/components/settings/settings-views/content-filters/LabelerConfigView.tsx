@@ -1,4 +1,5 @@
 import { For, Match, Show, Switch, batch, createEffect, createMemo, lazy } from 'solid-js';
+import { createMutable } from 'solid-js/store';
 
 import { createQuery, useQueryClient } from '@mary/solid-query';
 
@@ -48,11 +49,14 @@ const LabelerConfigView = () => {
 		return {
 			queryKey: getLabelerInfoKey(did),
 			queryFn: getLabelerInfo,
-			initialData: found(),
+			initialData: found,
+			select: (data) => {
+				return data ? createMutable(data) : undefined;
+			},
 		};
 	});
 
-	const data = createMemo(() => query.data ?? found());
+	const data = createMemo(() => found() ?? query.data);
 
 	// Reset the query on any changes to `foundService`
 	createEffect((subsequent) => {
