@@ -43,7 +43,7 @@ const EmbedLink = (props: EmbedLinkProps) => {
 
 			return (
 				<div
-					class="relative overflow-hidden rounded-md border border-divider"
+					class="relative max-h-80 self-start overflow-hidden rounded-md border border-divider"
 					style={/* @once */ { 'aspect-ratio': snippet.r }}
 				>
 					<video
