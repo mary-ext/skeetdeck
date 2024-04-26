@@ -19,38 +19,40 @@ export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryK
 	Observer: typeof QueryObserver,
 	queryClient?: QueryClient,
 ): QueryObserverResult<TData, TError> {
-	const client = useQueryClient(queryClient);
+	return untrack(() => {
+		const client = useQueryClient(queryClient);
 
-	const defaultedOptions = createMemo(() => {
-		return client.defaultQueryOptions(options(client));
+		const defaultedOptions = createMemo(() => {
+			return client.defaultQueryOptions(options(client));
+		});
+
+		const initialDefaultedOptions = defaultedOptions();
+
+		const observer = new Observer<TQueryFnData, TError, TData, TQueryData, TQueryKey>(
+			client,
+			initialDefaultedOptions,
+		);
+
+		const result = createStateObject(untrack(() => observer.getOptimisticResult(initialDefaultedOptions)));
+
+		createRenderEffect(
+			on(
+				defaultedOptions,
+				($defaultedOptions) => {
+					observer.setOptions($defaultedOptions);
+				},
+				{ defer: true },
+			),
+		);
+
+		onCleanup(
+			observer.subscribe((next) => {
+				notifyManager.schedule(() => Object.assign(result, next));
+			}),
+		);
+
+		observer.updateResult();
+
+		return result;
 	});
-
-	const initialDefaultedOptions = untrack(defaultedOptions);
-
-	const observer = new Observer<TQueryFnData, TError, TData, TQueryData, TQueryKey>(
-		client,
-		initialDefaultedOptions,
-	);
-
-	const result = createStateObject(observer.getOptimisticResult(initialDefaultedOptions));
-
-	createRenderEffect(
-		on(
-			defaultedOptions,
-			($defaultedOptions) => {
-				observer.setOptions($defaultedOptions);
-			},
-			{ defer: true },
-		),
-	);
-
-	onCleanup(
-		observer.subscribe((next) => {
-			notifyManager.schedule(() => Object.assign(result, next));
-		}),
-	);
-
-	observer.updateResult();
-
-	return result;
 }

@@ -170,54 +170,56 @@ export function createQueries<T extends any[], TCombinedResult = QueriesResults<
 	}>,
 	queryClient?: QueryClient,
 ): Accessor<TCombinedResult> {
-	const client = useQueryClient(queryClient);
+	return untrack(() => {
+		const client = useQueryClient(queryClient);
 
-	const defaultedOptions = createMemo(() => {
-		const $queriesOptions = queriesOptions(client);
+		const defaultedOptions = createMemo(() => {
+			const $queriesOptions = queriesOptions(client);
 
-		return {
-			queries: $queriesOptions.queries.map((queryOptions) => {
-				return client.defaultQueryOptions(queryOptions);
+			return {
+				queries: $queriesOptions.queries.map((queryOptions) => {
+					return client.defaultQueryOptions(queryOptions);
+				}),
+				combine: $queriesOptions.combine,
+			};
+		});
+
+		const initialDefaultedOptions = (defaultedOptions)();
+
+		const observer = new QueriesObserver(
+			client,
+			initialDefaultedOptions.queries,
+			initialDefaultedOptions as QueriesObserverOptions<TCombinedResult>,
+		);
+
+		const [, getInitialResult] = observer.getOptimisticResult(
+			initialDefaultedOptions.queries,
+			(initialDefaultedOptions as QueriesObserverOptions<TCombinedResult>).combine,
+		);
+
+		const [state, setState] = createSignal(getInitialResult());
+
+		createRenderEffect(
+			on(defaultedOptions, ($defaultedOptions) => {
+				observer.setQueries(
+					$defaultedOptions.queries,
+					$defaultedOptions as QueriesObserverOptions<TCombinedResult>,
+				);
 			}),
-			combine: $queriesOptions.combine,
-		};
+		);
+
+		onCleanup(
+			observer.subscribe(() => {
+				const $defaultedOptions = defaultedOptions();
+				const [, getResult] = observer.getOptimisticResult(
+					$defaultedOptions.queries,
+					($defaultedOptions as QueriesObserverOptions<TCombinedResult>).combine,
+				);
+
+				setState(() => getResult());
+			}),
+		);
+
+		return state;
 	});
-
-	const initialDefaultedOptions = untrack(defaultedOptions);
-
-	const observer = new QueriesObserver(
-		client,
-		initialDefaultedOptions.queries,
-		initialDefaultedOptions as QueriesObserverOptions<TCombinedResult>,
-	);
-
-	const [, getInitialResult] = observer.getOptimisticResult(
-		initialDefaultedOptions.queries,
-		(initialDefaultedOptions as QueriesObserverOptions<TCombinedResult>).combine,
-	);
-
-	const [state, setState] = createSignal(getInitialResult());
-
-	createRenderEffect(
-		on(defaultedOptions, ($defaultedOptions) => {
-			observer.setQueries(
-				$defaultedOptions.queries,
-				$defaultedOptions as QueriesObserverOptions<TCombinedResult>,
-			);
-		}),
-	);
-
-	onCleanup(
-		observer.subscribe(() => {
-			const $defaultedOptions = defaultedOptions();
-			const [, getResult] = observer.getOptimisticResult(
-				$defaultedOptions.queries,
-				($defaultedOptions as QueriesObserverOptions<TCombinedResult>).combine,
-			);
-
-			setState(() => getResult());
-		}),
-	);
-
-	return state;
 }
