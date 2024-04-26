@@ -106,12 +106,12 @@ const removeEmbedBtn = Interactive({
 });
 
 const removeImageBtn = Interactive({
-	variant: 'none',
+	variant: 'white',
 	class: `absolute top-0 right-0 m-1 z-20 grid h-7 w-7 place-items-center rounded-full text-lg text-white outline-primary hover:bg-gray-400/30 disabled:opacity-50`,
 });
 
 const altBtn = Interactive({
-	variant: 'none',
+	variant: 'white',
 	class: `absolute bottom-0 left-0 m-2 flex h-5 items-center rounded px-1 text-xs font-medium text-white hover:bg-gray-400/30 disabled:opacity-50`,
 });
 
