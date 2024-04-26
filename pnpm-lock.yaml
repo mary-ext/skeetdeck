@@ -66,8 +66,8 @@ importers:
         specifier: npm:@jsr/mary__base32@^0.1.0
         version: '@jsr/mary__base32@0.1.0'
       '@mary/bluesky-client':
-        specifier: npm:@jsr/mary__bluesky-client@^0.5.11
-        version: '@jsr/mary__bluesky-client@0.5.11'
+        specifier: npm:@jsr/mary__bluesky-client@^0.5.12
+        version: '@jsr/mary__bluesky-client@0.5.12'
       '@mary/emoji-db':
         specifier: workspace:@externdefs/emoji-db@^
         version: link:../packages/emoji-db
@@ -963,8 +963,8 @@ packages:
   '@jsr/mary__base32@0.1.0':
     resolution: {integrity: sha512-QuCtLFgJGcHqZvOZkfVvyfIHflAcKM1u17LwZgPhK0u/VJbM61IxvCspdOm8rx6ZpnwhPMDHRgROAEbyBxDc4A==, tarball: https://npm.jsr.io/~/7/@jsr/mary__base32/0.1.0.tgz}
 
-  '@jsr/mary__bluesky-client@0.5.11':
-    resolution: {integrity: sha512-et/WwVSsgH53AsFBG/dt4pcSjQVCIBoeulJTdJlloXnEBfgOuCyr0jm/lOecAl9NFClQ513aPVtdKiT+i4jYQA==, tarball: https://npm.jsr.io/~/8/@jsr/mary__bluesky-client/0.5.11.tgz}
+  '@jsr/mary__bluesky-client@0.5.12':
+    resolution: {integrity: sha512-LMmtjMgPHfSOe+LMh+4DiKbLgJ0rUCv8UNYHNosyqB+G1nLZnlIxmvsEz/85imi8eMy977zC0j6GE1nNtlKNkg==, tarball: https://npm.jsr.io/~/8/@jsr/mary__bluesky-client/0.5.12.tgz}
 
   '@jsr/mary__exif-rm@0.2.1':
     resolution: {integrity: sha512-Qpq/jYjkNCPQAp1ApDTNKjLfa9FDrEVumhY9ehuYWV2N00w/HqKQhkMvA+IqzxpWCDLoMwKah0hn7tau4XNBvA==, tarball: https://npm.jsr.io/~/7/@jsr/mary__exif-rm/0.2.1.tgz}
@@ -3066,7 +3066,7 @@ snapshots:
 
   '@jsr/mary__base32@0.1.0': {}
 
-  '@jsr/mary__bluesky-client@0.5.11': {}
+  '@jsr/mary__bluesky-client@0.5.12': {}
 
   '@jsr/mary__exif-rm@0.2.1': {}
 
