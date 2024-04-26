@@ -93,17 +93,18 @@ export const detectSnippet = (
 				u: `https://www.youtube-nocookie.com/embed/${videoId}?start=${seek}&autoplay=1&playsinline=1`,
 				r: `16/9`,
 			};
-		} else if ((m = /^\/shorts\/([^/]+?)$/.exec(p))) {
-			const videoId = m[1];
-
-			return {
-				t: SnippetType.IFRAME,
-				s: SnippetSource.YOUTUBE,
-				d: d,
-				u: `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&playsinline=1`,
-				r: `9/16`,
-			};
 		}
+		// else if ((m = /^\/shorts\/([^/]+?)$/.exec(p))) {
+		// 	const videoId = m[1];
+
+		// 	return {
+		// 		t: SnippetType.IFRAME,
+		// 		s: SnippetSource.YOUTUBE,
+		// 		d: d,
+		// 		u: `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&playsinline=1`,
+		// 		r: `9/16`,
+		// 	};
+		// }
 	} else if (d === 'youtu.be') {
 		// YouTube iframe
 		if ((m = /^\/([^/]+?)$/.exec(p))) {
