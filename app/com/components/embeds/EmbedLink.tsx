@@ -43,7 +43,7 @@ const EmbedLink = (props: EmbedLinkProps) => {
 
 			return (
 				<div
-					class="relative max-h-80 self-start overflow-hidden rounded-md border border-divider"
+					class="relative max-h-80 max-w-full self-start overflow-hidden rounded-md border border-divider"
 					style={/* @once */ { 'aspect-ratio': snippet.r }}
 				>
 					<video
@@ -64,6 +64,9 @@ const EmbedLink = (props: EmbedLinkProps) => {
 						onPlaying={() => setStalling(false)}
 						class="h-full w-full"
 					/>
+
+					{/* FIXME: this is the same hack as standalone images in image embeds */}
+					<div class="h-screen w-screen"></div>
 
 					<div hidden={!(!playing() || stalling())} class="absolute inset-0 bg-black/50"></div>
 
