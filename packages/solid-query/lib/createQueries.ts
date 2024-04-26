@@ -184,7 +184,7 @@ export function createQueries<T extends any[], TCombinedResult = QueriesResults<
 			};
 		});
 
-		const initialDefaultedOptions = (defaultedOptions)();
+		const initialDefaultedOptions = defaultedOptions();
 
 		const observer = new QueriesObserver(
 			client,

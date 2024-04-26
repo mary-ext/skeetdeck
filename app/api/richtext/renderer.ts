@@ -41,10 +41,10 @@ const buildHostPart = (url: URL) => {
 };
 
 export const isLinkValid = (uri: string, text: string) => {
-	const url = safeUrlParse(uri)
+	const url = safeUrlParse(uri);
 
 	if (!url) {
-		return false
+		return false;
 	}
 
 	const expectedHost = buildHostPart(url);
