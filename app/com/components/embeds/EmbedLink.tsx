@@ -43,6 +43,8 @@ const EmbedLink = (props: EmbedLinkProps) => {
 			const [playing, setPlaying] = createSignal(false);
 			const [stalling, setStalling] = createSignal(false);
 
+			let _stallTimeout: number | undefined;
+
 			return (
 				<div
 					class="relative max-h-80 max-w-full self-start overflow-hidden rounded-md border border-divider"
@@ -62,8 +64,14 @@ const EmbedLink = (props: EmbedLinkProps) => {
 						}}
 						loop
 						src={/* @once */ snippet.u}
-						onWaiting={() => setStalling(true)}
-						onPlaying={() => setStalling(false)}
+						onWaiting={() => {
+							clearTimeout(_stallTimeout);
+							_stallTimeout = setTimeout(() => setStalling(true), 50);
+						}}
+						onPlaying={() => {
+							clearTimeout(_stallTimeout);
+							setStalling(false);
+						}}
 						class="h-full w-full"
 					/>
 
