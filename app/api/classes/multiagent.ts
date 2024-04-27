@@ -105,14 +105,15 @@ export class Multiagent {
 		return value;
 	}
 	set active(next: At.DID | undefined) {
+		const accounts = this.store.accounts;
+		const index = next ? accounts.findIndex((x) => x.did === next) : -1;
+
 		batch(() => {
-			this.store.active = next;
+			this.store.active = index !== -1 ? next : undefined;
 
-			if (next) {
-				const accounts = this.store.accounts.slice();
-				accounts.sort((a, _b) => (a.did === next ? -1 : 1));
-
-				this.store.accounts = accounts;
+			if (index !== -1) {
+				const [acc] = accounts.splice(index, 1);
+				accounts.unshift(acc);
 			}
 		});
 	}
