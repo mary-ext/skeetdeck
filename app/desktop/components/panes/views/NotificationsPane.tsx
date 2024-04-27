@@ -178,7 +178,7 @@ const NotificationsPane = () => {
 							.flatMap((page) => page.slices)
 							.filter((slice) => {
 								const flag = REASONS[slice.type];
-								return flag !== undefined && (flag & mask) !== 0;
+								return flag !== undefined && (flag & mask) === 0;
 							});
 					})()}
 					error={notifications.error}
@@ -190,7 +190,7 @@ const NotificationsPane = () => {
 							<p class="text-center text-sm text-muted-fg">Nothing here but crickets...</p>
 						</div>
 					}
-					manualScroll={true}
+					manualScroll={pane.mask !== 0}
 					hasNewData={isNotificationsStale(notifications.data, latest.data)}
 					hasNextPage={notifications.hasNextPage}
 					isFetchingNextPage={notifications.isFetchingNextPage || notifications.isLoading}

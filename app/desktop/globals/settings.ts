@@ -14,7 +14,7 @@ export interface ModerationPreferences extends Omit<ModerationOptions, '_filters
 }
 
 export interface PreferencesSchema {
-	$version: 12;
+	$version: 13;
 	/** Onboarding mode */
 	onboarding: boolean;
 	/** Deck configuration */
@@ -50,7 +50,7 @@ const PREF_KEY = 'rantai_prefs';
 export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KEY, (version, prev) => {
 	if (version === 0) {
 		const object: PreferencesSchema = {
-			$version: 11,
+			$version: 13,
 			onboarding: true,
 			decks: [],
 			ui: {
@@ -135,8 +135,20 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 				}
 			}
 		}
+	}
 
-		_next.$version = 12;
+	if (version < 13) {
+		const _next = prev as PreferencesSchema;
+
+		for (const deck of _next.decks) {
+			for (const pane of deck.panes) {
+				if (pane.type === 'notifications') {
+					pane.mask = 0;
+				}
+			}
+		}
+
+		_next.$version = 13;
 	}
 
 	return prev;

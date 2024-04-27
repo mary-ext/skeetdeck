@@ -25,14 +25,14 @@ const NotificationsPaneSettings = () => {
 	const model = (flag: number) => {
 		return (node: HTMLInputElement) => {
 			createRenderEffect(() => {
-				node.checked = (pane.mask & flag) !== 0;
+				node.checked = (pane.mask & flag) === 0;
 			});
 
 			node.addEventListener('input', () => {
 				if (node.checked) {
-					pane.mask |= flag;
-				} else {
 					pane.mask &= ~flag;
+				} else {
+					pane.mask |= flag;
 				}
 			});
 		};
