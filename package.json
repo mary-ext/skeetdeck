@@ -1,4 +1,9 @@
 {
+	"private": true,
+	"workspaces": [
+		"app",
+		"packages/*"
+	],
 	"scripts": {
 		"fmt": "prettier --cache --write ."
 	},
