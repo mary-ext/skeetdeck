@@ -15,13 +15,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Bun
-        uses: https://github.com/oven-sh/setup-bun@v1
+      - name: Setup pnpm
+        uses: https://github.com/pnpm/action-setup@v3.0.0
         with:
-          bun-version: 1.1.x
+          version: 9
+
+      - name: Configure Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
 
       - name: Install dependencies
-        run: bun install
+        run: pnpm install --frozen-lockfile
 
       - name: Build app
         working-directory: app
@@ -32,13 +38,13 @@ jobs:
           export VITE_GIT_COMMIT=${RAW_COMMIT:0:7}
 
           echo "branch: $VITE_GIT_BRANCH; commit: $VITE_GIT_COMMIT"
-          bun run build:desktop
+          pnpm run build:desktop
 
       - name: Publish to Cloudflare Pages
         working-directory: app
         run: |
           CLOUDFLARE_API_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }} \
             CLOUDFLARE_ACCOUNT_ID=${{ secrets.CLOUDFLARE_ACCOUNT_ID }} \
-            bunx wrangler pages deploy desktop/dist \
+            pnpm dlx wrangler pages deploy desktop/dist \
               --project-name=skeetdeck \
               --branch=${{ github.ref_name == 'trunk' && 'main' || github.ref_name }}
