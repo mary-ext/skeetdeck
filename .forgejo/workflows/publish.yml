@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+        uses: https://github.com/oven-sh/setup-bun@v1
         with:
           bun-version: 1.1.x
 
