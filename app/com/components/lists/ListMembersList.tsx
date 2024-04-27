@@ -1,5 +1,3 @@
-import { type JSX, For } from 'solid-js';
-
 import { type InfiniteData, createInfiniteQuery, useQueryClient } from '@mary/solid-query';
 
 import { multiagent } from '~/api/globals/agent';
@@ -19,17 +17,15 @@ import { openModal } from '../../globals/modals';
 
 import { IconButton } from '../../primitives/icon-button';
 import { MenuItem, MenuItemIcon, MenuRoot } from '../../primitives/menu';
-import { loadMoreBtn } from '../../primitives/interactive';
 
 import ConfirmDialog from '../dialogs/ConfirmDialog';
-import GenericErrorView from '../views/GenericErrorView';
-import CircularProgress from '../CircularProgress';
 import { Flyout } from '../Flyout';
 import { VirtualContainer } from '../VirtualContainer';
 
 import DeleteIcon from '../../icons/baseline-delete';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
 
+import List from '../List';
 import ProfileItem, { type ProfileItemAccessory, type ProfileItemProps } from '../items/ProfileItem';
 
 export interface ListMembersListProps {
@@ -53,65 +49,33 @@ const ListMembersList = (props: ListMembersListProps) => {
 
 	const isOwner = list.uid === list.creator.did;
 
-	return [
-		<div>
-			<For each={members.data?.pages.flatMap((page) => page.members)}>
-				{(member) => {
-					if (isOwner) {
-						return (
-							<ListItem
-								profile={/* @once */ member.profile}
-								itemUri={/* @once */ member.uri}
-								listUri={/* @once */ list.uri}
-								onClick={onClick}
-							/>
-						);
-					}
-
+	return (
+		<List
+			data={members.data?.pages.flatMap((page) => page.members)}
+			error={members.error}
+			render={(member) => {
+				if (isOwner) {
 					return (
-						<VirtualContainer estimateHeight={88}>
-							<ProfileItem profile={/* @once */ member.profile} onClick={onClick} />
-						</VirtualContainer>
+						<ListItem
+							profile={/* @once */ member.profile}
+							itemUri={/* @once */ member.uri}
+							listUri={/* @once */ list.uri}
+							onClick={onClick}
+						/>
 					);
-				}}
-			</For>
-		</div>,
+				}
 
-		() => {
-			if (members.isFetching) {
 				return (
-					<div class="grid h-13 shrink-0 place-items-center">
-						<CircularProgress />
-					</div>
+					<VirtualContainer estimateHeight={88}>
+						<ProfileItem profile={/* @once */ member.profile} onClick={onClick} />
+					</VirtualContainer>
 				);
-			}
-
-			if (members.isError) {
-				return (
-					<GenericErrorView
-						error={members.error}
-						onRetry={() => {
-							members.fetchNextPage();
-						}}
-					/>
-				);
-			}
-
-			if (members.hasNextPage) {
-				return (
-					<button onClick={() => members.fetchNextPage()} class={loadMoreBtn}>
-						Show more profiles
-					</button>
-				);
-			}
-
-			return (
-				<div class="grid h-13 shrink-0 place-items-center">
-					<p class="text-sm text-muted-fg">End of list</p>
-				</div>
-			);
-		},
-	] as unknown as JSX.Element;
+			}}
+			hasNextPage={members.hasNextPage}
+			isFetchingNextPage={members.isFetching}
+			onEndReached={() => members.fetchNextPage()}
+		/>
+	);
 };
 
 export default ListMembersList;

@@ -1,4 +1,4 @@
-import { type JSX, For, Match, Switch, createEffect, createSignal, lazy } from 'solid-js';
+import { type JSX, createEffect, createSignal, lazy } from 'solid-js';
 
 import {
 	type InfiniteData,
@@ -8,7 +8,7 @@ import {
 	createMutation,
 } from '@mary/solid-query';
 
-import { getQueryErrorInfo, resetInfiniteData } from '~/api/utils/query';
+import { resetInfiniteData } from '~/api/utils/query';
 
 import { updateNotificationsSeen } from '~/api/mutations/update-notifications-seen';
 import {
@@ -23,12 +23,10 @@ import {
 
 import type { NotificationsPaneConfig } from '../../../globals/panes';
 
+import List from '~/com/components/List';
 import Notification from '~/com/components/items/Notification';
-import GenericErrorView from '~/com/components/views/GenericErrorView';
-import CircularProgress from '~/com/components/CircularProgress';
 
 import { IconButton } from '~/com/primitives/icon-button';
-import { loadMoreBtn, loadNewBtn } from '~/com/primitives/interactive';
 
 import CheckAllIcon from '~/com/icons/baseline-check-all';
 import SettingsOutlinedIcon from '~/com/icons/outline-settings';
@@ -42,10 +40,10 @@ const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings')
 const NotificationsPaneSettings = lazy(() => import('../settings/NotificationsPaneSettings'));
 
 const isNotificationsStale = (
-	timelineData: InfiniteData<NotificationsPage> | undefined,
+	listingData: InfiniteData<NotificationsPage> | undefined,
 	latestData: NotificationsLatestResult | undefined,
 ) => {
-	return latestData?.cid ? latestData.cid !== timelineData?.pages[0].cid : false;
+	return listingData && latestData?.cid ? latestData.cid !== listingData.pages[0].cid : false;
 };
 
 const NotificationsPane = () => {
@@ -172,94 +170,37 @@ const NotificationsPane = () => {
 			}
 		>
 			<PaneBody>
-				<Switch>
-					<Match when={read.isPending || notifications.isRefetching}>
-						<div class="grid h-13 shrink-0 place-items-center border-b border-divider">
-							<CircularProgress />
+				<List
+					data={(() => {
+						const mask = pane.mask;
+
+						return notifications.data?.pages
+							.flatMap((page) => page.slices)
+							.filter((slice) => {
+								const flag = REASONS[slice.type];
+								return flag !== undefined && (flag & mask) !== 0;
+							});
+					})()}
+					error={notifications.error}
+					render={(slice) => {
+						return <Notification uid={pane.uid} data={slice} />;
+					}}
+					fallback={
+						<div class="border-b border-divider p-4">
+							<p class="text-center text-sm text-muted-fg">Nothing here but crickets...</p>
 						</div>
-					</Match>
-
-					<Match when={!notifications.isLoading && isNotificationsStale(notifications.data, latest.data)}>
-						<button onClick={refetchNotifications} class={loadNewBtn}>
-							Show new notifications
-						</button>
-					</Match>
-				</Switch>
-
-				<div>
-					<For
-						each={(() => {
-							const mask = pane.mask;
-
-							return notifications.data?.pages
-								.flatMap((page) => page.slices)
-								.filter((slice) => {
-									const flag = REASONS[slice.type];
-									return flag !== undefined && (flag & mask) !== 0;
-								});
-						})()}
-						fallback={(() => {
-							return (() => {
-								if (notifications.data) {
-									return (
-										<div class="border-b border-divider p-4">
-											<p class="text-center text-sm text-muted-fg">Nothing here but crickets...</p>
-										</div>
-									);
-								}
-							}) as unknown as JSX.Element;
-						})()}
-					>
-						{(slice) => {
-							return <Notification uid={pane.uid} data={slice} />;
-						}}
-					</For>
-				</div>
-
-				<Switch>
-					<Match when={notifications.isFetchingNextPage || notifications.isLoading}>
-						<div class="grid h-13 shrink-0 place-items-center">
-							<CircularProgress />
-						</div>
-					</Match>
-
-					<Match when={notifications.error}>
-						{(err) => (
-							<GenericErrorView
-								padded
-								error={err()}
-								onRetry={() => {
-									const info = getQueryErrorInfo(err());
-
-									if (
-										notifications.isLoadingError ||
-										(notifications.isRefetchError && info?.pageParam === undefined)
-									) {
-										notifications.refetch();
-									} else {
-										notifications.fetchNextPage();
-									}
-								}}
-							/>
-						)}
-					</Match>
-
-					<Match when={notifications.hasNextPage}>
-						<button
-							disabled={notifications.isRefetching}
-							onClick={() => notifications.fetchNextPage()}
-							class={loadMoreBtn}
-						>
-							Show more notifications
-						</button>
-					</Match>
-
-					<Match when={notifications.data}>
-						<div class="grid h-13 shrink-0 place-items-center">
-							<p class="text-sm text-muted-fg">End of list</p>
-						</div>
-					</Match>
-				</Switch>
+					}
+					manualScroll={true}
+					hasNewData={isNotificationsStale(notifications.data, latest.data)}
+					hasNextPage={notifications.hasNextPage}
+					isFetchingNextPage={notifications.isFetchingNextPage || notifications.isLoading}
+					isRefreshing={notifications.isRefetching}
+					onEndReached={() => notifications.fetchNextPage()}
+					onRefresh={() => {
+						resetInfiniteData(queryClient, getNotificationsKey(pane.uid));
+						notifications.refetch();
+					}}
+				/>
 			</PaneBody>
 		</Pane>,
 

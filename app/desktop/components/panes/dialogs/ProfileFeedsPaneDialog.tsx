@@ -1,10 +1,13 @@
-import { createQuery } from '@mary/solid-query';
+import { createInfiniteQuery, createQuery } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
 
 import { getProfile, getProfileKey } from '~/api/queries/get-profile';
+import { getProfileFeeds, getProfileFeedsKey } from '~/api/queries/get-profile-feeds';
 
-import FeedList from '~/com/components/lists/FeedList';
+import List from '~/com/components/List';
+import { VirtualContainer } from '~/com/components/VirtualContainer';
+import FeedItem from '~/com/components/items/FeedItem';
 
 import { usePaneContext } from '../PaneContext';
 import PaneDialog from '../PaneDialog';
@@ -28,6 +31,15 @@ const ProfileFeedsPaneDialog = (props: ProfileFeedsPaneDialogProps) => {
 		};
 	});
 
+	const feeds = createInfiniteQuery(() => {
+		return {
+			queryKey: getProfileFeedsKey(pane.uid, props.actor),
+			queryFn: getProfileFeeds,
+			initialPageParam: undefined,
+			getNextPageParam: (last) => last.cursor,
+		};
+	});
+
 	return (
 		<PaneDialog>
 			<PaneDialogHeader
@@ -42,7 +54,20 @@ const ProfileFeedsPaneDialog = (props: ProfileFeedsPaneDialogProps) => {
 			/>
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
-				<FeedList uid={pane.uid} actor={actor} />
+				<List
+					data={feeds.data?.pages.flatMap((page) => page.feeds)}
+					error={feeds.error}
+					render={(feed) => {
+						return (
+							<VirtualContainer estimateHeight={96}>
+								<FeedItem feed={feed} />
+							</VirtualContainer>
+						);
+					}}
+					hasNextPage={feeds.hasNextPage}
+					isFetchingNextPage={feeds.isFetching}
+					onEndReached={() => feeds.fetchNextPage()}
+				/>
 			</div>
 		</PaneDialog>
 	);

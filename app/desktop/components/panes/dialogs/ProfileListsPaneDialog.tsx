@@ -1,10 +1,13 @@
-import { createQuery } from '@mary/solid-query';
+import { createInfiniteQuery, createQuery } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
 
 import { getProfile, getProfileKey } from '~/api/queries/get-profile';
+import { getProfileLists, getProfileListsKey } from '~/api/queries/get-profile-lists';
 
-import ListList from '~/com/components/lists/ListList';
+import List from '~/com/components/List';
+import { VirtualContainer } from '~/com/components/VirtualContainer';
+import ListItem from '~/com/components/items/ListItem';
 
 import { usePaneContext } from '../PaneContext';
 import PaneDialog from '../PaneDialog';
@@ -28,6 +31,15 @@ const ProfileListsPaneDialog = (props: ProfileListsPaneDialogProps) => {
 		};
 	});
 
+	const lists = createInfiniteQuery(() => {
+		return {
+			queryKey: getProfileListsKey(pane.uid, props.actor),
+			queryFn: getProfileLists,
+			initialPageParam: undefined,
+			getNextPageParam: (last) => last.cursor,
+		};
+	});
+
 	return (
 		<PaneDialog>
 			<PaneDialogHeader
@@ -42,7 +54,20 @@ const ProfileListsPaneDialog = (props: ProfileListsPaneDialogProps) => {
 			/>
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
-				<ListList uid={pane.uid} actor={actor} />
+				<List
+					data={lists.data?.pages.flatMap((page) => page.feeds)}
+					error={lists.error}
+					render={(list) => {
+						return (
+							<VirtualContainer estimateHeight={96}>
+								<ListItem list={list} />
+							</VirtualContainer>
+						);
+					}}
+					hasNextPage={lists.hasNextPage}
+					isFetchingNextPage={lists.isFetching}
+					onEndReached={() => lists.fetchNextPage()}
+				/>
 			</div>
 		</PaneDialog>
 	);

@@ -18,13 +18,12 @@ import { closeModal, openModal, useModalState } from '../../../globals/modals';
 import { Button } from '../../../primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog';
 import { IconButton } from '../../../primitives/icon-button';
-import { Interactive, loadMoreBtn } from '../../../primitives/interactive';
+import { Interactive } from '../../../primitives/interactive';
 
-import GenericErrorView from '../../views/GenericErrorView';
 import FilterBar from '../../inputs/FilterBar';
-import CircularProgress from '../../CircularProgress';
-import Modal from '../../Modal';
 import DialogOverlay from '../DialogOverlay';
+import List from '../../List';
+import Modal from '../../Modal';
 
 import AddIcon from '../../../icons/baseline-add';
 import CheckIcon from '../../../icons/baseline-check';
@@ -330,8 +329,10 @@ const CloneListMembersDialog = (props: CloneListMembersDialogProps) => {
 							<span class="text-sm">Create new list</span>
 						</button>
 
-						<For each={lists.data}>
-							{(list) => {
+						<List
+							data={lists.data}
+							error={lists.error}
+							render={(list) => {
 								const isSelected = () => {
 									const $dest = dest();
 									return $dest ? $dest.uri === list.uri : false;
@@ -350,46 +351,10 @@ const CloneListMembersDialog = (props: CloneListMembersDialogProps) => {
 									</button>
 								);
 							}}
-						</For>
-
-						{(() => {
-							if (lists.isFetching) {
-								return (
-									<div class="grid h-13 shrink-0 place-items-center">
-										<CircularProgress />
-									</div>
-								);
-							}
-
-							if (lists.isError) {
-								return (
-									<GenericErrorView
-										error={lists.error}
-										onRetry={() => {
-											if (lists.isLoadingError) {
-												lists.refetch();
-											} else {
-												lists.fetchNextPage();
-											}
-										}}
-									/>
-								);
-							}
-
-							if (lists.hasNextPage) {
-								return (
-									<button onClick={() => lists.fetchNextPage()} class={loadMoreBtn}>
-										Show more lists
-									</button>
-								);
-							}
-
-							return (
-								<div class="grid h-13 shrink-0 place-items-center">
-									<p class="text-sm text-muted-fg">End of list</p>
-								</div>
-							);
-						})()}
+							hasNextPage={lists.hasNextPage}
+							isFetchingNextPage={lists.isFetching}
+							onEndReached={() => lists.fetchNextPage()}
+						/>
 					</div>
 				</fieldset>
 			</div>

@@ -1,9 +1,9 @@
-import { For, Match, Switch, createEffect } from 'solid-js';
+import { createEffect } from 'solid-js';
 
 import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
-import { getQueryErrorInfo, resetInfiniteData } from '~/api/utils/query';
+import { resetInfiniteData } from '~/api/utils/query';
 
 import {
 	type TimelineLatestResult,
@@ -17,12 +17,8 @@ import {
 
 import { getTimelineQueryMeta } from '../../globals/shared';
 
-import CircularProgress from '../CircularProgress';
+import List from '../List';
 import { VirtualContainer } from '../VirtualContainer';
-
-import GenericErrorView from '../views/GenericErrorView';
-
-import { loadMoreBtn, loadNewBtn } from '../../primitives/interactive';
 
 import Post from '../items/Post';
 
@@ -92,91 +88,36 @@ const TimelineList = (props: TimelineListProps) => {
 	}, 0 as const);
 
 	return (
-		<>
-			<Switch>
-				<Match when={timeline.isRefetching}>
-					<div class="grid h-13 shrink-0 place-items-center border-b border-divider">
-						<CircularProgress />
-					</div>
-				</Match>
+		<List
+			data={timeline.data?.pages.flatMap((page) => page.slices)}
+			error={timeline.error}
+			render={(slice) => {
+				const items = slice.items;
+				const len = items.length;
 
-				<Match when={isTimelineStale(timeline.data, latest.data)}>
-					<button
-						onClick={() => {
-							resetInfiniteData(queryClient, getTimelineKey(props.uid, props.params));
-							timeline.refetch();
-						}}
-						class={loadNewBtn}
-					>
-						Show new posts
-					</button>
-				</Match>
-			</Switch>
-
-			<div>
-				<For each={timeline.data?.pages.flatMap((page) => page.slices)}>
-					{(slice) => {
-						const items = slice.items;
-						const len = items.length;
-
-						return items.map((item, idx) => (
-							<VirtualContainer estimateHeight={98.8}>
-								<Post
-									interactive
-									post={/* @once */ item.post}
-									parent={/* @once */ item.reply?.parent}
-									reason={/* @once */ item.reason}
-									prev={idx !== 0}
-									next={idx !== len - 1}
-								/>
-							</VirtualContainer>
-						));
-					}}
-				</For>
-			</div>
-
-			<Switch>
-				<Match when={timeline.isFetchingNextPage || timeline.isLoading}>
-					<div class="grid h-13 shrink-0 place-items-center">
-						<CircularProgress />
-					</div>
-				</Match>
-
-				<Match when={timeline.error}>
-					{(err) => (
-						<GenericErrorView
-							padded
-							error={err()}
-							onRetry={() => {
-								const info = getQueryErrorInfo(err());
-
-								if (timeline.isLoadingError || (timeline.isRefetchError && info?.pageParam === undefined)) {
-									timeline.refetch();
-								} else {
-									timeline.fetchNextPage();
-								}
-							}}
+				return items.map((item, idx) => (
+					<VirtualContainer estimateHeight={98.8}>
+						<Post
+							interactive
+							post={/* @once */ item.post}
+							parent={/* @once */ item.reply?.parent}
+							reason={/* @once */ item.reason}
+							prev={idx !== 0}
+							next={idx !== len - 1}
 						/>
-					)}
-				</Match>
-
-				<Match when={timeline.hasNextPage}>
-					<button
-						disabled={timeline.isRefetching}
-						onClick={() => timeline.fetchNextPage()}
-						class={loadMoreBtn}
-					>
-						Show more posts
-					</button>
-				</Match>
-
-				<Match when={timeline.data}>
-					<div class="grid h-13 shrink-0 place-items-center">
-						<p class="text-sm text-muted-fg">End of list</p>
-					</div>
-				</Match>
-			</Switch>
-		</>
+					</VirtualContainer>
+				));
+			}}
+			hasNewData={isTimelineStale(timeline.data, latest.data)}
+			hasNextPage={timeline.hasNextPage}
+			isFetchingNextPage={timeline.isFetchingNextPage || timeline.isLoading}
+			isRefreshing={timeline.isRefetching}
+			onEndReached={() => timeline.fetchNextPage()}
+			onRefresh={() => {
+				resetInfiniteData(queryClient, getTimelineKey(props.uid, props.params));
+				timeline.refetch();
+			}}
+		/>
 	);
 };
 
