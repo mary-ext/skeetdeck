@@ -105,7 +105,7 @@ const LabelerPopularView = () => {
 
 							<Match when={popular.hasNextPage}>
 								<button onClick={() => popular.fetchNextPage()} class={ListBoxItemInteractive}>
-									<span class="grow font-medium">Load more providers</span>
+									<span class="grow font-medium">Show more providers</span>
 								</button>
 							</Match>
 						</Switch>
