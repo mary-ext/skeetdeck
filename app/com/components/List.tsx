@@ -40,7 +40,7 @@ const List = <T,>(props: ListProps<T>) => {
 
 				<Match when={props.hasNewData}>
 					<button onClick={onRefresh} class={loadNewBtn}>
-						{'Show new posts'}
+						{'Show new items'}
 					</button>
 				</Match>
 			</Switch>
