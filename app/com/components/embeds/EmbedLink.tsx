@@ -23,6 +23,8 @@ export interface EmbedLinkProps {
 	interactive?: boolean;
 }
 
+const snippets = new WeakMap<EmbedLinkData, Snippet>();
+
 const EmbedLink = (props: EmbedLinkProps) => {
 	return (() => {
 		const interactive = props.interactive;
@@ -30,9 +32,9 @@ const EmbedLink = (props: EmbedLinkProps) => {
 
 		const thumb = link.thumb;
 
-		let snippet = link._s;
+		let snippet = snippets.get(link);
 		if (snippet === undefined) {
-			link._s = snippet = detectSnippet(link);
+			snippets.set(link, (snippet = detectSnippet(link)));
 		}
 
 		const t = snippet.t;
