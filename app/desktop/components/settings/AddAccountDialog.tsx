@@ -40,7 +40,7 @@ const formatEmailOtpCode = (code: string) => {
 	let str = code.toUpperCase();
 
 	if (!code.includes('-')) {
-		str = str.slice(0, 5) + '-' + code.slice(5);
+		str = str.slice(0, 5) + '-' + str.slice(5);
 	}
 
 	return str;
