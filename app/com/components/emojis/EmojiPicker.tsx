@@ -36,6 +36,7 @@ export interface EmojiPickerProps {
 
 const EmojiPicker = (props: EmojiPickerProps) => {
 	let scrollRef: HTMLDivElement | undefined;
+	let inputRef: HTMLInputElement | undefined;
 
 	const database = getEmojiDb();
 
@@ -83,6 +84,8 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 			<div class="flex gap-2 p-2">
 				<SearchInput
 					ref={(node) => {
+						inputRef = node;
+
 						onMount(() => {
 							node.focus();
 						});
@@ -140,7 +143,26 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 				</Flyout>
 			</div>
 
-			<div class="flex border-b border-divider pb-1">
+			<div
+				onKeyDown={(ev) => {
+					const key = ev.key;
+					let code: number;
+
+					// Move to search box if the user tries to type something
+					if (
+						!ev.metaKey &&
+						!ev.ctrlKey &&
+						key.length === 1 &&
+						((code = key.charCodeAt(0)), (code >= 97 && code <= 122) || (code >= 65 && code <= 90))
+					) {
+						ev.preventDefault();
+
+						inputRef!.focus();
+						document.execCommand('inserttext', false, key);
+					}
+				}}
+				class="flex justify-center border-b border-divider px-2 pb-1"
+			>
 				{EMOJI_GROUPS.map(([id, emoji, name]) => {
 					return (
 						<button
