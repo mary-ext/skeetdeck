@@ -103,7 +103,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 	});
 
 	return (
-		<div class="w-max bg-background">
+		<div class="w-max bg-background" style="width:340px">
 			<div class="flex gap-2 p-2">
 				<SearchInput
 					ref={(node) => {
@@ -349,7 +349,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 				</div>
 			</Suspense>
 
-			<div class="flex items-center gap-4 border-t border-divider p-2">
+			<div class="flex items-center gap-2 border-t border-divider p-2">
 				<div class="text-2xl">
 					{(() => {
 						const $selected = selected();
@@ -357,7 +357,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 					})()}
 				</div>
 
-				<span class="text-sm text-muted-fg">
+				<span class="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-fg">
 					{(() => {
 						const $selected = selected();
 
