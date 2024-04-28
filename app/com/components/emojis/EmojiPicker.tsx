@@ -26,7 +26,7 @@ const SKINTONE_EMOJIS = ['👏', '👏🏻', '👏🏼', '👏🏽', '👏🏾',
 const SKINTONE_LABELS = ['Default', 'Light', 'Medium-light', 'Medium', 'Medium-dark', 'Dark'];
 
 const skinBtn = Interactive({ class: `h-9 w-9 rounded text-xl` });
-const emojiBtn = Interactive({ class: `h-12 w-12 overflow-hidden rounded text-3xl` });
+const emojiBtn = Interactive({ class: `h-9 w-9 overflow-hidden rounded text-xl` });
 const categoryBtn = Interactive({ class: `relative h-9 w-9 rounded text-xl` });
 
 export interface EmojiPickerProps {
@@ -168,7 +168,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 
 			<Suspense fallback={<div class="h-64"></div>}>
 				<div ref={scrollRef} class="h-64 overflow-y-auto p-2">
-					<div class="grid grid-cols-6">
+					<div class="mx-auto grid w-max grid-cols-9 place-items-center">
 						{(() => {
 							const children = emojis()?.map((emoji) => {
 								return (
@@ -188,7 +188,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 
 							if (!children || children.length === 0) {
 								// Such that we still retain the width
-								return <div class="h-12 w-12"></div>;
+								return <div class="h-9 w-9"></div>;
 							}
 
 							return children;
