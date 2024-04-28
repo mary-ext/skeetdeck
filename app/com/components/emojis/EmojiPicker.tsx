@@ -295,6 +295,8 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 
 						if (hasKeyboard() === KeyboardState.YES_WITH_POINTER_OVER) {
 							setHasKeyboard(KeyboardState.YES);
+						} else {
+							setSelected(undefined);
 						}
 					}}
 					class="h-64 overflow-y-auto"
