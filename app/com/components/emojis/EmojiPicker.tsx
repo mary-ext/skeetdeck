@@ -43,6 +43,12 @@ export interface EmojiPickerProps {
 	onPick: (emoji: PickedEmoji, close: boolean) => void;
 }
 
+const enum KeyboardState {
+	NO = 0,
+	YES = 1,
+	YES_WITH_POINTER_OVER = 2,
+}
+
 const EmojiPicker = (props: EmojiPickerProps) => {
 	let scrollRef: HTMLDivElement | undefined;
 	let inputRef: HTMLInputElement | undefined;
@@ -74,7 +80,8 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 
 	const [tone, setTone] = createSignal<SkinTone>(0);
 
-	const [isKeyboardEnabled, setIsKeyboardEnabled] = createSignal(false);
+	const [isPointerOver, setIsPointerOver] = createSignal(false);
+	const [hasKeyboard, setHasKeyboard] = createSignal(KeyboardState.NO);
 	const [selected, setSelected] = createSignal<{ emoji: SummarizedEmoji; index: number }>();
 
 	const isSelected = createSelector(() => selected()?.emoji);
@@ -113,7 +120,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 
 							setSearch(value);
 
-							setIsKeyboardEnabled(false);
+							setHasKeyboard(KeyboardState.NO);
 							setSelected(undefined);
 						});
 					}}
@@ -122,7 +129,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 
 						if (key === 'Enter') {
 							const $selected = selected();
-							const $isKeyboardEnabled = isKeyboardEnabled();
+							const $isKeyboardEnabled = hasKeyboard();
 
 							ev.preventDefault();
 
@@ -147,7 +154,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 								return;
 							}
 
-							setIsKeyboardEnabled(true);
+							setHasKeyboard(!isPointerOver() ? KeyboardState.YES : KeyboardState.YES_WITH_POINTER_OVER);
 
 							if (!$selected) {
 								if ($emojis.length > 0) {
@@ -259,7 +266,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 									setGroup(id);
 									setSearch('');
 
-									setIsKeyboardEnabled(false);
+									setHasKeyboard(KeyboardState.NO);
 									setSelected(undefined);
 								});
 							}}
@@ -278,26 +285,41 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 			</div>
 
 			<Suspense fallback={<div class="h-64"></div>}>
-				<div ref={scrollRef} class="h-64 overflow-y-auto p-2">
-					<div class="mx-auto grid w-max grid-cols-9 place-items-center">
+				<div
+					ref={scrollRef}
+					onPointerEnter={() => {
+						setIsPointerOver(true);
+					}}
+					onPointerLeave={() => {
+						setIsPointerOver(false);
+
+						if (hasKeyboard() === KeyboardState.YES_WITH_POINTER_OVER) {
+							setHasKeyboard(KeyboardState.YES);
+						}
+					}}
+					class="h-64 overflow-y-auto"
+				>
+					<div class="m-2 grid w-max grid-cols-9 place-items-center">
 						{(() => {
 							const children = emojis()?.map((emoji, index) => {
 								return (
 									<button
 										ref={(node) => {
 											createEffect(() => {
-												if (isSelected(emoji) && isKeyboardEnabled()) {
+												if (isSelected(emoji) && hasKeyboard()) {
 													node.scrollIntoView({ block: 'nearest' });
 												}
 											});
 										}}
 										type="button"
 										aria-label={/* @once */ emoji.annotation}
-										onPointerEnter={() => {
-											batch(() => {
-												setSelected({ emoji, index });
-												setIsKeyboardEnabled(false);
-											});
+										onPointerOver={() => {
+											if (hasKeyboard() !== KeyboardState.YES_WITH_POINTER_OVER) {
+												batch(() => {
+													setSelected({ emoji, index });
+													setHasKeyboard(KeyboardState.NO);
+												});
+											}
 										}}
 										onClick={(ev) => {
 											const isShiftHeld = props.multiple && ev.shiftKey;
@@ -306,7 +328,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 										class={emojiBtn}
 										classList={{
 											[`bg-secondary/30`]: isSelected(emoji),
-											[`outline`]: isSelected(emoji) && isKeyboardEnabled(),
+											[`outline`]: isSelected(emoji) && hasKeyboard() !== KeyboardState.NO,
 										}}
 									>
 										{renderEmoji(emoji)}
