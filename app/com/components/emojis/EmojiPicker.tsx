@@ -105,7 +105,7 @@ const EmojiPicker = (props: EmojiPickerProps) => {
 						{
 							name: 'skintone-offset',
 							fn: (state) => {
-								return { x: state.x + 1, y: state.y - 1 };
+								return { x: state.x + 0.5, y: state.y - 0.5 };
 							},
 						},
 					]}
