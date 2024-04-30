@@ -85,6 +85,7 @@ const ProfileSearchPaneDialog = (props: ProfileSearchPaneDialogProps) => {
 						params={{
 							type: 'search',
 							query: profile.did + ' ' + search(),
+							sort: 'latest',
 						}}
 					/>
 				) : (
