@@ -1,4 +1,5 @@
 import { type JSX, createSignal, untrack } from 'solid-js';
+import { createMutable } from 'solid-js/store';
 
 import type { At } from '~/api/atp-schema';
 
@@ -44,6 +45,8 @@ export const ComposerContextProvider = (props: ComposerContextProviderProps) => 
 		},
 
 		_mount(state) {
+			state = createMutable(state);
+
 			if (_override) {
 				state = _override;
 				_override = undefined;

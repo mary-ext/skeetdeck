@@ -165,7 +165,7 @@ const ComposerPane = () => {
 	const queryClient = useQueryClient();
 	const composer = useComposer();
 
-	const state = composer._mount(createMutable(createComposerState(preferences)));
+	const state = composer._mount(createComposerState(preferences));
 	const posts = state.posts;
 
 	const [log, setLog] = createSignal<LogState>(logNone);
