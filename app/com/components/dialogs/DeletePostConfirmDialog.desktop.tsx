@@ -28,7 +28,8 @@ import DialogOverlay from './DialogOverlay';
 import { Button } from '../../primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
 
-import { type GateState, useComposer } from '~/desktop/components/composer/ComposerContext';
+import { useComposer } from '~/desktop/components/composer/ComposerContext';
+import type { GateState } from '~/desktop/components/composer/utils/state';
 
 export interface DeletePostConfirmDialogProps {
 	/** Expected to be static */
@@ -124,7 +125,7 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 	});
 
 	const redraftMutation = createMutation(() => {
-		const context = useComposer();
+		const composer = useComposer();
 
 		return {
 			mutationFn: async () => {
@@ -194,8 +195,7 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 				);
 
 				batch(() => {
-					context.open = true;
-					context.state = {
+					composer.replace({
 						author: uid,
 						reply: record.reply?.parent?.uri,
 						posts: [
@@ -211,7 +211,7 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 							},
 						],
 						gate: parseGateRules(threadgate?.allow),
-					};
+					});
 				});
 			},
 		};

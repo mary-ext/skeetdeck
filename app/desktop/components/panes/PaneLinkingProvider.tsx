@@ -1,4 +1,4 @@
-import { type JSX, lazy, batch } from 'solid-js';
+import { type JSX, lazy } from 'solid-js';
 
 import { isLinkValid } from '~/api/richtext/renderer';
 
@@ -70,12 +70,10 @@ export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {
 		}
 
 		if (type === LINK_QUOTE) {
-			batch(() => {
-				const posts = composer.state.posts;
+			composer.show((state) => {
+				const posts = state.posts;
 
-				composer.open = true;
-				composer.state.author = pane.uid;
-
+				state.author = pane.uid;
 				posts[posts.length - 1].record = `at://${to.actor}/app.bsky.feed.post/${to.rkey}`;
 			});
 
@@ -83,11 +81,9 @@ export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {
 		}
 
 		if (type === LINK_REPLY) {
-			batch(() => {
-				composer.open = true;
-				composer.state.author = pane.uid;
-
-				composer.state.reply = `at://${to.actor}/app.bsky.feed.post/${to.rkey}`;
+			composer.show((state) => {
+				state.author = pane.uid;
+				state.reply = `at://${to.actor}/app.bsky.feed.post/${to.rkey}`;
 			});
 
 			return;

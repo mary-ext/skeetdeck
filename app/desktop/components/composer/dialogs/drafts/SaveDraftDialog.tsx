@@ -4,8 +4,6 @@ import * as TID from '@mary/atproto-tid';
 
 import { closeModal } from '~/com/globals/modals';
 
-import { preferences } from '~/desktop/globals/settings';
-
 import { model, modelChecked } from '~/utils/input';
 
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
@@ -15,8 +13,9 @@ import { Button } from '~/com/primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
 import { Input } from '~/com/primitives/input';
 
-import { type GateState, useComposer, createComposerState } from '../../ComposerContext';
+import { useComposer } from '../../ComposerContext';
 import { type ComposerDraft, getDraftDb } from '../../utils/draft-db';
+import type { GateState } from '../../utils/state';
 
 const serializeGateState = (state: GateState): GateState => {
 	const type = state.type;
@@ -33,7 +32,7 @@ export interface SaveDraftDialogProps {
 }
 
 const SaveDraftDialog = (props: SaveDraftDialogProps) => {
-	const context = useComposer();
+	const composer = useComposer();
 
 	const [name, setName] = createSignal('Unnamed draft');
 	const [clear, setClear] = createSignal(true);
@@ -44,7 +43,7 @@ const SaveDraftDialog = (props: SaveDraftDialogProps) => {
 
 		const shouldClear = clear();
 
-		const state = context.state;
+		const state = composer.state()!;
 		const id = TID.now();
 
 		const serialized: ComposerDraft = {
@@ -80,7 +79,7 @@ const SaveDraftDialog = (props: SaveDraftDialogProps) => {
 			.then((db) => db.add('drafts', serialized, id))
 			.then(() => {
 				if (shouldClear) {
-					context.state = createComposerState(preferences);
+					composer._reset();
 				}
 
 				props.onSave(serialized);

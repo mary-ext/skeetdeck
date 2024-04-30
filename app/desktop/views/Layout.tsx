@@ -1,4 +1,4 @@
-import { For, Show, Suspense, batch, lazy } from 'solid-js';
+import { For, Show, Suspense, batch, createSignal, lazy } from 'solid-js';
 
 import { offset } from '@floating-ui/dom';
 import { DragDropProvider, DragDropSensors, SortableProvider, createSortable } from '@thisbeyond/solid-dnd';
@@ -61,11 +61,19 @@ const updateButton = Interactive({
 	class: `relative grid h-11 shrink-0 place-items-center overflow-hidden text-lg`,
 });
 
+const enum ShowState {
+	COMPOSER,
+}
+
 const DashboardLayout = (props: RouteComponentProps) => {
 	const params = props.params as { deck: string | undefined };
 
-	const composer = useComposer();
 	const decks = preferences.decks;
+
+	const composer = useComposer();
+	const [show, setShow] = createSignal<ShowState>();
+
+	composer._onDisplay((next) => setShow(next ? ShowState.COMPOSER : undefined));
 
 	return (
 		<div class="flex h-screen w-screen overflow-hidden">
@@ -76,10 +84,10 @@ const DashboardLayout = (props: RouteComponentProps) => {
 					{(uid) => (
 						<>
 							<button
-								disabled={composer.open}
+								disabled={show() === ShowState.COMPOSER}
 								title="Post..."
 								onClick={() => {
-									composer.open = true;
+									setShow(ShowState.COMPOSER);
 								}}
 								class={menuIconButton}
 							>
@@ -241,7 +249,7 @@ const DashboardLayout = (props: RouteComponentProps) => {
 				</button>
 			</div>
 
-			<ShowFreeze when={!!multiagent.active && composer.open}>
+			<ShowFreeze when={!!multiagent.active && show() === ShowState.COMPOSER}>
 				<Suspense
 					fallback={
 						<div class="grid w-96 shrink-0 place-items-center border-r border-divider">
@@ -249,7 +257,7 @@ const DashboardLayout = (props: RouteComponentProps) => {
 						</div>
 					}
 				>
-					<Keyed key={composer.state}>
+					<Keyed key={composer._key()}>
 						<ComposerPane />
 					</Keyed>
 				</Suspense>

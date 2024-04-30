@@ -1,108 +1,25 @@
 import { createContext, useContext } from 'solid-js';
 
-import type { At } from '~/api/atp-schema';
-import { systemLanguages } from '~/api/globals/platform';
-
-import type { PreliminaryRichText } from '~/api/richtext/composer';
-
-import type { PreferencesSchema } from '~/desktop/globals/settings';
-
-import type { ComposedImage } from '~/utils/image';
-
-export interface GateStateEveryone {
-	type: 'e';
-}
-
-export interface GateStateMentionedOnly {
-	type: 'm';
-}
-
-export interface GateStateFollowedOnly {
-	type: 'f';
-}
-
-export interface GateStateCustom {
-	type: 'c';
-	mentions: boolean;
-	follows: boolean;
-	lists: At.Uri[];
-}
-
-export type GateState = GateStateEveryone | GateStateMentionedOnly | GateStateFollowedOnly | GateStateCustom;
-
-export interface ParsedPost {
-	t: string;
-	r: PreliminaryRichText;
-}
-
-export interface PostState {
-	text: string;
-	external: string | undefined;
-	record: At.Uri | undefined;
-	images: ComposedImage[];
-	tags: string[];
-	labels: string[];
-	languages: string[];
-
-	_parsed: ParsedPost | null;
-}
-
-export interface ComposerState {
-	/** Which account we're posting from */
-	author: At.DID | undefined;
-	/** What it's replying to */
-	reply: string | undefined;
-	/** Posts to send, up to a max of 9 posts */
-	posts: PostState[];
-	/** Interaction gating set for the thread */
-	gate: GateState;
-}
+import type { ComposerState } from './utils/state';
 
 export interface ComposerContextState {
-	open: boolean;
-	/** Keyed state object, reassigning should reset the entire composer */
-	state: ComposerState;
+	// Public API
+	show(cb?: (state: ComposerState) => void): void;
+	replace(state: ComposerState): void;
+	state(): ComposerState | undefined;
+
+	// Methods for components that displays the composer
+	_key(): any;
+	_onDisplay(cb: (next: boolean) => void): void;
+
+	// Methods for the composer itself
+	_mount(state: ComposerState): ComposerState;
+	_hide(): void;
+	_reset(): void;
 }
 
 export const ComposerContext = createContext<ComposerContextState>();
 
 export const useComposer = () => {
 	return useContext(ComposerContext)!;
-};
-
-export const getComposerLanguage = (preferences: PreferencesSchema) => {
-	const prefs = preferences.language;
-	const lang = prefs.defaultPostLanguage;
-
-	if (lang === 'none') {
-		return [];
-	}
-	if (lang === 'system') {
-		return [systemLanguages[0]];
-	}
-
-	return [lang];
-};
-
-export const createPostState = (preferences: PreferencesSchema): PostState => {
-	return {
-		text: '',
-		external: undefined,
-		record: undefined,
-		images: [],
-		tags: [],
-		labels: [],
-		languages: getComposerLanguage(preferences),
-
-		_parsed: null,
-	};
-};
-
-export const createComposerState = (preferences: PreferencesSchema): ComposerState => {
-	return {
-		author: undefined,
-		reply: undefined,
-		gate: { type: preferences.ui.defaultReplyGate },
-		posts: [createPostState(preferences)],
-	};
 };

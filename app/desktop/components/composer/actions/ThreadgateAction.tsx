@@ -13,7 +13,7 @@ import CheckIcon from '~/com/icons/baseline-check';
 import PublicIcon from '~/com/icons/baseline-public';
 import LockIcon from '~/com/icons/baseline-lock';
 
-import type { GateState } from '../ComposerContext';
+import type { GateState } from '../utils/state';
 
 type Rule = Brand.Union<
 	AppBskyFeedThreadgate.FollowingRule | AppBskyFeedThreadgate.ListRule | AppBskyFeedThreadgate.MentionRule

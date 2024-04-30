@@ -6,8 +6,9 @@ import { signal } from '~/utils/signals';
 import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
 import Checkbox from '~/com/components/inputs/Checkbox';
 
-import { type GateState, type PostState, useComposer } from '../../ComposerContext';
+import { useComposer } from '../../ComposerContext';
 import { type ComposerDraft, type SerializedPostState, getDraftDb } from '../../utils/draft-db';
+import type { GateState, PostState } from '../../utils/state';
 
 export interface ApplyDraftDialogProps {
 	draft: ComposerDraft;
@@ -50,7 +51,7 @@ const hydrateGateState = (state: GateState): GateState => {
 };
 
 const ApplyDraftDialog = (props: ApplyDraftDialogProps) => {
-	const context = useComposer();
+	const composer = useComposer();
 
 	const [remove, setRemove] = createSignal(true);
 
@@ -80,12 +81,12 @@ const ApplyDraftDialog = (props: ApplyDraftDialogProps) => {
 					const state = draft.state;
 
 					// Prevent reusing the serialized objects for use in hydrated state
-					context.state = {
+					composer.replace({
 						author: draft.author,
 						reply: state.reply,
 						posts: state.posts.map((post) => hydratePostState(post)),
 						gate: hydrateGateState(state.gate),
-					};
+					});
 				});
 
 				if (shouldRemove) {

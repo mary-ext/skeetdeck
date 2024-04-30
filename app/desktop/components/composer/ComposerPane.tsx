@@ -1,5 +1,5 @@
 import { type JSX, For, Show, batch, createEffect, createMemo, createSignal, lazy, untrack } from 'solid-js';
-import { unwrap } from 'solid-js/store';
+import { createMutable, unwrap } from 'solid-js/store';
 
 import { makeEventListener } from '@solid-primitives/event-listener';
 
@@ -77,11 +77,11 @@ import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 import SwitchAccountAction from '../flyouts/SwitchAccountAction';
 
-import { createComposerState, createPostState, useComposer } from './ComposerContext';
+import { useComposer } from './ComposerContext';
 import DummyPost from './DummyPost';
 import TagsInput from './TagInput';
 
-import { getPostRt, isStateFilled } from './utils/state';
+import { createComposerState, createPostState, getPostRt, isStateFilled } from './utils/state';
 
 import ContentWarningAction from './actions/ContentWarningAction';
 import PostLanguageAction from './actions/PostLanguageAction';
@@ -163,9 +163,9 @@ const ComposerPane = () => {
 	const inputId = getUniqueId();
 
 	const queryClient = useQueryClient();
-	const context = useComposer();
+	const composer = useComposer();
 
-	const state = context.state;
+	const state = composer._mount(createMutable(createComposerState(preferences)));
 	const posts = state.posts;
 
 	const [log, setLog] = createSignal<LogState>(logNone);
@@ -528,7 +528,7 @@ const ComposerPane = () => {
 
 		// We're done here, let's reset this entire state.
 		{
-			context.state = createComposerState(preferences);
+			composer._reset();
 		}
 
 		// Anything afterwards is not necessary for the composer functionality,
@@ -637,7 +637,7 @@ const ComposerPane = () => {
 		if (hasContents()) {
 			makeEventListener(window, 'beforeunload', (ev) => {
 				ev.preventDefault();
-				context.open = true;
+				composer.show();
 			});
 		}
 	});
@@ -661,9 +661,7 @@ const ComposerPane = () => {
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
 				<button
 					title={`Close composer`}
-					onClick={() => {
-						context.open = false;
-					}}
+					onClick={composer._hide}
 					class={/* @once */ IconButton({ edge: 'left' })}
 				>
 					<ArrowLeftIcon />

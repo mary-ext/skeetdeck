@@ -1,30 +1,70 @@
-import { type JSX, createSignal } from 'solid-js';
-import { createMutable } from 'solid-js/store';
+import { type JSX, createSignal, untrack } from 'solid-js';
 
-import { preferences } from '~/desktop/globals/settings';
+import type { At } from '~/api/atp-schema';
 
-import { type ComposerContextState, createComposerState, ComposerContext } from './ComposerContext';
+import { type ComposerContextState, ComposerContext } from './ComposerContext';
+import type { ComposerState } from './utils/state';
 
 export interface ComposerContextProviderProps {
 	children: JSX.Element;
 }
 
 export const ComposerContextProvider = (props: ComposerContextProviderProps) => {
-	const [open, setOpen] = createSignal(false);
-	const [state, setState] = createSignal(createMutable(createComposerState(preferences)));
+	const [key, setKey] = createSignal(0);
+	const [state, setState] = createSignal<ComposerState>();
+
+	let _deferred = Promise.withResolvers<ComposerState>();
+
+	let _override: ComposerState | undefined;
+	let _uid: At.DID | undefined;
+
+	let _onShow: ((next: boolean) => void) | undefined;
 
 	const context: ComposerContextState = {
-		get open() {
-			return open();
+		show(cb) {
+			_onShow?.(true);
+
+			if (cb) {
+				_deferred.promise.then(cb);
+			}
 		},
-		set open(next) {
-			setOpen(next);
+		replace(state) {
+			_override = state;
+
+			_deferred = Promise.withResolvers();
+			setKey(key() + 1);
+
+			_onShow?.(true);
 		},
-		get state() {
-			return state();
+		state: state,
+
+		_key: key,
+		_onDisplay(cb) {
+			_onShow = cb;
 		},
-		set state(next) {
-			setState(createMutable(next));
+
+		_mount(state) {
+			if (_override) {
+				state = _override;
+				_override = undefined;
+			}
+
+			if (_uid) {
+				state.author = _uid;
+				_uid = undefined;
+			}
+
+			setState(state);
+			_deferred.resolve(state);
+			return state;
+		},
+		_reset() {
+			_deferred = Promise.withResolvers();
+			_uid = untrack(state)?.author;
+			setKey(key() + 1);
+		},
+		_hide() {
+			_onShow?.(false);
 		},
 	};
 

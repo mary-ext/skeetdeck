@@ -2,7 +2,7 @@ import { type DBSchema, type IDBPDatabase, openDB } from 'idb';
 
 import type { At } from '~/api/atp-schema';
 
-import type { GateState } from '../ComposerContext';
+import type { GateState } from './state';
 
 export interface SerializedImage {
 	blob: Blob;

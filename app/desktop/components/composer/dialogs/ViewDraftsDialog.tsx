@@ -86,7 +86,10 @@ const ViewDraftsDialog = () => {
 					<h1 class={/* @once */ DialogTitle()}>Drafts</h1>
 
 					<button
-						disabled={!isStateFilled(context.state)}
+						disabled={(() => {
+							const state = context.state();
+							return !state || !isStateFilled(state);
+						})()}
 						onClick={() => {
 							openModal(() => (
 								<SaveDraftDialog
