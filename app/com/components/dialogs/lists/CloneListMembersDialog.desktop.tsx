@@ -1,4 +1,4 @@
-import { For, createEffect, createSignal, lazy } from 'solid-js';
+import { createEffect, createSignal, lazy } from 'solid-js';
 import { createMutable } from 'solid-js/store';
 
 import { createInfiniteQuery, useQueryClient } from '@mary/solid-query';

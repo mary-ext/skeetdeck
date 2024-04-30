@@ -5,19 +5,13 @@ import { PreferenceHide, PreferenceIgnore, PreferenceWarn } from '~/api/moderati
 import { preferences } from '~/desktop/globals/settings';
 
 import { IconButton } from '~/com/primitives/icon-button';
-import { Interactive } from '~/com/primitives/interactive';
 
 import AddIcon from '~/com/icons/baseline-add';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
-
-import { VIEW_KEYWORD_FILTER_FORM, VIEW_MODERATION, useViewRouter } from './_router';
-import { ListBox, ListBoxItemChevron, ListBoxItemInteractive, ListGroup } from '~/com/primitives/list-box';
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 
-const selectItem = Interactive({
-	variant: 'muted',
-	class: `px-4 py-3 text-left text-sm`,
-});
+import { VIEW_KEYWORD_FILTER_FORM, useViewRouter } from './_router';
+import { ListBox, ListBoxItemChevron, ListBoxItemInteractive } from '~/com/primitives/list-box';
 
 const KeywordFiltersView = () => {
 	const router = useViewRouter();
