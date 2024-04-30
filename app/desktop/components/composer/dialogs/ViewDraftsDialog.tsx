@@ -41,7 +41,7 @@ interface DraftsListResponse {
 const PER_PAGE = 25;
 
 const ViewDraftsDialog = () => {
-	const context = useComposer();
+	const composer = useComposer();
 
 	const [listing, { refetch, mutate }] = createResource<DraftsListResponse, string>(
 		async (_, { refetching, value: prev }) => {
@@ -87,7 +87,7 @@ const ViewDraftsDialog = () => {
 
 					<button
 						disabled={(() => {
-							const state = context.state();
+							const state = composer.state();
 							return !state || !isStateFilled(state);
 						})()}
 						onClick={() => {
