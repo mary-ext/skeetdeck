@@ -35,7 +35,7 @@ export interface ComposerDraft {
 	createdAt: number;
 
 	/** Which user are we using to send these posts */
-	author: At.DID;
+	author: At.DID | undefined;
 	/** State of the composer */
 	state: SerializedComposerState;
 }

@@ -1,7 +1,5 @@
 import { batch, createSignal } from 'solid-js';
 
-import { multiagent } from '~/api/globals/agent';
-
 import { modelChecked } from '~/utils/input';
 import { signal } from '~/utils/signals';
 
@@ -79,16 +77,11 @@ const ApplyDraftDialog = (props: ApplyDraftDialogProps) => {
 				const shouldRemove = remove();
 
 				batch(() => {
-					const author = draft.author;
-
-					if (multiagent.accounts.some((x) => x.did === author)) {
-						context.author = draft.author;
-					}
-
 					const state = draft.state;
 
 					// Prevent reusing the serialized objects for use in hydrated state
 					context.state = {
+						author: draft.author,
 						reply: state.reply,
 						posts: state.posts.map((post) => hydratePostState(post)),
 						gate: hydrateGateState(state.gate),

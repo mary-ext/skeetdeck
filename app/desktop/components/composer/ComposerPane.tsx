@@ -1,4 +1,4 @@
-import { type JSX, For, Show, batch, createEffect, createMemo, createSignal, untrack, lazy } from 'solid-js';
+import { type JSX, For, Show, batch, createEffect, createMemo, createSignal, lazy, untrack } from 'solid-js';
 import { unwrap } from 'solid-js/store';
 
 import { makeEventListener } from '@solid-primitives/event-listener';
@@ -170,14 +170,19 @@ const ComposerPane = () => {
 
 	const [log, setLog] = createSignal<LogState>(logNone);
 
-	const author = createMemo(() => multiagent.accounts.find((acc) => acc.did === context.author));
+	const account = createMemo(() => {
+		const $author = state.author;
+		return multiagent.accounts.find((x) => x.did === $author);
+	});
 
 	const replying = createQuery(() => {
+		const author = state.author;
 		const reply = state.reply;
-		const key = getPostKey(context.author, reply ?? '');
+
+		const key = getPostKey(author!, reply!);
 
 		return {
-			enabled: reply !== undefined,
+			enabled: author !== undefined && reply !== undefined,
 			queryKey: key,
 			queryFn: getPost,
 			initialData: () => getInitialPost(key),
@@ -188,7 +193,7 @@ const ComposerPane = () => {
 	const hasContents = createMemo(() => isStateFilled(state));
 
 	const isSubmitDisabled = createMemo(() => {
-		if (log().t === LogType.PENDING || (state.reply && !replying.data)) {
+		if (!state.author || log().t === LogType.PENDING || (state.reply && !replying.data)) {
 			return true;
 		}
 
@@ -217,7 +222,7 @@ const ComposerPane = () => {
 
 		setLog(logPending(``));
 
-		const uid = context.author;
+		const uid = state.author!;
 		const agent = await multiagent.connect(uid);
 
 		const posts = unwrap(state.posts);
@@ -637,6 +642,20 @@ const ComposerPane = () => {
 		}
 	});
 
+	// Check to see if we have the right author here.
+	createEffect(() => {
+		if (state.author) {
+			const author = state.author;
+			const accounts = multiagent.accounts;
+
+			if (accounts.length === 0 || !accounts.some((x) => x.did === author)) {
+				state.author = undefined;
+			}
+		} else if (multiagent.active) {
+			state.author = multiagent.active;
+		}
+	});
+
 	return (
 		<div class="flex w-96 shrink-0 flex-col border-r border-divider">
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
@@ -911,15 +930,15 @@ const ComposerPane = () => {
 								/>
 
 								<div class="flex shrink-0 flex-col items-center pl-4 pr-3">
-									<SwitchAccountAction value={context.author} onChange={(next) => (context.author = next)}>
+									<SwitchAccountAction value={state.author} onChange={(next) => (state.author = next)}>
 										<button
 											tabindex={index() === 0 ? 0 : -1}
 											disabled={multiagent.accounts.length < 2}
 											class={switchUserBtn}
 										>
 											<img
-												src={author()?.profile?.avatar || DefaultUserAvatar}
-												title={`Currently posting as @${author()?.session.handle}`}
+												src={account()?.profile?.avatar || DefaultUserAvatar}
+												title={`Currently posting as @${account()?.session.handle}`}
 												class="h-full w-full"
 											/>
 										</button>
@@ -933,7 +952,7 @@ const ComposerPane = () => {
 								<div class="min-w-0 grow">
 									{/* Post header */}
 									{(() => {
-										const $author = author();
+										const $author = account();
 
 										if ($author) {
 											return (
@@ -982,7 +1001,7 @@ const ComposerPane = () => {
 											textareaRef = node;
 										}}
 										type="post"
-										uid={context.author}
+										uid={state.author}
 										value={draft.text}
 										rt={getPostRt(draft)}
 										placeholder={
@@ -1065,7 +1084,7 @@ const ComposerPane = () => {
 									</Show>
 
 									{/* Records */}
-									<Show when={draft.record}>
+									<Show when={state.author && draft.record}>
 										{(uri) => (
 											<div class="relative mb-2 mr-4 empty:hidden">
 												<button
@@ -1078,7 +1097,7 @@ const ComposerPane = () => {
 													<CloseIcon />
 												</button>
 
-												<EmbedRecord uid={context.author} uri={uri()} />
+												<EmbedRecord uid={state.author!} uri={uri()} />
 											</div>
 										)}
 									</Show>
@@ -1087,7 +1106,7 @@ const ComposerPane = () => {
 									<div class="mb-2 mr-4 flex flex-col gap-3 empty:hidden">
 										<For
 											each={
-												draft.images.length < 1 && !draft.external && !draft.record
+												state.author && draft.images.length < 1 && !draft.external && !draft.record
 													? getPostRt(draft).links
 													: undefined
 											}
@@ -1112,7 +1131,7 @@ const ComposerPane = () => {
 																	setPending(true);
 
 																	const result = await queryClient.fetchQuery({
-																		queryKey: getResolvedHandleKey(context.author, author),
+																		queryKey: getResolvedHandleKey(state.author!, author),
 																		queryFn: getResolvedHandle,
 																	});
 

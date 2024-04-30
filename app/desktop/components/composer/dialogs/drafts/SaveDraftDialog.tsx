@@ -51,7 +51,7 @@ const SaveDraftDialog = (props: SaveDraftDialogProps) => {
 			id: id,
 			title: name().trim(),
 			createdAt: Date.now(),
-			author: context.author,
+			author: state.author,
 			state: {
 				reply: state.reply,
 				posts: state.posts.map((post) => {

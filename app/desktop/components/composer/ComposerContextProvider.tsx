@@ -1,10 +1,7 @@
 import { type JSX, createSignal } from 'solid-js';
 import { createMutable } from 'solid-js/store';
 
-import { multiagent } from '~/api/globals/agent';
-
 import { preferences } from '~/desktop/globals/settings';
-import { createDerivedSignal } from '~/utils/hooks';
 
 import { type ComposerContextState, createComposerState, ComposerContext } from './ComposerContext';
 
@@ -14,7 +11,6 @@ export interface ComposerContextProviderProps {
 
 export const ComposerContextProvider = (props: ComposerContextProviderProps) => {
 	const [open, setOpen] = createSignal(false);
-	const [author, setAuthor] = createDerivedSignal(() => multiagent.active!);
 	const [state, setState] = createSignal(createMutable(createComposerState(preferences)));
 
 	const context: ComposerContextState = {
@@ -23,12 +19,6 @@ export const ComposerContextProvider = (props: ComposerContextProviderProps) => 
 		},
 		set open(next) {
 			setOpen(next);
-		},
-		get author() {
-			return author();
-		},
-		set author(next) {
-			setAuthor(next);
 		},
 		get state() {
 			return state();

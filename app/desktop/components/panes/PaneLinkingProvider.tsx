@@ -74,7 +74,7 @@ export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {
 				const posts = composer.state.posts;
 
 				composer.open = true;
-				composer.author = pane.uid;
+				composer.state.author = pane.uid;
 
 				posts[posts.length - 1].record = `at://${to.actor}/app.bsky.feed.post/${to.rkey}`;
 			});
@@ -85,7 +85,7 @@ export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {
 		if (type === LINK_REPLY) {
 			batch(() => {
 				composer.open = true;
-				composer.author = pane.uid;
+				composer.state.author = pane.uid;
 
 				composer.state.reply = `at://${to.actor}/app.bsky.feed.post/${to.rkey}`;
 			});

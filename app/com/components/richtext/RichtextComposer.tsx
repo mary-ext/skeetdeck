@@ -32,7 +32,7 @@ export interface RichtextComposerProps {
 	ref?: HTMLTextAreaElement | ((el: HTMLTextAreaElement) => void);
 
 	type: 'post' | 'textarea';
-	uid: At.DID;
+	uid: At.DID | undefined;
 
 	value: string;
 	rt: PreliminaryRichText;
@@ -201,15 +201,19 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 	);
 
 	const [suggestions] = createResource(
-		debouncedMatchedCompletion,
-		async (match): Promise<SuggestionItem[]> => {
+		() => {
+			const uid = props.uid;
+			const match = debouncedMatchedCompletion();
+
+			return uid && match ? ([uid, match] as const) : false;
+		},
+		async ([uid, match]): Promise<SuggestionItem[]> => {
 			const type = match.type;
 
 			const MATCH_LIMIT = 5;
 
 			if (type === Suggestion.MENTION) {
-				const $uid = props.uid;
-				const agent = await multiagent.connect($uid);
+				const agent = await multiagent.connect(uid);
 
 				const response = await agent.rpc.get('app.bsky.actor.searchActorsTypeahead', {
 					params: {

@@ -48,6 +48,8 @@ export interface PostState {
 }
 
 export interface ComposerState {
+	/** Which account we're posting from */
+	author: At.DID | undefined;
 	/** What it's replying to */
 	reply: string | undefined;
 	/** Posts to send, up to a max of 9 posts */
@@ -58,8 +60,6 @@ export interface ComposerState {
 
 export interface ComposerContextState {
 	open: boolean;
-	/** Which user are we using to send these posts */
-	author: At.DID;
 	/** Keyed state object, reassigning should reset the entire composer */
 	state: ComposerState;
 }
@@ -100,6 +100,7 @@ export const createPostState = (preferences: PreferencesSchema): PostState => {
 
 export const createComposerState = (preferences: PreferencesSchema): ComposerState => {
 	return {
+		author: undefined,
 		reply: undefined,
 		gate: { type: preferences.ui.defaultReplyGate },
 		posts: [createPostState(preferences)],

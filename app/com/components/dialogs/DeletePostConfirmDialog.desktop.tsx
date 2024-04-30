@@ -195,8 +195,8 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 
 				batch(() => {
 					context.open = true;
-					context.author = uid;
 					context.state = {
+						author: uid,
 						reply: record.reply?.parent?.uri,
 						posts: [
 							{
