@@ -45,12 +45,12 @@ export const ComposerContextProvider = (props: ComposerContextProviderProps) => 
 		},
 
 		_mount(state) {
-			state = createMutable(state);
-
 			if (_override) {
 				state = _override;
 				_override = undefined;
 			}
+
+			state = createMutable(state);
 
 			if (_uid) {
 				state.author = _uid;
