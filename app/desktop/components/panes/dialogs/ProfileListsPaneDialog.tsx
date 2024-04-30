@@ -55,7 +55,7 @@ const ProfileListsPaneDialog = (props: ProfileListsPaneDialogProps) => {
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<List
-					data={lists.data?.pages.flatMap((page) => page.feeds)}
+					data={lists.data?.pages.flatMap((page) => page.lists)}
 					error={lists.error}
 					render={(list) => {
 						return (
