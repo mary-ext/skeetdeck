@@ -109,7 +109,11 @@ const EmbedLink = (props: EmbedLinkProps) => {
 								class="overflow-hidden rounded-md border border-divider"
 								style={/* @once */ { 'aspect-ratio': snippet.r }}
 							>
-								<iframe src={/* @once */ snippet.u} allowfullscreen class="h-full w-full" />
+								<iframe
+									src={/* @once */ snippet.u}
+									allow="autoplay; fullscreen"
+									class="h-full w-full"
+								/>
 							</div>
 						);
 					}
