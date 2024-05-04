@@ -1,4 +1,4 @@
-import { type JSX, createSignal, untrack } from 'solid-js';
+import { type JSX, batch, createSignal, untrack } from 'solid-js';
 import { createMutable } from 'solid-js/store';
 
 import type { At } from '~/api/atp-schema';
@@ -33,9 +33,11 @@ export const ComposerContextProvider = (props: ComposerContextProviderProps) => 
 			_override = state;
 
 			_deferred = Promise.withResolvers();
-			setKey(key() + 1);
 
-			_onShow?.(true);
+			batch(() => {
+				setKey(key() + 1);
+				_onShow?.(true);
+			});
 		},
 		state: state,
 

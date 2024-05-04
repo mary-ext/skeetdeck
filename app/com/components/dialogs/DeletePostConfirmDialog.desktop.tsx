@@ -1,4 +1,4 @@
-import { batch, createEffect, createSignal } from 'solid-js';
+import { createEffect, createSignal } from 'solid-js';
 
 import { type InfiniteData, createMutation } from '@mary/solid-query';
 
@@ -194,24 +194,22 @@ const DeletePostConfirmDialog = (props: DeletePostConfirmDialogProps) => {
 					}),
 				);
 
-				batch(() => {
-					composer.replace({
-						author: uid,
-						reply: record.reply?.parent?.uri,
-						posts: [
-							{
-								text: serializeRichText(record.text, record.facets, false),
-								external: externalEmbedUri,
-								images: images,
-								labels: record.labels ? [...record.labels.values.map((label) => label.val)] : [],
-								languages: record.langs ? [...record.langs] : [],
-								record: recordEmbedUri,
-								tags: record.tags ? [...record.tags] : [],
-								_parsed: null,
-							},
-						],
-						gate: parseGateRules(threadgate?.allow),
-					});
+				composer.replace({
+					author: uid,
+					reply: record.reply?.parent?.uri,
+					posts: [
+						{
+							text: serializeRichText(record.text, record.facets, false),
+							external: externalEmbedUri,
+							images: images,
+							labels: record.labels ? [...record.labels.values.map((label) => label.val)] : [],
+							languages: record.langs ? [...record.langs] : [],
+							record: recordEmbedUri,
+							tags: record.tags ? [...record.tags] : [],
+							_parsed: null,
+						},
+					],
+					gate: parseGateRules(threadgate?.allow),
 				});
 			},
 		};

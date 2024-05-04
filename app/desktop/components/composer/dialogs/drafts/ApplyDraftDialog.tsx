@@ -1,4 +1,4 @@
-import { batch, createSignal } from 'solid-js';
+import { createSignal } from 'solid-js';
 
 import { modelChecked } from '~/utils/input';
 import { signal } from '~/utils/signals';
@@ -76,17 +76,14 @@ const ApplyDraftDialog = (props: ApplyDraftDialogProps) => {
 			confirmation="Confirm"
 			onConfirm={() => {
 				const shouldRemove = remove();
+				const state = draft.state;
 
-				batch(() => {
-					const state = draft.state;
-
-					// Prevent reusing the serialized objects for use in hydrated state
-					composer.replace({
-						author: draft.author,
-						reply: state.reply,
-						posts: state.posts.map((post) => hydratePostState(post)),
-						gate: hydrateGateState(state.gate),
-					});
+				// Prevent reusing the serialized objects for use in hydrated state
+				composer.replace({
+					author: draft.author,
+					reply: state.reply,
+					posts: state.posts.map((post) => hydratePostState(post)),
+					gate: hydrateGateState(state.gate),
 				});
 
 				if (shouldRemove) {
