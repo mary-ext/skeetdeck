@@ -26,7 +26,7 @@ export const ComposerContextProvider = (props: ComposerContextProviderProps) => 
 			_onShow?.(true);
 
 			if (cb) {
-				_deferred.promise.then(cb);
+				_deferred.promise.then((res) => batch(() => cb(res)));
 			}
 		},
 		replace(state) {
