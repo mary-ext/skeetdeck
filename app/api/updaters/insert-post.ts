@@ -63,11 +63,11 @@ const createDescendants = (
 	}
 
 	if (!end && amount >= 0) {
-		const last = posts[amount];
+		const lastUri = amount === 0 ? parentUri : posts[amount - 1].uri;
 
 		items.push({
 			type: 'overflow',
-			parentUri: last.uri,
+			parentUri: lastUri,
 			depth: maxDepth,
 			// hasNextSibling: false,
 		});
