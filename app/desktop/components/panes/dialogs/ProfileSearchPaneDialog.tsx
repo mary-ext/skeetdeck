@@ -7,6 +7,7 @@ import { addPane } from '../../../globals/settings';
 
 import TimelineList from '~/com/components/lists/TimelineList';
 import SearchInput from '~/com/components/inputs/SearchInput';
+import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel';
 
 import { IconButton } from '~/com/primitives/icon-button';
 
@@ -28,6 +29,7 @@ const ProfileSearchPaneDialog = (props: ProfileSearchPaneDialogProps) => {
 	const modal = usePaneModalState();
 
 	const [search, setSearch] = createSignal('');
+	const [sort, setSort] = createSignal<'top' | 'latest'>('latest');
 
 	return (
 		<PaneDialog>
@@ -80,14 +82,28 @@ const ProfileSearchPaneDialog = (props: ProfileSearchPaneDialogProps) => {
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				{search() !== '' ? (
-					<TimelineList
-						uid={/* @once */ profile.uid}
-						params={{
-							type: 'search',
-							query: profile.did + ' ' + search(),
-							sort: 'latest',
-						}}
-					/>
+					<TabbedPanel selected={sort()} onChange={setSort}>
+						<TabbedPanelView label="Latest" value="latest">
+							<TimelineList
+								uid={/* @once */ profile.uid}
+								params={{
+									type: 'search',
+									query: profile.did + ' ' + search(),
+									sort: 'latest',
+								}}
+							/>
+						</TabbedPanelView>
+						<TabbedPanelView label="Top" value="top">
+							<TimelineList
+								uid={/* @once */ profile.uid}
+								params={{
+									type: 'search',
+									query: profile.did + ' ' + search(),
+									sort: 'top',
+								}}
+							/>
+						</TabbedPanelView>
+					</TabbedPanel>
 				) : (
 					<div class="flex flex-col items-center p-4">
 						<p class="text-sm text-muted-fg">Try searching for keywords</p>
