@@ -138,16 +138,16 @@ const enum Crop {
 	STRETCH,
 }
 
-export const getResizedImage = (img: HTMLImageElement, width: number, height: number, mode: Crop) => {
+export const getResizedImage = (img: HTMLImageElement, maxW: number, maxH: number, mode: Crop) => {
 	let scale = 1;
 	let w = img.naturalWidth;
 	let h = img.naturalHeight;
 
-	if (w > width || h > height) {
+	if (w > maxW || h > maxH) {
 		if (mode === Crop.COVER) {
-			scale = w < h ? width / w : height / h;
+			scale = w < h ? maxW / w : maxH / h;
 		} else if (mode === Crop.CONTAIN) {
-			scale = w > h ? width / w : height / h;
+			scale = w > h ? maxW / w : maxH / h;
 		}
 
 		w = Math.floor(w * scale);
