@@ -5,7 +5,7 @@
 	},
 	"devDependencies": {
 		"prettier": "^3.2.5",
-		"prettier-plugin-tailwindcss": "^0.5.13",
+		"prettier-plugin-tailwindcss": "^0.5.14",
 		"tailwindcss": "^3.4.3",
 		"typescript": "5.4.2"
 	},
@@ -13,11 +13,11 @@
 		"patchedDependencies": {
 			"@tanstack/query-core@5.17.19": "patches/@tanstack__query-core@5.17.19.patch",
 			"cborg@4.0.7": "patches/cborg@4.0.6.patch",
-			"solid-js@1.8.16": "patches/solid-js@1.8.16.patch",
 			"solid-textarea-autosize@0.0.5": "patches/solid-textarea-autosize@0.0.5.patch",
 			"vite-plugin-pwa@0.17.4": "patches/vite-plugin-pwa@0.17.4.patch",
-			"vite@5.2.6": "patches/vite@5.2.6.patch",
-			"workbox-precaching@7.0.0": "patches/workbox-precaching@7.0.0.patch"
+			"solid-js@1.8.17": "patches/solid-js@1.8.17.patch",
+			"workbox-precaching@7.1.0": "patches/workbox-precaching@7.1.0.patch",
+			"vite@5.2.11": "patches/vite@5.2.11.patch"
 		},
 		"overrides": {
 			"hasown": "npm:@nolyfill/hasown@latest",

@@ -1,5 +1,5 @@
 diff --git a/PrecacheController.js b/PrecacheController.js
-index e00975e3762dc6382c39bebee04a89a651aae3d0..41a57e8ee7f7e8c11be0b69e1517874ed605c00f 100644
+index e00975e3762dc6382c39bebee04a89a651aae3d0..5d830222ffbd8e5ed841bbf3fe2560d354ca87ca 100644
 --- a/PrecacheController.js
 +++ b/PrecacheController.js
 @@ -150,9 +150,7 @@ class PrecacheController {
@@ -31,43 +31,43 @@ index e00975e3762dc6382c39bebee04a89a651aae3d0..41a57e8ee7f7e8c11be0b69e1517874e
 +    return new Promise((res, rej) => {
 +        let active = 0;
 +        let current = 0;
-+
++        
 +        let fulfilled = false;
-+
++        
 +        const resolve = () => {
 +            if (fulfilled || active > 0) {
 +                return;
 +            }
-+
++            
 +            fulfilled = true;
 +            res();
 +        };
-+
++        
 +        const reject = (err) => {
 +            if (fulfilled) {
 +                return;
 +            }
-+
++            
 +            rej(err);
 +        };
-+
++        
 +        const run = () => {
 +            const c = current++;
-+
++            
 +            if (fulfilled) {
 +                return;
 +            }
 +            if (c >= values.length) {
 +                return resolve();
 +            }
-+
++            
 +            const value = values[c];
-+
++            
 +            active++;
-+
++            
 +            try {
 +                const ret = iterator(value, c);
-+
++                
 +                if (ret && 'then' in ret) {
 +                    ret.then(() => {
 +                        active--;
@@ -81,7 +81,7 @@ index e00975e3762dc6382c39bebee04a89a651aae3d0..41a57e8ee7f7e8c11be0b69e1517874e
 +                reject(err);
 +            }
 +        };
-+
++        
 +        for (let i = 0; i < limit; i++) {
 +            run();
 +        }

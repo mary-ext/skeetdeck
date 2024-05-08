@@ -9,8 +9,8 @@
 		"lint": "tsc"
 	},
 	"dependencies": {
-		"@floating-ui/dom": "^1.6.3",
-		"@floating-ui/utils": "^0.2.1",
+		"@floating-ui/dom": "^1.6.5",
+		"@floating-ui/utils": "^0.2.2",
 		"@mary/atproto-cid": "npm:@jsr/mary__atproto-cid@^0.1.4",
 		"@mary/atproto-tid": "npm:@jsr/mary__atproto-tid@^0.1.1",
 		"@mary/base32": "npm:@jsr/mary__base32@^0.1.0",
@@ -24,21 +24,21 @@
 		"@thisbeyond/solid-dnd": "^0.7.5",
 		"cborg": "4.0.7",
 		"idb": "^8.0.0",
-		"immer": "^10.0.4",
+		"immer": "^10.1.1",
 		"solid-floating-ui": "^0.2.1",
-		"solid-js": "^1.8.16",
+		"solid-js": "^1.8.17",
 		"solid-textarea-autosize": "^0.0.5",
-		"tldts": "^6.1.16"
+		"tldts": "^6.1.19"
 	},
 	"devDependencies": {
 		"@types/dom-close-watcher": "^1.0.0",
 		"@types/dom-navigation": "^1.0.3",
-		"@types/node": "^20.12.2",
+		"@types/node": "^20.12.10",
 		"autoprefixer": "^10.4.19",
 		"babel-plugin-transform-typescript-const-enums": "^0.1.0",
 		"postcss": "^8.4.38",
-		"terser": "^5.30.1",
-		"vite": "^5.2.6",
+		"terser": "^5.31.0",
+		"vite": "^5.2.11",
 		"vite-plugin-pwa": "0.17.4",
 		"vite-plugin-solid": "^2.10.2"
 	}
