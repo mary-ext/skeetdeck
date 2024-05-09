@@ -4,8 +4,8 @@ import type { AppBskyLabelerDefs, At } from '../atp-schema';
 import { publicAppView } from '../globals/agent';
 
 // Hardcoded list of DIDs for now.
-// https://github.com/mary-ext/bluesky-labelers/blob/3dfabe0002256ff5c03f419ba51bd091891ca4fc/did.min.json
-const dids = [
+// https://github.com/mary-ext/bluesky-labelers
+const dids: string[] = [
 	'did:plc:j67mwmangcbxch7knfm7jo2b',
 	'did:plc:bpkpvmwpd3nr2ry4btt55ack',
 	'did:plc:newitj5jo3uel7o4mnf3vj2o',
