@@ -64,7 +64,7 @@ export const getLabelerPopularKey = () => {
 export const getLabelerPopular = async (
 	ctx: QC<ReturnType<typeof getLabelerPopularKey>, number | undefined>,
 ) => {
-	const limit = 10;
+	const limit = 25;
 
 	const start = ctx.pageParam || 0;
 	const end = start + limit;
