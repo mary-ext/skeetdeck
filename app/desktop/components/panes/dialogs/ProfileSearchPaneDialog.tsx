@@ -82,7 +82,7 @@ const ProfileSearchPaneDialog = (props: ProfileSearchPaneDialogProps) => {
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				{search() !== '' ? (
-					<TabbedPanel selected={sort()} onChange={setSort}>
+					<TabbedPanel selected={sort()} onChange={setSort} dense>
 						<TabbedPanelView label="Latest" value="latest">
 							<TimelineList
 								uid={/* @once */ profile.uid}
