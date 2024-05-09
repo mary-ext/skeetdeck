@@ -33,7 +33,7 @@
 	"devDependencies": {
 		"@types/dom-close-watcher": "^1.0.0",
 		"@types/dom-navigation": "^1.0.3",
-		"@types/node": "^20.12.10",
+		"@types/node": "^20.12.11",
 		"autoprefixer": "^10.4.19",
 		"babel-plugin-transform-typescript-const-enums": "^0.1.0",
 		"postcss": "^8.4.38",
