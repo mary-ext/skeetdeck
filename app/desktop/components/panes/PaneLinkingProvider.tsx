@@ -24,6 +24,7 @@ import {
 	LINK_QUOTE,
 	LINK_REPLY,
 	LinkingContext,
+	LINK_TAG,
 } from '~/com/components/Link';
 
 import { useComposer } from '../composer/ComposerContext';
@@ -44,11 +45,12 @@ const PaneDialogs = {
 	[LINK_POST_LIKED_BY]: lazy(() => import('./dialogs/PostLikedByPaneDialog')),
 	[LINK_POST_REPOSTED_BY]: lazy(() => import('./dialogs/PostRepostedByPaneDialog')),
 	[LINK_PROFILE]: lazy(() => import('./dialogs/ProfilePaneDialog')),
-	[LINK_PROFILE_FEEDS]: lazy(() => import('./dialogs/ProfileFeedsPaneDialog')),
 	[LINK_PROFILE_EDIT]: lazy(() => import('./dialogs/ProfileSettingsPaneDialog')),
+	[LINK_PROFILE_FEEDS]: lazy(() => import('./dialogs/ProfileFeedsPaneDialog')),
 	[LINK_PROFILE_FOLLOWERS]: lazy(() => import('./dialogs/ProfileFollowersPaneDialog')),
 	[LINK_PROFILE_FOLLOWS]: lazy(() => import('./dialogs/ProfileFollowsPaneDialog')),
 	[LINK_PROFILE_LISTS]: lazy(() => import('./dialogs/ProfileListsPaneDialog')),
+	[LINK_TAG]: lazy(() => import('./dialogs/HashtagPaneDialog')),
 };
 
 export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {

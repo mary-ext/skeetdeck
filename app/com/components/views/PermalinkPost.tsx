@@ -23,7 +23,6 @@ import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
 import FavoriteIcon from '../../icons/baseline-favorite';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
-import PoundIcon from '../../icons/baseline-pound';
 import RepeatIcon from '../../icons/baseline-repeat';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
@@ -32,8 +31,9 @@ import Embed from '../embeds/Embed';
 import ContentWarning from '../moderation/ContentWarning';
 
 import PostOverflowAction from '../items/posts/PostOverflowAction';
-import RepostAction from '../items/posts/RepostAction';
+import PostTag from '../items/posts/PostTag';
 import ReplyAction from '../items/posts/ReplyAction';
+import RepostAction from '../items/posts/RepostAction';
 
 import PostTranslation, { needTranslation } from './posts/PostTranslation';
 import LabelsOnMe from '../moderation/LabelsOnMe';
@@ -135,12 +135,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 			</ContentWarning>
 
 			<div class="mb-3 flex flex-wrap gap-1.5 text-de text-primary/85 empty:hidden">
-				{record.value.tags?.map((tag) => (
-					<div class="flex min-w-0 items-center gap-1 rounded-full bg-secondary/30 px-2 leading-6">
-						<PoundIcon />
-						<span class="overflow-hidden text-ellipsis whitespace-nowrap">{tag}</span>
-					</div>
-				))}
+				{record.value.tags?.map((tag) => <PostTag tag={tag} />)}
 			</div>
 
 			<div class="mb-3">

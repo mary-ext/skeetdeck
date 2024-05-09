@@ -28,19 +28,20 @@ import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
 import FavoriteIcon from '../../icons/baseline-favorite';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
-import PoundIcon from '../../icons/baseline-pound';
 import RepeatIcon from '../../icons/baseline-repeat';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import Embed from '../embeds/Embed';
 import ContentWarning from '../moderation/ContentWarning';
-import LabelsOnMe from '../moderation/LabelsOnMe';
-import ModerationAlerts from '../moderation/ModerationAlerts';
-
 import PostOverflowAction from './posts/PostOverflowAction';
+
+import PostTag from './posts/PostTag';
 import ReplyAction from './posts/ReplyAction';
 import RepostAction from './posts/RepostAction';
+
+import LabelsOnMe from '../moderation/LabelsOnMe';
+import ModerationAlerts from '../moderation/ModerationAlerts';
 
 export interface PostProps {
 	/** Expected to be static */
@@ -258,12 +259,7 @@ const Post = (props: PostProps) => {
 							const sliced = overflowing ? tags.slice(0, 3) : tags;
 
 							return [
-								...sliced.map((tag) => (
-									<div class="flex min-w-0 items-center gap-1 rounded-full bg-secondary/30 px-2 leading-6">
-										<PoundIcon />
-										<span class="overflow-hidden text-ellipsis whitespace-nowrap">{tag}</span>
-									</div>
-								)),
+								...sliced.map((tag) => <PostTag tag={tag} />),
 								overflowing && <span class="text-muted-fg">...and {length - 3} more</span>,
 							];
 						})()}
