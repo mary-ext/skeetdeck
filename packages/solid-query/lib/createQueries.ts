@@ -1,4 +1,15 @@
 import {
+	type DefaultError,
+	type QueriesObserverOptions,
+	type QueriesPlaceholderDataFunction,
+	type QueryClient,
+	type QueryFunction,
+	type QueryKey,
+	type ThrowOnError,
+	QueriesObserver,
+} from '@tanstack/query-core';
+
+import {
 	type Accessor,
 	createMemo,
 	createRenderEffect,
@@ -8,18 +19,7 @@ import {
 	untrack,
 } from 'solid-js';
 
-import {
-	type DefaultError,
-	type QueriesObserverOptions,
-	type QueriesPlaceholderDataFunction,
-	type QueryFunction,
-	type QueryKey,
-	type ThrowOnError,
-	QueriesObserver,
-} from '@tanstack/query-core';
-
 import { useQueryClient } from './QueryClientProvider.tsx';
-import type { QueryClient } from './QueryClient.ts';
 
 import type { CreateQueryResult, QueryAccessor, SolidQueryOptions } from './types.ts';
 

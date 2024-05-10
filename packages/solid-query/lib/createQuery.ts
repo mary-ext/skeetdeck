@@ -1,7 +1,6 @@
-import { type DefaultError, type QueryKey, QueryObserver } from '@tanstack/query-core';
+import { type DefaultError, type QueryClient, type QueryKey, QueryObserver } from '@tanstack/query-core';
 
 import { createBaseQuery } from './createBaseQuery.ts';
-import type { QueryClient } from './QueryClient.ts';
 import type {
 	CreateQueryOptions,
 	CreateQueryResult,

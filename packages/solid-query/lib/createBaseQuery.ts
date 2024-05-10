@@ -1,4 +1,5 @@
 import {
+	type QueryClient,
 	type QueryKey,
 	type QueryObserver,
 	type QueryObserverResult,
@@ -7,7 +8,6 @@ import {
 
 import { createMemo, createRenderEffect, on, onCleanup, untrack } from 'solid-js';
 
-import type { QueryClient } from './QueryClient.ts';
 import { useQueryClient } from './QueryClientProvider.tsx';
 
 import type { CreateBaseQueryOptions, QueryAccessor } from './types.ts';

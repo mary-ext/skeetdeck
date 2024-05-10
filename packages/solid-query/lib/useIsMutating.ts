@@ -1,8 +1,7 @@
-import type { MutationFilters } from '@tanstack/query-core';
+import type { MutationFilters, QueryClient } from '@tanstack/query-core';
 
 import { type Accessor, createSignal, onCleanup, untrack } from 'solid-js';
 
-import type { QueryClient } from './QueryClient.ts';
 import { useQueryClient } from './QueryClientProvider.tsx';
 
 export function useIsMutating(

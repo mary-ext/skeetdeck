@@ -1,16 +1,17 @@
 import type {
 	DefaultError,
 	DefinedQueryObserverResult,
+	InfiniteQueryObserverOptions,
 	InfiniteQueryObserverResult,
 	MutateFunction,
 	MutationObserverOptions,
 	MutationObserverResult,
+	QueryClient,
 	QueryKey,
+	QueryObserverOptions,
 	QueryObserverResult,
 	WithRequired,
 } from '@tanstack/query-core';
-
-import type { InfiniteQueryObserverOptions, QueryClient, QueryObserverOptions } from './QueryClient.ts';
 
 export type QueryAccessor<T> = (queryClient: QueryClient) => T;
 

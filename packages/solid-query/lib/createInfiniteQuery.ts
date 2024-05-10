@@ -1,13 +1,13 @@
 import {
 	type DefaultError,
 	type InfiniteData,
+	type QueryClient,
 	type QueryKey,
 	type QueryObserver,
 	InfiniteQueryObserver,
 } from '@tanstack/query-core';
 
 import { createBaseQuery } from './createBaseQuery.ts';
-import type { QueryClient } from './QueryClient.ts';
 import type { CreateInfiniteQueryOptions, CreateInfiniteQueryResult } from './types.ts';
 
 export function createInfiniteQuery<
