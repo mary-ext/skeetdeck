@@ -110,12 +110,13 @@ export const detectSnippet = (
 		// YouTube iframe
 		if ((m = /^\/([^/]+?)$/.exec(p))) {
 			const videoId = m[1];
+			const seek = q.get('t') || 0;
 
 			return {
 				t: SnippetType.IFRAME,
 				s: SnippetSource.YOUTUBE,
 				d: d,
-				u: `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&playsinline=1`,
+				u: `https://www.youtube-nocookie.com/embed/${videoId}?start=${seek}&autoplay=1&playsinline=1`,
 				r: `16/9`,
 			};
 		}
