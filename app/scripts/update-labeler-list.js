@@ -5,7 +5,7 @@ import { BskyXRPC } from '@mary/bluesky-client';
 const DID_LIST_URL = 'https://raw.githubusercontent.com/mary-ext/bluesky-labelers/trunk/did.min.json';
 const SOURCE_PATH = 'api/queries/get-labeler-popular.ts';
 
-let dids;
+let creators;
 
 {
 	console.log(`retrieving labeler listing`);
@@ -36,11 +36,11 @@ let dids;
 			);
 		});
 
-	dids = listing.map((x) => x.creator.did);
+	creators = listing.map((x) => x.creator);
 }
 
 {
-	const substr = `[\n${dids.map((x) => `\t'${x}',\n`).join('')}]`;
+	const substr = `[\n${creators.map((x) => `\t'${x.did}', // ${x.handle}\n`).join('')}]`;
 	const re = /(?<=const dids(?::\s*[a-z[\]]+)?\s*=\s*)\[[^]*?\](?=;)/;
 
 	const source = fs.readFileSync(SOURCE_PATH, 'utf-8');
