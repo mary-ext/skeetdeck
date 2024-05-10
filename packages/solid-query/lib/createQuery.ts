@@ -43,7 +43,6 @@ export function queryOptions<
 		TQueryKey
 	> = UndefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>,
 >(options: TOptions): TOptions;
-
 export function queryOptions<
 	TQueryFnData = unknown,
 	TError = unknown,
@@ -56,7 +55,6 @@ export function queryOptions<
 		TQueryKey
 	> = DefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>,
 >(options: TOptions): TOptions;
-
 export function queryOptions(options: unknown) {
 	return options;
 }
