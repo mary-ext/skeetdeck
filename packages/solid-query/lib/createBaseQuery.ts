@@ -33,7 +33,7 @@ export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryK
 			initialDefaultedOptions,
 		);
 
-		const result = createStateObject(untrack(() => observer.getOptimisticResult(initialDefaultedOptions)));
+		const result = createStateObject(observer.getOptimisticResult(initialDefaultedOptions));
 
 		createRenderEffect(
 			on(
