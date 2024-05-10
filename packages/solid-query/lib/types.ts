@@ -96,7 +96,7 @@ export interface SolidMutationOptions<
 	TError = DefaultError,
 	TVariables = void,
 	TContext = unknown,
-> extends Omit<MutationObserverOptions<TData, TError, TVariables, TContext>, '_defaulted' | 'variables'> {}
+> extends Omit<MutationObserverOptions<TData, TError, TVariables, TContext>, '_defaulted'> {}
 
 export type CreateMutationOptions<
 	TData = unknown,
