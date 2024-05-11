@@ -122,9 +122,6 @@ export const mergeProfile = (
 
 		if ('description' in profile) {
 			val.description.value = profile.description;
-			val.associated.value = getAssociated(profile.associated);
-		} else {
-			val.associated.value = mergeAssociatedBasic(val.associated.peek(), profile.associated);
 		}
 
 		if ('postsCount' in profile) {
@@ -132,6 +129,9 @@ export const mergeProfile = (
 			val.followersCount.value = profile.followersCount ?? 0;
 			val.followsCount.value = profile.followsCount ?? 0;
 			val.postsCount.value = profile.postsCount ?? 0;
+			val.associated.value = getAssociated(profile.associated);
+		} else {
+			val.associated.value = mergeAssociatedBasic(val.associated.peek(), profile.associated);
 		}
 	}
 
