@@ -150,7 +150,5 @@ const mergeAssociatedBasic = (
 	a: AppBskyActorDefs.ProfileAssociated | undefined,
 	b: AppBskyActorDefs.ProfileAssociated | undefined,
 ) => {
-	if (b) {
-		return getAssociated(a ? { ...a, ...b } : b);
-	}
+	return getAssociated(a ? { ...a, ...b } : b);
 };
