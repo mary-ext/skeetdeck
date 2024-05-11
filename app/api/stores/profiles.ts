@@ -110,7 +110,6 @@ export const mergeProfile = (
 		val.handle.value = profile.handle;
 		val.displayName.value = profile.displayName;
 		val.avatar.value = profile.avatar;
-		val.associated.value = getAssociated(profile.associated);
 		val.labels.value = profile.labels || [];
 
 		val.viewer.muted.value = profile.viewer?.muted;
@@ -123,6 +122,9 @@ export const mergeProfile = (
 
 		if ('description' in profile) {
 			val.description.value = profile.description;
+			val.associated.value = getAssociated(profile.associated);
+		} else {
+			val.associated.value = mergeAssociatedBasic(val.associated.peek(), profile.associated);
 		}
 
 		if ('postsCount' in profile) {
@@ -141,5 +143,14 @@ const getAssociated = (o: AppBskyActorDefs.ProfileAssociated | undefined): Profi
 
 	if (feedgens > 0 || labeler || lists > 0) {
 		return { feedgens, labeler, lists };
+	}
+};
+
+const mergeAssociatedBasic = (
+	a: AppBskyActorDefs.ProfileAssociated | undefined,
+	b: AppBskyActorDefs.ProfileAssociated | undefined,
+) => {
+	if (b) {
+		return getAssociated(a ? { ...a, ...b } : b);
 	}
 };
