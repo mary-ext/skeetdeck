@@ -82,17 +82,12 @@ const extractSearchParams = (url: URL): Params => {
 };
 
 const createMemoObject = <T extends Record<string | symbol, unknown>>(fn: () => T): T => {
-	const map = new Map();
+	const obj: Record<string | symbol, () => unknown> = Object.create(null);
 	const owner = getOwner();
 
 	return new Proxy({} as T, {
 		get(_, prop) {
-			let memo = map.get(prop);
-			if (memo === undefined) {
-				map.set(prop, (memo = runWithOwner(owner, () => createMemo(() => fn()[prop]))));
-			}
-
-			return memo();
+			return (obj[prop] ??= runWithOwner(owner, () => createMemo(() => fn()[prop]))!)();
 		},
 	});
 };
