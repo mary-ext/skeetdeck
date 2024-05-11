@@ -38,14 +38,14 @@ export interface ProfileOverflowActionProps {
 	children: JSX.Element;
 }
 
-const isDesktop = import.meta.env.VITE_MODE === 'desktop';
-
 const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 	const linking = useLinking();
 
 	return (() => {
 		const profile = props.profile;
 		const did = profile.did;
+
+		const associated = profile.associated;
 
 		const isSelf = profile.uid === did;
 		const isOwnAccount = createMemo(() => multiagent.accounts.some((account) => account.did === did));
@@ -77,7 +77,7 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 							<span>Open in Bluesky app</span>
 						</a>
 
-						{isDesktop && (
+						{associated.value?.lists && (
 							<button
 								onClick={() => {
 									close();
@@ -90,7 +90,7 @@ const ProfileOverflowAction = (props: ProfileOverflowActionProps) => {
 							</button>
 						)}
 
-						{isDesktop && (
+						{associated.value?.feedgens && (
 							<button
 								onClick={() => {
 									close();
