@@ -156,9 +156,9 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 					<p dir="auto" class="overflow-hidden break-words text-xl font-bold empty:hidden">
 						{profile.displayName.value}
 					</p>
-					<p class="flex min-w-0 items-center text-sm text-muted-fg">
+					<p class="flex min-w-0 items-start text-sm text-muted-fg">
 						<ProfileHandleAction profile={profile}>
-							<button class="overflow-hidden text-ellipsis whitespace-nowrap text-left hover:underline">
+							<button class="overflow-hidden text-ellipsis break-words text-left hover:underline">
 								{'@' + profile.handle.value}
 							</button>
 						</ProfileHandleAction>
@@ -166,7 +166,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 						{(() => {
 							if (viewer.followedBy.value) {
 								return (
-									<span class="ml-2 shrink-0 rounded bg-muted px-1 py-px text-xs font-medium text-primary">
+									<span class="ml-2 mt-0.5 shrink-0 rounded bg-muted px-1 py-px text-xs font-medium text-primary">
 										Follows you
 									</span>
 								);
