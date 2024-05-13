@@ -65,13 +65,8 @@ const ProfileFollowsPaneDialog = (props: ProfileFollowsPaneDialogProps) => {
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<ProfileList
+					query={follows}
 					asideAccessory={ProfileFollowAccessory}
-					profiles={follows.data?.pages.flatMap((page) => page.profiles)}
-					fetching={follows.isFetching}
-					error={follows.error}
-					hasMore={follows.hasNextPage}
-					onRetry={() => follows.fetchNextPage()}
-					onLoadMore={() => follows.fetchNextPage()}
 					onItemClick={(profile, alt) => {
 						if (alt) {
 							return;

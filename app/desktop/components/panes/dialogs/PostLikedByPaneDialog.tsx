@@ -46,12 +46,7 @@ const PostLikedByPaneDialog = (props: PostLikedByDialogProps) => {
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<ProfileList
-					profiles={likes.data?.pages.flatMap((page) => page.profiles)}
-					fetching={likes.isFetching}
-					error={likes.error}
-					hasMore={likes.hasNextPage}
-					onRetry={() => likes.fetchNextPage()}
-					onLoadMore={() => likes.fetchNextPage()}
+					query={likes}
 					onItemClick={(profile, alt) => {
 						if (alt) {
 							return;

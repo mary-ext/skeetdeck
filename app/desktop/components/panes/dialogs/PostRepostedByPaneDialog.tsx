@@ -46,12 +46,7 @@ const PostRepostedByPaneDialog = (props: PostRepostedByDialogProps) => {
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<ProfileList
-					profiles={reposts.data?.pages.flatMap((page) => page.profiles)}
-					fetching={reposts.isFetching}
-					error={reposts.error}
-					hasMore={reposts.hasNextPage}
-					onRetry={() => reposts.fetchNextPage()}
-					onLoadMore={() => reposts.fetchNextPage()}
+					query={reposts}
 					onItemClick={(profile, alt) => {
 						if (alt) {
 							return;

@@ -63,15 +63,7 @@ const ProfilePaneCreator = (props: PaneCreatorProps) => {
 									Searching for "<span class="whitespace-pre-wrap break-words">{search()}</span>"
 								</p>
 
-								<ProfileList
-									profiles={profiles.data?.pages.flatMap((page) => page.profiles)}
-									fetching={profiles.isFetching}
-									error={profiles.error}
-									hasMore={profiles.hasNextPage}
-									onRetry={() => profiles.fetchNextPage()}
-									onLoadMore={() => profiles.fetchNextPage()}
-									onItemClick={handleItemClick}
-								/>
+								<ProfileList query={profiles} onItemClick={handleItemClick} />
 							</>
 						);
 					}}
@@ -86,17 +78,7 @@ const ProfilePaneCreator = (props: PaneCreatorProps) => {
 							getNextPageParam: (last) => last.cursor,
 						}));
 
-						return (
-							<ProfileList
-								profiles={profiles.data?.pages.flatMap((page) => page.profiles)}
-								fetching={profiles.isFetching}
-								error={profiles.error}
-								hasMore={profiles.hasNextPage}
-								onRetry={() => profiles.fetchNextPage()}
-								onLoadMore={() => profiles.fetchNextPage()}
-								onItemClick={handleItemClick}
-							/>
-						);
+						return <ProfileList query={profiles} onItemClick={handleItemClick} />;
 					}}
 				</Match>
 			</Switch>
