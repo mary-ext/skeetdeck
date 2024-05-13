@@ -1,4 +1,4 @@
-import { For, createResource, lazy, onCleanup } from 'solid-js';
+import { createResource, lazy, onCleanup } from 'solid-js';
 
 import { closeModal, openModal } from '~/com/globals/modals';
 
@@ -6,6 +6,7 @@ import { formatAbsDateTime } from '~/utils/intl/time';
 
 import BlobImage from '~/com/components/BlobImage';
 import { Flyout } from '~/com/components/Flyout';
+import List from '~/com/components/List';
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
 import type { EmbeddedImage } from '~/com/components/dialogs/ImageViewerDialog';
 import CloseIcon from '~/com/icons/baseline-close';
@@ -16,14 +17,12 @@ import PlaylistAddCheckIcon from '~/com/icons/baseline-playlist-add-check';
 import { Button } from '~/com/primitives/button';
 import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
 import { IconButton } from '~/com/primitives/icon-button';
-import { loadMoreBtn } from '~/com/primitives/interactive';
 import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 
 import { useComposer } from '../ComposerContext';
 import { getDraftDb, type ComposerDraft, type SerializedImage } from '../utils/draft-db';
 
 import { isStateFilled } from '../utils/state';
-
 import ApplyDraftDialog from './drafts/ApplyDraftDialog';
 import DeleteDraftDialog from './drafts/DeleteDraftDialog';
 import RenameDraftDialog from './drafts/RenameDraftDialog';
@@ -113,8 +112,9 @@ const ViewDraftsDialog = () => {
 				</div>
 
 				<div class={/* @once */ DialogBody({ class: 'flex flex-col', scrollable: true, padded: false })}>
-					<For each={!listing.error ? listing.latest?.drafts : undefined}>
-						{(draft) => {
+					<List
+						data={!listing.error ? listing.latest?.drafts : undefined}
+						render={(draft) => {
 							const state = draft.state;
 							const posts = state.posts;
 
@@ -250,35 +250,15 @@ const ViewDraftsDialog = () => {
 								</div>
 							);
 						}}
-					</For>
-
-					{(() => {
-						const latest = !listing.error && listing.latest;
-
-						if (latest) {
-							const cursor = latest.cursor;
-							const empty = latest.drafts.length === 0;
-
+						hasNextPage={!listing.error && listing.latest?.cursor !== undefined}
+						isFetchingNextPage={listing.loading}
+						onEndReached={() => {
+							const cursor = !listing.error && listing.latest?.cursor;
 							if (cursor) {
-								return (
-									<button
-										onClick={() => {
-											refetch(cursor);
-										}}
-										class={loadMoreBtn}
-									>
-										Show more drafts
-									</button>
-								);
+								refetch(cursor);
 							}
-
-							return (
-								<div class="grid h-13 shrink-0 place-items-center">
-									<p class="text-sm text-muted-fg">{!empty ? `End of list` : `You don't have any drafts`}</p>
-								</div>
-							);
-						}
-					})()}
+						}}
+					/>
 				</div>
 			</div>
 		</DialogOverlay>
