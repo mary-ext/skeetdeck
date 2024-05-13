@@ -1,10 +1,8 @@
-import type { QueryFunctionContext as QC } from '@mary/solid-query';
-
 import { XRPCError } from '@mary/bluesky-client/xrpc';
+import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import type { AppBskyLabelerDefs, At } from '../atp-schema';
 import { publicAppView } from '../globals/agent';
-
 import { interpretServiceDefinition } from '../moderation/service';
 
 export const getLabelerInfoKey = (did: At.DID) => {

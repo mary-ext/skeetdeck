@@ -1,30 +1,26 @@
-import { type JSX, lazy, createMemo } from 'solid-js';
+import { createMemo, lazy, type JSX } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent.ts';
-import { getRecordId } from '~/api/utils/misc';
-
-import type { SignalizedPost } from '~/api/stores/posts';
-
 import { isProfileTempMuted } from '~/api/moderation';
 import { serializeRichText } from '~/api/richtext/utils';
+import type { SignalizedPost } from '~/api/stores/posts';
+import { getRecordId } from '~/api/utils/misc';
 
 import { openModal } from '../../../globals/modals';
 import { getModerationOptions } from '../../../globals/shared';
 
-import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
-
-import { Flyout } from '../../Flyout';
-
 import ContentCopyIcon from '../../../icons/baseline-content-copy';
-import DeleteOutlinedIcon from '../../../icons/outline-delete';
 import LaunchIcon from '../../../icons/baseline-launch';
 import LinkIcon from '../../../icons/baseline-link';
-import ReportProblemOutlinedIcon from '../../../icons/outline-report-problem';
 import TranslateIcon from '../../../icons/baseline-translate';
-import VisibilityOffOutlinedIcon from '../../../icons/outline-visibility-off';
+import DeleteOutlinedIcon from '../../../icons/outline-delete';
+import ReportProblemOutlinedIcon from '../../../icons/outline-report-problem';
 import VisibilityOutlinedIcon from '../../../icons/outline-visibility';
+import VisibilityOffOutlinedIcon from '../../../icons/outline-visibility-off';
 import VolumeOffOutlinedIcon from '../../../icons/outline-volume-off';
 import VolumeUpOutlinedIcon from '../../../icons/outline-volume-up';
+import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
+import { Flyout } from '../../Flyout';
 
 const DeletePostConfirmDialog = lazy(() => import('../../dialogs/DeletePostConfirmDialog'));
 const MuteConfirmDialog = lazy(() => import('../../dialogs/MuteConfirmDialog'));

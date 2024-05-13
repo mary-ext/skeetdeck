@@ -1,7 +1,5 @@
 import { multiagent } from '../globals/agent';
-
 import type { SignalizedList } from '../stores/lists';
-
 import { createToggleMutation } from '../utils/toggle-mutation';
 
 const createListMuteMutation = (list: SignalizedList) => {

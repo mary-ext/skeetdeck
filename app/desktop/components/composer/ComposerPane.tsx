@@ -1,5 +1,5 @@
-import { type JSX, For, Show, batch, createEffect, createMemo, createSignal, lazy, untrack } from 'solid-js';
-import { createMutable, unwrap } from 'solid-js/store';
+import { For, Show, batch, createEffect, createMemo, createSignal, lazy, untrack, type JSX } from 'solid-js';
+import { unwrap } from 'solid-js/store';
 
 import { makeEventListener } from '@solid-primitives/event-listener';
 
@@ -16,62 +16,56 @@ import type {
 	ComAtprotoRepoStrongRef,
 } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
-import { extractAppLink } from '~/api/utils/links';
-import { formatQueryError, getCollectionId, isDid } from '~/api/utils/misc';
-
 import type { ThreadData } from '~/api/models/threads';
 import { getUploadedBlob, uploadBlob } from '~/api/mutations/upload-blob';
 import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info';
-import { type LinkMeta, getLinkMeta, getLinkMetaKey } from '~/api/queries/get-link-meta';
+import { getLinkMeta, getLinkMetaKey, type LinkMeta } from '~/api/queries/get-link-meta';
 import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/get-list-info';
 import { getInitialPost, getPost, getPostKey } from '~/api/queries/get-post';
 import { getResolvedHandle, getResolvedHandleKey } from '~/api/queries/get-resolved-handle';
 import type { getTimelineLatestKey } from '~/api/queries/get-timeline';
-import type { SignalizedPost } from '~/api/stores/posts';
-import { produceThreadInsert } from '~/api/updaters/insert-post';
-
 import {
-	type PreliminaryRichText,
+	InvalidHandleError,
 	finalizeRt,
 	getRtLength,
-	InvalidHandleError,
+	type PreliminaryRichText,
 } from '~/api/richtext/composer';
+import type { SignalizedPost } from '~/api/stores/posts';
+import { produceThreadInsert } from '~/api/updaters/insert-post';
+import { extractAppLink } from '~/api/utils/links';
+import { formatQueryError, getCollectionId, isDid } from '~/api/utils/misc';
 
 import { openModal } from '~/com/globals/modals';
 
 import { preferences } from '~/desktop/globals/settings';
 
-import { languageNames } from '~/utils/intl/display-names';
-import { type CompressResult, compressPostImage } from '~/utils/image';
+import { compressPostImage, type CompressResult } from '~/utils/image';
 import { isMac } from '~/utils/interaction';
+import { languageNames } from '~/utils/intl/display-names';
 import { clsx, getUniqueId } from '~/utils/misc';
 import { Signal, signal } from '~/utils/signals';
 
-import { Button } from '~/com/primitives/button';
-import { IconButton } from '~/com/primitives/icon-button';
-import { Interactive } from '~/com/primitives/interactive';
-
-import CircularProgress from '~/com/components/CircularProgress';
-import RichtextComposer from '~/com/components/richtext/RichtextComposer';
 import BlobImage from '~/com/components/BlobImage';
-
-import EmojiFlyout from '~/com/components/emojis/EmojiFlyout';
-
+import CircularProgress from '~/com/components/CircularProgress';
 import { EmbedFeedContent } from '~/com/components/embeds/EmbedFeed';
 import EmbedLink from '~/com/components/embeds/EmbedLink';
 import { EmbedListContent } from '~/com/components/embeds/EmbedList';
 import { EmbedQuoteContent } from '~/com/components/embeds/EmbedQuote';
-
+import EmojiFlyout from '~/com/components/emojis/EmojiFlyout';
+import RichtextComposer from '~/com/components/richtext/RichtextComposer';
 import AddIcon from '~/com/icons/baseline-add';
 import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import CheckIcon from '~/com/icons/baseline-check';
 import CloseIcon from '~/com/icons/baseline-close';
-import EmojiEmotionsOutlinedIcon from '~/com/icons/outline-emoji-emotions.tsx';
-import ImageOutlinedIcon from '~/com/icons/outline-image.tsx';
 import LanguageIcon from '~/com/icons/baseline-language';
 import LinkIcon from '~/com/icons/baseline-link';
+import EmojiEmotionsOutlinedIcon from '~/com/icons/outline-emoji-emotions.tsx';
+import ImageOutlinedIcon from '~/com/icons/outline-image.tsx';
 import ShieldOutlinedIcon from '~/com/icons/outline-shield';
+import { Button } from '~/com/primitives/button';
+import { IconButton } from '~/com/primitives/icon-button';
+import { Interactive } from '~/com/primitives/interactive';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 

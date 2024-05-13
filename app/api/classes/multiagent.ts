@@ -2,20 +2,20 @@ import { batch, createEffect, createRoot } from 'solid-js';
 import { unwrap } from 'solid-js/store';
 
 import {
+	BskyAuth,
+	BskyMod,
+	BskyXRPC,
 	type AtpAccessJwt,
 	type AtpSessionData,
 	type AuthLoginOptions,
 	type ModerationService,
-	BskyAuth,
-	BskyXRPC,
-	BskyMod,
 } from '@mary/bluesky-client';
 import { decodeJwt } from '@mary/bluesky-client/utils/jwt';
 
 import type { At } from '../atp-schema';
 
-import { createReactiveLocalStorage } from '~/utils/storage';
 import { signal } from '~/utils/signals';
+import { createReactiveLocalStorage } from '~/utils/storage';
 
 export interface MultiagentLoginOptions extends AuthLoginOptions {
 	service: string;

@@ -2,10 +2,9 @@ import type { At } from '~/api/atp-schema';
 
 import { closeModal } from '../../globals/modals';
 
-import DialogOverlay from './DialogOverlay';
-
-import { DialogActions, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
 import { Button } from '../../primitives/button';
+import { DialogActions, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
+import DialogOverlay from './DialogOverlay';
 
 export interface BlockConfirmDialogProps {
 	/** Expected to be static */

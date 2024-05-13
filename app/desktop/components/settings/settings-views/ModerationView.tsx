@@ -17,8 +17,8 @@ import {
 
 import AddIcon from '~/com/icons/baseline-add';
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
-import FilterAltOutlinedIcon from '~/com/icons/outline-filter-alt';
 import RepeatOffIcon from '~/com/icons/baseline-repeat-off';
+import FilterAltOutlinedIcon from '~/com/icons/outline-filter-alt';
 import VisibilityOffOutlinedIcon from '~/com/icons/outline-visibility-off';
 
 import DefaultLabelerAvatar from '~/com/assets/default-labeler-avatar.svg?url';

@@ -2,17 +2,15 @@ import { createSignal } from 'solid-js';
 
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
-import { type SearchPaneConfig, PANE_TYPE_SEARCH } from '../../../globals/panes';
+import { PANE_TYPE_SEARCH, type SearchPaneConfig } from '../../../globals/panes';
 import { addPane } from '../../../globals/settings';
 
-import TimelineList from '~/com/components/lists/TimelineList';
-import SearchInput from '~/com/components/inputs/SearchInput';
 import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel';
-
-import { IconButton } from '~/com/primitives/icon-button';
-
+import SearchInput from '~/com/components/inputs/SearchInput';
+import TimelineList from '~/com/components/lists/TimelineList';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
+import { IconButton } from '~/com/primitives/icon-button';
 
 import { usePaneContext, usePaneModalState } from '../PaneContext';
 import PaneDialog from '../PaneDialog';

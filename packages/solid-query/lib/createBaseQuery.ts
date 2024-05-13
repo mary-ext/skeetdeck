@@ -1,9 +1,9 @@
 import {
+	notifyManager,
 	type QueryClient,
 	type QueryKey,
 	type QueryObserver,
 	type QueryObserverResult,
-	notifyManager,
 } from '@tanstack/query-core';
 
 import { createMemo, createRenderEffect, on, onCleanup, untrack } from 'solid-js';

@@ -1,5 +1,4 @@
 import {
-	type JSX,
 	For,
 	Match,
 	Switch,
@@ -7,6 +6,7 @@ import {
 	createMemo,
 	createResource,
 	createSignal,
+	type JSX,
 } from 'solid-js';
 
 import { autoUpdate, flip, offset, shift } from '@floating-ui/dom';

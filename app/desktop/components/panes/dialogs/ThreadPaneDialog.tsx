@@ -3,15 +3,13 @@ import { createMemo } from 'solid-js';
 import { createQuery } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
-
 import { getInitialPostThread, getPostThread, getPostThreadKey } from '~/api/queries/get-post-thread';
 
 import { PANE_TYPE_THREAD, SpecificPaneSize, type ThreadPaneConfig } from '../../../globals/panes';
 import { addPane, preferences } from '../../../globals/settings';
 
-import { IconButton } from '~/com/primitives/icon-button';
-
 import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
+import { IconButton } from '~/com/primitives/icon-button';
 
 import { usePaneContext, usePaneModalState } from '../PaneContext';
 import PaneDialog from '../PaneDialog';

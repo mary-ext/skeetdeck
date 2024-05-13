@@ -7,7 +7,7 @@ import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
 import Checkbox from '~/com/components/inputs/Checkbox';
 
 import { useComposer } from '../../ComposerContext';
-import { type ComposerDraft, type SerializedPostState, getDraftDb } from '../../utils/draft-db';
+import { getDraftDb, type ComposerDraft, type SerializedPostState } from '../../utils/draft-db';
 import type { GateState, PostState } from '../../utils/state';
 
 export interface ApplyDraftDialogProps {

@@ -1,8 +1,6 @@
 import type { AppBskyFeedLike } from '../atp-schema';
 import { multiagent } from '../globals/agent';
-
 import type { SignalizedPost } from '../stores/posts';
-
 import { getCurrentDate, getRecordId } from '../utils/misc';
 import { createToggleMutation } from '../utils/toggle-mutation';
 

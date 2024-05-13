@@ -2,10 +2,9 @@ import { onMount } from 'solid-js';
 
 import { closeModal } from '~/com/globals/modals';
 
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
 import { Button } from '~/com/primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
-
-import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
 
 export interface ImageAltReminderDialogProps {
 	onIgnore: () => void;

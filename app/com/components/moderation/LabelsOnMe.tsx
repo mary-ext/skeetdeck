@@ -1,9 +1,9 @@
-import { type JSX, lazy } from 'solid-js';
+import { lazy, type JSX } from 'solid-js';
 
 import type { At, ComAtprotoLabelDefs } from '~/api/atp-schema';
 
-import InfoOutlinedIcon from '../../icons/outline-info';
 import { openModal } from '~/com/globals/modals';
+import InfoOutlinedIcon from '../../icons/outline-info';
 
 import type { ReportTarget } from '../dialogs/LabelsOnMeDialog';
 

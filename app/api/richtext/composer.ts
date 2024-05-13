@@ -5,7 +5,6 @@ import { multiagent } from '../globals/agent';
 
 import { asciiLen, graphemeLen } from './intl';
 import { safeUrlParse, toShortUrl } from './renderer';
-
 import type { Facet } from './types';
 
 interface TextSegment {

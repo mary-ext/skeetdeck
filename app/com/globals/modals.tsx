@@ -1,11 +1,10 @@
-import { For, Suspense, createContext, createSignal, useContext } from 'solid-js';
-import type { JSX } from 'solid-js/jsx-runtime';
+import { For, Suspense, createContext, createSignal, useContext, type JSX } from 'solid-js';
 
-import { type Signal, signal } from '~/utils/signals';
+import { signal, type Signal } from '~/utils/signals';
 
-import DialogOverlay from '../components/dialogs/DialogOverlay';
 import CircularProgress from '../components/CircularProgress';
 import Modal from '../components/Modal';
+import DialogOverlay from '../components/dialogs/DialogOverlay';
 
 type ModalComponent = () => JSX.Element;
 

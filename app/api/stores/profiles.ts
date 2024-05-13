@@ -1,5 +1,5 @@
 import { EQUALS_DEQUAL } from '~/utils/dequal';
-import { type Signal, signal } from '~/utils/signals';
+import { signal, type Signal } from '~/utils/signals';
 
 import type { AppBskyActorDefs, At, Brand } from '../atp-schema';
 

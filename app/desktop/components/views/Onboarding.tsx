@@ -2,20 +2,18 @@ import { For, batch, createSignal, lazy } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent';
 
-import { clsx, getUniqueId } from '~/utils/misc';
 import { createRadioModel, modelChecked } from '~/utils/input';
+import { clsx, getUniqueId } from '~/utils/misc';
 
 import { openModal } from '~/com/globals/modals';
 
+import Checkbox from '~/com/components/inputs/Checkbox';
+import Radio from '~/com/components/inputs/Radio';
+import AddIcon from '~/com/icons/baseline-add';
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 import { BoxedIconButton } from '~/com/primitives/boxed-icon-button';
 import { Button } from '~/com/primitives/button';
 import { Interactive } from '~/com/primitives/interactive';
-
-import Radio from '~/com/components/inputs/Radio';
-import Checkbox from '~/com/components/inputs/Checkbox';
-
-import AddIcon from '~/com/icons/baseline-add';
-import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 

@@ -1,8 +1,6 @@
 import type { AppBskyGraphListblock } from '../atp-schema';
 import { multiagent } from '../globals/agent';
-
 import type { SignalizedList } from '../stores/lists';
-
 import { getCurrentDate, getRecordId } from '../utils/misc';
 import { createToggleMutation } from '../utils/toggle-mutation';
 

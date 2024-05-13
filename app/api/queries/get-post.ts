@@ -2,11 +2,8 @@ import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import type { AppBskyFeedDefs, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
-import { createBatchedFetch } from '../utils/batch-fetch';
-
 import { getCachedPost, mergePost, type SignalizedPost } from '../stores/posts';
-
-import _getDid from './_did';
+import { createBatchedFetch } from '../utils/batch-fetch';
 
 type Post = AppBskyFeedDefs.PostView;
 type Query = [uid: At.DID, uri: string];

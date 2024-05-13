@@ -1,11 +1,10 @@
 import type { SignalizedList } from '~/api/stores/lists';
 
 import { LINK_PROFILE, useLinking } from '~/com/components/Link';
+import ListMembersList from '~/com/components/lists/ListMembersList';
 
 import PaneDialog from '../PaneDialog';
 import PaneDialogHeader from '../PaneDialogHeader';
-
-import ListMembersList from '~/com/components/lists/ListMembersList';
 
 export interface ListMembersPaneDialogProps {
 	/** Expected to be static */

@@ -1,21 +1,26 @@
-import { type Signal, For, batch, createSignal, onMount } from 'solid-js';
+import { For, batch, createSignal, onMount, type Signal } from 'solid-js';
 
 import {
-	type KeywordFilterMatcher,
 	PreferenceHide,
 	PreferenceIgnore,
 	PreferenceWarn,
+	type KeywordFilterMatcher,
 	type KeywordPreference,
 } from '~/api/moderation';
 
-import { formatAbsDateTime } from '~/utils/intl/time';
 import { model, refs } from '~/utils/input';
+import { formatAbsDateTime } from '~/utils/intl/time';
 
 import { openModal } from '~/com/globals/modals';
 import { bustModeration } from '~/com/globals/shared';
 
 import { preferences } from '../../../../globals/settings';
 
+import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
+import AddIcon from '~/com/icons/baseline-add';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+import CloseIcon from '~/com/icons/baseline-close';
+import FormatLetterMatchesIcon from '~/com/icons/baseline-format-letter-matches';
 import { Button } from '~/com/primitives/button';
 import { IconButton } from '~/com/primitives/icon-button';
 import { Input } from '~/com/primitives/input';
@@ -27,16 +32,9 @@ import {
 	ListGroupHeader,
 } from '~/com/primitives/list-box';
 
-import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
-
 import DateTimeDialog from '~/desktop/components/dialogs/DateTimeDialog';
 
-import AddIcon from '~/com/icons/baseline-add';
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
-import CloseIcon from '~/com/icons/baseline-close';
-import FormatLetterMatchesIcon from '~/com/icons/baseline-format-letter-matches';
-
-import { type ViewParams, VIEW_KEYWORD_FILTER_FORM, useViewRouter } from '../_router';
+import { VIEW_KEYWORD_FILTER_FORM, useViewRouter, type ViewParams } from '../_router';
 
 import { SelectionItem } from '../_components';
 

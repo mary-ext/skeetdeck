@@ -1,8 +1,6 @@
-import { type Component, lazy } from 'solid-js';
+import { lazy, type Component } from 'solid-js';
 
 import {
-	type PaneConfig,
-	type PaneType,
 	PANE_TYPE_FEED,
 	PANE_TYPE_HOME,
 	PANE_TYPE_LIST,
@@ -10,6 +8,8 @@ import {
 	PANE_TYPE_PROFILE,
 	PANE_TYPE_SEARCH,
 	PANE_TYPE_THREAD,
+	type PaneConfig,
+	type PaneType,
 } from '../../globals/panes';
 
 export interface PaneRouterProps {

@@ -9,21 +9,18 @@ import { formatQueryError } from '~/api/utils/misc';
 
 import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';
 
-import { type Signal, signal } from '~/utils/signals';
+import { signal, type Signal } from '~/utils/signals';
 
 import { preferences } from '~/desktop/globals/settings';
 
-import { IconButton } from '~/com/primitives/icon-button';
-import { loadMoreBtn } from '~/com/primitives/interactive';
-
 import CircularProgress from '~/com/components/CircularProgress';
 import { VirtualContainer } from '~/com/components/VirtualContainer';
-
 import ProfileItem, { type ProfileItemAccessory } from '~/com/components/items/ProfileItem';
-
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import VisibilityIcon from '~/com/icons/baseline-visibility';
 import VisibilityOffIcon from '~/com/icons/baseline-visibility-off';
+import { IconButton } from '~/com/primitives/icon-button';
+import { loadMoreBtn } from '~/com/primitives/interactive';
 
 import { useViewRouter } from '../_router';
 

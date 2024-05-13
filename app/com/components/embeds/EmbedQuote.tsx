@@ -1,29 +1,26 @@
 import { type JSX } from 'solid-js';
 
 import type { AppBskyEmbedRecord, AppBskyFeedPost } from '~/api/atp-schema';
-import { getRecordId } from '~/api/utils/misc';
-
 import {
-	type ModerationCause,
 	ContextContentList,
 	ContextContentMedia,
 	getModerationUI,
+	type ModerationCause,
 } from '~/api/moderation';
 import { decideQuote } from '~/api/moderation/entities/quote';
+import { getRecordId } from '~/api/utils/misc';
 
 import { clsx } from '~/utils/misc';
 
 import { getModerationOptions } from '../../globals/shared';
 
 import { Interactive } from '../../primitives/interactive';
-
 import { LINK_POST, Link } from '../Link';
 import TimeAgo from '../TimeAgo';
-
-import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
-
 import ContentWarning from '../moderation/ContentWarning';
 import EmbedImage from './EmbedImage';
+
+import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 type EmbeddedPostRecord = AppBskyEmbedRecord.ViewRecord;
 type PostRecord = AppBskyFeedPost.Record;

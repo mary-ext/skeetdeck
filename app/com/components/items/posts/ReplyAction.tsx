@@ -1,15 +1,13 @@
-import { type JSX, untrack } from 'solid-js';
+import { untrack, type JSX } from 'solid-js';
 
 import { makeEventListener } from '@solid-primitives/event-listener';
 
-import { getRecordId } from '~/api/utils/misc';
-
 import type { SignalizedPost } from '~/api/stores/posts';
+import { getRecordId } from '~/api/utils/misc';
 
 import { assert } from '~/utils/misc';
 
 import { Button } from '../../../primitives/button';
-
 import { Flyout, offsetlessMiddlewares } from '../../Flyout';
 import { LINK_REPLY, useLinking } from '../../Link';
 

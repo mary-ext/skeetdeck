@@ -1,10 +1,10 @@
 import {
+	InfiniteQueryObserver,
 	type DefaultError,
 	type InfiniteData,
 	type QueryClient,
 	type QueryKey,
 	type QueryObserver,
-	InfiniteQueryObserver,
 } from '@tanstack/query-core';
 
 import { createBaseQuery } from './createBaseQuery.ts';

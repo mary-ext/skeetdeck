@@ -1,7 +1,5 @@
 import { multiagent } from '../globals/agent';
-
 import type { SignalizedProfile } from '../stores/profiles';
-
 import { createToggleMutation } from '../utils/toggle-mutation';
 
 const createProfileMuteMutation = (profile: SignalizedProfile) => {

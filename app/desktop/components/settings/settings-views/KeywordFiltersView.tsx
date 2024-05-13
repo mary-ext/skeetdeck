@@ -4,14 +4,13 @@ import { PreferenceHide, PreferenceIgnore, PreferenceWarn } from '~/api/moderati
 
 import { preferences } from '~/desktop/globals/settings';
 
-import { IconButton } from '~/com/primitives/icon-button';
-
 import AddIcon from '~/com/icons/baseline-add';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
+import { IconButton } from '~/com/primitives/icon-button';
+import { ListBox, ListBoxItemChevron, ListBoxItemInteractive } from '~/com/primitives/list-box';
 
 import { VIEW_KEYWORD_FILTER_FORM, useViewRouter } from './_router';
-import { ListBox, ListBoxItemChevron, ListBoxItemInteractive } from '~/com/primitives/list-box';
 
 const KeywordFiltersView = () => {
 	const router = useViewRouter();

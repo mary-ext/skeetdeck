@@ -4,7 +4,6 @@ import type { AppBskyEmbedRecord, AppBskyFeedDefs, At } from '~/api/atp-schema';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import { LINK_POST, Link } from '../Link';
-
 import EmbedRecordNotFound from './EmbedRecordNotFound';
 
 type EmbeddedBlockedRecord = AppBskyEmbedRecord.ViewBlocked | AppBskyFeedDefs.BlockedPost;

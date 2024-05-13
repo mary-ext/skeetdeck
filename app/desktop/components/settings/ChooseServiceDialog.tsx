@@ -3,7 +3,7 @@ import { createSignal } from 'solid-js';
 import { BskyXRPC } from '@mary/bluesky-client';
 import { createMutation } from '@mary/solid-query';
 
-import { type DataServer, DEFAULT_DATA_SERVERS } from '~/api/globals/defaults';
+import { DEFAULT_DATA_SERVERS, type DataServer } from '~/api/globals/defaults';
 import { formatQueryError } from '~/api/utils/misc';
 
 import { createRadioModel, model, mutationAutofocus, refs } from '~/utils/input';
@@ -13,12 +13,10 @@ import { closeModal } from '~/com/globals/modals';
 
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
 import Radio from '~/com/components/inputs/Radio';
-
+import GlobeIcon from '~/com/icons/baseline-globe';
 import { Button } from '~/com/primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
 import { Input } from '~/com/primitives/input';
-
-import GlobeIcon from '~/com/icons/baseline-globe';
 
 export interface ChooseServiceDialogProps {
 	serviceUri?: string;

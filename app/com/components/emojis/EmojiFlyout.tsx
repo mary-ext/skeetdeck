@@ -1,4 +1,4 @@
-import { type JSX, Suspense, lazy } from 'solid-js';
+import { Suspense, lazy, type JSX } from 'solid-js';
 
 import { autoPlacement, shift } from '@floating-ui/dom';
 

@@ -2,10 +2,8 @@ import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
-
-import { mergeProfile } from '../stores/profiles';
-
 import { moderateProfileList } from '../moderation/utils';
+import { mergeProfile } from '../stores/profiles';
 
 export const getLikesKey = (uid: At.DID, uri: string, limit = 25) => {
 	return ['getLikes', uid, uri, limit] as const;

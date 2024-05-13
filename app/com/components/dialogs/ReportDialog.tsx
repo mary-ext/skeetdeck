@@ -26,6 +26,9 @@ import { clsx, getUniqueId } from '~/utils/misc';
 import { closeModal, useModalState } from '../../globals/modals';
 import { getModerationOptions } from '../../globals/shared';
 
+import ArrowLeftIcon from '../../icons/baseline-arrow-left';
+import ChevronRightIcon from '../../icons/baseline-chevron-right';
+import CloseIcon from '../../icons/baseline-close';
 import { Button } from '../../primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot } from '../../primitives/dialog';
 import { IconButton } from '../../primitives/icon-button';
@@ -38,12 +41,7 @@ import {
 	ListGroupHeader,
 } from '../../primitives/list-box';
 import { Textarea } from '../../primitives/textarea';
-
 import DialogOverlay from './DialogOverlay';
-
-import ArrowLeftIcon from '../../icons/baseline-arrow-left';
-import ChevronRightIcon from '../../icons/baseline-chevron-right';
-import CloseIcon from '../../icons/baseline-close';
 
 import DefaultLabelerAvatar from '../../assets/default-labeler-avatar.svg?url';
 

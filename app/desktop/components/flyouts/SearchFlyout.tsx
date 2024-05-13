@@ -1,17 +1,16 @@
-import { type JSX, For, createMemo, createSignal } from 'solid-js';
+import { For, createMemo, createSignal, type JSX } from 'solid-js';
 
 import { createQuery } from '@mary/solid-query';
 
 import type { AppBskyActorDefs, At } from '~/api/atp-schema';
-
 import { searchProfilesTypeahead, searchProfilesTypeaheadKey } from '~/api/queries/search-profiles-typeahead';
 
 import { createDebouncedValue, createDerivedSignal } from '~/utils/hooks';
 import { model } from '~/utils/input';
 import { clsx } from '~/utils/misc';
 
-import SearchInput from '~/com/components/inputs/SearchInput';
 import CircularProgress from '~/com/components/CircularProgress';
+import SearchInput from '~/com/components/inputs/SearchInput';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 

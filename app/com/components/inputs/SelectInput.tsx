@@ -1,4 +1,4 @@
-import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down';
+import ArrowDropDownIcon from '../../icons/baseline-arrow-drop-down';
 
 export interface SelectItem<T extends string = string> {
 	value: T;

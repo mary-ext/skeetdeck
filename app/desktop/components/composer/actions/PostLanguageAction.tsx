@@ -9,11 +9,9 @@ import { openModal } from '~/com/globals/modals';
 
 import { preferences } from '~/desktop/globals/settings';
 
-import { MenuItem, MenuRoot } from '~/com/primitives/menu';
-
 import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
-
 import CheckIcon from '~/com/icons/baseline-check';
+import { MenuItem, MenuRoot } from '~/com/primitives/menu';
 
 import CustomPostLanguageDialog from '../dialogs/CustomPostLanguageDialog';
 

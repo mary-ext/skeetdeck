@@ -6,6 +6,7 @@ import { mapDefined } from '~/utils/misc';
 
 import { preferences } from '~/desktop/globals/settings';
 
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 import {
 	ListBox,
 	ListBoxItemChevron,
@@ -15,11 +16,9 @@ import {
 	ListGroupHeader,
 } from '~/com/primitives/list-box';
 
-import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
-
 import { VIEW_ADDITIONAL_LANGUAGE, VIEW_EXCLUDED_TRANSLATION, useViewRouter } from './_router';
 
-import { type SelectOption, CheckItem, SelectionItem } from './_components';
+import { CheckItem, SelectionItem, type SelectOption } from './_components';
 
 const LanguageView = () => {
 	const router = useViewRouter();

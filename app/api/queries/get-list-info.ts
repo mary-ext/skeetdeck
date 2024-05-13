@@ -2,7 +2,6 @@ import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
-
 import { getCachedList, mergeList } from '../stores/lists';
 
 export const getListInfoKey = (uid: At.DID, uri: string) => {

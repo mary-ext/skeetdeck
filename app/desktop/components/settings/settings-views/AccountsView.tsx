@@ -1,22 +1,20 @@
-import { type JSX, For } from 'solid-js';
+import { For, type JSX } from 'solid-js';
 
 import { useQueryClient } from '@mary/solid-query';
 
 import type { MultiagentAccountData } from '~/api/classes/multiagent';
-import { multiagent } from '~/api/globals/agent.js';
+import { multiagent } from '~/api/globals/agent';
 
 import { openModal } from '~/com/globals/modals';
 
-import { IconButton } from '~/com/primitives/icon-button';
-import { ListBox, ListBoxItemChevron, ListBoxItemInteractive } from '~/com/primitives/list-box';
-import { MenuItem, MenuRoot } from '~/com/primitives/menu';
-
 import { Flyout } from '~/com/components/Flyout';
 import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
-
 import AddIcon from '~/com/icons/baseline-add';
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
+import { IconButton } from '~/com/primitives/icon-button';
+import { ListBox, ListBoxItemChevron, ListBoxItemInteractive } from '~/com/primitives/list-box';
+import { MenuItem, MenuRoot } from '~/com/primitives/menu';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 

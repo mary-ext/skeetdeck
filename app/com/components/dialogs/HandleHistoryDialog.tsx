@@ -5,18 +5,18 @@ import type { At } from '~/api/atp-schema';
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
 import { dequal } from '~/utils/dequal';
+import { formatAbsDateTime } from '~/utils/intl/time';
 
 import { closeModal } from '../../globals/modals';
 
 import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
 import { IconButton } from '../../primitives/icon-button';
 
-import GenericErrorView from '../views/GenericErrorView';
 import CircularProgress from '../CircularProgress';
+import GenericErrorView from '../views/GenericErrorView';
 import DialogOverlay from './DialogOverlay';
 
 import CloseIcon from '../../icons/baseline-close';
-import { formatAbsDateTime } from '~/utils/intl/time';
 
 export interface HandleHistoryDialogProps {
 	/** Expected to be static */

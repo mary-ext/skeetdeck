@@ -8,13 +8,12 @@ import { model, modelChecked } from '~/utils/input';
 
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
 import Checkbox from '~/com/components/inputs/Checkbox';
-
 import { Button } from '~/com/primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
 import { Input } from '~/com/primitives/input';
 
 import { useComposer } from '../../ComposerContext';
-import { type ComposerDraft, getDraftDb } from '../../utils/draft-db';
+import { getDraftDb, type ComposerDraft } from '../../utils/draft-db';
 import type { GateState } from '../../utils/state';
 
 const serializeGateState = (state: GateState): GateState => {

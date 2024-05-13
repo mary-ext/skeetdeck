@@ -3,21 +3,18 @@ import type { JSX } from 'solid-js';
 import { createQuery } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
-
 import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/get-list-info';
 
-import { type CustomListPaneConfig, PANE_TYPE_LIST } from '../../../globals/panes';
+import { PANE_TYPE_LIST, type CustomListPaneConfig } from '../../../globals/panes';
 import { addPane } from '../../../globals/settings';
 
-import { IconButton } from '~/com/primitives/icon-button';
-
-import TimelineList from '~/com/components/lists/TimelineList';
-import ListMembersList from '~/com/components/lists/ListMembersList';
-import GenericErrorView from '~/com/components/views/GenericErrorView';
 import CircularProgress from '~/com/components/CircularProgress';
 import { LINK_PROFILE, useLinking } from '~/com/components/Link';
-
+import ListMembersList from '~/com/components/lists/ListMembersList';
+import TimelineList from '~/com/components/lists/TimelineList';
+import GenericErrorView from '~/com/components/views/GenericErrorView';
 import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
+import { IconButton } from '~/com/primitives/icon-button';
 
 import { usePaneContext, usePaneModalState } from '../PaneContext';
 import PaneDialog from '../PaneDialog';

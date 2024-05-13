@@ -5,10 +5,8 @@ import { addPane } from '~/desktop/globals/settings';
 
 import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel';
 import TimelineList from '~/com/components/lists/TimelineList';
-
-import { IconButton } from '~/com/primitives/icon-button';
-
 import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
+import { IconButton } from '~/com/primitives/icon-button';
 
 import { usePaneContext, usePaneModalState } from '../PaneContext';
 import PaneDialog from '../PaneDialog';

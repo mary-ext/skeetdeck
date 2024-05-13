@@ -1,40 +1,37 @@
-import { type JSX, createEffect, createSignal, lazy } from 'solid-js';
+import { createEffect, createSignal, lazy, type JSX } from 'solid-js';
 
 import {
-	type InfiniteData,
 	createInfiniteQuery,
+	createMutation,
 	createQuery,
 	useQueryClient,
-	createMutation,
+	type InfiniteData,
 } from '@mary/solid-query';
-
-import { resetInfiniteData } from '~/api/utils/query';
 
 import { updateNotificationsSeen } from '~/api/mutations/update-notifications-seen';
 import {
-	type NotificationsLatestResult,
-	type NotificationsPage,
 	REASONS,
 	getNotifications,
 	getNotificationsKey,
 	getNotificationsLatest,
 	getNotificationsLatestKey,
+	type NotificationsLatestResult,
+	type NotificationsPage,
 } from '~/api/queries/get-notifications';
+import { resetInfiniteData } from '~/api/utils/query';
 
 import type { NotificationsPaneConfig } from '../../../globals/panes';
 
 import List from '~/com/components/List';
 import Notification from '~/com/components/items/Notification';
-
-import { IconButton } from '~/com/primitives/icon-button';
-
 import CheckAllIcon from '~/com/icons/baseline-check-all';
 import SettingsOutlinedIcon from '~/com/icons/outline-settings';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import { usePaneContext } from '../PaneContext';
 import Pane from '../Pane';
 import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
+import { usePaneContext } from '../PaneContext';
 
 const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));
 const NotificationsPaneSettings = lazy(() => import('../settings/NotificationsPaneSettings'));

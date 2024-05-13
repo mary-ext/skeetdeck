@@ -1,9 +1,8 @@
 import type { JSX } from 'solid-js';
 
-import { IconButton } from '~/com/primitives/icon-button';
-
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import CloseIcon from '~/com/icons/baseline-close';
+import { IconButton } from '~/com/primitives/icon-button';
 
 import { usePaneModalState } from './PaneContext';
 

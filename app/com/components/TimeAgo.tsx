@@ -1,4 +1,4 @@
-import { type Accessor, type JSX, createSignal, createRenderEffect } from 'solid-js';
+import { createRenderEffect, createSignal, type Accessor, type JSX } from 'solid-js';
 
 import { formatAbsDateTime, formatReltime } from '~/utils/intl/time';
 

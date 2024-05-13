@@ -1,6 +1,6 @@
 import { createEffect, createSignal } from 'solid-js';
 
-import { type InfiniteData, createMutation } from '@mary/solid-query';
+import { createMutation, type InfiniteData } from '@mary/solid-query';
 
 import type { AppBskyEmbedImages, AppBskyFeedThreadgate, Brand } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
@@ -10,15 +10,15 @@ import type { ThreadData } from '~/api/models/threads';
 import { getPost, getPostKey } from '~/api/queries/get-post';
 import type { getPostThreadKey } from '~/api/queries/get-post-thread';
 import type { TimelinePage } from '~/api/queries/get-timeline';
-import { type SignalizedPost, removeCachedPost } from '~/api/stores/posts';
+import { removeCachedPost, type SignalizedPost } from '~/api/stores/posts';
 import { producePostDelete } from '~/api/updaters/delete-post';
 
 import { serializeRichText } from '~/api/richtext/utils';
 
-import { type ComposedImage, getImageFromBlob } from '~/utils/image';
+import { getImageFromBlob, type ComposedImage } from '~/utils/image';
 import { modelChecked } from '~/utils/input';
-import { signal } from '~/utils/signals';
 import { mapDefined } from '~/utils/misc';
+import { signal } from '~/utils/signals';
 
 import { closeModal, useModalState } from '../../globals/modals';
 

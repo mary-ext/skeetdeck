@@ -6,11 +6,6 @@ import { mapDefined } from '~/utils/misc';
 import type { AppBskyLabelerDefs } from '../atp-schema';
 
 import {
-	type LabelBlur,
-	type LabelDefinitionMapping,
-	type LabelPreference,
-	type LabelSeverity,
-	type ModerationService,
 	BlurContent,
 	BlurMedia,
 	BlurNone,
@@ -21,6 +16,11 @@ import {
 	SeverityAlert,
 	SeverityInform,
 	SeverityNone,
+	type LabelBlur,
+	type LabelDefinitionMapping,
+	type LabelPreference,
+	type LabelSeverity,
+	type ModerationService,
 } from '.';
 
 export const interpretServiceDefinition = (

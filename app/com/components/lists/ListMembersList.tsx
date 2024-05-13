@@ -1,13 +1,13 @@
-import { type InfiniteData, createInfiniteQuery, useQueryClient } from '@mary/solid-query';
+import { createInfiniteQuery, useQueryClient, type InfiniteData } from '@mary/solid-query';
 
 import { multiagent } from '~/api/globals/agent';
 import { getRecordId } from '~/api/utils/misc';
 
-import { type ListMembersPage, getListMembers, getListMembersKey } from '~/api/queries/get-list-members';
+import { getListMembers, getListMembersKey, type ListMembersPage } from '~/api/queries/get-list-members';
 import {
-	type ListMembership,
 	findMembership,
 	getListMembershipsKey,
+	type ListMembership,
 } from '~/api/queries/get-list-memberships';
 import type { SignalizedList } from '~/api/stores/lists';
 
@@ -25,8 +25,8 @@ import { VirtualContainer } from '../VirtualContainer';
 import DeleteIcon from '../../icons/baseline-delete';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
 
-import List from '../List';
 import ProfileItem, { type ProfileItemAccessory, type ProfileItemProps } from '../items/ProfileItem';
+import List from '../List';
 
 export interface ListMembersListProps {
 	/** Expected to be static */

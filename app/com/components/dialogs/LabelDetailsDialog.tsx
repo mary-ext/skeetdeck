@@ -1,11 +1,10 @@
-import { type LabelModerationCause, type ModerationService, getLocalizedLabel } from '~/api/moderation';
+import { getLocalizedLabel, type LabelModerationCause, type ModerationService } from '~/api/moderation';
 
 import { closeModal } from '../../globals/modals';
 
 import { Button } from '../../primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
 import { ListBox, ListBoxItem } from '../../primitives/list-box';
-
 import DialogOverlay from './DialogOverlay';
 
 export interface LabelDetailsDialogProps {

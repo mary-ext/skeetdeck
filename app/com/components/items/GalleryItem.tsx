@@ -1,4 +1,4 @@
-import { type JSX, lazy, createMemo } from 'solid-js';
+import { createMemo, lazy, type JSX } from 'solid-js';
 
 import type { AppBskyEmbedImages } from '~/api/atp-schema';
 import { getRecordId } from '~/api/utils/misc';
@@ -8,8 +8,8 @@ import type { SignalizedPost } from '~/api/stores/posts';
 import { ContextContentMedia, getModerationUI } from '~/api/moderation';
 import { moderatePost } from '~/api/moderation/entities/post';
 
-import { formatCompact } from '~/utils/intl/number';
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction';
+import { formatCompact } from '~/utils/intl/number';
 import { clsx } from '~/utils/misc';
 
 import { openModal } from '../../globals/modals';

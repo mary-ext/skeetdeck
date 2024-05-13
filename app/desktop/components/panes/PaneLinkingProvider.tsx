@@ -1,4 +1,4 @@
-import { type JSX, lazy } from 'solid-js';
+import { lazy, type JSX } from 'solid-js';
 
 import { isLinkValid } from '~/api/richtext/renderer';
 
@@ -7,24 +7,24 @@ import { isCtrlKeyPressed, isElementAltClicked } from '~/utils/interaction';
 import { openModal } from '~/com/globals/modals';
 
 import {
-	type LinkingContextObject,
 	LINK_EXTERNAL,
-	LINK_FEED_LIKED_BY,
 	LINK_FEED,
+	LINK_FEED_LIKED_BY,
 	LINK_LIST,
+	LINK_POST,
 	LINK_POST_LIKED_BY,
 	LINK_POST_REPOSTED_BY,
-	LINK_POST,
+	LINK_PROFILE,
 	LINK_PROFILE_EDIT,
 	LINK_PROFILE_FEEDS,
 	LINK_PROFILE_FOLLOWERS,
 	LINK_PROFILE_FOLLOWS,
 	LINK_PROFILE_LISTS,
-	LINK_PROFILE,
 	LINK_QUOTE,
 	LINK_REPLY,
-	LinkingContext,
 	LINK_TAG,
+	LinkingContext,
+	type LinkingContextObject,
 } from '~/com/components/Link';
 
 import { useComposer } from '../composer/ComposerContext';

@@ -1,4 +1,4 @@
-import { type JSX, createMemo } from 'solid-js';
+import { createMemo, type JSX } from 'solid-js';
 
 import type { SignalizedProfile } from '~/api/stores/profiles';
 

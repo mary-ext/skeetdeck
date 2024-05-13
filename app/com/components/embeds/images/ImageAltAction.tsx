@@ -1,7 +1,6 @@
 import type { JSX } from 'solid-js';
 
 import { Button } from '../../../primitives/button';
-
 import { Flyout, offsetlessMiddlewares } from '../../Flyout';
 
 export interface ImageAltActionProps {

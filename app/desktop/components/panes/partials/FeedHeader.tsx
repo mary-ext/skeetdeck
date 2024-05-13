@@ -1,22 +1,19 @@
-import { type JSX, lazy } from 'solid-js';
-
-import { getRecordId } from '~/api/utils/misc';
+import { lazy, type JSX } from 'solid-js';
 
 import { updateFeedLike } from '~/api/mutations/like-feed';
 import type { SignalizedFeed } from '~/api/stores/feeds';
+import { getRecordId } from '~/api/utils/misc';
 
 import { formatCompact } from '~/utils/intl/number';
 
 import { openModal } from '~/com/globals/modals';
 
-import { BoxedIconButton } from '~/com/primitives/boxed-icon-button';
-
 import { LINK_FEED_LIKED_BY, LINK_PROFILE, Link } from '~/com/components/Link';
 import RichTextRenderer from '~/com/components/RichTextRenderer';
 import { VirtualContainer } from '~/com/components/VirtualContainer';
-
 import FavoriteIcon from '~/com/icons/baseline-favorite';
 import FavoriteOutlinedIcon from '~/com/icons/outline-favorite';
+import { BoxedIconButton } from '~/com/primitives/boxed-icon-button';
 
 import DefaultFeedAvatar from '~/com/assets/default-feed-avatar.svg?url';
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';

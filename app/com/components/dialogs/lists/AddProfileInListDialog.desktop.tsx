@@ -2,24 +2,24 @@ import { createEffect, createMemo, createSignal, lazy } from 'solid-js';
 
 import * as TID from '@mary/atproto-tid';
 import {
-	type InfiniteData,
 	createInfiniteQuery,
 	createMutation,
 	createQuery,
 	useQueryClient,
+	type InfiniteData,
 } from '@mary/solid-query';
 
 import type { AppBskyGraphListitem, Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
-import { multiagent, renderAccountName } from '~/api/globals/agent';
 import { renderListPurpose } from '~/api/display';
+import { multiagent, renderAccountName } from '~/api/globals/agent';
 import { getCurrentDate, getRecordId } from '~/api/utils/misc';
 
 import type { ListMembersPage } from '~/api/queries/get-list-members';
 import {
-	type ListMembership,
 	getListMemberships,
 	getListMembershipsKey,
 	listMembershipsOptions,
+	type ListMembership,
 } from '~/api/queries/get-list-memberships';
 import { getProfileKey } from '~/api/queries/get-profile';
 import { getProfileLists, getProfileListsKey } from '~/api/queries/get-profile-lists';
@@ -32,17 +32,15 @@ import { difference } from '~/utils/sets';
 import { closeModal, openModal, useModalState } from '../../../globals/modals';
 
 import { Button } from '~/com/primitives/button';
-import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog';
-import { IconButton } from '../../../primitives/icon-button';
 import { Interactive } from '~/com/primitives/interactive';
-
-import FilterBar from '../../inputs/FilterBar';
-import DialogOverlay from '../DialogOverlay';
-import List from '../../List';
-
 import AddIcon from '../../../icons/baseline-add';
 import CheckIcon from '../../../icons/baseline-check';
 import CloseIcon from '../../../icons/baseline-close';
+import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog';
+import { IconButton } from '../../../primitives/icon-button';
+import List from '../../List';
+import FilterBar from '../../inputs/FilterBar';
+import DialogOverlay from '../DialogOverlay';
 
 import DefaultListAvatar from '../../../assets/default-list-avatar.svg?url';
 

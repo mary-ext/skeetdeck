@@ -2,7 +2,6 @@ import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
-
 import { isDid } from '../utils/misc';
 
 export const getResolvedHandleKey = (uid: At.DID, actor: string) => {

@@ -1,4 +1,4 @@
-import { type JSX, For, createSignal, onCleanup } from 'solid-js';
+import { For, createSignal, onCleanup, type JSX } from 'solid-js';
 
 import { autoUpdate, offset } from '@floating-ui/dom';
 import { useFloating } from 'solid-floating-ui';
@@ -7,12 +7,10 @@ import { graphemeLen } from '~/api/richtext/intl';
 
 import { assert, clsx } from '~/utils/misc';
 
-import { Interactive } from '~/com/primitives/interactive';
-
 import { offsetlessMiddlewares } from '~/com/components/Flyout';
-
 import CloseIcon from '~/com/icons/baseline-close';
 import PoundIcon from '~/com/icons/baseline-pound';
+import { Interactive } from '~/com/primitives/interactive';
 
 export interface TagsInputProps {
 	tags: string[];

@@ -1,4 +1,4 @@
-import { type JSX, createMemo, createSignal, onMount } from 'solid-js';
+import { createMemo, createSignal, onMount, type JSX } from 'solid-js';
 
 import { makeEventListener } from '@solid-primitives/event-listener';
 
@@ -6,12 +6,11 @@ import { clsx } from '~/utils/misc';
 
 import { closeModal } from '../../globals/modals';
 
-import { Interactive } from '../../primitives/interactive';
-
 import ArrowLeftIcon from '../../icons/baseline-arrow-left';
 import CloseIcon from '../../icons/baseline-close';
 import VisibilityOutlinedIcon from '../../icons/outline-visibility';
 import VisibilityOffOutlinedIcon from '../../icons/outline-visibility-off';
+import { Interactive } from '../../primitives/interactive';
 
 const isMobile = import.meta.env.VITE_MODE === 'mobile';
 

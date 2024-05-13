@@ -2,9 +2,8 @@ import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import type { AppBskyActorDefs, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
+import { getCachedProfile, mergeProfile, type SignalizedProfile } from '../stores/profiles';
 import { createBatchedFetch } from '../utils/batch-fetch';
-
-import { type SignalizedProfile, getCachedProfile, mergeProfile } from '../stores/profiles';
 
 type ProfileData = AppBskyActorDefs.ProfileViewDetailed;
 type Query = [uid: At.DID, actor: string];

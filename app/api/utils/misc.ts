@@ -1,4 +1,4 @@
-import { type Headers, XRPCError } from '@mary/bluesky-client/xrpc';
+import { XRPCError, type Headers } from '@mary/bluesky-client/xrpc';
 
 import type { At } from '../atp-schema';
 import { MultiagentError } from '../classes/multiagent';

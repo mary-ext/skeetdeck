@@ -1,4 +1,4 @@
-import { type JSX, For } from 'solid-js';
+import { For, type JSX } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
 import { getRecordId, getRepoId } from '~/api/utils/misc';

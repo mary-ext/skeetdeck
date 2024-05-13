@@ -2,10 +2,8 @@ import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
-
-import { mergeProfile } from '../stores/profiles';
-
 import { moderateProfileList } from '../moderation/utils';
+import { mergeProfile } from '../stores/profiles';
 
 export const getPostRepostsKey = (uid: At.DID, uri: string, limit = 25) => {
 	return ['getPostReposts', uid, uri, limit] as const;

@@ -2,21 +2,21 @@ import { createEffect } from 'solid-js';
 
 import { getRecordId } from '~/api/utils/misc';
 
-import type { SignalizedPost } from '~/api/stores/posts';
 import { updatePostLike } from '~/api/mutations/like-post';
+import type { SignalizedPost } from '~/api/stores/posts';
 
 import { formatCompact } from '~/utils/intl/number';
 import { clsx } from '~/utils/misc';
 
-import { type PostLinking, type ProfileLinking, LINK_POST, LINK_PROFILE, Link } from '../Link';
+import { LINK_POST, LINK_PROFILE, Link, type PostLinking, type ProfileLinking } from '../Link';
 import RichTextRenderer from '../RichTextRenderer';
 import TimeAgo from '../TimeAgo';
 
-import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
 import FavoriteIcon from '../../icons/baseline-favorite';
-import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
 import RepeatIcon from '../../icons/baseline-repeat';
+import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
+import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 

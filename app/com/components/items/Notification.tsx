@@ -1,4 +1,4 @@
-import { type Accessor, type JSX, Match, Switch, createSignal } from 'solid-js';
+import { Match, Switch, createSignal, type Accessor, type JSX } from 'solid-js';
 
 import { createQuery } from '@mary/solid-query';
 
@@ -18,8 +18,8 @@ import { clsx } from '~/utils/misc';
 
 import { Interactive } from '~/com/primitives/interactive';
 
-import { LINK_PROFILE, Link } from '../Link';
 import CircularProgress from '../CircularProgress';
+import { LINK_PROFILE, Link } from '../Link';
 import { VirtualContainer } from '../VirtualContainer';
 
 import ChevronRightIcon from '../../icons/baseline-chevron-right';

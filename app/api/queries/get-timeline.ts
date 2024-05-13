@@ -5,34 +5,31 @@ import { assert } from '~/utils/misc';
 import type { AppBskyFeedGetTimeline, AppBskyFeedPost, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 import { systemLanguages } from '../globals/platform';
-
-import { unwrapPostEmbedText } from '../utils/post';
-import { wrapInfiniteQuery } from '../utils/query';
-
 import {
-	type ModerationCause,
-	type ModerationOptions,
+	createTimelineSlices,
+	createUnjoinedSlices,
+	type PostFilter,
+	type SignalizedTimelineItem,
+	type SliceFilter,
+	type TimelineSlice,
+} from '../models/timeline';
+import {
 	ContextContentList,
 	PreferenceHide,
 	TargetContent,
 	decideLabelModeration,
 	decideMutedKeywordModeration,
 	getModerationUI,
+	type ModerationCause,
+	type ModerationOptions,
 } from '../moderation';
+import { unwrapPostEmbedText } from '../utils/post';
+import { wrapInfiniteQuery } from '../utils/query';
 
-import {
-	type PostFilter,
-	type SignalizedTimelineItem,
-	type SliceFilter,
-	type TimelineSlice,
-	createTimelineSlices,
-	createUnjoinedSlices,
-} from '../models/timeline';
-
+import type { AgentInstance } from '../classes/multiagent';
 import type { LanguagePreferences } from '../types';
 
 import _getDid from './_did';
-import type { AgentInstance } from '../classes/multiagent';
 
 export interface HomeTimelineParams {
 	type: 'home';

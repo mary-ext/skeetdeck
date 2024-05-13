@@ -3,9 +3,9 @@ import { createEffect, createMemo, createSignal } from 'solid-js';
 import { createMutation } from '@mary/solid-query';
 
 import type { AppBskyGraphDefs, AppBskyGraphList, At } from '~/api/atp-schema';
+import { ListPurposeLabels } from '~/api/display';
 import { getAccountHandle, multiagent } from '~/api/globals/agent';
 import { getCurrentDate } from '~/api/utils/misc';
-import { ListPurposeLabels } from '~/api/display';
 
 import { uploadBlob } from '~/api/mutations/upload-blob';
 
@@ -16,18 +16,16 @@ import { clsx } from '~/utils/misc';
 
 import { closeModal, useModalState } from '../../../globals/modals';
 
+import CloseIcon from '../../../icons/baseline-close';
 import { Button } from '../../../primitives/button';
 import { DialogBody, DialogHeader, DialogRoot } from '../../../primitives/dialog';
 import { IconButton } from '../../../primitives/icon-button';
 import { Input } from '../../../primitives/input';
-
+import BlobImage from '../../BlobImage';
 import AddPhotoButton from '../../inputs/AddPhotoButton';
 import SelectInput from '../../inputs/SelectInput';
 import RichtextComposer from '../../richtext/RichtextComposer';
-import BlobImage from '../../BlobImage';
 import DialogOverlay from '../DialogOverlay';
-
-import CloseIcon from '../../../icons/baseline-close';
 
 type ListPurpose = AppBskyGraphDefs.ListPurpose;
 

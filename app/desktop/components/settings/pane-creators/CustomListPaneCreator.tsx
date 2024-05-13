@@ -7,19 +7,18 @@ import { multiagent, renderAccountName } from '~/api/globals/agent';
 
 import { openModal } from '~/com/globals/modals';
 
-import { type CustomListPaneConfig, PANE_TYPE_LIST } from '../../../globals/panes';
-
-import { DialogBody } from '~/com/primitives/dialog';
-import { Interactive, loadMoreBtn } from '~/com/primitives/interactive';
+import { PANE_TYPE_LIST, type CustomListPaneConfig } from '../../../globals/panes';
 
 import CircularProgress from '~/com/components/CircularProgress';
 import { VirtualContainer } from '~/com/components/VirtualContainer';
 import FilterBar from '~/com/components/inputs/FilterBar';
+import { DialogBody } from '~/com/primitives/dialog';
+import { Interactive, loadMoreBtn } from '~/com/primitives/interactive';
 
+import AddIcon from '~/com/icons/baseline-add';
 import type { PaneCreatorProps } from './types';
 
 import DefaultListAvatar from '~/com/assets/default-list-avatar.svg?url';
-import AddIcon from '~/com/icons/baseline-add';
 
 const AddListDialog = lazy(() => import('~/com/components/dialogs/lists/AddListDialog'));
 

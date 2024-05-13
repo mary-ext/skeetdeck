@@ -1,6 +1,6 @@
 import type { QueryClient, QueryFilters } from '@tanstack/query-core';
 
-import { type Accessor, createSignal, onCleanup, untrack } from 'solid-js';
+import { createSignal, onCleanup, untrack, type Accessor } from 'solid-js';
 
 import { useQueryClient } from './QueryClientProvider.tsx';
 

@@ -1,9 +1,9 @@
-import { type JSX, createMemo } from 'solid-js';
+import { createMemo, type JSX } from 'solid-js';
 
 import { clsx } from '~/utils/misc';
 
-import { preferences } from '../../globals/settings';
 import { PaneSize, SpecificPaneSize } from '../../globals/panes';
+import { preferences } from '../../globals/settings';
 
 import { usePaneContext } from './PaneContext';
 

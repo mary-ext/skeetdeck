@@ -1,24 +1,24 @@
 import { For, Match, Switch, createEffect } from 'solid-js';
 
-import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@mary/solid-query';
+import { createInfiniteQuery, createQuery, useQueryClient, type InfiniteData } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
 import { getQueryErrorInfo, resetInfiniteData } from '~/api/utils/query';
 
 import {
-	type TimelineLatestResult,
-	type TimelinePage,
-	type TimelineParams,
 	getTimeline,
 	getTimelineKey,
 	getTimelineLatest,
 	getTimelineLatestKey,
+	type TimelineLatestResult,
+	type TimelinePage,
+	type TimelineParams,
 } from '~/api/queries/get-timeline';
 
 import { getTimelineQueryMeta } from '../../globals/shared';
 
-import GenericErrorView from '../views/GenericErrorView';
 import CircularProgress from '../CircularProgress';
+import GenericErrorView from '../views/GenericErrorView';
 
 import { loadMoreBtn, loadNewBtn } from '../../primitives/interactive';
 

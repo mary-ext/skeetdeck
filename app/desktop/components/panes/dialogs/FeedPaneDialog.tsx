@@ -1,17 +1,14 @@
 import { createQuery } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
-
 import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info';
 
-import { type CustomFeedPaneConfig, PANE_TYPE_FEED } from '../../../globals/panes';
+import { PANE_TYPE_FEED, type CustomFeedPaneConfig } from '../../../globals/panes';
 import { addPane } from '../../../globals/settings';
 
-import { IconButton } from '~/com/primitives/icon-button';
-
 import TimelineList from '~/com/components/lists/TimelineList';
-
 import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
+import { IconButton } from '~/com/primitives/icon-button';
 
 import { usePaneContext, usePaneModalState } from '../PaneContext';
 import PaneDialog from '../PaneDialog';

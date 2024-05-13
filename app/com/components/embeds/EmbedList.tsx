@@ -5,7 +5,6 @@ import { renderListPurpose } from '~/api/display';
 import { getRecordId } from '~/api/utils/misc';
 
 import { Interactive } from '../../primitives/interactive';
-
 import { LINK_LIST, Link } from '../Link';
 
 import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';

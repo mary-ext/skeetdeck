@@ -1,5 +1,5 @@
-import { createUtfString, getUtf8Length, sliceUtf8 } from './unicode';
 import type { Facet, LinkFeature, MentionFeature, RichTextSegment, TagFeature } from './types';
+import { createUtfString, getUtf8Length, sliceUtf8 } from './unicode';
 
 export interface RichTextOptions {
 	text: string;

@@ -2,7 +2,6 @@ import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
-
 import { mergeList } from '../stores/lists';
 
 export const getProfileListsKey = (uid: At.DID, actor: string, limit: number = 30) => {

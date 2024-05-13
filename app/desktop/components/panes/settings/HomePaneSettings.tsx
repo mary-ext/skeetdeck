@@ -1,8 +1,8 @@
-import Checkbox from '~/com/components/inputs/Checkbox';
+import type { HomePaneConfig } from '~/desktop/globals/panes';
 
 import { modelChecked } from '~/utils/input';
 
-import type { HomePaneConfig } from '~/desktop/globals/panes';
+import Checkbox from '~/com/components/inputs/Checkbox';
 
 import { usePaneContext } from '../PaneContext';
 

@@ -1,4 +1,4 @@
-import { type Component, Match, Show, Switch, createSignal } from 'solid-js';
+import { Match, Show, Switch, createSignal, type Component } from 'solid-js';
 
 import * as TID from '@mary/atproto-tid';
 
@@ -12,11 +12,6 @@ import { createDerivedSignal } from '~/utils/hooks';
 import { closeModal } from '~/com/globals/modals';
 
 import {
-	type DeckConfig,
-	type HomePaneConfig,
-	type NotificationsPaneConfig,
-	type PaneConfig,
-	type PaneType,
 	PANE_TYPE_FEED,
 	PANE_TYPE_HOME,
 	PANE_TYPE_LIST,
@@ -24,27 +19,30 @@ import {
 	PANE_TYPE_PROFILE,
 	SpecificPaneSize,
 	labelizePaneType,
+	type DeckConfig,
+	type HomePaneConfig,
+	type NotificationsPaneConfig,
+	type PaneConfig,
+	type PaneType,
 } from '../../globals/panes';
-
-import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
-import { IconButton } from '~/com/primitives/icon-button';
-import { Interactive } from '~/com/primitives/interactive';
 
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
 import SelectInput from '~/com/components/inputs/SelectInput';
-
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import CloseIcon from '~/com/icons/baseline-close';
+import PoundIcon from '~/com/icons/baseline-pound';
 import HomeOutlinedIcon from '~/com/icons/outline-home';
 import ListBoxOutlinedIcon from '~/com/icons/outline-list-box';
 import NotificationsOutlinedIcon from '~/com/icons/outline-notifications';
 import PersonOutlinedIcon from '~/com/icons/outline-person';
-import PoundIcon from '~/com/icons/baseline-pound';
+import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
+import { IconButton } from '~/com/primitives/icon-button';
+import { Interactive } from '~/com/primitives/interactive';
 
-import type { AddFn, PaneCreatorProps } from './pane-creators/types';
 import CustomFeedPaneCreator from './pane-creators/CustomFeedPaneCreator';
 import CustomListPaneCreator from './pane-creators/CustomListPaneCreator';
 import ProfilePaneCreator from './pane-creators/ProfilePaneCreator';
+import type { AddFn, PaneCreatorProps } from './pane-creators/types';
 
 export interface AddPaneDialogProps {
 	/** Expected to be static */

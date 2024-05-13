@@ -1,9 +1,9 @@
 import { EQUALS_DEQUAL } from '~/utils/dequal';
-import { type Signal, signal } from '~/utils/signals';
+import { signal, type Signal } from '~/utils/signals';
 
 import type { AppBskyFeedDefs, AppBskyFeedPost, At } from '../atp-schema';
 
-import { type SignalizedProfile, mergeProfile } from './profiles';
+import { mergeProfile, type SignalizedProfile } from './profiles';
 
 type Post = AppBskyFeedDefs.PostView;
 type PostRecord = AppBskyFeedPost.Record;

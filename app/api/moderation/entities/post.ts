@@ -5,12 +5,12 @@ import { unwrapPostEmbedText } from '../../utils/post';
 import type { SignalizedPost } from '../../stores/posts';
 
 import {
-	type ModerationCause,
-	type ModerationOptions,
 	PreferenceWarn,
 	TargetContent,
 	decideLabelModeration,
 	decideMutedKeywordModeration,
+	type ModerationCause,
+	type ModerationOptions,
 } from '..';
 import { cache } from './_shared';
 

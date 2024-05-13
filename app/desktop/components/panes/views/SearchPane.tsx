@@ -1,17 +1,15 @@
-import { type JSX, createSignal, lazy } from 'solid-js';
+import { createSignal, lazy, type JSX } from 'solid-js';
 
 import type { SearchPaneConfig } from '../../../globals/panes';
 
+import TimelineList from '~/com/components/lists/TimelineList';
+import SettingsOutlinedIcon from '~/com/icons/outline-settings';
 import { IconButton } from '~/com/primitives/icon-button';
 
-import TimelineList from '~/com/components/lists/TimelineList';
-
-import SettingsOutlinedIcon from '~/com/icons/outline-settings';
-
-import { usePaneContext } from '../PaneContext';
 import Pane from '../Pane';
 import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
+import { usePaneContext } from '../PaneContext';
 
 const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));
 const SearchPaneSettings = lazy(() => import('../settings/SearchPaneSettings'));

@@ -3,13 +3,13 @@ import { sequal } from '~/utils/dequal';
 import type { SignalizedProfile } from '../../stores/profiles';
 
 import {
-	type ModerationCause,
-	type ModerationOptions,
 	TargetAccount,
 	TargetProfile,
 	decideLabelModeration,
 	decideMutedPermanentModeration,
 	decideMutedTemporaryModeration,
+	type ModerationCause,
+	type ModerationOptions,
 } from '..';
 import { cache } from './_shared';
 

@@ -1,19 +1,16 @@
-import { type JSX, lazy } from 'solid-js';
-
-import { getRecordId } from '~/api/utils/misc';
+import { lazy, type JSX } from 'solid-js';
 
 import type { SignalizedList } from '~/api/stores/lists';
+import { getRecordId } from '~/api/utils/misc';
 
 import { openModal } from '~/com/globals/modals';
 
-import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
-
 import { Flyout } from '~/com/components/Flyout';
-
-import CleaningServicesOutlinedIcon from '~/com/icons/outline-cleaning-services';
 import CopyAllIcon from '~/com/icons/baseline-copy-all';
 import LaunchIcon from '~/com/icons/baseline-launch';
+import CleaningServicesOutlinedIcon from '~/com/icons/outline-cleaning-services';
 import ReportProblemOutlinedIcon from '~/com/icons/outline-report-problem';
+import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 
 const CloneListMembersDialog = lazy(() => import('~/com/components/dialogs/lists/CloneListMembersDialog'));
 const PruneListOrphanDialog = lazy(() => import('~/com/components/dialogs/lists/PruneListOrphanDialog'));

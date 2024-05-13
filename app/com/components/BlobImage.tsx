@@ -1,4 +1,4 @@
-import { type ComponentProps, onCleanup } from 'solid-js';
+import { onCleanup, type ComponentProps } from 'solid-js';
 
 export interface BlobImageProps extends Omit<ComponentProps<'img'>, 'src'> {
 	src: Blob | string | undefined;

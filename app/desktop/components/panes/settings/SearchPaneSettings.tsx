@@ -4,11 +4,9 @@ import { getUniqueId } from '~/utils/misc';
 
 import type { SearchPaneConfig } from '../../../globals/panes';
 
-import { Textarea } from '~/com/primitives/textarea';
-
 import Radio from '~/com/components/inputs/Radio';
-
 import SearchIcon from '~/com/icons/baseline-search';
+import { Textarea } from '~/com/primitives/textarea';
 
 import { usePaneContext } from '../PaneContext';
 

@@ -1,12 +1,10 @@
-import { type JSX, batch } from 'solid-js';
+import { batch, type JSX } from 'solid-js';
 
 import { clsx } from '~/utils/misc';
 
-import { MenuItem, MenuRoot } from '~/com/primitives/menu';
-
 import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
-
 import CheckIcon from '~/com/icons/baseline-check';
+import { MenuItem, MenuRoot } from '~/com/primitives/menu';
 
 export interface ContentWarningActionProps {
 	labels: string[];

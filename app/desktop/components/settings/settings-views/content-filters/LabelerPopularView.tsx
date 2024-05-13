@@ -6,17 +6,16 @@ import { getLabelerPopular, getLabelerPopularKey } from '~/api/queries/get-label
 
 import { formatCompact } from '~/utils/intl/number';
 
+import CircularProgress from '~/com/components/CircularProgress';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 import { IconButton } from '~/com/primitives/icon-button';
 import { Interactive } from '~/com/primitives/interactive';
 import { ListBox, ListBoxBlock, ListBoxItemInteractive } from '~/com/primitives/list-box';
 
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
-import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
-
 import DefaultLabelerAvatar from '~/com/assets/default-labeler-avatar.svg?url';
 
 import { VIEW_LABELER_CONFIG, useViewRouter } from '../_router';
-import CircularProgress from '~/com/components/CircularProgress';
 
 const listItem = Interactive({
 	variant: 'muted',

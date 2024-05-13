@@ -4,7 +4,6 @@ import type { At } from '~/api/atp-schema';
 import { produce } from '~/utils/immer';
 
 import type { TimelineSlice } from '~/api/models/timeline';
-
 import type { TimelinePage, TimelinePageCursor } from '~/api/queries/get-timeline';
 
 export const produceTimelineFilter = (did: At.DID) => {

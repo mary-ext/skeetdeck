@@ -6,26 +6,23 @@ import { XRPCError } from '@mary/bluesky-client/xrpc';
 import { createMutation } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
+import { MultiagentError } from '~/api/classes/multiagent';
 import { getDidInfo } from '~/api/did';
 import { multiagent } from '~/api/globals/agent';
 import { DEFAULT_DATA_SERVERS } from '~/api/globals/defaults';
-import { MultiagentError } from '~/api/classes/multiagent';
-import { formatQueryError } from '~/api/utils/misc';
-
 import { getProfile, getProfileKey } from '~/api/queries/get-profile';
+import { formatQueryError } from '~/api/utils/misc';
 
 import { model, mutationAutofocus, refs } from '~/utils/input';
 
 import { closeModal, openModal, useModalState } from '~/com/globals/modals';
 
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
-
+import EditIcon from '~/com/icons/baseline-edit';
+import GlobeIcon from '~/com/icons/baseline-globe';
 import { Button } from '~/com/primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
 import { Input } from '~/com/primitives/input';
-
-import GlobeIcon from '~/com/icons/baseline-globe';
-import EditIcon from '~/com/icons/baseline-edit';
 
 const ChooseServiceDialog = lazy(() => import('./ChooseServiceDialog'));
 

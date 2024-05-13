@@ -1,13 +1,12 @@
 import { createInfiniteQuery } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
-
 import { getPostReposts, getPostRepostsKey } from '~/api/queries/get-post-reposts';
 
 import { getModerationOptions } from '~/com/globals/shared';
 
-import ProfileList from '~/com/components/lists/ProfileList';
 import { LINK_PROFILE, useLinking } from '~/com/components/Link';
+import ProfileList from '~/com/components/lists/ProfileList';
 
 import { usePaneContext } from '../PaneContext';
 import PaneDialog from '../PaneDialog';

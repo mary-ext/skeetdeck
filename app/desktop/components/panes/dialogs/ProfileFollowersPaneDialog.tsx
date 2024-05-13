@@ -3,7 +3,6 @@ import { createMemo } from 'solid-js';
 import { createInfiniteQuery } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
-
 import {
 	getInitialProfileFollowers,
 	getProfileFollowers,
@@ -12,9 +11,9 @@ import {
 
 import { getModerationOptions } from '~/com/globals/shared';
 
+import { LINK_PROFILE, useLinking } from '~/com/components/Link';
 import { ProfileFollowAccessory } from '~/com/components/items/ProfileItem';
 import ProfileList from '~/com/components/lists/ProfileList';
-import { LINK_PROFILE, useLinking } from '~/com/components/Link';
 
 import { usePaneContext } from '../PaneContext';
 import PaneDialog from '../PaneDialog';

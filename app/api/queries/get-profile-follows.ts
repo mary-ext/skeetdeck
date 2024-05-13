@@ -2,10 +2,8 @@ import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
-
-import { getCachedProfile, mergeProfile } from '../stores/profiles';
-
 import { moderateProfileList } from '../moderation/utils';
+import { getCachedProfile, mergeProfile } from '../stores/profiles';
 
 export const getProfileFollowsKey = (uid: At.DID, actor: string, limit = 25) => {
 	return ['getProfileFollows', uid, actor, limit] as const;

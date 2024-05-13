@@ -1,4 +1,4 @@
-import { type ComponentProps, Show, onCleanup, onMount } from 'solid-js';
+import { Show, onCleanup, onMount, type ComponentProps } from 'solid-js';
 
 export interface ModalProps extends Pick<ComponentProps<'svg'>, 'children'> {
 	open?: boolean;

@@ -1,9 +1,9 @@
-import { type JSX, createSignal, untrack, getOwner, runWithOwner } from 'solid-js';
+import { createSignal, getOwner, runWithOwner, untrack, type JSX } from 'solid-js';
 
 import { makeEventListener } from '@solid-primitives/event-listener';
 
-import { type Middleware, autoUpdate, flip, shift, size } from '@floating-ui/dom';
-import { type Placement, getSide } from '@floating-ui/utils';
+import { autoUpdate, flip, shift, size, type Middleware } from '@floating-ui/dom';
+import { getSide, type Placement } from '@floating-ui/utils';
 import { useFloating } from 'solid-floating-ui';
 
 import { assert } from '~/utils/misc';

@@ -1,6 +1,6 @@
 import type { SignalizedProfile } from '../stores/profiles';
 
-import { type ModerationOptions, ContextProfileList, getModerationUI } from '.';
+import { ContextProfileList, getModerationUI, type ModerationOptions } from '.';
 import { moderateProfile } from './entities/profile';
 
 export const moderateProfileList = (

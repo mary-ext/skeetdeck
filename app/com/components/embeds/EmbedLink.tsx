@@ -1,15 +1,13 @@
-import { type JSX, createEffect, createSignal } from 'solid-js';
+import { createEffect, createSignal, type JSX } from 'solid-js';
 
 import type { AppBskyEmbedExternal } from '~/api/atp-schema';
 
-import { Interactive } from '../../primitives/interactive';
-
 import PlayIcon from '../../icons/baseline-play';
-
+import { Interactive } from '../../primitives/interactive';
 import BlobImage from '../BlobImage';
 import CircularProgress from '../CircularProgress';
 
-import { type Snippet, SnippetType, detectSnippet } from '~/com/lib/snippet';
+import { SnippetType, detectSnippet, type Snippet } from '~/com/lib/snippet';
 
 type EmbeddedLink = AppBskyEmbedExternal.ViewExternal;
 
@@ -109,11 +107,7 @@ const EmbedLink = (props: EmbedLinkProps) => {
 								class="overflow-hidden rounded-md border border-divider"
 								style={/* @once */ { 'aspect-ratio': snippet.r }}
 							>
-								<iframe
-									src={/* @once */ snippet.u}
-									allow="autoplay; fullscreen"
-									class="h-full w-full"
-								/>
+								<iframe src={/* @once */ snippet.u} allow="autoplay; fullscreen" class="h-full w-full" />
 							</div>
 						);
 					}

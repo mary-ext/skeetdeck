@@ -7,9 +7,8 @@ import { clsx } from '~/utils/misc';
 import { getPaneSizeWidth } from '../../globals/panes';
 import { resolvePaneSize } from '../../globals/settings';
 
-import { IconButton } from '~/com/primitives/icon-button';
-
 import DragIndicatorIcon from '~/com/icons/baseline-drag-indicator';
+import { IconButton } from '~/com/primitives/icon-button';
 
 import { usePaneContext } from './PaneContext';
 

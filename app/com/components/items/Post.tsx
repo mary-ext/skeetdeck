@@ -1,34 +1,34 @@
-import { type Accessor, createEffect, createMemo } from 'solid-js';
+import { createEffect, createMemo, type Accessor } from 'solid-js';
 
-import type { SignalizedPost } from '~/api/stores/posts';
 import type { SignalizedTimelineItem } from '~/api/models/timeline';
+import type { SignalizedPost } from '~/api/stores/posts';
 import { getRecordId } from '~/api/utils/misc';
 
 import { updatePostLike } from '~/api/mutations/like-post';
 
 import {
-	type ModerationCause,
 	ContextContentList,
 	ContextProfileMedia,
 	getModerationUI,
+	type ModerationCause,
 } from '~/api/moderation';
 import { moderatePost } from '~/api/moderation/entities/post';
 
-import { formatCompact } from '~/utils/intl/number';
 import { isElementClicked } from '~/utils/interaction';
+import { formatCompact } from '~/utils/intl/number';
 import { clsx } from '~/utils/misc';
 
 import { getModerationOptions } from '../../globals/shared';
 
-import { type PostLinking, type ProfileLinking, LINK_PROFILE, LINK_POST, Link, useLinking } from '../Link';
+import { LINK_POST, LINK_PROFILE, Link, useLinking, type PostLinking, type ProfileLinking } from '../Link';
 import RichTextRenderer from '../RichTextRenderer';
 import TimeAgo from '../TimeAgo';
 
-import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
 import FavoriteIcon from '../../icons/baseline-favorite';
-import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
 import RepeatIcon from '../../icons/baseline-repeat';
+import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
+import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 

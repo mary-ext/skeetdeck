@@ -3,15 +3,15 @@ import * as TID from '@mary/atproto-tid';
 import type { At } from '~/api/atp-schema';
 import { getAccountData } from '~/api/globals/agent';
 
+import { FILTER_ALL } from '~/api/queries/get-notifications';
 import {
-	type DeckConfig,
 	PANE_TYPE_HOME,
 	PANE_TYPE_NOTIFICATIONS,
 	PANE_TYPE_PROFILE,
 	ProfilePaneTab,
 	SpecificPaneSize,
+	type DeckConfig,
 } from '../../globals/panes';
-import { FILTER_ALL } from '~/api/queries/get-notifications';
 
 export const createEmptyDeck = (): DeckConfig => {
 	return {

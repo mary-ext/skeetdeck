@@ -1,6 +1,6 @@
 import { createEffect, createSignal } from 'solid-js';
 
-import { type InfiniteData, createQuery, useQueryClient } from '@mary/solid-query';
+import { createQuery, useQueryClient, type InfiniteData } from '@mary/solid-query';
 
 import type { AppBskyGraphDefs } from '~/api/atp-schema.ts';
 import { getAccountHandle, multiagent } from '~/api/globals/agent.ts';
@@ -14,13 +14,11 @@ import { produceTimelineFilter } from '~/api/updaters/timeline-filter.ts';
 
 import { closeModal } from '../../globals/modals.tsx';
 
-import CircularProgress from '../CircularProgress.tsx';
-import DialogOverlay from './DialogOverlay.tsx';
-
-import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog.ts';
 import { Button } from '../../primitives/button.ts';
-
+import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog.ts';
+import CircularProgress from '../CircularProgress.tsx';
 import { EmbedListContent } from '../embeds/EmbedList.tsx';
+import DialogOverlay from './DialogOverlay.tsx';
 
 import SwitchAccountAction from '~/desktop/components/flyouts/SwitchAccountAction.tsx';
 

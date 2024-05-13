@@ -4,7 +4,6 @@ import type { AppBskyFeedDefs } from '~/api/atp-schema';
 import { getRecordId } from '~/api/utils/misc';
 
 import { Interactive } from '../../primitives/interactive';
-
 import { LINK_FEED, Link } from '../Link';
 
 import DefaultFeedAvatar from '../../assets/default-feed-avatar.svg?url';

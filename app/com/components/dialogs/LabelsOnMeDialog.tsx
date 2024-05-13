@@ -25,15 +25,13 @@ import { clsx, getUniqueId } from '~/utils/misc';
 import { closeModal, useModalState } from '../../globals/modals';
 import { getModerationOptions } from '../../globals/shared';
 
+import { IconButton } from '~/com/primitives/icon-button';
+import ArrowLeftIcon from '../../icons/baseline-arrow-left';
 import { Button } from '../../primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
-import { IconButton } from '~/com/primitives/icon-button';
 import { ListBox, ListBoxItem, ListGroup, ListGroupHeader } from '../../primitives/list-box';
 import { Textarea } from '../../primitives/textarea';
-
 import DialogOverlay from './DialogOverlay';
-
-import ArrowLeftIcon from '../../icons/baseline-arrow-left';
 
 import DefaultLabelerAvatar from '../../assets/default-labeler-avatar.svg?url';
 

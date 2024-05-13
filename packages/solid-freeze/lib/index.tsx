@@ -1,4 +1,4 @@
-import { type JSX, type Resource, Suspense, createMemo, createResource } from 'solid-js';
+import { Suspense, createMemo, createResource, type JSX, type Resource } from 'solid-js';
 
 export interface FreezeProps {
 	freeze: boolean;

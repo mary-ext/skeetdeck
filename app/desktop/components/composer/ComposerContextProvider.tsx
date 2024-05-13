@@ -1,9 +1,9 @@
-import { type JSX, batch, createSignal, untrack } from 'solid-js';
+import { batch, createSignal, untrack, type JSX } from 'solid-js';
 import { createMutable } from 'solid-js/store';
 
 import type { At } from '~/api/atp-schema';
 
-import { type ComposerContextState, ComposerContext } from './ComposerContext';
+import { ComposerContext, type ComposerContextState } from './ComposerContext';
 import type { ComposerState } from './utils/state';
 
 export interface ComposerContextProviderProps {

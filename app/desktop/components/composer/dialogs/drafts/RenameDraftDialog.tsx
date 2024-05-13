@@ -5,12 +5,11 @@ import { closeModal } from '~/com/globals/modals';
 import { model } from '~/utils/input';
 
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
-
 import { Button } from '~/com/primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
 import { Input } from '~/com/primitives/input';
 
-import { type ComposerDraft, getDraftDb } from '../../utils/draft-db';
+import { getDraftDb, type ComposerDraft } from '../../utils/draft-db';
 
 export interface SaveDraftDialogProps {
 	draft: ComposerDraft;

@@ -1,4 +1,4 @@
-import { type JSX, lazy, createMemo } from 'solid-js';
+import { createMemo, lazy, type JSX } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
@@ -29,11 +29,11 @@ import MoreHorizIcon from '../../icons/baseline-more-horiz';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
-import ModerationAlerts from '../moderation/ModerationAlerts';
 import ProfileFollowButton from '../ProfileFollowButton';
+import ModerationAlerts from '../moderation/ModerationAlerts';
 
-import ProfileOverflowAction from './profiles/ProfileOverflowAction';
 import ProfileHandleAction from './profiles/ProfileHandleAction';
+import ProfileOverflowAction from './profiles/ProfileOverflowAction';
 
 const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog'));
 const MuteConfirmDialog = lazy(() => import('../dialogs/MuteConfirmDialog'));

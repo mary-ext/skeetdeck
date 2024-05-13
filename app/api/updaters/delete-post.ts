@@ -3,7 +3,6 @@ import type { InfiniteData } from '@mary/solid-query';
 import { produce } from '~/utils/immer';
 
 import type { AppBskyFeedDefs, Brand } from '../atp-schema';
-
 import type { ThreadData } from '../models/threads';
 import type { TimelinePage } from '../queries/get-timeline';
 import { SignalizedPost } from '../stores/posts';

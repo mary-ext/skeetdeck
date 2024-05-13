@@ -2,7 +2,7 @@ import { BskyXRPC } from '@mary/bluesky-client';
 
 import type { At } from '../atp-schema';
 
-import { type MultiagentAccountData, Multiagent } from '../classes/multiagent';
+import { Multiagent, type MultiagentAccountData } from '../classes/multiagent';
 
 export const multiagent = new Multiagent('accs');
 

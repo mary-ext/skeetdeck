@@ -1,4 +1,4 @@
-import { type JSX, createMemo, createSignal } from 'solid-js';
+import { createMemo, createSignal, type JSX } from 'solid-js';
 
 import type { AppBskyFeedDefs, AppBskyFeedThreadgate, At } from '~/api/atp-schema';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
@@ -19,11 +19,11 @@ import { LINK_LIST, LINK_POST_LIKED_BY, LINK_POST_REPOSTED_BY, LINK_PROFILE, Lin
 import RichTextRenderer from '../RichTextRenderer';
 
 import AccountCheckIcon from '../../icons/baseline-account-check';
-import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
 import FavoriteIcon from '../../icons/baseline-favorite';
-import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
 import RepeatIcon from '../../icons/baseline-repeat';
+import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
+import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
@@ -35,9 +35,9 @@ import PostTag from '../items/posts/PostTag';
 import ReplyAction from '../items/posts/ReplyAction';
 import RepostAction from '../items/posts/RepostAction';
 
-import PostTranslation, { needTranslation } from './posts/PostTranslation';
 import LabelsOnMe from '../moderation/LabelsOnMe';
 import ModerationAlerts from '../moderation/ModerationAlerts';
+import PostTranslation, { needTranslation } from './posts/PostTranslation';
 
 export interface PermalinkPostProps {
 	/** Expected to be static */

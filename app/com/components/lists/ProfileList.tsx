@@ -5,7 +5,7 @@ import type { SignalizedProfile } from '~/api/stores/profiles';
 import List from '../List';
 import { VirtualContainer } from '../VirtualContainer';
 
-import { type ProfileItemAccessory, type ProfileItemProps, ProfileItem } from '../items/ProfileItem';
+import { ProfileItem, type ProfileItemAccessory, type ProfileItemProps } from '../items/ProfileItem';
 
 export interface ProfileListProps {
 	/** Expected to be static */

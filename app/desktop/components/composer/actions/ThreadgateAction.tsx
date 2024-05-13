@@ -2,16 +2,14 @@ import type { Component, ComponentProps, JSX } from 'solid-js';
 
 import type { AppBskyFeedThreadgate, Brand } from '~/api/atp-schema';
 
-import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
-
 import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
-
 import AccountCheckIcon from '~/com/icons/baseline-account-check';
 import AlternateEmailIcon from '~/com/icons/baseline-alternate-email';
 import CheckIcon from '~/com/icons/baseline-check';
+import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 // import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
-import PublicIcon from '~/com/icons/baseline-public';
 import LockIcon from '~/com/icons/baseline-lock';
+import PublicIcon from '~/com/icons/baseline-public';
 
 import type { GateState } from '../utils/state';
 

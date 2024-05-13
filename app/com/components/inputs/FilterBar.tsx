@@ -2,7 +2,7 @@ import { untrack } from 'solid-js';
 
 import { getUniqueId } from '~/utils/misc';
 
-import CheckIcon from '~/com/icons/baseline-check';
+import CheckIcon from '../../icons/baseline-check';
 
 export interface FilterItem<T> {
 	value: T;

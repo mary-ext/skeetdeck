@@ -7,7 +7,7 @@ import type { ModerationOptions } from '~/api/moderation';
 
 import { createReactiveLocalStorage } from '~/utils/storage';
 
-import { type DeckConfig, type PaneConfig, PaneSize, SpecificPaneSize } from './panes';
+import { PaneSize, SpecificPaneSize, type DeckConfig, type PaneConfig } from './panes';
 
 export interface ModerationPreferences extends Omit<ModerationOptions, '_filtersCache'> {
 	updatedAt: number;

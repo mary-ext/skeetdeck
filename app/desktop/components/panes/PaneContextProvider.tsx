@@ -1,23 +1,22 @@
-import { type Accessor, type JSX, For, Suspense, createSignal } from 'solid-js';
+import { For, Suspense, createSignal, type Accessor, type JSX } from 'solid-js';
 
 import { createSortable, transformStyle } from '@thisbeyond/solid-dnd';
 
-import { signal } from '~/utils/signals';
 import { clsx } from '~/utils/misc';
+import { signal } from '~/utils/signals';
 
 import CircularProgress from '~/com/components/CircularProgress';
 
 import type { BasePaneConfig, DeckConfig } from '../../globals/panes';
 
-import { PaneLinkingProvider } from './PaneLinkingProvider';
-
 import {
+	PaneContext,
+	PaneModalContext,
 	type PaneContextObject,
 	type PaneModalContextObject,
 	type PaneModalState,
-	PaneContext,
-	PaneModalContext,
 } from './PaneContext';
+import { PaneLinkingProvider } from './PaneLinkingProvider';
 
 export type Sortable = ReturnType<typeof createSortable>;
 

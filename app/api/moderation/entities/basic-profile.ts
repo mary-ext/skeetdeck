@@ -3,12 +3,12 @@ import { sequal } from '~/utils/dequal';
 import type { AppBskyActorDefs } from '../../atp-schema';
 
 import {
-	type ModerationCause,
-	type ModerationOptions,
 	TargetProfile,
 	decideLabelModeration,
 	decideMutedPermanentModeration,
 	decideMutedTemporaryModeration,
+	type ModerationCause,
+	type ModerationOptions,
 } from '..';
 import { cache } from './_shared';
 

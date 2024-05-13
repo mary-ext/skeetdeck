@@ -3,7 +3,7 @@ import { createMemo, type JSX } from 'solid-js';
 import { segmentRichText } from '~/api/richtext/segmentize';
 import type { Facet, RichTextSegment } from '~/api/richtext/types';
 
-import { type Linking, LINK_EXTERNAL, LINK_PROFILE, LINK_TAG, useLinking } from './Link';
+import { LINK_EXTERNAL, LINK_PROFILE, LINK_TAG, useLinking, type Linking } from './Link';
 
 export interface RichTextReturn {
 	t: string;

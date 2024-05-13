@@ -1,8 +1,6 @@
 import type { AppBskyGraphBlock } from '../atp-schema';
 import { multiagent } from '../globals/agent';
-
 import type { SignalizedProfile } from '../stores/profiles';
-
 import { getCurrentDate, getRecordId } from '../utils/misc';
 import { createToggleMutation } from '../utils/toggle-mutation';
 

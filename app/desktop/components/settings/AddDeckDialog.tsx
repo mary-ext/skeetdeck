@@ -5,15 +5,13 @@ import { navigate } from '@pkg/solid-page-router';
 
 import { preferences } from '../../globals/settings';
 
-import { closeModal } from '~/com/globals/modals';
-import { model } from '~/utils/input';
-
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
 import EmojiFlyout from '~/com/components/emojis/EmojiFlyout';
-
+import { closeModal } from '~/com/globals/modals';
 import { Button } from '~/com/primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
 import { Input } from '~/com/primitives/input';
+import { model } from '~/utils/input';
 
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 

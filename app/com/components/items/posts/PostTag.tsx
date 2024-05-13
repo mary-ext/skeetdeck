@@ -1,6 +1,5 @@
-import { LINK_TAG, Link, type TagLinking } from '../../Link';
-
 import PoundIcon from '../../../icons/baseline-pound';
+import { LINK_TAG, Link, type TagLinking } from '../../Link';
 
 export interface PostTagProps {
 	tag: string;

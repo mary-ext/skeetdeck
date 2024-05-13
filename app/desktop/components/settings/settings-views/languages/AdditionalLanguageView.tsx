@@ -1,20 +1,18 @@
-import { type JSX, For, createMemo, createSignal } from 'solid-js';
+import { For, createMemo, createSignal, type JSX } from 'solid-js';
 
 import { systemLanguages } from '~/api/globals/platform';
 
+import { model } from '~/utils/input';
 import { getNativeLanguageName, languageNames, languageNamesStrict } from '~/utils/intl/display-names';
 import { CODE2S } from '~/utils/intl/languages';
-import { model } from '~/utils/input';
 
 import { preferences } from '~/desktop/globals/settings';
 
-import { IconButton } from '~/com/primitives/icon-button';
-
 import SearchInput from '~/com/components/inputs/SearchInput';
-
 import AddIcon from '~/com/icons/baseline-add';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import DeleteIcon from '~/com/icons/baseline-delete';
+import { IconButton } from '~/com/primitives/icon-button';
 
 import { useViewRouter } from '../_router';
 

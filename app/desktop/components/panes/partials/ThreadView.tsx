@@ -4,27 +4,23 @@ import { XRPCError } from '@mary/bluesky-client/xrpc';
 import { type CreateQueryResult } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
-import { getRecordId, getRepoId } from '~/api/utils/misc';
-
 import type { ThreadData } from '~/api/models/threads';
 import { BlockedThreadError } from '~/api/queries/get-post-thread';
 import { SignalizedPost } from '~/api/stores/posts';
+import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import { preferences } from '../../../globals/settings';
-
-import { Button } from '~/com/primitives/button';
 
 import CircularProgress from '~/com/components/CircularProgress';
 import Keyed from '~/com/components/Keyed';
 import { LINK_POST, LINK_PROFILE, Link } from '~/com/components/Link';
 import { VirtualContainer } from '~/com/components/VirtualContainer';
-
-import GenericErrorView from '~/com/components/views/GenericErrorView';
-import PermalinkPost from '~/com/components/views/PermalinkPost';
-
 import EmbedRecordBlocked from '~/com/components/embeds/EmbedRecordBlocked';
 import EmbedRecordNotFound from '~/com/components/embeds/EmbedRecordNotFound';
 import Post from '~/com/components/items/Post';
+import GenericErrorView from '~/com/components/views/GenericErrorView';
+import PermalinkPost from '~/com/components/views/PermalinkPost';
+import { Button } from '~/com/primitives/button';
 
 const FlattenedThread = lazy(() => import('~/com/components/views/threads/FlattenedThread'));
 const NestedThread = lazy(() => import('~/com/components/views/threads/NestedThread'));

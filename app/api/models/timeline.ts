@@ -1,6 +1,6 @@
 import type { AppBskyFeedDefs, At } from '../atp-schema';
 
-import { type SignalizedPost, mergePost } from '../stores/posts';
+import { mergePost, type SignalizedPost } from '../stores/posts';
 
 type Post = AppBskyFeedDefs.PostView;
 type TimelineItem = AppBskyFeedDefs.FeedViewPost;

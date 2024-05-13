@@ -4,13 +4,17 @@ import { createMutation, createQuery } from '@mary/solid-query';
 
 import { multiagent } from '~/api/globals/agent';
 
-import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';
 import { upsertProfile } from '~/api/mutations/upsert-profile';
+import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';
 
 import { clsx } from '~/utils/misc';
 
 import Checkbox from '~/com/components/inputs/Checkbox';
-
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+import BlockIcon from '~/com/icons/baseline-block';
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
+import PeopleOutlinedIcon from '~/com/icons/outline-people';
+import VolumeOffOutlinedIcon from '~/com/icons/outline-volume-off';
 import { IconButton } from '~/com/primitives/icon-button';
 import {
 	ListBox,
@@ -22,13 +26,7 @@ import {
 	ListGroupHeader,
 } from '~/com/primitives/list-box';
 
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
-import BlockIcon from '~/com/icons/baseline-block';
-import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
-import PeopleOutlinedIcon from '~/com/icons/outline-people';
-import VolumeOffOutlinedIcon from '~/com/icons/outline-volume-off';
-
-import { type ViewParams, VIEW_ACCOUNT_CONFIG, useViewRouter } from '../_router';
+import { VIEW_ACCOUNT_CONFIG, useViewRouter, type ViewParams } from '../_router';
 
 const NO_UNAUTHENTICATED_LABEL = '!no-unauthenticated';
 

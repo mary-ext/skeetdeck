@@ -1,4 +1,4 @@
-import { type DefaultError, type QueryClient, MutationObserver, notifyManager } from '@tanstack/query-core';
+import { MutationObserver, notifyManager, type DefaultError, type QueryClient } from '@tanstack/query-core';
 
 import { createMemo, createRenderEffect, on, onCleanup, untrack } from 'solid-js';
 

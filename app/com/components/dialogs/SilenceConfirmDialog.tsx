@@ -2,8 +2,8 @@ import { batch, createMemo, createSignal } from 'solid-js';
 
 import { useQueryClient, type InfiniteData } from '@mary/solid-query';
 
-import type { SignalizedProfile } from '~/api/stores/profiles';
 import type { TimelinePage, getTimelineKey } from '~/api/queries/get-timeline';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 import { produceTimelineFilter } from '~/api/updaters/timeline-filter';
 
 import { isProfileTempMuted } from '~/api/moderation';
@@ -11,12 +11,10 @@ import { isProfileTempMuted } from '~/api/moderation';
 import { closeModal } from '../../globals/modals';
 import { bustModeration, getModerationOptions } from '../../globals/shared';
 
-import DialogOverlay from './DialogOverlay';
-
 import { Button } from '../../primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
-
 import SelectInput from '../inputs/SelectInput';
+import DialogOverlay from './DialogOverlay';
 
 export interface SilenceConfirmDialogProps {
 	profile: SignalizedProfile;

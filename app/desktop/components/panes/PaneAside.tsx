@@ -1,7 +1,6 @@
 import { type JSX, Suspense } from 'solid-js';
 
 import CircularProgress from '~/com/components/CircularProgress';
-
 import { Button } from '~/com/primitives/button';
 
 export interface PaneAsideProps {

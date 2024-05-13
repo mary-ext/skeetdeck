@@ -2,8 +2,7 @@ import { unwrap } from 'solid-js/store';
 
 import type { At } from '~/api/atp-schema';
 import { systemLanguages } from '~/api/globals/platform';
-
-import { type PreliminaryRichText, getRtLength, parseRt } from '~/api/richtext/composer';
+import { getRtLength, parseRt, type PreliminaryRichText } from '~/api/richtext/composer';
 
 import type { ComposedImage } from '~/utils/image';
 

@@ -10,18 +10,15 @@ import { formatCompact } from '~/utils/intl/number';
 import CircularProgress from '~/com/components/CircularProgress';
 import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel';
 import { VirtualContainer } from '~/com/components/VirtualContainer';
-import GenericErrorView from '~/com/components/views/GenericErrorView';
-
-import TimelineList from '~/com/components/lists/TimelineList';
 import TimelineGalleryList from '~/com/components/lists/TimelineGalleryList';
+import TimelineList from '~/com/components/lists/TimelineList';
+import GenericErrorView from '~/com/components/views/GenericErrorView';
 import ProfileHeader from '~/com/components/views/ProfileHeader';
-
-import { IconButton } from '~/com/primitives/icon-button';
-
 import SearchIcon from '~/com/icons/baseline-search';
 import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import { type ProfilePaneConfig, PANE_TYPE_PROFILE, ProfilePaneTab } from '../../../globals/panes';
+import { PANE_TYPE_PROFILE, ProfilePaneTab, type ProfilePaneConfig } from '../../../globals/panes';
 import { addPane, preferences } from '../../../globals/settings';
 
 import { usePaneContext, usePaneModalState } from '../PaneContext';

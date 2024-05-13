@@ -1,4 +1,4 @@
-import { type JSX, createSignal, lazy } from 'solid-js';
+import { createSignal, lazy, type JSX } from 'solid-js';
 
 import { createQuery } from '@mary/solid-query';
 
@@ -7,18 +7,16 @@ import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/g
 
 import type { CustomListPaneConfig } from '../../../globals/panes';
 
-import { IconButton } from '~/com/primitives/icon-button';
-
-import TimelineList from '~/com/components/lists/TimelineList';
 import { VirtualContainer } from '~/com/components/VirtualContainer';
-
+import TimelineList from '~/com/components/lists/TimelineList';
 import InfoOutlinedIcon from '~/com/icons/outline-info';
 import SettingsOutlinedIcon from '~/com/icons/outline-settings';
+import { IconButton } from '~/com/primitives/icon-button';
 
-import { usePaneContext } from '../PaneContext';
 import Pane from '../Pane';
 import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
+import { usePaneContext } from '../PaneContext';
 
 const CustomListPaneSettings = lazy(() => import('../settings/CustomListPaneSettings'));
 const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));

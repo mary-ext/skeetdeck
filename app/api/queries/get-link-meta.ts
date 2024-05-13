@@ -1,6 +1,7 @@
 import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import { compressPostImage } from '~/utils/image';
+
 import { followAbortSignal } from '../utils/misc';
 
 const LINK_PROXY_ENDPOINT = 'https://cardyb.bsky.app/v1/extract';

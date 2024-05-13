@@ -1,4 +1,4 @@
-import { type JSX, createMemo, lazy } from 'solid-js';
+import { createMemo, lazy, type JSX } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent';
 
@@ -16,14 +16,14 @@ import { LINK_PROFILE_FEEDS, LINK_PROFILE_LISTS, useLinking } from '../../Link';
 
 import BlockIcon from '../../../icons/baseline-block';
 import LaunchIcon from '../../../icons/baseline-launch';
-import ListBoxOutlinedIcon from '../../../icons/outline-list-box';
 import PlaylistAddIcon from '../../../icons/baseline-playlist-add';
 import PoundIcon from '../../../icons/baseline-pound';
 import RepeatIcon from '../../../icons/baseline-repeat';
 import RepeatOffIcon from '../../../icons/baseline-repeat-off';
+import ListBoxOutlinedIcon from '../../../icons/outline-list-box';
 import ReportProblemOutlinedIcon from '../../../icons/outline-report-problem';
-import VisibilityOffOutlinedIcon from '../../../icons/outline-visibility-off';
 import VisibilityOutlinedIcon from '../../../icons/outline-visibility';
+import VisibilityOffOutlinedIcon from '../../../icons/outline-visibility-off';
 import VolumeOffOutlinedIcon from '../../../icons/outline-volume-off';
 import VolumeUpOutlinedIcon from '../../../icons/outline-volume-up';
 

@@ -1,14 +1,14 @@
 import {
+	replaceEqualDeep,
 	type DefaultError,
 	type Mutation,
 	type MutationCache,
 	type MutationFilters,
 	type MutationState,
 	type QueryClient,
-	replaceEqualDeep,
 } from '@tanstack/query-core';
 
-import { type Accessor, createEffect, createSignal, onCleanup, untrack } from 'solid-js';
+import { createEffect, createSignal, onCleanup, untrack, type Accessor } from 'solid-js';
 
 import { useQueryClient } from './QueryClientProvider.tsx';
 

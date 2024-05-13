@@ -1,8 +1,8 @@
 import { createRenderEffect, lazy } from 'solid-js';
 import { render } from 'solid-js/web';
 
-import { Router, configureRouter } from '@pkg/solid-page-router';
 import { QueryClientProvider } from '@mary/solid-query';
+import { Router, configureRouter } from '@pkg/solid-page-router';
 
 import { multiagent } from '~/api/globals/agent';
 
@@ -17,8 +17,8 @@ import { MetaProvider } from '~/com/lib/meta';
 
 import ComposerContextProvider from './components/composer/ComposerContextProvider';
 
-import { preferences } from './globals/settings';
 import { queryClient } from './globals/query';
+import { preferences } from './globals/settings';
 
 import './styles/tailwind.css';
 

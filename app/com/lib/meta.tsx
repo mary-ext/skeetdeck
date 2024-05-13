@@ -6,8 +6,8 @@ import {
 	onCleanup,
 	onMount,
 	useContext,
+	type JSX,
 } from 'solid-js';
-import type { JSX } from 'solid-js/jsx-runtime';
 
 type TitleNode = Comment & { _render: () => string };
 

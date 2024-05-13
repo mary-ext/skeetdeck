@@ -57,4 +57,4 @@ export const setBustModerationListener = (fn: () => void): void => {
 	bustModeration = fn;
 };
 
-export { setModerationOptions, setLanguagePreferences, setTranslationPreferences };
+export { setLanguagePreferences, setModerationOptions, setTranslationPreferences };

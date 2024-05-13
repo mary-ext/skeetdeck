@@ -1,22 +1,22 @@
-import { type Component, lazy } from 'solid-js';
+import { lazy, type Component } from 'solid-js';
 
 import {
-	type View,
-	type ViewType,
 	VIEW_ABOUT,
-	VIEW_ACCOUNT_CONFIG,
 	VIEW_ACCOUNTS,
+	VIEW_ACCOUNT_CONFIG,
 	VIEW_ADDITIONAL_LANGUAGE,
 	VIEW_CONTENT,
 	VIEW_EXCLUDED_TRANSLATION,
 	VIEW_HIDDEN_REPOSTERS,
 	VIEW_INTERFACE,
-	VIEW_KEYWORD_FILTER_FORM,
 	VIEW_KEYWORD_FILTERS,
+	VIEW_KEYWORD_FILTER_FORM,
 	VIEW_LABELER_CONFIG,
 	VIEW_LABELER_POPULAR,
 	VIEW_MODERATION,
 	VIEW_TEMPORARY_MUTES,
+	type View,
+	type ViewType,
 } from './_router';
 
 const AboutView = lazy(() => import('./AboutView'));
