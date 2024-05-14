@@ -12,8 +12,8 @@ const dids: string[] = [
 	'did:plc:i65enriuag7n5fgkopbqtkyk', // profile-labels.bossett.social
 	'did:plc:smtbhjnwsvcxzvez2nbf7mar', // cryptolabeler.w3igg.com
 	'did:plc:wp7hxfjl5l4zlptn7y6774lk', // baatl.mastod.one
-	'did:plc:vrjubqujt3v46z5poehh4qfg', // taurusshield.app
 	'did:plc:mjyeurqmqjeexbgigk3yytvb', // nogifsplease.bsky.social
+	'did:plc:vrjubqujt3v46z5poehh4qfg', // taurusshield.app
 	'did:plc:jcce2sa3fgue4wiocvf7e7xj', // labeler.flicknow.xyz
 	'did:plc:5o2g6wwchb3tgwrhl2atauzu', // moderation.tripazeada.club
 	'did:plc:e4elbtctnfqocyfcml6h2lf7', // labeler.mountainherder.xyz
@@ -25,21 +25,21 @@ const dids: string[] = [
 	'did:plc:3eivfiql4memqxkryeu4tqnk', // mod.shawn.party
 	'did:web:genco.me', // genco.me
 	'did:plc:fcikraffwejtuqffifeykcml', // ff14labeler.bsky.social
-	'did:plc:oz5zavafp7szpd2yyko57ccz', // divylabeler.bsky.social
 	'did:plc:cnn3jrtucivembf66xe6fdfs', // moderation.moe
+	'did:plc:oz5zavafp7szpd2yyko57ccz', // divylabeler.bsky.social
 	'did:plc:skibpmllbhxvbvwgtjxl3uao', // anti-aging.bsky.social
 	'did:plc:j2zujaxuq33c7nbcqyvgvyvk', // nexus-labeler.bsky.social
-	'did:plc:olmiw2wkm3qoxinal7w5fbnl', // blue-cosmos.bsky.social
 	'did:plc:z3yk2cflhmn6vmzo3f5ixqh4', // yardcrow.com
+	'did:plc:olmiw2wkm3qoxinal7w5fbnl', // blue-cosmos.bsky.social
 	'did:plc:4vf7tgwlg6edds2g2nixyjda', // labeler-test.bsky.day
 	'did:plc:z7wmj3d5t7ytjf4nrh5nq6zx', // lapor.bsky.social
 	'did:plc:gcbmhqcuvuoz7jgmlanabiuv', // label.goeo.lol
 	'did:plc:nyfwpkztgsrbhrjewnw2p7yo', // labeler.dovgonosyk.xyz
 	'did:plc:e2pq4mw6ivyle3lavxptuh56', // ohnozone.bsky.social
 	'did:plc:7fkqmr7dfu6vanyxvjtloos3', // hblabeler.bsky.social
+	'did:plc:bqcfe3frnfpte7udjaojhddt', // bka.li
 	'did:plc:j3axwmdgrvnd73yrlemynsne', // labeler.launchpadx.top
 	'did:plc:3o4ajsgts2fsuexm5ai6wln5', // mombot.at.dingdongdata.com
-	'did:plc:bqcfe3frnfpte7udjaojhddt', // bka.li
 	'did:plc:ar7c4by46qjdydhdevvrndac', // moderation.bsky.app
 	'did:plc:exlb5xx2t4pgtjqzdm6ntsgh', // exml.bsky.social
 	'did:plc:l2s5mv6h2j5gyoacsxdxdfom', // labeler.divy.zone
@@ -54,7 +54,6 @@ const dids: string[] = [
 	'did:plc:3wabolcdllw3w5lnwbrrlp7z', // topical-moderation.bsky.social
 	'did:plc:pozgajl56zcftf6nzps46z65', // abandoned293487398.bsky.social
 	'did:plc:d5dgzxlv5pbpwzkahhdexoce', // gifblock.flop.quest
-	'did:plc:n5aztsyungwywj3psng3z65i', // labeltest.bsky.social
 	'did:plc:fckjqanjagumq5qw4ozwj7go', // matsui0000.bsky.social
 	'did:plc:lydl7umexooxibfhdtwcijn2', // moderation.veryun.cool
 	'did:plc:coynarrmyjsm2s3zkbbr5iow', // yonatanlabel.bsky.social
