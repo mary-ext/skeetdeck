@@ -1,4 +1,4 @@
-import { Suspense, createMemo, createResource, type JSX, type Resource } from 'solid-js';
+import { For, Suspense, createMemo, createResource, type JSX, type Resource } from 'solid-js';
 
 export interface FreezeProps {
 	freeze: boolean;
@@ -64,12 +64,50 @@ export const ShowFreeze = (props: ShowFreezeProps) => {
 
 	return Freeze({
 		get freeze() {
-			return show() && !props.when;
+			return !props.when;
 		},
 		get children() {
 			if (show()) {
 				return props.children;
 			}
+		},
+	});
+};
+
+export interface KeepAliveProps<T> {
+	value: T | undefined;
+	include?: T[];
+	render: (value: T) => JSX.Element;
+}
+
+export const KeepAlive = <T,>(props: KeepAliveProps<T>) => {
+	const values = createMemo<T[]>((arr) => {
+		const value = props.value;
+		const include = props.include;
+
+		if (value !== undefined && !arr.includes(value)) {
+			arr = [...arr, value];
+		}
+
+		if (include !== undefined) {
+			arr = arr.filter((x) => include.includes(x));
+		}
+
+		return arr;
+	}, []);
+
+	return For({
+		get each() {
+			return values();
+		},
+		children(value) {
+			const suspend = useSuspend(() => value !== props.value);
+
+			return Suspense({
+				get children() {
+					return [suspend as unknown as JSX.Element, props.render(value)];
+				},
+			});
 		},
 	});
 };
