@@ -151,6 +151,13 @@ export class Multiagent {
 				}
 			});
 
+			// We already have an agent instance, so let's just use the existing one.
+			// The mutation above should have updated the session data.
+			if (this.#agents[did]) {
+				cleanup();
+				return did;
+			}
+
 			const stored: StoredAgent = {
 				p: Promise.resolve().then(() => stored),
 				c: cleanup,
