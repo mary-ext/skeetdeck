@@ -31,6 +31,7 @@ import FeatherIcon from '~/com/icons/baseline-feather';
 import SearchIcon from '~/com/icons/baseline-search';
 import SystemUpdateAltIcon from '~/com/icons/baseline-system-update-alt';
 import TableLargeAddIcon from '~/com/icons/baseline-table-large-add';
+import MailOutlinedIcon from '~/com/icons/outline-mail';
 import SettingsOutlinedIcon from '~/com/icons/outline-settings';
 import { Interactive } from '~/com/primitives/interactive';
 
@@ -38,6 +39,7 @@ import { useComposer } from '../components/composer/ComposerContext';
 import { ConstrainXDragAxis } from '../utils/dnd';
 
 const ComposerPane = lazy(() => import('../components/composer/ComposerPane'));
+const MessagesPane = lazy(() => import('../components/messages/MessagesPane'));
 
 const AddDeckDialog = lazy(() => import('../components/settings/AddDeckDialog'));
 const SettingsDialog = lazy(() => import('../components/settings/SettingsDialog'));
@@ -61,6 +63,7 @@ const updateButton = Interactive({
 
 const enum ShowState {
 	COMPOSER,
+	DIRECT_MESSAGES,
 }
 
 const DashboardLayout = (props: RouteComponentProps) => {
@@ -90,6 +93,17 @@ const DashboardLayout = (props: RouteComponentProps) => {
 								class={menuIconButton}
 							>
 								<FeatherIcon />
+							</button>
+
+							<button
+								disabled={show() === ShowState.DIRECT_MESSAGES}
+								title="Direct Messages"
+								onClick={() => {
+									setShow(ShowState.DIRECT_MESSAGES);
+								}}
+								class={menuIconButton}
+							>
+								<MailOutlinedIcon />
 							</button>
 
 							<Flyout
@@ -258,6 +272,17 @@ const DashboardLayout = (props: RouteComponentProps) => {
 					<Keyed key={composer._key()}>
 						<ComposerPane />
 					</Keyed>
+				</Suspense>
+			</ShowFreeze>
+			<ShowFreeze when={!!multiagent.active && show() === ShowState.DIRECT_MESSAGES}>
+				<Suspense
+					fallback={
+						<div class="grid w-96 shrink-0 place-items-center border-r border-divider">
+							<CircularProgress />
+						</div>
+					}
+				>
+					<MessagesPane onClose={() => setShow(undefined)} />
 				</Suspense>
 			</ShowFreeze>
 
