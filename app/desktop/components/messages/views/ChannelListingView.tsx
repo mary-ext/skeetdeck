@@ -77,6 +77,7 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 			let convos = data.convos;
 
 			for (const [convoId, events] of map) {
+				// @todo: actually go through all events.
 				const latest = events.at(-1)!;
 				if (!latest) {
 					continue;
@@ -95,7 +96,7 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 						) {
 							item.rev = latest.rev;
 							item.lastMessage.value = latest.message;
-							item.unread.value = latest.$type === 'chat.bsky.convo.defs#logCreateMessage';
+							item.unread.value = true;
 
 							if (itemIndex !== 0) {
 								spliced = true;
