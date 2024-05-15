@@ -22,6 +22,7 @@ const ProfileList = (props: ProfileListProps) => {
 	return (
 		<List
 			data={query.data?.pages.flatMap((page) => page.profiles)}
+			error={query.error}
 			render={(profile) => {
 				return (
 					<VirtualContainer class="shrink-0" estimateHeight={88}>
