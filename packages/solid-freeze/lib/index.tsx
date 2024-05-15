@@ -77,7 +77,7 @@ export const ShowFreeze = (props: ShowFreezeProps) => {
 export interface KeepAliveProps<T> {
 	value: T | undefined;
 	include?: T[];
-	render: (value: T) => JSX.Element;
+	children: (value: T) => JSX.Element;
 }
 
 export const KeepAlive = <T,>(props: KeepAliveProps<T>) => {
@@ -105,7 +105,7 @@ export const KeepAlive = <T,>(props: KeepAliveProps<T>) => {
 
 			return Suspense({
 				get children() {
-					return [suspend as unknown as JSX.Element, props.render(value)];
+					return [suspend as unknown as JSX.Element, props.children(value)];
 				},
 			});
 		},
