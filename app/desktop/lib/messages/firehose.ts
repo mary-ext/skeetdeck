@@ -161,7 +161,7 @@ export class ChatFirehose extends EventEmitter<ChatFirehoseEvents> {
 				switch (action.type) {
 					case FirehoseAction.RESUME: {
 						this.#status = FirehoseStatus.INITIALIZING;
-						this.#latestRev = undefined;
+						this.#latestRev = action.rev;
 
 						this.#init();
 						break;
@@ -258,10 +258,10 @@ export class ChatFirehose extends EventEmitter<ChatFirehoseEvents> {
 
 		this.#isPolling = true;
 
+		let cursor = this.#latestRev;
+
 		try {
 			const buckets = new Map<string, ConvoEvents>();
-
-			let cursor = this.#latestRev;
 
 			do {
 				const response = await this.rpc.get('chat.bsky.convo.getLog', {
@@ -305,7 +305,7 @@ export class ChatFirehose extends EventEmitter<ChatFirehoseEvents> {
 				data: {
 					kind: 'poll_failure',
 					exception: e,
-					retry: () => this.#dispatch({ type: FirehoseAction.RESUME }),
+					retry: () => this.#dispatch({ type: FirehoseAction.RESUME, rev: cursor }),
 				},
 			});
 		} finally {
@@ -336,6 +336,6 @@ type BusDispatch =
 	| { type: FirehoseAction.INITIALIZE }
 	| { type: FirehoseAction.READY }
 	| { type: FirehoseAction.BACKGROUND }
-	| { type: FirehoseAction.RESUME }
+	| { type: FirehoseAction.RESUME; rev?: string }
 	| { type: FirehoseAction.ERROR; data: FirehoseError }
 	| { type: FirehoseAction.UPDATE_POLL };
