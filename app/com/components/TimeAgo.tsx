@@ -1,9 +1,13 @@
-import { createEffect, createSignal, type Accessor, type JSX } from 'solid-js';
+import { createRenderEffect, createSignal, type Accessor, type JSX } from 'solid-js';
 
 import { formatAbsDateTime, formatReltime } from '~/utils/intl/time';
 
 export interface TimeAgoProps {
 	value: string | number;
+	/** Expected to be static */
+	absolute?: (time: number) => string;
+	/** Expected to be static */
+	relative?: (time: number) => string;
 	children: (relative: Accessor<string>, absolute: Accessor<string>) => JSX.Element;
 }
 
@@ -15,17 +19,20 @@ const tickForward = () => {
 };
 
 const TimeAgo = (props: TimeAgoProps) => {
+	const formatAbsolute = props.absolute ?? formatAbsDateTime;
+	const formatRelative = props.relative ?? formatReltime;
+
 	const [absolute, setAbsolute] = createSignal('');
 	const [relative, setRelative] = createSignal('');
 
-	createEffect(() => {
+	createRenderEffect(() => {
 		const time = toInt(props.value);
 
-		setAbsolute(formatAbsDateTime(time));
+		setAbsolute(formatAbsolute(time));
 
-		createEffect(() => {
+		createRenderEffect(() => {
 			watch();
-			return setRelative(formatReltime(time));
+			return setRelative(formatRelative(time));
 		});
 	});
 
