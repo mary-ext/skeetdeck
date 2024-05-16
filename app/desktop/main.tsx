@@ -16,6 +16,7 @@ import * as shared from '~/com/globals/shared';
 import { MetaProvider } from '~/com/lib/meta';
 
 import ComposerContextProvider from './components/composer/ComposerContextProvider';
+import MessagesContextProvider from './components/messages/MessagesContextProvider';
 
 import { queryClient } from './globals/query';
 import { preferences } from './globals/settings';
@@ -53,8 +54,10 @@ const App = () => {
 		<QueryClientProvider client={queryClient}>
 			<MetaProvider>
 				<ComposerContextProvider>
-					<Router />
-					<ModalProvider />
+					<MessagesContextProvider>
+						<Router />
+						<ModalProvider />
+					</MessagesContextProvider>
 				</ComposerContextProvider>
 			</MetaProvider>
 		</QueryClientProvider>

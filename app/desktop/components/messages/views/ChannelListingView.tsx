@@ -21,8 +21,8 @@ import { IconButton } from '~/com/primitives/icon-button';
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 import ChannelItem from '../components/ChannelItem';
-import { useChatPane } from '../contexts/chat-pane';
-import { useMultichat } from '../contexts/multichat';
+
+import { useChatPane } from '../contexts/chat';
 import type { ViewKind, ViewParams } from '../contexts/router';
 
 type ChannelEvents = ChatBskyConvoGetLog.Output['logs'];
@@ -33,8 +33,7 @@ interface ChannelListingReturn {
 }
 
 const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
-	const { close } = useChatPane();
-	const { did, rpc, firehose } = useMultichat();
+	const { close, did, rpc, firehose } = useChatPane();
 
 	const profile = createMemo(() => getAccountData(did)?.profile);
 

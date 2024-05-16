@@ -36,6 +36,7 @@ import SettingsOutlinedIcon from '~/com/icons/outline-settings';
 import { Interactive } from '~/com/primitives/interactive';
 
 import { useComposer } from '../components/composer/ComposerContext';
+import { useMessages } from '../components/messages/MessagesContext';
 import { ConstrainXDragAxis } from '../utils/dnd';
 
 const ComposerPane = lazy(() => import('../components/composer/ComposerPane'));
@@ -72,9 +73,11 @@ const DashboardLayout = (props: RouteComponentProps) => {
 	const decks = preferences.decks;
 
 	const composer = useComposer();
+	const messages = useMessages();
 	const [show, setShow] = createSignal<ShowState>();
 
 	composer._onDisplay((next) => setShow(next ? ShowState.COMPOSER : undefined));
+	messages.onShow(() => setShow(ShowState.DIRECT_MESSAGES));
 
 	return (
 		<div class="flex h-screen w-screen overflow-hidden">
