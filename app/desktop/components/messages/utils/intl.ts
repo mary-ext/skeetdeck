@@ -20,7 +20,7 @@ export const formatChatReltime = (time: string | number): string => {
 	const ftime = timeFormat.format(date);
 
 	if (isSameDate(curr, date)) {
-		return ftime;
+		return `Today, ${ftime}`;
 	}
 
 	const yesterday = new Date(curr);
