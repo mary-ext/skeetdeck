@@ -1,4 +1,4 @@
-import { createRenderEffect, lazy } from 'solid-js';
+import { createEffect, lazy } from 'solid-js';
 import { render } from 'solid-js/web';
 
 import { QueryClientProvider } from '@mary/solid-query';
@@ -25,7 +25,7 @@ import './styles/tailwind.css';
 import('./lib/scheduled');
 
 const App = () => {
-	createRenderEffect(() => {
+	createEffect(() => {
 		// Sets up the multiagent labeler header
 		multiagent.services.value = preferences.moderation.services.map((service) => ({
 			did: service.did,
@@ -33,7 +33,7 @@ const App = () => {
 		}));
 	});
 
-	createRenderEffect(() => {
+	createEffect(() => {
 		const theme = preferences.ui.theme;
 
 		const cl = document.documentElement.classList;
@@ -41,7 +41,7 @@ const App = () => {
 		if (theme === 'auto') {
 			const isDark = useMediaQuery('(prefers-color-scheme: dark)');
 
-			createRenderEffect(() => {
+			createEffect(() => {
 				cl.toggle('is-dark', isDark());
 			});
 		} else {

@@ -1,6 +1,6 @@
 import { MutationObserver, notifyManager, type DefaultError, type QueryClient } from '@tanstack/query-core';
 
-import { createMemo, createRenderEffect, on, onCleanup, untrack } from 'solid-js';
+import { createEffect, createMemo, on, onCleanup, untrack } from 'solid-js';
 
 import { useQueryClient } from './QueryClientProvider.tsx';
 
@@ -36,7 +36,7 @@ export function createMutation<TData = unknown, TError = DefaultError, TVariable
 			mutateAsync: initialResult.mutate,
 		});
 
-		createRenderEffect(
+		createEffect(
 			on(
 				defaultedOptions,
 				($defaultedOptions) => {

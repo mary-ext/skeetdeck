@@ -1,4 +1,4 @@
-import { createRenderEffect, createSignal, type Accessor, type JSX } from 'solid-js';
+import { createEffect, createSignal, type Accessor, type JSX } from 'solid-js';
 
 import { formatAbsDateTime, formatReltime } from '~/utils/intl/time';
 
@@ -18,12 +18,12 @@ const TimeAgo = (props: TimeAgoProps) => {
 	const [absolute, setAbsolute] = createSignal('');
 	const [relative, setRelative] = createSignal('');
 
-	createRenderEffect(() => {
+	createEffect(() => {
 		const time = toInt(props.value);
 
 		setAbsolute(formatAbsDateTime(time));
 
-		createRenderEffect(() => {
+		createEffect(() => {
 			watch();
 			return setRelative(formatReltime(time));
 		});

@@ -6,7 +6,7 @@ import {
 	type QueryObserverResult,
 } from '@tanstack/query-core';
 
-import { createMemo, createRenderEffect, on, onCleanup, untrack } from 'solid-js';
+import { createEffect, createMemo, on, onCleanup, untrack } from 'solid-js';
 
 import { useQueryClient } from './QueryClientProvider.tsx';
 
@@ -35,7 +35,7 @@ export function createBaseQuery<TQueryFnData, TError, TData, TQueryData, TQueryK
 
 		const result = createStateObject(observer.getOptimisticResult(initialDefaultedOptions));
 
-		createRenderEffect(
+		createEffect(
 			on(
 				defaultedOptions,
 				($defaultedOptions) => {

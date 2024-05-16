@@ -1,11 +1,4 @@
-import {
-	type Accessor,
-	type Signal,
-	createEffect,
-	createRenderEffect,
-	createSignal,
-	onCleanup,
-} from 'solid-js';
+import { createEffect, createSignal, onCleanup, untrack, type Accessor, type Signal } from 'solid-js';
 
 export const EQUALS_FALSE = { equals: false } as const;
 
@@ -32,9 +25,9 @@ export const createDebouncedValue = <T>(
 };
 
 export const createDerivedSignal = <T>(accessor: Accessor<T>): Signal<T> => {
-	const [state, setState] = createSignal<T>();
+	const [state, setState] = createSignal<T>(untrack(accessor));
 
-	createRenderEffect(() => {
+	createEffect(() => {
 		setState(accessor);
 	});
 

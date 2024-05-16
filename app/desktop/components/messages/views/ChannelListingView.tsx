@@ -1,9 +1,10 @@
 import {
+	createEffect,
 	createMemo,
-	createRenderEffect,
 	createResource,
 	createSignal,
 	onCleanup,
+	onMount,
 	type Resource,
 } from 'solid-js';
 
@@ -120,7 +121,7 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 			return data;
 		};
 
-		createRenderEffect(() => {
+		createEffect(() => {
 			if (listing.state !== 'ready') {
 				// Listing hasn't loaded yet, so we'll dump the events somewhere.
 				if (!pendingEvents) {
@@ -140,23 +141,25 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 			}
 		});
 
-		onCleanup(
-			firehose.on('log', (buckets) => {
-				if (pendingEvents) {
-					for (const [channelId, events] of buckets) {
-						// @todo: I think we only need the latest events for now...
-						pendingEvents.set(channelId, events);
+		onMount(() => {
+			onCleanup(
+				firehose.on('log', (buckets) => {
+					if (pendingEvents) {
+						for (const [channelId, events] of buckets) {
+							// @todo: I think we only need the latest events for now...
+							pendingEvents.set(channelId, events);
+						}
+
+						return;
 					}
 
-					return;
-				}
-
-				mutate((data) => {
-					assert(data !== undefined, `expected data to exist`);
-					return updateListing(data, buckets);
-				});
-			}),
-		);
+					mutate((data) => {
+						assert(data !== undefined, `expected data to exist`);
+						return updateListing(data, buckets);
+					});
+				}),
+			);
+		});
 	}
 
 	return (

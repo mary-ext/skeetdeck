@@ -1,4 +1,4 @@
-import { createRenderEffect } from 'solid-js';
+import { createEffect } from 'solid-js';
 
 import {
 	FILTER_FOLLOWS,
@@ -24,7 +24,7 @@ const NotificationsPaneSettings = () => {
 
 	const model = (flag: number) => {
 		return (node: HTMLInputElement) => {
-			createRenderEffect(() => {
+			createEffect(() => {
 				node.checked = (pane.mask & flag) === 0;
 			});
 

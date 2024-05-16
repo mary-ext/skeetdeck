@@ -9,15 +9,7 @@ import {
 	type ThrowOnError,
 } from '@tanstack/query-core';
 
-import {
-	createMemo,
-	createRenderEffect,
-	createSignal,
-	on,
-	onCleanup,
-	untrack,
-	type Accessor,
-} from 'solid-js';
+import { createEffect, createMemo, createSignal, on, onCleanup, untrack, type Accessor } from 'solid-js';
 
 import { useQueryClient } from './QueryClientProvider.tsx';
 
@@ -199,7 +191,7 @@ export function createQueries<T extends any[], TCombinedResult = QueriesResults<
 
 		const [state, setState] = createSignal(getInitialResult());
 
-		createRenderEffect(
+		createEffect(
 			on(defaultedOptions, ($defaultedOptions) => {
 				observer.setQueries(
 					$defaultedOptions.queries,
