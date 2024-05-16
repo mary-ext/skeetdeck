@@ -227,7 +227,7 @@ export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }:
 					time.getMonth() !== nextTime.getMonth() ||
 					time.getFullYear() !== nextTime.getFullYear()
 				) {
-					date = item.sentAt;
+					date = nextItem.sentAt;
 				}
 
 				// Separate messages if:
@@ -238,6 +238,14 @@ export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }:
 				}
 			} else {
 				tail = false;
+			}
+
+			if (idx === 0 && oldestRev() === null) {
+				const date = item.sentAt;
+				const entry = (entryCache.get(date) as DividerEntry | undefined) ?? { type: EntryType.DIVIDER, date };
+
+				newEntryCache.set(date, entry);
+				entrants.push(entry);
 			}
 
 			{
