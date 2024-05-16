@@ -207,7 +207,7 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 		doInitialLoad();
 
 		onCleanup(
-			firehose.on(`log:${channelId}`, (events) => {
+			firehose.emitter.on(`log:${channelId}`, (events) => {
 				if (pendingEvents) {
 					pendingEvents = [...pendingEvents, ...events];
 				}

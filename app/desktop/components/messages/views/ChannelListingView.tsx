@@ -142,7 +142,7 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 
 		onMount(() => {
 			onCleanup(
-				firehose.on('log', (buckets) => {
+				firehose.emitter.on('log', (buckets) => {
 					if (pendingEvents) {
 						for (const [channelId, events] of buckets) {
 							// @todo: I think we only need the latest events for now...

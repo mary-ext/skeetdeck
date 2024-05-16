@@ -6,7 +6,7 @@ import { multiagent } from '~/api/globals/agent';
 
 import { createDerivedSignal, makeAbortable } from '~/utils/hooks';
 
-import { ChatFirehose } from '~/desktop/lib/messages/firehose';
+import { createChatFirehose } from '~/desktop/lib/messages/firehose';
 
 import CircularProgress from '~/com/components/CircularProgress';
 
@@ -35,7 +35,7 @@ const MessagesPane = (props: MessagesPaneProps) => {
 		const { rpc } = await multiagent.connect(did);
 
 		const proxied = withProxy(rpc, DM_SERVICE_PROXY);
-		const firehose = new ChatFirehose(proxied);
+		const firehose = createChatFirehose(proxied);
 
 		if (!signal.aborted) {
 			firehose.init();

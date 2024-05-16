@@ -22,68 +22,29 @@ export type ChatFirehoseEvents = {
 	[key: `log:${string}`]: (events: ConvoEvents) => void;
 };
 
-export class ChatFirehose extends EventEmitter<ChatFirehoseEvents> {
-	rpc: BskyXRPC;
+export type ChatFirehose = ReturnType<typeof createChatFirehose>;
 
-	#status: FirehoseStatus = FirehoseStatus.INITIALIZING;
-	#latestRev: string | undefined;
+export const createChatFirehose = (rpc: BskyXRPC) => {
+	let status = FirehoseStatus.INITIALIZING;
+	let latestRev: string | undefined;
 
-	#pollId: number | undefined;
-	#pollImmediately = true;
-	#isPolling = false;
-	#requestedPollIntervals: Map<string, number> = new Map();
+	let pollId: number | undefined;
+	let pollImmediately = true;
+	let isPolling = true;
+	let requestedPollIntervals: Map<string, number> = new Map();
 
-	#isBackgrounding = false;
+	let isBackgrounding = false;
 
-	constructor(rpc: BskyXRPC) {
-		super();
+	const emitter = new EventEmitter<ChatFirehoseEvents>();
 
-		this.rpc = rpc;
-
-		this.#init();
-	}
-
-	/// Public APIs
-	init() {
-		this.#dispatch({ type: FirehoseAction.INITIALIZE });
-	}
-
-	background() {
-		this.#isBackgrounding = true;
-		this.#dispatch({ type: FirehoseAction.BACKGROUND });
-	}
-
-	resume() {
-		this.#isBackgrounding = false;
-		this.#dispatch({ type: FirehoseAction.RESUME });
-	}
-
-	requestPollInterval(interval: number): () => void {
-		const id = nanoid();
-
-		this.#requestedPollIntervals.set(id, interval);
-		this.#dispatch({ type: FirehoseAction.UPDATE_POLL });
-
-		return () => {
-			this.#requestedPollIntervals.delete(id);
-			this.#dispatch({ type: FirehoseAction.UPDATE_POLL });
-		};
-	}
-
-	destroy() {
-		this.#status = FirehoseStatus.DESTROYED;
-		this.#stopPolling();
-	}
-
-	/// Dispatcher
-	#dispatch(action: BusDispatch): void {
-		switch (this.#status) {
+	const dispatch = (action: BusDispatch): void => {
+		switch (status) {
 			case FirehoseStatus.UNINITIALIZED: {
 				switch (action.type) {
 					case FirehoseAction.INITIALIZE: {
-						this.#status = FirehoseStatus.INITIALIZING;
+						status = FirehoseStatus.INITIALIZING;
 
-						this.#init();
+						init();
 						break;
 					}
 				}
@@ -93,16 +54,16 @@ export class ChatFirehose extends EventEmitter<ChatFirehoseEvents> {
 			case FirehoseStatus.INITIALIZING: {
 				switch (action.type) {
 					case FirehoseAction.READY: {
-						this.#status = !this.#isBackgrounding ? FirehoseStatus.READY : FirehoseStatus.BACKGROUNDED;
-						this.#startPolling(true);
+						status = !isBackgrounding ? FirehoseStatus.READY : FirehoseStatus.BACKGROUNDED;
+						startPolling(true);
 
-						this.emit('connect');
+						emitter.emit('connect');
 						break;
 					}
 					case FirehoseAction.ERROR: {
-						this.#status = FirehoseStatus.ERROR;
+						status = FirehoseStatus.ERROR;
 
-						this.emit('error', action.data);
+						emitter.emit('error', action.data);
 						break;
 					}
 				}
@@ -112,21 +73,21 @@ export class ChatFirehose extends EventEmitter<ChatFirehoseEvents> {
 			case FirehoseStatus.READY: {
 				switch (action.type) {
 					case FirehoseAction.BACKGROUND: {
-						this.#status = FirehoseStatus.BACKGROUNDED;
-						this.#startPolling();
+						status = FirehoseStatus.BACKGROUNDED;
+						startPolling();
 
 						break;
 					}
 					case FirehoseAction.UPDATE_POLL: {
-						this.#startPolling();
+						startPolling();
 
 						break;
 					}
 					case FirehoseAction.ERROR: {
-						this.#status = FirehoseStatus.ERROR;
-						this.#stopPolling();
+						status = FirehoseStatus.ERROR;
+						stopPolling();
 
-						this.emit('error', action.data);
+						emitter.emit('error', action.data);
 						break;
 					}
 				}
@@ -136,21 +97,21 @@ export class ChatFirehose extends EventEmitter<ChatFirehoseEvents> {
 			case FirehoseStatus.BACKGROUNDED: {
 				switch (action.type) {
 					case FirehoseAction.RESUME: {
-						this.#status = FirehoseStatus.READY;
-						this.#startPolling();
+						status = FirehoseStatus.READY;
+						startPolling();
 
 						break;
 					}
 					case FirehoseAction.UPDATE_POLL: {
-						this.#startPolling();
+						startPolling();
 
 						break;
 					}
 					case FirehoseAction.ERROR: {
-						this.#status = FirehoseStatus.ERROR;
-						this.#stopPolling();
+						status = FirehoseStatus.ERROR;
+						stopPolling();
 
-						this.emit('error', action.data);
+						emitter.emit('error', action.data);
 						break;
 					}
 				}
@@ -160,10 +121,10 @@ export class ChatFirehose extends EventEmitter<ChatFirehoseEvents> {
 			case FirehoseStatus.ERROR: {
 				switch (action.type) {
 					case FirehoseAction.RESUME: {
-						this.#status = FirehoseStatus.INITIALIZING;
-						this.#latestRev = action.rev;
+						status = FirehoseStatus.INITIALIZING;
+						latestRev = action.rev;
 
-						this.#init();
+						init();
 						break;
 					}
 				}
@@ -171,17 +132,15 @@ export class ChatFirehose extends EventEmitter<ChatFirehoseEvents> {
 				break;
 			}
 		}
-	}
+	};
 
-	/// Init code
-	async #init() {
+	const init = async (): Promise<void> => {
 		try {
-			const response = await this.rpc.get('chat.bsky.convo.listConvos', {
+			const response = await rpc.get('chat.bsky.convo.listConvos', {
 				params: { limit: 1 },
 			});
 
 			const convos = response.data.convos;
-			let latestRev = this.#latestRev;
 
 			for (const convo of convos) {
 				const rev = convo.rev;
@@ -191,35 +150,29 @@ export class ChatFirehose extends EventEmitter<ChatFirehoseEvents> {
 				}
 			}
 
-			this.#latestRev = latestRev;
-
-			this.#dispatch({ type: FirehoseAction.READY });
+			dispatch({ type: FirehoseAction.READY });
 		} catch (err) {
-			this.#dispatch({
+			dispatch({
 				type: FirehoseAction.ERROR,
 				data: {
 					kind: 'init_failure',
 					exception: err,
-					retry: () => this.#dispatch({ type: FirehoseAction.RESUME }),
+					retry: () => dispatch({ type: FirehoseAction.RESUME }),
 				},
 			});
 		}
-	}
+	};
 
-	/// Polling code
-	#stopPolling(): void {
-		const pollId = this.#pollId;
-
+	const stopPolling = (): void => {
 		if (pollId !== undefined) {
 			clearTimeout(pollId);
-			this.#pollId = undefined;
+			pollId = undefined;
 		}
-	}
+	};
 
-	#startPolling(init = false): void {
-		this.#stopPolling();
+	const startPolling = (init = false): void => {
+		stopPolling();
 
-		let status = this.#status;
 		let pollInterval = 30_000;
 
 		if (status !== FirehoseStatus.READY && status !== FirehoseStatus.BACKGROUNDED) {
@@ -227,50 +180,50 @@ export class ChatFirehose extends EventEmitter<ChatFirehoseEvents> {
 		}
 
 		if (status === FirehoseStatus.READY) {
-			pollInterval = Math.min(pollInterval, ...this.#requestedPollIntervals.values());
+			pollInterval = Math.min(pollInterval, ...requestedPollIntervals.values());
 
 			// Ratelimit immediate polling
-			if (this.#pollImmediately && !this.#isPolling) {
-				this.#pollImmediately = false;
+			if (pollImmediately && !isPolling) {
+				pollImmediately = false;
 
 				// Don't actually poll if we just initialized
 				if (!init) {
-					this.#poll();
+					poll();
 				}
 
-				setTimeout(() => (this.#pollImmediately = true), 10_000);
+				setTimeout(() => (pollImmediately = true), 10_000);
 			}
 		}
 
-		this.#pollId = setInterval(() => {
-			if (this.#isPolling) {
+		pollId = setInterval(() => {
+			if (isPolling) {
 				return;
 			}
 
-			this.#poll();
+			poll();
 		}, pollInterval);
-	}
+	};
 
-	async #poll() {
-		if (this.#isPolling) {
+	const poll = async (): Promise<void> => {
+		if (isPolling) {
 			return;
 		}
 
-		this.#isPolling = true;
+		isPolling = true;
 
-		let cursor = this.#latestRev;
+		let cursor = latestRev;
 
 		try {
 			const buckets = new Map<string, ConvoEvents>();
 
 			do {
-				const response = await this.rpc.get('chat.bsky.convo.getLog', {
+				const { data } = await rpc.get('chat.bsky.convo.getLog', {
 					params: {
 						cursor: cursor,
 					},
 				});
 
-				const events = response.data.logs;
+				const events = data.logs;
 
 				for (const ev of events) {
 					const convoId = ev.convoId;
@@ -282,37 +235,67 @@ export class ChatFirehose extends EventEmitter<ChatFirehoseEvents> {
 					}
 				}
 
-				cursor = response.data.cursor;
+				cursor = data.cursor;
 
 				if (events.length === 0) {
 					break;
 				}
 			} while (true);
 
-			this.#latestRev = cursor;
+			latestRev = cursor;
 
 			if (buckets.size !== 0) {
 				// there shouldn't be any need to try-catch these emits, should it?
-				this.emit(`log`, buckets);
+				emitter.emit(`log`, buckets);
 
 				for (const [convoId, batch] of buckets) {
-					this.emit(`log:${convoId}`, batch);
+					emitter.emit(`log:${convoId}`, batch);
 				}
 			}
 		} catch (e) {
-			this.#dispatch({
+			dispatch({
 				type: FirehoseAction.ERROR,
 				data: {
 					kind: 'poll_failure',
 					exception: e,
-					retry: () => this.#dispatch({ type: FirehoseAction.RESUME, rev: cursor }),
+					retry: () => dispatch({ type: FirehoseAction.RESUME, rev: cursor }),
 				},
 			});
 		} finally {
-			this.#isPolling = false;
+			isPolling = false;
 		}
-	}
-}
+	};
+
+	return {
+		emitter,
+		init(): void {
+			dispatch({ type: FirehoseAction.INITIALIZE });
+		},
+		background(): void {
+			isBackgrounding = true;
+			dispatch({ type: FirehoseAction.BACKGROUND });
+		},
+		resume(): void {
+			isBackgrounding = false;
+			dispatch({ type: FirehoseAction.RESUME });
+		},
+		requestPollInterval(interval: number): () => void {
+			const id = nanoid();
+
+			requestedPollIntervals.set(id, interval);
+			dispatch({ type: FirehoseAction.UPDATE_POLL });
+
+			return () => {
+				requestedPollIntervals.delete(id);
+				dispatch({ type: FirehoseAction.UPDATE_POLL });
+			};
+		},
+		destroy() {
+			status = FirehoseStatus.DESTROYED;
+			stopPolling();
+		},
+	};
+};
 
 const enum FirehoseStatus {
 	UNINITIALIZED,
