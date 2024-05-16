@@ -6,6 +6,7 @@ import type { At, Brand, ChatBskyActorDefs, ChatBskyConvoDefs } from '../atp-sch
 import { mergeProfile, type SignalizedProfile } from './profiles';
 
 type Convo = ChatBskyConvoDefs.ConvoView;
+type ConvoProfile = Omit<ChatBskyActorDefs.ProfileViewBasic, typeof Brand.Type>;
 
 export const convos: Record<string, WeakRef<SignalizedConvo>> = {};
 
@@ -22,7 +23,8 @@ export class SignalizedConvo {
 
 	id: string;
 	rev: string;
-	members: Signal<SignalizedProfile[]>;
+	self: SignalizedProfile;
+	recipients: Signal<SignalizedProfile[]>;
 	muted: Signal<boolean>;
 	unread: Signal<boolean>;
 	lastMessage: Signal<Convo['lastMessage']>;
@@ -32,7 +34,8 @@ export class SignalizedConvo {
 
 		this.id = convo.id;
 		this.rev = convo.rev;
-		this.members = signal(mapMembers(uid, convo.members), EQUALS_DEQUAL);
+		this.self = mergeProfile(uid, convo.members.find((m) => m.did === uid) as ConvoProfile);
+		this.recipients = signal(mapMembers(uid, convo.members), EQUALS_DEQUAL);
 		this.muted = signal(convo.muted);
 		this.unread = signal(convo.unreadCount > 0);
 		this.lastMessage = signal(convo.lastMessage);
@@ -62,8 +65,10 @@ export const mergeConvo = (uid: At.DID, convo: Convo) => {
 
 		gc.register(val, id);
 	} else {
+		mergeProfile(uid, convo.members.find((m) => m.did === uid) as ConvoProfile);
+
 		val.rev = convo.rev;
-		val.members.value = mapMembers(uid, convo.members);
+		val.recipients.value = mapMembers(uid, convo.members);
 		val.muted.value = convo.muted;
 		val.unread.value = convo.unreadCount > 0;
 		val.lastMessage.value = convo.lastMessage;
@@ -73,7 +78,5 @@ export const mergeConvo = (uid: At.DID, convo: Convo) => {
 };
 
 const mapMembers = (uid: At.DID, members: ChatBskyActorDefs.ProfileViewBasic[]): SignalizedProfile[] => {
-	return members
-		.filter((m) => m.did !== uid)
-		.map((m) => mergeProfile(uid, m as Omit<ChatBskyActorDefs.ProfileViewBasic, typeof Brand.Type>));
+	return members.filter((m) => m.did !== uid).map((m) => mergeProfile(uid, m as ConvoProfile));
 };

@@ -1,19 +1,10 @@
-import {
-	For,
-	Show,
-	Suspense,
-	createEffect,
-	createMemo,
-	createResource,
-	createSignal,
-	onCleanup,
-} from 'solid-js';
+import { For, Show, Suspense, createEffect, createMemo, createResource, createSignal } from 'solid-js';
 
 import { withProxy } from '@mary/bluesky-client/xrpc';
 
 import { multiagent } from '~/api/globals/agent';
 
-import { createDerivedSignal } from '~/utils/hooks';
+import { createDerivedSignal, makeAbortable } from '~/utils/hooks';
 
 import { ChatFirehose } from '~/desktop/lib/messages/firehose';
 
@@ -138,15 +129,3 @@ const MessagesPane = (props: MessagesPaneProps) => {
 };
 
 export default MessagesPane;
-
-const makeAbortable = (): (() => AbortSignal) => {
-	let controller: AbortController | undefined;
-	onCleanup(() => controller?.abort());
-
-	return () => {
-		controller?.abort();
-		controller = new AbortController();
-
-		return controller.signal;
-	};
-};

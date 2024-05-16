@@ -12,6 +12,7 @@ export interface ChannelItemProps {
 	uid: At.DID;
 	/** Expected to be static */
 	item: SignalizedConvo;
+	onClick: () => void;
 }
 
 const itemClass = Interactive({
@@ -22,10 +23,10 @@ const ChannelItem = (props: ChannelItemProps) => {
 	const item = props.item;
 
 	return (
-		<button class={itemClass}>
+		<button class={itemClass} onClick={props.onClick}>
 			{(() => {
 				// @todo: just pretend we only have 1:1 DMs for now
-				const recipient = item.members.value[0];
+				const recipient = item.recipients.value[0];
 
 				return (
 					<>

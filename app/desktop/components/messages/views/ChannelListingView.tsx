@@ -23,7 +23,7 @@ import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 import ChannelItem from '../components/ChannelItem';
 
 import { useChatPane } from '../contexts/chat';
-import type { ViewKind, ViewParams } from '../contexts/router';
+import { ViewKind, type ViewParams } from '../contexts/router';
 
 type ChannelEvents = ChatBskyConvoGetLog.Output['logs'];
 
@@ -33,7 +33,7 @@ interface ChannelListingReturn {
 }
 
 const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
-	const { close, did, rpc, firehose } = useChatPane();
+	const { close, did, rpc, firehose, router } = useChatPane();
 
 	const profile = createMemo(() => getAccountData(did)?.profile);
 
@@ -187,9 +187,13 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 				<List
 					data={isResourceReady(listing) ? listing.latest.convos : undefined}
 					error={listing.error}
-					render={(convo) => {
-						return <ChannelItem uid={did} item={convo} />;
-					}}
+					render={(convo) => (
+						<ChannelItem
+							uid={did}
+							item={convo}
+							onClick={() => router.to({ kind: ViewKind.CHANNEL, id: convo.id })}
+						/>
+					)}
 					hasNextPage={isResourceReady(listing) && listing.latest.cursor !== undefined}
 					hasNewData={hasNew()}
 					isFetchingNextPage={listing.loading}
