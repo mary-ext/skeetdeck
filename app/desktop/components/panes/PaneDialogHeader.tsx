@@ -23,7 +23,7 @@ const PaneDialogHeader = (props: PaneDialogHeaderProps) => {
 					return (
 						<button
 							type="button"
-							title="Go back to previous dialog"
+							title="Return to previous dialog"
 							disabled={props.disabled}
 							onClick={modal.close}
 							class={/* @once */ IconButton({ edge: 'left' })}

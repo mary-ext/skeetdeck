@@ -199,7 +199,7 @@ const Onboarding = () => {
 				<div class="grow"></div>
 
 				<button
-					title="Go back to previous page"
+					title="Return to previous screen"
 					hidden={(() => {
 						const $step = step();
 						return !($step === Steps.SYNC || $step === Steps.FINISH);

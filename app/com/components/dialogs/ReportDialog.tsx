@@ -214,7 +214,7 @@ const ReportDialog = (props: ReportDialogProps) => {
 						if (canGoBack()) {
 							return (
 								<button
-									title="Go back to previous page"
+									title="Return to previous screen"
 									onClick={() => {
 										const $step = step();
 

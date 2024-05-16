@@ -120,7 +120,7 @@ const LabelsOnMeDialog = (props: LabelsOnMeDialogProps) => {
 						if (step() === AppealStep.EXPLAIN) {
 							return (
 								<button
-									title="Go back to previous page"
+									title="Return to previous screen"
 									onClick={() => {
 										setStep(AppealStep.CHOOSE_LABELS);
 									}}
