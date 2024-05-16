@@ -216,7 +216,6 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 		try {
 			const buckets = new Map<string, ConvoEvents>();
 
-			do {
 				const { data } = await rpc.get('chat.bsky.convo.getLog', {
 					params: {
 						cursor: cursor,
@@ -235,14 +234,7 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 					}
 				}
 
-				cursor = data.cursor;
-
-				if (events.length === 0) {
-					break;
-				}
-			} while (true);
-
-			latestRev = cursor;
+			latestRev = cursor = data.cursor;
 
 			if (buckets.size !== 0) {
 				// there shouldn't be any need to try-catch these emits, should it?
