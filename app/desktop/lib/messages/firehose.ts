@@ -5,6 +5,12 @@ import type { ChatBskyConvoGetLog } from '~/api/atp-schema';
 
 import { EventEmitter } from '../events';
 
+function debug(msg: string) {
+	if (import.meta.env.DEV) {
+		console.log(`[chat-firehose] ${msg}`);
+	}
+}
+
 type ConvoEvents = ChatBskyConvoGetLog.Output['logs'];
 
 export type FirehoseErrorKind = 'unknown' | 'init_failure' | 'poll_failure';
@@ -45,6 +51,7 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 						status = FirehoseStatus.INITIALIZING;
 
 						init();
+						debug(`transition: UNINITIALIZED -> INITIALIZING`);
 						break;
 					}
 				}
@@ -58,12 +65,14 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 						startPolling(true);
 
 						emitter.emit('connect');
+						debug(`transition: INITIALIZING -> ${!isBackgrounding ? `READY` : `BACKGROUNDED`}`);
 						break;
 					}
 					case FirehoseAction.ERROR: {
 						status = FirehoseStatus.ERROR;
 
 						emitter.emit('error', action.data);
+						debug(`transition: INITIALIZING -> ERROR`);
 						break;
 					}
 				}
@@ -76,6 +85,7 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 						status = FirehoseStatus.BACKGROUNDED;
 						startPolling();
 
+						debug(`transition: READY -> BACKGROUNDED`);
 						break;
 					}
 					case FirehoseAction.UPDATE_POLL: {
@@ -88,6 +98,7 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 						stopPolling();
 
 						emitter.emit('error', action.data);
+						debug(`transition: READY -> ERROR`);
 						break;
 					}
 				}
@@ -100,6 +111,7 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 						status = FirehoseStatus.READY;
 						startPolling();
 
+						debug(`transition: BACKGROUNDED -> READY`);
 						break;
 					}
 					case FirehoseAction.UPDATE_POLL: {
@@ -112,6 +124,7 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 						stopPolling();
 
 						emitter.emit('error', action.data);
+						debug(`transition: BACKGROUNDED -> ERROR`);
 						break;
 					}
 				}
@@ -125,6 +138,7 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 						latestRev = action.rev;
 
 						init();
+						debug(`transition: ERROR -> INITIALIZING`);
 						break;
 					}
 				}
@@ -165,6 +179,8 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 
 	const stopPolling = (): void => {
 		if (pollId !== undefined) {
+			debug(`removing polling`);
+
 			clearTimeout(pollId);
 			pollId = undefined;
 		}
@@ -195,6 +211,8 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 			}
 		}
 
+		debug(`setting up polling for ${pollInterval} ms`);
+
 		pollId = setInterval(() => {
 			if (isPolling) {
 				return;
@@ -216,25 +234,29 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 		try {
 			const buckets = new Map<string, ConvoEvents>();
 
-				const { data } = await rpc.get('chat.bsky.convo.getLog', {
-					params: {
-						cursor: cursor,
-					},
-				});
+			const { data } = await rpc.get('chat.bsky.convo.getLog', {
+				params: {
+					cursor: cursor,
+				},
+			});
 
-				const events = data.logs;
+			const events = data.logs;
 
-				for (const ev of events) {
-					const convoId = ev.convoId;
+			for (const ev of events) {
+				const convoId = ev.convoId;
 
-					if (buckets.has(convoId)) {
-						buckets.get(convoId)!.push(ev);
-					} else {
-						buckets.set(convoId, [ev]);
-					}
+				if (buckets.has(convoId)) {
+					buckets.get(convoId)!.push(ev);
+				} else {
+					buckets.set(convoId, [ev]);
 				}
+			}
 
 			latestRev = cursor = data.cursor;
+
+			if (events.length !== 0) {
+				debug(`received ${events.length} events; cursor=${cursor}`);
+			}
 
 			if (buckets.size !== 0) {
 				// there shouldn't be any need to try-catch these emits, should it?
@@ -285,6 +307,8 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 		destroy() {
 			status = FirehoseStatus.DESTROYED;
 			stopPolling();
+
+			debug(`destroyed`);
 		},
 	};
 };
