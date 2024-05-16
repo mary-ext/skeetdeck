@@ -25,12 +25,12 @@ export type ChatFirehoseEvents = {
 export type ChatFirehose = ReturnType<typeof createChatFirehose>;
 
 export const createChatFirehose = (rpc: BskyXRPC) => {
-	let status = FirehoseStatus.INITIALIZING;
+	let status = FirehoseStatus.UNINITIALIZED;
 	let latestRev: string | undefined;
 
 	let pollId: number | undefined;
 	let pollImmediately = true;
-	let isPolling = true;
+	let isPolling = false;
 	let requestedPollIntervals: Map<string, number> = new Map();
 
 	let isBackgrounding = false;
