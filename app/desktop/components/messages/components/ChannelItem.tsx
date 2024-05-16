@@ -36,7 +36,7 @@ const ChannelItem = (props: ChannelItemProps) => {
 
 						<div class="min-w-0 grow">
 							<div class="mb-0.5 flex items-center justify-between gap-3">
-								<div class="flex items-center overflow-hidden text-sm text-muted-fg">
+								<div class="flex grow items-center overflow-hidden text-sm text-muted-fg">
 									<span class="flex max-w-full gap-1 overflow-hidden text-ellipsis whitespace-nowrap text-left">
 										{recipient.displayName.value && (
 											<bdi class="overflow-hidden text-ellipsis">
