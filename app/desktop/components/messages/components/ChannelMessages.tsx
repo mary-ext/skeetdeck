@@ -213,6 +213,8 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 				}
 			}),
 		);
+
+		onCleanup(firehose.requestPollInterval(3_000));
 	});
 
 	let entryCache = new Map<string, Entry>();
