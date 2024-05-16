@@ -1,4 +1,4 @@
-import { batch, createEffect, createMemo, createSignal, onCleanup } from 'solid-js';
+import { batch, createMemo, createSignal, onCleanup } from 'solid-js';
 
 import type { BskyXRPC } from '@mary/bluesky-client';
 
@@ -203,20 +203,6 @@ export const createChannelState = ({ id: channelId, firehose, rpc, fetchLimit = 
 		}
 	};
 
-	createEffect(() => {
-		doInitialLoad();
-
-		onCleanup(
-			firehose.emitter.on(`log:${channelId}`, (events) => {
-				if (pendingEvents) {
-					pendingEvents = [...pendingEvents, ...events];
-				}
-			}),
-		);
-
-		onCleanup(firehose.requestPollInterval(3_000));
-	});
-
 	let entryCache = new Map<string, Entry>();
 	const entries = createMemo<Entry[]>(() => {
 		const entrants: Entry[] = [];
@@ -277,6 +263,8 @@ export const createChannelState = ({ id: channelId, firehose, rpc, fetchLimit = 
 		return entrants;
 	});
 
+	let destroy: (() => void) | undefined;
+
 	return {
 		entries,
 
@@ -285,6 +273,25 @@ export const createChannelState = ({ id: channelId, firehose, rpc, fetchLimit = 
 		failed,
 
 		doLoadUpwards,
+
+		mount() {
+			if (!destroy) {
+				doInitialLoad();
+
+				destroy = firehose.emitter.on(`log:${channelId}`, (events) => {
+					if (pendingEvents) {
+						pendingEvents = [...pendingEvents, ...events];
+					}
+
+					setMessages((messages) => processFirehoseEvents(messages, events));
+				});
+			}
+
+			onCleanup(firehose.requestPollInterval(3_000));
+		},
+		destroy() {
+			destroy?.();
+		},
 	};
 };
 

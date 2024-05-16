@@ -1,4 +1,4 @@
-import { For } from 'solid-js';
+import { For, onCleanup, onMount } from 'solid-js';
 
 import type { SignalizedConvo } from '~/api/stores/convo';
 
@@ -20,11 +20,16 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 	const convo = props.convo;
 
 	const { firehose, rpc } = useChatPane();
-	const { entries } = createChannelState({ id: convo.id, firehose, rpc });
+	const channel = createChannelState({ id: convo.id, firehose, rpc });
+
+	onMount(() => {
+		channel.mount();
+		onCleanup(channel.destroy);
+	});
 
 	return (
 		<div class="flex min-h-0 grow flex-col overflow-y-auto pt-6">
-			<For each={entries()}>
+			<For each={channel.entries()}>
 				{(entry) => {
 					const type = entry.type;
 
