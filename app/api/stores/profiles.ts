@@ -32,7 +32,7 @@ export class SignalizedProfile {
 	readonly followersCount: Signal<NonNullable<ProfileDetailed['followersCount']>>;
 	readonly followsCount: Signal<NonNullable<ProfileDetailed['followsCount']>>;
 	readonly postsCount: Signal<NonNullable<ProfileDetailed['postsCount']>>;
-	readonly associated: Signal<ProfileAssociated | undefined>;
+	readonly associated: Signal<ProfileAssociated>;
 	readonly labels: Signal<NonNullable<ProfileDetailed['labels']>>;
 
 	readonly viewer: {
@@ -138,12 +138,13 @@ export const mergeProfile = (
 	return val;
 };
 
-const getAssociated = (o: AppBskyActorDefs.ProfileAssociated | undefined): ProfileAssociated | undefined => {
-	const { feedgens = 0, labeler = false, lists = 0 } = o || {};
+const DEFAULT_CHAT_ASSOCIATION: AppBskyActorDefs.ProfileAssociatedChat = {
+	allowIncoming: 'none',
+};
 
-	if (feedgens > 0 || labeler || lists > 0) {
-		return { feedgens, labeler, lists };
-	}
+const getAssociated = (o: AppBskyActorDefs.ProfileAssociated | undefined): ProfileAssociated => {
+	const { feedgens = 0, labeler = false, lists = 0, chat = DEFAULT_CHAT_ASSOCIATION } = o || {};
+	return { feedgens, labeler, lists, chat };
 };
 
 const mergeAssociatedBasic = (
