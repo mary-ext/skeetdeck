@@ -1,4 +1,4 @@
-import { batch, createMemo, createSignal, onCleanup } from 'solid-js';
+import { batch, createMemo, createSignal } from 'solid-js';
 
 import type { BskyXRPC } from '@mary/bluesky-client';
 
@@ -19,7 +19,9 @@ export interface ChannelOptions {
 	fetchLimit?: number;
 }
 
-export const createChannelState = ({ id: channelId, firehose, rpc, fetchLimit = 50 }: ChannelOptions) => {
+export type Channel = ReturnType<typeof createChannel>;
+
+export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }: ChannelOptions) => {
 	const abortable = makeAbortable();
 
 	/** Loaded messages */
@@ -286,8 +288,6 @@ export const createChannelState = ({ id: channelId, firehose, rpc, fetchLimit = 
 					setMessages((messages) => processFirehoseEvents(messages, events));
 				});
 			}
-
-			onCleanup(firehose.requestPollInterval(3_000));
 		},
 		destroy() {
 			destroy?.();

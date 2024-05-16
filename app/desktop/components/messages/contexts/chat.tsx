@@ -6,7 +6,9 @@ import type { At } from '~/api/atp-schema';
 
 import { assert } from '~/utils/misc';
 
+import type { Channel } from '~/desktop/lib/messages/channel';
 import type { ChatFirehose } from '~/desktop/lib/messages/firehose';
+import type { LRU } from '~/desktop/lib/messages/lru';
 
 import type { View } from './router';
 
@@ -22,6 +24,7 @@ export interface ChatPaneState {
 	did: At.DID;
 	rpc: BskyXRPC;
 	firehose: ChatFirehose;
+	channels: LRU<string, Channel>;
 
 	router: ChatRouterState;
 

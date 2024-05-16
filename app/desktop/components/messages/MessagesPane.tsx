@@ -1,4 +1,13 @@
-import { For, Show, Suspense, createEffect, createMemo, createResource, createSignal } from 'solid-js';
+import {
+	For,
+	Show,
+	Suspense,
+	createEffect,
+	createMemo,
+	createResource,
+	createSignal,
+	onCleanup,
+} from 'solid-js';
 
 import { withProxy } from '@mary/bluesky-client/xrpc';
 
@@ -6,7 +15,9 @@ import { multiagent } from '~/api/globals/agent';
 
 import { createDerivedSignal, makeAbortable } from '~/utils/hooks';
 
+import { createChannel, type Channel } from '~/desktop/lib/messages/channel';
 import { createChatFirehose } from '~/desktop/lib/messages/firehose';
+import { createLRU } from '~/desktop/lib/messages/lru';
 
 import CircularProgress from '~/com/components/CircularProgress';
 
@@ -36,12 +47,21 @@ const MessagesPane = (props: MessagesPaneProps) => {
 
 		const proxied = withProxy(rpc, DM_SERVICE_PROXY);
 		const firehose = createChatFirehose(proxied);
+		const channels = createLRU<string, Channel>({
+			maxSize: 3,
+			create(id) {
+				return createChannel({ id, firehose, rpc: proxied });
+			},
+			destroy(channel) {
+				return channel.destroy();
+			},
+		});
 
 		if (!signal.aborted) {
 			firehose.init();
 		}
 
-		return { did: did, rpc: proxied, firehose };
+		return { did: did, rpc: proxied, firehose, channels };
 	});
 
 	const router: ChatRouterState = {
@@ -109,6 +129,11 @@ const MessagesPane = (props: MessagesPaneProps) => {
 							close: props.onClose,
 							changeAccount: setUid,
 						};
+
+						onCleanup(() => {
+							context.firehose.destroy();
+							context.channels.clear();
+						});
 
 						return (
 							<ChatPaneContext.Provider value={context}>

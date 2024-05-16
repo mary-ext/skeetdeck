@@ -2,7 +2,7 @@ import { For, onCleanup, onMount } from 'solid-js';
 
 import type { SignalizedConvo } from '~/api/stores/convo';
 
-import { createChannelState, EntryType } from '~/desktop/lib/messages/channel';
+import { EntryType } from '~/desktop/lib/messages/channel';
 
 import { useChatPane } from '../contexts/chat';
 
@@ -19,12 +19,12 @@ interface ChannelMessagesProps {
 const ChannelMessages = (props: ChannelMessagesProps) => {
 	const convo = props.convo;
 
-	const { firehose, rpc } = useChatPane();
-	const channel = createChannelState({ id: convo.id, firehose, rpc });
+	const { firehose, channels } = useChatPane();
+	const channel = channels.get(convo.id);
 
 	onMount(() => {
 		channel.mount();
-		onCleanup(channel.destroy);
+		onCleanup(firehose.requestPollInterval(3_000));
 	});
 
 	return (
