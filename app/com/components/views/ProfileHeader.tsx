@@ -70,7 +70,6 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 
 	const canMessage = createMemo(() => {
 		const allowed = associated.value.chat.allowIncoming;
-		console.log(profile.did, allowed);
 
 		if (allowed === 'all') {
 			return true;
