@@ -20,7 +20,7 @@ import { IconButton } from '~/com/primitives/icon-button';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
-import ConvoItem from '../components/ConvoItem';
+import ChannelItem from '../components/ChannelItem';
 import { useChatPane } from '../contexts/chat-pane';
 import { useMultichat } from '../contexts/multichat';
 import type { ViewKind, ViewParams } from '../contexts/router';
@@ -189,7 +189,7 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 					data={isResourceReady(listing) ? listing.latest.convos : undefined}
 					error={listing.error}
 					render={(convo) => {
-						return <ConvoItem uid={did} item={convo} />;
+						return <ChannelItem uid={did} item={convo} />;
 					}}
 					hasNextPage={isResourceReady(listing) && listing.latest.cursor !== undefined}
 					hasNewData={hasNew()}

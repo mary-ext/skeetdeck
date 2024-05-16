@@ -7,7 +7,7 @@ import { Interactive } from '~/com/primitives/interactive';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
-export interface ConvoItemProps {
+export interface ChannelItemProps {
 	/** Expected to be static */
 	uid: At.DID;
 	/** Expected to be static */
@@ -18,7 +18,7 @@ const itemClass = Interactive({
 	class: `flex items-start gap-3 px-4 py-3 text-left`,
 });
 
-const ConvoItem = (props: ConvoItemProps) => {
+const ChannelItem = (props: ChannelItemProps) => {
 	const item = props.item;
 
 	return (
@@ -107,4 +107,4 @@ const ConvoItem = (props: ConvoItemProps) => {
 	);
 };
 
-export default ConvoItem;
+export default ChannelItem;
