@@ -61,14 +61,13 @@ const MessagesPane = (props: MessagesPaneProps) => {
 			return views().length > 1;
 		},
 		back() {
-			const $views = views();
-
-			if ($views.length > 1) {
-				setViews($views.slice(0, -1));
-			}
+			setViews((views) => (views.length > 1 ? views.slice(0, -1) : views));
+		},
+		replace(next) {
+			setViews((views) => (views.length > 1 ? views.with(views.length - 1, next) : views));
 		},
 		to(next) {
-			setViews(views().concat(next));
+			setViews((views) => views.concat(next));
 		},
 	};
 
@@ -87,8 +86,13 @@ const MessagesPane = (props: MessagesPaneProps) => {
 		if (initialState) {
 			setUid(initialState.uid);
 
-			if (initialState.actor) {
-				// @todo: redirect to a page that resolves the convo
+			if (initialState.members) {
+				setViews([
+					{ kind: ViewKind.CHANNEL_LISTING },
+					{ kind: ViewKind.RESOLVE_CHANNEL, members: initialState.members },
+				]);
+			} else {
+				setViews([{ kind: ViewKind.CHANNEL_LISTING }]);
 			}
 		} else if (prev) {
 			setViews([{ kind: ViewKind.CHANNEL_LISTING }]);
@@ -117,7 +121,13 @@ const MessagesPane = (props: MessagesPaneProps) => {
 
 						return (
 							<ChatPaneContext.Provider value={context}>
-								<For each={views()}>{(view) => <ChatRouterView view={view} />}</For>
+								<For each={views()}>
+									{(view) => (
+										<div class="contents" hidden={current() !== view}>
+											<ChatRouterView view={view} />
+										</div>
+									)}
+								</For>
 							</ChatPaneContext.Provider>
 						);
 					}}

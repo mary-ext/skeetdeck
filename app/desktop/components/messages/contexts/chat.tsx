@@ -15,6 +15,7 @@ export interface ChatRouterState {
 	readonly canGoBack: boolean;
 	back(): void;
 	to(next: View): void;
+	replace(next: View): void;
 }
 
 export interface ChatPaneState {

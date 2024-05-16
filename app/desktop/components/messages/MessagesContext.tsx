@@ -5,7 +5,7 @@ import { assert } from '~/utils/misc';
 
 export interface MessagesInitialState {
 	uid: At.DID;
-	actor: At.DID;
+	members: At.DID[];
 }
 
 export interface MessagesContextState {

@@ -20,6 +20,7 @@ import {
 	LINK_PROFILE_FOLLOWERS,
 	LINK_PROFILE_FOLLOWS,
 	LINK_PROFILE_LISTS,
+	LINK_PROFILE_MESSAGE,
 	LINK_QUOTE,
 	LINK_REPLY,
 	LINK_TAG,
@@ -28,6 +29,7 @@ import {
 } from '~/com/components/Link';
 
 import { useComposer } from '../composer/ComposerContext';
+import { useMessages } from '../messages/MessagesContext';
 
 import { usePaneContext } from './PaneContext';
 
@@ -56,6 +58,7 @@ const PaneDialogs = {
 export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {
 	const { pane, openModal } = usePaneContext();
 	const composer = useComposer();
+	const messages = useMessages();
 
 	const navigate: LinkingContextObject['navigate'] = (to, alt) => {
 		const type = to.type;
@@ -88,6 +91,11 @@ export const PaneLinkingProvider = (props: PaneLinkingProviderProps) => {
 				state.reply = `at://${to.actor}/app.bsky.feed.post/${to.rkey}`;
 			});
 
+			return;
+		}
+
+		if (type === LINK_PROFILE_MESSAGE) {
+			messages.show({ uid: pane.uid, members: [to.actor] });
 			return;
 		}
 	};
