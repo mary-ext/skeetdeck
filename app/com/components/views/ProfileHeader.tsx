@@ -20,12 +20,18 @@ import { clsx } from '~/utils/misc';
 import { openModal } from '../../globals/modals';
 import { getModerationOptions } from '../../globals/shared';
 
+import MoreHorizIcon from '../../icons/baseline-more-horiz';
+import MailOutlinedIcon from '../../icons/outline-mail';
 import { BoxedIconButton } from '../../primitives/boxed-icon-button';
 import { Button } from '../../primitives/button';
-
-import { LINK_LIST, LINK_PROFILE_EDIT, LINK_PROFILE_FOLLOWERS, LINK_PROFILE_FOLLOWS, Link } from '../Link';
-
-import MoreHorizIcon from '../../icons/baseline-more-horiz';
+import {
+	LINK_LIST,
+	LINK_PROFILE_EDIT,
+	LINK_PROFILE_FOLLOWERS,
+	LINK_PROFILE_FOLLOWS,
+	LINK_PROFILE_MESSAGE,
+	Link,
+} from '../Link';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
@@ -39,8 +45,6 @@ const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog'));
 const MuteConfirmDialog = lazy(() => import('../dialogs/MuteConfirmDialog'));
 const SilenceConfirmDialog = lazy(() => import('../dialogs/SilenceConfirmDialog'));
 
-const isDesktop = import.meta.env.VITE_MODE === 'desktop';
-
 export interface ProfileHeaderProps {
 	/** Expected to be static */
 	profile: SignalizedProfile;
@@ -48,6 +52,7 @@ export interface ProfileHeaderProps {
 
 const ProfileHeader = (props: ProfileHeaderProps) => {
 	const profile = props.profile;
+	const associated = profile.associated;
 	const viewer = profile.viewer;
 
 	const causes = createMemo(() => {
@@ -61,6 +66,19 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 	const shouldBlurMedia = createMemo(() => {
 		const ui = getModerationUI(causes(), ContextProfileMedia);
 		return ui.b.length > 0;
+	});
+
+	const canMessage = createMemo(() => {
+		const allowed = associated.value.chat.allowIncoming;
+		console.log(profile.did, allowed);
+
+		if (allowed === 'all') {
+			return true;
+		} else if (allowed === 'following') {
+			return !!viewer.followedBy.value;
+		}
+
+		return false;
 	});
 
 	return (
@@ -123,13 +141,24 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 					{
 						/* @once */ profile.did !== profile.uid
 							? [
-									isDesktop && (
-										<ProfileOverflowAction profile={profile}>
-											<button title="Actions" class={/* @once */ BoxedIconButton()}>
-												<MoreHorizIcon />
-											</button>
-										</ProfileOverflowAction>
-									),
+									<ProfileOverflowAction profile={profile}>
+										<button title="Actions" class={/* @once */ BoxedIconButton()}>
+											<MoreHorizIcon />
+										</button>
+									</ProfileOverflowAction>,
+									(() => {
+										if (canMessage()) {
+											return (
+												<Link
+													title="Message"
+													to={{ type: LINK_PROFILE_MESSAGE, actor: profile.did }}
+													class={/* @once */ BoxedIconButton()}
+												>
+													<MailOutlinedIcon />
+												</Link>
+											);
+										}
+									}) as unknown as JSX.Element,
 									(() => {
 										if (!viewer.blocking.value && !viewer.blockedBy.value) {
 											return <ProfileFollowButton profile={profile} />;

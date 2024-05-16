@@ -16,9 +16,10 @@ export const LINK_PROFILE_FEEDS = 9;
 export const LINK_PROFILE_FOLLOWERS = 10;
 export const LINK_PROFILE_FOLLOWS = 11;
 export const LINK_PROFILE_LISTS = 12;
-export const LINK_QUOTE = 13;
-export const LINK_REPLY = 14;
-export const LINK_TAG = 15;
+export const LINK_PROFILE_MESSAGE = 13;
+export const LINK_QUOTE = 14;
+export const LINK_REPLY = 15;
+export const LINK_TAG = 16;
 
 export interface ExternalLinking {
 	type: typeof LINK_EXTERNAL;
@@ -92,6 +93,11 @@ export interface ProfileListsLinking {
 	actor: At.DID;
 }
 
+export interface ProfileMessageLinking {
+	type: typeof LINK_PROFILE_MESSAGE;
+	actor: At.DID;
+}
+
 export interface QuoteLinking {
 	type: typeof LINK_QUOTE;
 	actor: At.DID;
@@ -123,6 +129,7 @@ export type Linking =
 	| ProfileFollowersLinking
 	| ProfileFollowsLinking
 	| ProfileListsLinking
+	| ProfileMessageLinking
 	| QuoteLinking
 	| ReplyLinking
 	| TagLinking;
