@@ -162,9 +162,7 @@ export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }:
 			setFetching(FetchState.UPWARDS);
 
 			// Defer firehose events, in case deletions happens upwards
-			if (!pendingEvents) {
-				pendingEvents = [];
-			}
+			pendingEvents = [];
 
 			try {
 				const { data } = await rpc.get('chat.bsky.convo.getMessages', {
