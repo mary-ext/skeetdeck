@@ -1,5 +1,7 @@
 import { createEffect, For, Match, onCleanup, onMount, Switch } from 'solid-js';
 
+import { makeEventListener } from '@solid-primitives/event-listener';
+
 import type { SignalizedConvo } from '~/api/stores/convo';
 
 import { ifIntersect } from '~/utils/refs';
@@ -12,7 +14,6 @@ import { useChatPane } from '../contexts/chat';
 
 import MessageDivider from './MessageDivider';
 import MessageItem from './MessageItem';
-import { createEventListener } from '@solid-primitives/event-listener';
 
 interface ChannelMessagesProps {
 	/** Expected to be static */
@@ -47,7 +48,7 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 	};
 
 	const markRead = () => {
-		if (!latestId || (initialMount && !convo.unread.peek())) {
+		if (!latestId) {
 			return;
 		}
 
@@ -65,7 +66,7 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 		channel.mount();
 
 		onCleanup(firehose.requestPollInterval(3_000));
-		createEventListener(document, 'visibilitychange', () => (focused = !document.hidden));
+		makeEventListener(document, 'visibilitychange', () => (focused = !document.hidden));
 	});
 
 	createEffect((o: { oldest?: string; height?: number } = {}) => {
@@ -77,7 +78,10 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 
 			if ((focused || initialMount) && atBottom) {
 				ref!.scrollTo(0, ref!.scrollHeight);
-				markRead();
+
+				if (!initialMount || convo.unread.peek()) {
+					markRead();
+				}
 
 				initialMount = false;
 			} else {
