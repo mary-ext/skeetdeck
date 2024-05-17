@@ -138,6 +138,14 @@ export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }:
 				// @todo: do something with `err`
 				setFetching();
 				setFailed(true);
+
+				// Process deferred events
+				if (pendingEvents !== undefined) {
+					const events = pendingEvents;
+					pendingEvents = undefined;
+
+					setMessages((existing) => processFirehoseEvents(existing, events));
+				}
 			}
 		};
 
