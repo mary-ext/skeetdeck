@@ -2,14 +2,13 @@ import { batch, createMemo, createRoot, createSignal, getOwner, onCleanup, runWi
 
 import type { BskyXRPC } from '@mary/bluesky-client';
 
-import type { ChatBskyConvoDefs, ChatBskyConvoGetLog } from '~/api/atp-schema';
+import type { ChatBskyConvoDefs } from '~/api/atp-schema';
 
 import { makeAbortable } from '~/utils/hooks';
 import { assert, mapDefined } from '~/utils/misc';
 
-import type { ChatFirehose } from './firehose';
+import type { ChatFirehose, ConvoEvent } from './firehose';
 
-type ChannelEvents = ChatBskyConvoGetLog.Output['logs'];
 type Message = ChatBskyConvoDefs.MessageView;
 
 export interface ChannelOptions {
@@ -40,9 +39,9 @@ export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }:
 		const [failed, setFailed] = createSignal(false);
 
 		/** Firehose events we haven't processed because we're currently fetching */
-		let pendingEvents: ChannelEvents | undefined;
+		let pendingEvents: ConvoEvent[] | undefined;
 
-		const processFirehoseEvents = (messages: Message[], events: ChannelEvents) => {
+		const processFirehoseEvents = (messages: Message[], events: ConvoEvent[]) => {
 			for (let idx = 0, len = events.length; idx < len; idx++) {
 				const event = events[idx];
 				const type = event.$type;
