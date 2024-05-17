@@ -5,7 +5,7 @@ import type { BskyXRPC } from '@mary/bluesky-client';
 import type { ChatBskyConvoDefs, ChatBskyConvoGetLog } from '~/api/atp-schema';
 
 import { makeAbortable } from '~/utils/hooks';
-import { mapDefined } from '~/utils/misc';
+import { assert, mapDefined } from '~/utils/misc';
 
 import type { ChatFirehose } from './firehose';
 
@@ -211,64 +211,104 @@ export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }:
 		const newEntryCache = new Map<string, Entry>();
 
 		const arr = messages();
-		for (let idx = 0, len = arr.length; idx < len; idx++) {
-			const item = arr[idx];
-			const nextItem = arr[idx + 1];
+		let group: Message[] | undefined;
 
-			let date: string | undefined;
-			let tail = true;
+		const flushGroup = () => {
+			assert(group !== undefined, `expected group to exist`);
 
-			if (nextItem) {
-				const time = new Date(item.sentAt);
-				const nextTime = new Date(nextItem.sentAt);
+			for (let idx = 0, len = group.length; idx < len; idx++) {
+				const msg = group[idx];
+				const tail = idx !== len - 1;
 
-				if (
-					time.getDate() !== nextTime.getDate() ||
-					time.getMonth() !== nextTime.getMonth() ||
-					time.getFullYear() !== nextTime.getFullYear()
-				) {
-					date = nextItem.sentAt;
-				}
-
-				// Separate messages if:
-				// - Not the same author
-				// - 7 minutes has elapsed between the two message
-				if (item.sender.did !== nextItem.sender.did || nextTime.getTime() - time.getTime() >= 420_000) {
-					tail = false;
-				}
-			} else {
-				tail = false;
-			}
-
-			if (idx === 0 && oldestRev() === null) {
-				const date = item.sentAt;
-				const entry = (entryCache.get(date) as DividerEntry | undefined) ?? { type: EntryType.DIVIDER, date };
-
-				newEntryCache.set(date, entry);
-				entrants.push(entry);
-			}
-
-			{
-				const key = `${item.id}:${+tail}`;
+				const key = `${msg.id}:${+tail}`;
 				const entry = (entryCache.get(key) as MessageEntry | undefined) ?? {
 					type: EntryType.MESSAGE,
-					message: item,
-					tail,
+					message: msg,
+					tail: tail,
 				};
 
 				newEntryCache.set(key, entry);
 				entrants.push(entry);
 			}
 
-			if (date) {
-				const key = date;
-				const entry = (entryCache.get(key) as DividerEntry | undefined) ?? { type: EntryType.DIVIDER, date };
+			group = undefined;
+		};
 
-				newEntryCache.set(key, entry);
-				entrants.push(entry);
+		const pushDivider = (date: string) => {
+			const entry = (entryCache.get(date) as DividerEntry | undefined) ?? { type: EntryType.DIVIDER, date };
+
+			newEntryCache.set(date, entry);
+			entrants.push(entry);
+		};
+
+		for (let idx = 0, len = arr.length; idx < len; idx++) {
+			const item = arr[idx];
+
+			// We're at the first message in history, push a divider.
+			if (idx === 0 && oldestRev() === null) {
+				pushDivider(item.sentAt);
 			}
+
+			// First message in group
+			if (!group) {
+				group = [item];
+				continue;
+			}
+
+			// Grab the first and last message in group
+			const firstInGroup = group[0];
+			const lastInGroup = group[group.length - 1];
+
+			{
+				const a = new Date(lastInGroup.sentAt);
+				const b = new Date(item.sentAt);
+
+				// Check if it's still the same date
+				if (
+					b.getDate() !== a.getDate() ||
+					b.getMonth() !== a.getMonth() ||
+					b.getFullYear() !== a.getFullYear()
+				) {
+					// It's not, so let's flush this group
+					flushGroup();
+
+					// Push a divider
+					pushDivider(item.sentAt);
+
+					// Rewind since we haven't dealt with this item yet
+					idx--;
+					continue;
+				}
+
+				// Separate messages if:
+				// - Not the same author
+				// - 7 minutes has elapsed between this and the last in group
+				// - 14 minutes has elapsed between this and the first in group
+				if (
+					item.sender.did !== lastInGroup.sender.did ||
+					b.getTime() - a.getTime() >= 420_000 ||
+					b.getTime() - new Date(firstInGroup.sentAt).getTime() >= 840_000
+				) {
+					// Flush the group
+					flushGroup();
+
+					// Rewind since we haven't dealt with this item yet
+					idx--;
+					continue;
+				}
+			}
+
+			// We passed all those checks from above, so push it to the group array.
+			group.push(item);
 		}
 
+		// Flush the remaining group, there's guaranteed to be one if there's at
+		// least one message in the array.
+		if (group) {
+			flushGroup();
+		}
+
+		// Override the entry cache with the new one.
 		entryCache = newEntryCache;
 		return entrants;
 	});
