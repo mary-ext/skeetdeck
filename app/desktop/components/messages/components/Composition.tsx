@@ -83,6 +83,11 @@ const Composition = (props: CompositionProps) => {
 					value={text()}
 					rt={rt()}
 					onChange={setText}
+					onKeyDown={(ev) => {
+						if (ev.key === 'Enter' && !ev.shiftKey) {
+							ev.preventDefault();
+						}
+					}}
 					minRows={1}
 					maxRows={6}
 					placeholder="Send a message"
