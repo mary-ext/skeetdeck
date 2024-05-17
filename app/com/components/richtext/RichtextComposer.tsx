@@ -37,8 +37,9 @@ export interface RichtextComposerProps {
 	value: string;
 	rt: PreliminaryRichText;
 	onChange: (next: string) => void;
-	onSubmit?: () => void;
 	onImageDrop?: (blob: File[]) => void;
+	onKeyDown?: (ev: KeyboardEvent) => void;
+	onSubmit?: () => void;
 
 	minRows?: number;
 	maxRows?: number;
@@ -133,8 +134,9 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 	const type = props.type;
 
 	const onChange = props.onChange;
-	const onSubmit = props.onSubmit;
 	const onImageDrop = props.onImageDrop;
+	const onKeyDown = props.onKeyDown;
+	const onSubmit = props.onSubmit;
 
 	const [showDrop, setShowDrop] = createSignal(false);
 
@@ -397,10 +399,6 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 				onKeyDown={(ev) => {
 					const key = ev.key;
 
-					if (key === 'Backspace') {
-						setTimeout(handleInputSelection, 0);
-					}
-
 					if (matchedCompletion()) {
 						const $sel = menuSelection();
 						const $suggestions = !suggestions.error && suggestions();
@@ -424,17 +422,32 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 								} else {
 									setMenuSelection(undefined);
 								}
-							} else if ($sel != null && key === 'Enter') {
-								const item = $suggestions[$sel];
-
+							} else if (key === 'Enter') {
 								ev.preventDefault();
-								if (item) {
-									acceptSuggestion(item);
+
+								if ($sel != null) {
+									const item = $suggestions[$sel];
+
+									if (item) {
+										acceptSuggestion(item);
+									}
 								}
 							}
 						}
 
 						return;
+					}
+
+					if (onKeyDown) {
+						onKeyDown(ev);
+
+						if (ev.defaultPrevented) {
+							return;
+						}
+					}
+
+					if (key === 'Backspace') {
+						setTimeout(handleInputSelection, 0);
 					}
 
 					if (onSubmit && key === 'Enter' && isCtrlKeyPressed(ev)) {
