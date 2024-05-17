@@ -1,9 +1,8 @@
 import { createEffect, createSignal, For, Match, onMount, Switch, untrack } from 'solid-js';
 
-import { makeEventListener } from '@solid-primitives/event-listener';
-
 import type { SignalizedConvo } from '~/api/stores/convo';
 
+import { scrollObserver } from '~/utils/intersection-observer';
 import { ifIntersect } from '~/utils/refs';
 
 import { EntryType, type Channel } from '~/desktop/lib/messages/channel';
@@ -29,34 +28,26 @@ interface ChannelMessagesProps {
 }
 
 const ChannelMessages = (props: ChannelMessagesProps) => {
-	let ref: HTMLElement;
-
 	const { rpc } = useChatPane();
 
 	const convo = props.convo;
+
 	const channel = props.channel;
 
 	let initialMount = true;
-	let focused = !document.hidden;
-	let latestId: string | undefined;
-	const [unread, setUnread] = createSignal<string>();
-
 	let atBottom = true;
+	let latestId: string | undefined;
+	let ackedId: string | undefined;
 
-	const onScroll = () => {
-		atBottom = ref!.scrollTop >= ref!.scrollHeight - ref!.offsetHeight - 100;
-
-		if (atBottom && unread() !== undefined) {
-			setUnread(undefined);
-			markRead();
-		}
-	};
+	const [unread, setUnread] = createSignal<string>();
+	const entries = channel.createEntries({ unread });
 
 	const markRead = () => {
-		if (!latestId) {
+		if (!latestId || latestId === ackedId) {
 			return;
 		}
 
+		ackedId = latestId;
 		debug(`marking as read; id=${latestId}`);
 
 		// @todo: fire mark-read event
@@ -71,7 +62,6 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 
 	onMount(() => {
 		channel.mount();
-		makeEventListener(document, 'visibilitychange', () => (focused = !document.hidden));
 	});
 
 	createEffect((o: { oldest?: string; height?: number } = {}) => {
@@ -88,9 +78,10 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 				}
 
 				initialMount = false;
-			} else if (atBottom && focused) {
+			} else if (atBottom && document.hasFocus()) {
 				// We're at the bottom and currently focused
 				markRead();
+				setUnread();
 			} else if (untrack(unread) === undefined) {
 				// Start of a new unread session
 
@@ -105,11 +96,7 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 	});
 
 	return (
-		<div
-			ref={(node) => (ref = node)}
-			onScroll={onScroll}
-			class="flex min-h-0 grow flex-col-reverse overflow-y-auto"
-		>
+		<div class="relative flex min-h-0 grow flex-col-reverse overflow-y-auto">
 			<div>
 				<Switch>
 					<Match when={channel.oldestRev() === null}>
@@ -130,7 +117,7 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 						</div>
 					</Match>
 				</Switch>
-				<For each={channel.entries()}>
+				<For each={entries()}>
 					{(entry) => {
 						const type = entry.type;
 
@@ -141,12 +128,28 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 						}
 
 						if (type === EntryType.DIVIDER) {
-							return <MessageDivider date={/* @once */ entry.date} />;
+							return <MessageDivider {...entry} />;
 						}
 
 						return null;
 					}}
 				</For>
+				<div
+					ref={(node) => {
+						// @ts-expect-error
+						node.$onintersect = (entry: IntersectionObserverEntry) => {
+							atBottom = entry.isIntersecting;
+
+							if (atBottom && unread() !== undefined) {
+								markRead();
+							}
+						};
+
+						scrollObserver.observe(node);
+					}}
+					style="height:64px"
+					class="pointer-events-none absolute bottom-0 w-full"
+				></div>
 			</div>
 		</div>
 	);

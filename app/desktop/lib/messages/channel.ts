@@ -1,4 +1,13 @@
-import { batch, createMemo, createRoot, createSignal, getOwner, onCleanup, runWithOwner } from 'solid-js';
+import {
+	batch,
+	createMemo,
+	createRoot,
+	createSignal,
+	getOwner,
+	onCleanup,
+	runWithOwner,
+	type Accessor,
+} from 'solid-js';
 
 import * as TID from '@mary/atproto-tid';
 import type { BskyXRPC } from '@mary/bluesky-client';
@@ -262,115 +271,134 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 			}
 		};
 
-		let entryCache = new Map<string, Entry>();
-		const entries = createMemo<Entry[]>(() => {
-			track();
+		const createEntries = ({ unread }: { unread: Accessor<string | undefined> }) => {
+			let entryCache = new Map<string, Entry>();
+			const entries = createMemo<Entry[]>(() => {
+				track();
 
-			const entrants: Entry[] = [];
-			const newEntryCache = new Map<string, Entry>();
+				const entrants: Entry[] = [];
+				const newEntryCache = new Map<string, Entry>();
 
-			const $messages = messages();
+				const $messages = messages();
+				const $unread = unread();
 
-			const arr = drafts.size === 0 ? $messages : [...$messages, ...drafts.values()];
-			let group: MessageView[] | undefined;
+				const arr = drafts.size === 0 ? $messages : [...$messages, ...drafts.values()];
+				let group: MessageView[] | undefined;
 
-			const flushGroup = () => {
-				assert(group !== undefined, `expected group to exist`);
+				const flushGroup = () => {
+					assert(group !== undefined, `expected group to exist`);
 
-				for (let idx = 0, len = group.length; idx < len; idx++) {
-					const msg = group[idx];
-					const tail = idx !== len - 1;
+					for (let idx = 0, len = group.length; idx < len; idx++) {
+						const msg = group[idx];
+						const tail = idx !== len - 1;
 
-					const key = `${msg.id}:${+tail}`;
-					const entry = (entryCache.get(key) as MessageEntry | undefined) ?? {
-						type: EntryType.MESSAGE,
-						message: msg,
-						tail: tail,
+						const key = `${msg.id}:${+tail}`;
+						const entry = (entryCache.get(key) as MessageEntry | undefined) ?? {
+							type: EntryType.MESSAGE,
+							message: msg,
+							tail: tail,
+						};
+
+						newEntryCache.set(key, entry);
+						entrants.push(entry);
+					}
+
+					group = undefined;
+				};
+
+				const pushDivider = (date: string, unread = false) => {
+					const key = `${date}:${+unread}`;
+					const entry = (entryCache.get(key) as DividerEntry | undefined) ?? {
+						type: EntryType.DIVIDER,
+						date,
+						unread,
 					};
 
 					newEntryCache.set(key, entry);
 					entrants.push(entry);
-				}
+				};
 
-				group = undefined;
-			};
+				for (let idx = 0, len = arr.length; idx < len; idx++) {
+					const item = arr[idx];
 
-			const pushDivider = (date: string) => {
-				const entry = (entryCache.get(date) as DividerEntry | undefined) ?? { type: EntryType.DIVIDER, date };
+					// We're at the first message in history, push a divider.
+					if (idx === 0 && oldestRev() === null) {
+						pushDivider(item.sentAt);
+					}
 
-				newEntryCache.set(date, entry);
-				entrants.push(entry);
-			};
-
-			for (let idx = 0, len = arr.length; idx < len; idx++) {
-				const item = arr[idx];
-
-				// We're at the first message in history, push a divider.
-				if (idx === 0 && oldestRev() === null) {
-					pushDivider(item.sentAt);
-				}
-
-				// First message in group
-				if (!group) {
-					group = [item];
-					continue;
-				}
-
-				// Grab the first and last message in group
-				const firstInGroup = group[0];
-				const lastInGroup = group[group.length - 1];
-
-				const m = firstInGroup !== lastInGroup;
-
-				{
-					const a = new Date(lastInGroup.sentAt);
-					const b = new Date(item.sentAt);
-
-					const sameDate = isSameDate(a, b);
-
-					// Separate messages if:
-					// - Not the same date
-					// - Not the same author
-					// - 7 minutes has elapsed between this and the last in group
-					// - 14 minutes has elapsed between this and the first in group
-					if (
-						!sameDate ||
-						item.sender.did !== lastInGroup.sender.did ||
-						b.getTime() - a.getTime() >= 420_000 ||
-						(m && b.getTime() - new Date(firstInGroup.sentAt).getTime() >= 840_000)
-					) {
-						// Flush the group
-						flushGroup();
-
-						// Push a divider if it's specifically not the same date
-						if (!sameDate) {
-							pushDivider(item.sentAt);
+					if ($unread === item.id) {
+						if (group) {
+							flushGroup();
 						}
 
-						// Rewind since we haven't dealt with this item yet
-						idx--;
+						pushDivider(item.sentAt, true);
+					}
+
+					// First message in group
+					if (!group) {
+						group = [item];
 						continue;
 					}
+
+					// Grab the first and last message in group
+					const firstInGroup = group[0];
+					const lastInGroup = group[group.length - 1];
+
+					const m = firstInGroup !== lastInGroup;
+
+					{
+						const a = new Date(lastInGroup.sentAt);
+						const b = new Date(item.sentAt);
+
+						const sameDate = isSameDate(a, b);
+
+						// Separate messages if:
+						// - Not the same date
+						// - Not the same author
+						// - 7 minutes has elapsed between this and the last in group
+						// - 14 minutes has elapsed between this and the first in group
+						if (
+							!sameDate ||
+							item.sender.did !== lastInGroup.sender.did ||
+							b.getTime() - a.getTime() >= 420_000 ||
+							(m && b.getTime() - new Date(firstInGroup.sentAt).getTime() >= 840_000)
+						) {
+							// Flush the group
+							flushGroup();
+
+							// Push a divider if it's specifically not the same date
+							if (!sameDate) {
+								pushDivider(item.sentAt);
+							}
+
+							// Rewind since we haven't dealt with this item yet
+							idx--;
+							continue;
+						}
+					}
+
+					// We passed all those checks from above, so push it to the group array.
+					group.push(item);
 				}
 
-				// We passed all those checks from above, so push it to the group array.
-				group.push(item);
-			}
+				// Flush the remaining group, there's guaranteed to be one if there's at
+				// least one message in the array.
+				if (group) {
+					flushGroup();
+				}
 
-			// Flush the remaining group, there's guaranteed to be one if there's at
-			// least one message in the array.
-			if (group) {
-				flushGroup();
-			}
+				// Override the entry cache with the new one.
+				entryCache = newEntryCache;
+				return entrants;
+			});
 
-			// Override the entry cache with the new one.
-			entryCache = newEntryCache;
-			return entrants;
-		});
+			return entries;
+		};
 
 		return {
 			messages,
-			entries,
+			drafts,
+			createEntries,
 
 			oldestRev,
 			fetching,
@@ -421,6 +449,7 @@ export interface UnsentMessageEntry {}
 export interface DividerEntry {
 	type: EntryType.DIVIDER;
 	date: string;
+	unread: boolean;
 }
 
 export type Entry = MessageEntry | DividerEntry;
