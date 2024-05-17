@@ -22,7 +22,7 @@ export interface ChannelOptions {
 export type Channel = ReturnType<typeof createChannel>;
 
 export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }: ChannelOptions) => {
-	const abortable = makeAbortable();
+	const abortable = makeAbortable(false);
 
 	/** Loaded messages */
 	const [messages, setMessages] = createSignal<Message[]>([]);
