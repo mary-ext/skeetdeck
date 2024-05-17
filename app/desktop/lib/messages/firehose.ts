@@ -277,6 +277,11 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 			isBackgrounding = false;
 			dispatch({ type: FirehoseAction.RESUME });
 		},
+		poll(): void {
+			if (status === FirehoseStatus.READY || status === FirehoseStatus.BACKGROUNDED) {
+				poll();
+			}
+		},
 		requestPollInterval(interval: number): () => void {
 			const id = nanoid();
 
