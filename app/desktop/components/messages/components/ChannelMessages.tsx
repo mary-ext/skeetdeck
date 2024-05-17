@@ -2,7 +2,11 @@ import { createEffect, For, Match, onCleanup, onMount, Switch } from 'solid-js';
 
 import type { SignalizedConvo } from '~/api/stores/convo';
 
+import { scrollObserver } from '~/utils/intersection-observer';
+
 import { EntryType } from '~/desktop/lib/messages/channel';
+
+import CircularProgress from '~/com/components/CircularProgress';
 
 import { useChatPane } from '../contexts/chat';
 
@@ -35,12 +39,29 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 		onCleanup(firehose.requestPollInterval(3_000));
 	});
 
-	createEffect(() => {
-		if (channel.entries()) {
+	createEffect((o: { latest?: string; oldest?: string; height?: number } = {}) => {
+		const latest = channel.messages().at(-1)?.id;
+		const oldest = channel.messages().at(0)?.id;
+
+		if (latest !== o.latest) {
 			if (atBottom) {
 				ref!.scrollTo(0, ref!.scrollHeight);
 			}
+
+			o.latest = latest;
 		}
+
+		if (oldest !== o.oldest) {
+			if (o.oldest !== undefined && ref!.scrollTop <= 100) {
+				const delta = ref!.scrollHeight - o.height! + ref!.scrollTop;
+				ref!.scrollTo(0, delta);
+			}
+
+			o.oldest = oldest;
+		}
+
+		o.height = ref!.scrollHeight;
+		return o;
 	});
 
 	return (
@@ -52,8 +73,37 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 					</div>
 				</Match>
 
-				<Match when>
-					<div class="pt-6"></div>
+				<Match when={channel.fetching() != null || channel.oldestRev() != null}>
+					<div
+						ref={(node) => {
+							createEffect(() => {
+								if (channel.oldestRev() != null && channel.fetching() == null) {
+									// @ts-expect-error
+									if (node.$onintersect === undefined) {
+										// @ts-expect-error
+										node.$onintersect = (entry: IntersectionObserverEntry) => {
+											if (entry.isIntersecting) {
+												channel.doLoadUpwards();
+											}
+										};
+
+										scrollObserver.observe(node);
+									}
+								} else {
+									// @ts-expect-error
+									if (node.$onintersect !== undefined) {
+										// @ts-expect-error
+										node.$onintersect = undefined;
+
+										scrollObserver.unobserve(node);
+									}
+								}
+							});
+						}}
+						class="grid h-13 shrink-0 place-items-center"
+					>
+						<CircularProgress />
+					</div>
 				</Match>
 			</Switch>
 			<For each={channel.entries()}>
