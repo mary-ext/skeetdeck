@@ -34,12 +34,9 @@ export const createDerivedSignal = <T>(accessor: Accessor<T>): Signal<T> => {
 	return [state, setState] as Signal<T>;
 };
 
-export const makeAbortable = (mount = true): (() => AbortSignal) => {
+export const makeAbortable = (): (() => AbortSignal) => {
 	let controller: AbortController | undefined;
-
-	if (mount) {
-		onCleanup(() => controller?.abort());
-	}
+	onCleanup(() => controller?.abort());
 
 	return () => {
 		controller?.abort();
