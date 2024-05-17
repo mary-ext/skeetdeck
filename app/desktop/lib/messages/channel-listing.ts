@@ -123,11 +123,11 @@ export const createChannelListing = ({ did, rpc, firehose, fetchLimit = 20 }: Ch
 			return channels;
 		};
 
-		const doInitialLoad = async () => {
+		const doInitialLoad = async (refresh = false) => {
 			const signal = abortable();
 
 			// Set fetching state
-			setFetching(FetchState.INITIAL);
+			setFetching(!refresh ? FetchState.INITIAL : FetchState.REFRESH);
 
 			// Start deferring events from firehose
 			pendingEvents = [];
@@ -148,6 +148,9 @@ export const createChannelListing = ({ did, rpc, firehose, fetchLimit = 20 }: Ch
 
 				batch(() => {
 					const key = Date.now();
+
+					// This is a fresh load, so set this to false
+					setHasNew(false);
 
 					// If we returned less than the limit, then we reached the end
 					setCursor((convos.length >= fetchLimit && data.cursor) || null);
@@ -256,6 +259,9 @@ export const createChannelListing = ({ did, rpc, firehose, fetchLimit = 20 }: Ch
 			fetching,
 			failed,
 
+			doRefresh() {
+				doInitialLoad(true);
+			},
 			doLoadDownwards,
 
 			mount() {
@@ -295,8 +301,8 @@ export const enum FetchState {
 	INITIAL,
 	/** Currently fetching subsequent channel listing */
 	DOWNWARDS,
-	/** Currently fetching new conversations from firehose */
-	FIREHOSE_INITIATED,
+	/** Currently refreshing the channel listing (initial load) */
+	REFRESH,
 }
 
 export const enum FailureState {
@@ -304,6 +310,6 @@ export const enum FailureState {
 	INITIAL,
 	/** Failure came from fetching subsequent channel listing */
 	DOWNWARDS,
-	/** Failure came from fetching new conversations from firehose */
-	FIREHOSE_INITIATED,
+	/** Failure came from refreshing the channel listing (initial load) */
+	REFRESH,
 }

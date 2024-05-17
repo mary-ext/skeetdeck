@@ -8,7 +8,7 @@ import { IconButton } from '~/com/primitives/icon-button';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
-import { createChannelListing } from '~/desktop/lib/messages/channel-listing';
+import { createChannelListing, FetchState } from '~/desktop/lib/messages/channel-listing';
 
 import ChannelItem from '../components/ChannelItem';
 
@@ -62,8 +62,13 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 					)}
 					hasNextPage={listing.cursor() != null}
 					hasNewData={listing.hasNew()}
-					isFetchingNextPage={listing.fetching() !== undefined}
+					isFetchingNextPage={(() => {
+						const fetching = listing.fetching();
+						return fetching === FetchState.DOWNWARDS || fetching === FetchState.INITIAL;
+					})()}
+					isRefreshing={listing.fetching() === FetchState.REFRESH}
 					onEndReached={listing.doLoadDownwards}
+					onRefresh={listing.doRefresh}
 				/>
 			</div>
 		</>
