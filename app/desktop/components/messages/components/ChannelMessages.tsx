@@ -12,6 +12,7 @@ import { useChatPane } from '../contexts/chat';
 
 import MessageDivider from './MessageDivider';
 import MessageItem from './MessageItem';
+import { createEventListener } from '@solid-primitives/event-listener';
 
 interface ChannelMessagesProps {
 	/** Expected to be static */
@@ -25,39 +26,72 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 
 	const convo = props.convo;
 
-	const { firehose, channels } = useChatPane();
+	const { firehose, channels, rpc } = useChatPane();
 	const channel = channels.get(convo.id);
+
+	let initialMount = true;
+	let focused = !document.hidden;
+
+	let latestId: string | undefined;
+	let unread = false;
 
 	let atBottom = true;
 
 	const onScroll = () => {
 		atBottom = ref!.scrollTop >= ref!.scrollHeight - ref!.offsetHeight - 100;
+
+		if (atBottom && unread) {
+			unread = false;
+			markRead();
+		}
+	};
+
+	const markRead = () => {
+		if (!latestId || (initialMount && !convo.unread.peek())) {
+			return;
+		}
+
+		// @todo: fire mark-read event
+
+		rpc.call('chat.bsky.convo.updateRead', {
+			data: {
+				convoId: convo.id,
+				messageId: latestId,
+			},
+		});
 	};
 
 	onMount(() => {
 		channel.mount();
+
 		onCleanup(firehose.requestPollInterval(3_000));
+		createEventListener(document, 'visibilitychange', () => (focused = !document.hidden));
 	});
 
-	createEffect((o: { latest?: string; oldest?: string; height?: number } = {}) => {
+	createEffect((o: { oldest?: string; height?: number } = {}) => {
 		const latest = channel.messages().at(-1)?.id;
 		const oldest = channel.messages().at(0)?.id;
 
-		if (latest !== o.latest) {
-			if (atBottom) {
-				ref!.scrollTo(0, ref!.scrollHeight);
-			}
+		if (latest !== latestId) {
+			latestId = latest;
 
-			o.latest = latest;
+			if ((focused || initialMount) && atBottom) {
+				ref!.scrollTo(0, ref!.scrollHeight);
+				markRead();
+
+				initialMount = false;
+			} else {
+				unread = true;
+			}
 		}
 
 		if (oldest !== o.oldest) {
+			o.oldest = oldest;
+
 			if (o.oldest !== undefined && ref!.scrollTop <= 100) {
 				const delta = ref!.scrollHeight - o.height! + ref!.scrollTop;
 				ref!.scrollTo(0, delta);
 			}
-
-			o.oldest = oldest;
 		}
 
 		o.height = ref!.scrollHeight;
