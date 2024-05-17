@@ -1,5 +1,7 @@
-import type { BskyXRPC } from '@mary/bluesky-client';
 import { nanoid } from 'nanoid/non-secure';
+import { batch } from 'solid-js';
+
+import type { BskyXRPC } from '@mary/bluesky-client';
 
 import type { ChatBskyConvoGetLog } from '~/api/atp-schema';
 
@@ -241,10 +243,12 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 
 			const events = data.logs;
 
-			for (let idx = 0, len = events.length; idx < len; idx++) {
-				const event = events[idx];
-				emitter.emit('event', event);
-			}
+			batch(() => {
+				for (let idx = 0, len = events.length; idx < len; idx++) {
+					const event = events[idx];
+					emitter.emit('event', event);
+				}
+			});
 		} catch (e) {
 			dispatch({
 				type: FirehoseAction.ERROR,
