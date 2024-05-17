@@ -20,6 +20,7 @@ const gc = new FinalizationRegistry<string>((id) => {
 
 export class SignalizedConvo {
 	readonly uid: At.DID;
+	_key?: number;
 
 	id: string;
 	rev: string;
@@ -29,13 +30,14 @@ export class SignalizedConvo {
 	unread: Signal<boolean>;
 	lastMessage: Signal<Convo['lastMessage']>;
 
-	constructor(uid: At.DID, convo: Convo) {
+	constructor(uid: At.DID, convo: Convo, key?: number) {
 		this.uid = uid;
+		this._key = key;
 
 		this.id = convo.id;
 		this.rev = convo.rev;
-		this.self = mergeProfile(uid, convo.members.find((m) => m.did === uid) as ConvoProfile);
-		this.recipients = signal(mapMembers(uid, convo.members), EQUALS_DEQUAL);
+		this.self = mergeProfile(uid, convo.members.find((m) => m.did === uid) as ConvoProfile, key);
+		this.recipients = signal(mapMembers(uid, convo.members, key), EQUALS_DEQUAL);
 		this.muted = signal(convo.muted);
 		this.unread = signal(convo.unreadCount > 0);
 		this.lastMessage = signal(convo.lastMessage);
@@ -53,7 +55,7 @@ export const getCachedConvo = (uid: At.DID, convoId: string) => {
 	return ref?.deref();
 };
 
-export const mergeConvo = (uid: At.DID, convo: Convo) => {
+export const mergeConvo = (uid: At.DID, convo: Convo, key?: number) => {
 	let id = createConvoId(uid, convo.id);
 
 	let ref: WeakRef<SignalizedConvo> | undefined = convos[id];
@@ -64,11 +66,12 @@ export const mergeConvo = (uid: At.DID, convo: Convo) => {
 		convos[id] = new WeakRef(val);
 
 		gc.register(val, id);
-	} else {
-		mergeProfile(uid, convo.members.find((m) => m.did === uid) as ConvoProfile);
+	} else if (!key || val._key !== key) {
+		val._key = key;
+		mergeProfile(uid, convo.members.find((m) => m.did === uid) as ConvoProfile, key);
 
 		val.rev = convo.rev;
-		val.recipients.value = mapMembers(uid, convo.members);
+		val.recipients.value = mapMembers(uid, convo.members, key);
 		val.muted.value = convo.muted;
 		val.unread.value = convo.unreadCount > 0;
 		val.lastMessage.value = convo.lastMessage;
@@ -77,6 +80,10 @@ export const mergeConvo = (uid: At.DID, convo: Convo) => {
 	return val;
 };
 
-const mapMembers = (uid: At.DID, members: ChatBskyActorDefs.ProfileViewBasic[]): SignalizedProfile[] => {
-	return members.filter((m) => m.did !== uid).map((m) => mergeProfile(uid, m as ConvoProfile));
+const mapMembers = (
+	uid: At.DID,
+	members: ChatBskyActorDefs.ProfileViewBasic[],
+	key?: number,
+): SignalizedProfile[] => {
+	return members.filter((m) => m.did !== uid).map((m) => mergeProfile(uid, m as ConvoProfile, key));
 };
