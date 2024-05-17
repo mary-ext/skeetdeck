@@ -1,8 +1,8 @@
-import { For, Match, Switch, createEffect, type JSX } from 'solid-js';
+import { For, Match, Switch, type JSX } from 'solid-js';
 
 import { getQueryErrorInfo } from '~/api/utils/query';
 
-import { scrollObserver } from '~/utils/intersection-observer';
+import { ifIntersect } from '~/utils/refs';
 
 import { loadMoreBtn, loadNewBtn } from '../primitives/interactive';
 
@@ -78,29 +78,7 @@ const List = <T,>(props: ListProps<T>) => {
 
 				<Match when={props.isFetchingNextPage || props.hasNextPage}>
 					<div
-						ref={(node) => {
-							createEffect(() => {
-								if (props.hasNextPage && !props.isFetchingNextPage) {
-									// @ts-expect-error
-									if (node.$onintersect === undefined) {
-										// @ts-expect-error
-										node.$onintersect = (entry: IntersectionObserverEntry) => {
-											entry.isIntersecting && onEndReached?.();
-										};
-
-										scrollObserver.observe(node);
-									}
-								} else {
-									// @ts-expect-error
-									if (node.$onintersect !== undefined) {
-										// @ts-expect-error
-										node.$onintersect = undefined;
-
-										scrollObserver.unobserve(node);
-									}
-								}
-							});
-						}}
+						ref={ifIntersect(() => props.hasNextPage && !props.isFetchingNextPage, onEndReached)}
 						class="grid h-13 shrink-0 place-items-center"
 					>
 						<CircularProgress />

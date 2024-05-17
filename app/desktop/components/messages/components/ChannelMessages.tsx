@@ -2,7 +2,7 @@ import { createEffect, For, Match, onCleanup, onMount, Switch } from 'solid-js';
 
 import type { SignalizedConvo } from '~/api/stores/convo';
 
-import { scrollObserver } from '~/utils/intersection-observer';
+import { ifIntersect } from '~/utils/refs';
 
 import { EntryType } from '~/desktop/lib/messages/channel';
 
@@ -75,31 +75,10 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 
 				<Match when={channel.fetching() != null || channel.oldestRev() != null}>
 					<div
-						ref={(node) => {
-							createEffect(() => {
-								if (channel.oldestRev() != null && channel.fetching() == null) {
-									// @ts-expect-error
-									if (node.$onintersect === undefined) {
-										// @ts-expect-error
-										node.$onintersect = (entry: IntersectionObserverEntry) => {
-											if (entry.isIntersecting) {
-												channel.doLoadUpwards();
-											}
-										};
-
-										scrollObserver.observe(node);
-									}
-								} else {
-									// @ts-expect-error
-									if (node.$onintersect !== undefined) {
-										// @ts-expect-error
-										node.$onintersect = undefined;
-
-										scrollObserver.unobserve(node);
-									}
-								}
-							});
-						}}
+						ref={ifIntersect(
+							() => channel.oldestRev() != null && channel.fetching() == null,
+							channel.doLoadUpwards,
+						)}
 						class="grid h-13 shrink-0 place-items-center"
 					>
 						<CircularProgress />
