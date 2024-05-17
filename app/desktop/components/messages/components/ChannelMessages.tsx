@@ -1,4 +1,4 @@
-import { createSignal, For, Match, onMount, Switch } from 'solid-js';
+import { createEffect, createSignal, For, Match, onMount, Switch, untrack } from 'solid-js';
 
 import { makeEventListener } from '@solid-primitives/event-listener';
 
@@ -38,7 +38,6 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 
 	let initialMount = true;
 	let focused = !document.hidden;
-
 	let latestId: string | undefined;
 	const [unread, setUnread] = createSignal<string>();
 
@@ -73,6 +72,36 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 	onMount(() => {
 		channel.mount();
 		makeEventListener(document, 'visibilitychange', () => (focused = !document.hidden));
+	});
+
+	createEffect((o: { oldest?: string; height?: number } = {}) => {
+		const latest = channel.messages().at(-1)?.id;
+
+		if (latest !== latestId) {
+			// New message!
+			latestId = latest;
+
+			if (initialMount) {
+				// This is the initial mount, only mark as read when it's certain
+				if (convo.unread.peek()) {
+					markRead();
+				}
+
+				initialMount = false;
+			} else if (atBottom && focused) {
+				// We're at the bottom and currently focused
+				markRead();
+			} else if (untrack(unread) === undefined) {
+				// Start of a new unread session
+
+				debug(`new unread; id=${latest}`);
+				setUnread(latest);
+			} else {
+				// @todo: make sure it's anchored to the unread divider somehow
+			}
+		}
+
+		return o;
 	});
 
 	return (
