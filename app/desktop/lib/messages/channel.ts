@@ -264,38 +264,32 @@ export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }:
 				const firstInGroup = group[0];
 				const lastInGroup = group[group.length - 1];
 
+				const m = firstInGroup !== lastInGroup;
+
 				{
 					const a = new Date(lastInGroup.sentAt);
 					const b = new Date(item.sentAt);
 
-					// Check if it's still the same date
-					if (
-						b.getDate() !== a.getDate() ||
-						b.getMonth() !== a.getMonth() ||
-						b.getFullYear() !== a.getFullYear()
-					) {
-						// It's not, so let's flush this group
-						flushGroup();
-
-						// Push a divider
-						pushDivider(item.sentAt);
-
-						// Rewind since we haven't dealt with this item yet
-						idx--;
-						continue;
-					}
+					const sameDate = isSameDate(a, b);
 
 					// Separate messages if:
+					// - Not the same date
 					// - Not the same author
 					// - 7 minutes has elapsed between this and the last in group
 					// - 14 minutes has elapsed between this and the first in group
 					if (
+						!sameDate ||
 						item.sender.did !== lastInGroup.sender.did ||
 						b.getTime() - a.getTime() >= 420_000 ||
-						b.getTime() - new Date(firstInGroup.sentAt).getTime() >= 840_000
+						(m && b.getTime() - new Date(firstInGroup.sentAt).getTime() >= 840_000)
 					) {
 						// Flush the group
 						flushGroup();
+
+						// Push a divider if it's specifically not the same date
+						if (!sameDate) {
+							pushDivider(item.sentAt);
+						}
 
 						// Rewind since we haven't dealt with this item yet
 						idx--;
