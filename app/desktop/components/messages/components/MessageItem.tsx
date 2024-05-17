@@ -51,7 +51,7 @@ const MessageItem = ({ convo, item, tail }: MessageItemProps) => {
 			{!tail && (
 				<TimeAgo value={/* @once */ item.sentAt} relative={formatChatReltime}>
 					{(relative) => (
-						<div class={`mt-1 text-xs text-muted-fg` + (isSender ? ` text-right` : ` text-left`)}>
+						<div class={`mt-1.5 text-xs text-muted-fg` + (isSender ? ` text-right` : ` text-left`)}>
 							{relative()}
 						</div>
 					)}
