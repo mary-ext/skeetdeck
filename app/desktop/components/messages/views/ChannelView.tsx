@@ -32,8 +32,10 @@ const ChannelView = ({ id }: ViewParams<ViewKind.CHANNEL>) => {
 				return (
 					<>
 						<ChannelHeader convo={convo} />
-						<ChannelMessages convo={convo} channel={channel} />
-						<Composition convo={convo} channel={channel} />
+						<div class="flex min-h-0 shrink grow flex-col-reverse">
+							<Composition convo={convo} channel={channel} />
+							<ChannelMessages convo={convo} channel={channel} />
+						</div>
 					</>
 				);
 			}}
