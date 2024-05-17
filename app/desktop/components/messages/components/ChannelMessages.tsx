@@ -1,4 +1,4 @@
-import { createEffect, For, Match, onCleanup, onMount, Switch } from 'solid-js';
+import { createEffect, createSignal, For, Match, onCleanup, onMount, Switch, untrack } from 'solid-js';
 
 import { makeEventListener } from '@solid-primitives/event-listener';
 
@@ -34,15 +34,15 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 	let focused = !document.hidden;
 
 	let latestId: string | undefined;
-	let unread = false;
+	const [unread, setUnread] = createSignal<string>();
 
 	let atBottom = true;
 
 	const onScroll = () => {
 		atBottom = ref!.scrollTop >= ref!.scrollHeight - ref!.offsetHeight - 100;
 
-		if (atBottom && unread) {
-			unread = false;
+		if (atBottom && unread() !== undefined) {
+			setUnread(undefined);
 			markRead();
 		}
 	};
@@ -74,28 +74,38 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 		const oldest = channel.messages().at(0)?.id;
 
 		if (latest !== latestId) {
+			// New message!
 			latestId = latest;
 
-			if ((focused || initialMount) && atBottom) {
+			// If this is an initial mount, or we're at the bottom while focused
+			if (initialMount || (atBottom && focused)) {
+				// Scroll to bottom so that this new message appears
 				ref!.scrollTo(0, ref!.scrollHeight);
 
+				// Mark as read, except if it's an initial mount and we know for certain
+				// that there's no unread here.
 				if (!initialMount || convo.unread.peek()) {
 					markRead();
 				}
 
+				// We've mounted, so unset this.
 				initialMount = false;
-			} else {
-				unread = true;
+			} else if (untrack(unread) === undefined) {
+				// We're at the start of an unread session
+				setUnread(latest);
 			}
 		}
 
 		if (oldest !== o.oldest) {
-			o.oldest = oldest;
+			// Past message history loaded!
 
 			if (o.oldest !== undefined && ref!.scrollTop <= 100) {
+				// Maintain current scroll position
 				const delta = ref!.scrollHeight - o.height! + ref!.scrollTop;
 				ref!.scrollTo(0, delta);
 			}
+
+			o.oldest = oldest;
 		}
 
 		o.height = ref!.scrollHeight;
