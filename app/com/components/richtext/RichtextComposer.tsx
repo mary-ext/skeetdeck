@@ -31,7 +31,7 @@ import DefaultUserAvatar from '../../assets/default-user-avatar.svg?url';
 export interface RichtextComposerProps {
 	ref?: HTMLTextAreaElement | ((el: HTMLTextAreaElement) => void);
 
-	type: 'post' | 'textarea' | 'dm';
+	type: 'post' | 'textarea';
 	uid: At.DID | undefined;
 
 	value: string;
@@ -282,7 +282,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 					type === 'post' && `text-base`,
 					type === 'textarea' &&
 						`rounded-md border border-input text-sm outline-2 -outline-offset-1 outline-accent disabled:opacity-50 focus-within:outline`,
-					type === 'dm' && `grow self-stretch text-sm`,
+					// type === 'dm' && `grow self-stretch text-sm`,
 				])
 			}
 		>
@@ -294,7 +294,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 						`absolute inset-0 z-0 whitespace-pre-wrap break-words`,
 						type === 'post' && `pb-2 pr-4`,
 						type === 'textarea' && `px-3 py-[0.45rem]`,
-						type === 'dm' && `py-2.5`,
+						// type === 'dm' && `py-2.5`,
 					])
 				}
 				innerHTML={buildHtml(props.rt)}
@@ -316,7 +316,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 						`relative z-10 block w-full resize-none overflow-hidden bg-transparent text-transparent caret-primary outline-none placeholder:text-muted-fg`,
 						type === 'post' && `pb-2 pr-4`,
 						type === 'textarea' && `px-3 py-[0.45rem]`,
-						type === 'dm' && `py-2.5`,
+						// type === 'dm' && `py-2.5`,
 					])
 				}
 				onPaste={
