@@ -1,8 +1,10 @@
 import { createMemo, createSignal } from 'solid-js';
-import { getRtLength, parseRt } from '~/api/richtext/composer';
+import TextareaAutosize from 'solid-textarea-autosize';
 
+import { getRtLength, parseRt } from '~/api/richtext/composer';
 import type { SignalizedConvo } from '~/api/stores/convo';
-import RichtextComposer from '~/com/components/richtext/RichtextComposer';
+
+import type { Channel } from '~/desktop/lib/messages/channel';
 
 import SendOutlinedIcon from '~/com/icons/outline-send';
 import { IconButton } from '~/com/primitives/icon-button';
@@ -10,14 +12,18 @@ import { IconButton } from '~/com/primitives/icon-button';
 export interface CompositionProps {
 	/** Expected to be static */
 	convo: SignalizedConvo;
+	/** Expected to be static */
+	channel: Channel;
 }
+
+const MAX_MESSAGE_LIMIT = 1000;
+const SHOW_LIMIT_COUNTER = MAX_MESSAGE_LIMIT - 200;
 
 const Composition = (props: CompositionProps) => {
 	// const [focused, setFocused] = createSignal(false);
 	// const [userExpanded, setUserExpanded] = createSignal(false);
 
-	const convo = props.convo;
-	const uid = convo.uid;
+	const channel = props.channel;
 
 	const [text, setText] = createSignal('');
 
@@ -26,7 +32,7 @@ const Composition = (props: CompositionProps) => {
 
 	return (
 		<div class="px-3 pb-4">
-			<div class="flex items-center gap-2 rounded-md bg-secondary/30 pl-3 pr-1">
+			<div class="relative flex items-start gap-2 rounded-md bg-secondary/30 pl-3 pr-1">
 				{/* {!focused() || text().length === 0 ? (
 					<div class="flex">
 						<button
@@ -65,37 +71,51 @@ const Composition = (props: CompositionProps) => {
 					</div>
 				)} */}
 
-				{/* <TextareaAutosize
+				<TextareaAutosize
 					value={text()}
 					onInput={(ev) => {
 						// setFocused(true);
 						setText(ev.target.value);
 					}}
-					placeholder="Start a new message"
-					minRows={1}
-					maxRows={6}
-					class="grow resize-none self-stretch bg-transparent py-2.5 pl-3 text-sm text-primary outline-none placeholder:text-muted-fg"
-				/> */}
-
-				<RichtextComposer
-					uid={uid}
-					type="dm"
-					value={text()}
-					rt={rt()}
-					onChange={setText}
 					onKeyDown={(ev) => {
 						if (ev.key === 'Enter' && !ev.shiftKey) {
 							ev.preventDefault();
+
+							if (length() !== 0) {
+								channel.sendMessage({ richtext: rt() });
+								setText('');
+							}
 						}
 					}}
+					placeholder="Start a new message"
 					minRows={1}
 					maxRows={6}
-					placeholder="Send a message"
+					maxLength={MAX_MESSAGE_LIMIT * 1.5}
+					class="grow resize-none self-stretch bg-transparent py-2.5 text-sm text-primary outline-none placeholder:text-muted-fg"
 				/>
 
-				<button disabled={length() === 0} class={/* @once */ IconButton({ color: 'muted' })}>
-					<SendOutlinedIcon />
-				</button>
+				<div class="flex h-10 items-center">
+					<button
+						disabled={(() => {
+							const $length = length();
+							return $length === 0 || $length > MAX_MESSAGE_LIMIT;
+						})()}
+						class={/* @once */ IconButton({ color: 'muted' })}
+					>
+						<SendOutlinedIcon />
+					</button>
+				</div>
+
+				{length() >= SHOW_LIMIT_COUNTER && (
+					<div
+						class={
+							`absolute bottom-0 right-0 select-none px-3 py-2.5 text-de` +
+							(length() > MAX_MESSAGE_LIMIT ? ` text-red-600` : ` text-muted-fg`)
+						}
+					>
+						{MAX_MESSAGE_LIMIT - length()}
+					</div>
+				)}
 			</div>
 		</div>
 	);

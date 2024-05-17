@@ -1,18 +1,21 @@
 import { batch, createMemo, createRoot, createSignal, getOwner, onCleanup, runWithOwner } from 'solid-js';
 
+import * as TID from '@mary/atproto-tid';
 import type { BskyXRPC } from '@mary/bluesky-client';
 
-import type { ChatBskyConvoDefs } from '~/api/atp-schema';
+import type { At, ChatBskyConvoDefs } from '~/api/atp-schema';
+import { finalizeRt, getRtText, type PreliminaryRichText } from '~/api/richtext/composer';
 
-import { makeAbortable } from '~/utils/hooks';
+import { EQUALS_FALSE, makeAbortable } from '~/utils/hooks';
 import { assert, mapDefined } from '~/utils/misc';
 
 import type { ChatFirehose, ConvoEvent } from './firehose';
 
-type Message = ChatBskyConvoDefs.MessageView;
+type MessageView = ChatBskyConvoDefs.MessageView;
 
 export interface ChannelOptions {
-	id: string;
+	channelId: string;
+	did: At.DID;
 	rpc: BskyXRPC;
 	firehose: ChatFirehose;
 	fetchLimit?: number;
@@ -20,7 +23,17 @@ export interface ChannelOptions {
 
 export type Channel = ReturnType<typeof createChannel>;
 
-export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }: ChannelOptions) => {
+export interface RawMessage {
+	richtext: PreliminaryRichText;
+}
+
+export interface DraftMessage {
+	id: string;
+	message: ChatBskyConvoDefs.Message;
+	failed: boolean;
+}
+
+export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }: ChannelOptions) => {
 	return createRoot((destroy) => {
 		let init = false;
 
@@ -28,7 +41,11 @@ export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }:
 		const abortable = makeAbortable();
 
 		/** Loaded messages */
-		const [messages, setMessages] = createSignal<Message[]>([]);
+		const [messages, setMessages] = createSignal<MessageView[]>([]);
+
+		/** Pending messages, along with invalidation mechanism for the items */
+		const [track, trigger] = createSignal(undefined, EQUALS_FALSE);
+		const drafts = new Map<string, MessageView>();
 
 		/** Oldest revision currently stored, `null` if we've reached the end */
 		const [oldestRev, setOldestRev] = createSignal<string | null>();
@@ -41,7 +58,7 @@ export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }:
 		/** Firehose events we haven't processed because we're currently fetching */
 		let pendingEvents: ConvoEvent[] | undefined;
 
-		const processFirehoseEvents = (messages: Message[], events: ConvoEvent[]) => {
+		const processFirehoseEvents = (messages: MessageView[], events: ConvoEvent[]) => {
 			for (let idx = 0, len = events.length; idx < len; idx++) {
 				const event = events[idx];
 				const type = event.$type;
@@ -210,13 +227,52 @@ export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }:
 			}
 		};
 
+		const sendMessage = async (raw: RawMessage) => {
+			const id = TID.now();
+
+			const placebo: MessageView = {
+				id: id,
+				rev: '',
+				sender: { did },
+				sentAt: new Date().toISOString(),
+				text: getRtText(raw.richtext),
+			};
+
+			drafts.set(id, placebo);
+			trigger();
+
+			try {
+				const rt = await finalizeRt(did, raw.richtext);
+
+				await rpc.call('chat.bsky.convo.sendMessage', {
+					data: {
+						convoId: channelId,
+						message: {
+							id: id,
+							text: rt.text,
+							facets: rt.facets,
+						},
+					},
+				});
+
+				drafts.delete(id);
+				firehose.poll();
+			} catch (err) {
+				console.error('err', err);
+			}
+		};
+
 		let entryCache = new Map<string, Entry>();
 		const entries = createMemo<Entry[]>(() => {
+			track();
+
 			const entrants: Entry[] = [];
 			const newEntryCache = new Map<string, Entry>();
 
-			const arr = messages();
-			let group: Message[] | undefined;
+			const $messages = messages();
+
+			const arr = drafts.size === 0 ? $messages : [...$messages, ...drafts.values()];
+			let group: MessageView[] | undefined;
 
 			const flushGroup = () => {
 				assert(group !== undefined, `expected group to exist`);
@@ -321,6 +377,7 @@ export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }:
 			failed,
 
 			doLoadUpwards,
+			sendMessage,
 
 			mount() {
 				if (!init) {
@@ -349,11 +406,17 @@ export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }:
 	}, null);
 };
 
+const isSameDate = (a: Date, b: Date) => {
+	return a.getDate() === b.getDate() && a.getMonth() === b.getMonth() && a.getFullYear() === b.getFullYear();
+};
+
 export interface MessageEntry {
 	type: EntryType.MESSAGE;
-	message: Message;
+	message: MessageView;
 	tail: boolean;
 }
+
+export interface UnsentMessageEntry {}
 
 export interface DividerEntry {
 	type: EntryType.DIVIDER;
@@ -364,6 +427,7 @@ export type Entry = MessageEntry | DividerEntry;
 
 export const enum EntryType {
 	MESSAGE,
+	UNSENT_MESSAGE,
 	DIVIDER,
 }
 

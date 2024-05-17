@@ -1,4 +1,4 @@
-import { createResource, Show, type ResourceOptions } from 'solid-js';
+import { createResource, onCleanup, Show, type ResourceOptions } from 'solid-js';
 
 import { getCachedConvo, mergeConvo, SignalizedConvo } from '~/api/stores/convo';
 
@@ -10,7 +10,7 @@ import { useChatPane } from '../contexts/chat';
 import type { ViewKind, ViewParams } from '../contexts/router';
 
 const ChannelView = ({ id }: ViewParams<ViewKind.CHANNEL>) => {
-	const { did, rpc } = useChatPane();
+	const { did, firehose, channels, rpc } = useChatPane();
 
 	const getInitialConvo = (): ResourceOptions<SignalizedConvo> => {
 		const convo = getCachedConvo(did, id);
@@ -24,13 +24,19 @@ const ChannelView = ({ id }: ViewParams<ViewKind.CHANNEL>) => {
 
 	return (
 		<Show when={convo.latest} keyed>
-			{(convo) => (
-				<>
-					<ChannelHeader convo={convo} />
-					<ChannelMessages convo={convo} fetchLimit={50} />
-					<Composition convo={convo} />
-				</>
-			)}
+			{(convo) => {
+				const channel = channels.get(convo.id);
+
+				onCleanup(firehose.requestPollInterval(3_000));
+
+				return (
+					<>
+						<ChannelHeader convo={convo} />
+						<ChannelMessages convo={convo} channel={channel} />
+						<Composition convo={convo} channel={channel} />
+					</>
+				);
+			}}
 		</Show>
 	);
 };

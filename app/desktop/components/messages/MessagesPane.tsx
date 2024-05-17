@@ -46,11 +46,17 @@ const MessagesPane = (props: MessagesPaneProps) => {
 		const { rpc } = await multiagent.connect(did);
 
 		const proxied = withProxy(rpc, DM_SERVICE_PROXY);
+
 		const firehose = createChatFirehose(proxied);
 		const channels = createLRU<string, Channel>({
 			maxSize: 3,
 			create(id) {
-				return createChannel({ id, firehose, rpc: proxied });
+				return createChannel({
+					channelId: id,
+					did: did,
+					firehose,
+					rpc: proxied,
+				});
 			},
 			destroy(channel) {
 				return channel.destroy();

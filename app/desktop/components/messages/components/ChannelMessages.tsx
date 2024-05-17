@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, Match, onCleanup, onMount, Switch, untrack } from 'solid-js';
+import { createEffect, createSignal, For, Match, onMount, Switch, untrack } from 'solid-js';
 
 import { makeEventListener } from '@solid-primitives/event-listener';
 
@@ -6,7 +6,7 @@ import type { SignalizedConvo } from '~/api/stores/convo';
 
 import { ifIntersect } from '~/utils/refs';
 
-import { EntryType } from '~/desktop/lib/messages/channel';
+import { EntryType, type Channel } from '~/desktop/lib/messages/channel';
 
 import CircularProgress from '~/com/components/CircularProgress';
 
@@ -24,17 +24,17 @@ function debug(msg: string) {
 interface ChannelMessagesProps {
 	/** Expected to be static */
 	convo: SignalizedConvo;
-	/** Maximum amount of messages to fetch at a time */
-	fetchLimit: number;
+	/** Expected to be static */
+	channel: Channel;
 }
 
 const ChannelMessages = (props: ChannelMessagesProps) => {
 	let ref: HTMLElement;
 
-	const convo = props.convo;
+	const { rpc } = useChatPane();
 
-	const { firehose, channels, rpc } = useChatPane();
-	const channel = channels.get(convo.id);
+	const convo = props.convo;
+	const channel = props.channel;
 
 	let initialMount = true;
 	let focused = !document.hidden;
@@ -72,8 +72,6 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 
 	onMount(() => {
 		channel.mount();
-
-		onCleanup(firehose.requestPollInterval(3_000));
 		makeEventListener(document, 'visibilitychange', () => (focused = !document.hidden));
 	});
 

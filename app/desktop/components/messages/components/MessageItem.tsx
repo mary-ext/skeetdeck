@@ -19,6 +19,7 @@ export interface MessageItemProps {
 const MessageItem = ({ convo, item, tail }: MessageItemProps) => {
 	const text = item.text;
 	const isSender = convo.self.did == item.sender.did;
+	const isDraft = isSender && item.rev === '';
 
 	return (
 		<div class={`px-3` + (tail ? ` mb-1.5` : ` mb-6`)}>
@@ -34,7 +35,8 @@ const MessageItem = ({ convo, item, tail }: MessageItemProps) => {
 					class={
 						`rounded-lg px-3 py-2 text-sm` +
 						(isSender ? ` bg-accent text-white` : ` bg-secondary/30`) +
-						(!tail ? (isSender ? ` rounded-br-none` : ` rounded-bl-none`) : ``)
+						(!tail ? (isSender ? ` rounded-br-none` : ` rounded-bl-none`) : ``) +
+						(isDraft ? ` opacity-60` : ``)
 					}
 				>
 					<div class="whitespace-pre-wrap break-words text-sm">{text}</div>
