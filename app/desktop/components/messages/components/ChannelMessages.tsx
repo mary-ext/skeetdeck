@@ -1,8 +1,8 @@
-import { createEffect, createSignal, For, Match, onCleanup, onMount, Switch, untrack } from 'solid-js';
+import { createEffect, For, Match, onCleanup, onMount, Switch } from 'solid-js';
 
 import type { SignalizedConvo } from '~/api/stores/convo';
 
-import { EntryType, FetchState } from '~/desktop/lib/messages/channel';
+import { EntryType } from '~/desktop/lib/messages/channel';
 
 import { useChatPane } from '../contexts/chat';
 
