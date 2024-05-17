@@ -335,12 +335,15 @@ export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }:
 
 					runWithOwner(owner, () => {
 						onCleanup(
-							firehose.emitter.on(`log:${channelId}`, (events) => {
-								if (pendingEvents) {
-									pendingEvents = [...pendingEvents, ...events];
-								}
+							firehose.emitter.on('event', (event) => {
+								if (event.convoId === channelId) {
+									if (pendingEvents) {
+										pendingEvents.push(event);
+										return;
+									}
 
-								setMessages((messages) => processFirehoseEvents(messages, events));
+									setMessages((messages) => processFirehoseEvents(messages, [event]));
+								}
 							}),
 						);
 					});

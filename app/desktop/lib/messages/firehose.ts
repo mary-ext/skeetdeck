@@ -11,7 +11,9 @@ function debug(msg: string) {
 	}
 }
 
-type ConvoEvents = ChatBskyConvoGetLog.Output['logs'];
+type UnwrapArray<T> = T extends (infer V)[] ? V : never;
+
+export type ConvoEvent = UnwrapArray<ChatBskyConvoGetLog.Output['logs']>;
 
 export type FirehoseErrorKind = 'unknown' | 'init_failure' | 'poll_failure';
 
@@ -24,8 +26,7 @@ export interface FirehoseError {
 export type ChatFirehoseEvents = {
 	connect: () => void;
 	error: (err: FirehoseError) => void;
-	log: (buckets: Map<string, ConvoEvents>) => void;
-	[key: `log:${string}`]: (events: ConvoEvents) => void;
+	event: (event: ConvoEvent) => void;
 };
 
 export type ChatFirehose = ReturnType<typeof createChatFirehose>;
@@ -232,8 +233,6 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 		let cursor = latestRev;
 
 		try {
-			const buckets = new Map<string, ConvoEvents>();
-
 			const { data } = await rpc.get('chat.bsky.convo.getLog', {
 				params: {
 					cursor: cursor,
@@ -242,29 +241,9 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 
 			const events = data.logs;
 
-			for (const ev of events) {
-				const convoId = ev.convoId;
-
-				if (buckets.has(convoId)) {
-					buckets.get(convoId)!.push(ev);
-				} else {
-					buckets.set(convoId, [ev]);
-				}
-			}
-
-			latestRev = cursor = data.cursor;
-
-			if (events.length !== 0) {
-				debug(`received ${events.length} events; cursor=${cursor}`);
-			}
-
-			if (buckets.size !== 0) {
-				// there shouldn't be any need to try-catch these emits, should it?
-				emitter.emit(`log`, buckets);
-
-				for (const [convoId, batch] of buckets) {
-					emitter.emit(`log:${convoId}`, batch);
-				}
+			for (let idx = 0, len = events.length; idx < len; idx++) {
+				const event = events[idx];
+				emitter.emit('event', event);
 			}
 		} catch (e) {
 			dispatch({
