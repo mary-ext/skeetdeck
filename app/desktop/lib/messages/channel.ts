@@ -126,9 +126,6 @@ export const createChannel = ({ id: channelId, firehose, rpc, fetchLimit = 50 }:
 					// Reset fetching state
 					setFetching();
 				});
-
-				// Stop deferring firehose events
-				pendingEvents = undefined;
 			} catch (err) {
 				// Ignore error if we've been aborted
 				if (signal.aborted) {
