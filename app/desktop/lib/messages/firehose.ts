@@ -9,7 +9,7 @@ import { EventEmitter } from '../events';
 
 function debug(msg: string) {
 	if (import.meta.env.DEV) {
-		console.log(`[chat-firehose] ${msg}`);
+		console.log(`%c[chat-firehose]%c ${msg}`, `color: #ffd700`, ``);
 	}
 }
 

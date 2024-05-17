@@ -15,6 +15,12 @@ import { useChatPane } from '../contexts/chat';
 import MessageDivider from './MessageDivider';
 import MessageItem from './MessageItem';
 
+function debug(msg: string) {
+	if (import.meta.env.DEV) {
+		console.log(`%c[chat-messages]%c ${msg}`, `color: #ff4500`, ``);
+	}
+}
+
 interface ChannelMessagesProps {
 	/** Expected to be static */
 	convo: SignalizedConvo;
@@ -52,6 +58,8 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 			return;
 		}
 
+		debug(`marking as read; id=${latestId}`);
+
 		// @todo: fire mark-read event
 
 		rpc.call('chat.bsky.convo.updateRead', {
@@ -76,9 +84,12 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 		if (latest !== latestId) {
 			// New message!
 			latestId = latest;
+			debug(`new message; id=${latest}`);
 
 			// If this is an initial mount, or we're at the bottom while focused
 			if (initialMount || (atBottom && focused)) {
+				debug(`scrolling to bottom; initial=${initialMount}`);
+
 				// Scroll to bottom so that this new message appears
 				ref!.scrollTo(0, ref!.scrollHeight);
 
@@ -91,6 +102,8 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 				// We've mounted, so unset this.
 				initialMount = false;
 			} else if (untrack(unread) === undefined) {
+				debug(`new unread; id=${latest}`);
+
 				// We're at the start of an unread session
 				setUnread(latest);
 			}
@@ -98,6 +111,7 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 
 		if (oldest !== o.oldest) {
 			// Past message history loaded!
+			debug(`old message; id=${oldest}`);
 
 			if (o.oldest !== undefined && ref!.scrollTop <= 100) {
 				// Maintain current scroll position
