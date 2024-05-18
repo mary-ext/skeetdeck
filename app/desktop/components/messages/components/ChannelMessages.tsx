@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, Match, onMount, Switch, untrack } from 'solid-js';
+import { createEffect, createSignal, For, Match, Switch, untrack } from 'solid-js';
 
 import { scrollObserver } from '~/utils/intersection-observer';
 import { ifIntersect } from '~/utils/refs';
@@ -28,7 +28,7 @@ const ChannelMessages = () => {
 	let ackedId: string | undefined;
 
 	const [unread, setUnread] = createSignal<string>();
-	const entries = channel.createEntries({ unread });
+	const { entries } = channel.mount({ unread });
 
 	const markRead = () => {
 		if (!latestId || latestId === ackedId) {
@@ -48,10 +48,6 @@ const ChannelMessages = () => {
 			},
 		});
 	};
-
-	onMount(() => {
-		channel.mount();
-	});
 
 	createEffect((o: { oldest?: string; height?: number } = {}) => {
 		const latest = channel.messages().at(-1)?.id;
