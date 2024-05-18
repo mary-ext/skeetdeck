@@ -86,6 +86,8 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 				switch (action.type) {
 					case FirehoseAction.BACKGROUND: {
 						if (!isBackgrounding) {
+							debug(`isBackgrounding = true`);
+
 							isBackgrounding = true;
 							startPolling(true);
 						}
@@ -94,6 +96,8 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 					}
 					case FirehoseAction.RESUME: {
 						if (isBackgrounding) {
+							debug(`isBackgrounding = false`);
+
 							isBackgrounding = false;
 							startPolling();
 						}
