@@ -23,12 +23,12 @@ const ChannelMessages = () => {
 	const { channel, convo } = useChannel();
 
 	let initialMount = true;
-	let atBottom = true;
 	let latestId: string | undefined;
 	let ackedId: string | undefined;
 
+	const [atBottom, setAtBottom] = createSignal(true);
 	const [unread, setUnread] = createSignal<string>();
-	const { entries } = channel.mount({ unread });
+	const { entries } = channel.mount({ unread, atBottom });
 
 	const markRead = () => {
 		if (!latestId || latestId === ackedId) {
@@ -63,7 +63,7 @@ const ChannelMessages = () => {
 				}
 
 				initialMount = false;
-			} else if (atBottom && document.hasFocus()) {
+			} else if (untrack(atBottom) && document.hasFocus()) {
 				// We're at the bottom and currently focused
 				markRead();
 				setUnread();
@@ -123,9 +123,9 @@ const ChannelMessages = () => {
 					ref={(node) => {
 						// @ts-expect-error
 						node.$onintersect = (entry: IntersectionObserverEntry) => {
-							atBottom = entry.isIntersecting;
+							setAtBottom(entry.isIntersecting);
 
-							if (atBottom && unread() !== undefined) {
+							if (atBottom() && unread() !== undefined) {
 								markRead();
 							}
 						};

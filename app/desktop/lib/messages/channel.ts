@@ -7,6 +7,7 @@ import {
 	onCleanup,
 	onMount,
 	runWithOwner,
+	untrack,
 	type Accessor,
 } from 'solid-js';
 
@@ -43,6 +44,8 @@ export interface DraftMessage {
 	failed: boolean;
 }
 
+const MAX_MESSAGE_HISTORY = 150;
+
 export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }: ChannelOptions) => {
 	return createRoot((destroy) => {
 		let init = false;
@@ -65,10 +68,15 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 		/** Whether the last fetch has failed */
 		const [failed, setFailed] = createSignal(false);
 
+		/** Array of registered views */
+		const atBottoms: Accessor<boolean>[] = [];
+
 		/** Firehose events we haven't processed because we're currently fetching */
 		let pendingEvents: ConvoEvent[] | undefined;
 
 		const processFirehoseEvents = (messages: MessageView[], events: ConvoEvent[]) => {
+			let addition = false;
+
 			for (let idx = 0, len = events.length; idx < len; idx++) {
 				const event = events[idx];
 				const type = event.$type;
@@ -78,6 +86,7 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 
 					if (message.$type === 'chat.bsky.convo.defs#messageView') {
 						messages = messages.concat(message);
+						addition = true;
 					}
 				} else if (type === 'chat.bsky.convo.defs#logDeleteMessage') {
 					// Can be expensive, but it's also somewhat rare, message can't be
@@ -93,6 +102,14 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 							break;
 						}
 					}
+				}
+			}
+
+			// Trim message history if it's getting too long.
+			if (addition && messages.length > MAX_MESSAGE_HISTORY) {
+				if (atBottoms.length === 0 || untrack(() => atBottoms.every((fn) => fn()))) {
+					messages = messages.slice(-fetchLimit);
+					setOldestRev(messages.at(0)?.rev ?? null);
 				}
 			}
 
@@ -284,7 +301,7 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 			sendMessage,
 
 			destroy,
-			mount({ unread }: { unread: Accessor<string | undefined> }) {
+			mount({ unread, atBottom }: { unread: Accessor<string | undefined>; atBottom: Accessor<boolean> }) {
 				onMount(() => {
 					if (!init) {
 						init = true;
@@ -307,6 +324,11 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 						});
 					}
 				});
+
+				{
+					atBottoms.push(atBottom);
+					onCleanup(() => atBottoms.splice(atBottoms.indexOf(atBottom), 1));
+				}
 
 				let entryCache = new Map<string, Entry>();
 				const entries = createMemo<Entry[]>(() => {
