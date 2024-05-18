@@ -1,20 +1,14 @@
-import type { SignalizedConvo } from '~/api/stores/convo';
-
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import { IconButton } from '~/com/primitives/icon-button';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 import { useChatPane } from '../contexts/chat';
+import { useChannel } from '../contexts/channel';
 
-export interface ChannelHeaderProps {
-	/** Expected to be static */
-	convo: SignalizedConvo;
-}
-
-const ChannelHeader = (props: ChannelHeaderProps) => {
+const ChannelHeader = () => {
 	const { router } = useChatPane();
-	const convo = props.convo;
+	const { convo } = useChannel();
 
 	return (
 		<div class="flex h-13 shrink-0 items-center gap-3 border-b border-divider px-4">

@@ -2,36 +2,26 @@ import { createMemo, createSignal } from 'solid-js';
 import TextareaAutosize from 'solid-textarea-autosize';
 
 import { getRtLength, parseRt } from '~/api/richtext/composer';
-import type { SignalizedConvo } from '~/api/stores/convo';
-
-import type { Channel } from '~/desktop/lib/messages/channel';
 
 import { autofocusIf, refs } from '~/utils/input';
 
 import SendOutlinedIcon from '~/com/icons/outline-send';
 import { IconButton } from '~/com/primitives/icon-button';
 
+import { useChannel } from '../contexts/channel';
 import { useChatPane } from '../contexts/chat';
-
-export interface CompositionProps {
-	/** Expected to be static */
-	convo: SignalizedConvo;
-	/** Expected to be static */
-	channel: Channel;
-}
 
 const MAX_MESSAGE_LIMIT = 1000;
 const SHOW_LIMIT_COUNTER = MAX_MESSAGE_LIMIT - 200;
 
-const Composition = (props: CompositionProps) => {
+const Composition = () => {
 	let ref: HTMLTextAreaElement;
 
 	const { isOpen } = useChatPane();
+	const { channel } = useChannel();
 
 	// const [focused, setFocused] = createSignal(false);
 	// const [userExpanded, setUserExpanded] = createSignal(false);
-
-	const channel = props.channel;
 
 	const [text, setText] = createSignal('');
 

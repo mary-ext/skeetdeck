@@ -1,16 +1,14 @@
 import { createEffect, createSignal, For, Match, onMount, Switch, untrack } from 'solid-js';
 
-import type { SignalizedConvo } from '~/api/stores/convo';
-
 import { scrollObserver } from '~/utils/intersection-observer';
 import { ifIntersect } from '~/utils/refs';
 
-import { EntryType, type Channel } from '~/desktop/lib/messages/channel';
+import { EntryType } from '~/desktop/lib/messages/channel';
 
 import CircularProgress from '~/com/components/CircularProgress';
 
+import { useChannel } from '../contexts/channel';
 import { useChatPane } from '../contexts/chat';
-
 import MessageDivider from './MessageDivider';
 import MessageItem from './MessageItem';
 
@@ -20,19 +18,9 @@ function debug(msg: string) {
 	}
 }
 
-interface ChannelMessagesProps {
-	/** Expected to be static */
-	convo: SignalizedConvo;
-	/** Expected to be static */
-	channel: Channel;
-}
-
-const ChannelMessages = (props: ChannelMessagesProps) => {
+const ChannelMessages = () => {
 	const { firehose, rpc } = useChatPane();
-
-	const convo = props.convo;
-
-	const channel = props.channel;
+	const { channel, convo } = useChannel();
 
 	let initialMount = true;
 	let atBottom = true;

@@ -7,6 +7,7 @@ import ChannelMessages from '../components/ChannelMessages';
 import Composition from '../components/Composition';
 import FirehoseIndicator from '../components/FirehoseStatus';
 
+import { ChannelContext } from '../contexts/channel';
 import { useChatPane } from '../contexts/chat';
 import type { ViewKind, ViewParams } from '../contexts/router';
 
@@ -27,18 +28,17 @@ const ChannelView = ({ id }: ViewParams<ViewKind.CHANNEL>) => {
 		<Show when={convo.latest} keyed>
 			{(convo) => {
 				const channel = channels.get(convo.id);
-
 				onCleanup(firehose.requestPollInterval(3_000));
 
 				return (
-					<>
-						<ChannelHeader convo={convo} />
+					<ChannelContext.Provider value={{ convo, channel }}>
+						<ChannelHeader />
 						<FirehoseIndicator />
 						<div class="flex min-h-0 shrink grow flex-col-reverse">
-							<Composition convo={convo} channel={channel} />
-							<ChannelMessages convo={convo} channel={channel} />
+							<Composition />
+							<ChannelMessages />
 						</div>
-					</>
+					</ChannelContext.Provider>
 				);
 			}}
 		</Show>
