@@ -264,33 +264,35 @@ const DashboardLayout = (props: RouteComponentProps) => {
 				</button>
 			</div>
 
-			<ShowFreeze when={!!multiagent.active && show() === ShowState.COMPOSER}>
-				<Suspense
-					fallback={
-						<div class="grid w-96 shrink-0 place-items-center border-r border-divider">
-							<CircularProgress />
-						</div>
-					}
-				>
-					<Keyed key={composer._key()}>
-						<ComposerPane />
-					</Keyed>
-				</Suspense>
-			</ShowFreeze>
-			<ShowFreeze when={!!multiagent.active && show() === ShowState.DIRECT_MESSAGES}>
-				<Suspense
-					fallback={
-						<div class="grid w-96 shrink-0 place-items-center border-r border-divider">
-							<CircularProgress />
-						</div>
-					}
-				>
-					<MessagesPane
-						isOpen={() => show() === ShowState.DIRECT_MESSAGES}
-						onClose={() => setShow(undefined)}
-					/>
-				</Suspense>
-			</ShowFreeze>
+			<Show when={multiagent.active}>
+				<ShowFreeze when={show() === ShowState.COMPOSER}>
+					<Suspense
+						fallback={
+							<div class="grid w-96 shrink-0 place-items-center border-r border-divider">
+								<CircularProgress />
+							</div>
+						}
+					>
+						<Keyed key={composer._key()}>
+							<ComposerPane />
+						</Keyed>
+					</Suspense>
+				</ShowFreeze>
+				<ShowFreeze when={show() === ShowState.DIRECT_MESSAGES}>
+					<Suspense
+						fallback={
+							<div class="grid w-96 shrink-0 place-items-center border-r border-divider">
+								<CircularProgress />
+							</div>
+						}
+					>
+						<MessagesPane
+							isOpen={() => show() === ShowState.DIRECT_MESSAGES}
+							onClose={() => setShow(undefined)}
+						/>
+					</Suspense>
+				</ShowFreeze>
+			</Show>
 
 			<Suspense
 				fallback={
