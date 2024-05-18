@@ -28,7 +28,7 @@ interface ChannelMessagesProps {
 }
 
 const ChannelMessages = (props: ChannelMessagesProps) => {
-	const { rpc } = useChatPane();
+	const { firehose, rpc } = useChatPane();
 
 	const convo = props.convo;
 
@@ -47,10 +47,11 @@ const ChannelMessages = (props: ChannelMessagesProps) => {
 			return;
 		}
 
-		ackedId = latestId;
 		debug(`marking as read; id=${latestId}`);
 
-		// @todo: fire mark-read event
+		ackedId = latestId;
+
+		firehose.emitter.emit('read', convo.id, latestId);
 
 		rpc.call('chat.bsky.convo.updateRead', {
 			data: {

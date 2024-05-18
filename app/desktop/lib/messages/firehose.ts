@@ -29,6 +29,7 @@ export type ChatFirehoseEvents = {
 	connect: () => void;
 	error: (err: FirehoseError) => void;
 	event: (event: ConvoEvent) => void;
+	read: (channelId: string, messageId: string) => void;
 };
 
 export type ChatFirehose = ReturnType<typeof createChatFirehose>;

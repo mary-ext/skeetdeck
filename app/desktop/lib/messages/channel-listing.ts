@@ -91,6 +91,7 @@ export const createChannelListing = ({ did, rpc, firehose, fetchLimit = 20 }: Ch
 				} else if (type === 'chat.bsky.convo.defs#logCreateMessage') {
 					if (convo) {
 						convo.lastMessage.value = event.message;
+						convo.unread.value = true;
 
 						if (last!.index === -1) {
 							removedChannels.delete(convo.id);
@@ -273,6 +274,23 @@ export const createChannelListing = ({ did, rpc, firehose, fetchLimit = 20 }: Ch
 					runWithOwner(owner, () => {
 						onCleanup(
 							firehose.emitter.on('event', (event) => {
+								if (pendingEvents) {
+									pendingEvents.push(event);
+									return;
+								}
+
+								setChannels((channels) => processFirehoseEvents(channels, [event]));
+							}),
+						);
+
+						onCleanup(
+							firehose.emitter.on('read', (channelId, messageId) => {
+								const event: MarkReadEvent = {
+									$type: 'mark-read',
+									convoId: channelId,
+									messageId: messageId,
+								};
+
 								if (pendingEvents) {
 									pendingEvents.push(event);
 									return;
