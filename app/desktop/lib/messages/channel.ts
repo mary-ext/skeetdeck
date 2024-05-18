@@ -354,6 +354,7 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 
 					const arr = drafts.size === 0 ? $messages : [...$messages, ...drafts.values()];
 					let group: MessageView[] | undefined;
+					let insertedUnread = $unread === undefined;
 
 					const flushGroup = () => {
 						assert(group !== undefined, `expected group to exist`);
@@ -396,7 +397,9 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 							pushDivider(item.sentAt);
 						}
 
-						if ($unread === item.id) {
+						if (!insertedUnread && item.rev >= $unread!) {
+							insertedUnread = true;
+
 							if (group) {
 								flushGroup();
 							}

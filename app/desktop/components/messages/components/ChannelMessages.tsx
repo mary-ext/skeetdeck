@@ -85,8 +85,8 @@ const ChannelMessages = () => {
 			} else if (untrack(unread) === undefined) {
 				// Start of a new unread session
 
-				debug(`new unread; id=${latestId}`);
-				setUnread(latestId);
+				debug(`new unread; rev=${last.rev}`);
+				setUnread(last.rev);
 
 				// Make sure the browser doesn't stick
 				if (ref!.scrollTop === 0) {
