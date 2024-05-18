@@ -245,6 +245,10 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 			const events = data.logs;
 			latestRev = cursor = data.cursor;
 
+			if (events.length !== 0) {
+				debug(`received ${events.length} events`);
+			}
+
 			batch(() => {
 				for (let idx = 0, len = events.length; idx < len; idx++) {
 					const event = events[idx];
