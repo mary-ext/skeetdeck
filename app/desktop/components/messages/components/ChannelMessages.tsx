@@ -65,6 +65,8 @@ const ChannelMessages = () => {
 			// New message!
 			latestId = last.id;
 
+			const ours = last.sender.did === did;
+
 			if (initialMount) {
 				// This is the initial mount, only mark as read when it's certain
 				if (convo.unread.peek()) {
@@ -72,10 +74,14 @@ const ChannelMessages = () => {
 				}
 
 				initialMount = false;
-			} else if (last.sender.did === did || (untrack(atBottom) && untrack(isOpen) && document.hasFocus())) {
-				// We're at the bottom and currently focused, or last message is us.
+			} else if (ours || (untrack(atBottom) && untrack(isOpen) && document.hasFocus())) {
+				// We're at the bottom and currently focused, or last message is ours.
 				markRead();
-				setUnread();
+
+				// Only unset unread if it's our post
+				if (ours) {
+					setUnread();
+				}
 			} else if (untrack(unread) === undefined) {
 				// Start of a new unread session
 
