@@ -35,6 +35,7 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 	const [status, setStatus] = createSignal(FirehoseStatus.IDLE);
 	const [error, setError] = createSignal<FirehoseError>();
 
+	let initialRevRetrieved = false;
 	let latestRev: string | undefined;
 
 	let pollId: number | undefined;
@@ -140,7 +141,16 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 							setError(undefined);
 						});
 
-						init();
+						if (initialRevRetrieved) {
+							poll().then(() => {
+								if (untrack(status) === FirehoseStatus.INITIALIZING) {
+									dispatch({ type: FirehoseAction.CONNECTED });
+								}
+							});
+						} else {
+							init();
+						}
+
 						debug(`transition: ERROR -> INITIALIZING`);
 						break;
 					}
@@ -158,7 +168,9 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 			});
 
 			const convos = response.data.convos;
+
 			latestRev = undefined;
+			initialRevRetrieved = true;
 
 			for (const convo of convos) {
 				const rev = convo.rev;
