@@ -6,8 +6,12 @@ import type { SignalizedConvo } from '~/api/stores/convo';
 
 import type { Channel } from '~/desktop/lib/messages/channel';
 
+import { autofocusIf } from '~/utils/input';
+
 import SendOutlinedIcon from '~/com/icons/outline-send';
 import { IconButton } from '~/com/primitives/icon-button';
+
+import { useChatPane } from '../contexts/chat';
 
 export interface CompositionProps {
 	/** Expected to be static */
@@ -20,6 +24,8 @@ const MAX_MESSAGE_LIMIT = 1000;
 const SHOW_LIMIT_COUNTER = MAX_MESSAGE_LIMIT - 200;
 
 const Composition = (props: CompositionProps) => {
+	const { isOpen } = useChatPane();
+
 	// const [focused, setFocused] = createSignal(false);
 	// const [userExpanded, setUserExpanded] = createSignal(false);
 
@@ -72,6 +78,7 @@ const Composition = (props: CompositionProps) => {
 				)} */}
 
 				<TextareaAutosize
+					ref={autofocusIf(isOpen)}
 					value={text()}
 					onInput={(ev) => {
 						// setFocused(true);

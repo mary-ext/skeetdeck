@@ -285,7 +285,10 @@ const DashboardLayout = (props: RouteComponentProps) => {
 						</div>
 					}
 				>
-					<MessagesPane onClose={() => setShow(undefined)} />
+					<MessagesPane
+						isOpen={() => show() === ShowState.DIRECT_MESSAGES}
+						onClose={() => setShow(undefined)}
+					/>
 				</Suspense>
 			</ShowFreeze>
 

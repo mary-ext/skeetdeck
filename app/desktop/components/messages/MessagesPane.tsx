@@ -18,6 +18,7 @@ import { useMessages, type MessagesInitialState } from './MessagesContext';
 import { DM_SERVICE_PROXY } from './const';
 
 export interface MessagesPaneProps {
+	isOpen: () => boolean;
 	onClose: () => void;
 }
 
@@ -114,6 +115,7 @@ const MessagesPane = (props: MessagesPaneProps) => {
 					const context: ChatPaneState = {
 						...partialState,
 						router: router,
+						isOpen: props.isOpen,
 						close: props.onClose,
 						changeAccount: setUid,
 					};

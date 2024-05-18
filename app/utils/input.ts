@@ -1,4 +1,4 @@
-import { type Accessor, createEffect, onMount } from 'solid-js';
+import { type Accessor, createEffect, createRenderEffect, onMount } from 'solid-js';
 
 import type { CreateMutationResult } from '@mary/solid-query';
 
@@ -75,6 +75,16 @@ export const autofocus = (node: HTMLInputElement | HTMLTextAreaElement | HTMLBut
 	onMount(() => {
 		node.focus();
 	});
+};
+
+export const autofocusIf = (enabled: () => boolean) => {
+	return (node: HTMLInputElement | HTMLTextAreaElement | HTMLButtonElement) => {
+		createRenderEffect(() => {
+			if (enabled()) {
+				setTimeout(() => node.focus(), 0);
+			}
+		});
+	};
 };
 
 export const mutationAutofocus = (mutation: CreateMutationResult<any, any, any, any>, first = true) => {

@@ -28,6 +28,7 @@ export interface ChatPaneState {
 
 	router: ChatRouterState;
 
+	isOpen(): boolean;
 	close(): void;
 	changeAccount(next: At.DID): void;
 }
