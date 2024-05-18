@@ -54,7 +54,7 @@ const deckButton = Interactive({
 });
 
 const menuIconButton = Interactive({
-	class: `grid h-11 shrink-0 place-items-center text-lg disabled:opacity-50`,
+	class: `relative grid h-11 shrink-0 place-items-center text-lg disabled:opacity-50`,
 });
 
 const updateButton = Interactive({
@@ -107,6 +107,10 @@ const DashboardLayout = (props: RouteComponentProps) => {
 								class={menuIconButton}
 							>
 								<MailOutlinedIcon />
+
+								{show() !== ShowState.DIRECT_MESSAGES && messages.unreadCount() > 0 && (
+									<div class="absolute right-3.5 top-3 h-2 w-2 rounded-full bg-red-600"></div>
+								)}
 							</button>
 
 							<Flyout

@@ -114,7 +114,7 @@ const MessagesPane = (props: MessagesPaneProps) => {
 		<div class="flex w-96 shrink-0 flex-col border-r border-divider">
 			<Show when={partial()} keyed>
 				{(partialState) => {
-					const context: ChatPaneState = {
+					const ctx: ChatPaneState = {
 						...partialState,
 						router: router,
 						isOpen: props.isOpen,
@@ -122,17 +122,19 @@ const MessagesPane = (props: MessagesPaneProps) => {
 						changeAccount: setUid,
 					};
 
-					makeEventListener(document, 'focus', context.firehose.resume);
-					makeEventListener(document, 'blur', context.firehose.background);
+					makeEventListener(document, 'focus', ctx.firehose.resume);
+					makeEventListener(document, 'blur', ctx.firehose.background);
 
 					onCleanup(() => {
-						context.firehose.destroy();
-						context.channels.clear();
+						ctx.firehose.destroy();
+						ctx.channels.clear();
+
+						context.setUnreadCount(0);
 					});
 
 					return (
 						<NoopLinkingProvider>
-							<ChatPaneContext.Provider value={context}>
+							<ChatPaneContext.Provider value={ctx}>
 								<For each={views()}>
 									{(view) => (
 										<div class="contents" hidden={current() !== view}>

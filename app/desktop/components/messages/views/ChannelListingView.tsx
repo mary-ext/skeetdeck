@@ -1,4 +1,4 @@
-import { createMemo, onCleanup, onMount } from 'solid-js';
+import { createEffect, createMemo, onCleanup, onMount } from 'solid-js';
 
 import { getAccountData } from '~/api/globals/agent';
 
@@ -17,7 +17,10 @@ import FirehoseIndicator from '../components/FirehoseStatus';
 import { useChatPane } from '../contexts/chat';
 import { ViewKind, type ViewParams } from '../contexts/router';
 
+import { useMessages } from '../MessagesContext';
+
 const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
+	const { setUnreadCount } = useMessages();
 	const { close, did, rpc, firehose, router } = useChatPane();
 
 	const profile = createMemo(() => getAccountData(did)?.profile);
@@ -27,6 +30,14 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 	onMount(() => {
 		listing.mount();
 		onCleanup(listing.destroy);
+	});
+
+	createEffect(() => {
+		const unreadChannels = listing.channels().filter((channel) => {
+			return !channel.muted.value && channel.unread.value;
+		});
+
+		setUnreadCount(unreadChannels.length);
 	});
 
 	return (
