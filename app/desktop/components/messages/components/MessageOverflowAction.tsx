@@ -50,7 +50,7 @@ const MessageOverflowAction = (props: MessageOverflowActionProps) => {
 							openModal(() => (
 								<ConfirmDialog
 									title="Delete this message?"
-									body="The message will be deleted for you, but not for other participants."
+									body="The message will be deleted for you, but not to other participants."
 									confirmation="Delete"
 									onConfirm={() => channel.deleteMessage(item.id)}
 								/>

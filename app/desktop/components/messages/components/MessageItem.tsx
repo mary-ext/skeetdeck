@@ -77,7 +77,7 @@ const MessageAccessory = ({ item }: MessageAccessoryProps) => {
 	return (
 		<div class="flex shrink-0 px-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100">
 			<MessageOverflowAction item={item}>
-				<button class={/* @once */ IconButton({ color: 'muted' })}>
+				<button title="Actions" class={/* @once */ IconButton({ color: 'muted' })}>
 					<MoreHorizIcon />
 				</button>
 			</MessageOverflowAction>
