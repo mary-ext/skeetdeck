@@ -40,6 +40,7 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 	let pollId: number | undefined;
 	let pollImmediately = true;
 	let isPolling = false;
+	let lastPollInterval: number | undefined;
 	let requestedPollIntervals: Map<string, number> = new Map();
 
 	let isBackgrounding = false;
@@ -183,8 +184,6 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 	};
 
 	const startPolling = (init = false): void => {
-		stopPolling();
-
 		if (untrack(status) !== FirehoseStatus.READY) {
 			return;
 		}
@@ -194,6 +193,13 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 		if (!isBackgrounding) {
 			pollInterval = Math.min(pollInterval, ...requestedPollIntervals.values());
 		}
+
+		if (pollId !== undefined && lastPollInterval === pollInterval) {
+			return;
+		}
+
+		lastPollInterval = pollInterval;
+		stopPolling();
 
 		// Ratelimit immediate polling
 		if (pollImmediately && !isPolling) {
