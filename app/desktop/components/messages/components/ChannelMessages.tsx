@@ -23,7 +23,7 @@ function debug(msg: string) {
 const ChannelMessages = () => {
 	let ref: HTMLElement;
 
-	const { firehose, rpc, isOpen } = useChatPane();
+	const { did, firehose, rpc, isOpen } = useChatPane();
 	const { channel, convo } = useChannel();
 
 	let initialMount = true;
@@ -72,8 +72,8 @@ const ChannelMessages = () => {
 				}
 
 				initialMount = false;
-			} else if (untrack(atBottom) && untrack(isOpen) && document.hasFocus()) {
-				// We're at the bottom and currently focused
+			} else if (last.sender.did === did || (untrack(atBottom) && untrack(isOpen) && document.hasFocus())) {
+				// We're at the bottom and currently focused, or last message is us.
 				markRead();
 				setUnread();
 			} else if (untrack(unread) === undefined) {
