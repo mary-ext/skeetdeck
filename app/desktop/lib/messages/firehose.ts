@@ -194,24 +194,24 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 			pollInterval = Math.min(pollInterval, ...requestedPollIntervals.values());
 		}
 
+		if (pollImmediately && !isPolling) {
+			pollImmediately = false;
+
+			// Don't actually poll if we just initialized
+			if (!init) {
+				debug(`immediate polling requested`);
+				poll();
+			}
+
+			setTimeout(() => (pollImmediately = true), 10_000);
+		}
+
 		if (pollId !== undefined && lastPollInterval === pollInterval) {
 			return;
 		}
 
 		lastPollInterval = pollInterval;
 		stopPolling();
-
-		// Ratelimit immediate polling
-		if (pollImmediately && !isPolling) {
-			pollImmediately = false;
-
-			// Don't actually poll if we just initialized
-			if (!init) {
-				poll();
-			}
-
-			setTimeout(() => (pollImmediately = true), 10_000);
-		}
 
 		debug(`setting up polling for ${pollInterval} ms`);
 
