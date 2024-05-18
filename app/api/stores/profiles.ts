@@ -139,7 +139,7 @@ export const mergeProfile = (
 };
 
 const DEFAULT_CHAT_ASSOCIATION: AppBskyActorDefs.ProfileAssociatedChat = {
-	allowIncoming: 'none',
+	allowIncoming: 'following',
 };
 
 const getAssociated = (o: AppBskyActorDefs.ProfileAssociated | undefined): ProfileAssociated => {
