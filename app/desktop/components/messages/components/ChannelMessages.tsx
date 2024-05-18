@@ -11,6 +11,7 @@ import { useChannel } from '../contexts/channel';
 import { useChatPane } from '../contexts/chat';
 import MessageDivider from './MessageDivider';
 import MessageItem from './MessageItem';
+import type { ChatBskyConvoDefs } from '@mary/bluesky-client/lexicons';
 
 function debug(msg: string) {
 	if (import.meta.env.DEV) {
@@ -19,6 +20,8 @@ function debug(msg: string) {
 }
 
 const ChannelMessages = () => {
+	let ref: HTMLElement;
+
 	const { firehose, rpc } = useChatPane();
 	const { channel, convo } = useChannel();
 
@@ -49,14 +52,17 @@ const ChannelMessages = () => {
 		});
 	};
 
-	createEffect(() => {
-		const latest = channel.messages().at(-1)?.id;
+	createEffect((prev: ChatBskyConvoDefs.MessageView | undefined) => {
+		const messages = channel.messages();
+		const last = messages[messages.length - 1];
 
-		if (latest === undefined) {
-			// Do nothing.
-		} else if (latestId === undefined || latest > latestId) {
+		if (last === undefined) {
+			return undefined;
+		}
+
+		if (prev === undefined || last.rev > prev.rev) {
 			// New message!
-			latestId = latest;
+			latestId = last.id;
 
 			if (initialMount) {
 				// This is the initial mount, only mark as read when it's certain
@@ -72,16 +78,21 @@ const ChannelMessages = () => {
 			} else if (untrack(unread) === undefined) {
 				// Start of a new unread session
 
-				debug(`new unread; id=${latest}`);
-				setUnread(latest);
-			} else {
-				// @todo: make sure it's anchored to the unread divider somehow
+				debug(`new unread; id=${latestId}`);
+				setUnread(latestId);
+
+				// Make sure the browser doesn't stick
+				if (ref!.scrollTop === 0) {
+					ref!.scrollTop = -1;
+				}
 			}
 		}
+
+		return last;
 	});
 
 	return (
-		<div class="relative flex min-h-0 grow flex-col-reverse overflow-y-auto">
+		<div ref={(node) => (ref = node)} class="relative flex min-h-0 grow flex-col-reverse overflow-y-auto">
 			<div>
 				<Switch>
 					<Match when={channel.oldestRev() === null}>
