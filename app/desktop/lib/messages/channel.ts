@@ -144,8 +144,8 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 				pendingEvents = undefined;
 
 				batch(() => {
-					// If we returned less than the limit, we're at the start of the convo
-					setOldestRev((messages.length >= fetchLimit && data.cursor) || null);
+					// If we get `undefined` here, we're at the end.
+					setOldestRev(data.cursor ?? null);
 
 					// If we've not received any events from firehose, set it as is
 					if (events.length === 0) {
@@ -225,8 +225,8 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 				pendingEvents = undefined;
 
 				batch(() => {
-					// If we returned less than the limit, we're at the start of the convo
-					setOldestRev((messages.length >= fetchLimit && data.cursor) || null);
+					// If we get `undefined` here, we're at the end.
+					setOldestRev(data.cursor ?? null);
 
 					// Concatenate to existing message history, and process deferred events
 					setMessages((existing) => processFirehoseEvents([...filtered, ...existing], events));
