@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid/non-secure';
-import { batch } from 'solid-js';
+import { batch, createSignal, untrack } from 'solid-js';
 
 import type { BskyXRPC } from '@mary/bluesky-client';
 
@@ -22,12 +22,9 @@ export type FirehoseErrorKind = 'unknown' | 'init_failure' | 'poll_failure';
 export interface FirehoseError {
 	kind: FirehoseErrorKind;
 	exception?: unknown;
-	retry: () => void;
 }
 
 export type ChatFirehoseEvents = {
-	connect: () => void;
-	error: (err: FirehoseError) => void;
 	event: (event: ConvoEvent) => void;
 	read: (channelId: string, messageId: string) => void;
 };
@@ -35,7 +32,9 @@ export type ChatFirehoseEvents = {
 export type ChatFirehose = ReturnType<typeof createChatFirehose>;
 
 export const createChatFirehose = (rpc: BskyXRPC) => {
-	let status = FirehoseStatus.UNINITIALIZED;
+	const [status, setStatus] = createSignal(FirehoseStatus.IDLE);
+	const [error, setError] = createSignal<FirehoseError>();
+
 	let latestRev: string | undefined;
 
 	let pollId: number | undefined;
@@ -48,14 +47,15 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 	const emitter = new EventEmitter<ChatFirehoseEvents>();
 
 	const dispatch = (action: BusDispatch): void => {
-		switch (status) {
-			case FirehoseStatus.UNINITIALIZED: {
+		switch (untrack(status)) {
+			case FirehoseStatus.IDLE: {
 				switch (action.type) {
-					case FirehoseAction.INITIALIZE: {
-						status = FirehoseStatus.INITIALIZING;
+					case FirehoseAction.CONNECT: {
+						setStatus(FirehoseStatus.INITIALIZING);
 
 						init();
-						debug(`transition: UNINITIALIZED -> INITIALIZING`);
+
+						debug(`transition: IDLE -> INITIALIZING`);
 						break;
 					}
 				}
@@ -64,18 +64,17 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 			}
 			case FirehoseStatus.INITIALIZING: {
 				switch (action.type) {
-					case FirehoseAction.READY: {
-						status = !isBackgrounding ? FirehoseStatus.READY : FirehoseStatus.BACKGROUNDED;
+					case FirehoseAction.CONNECTED: {
+						setStatus(FirehoseStatus.READY);
 						startPolling(true);
 
-						emitter.emit('connect');
 						debug(`transition: INITIALIZING -> ${!isBackgrounding ? `READY` : `BACKGROUNDED`}`);
 						break;
 					}
 					case FirehoseAction.ERROR: {
-						status = FirehoseStatus.ERROR;
+						setStatus(FirehoseStatus.ERROR);
+						setError(action.data);
 
-						emitter.emit('error', action.data);
 						debug(`transition: INITIALIZING -> ERROR`);
 						break;
 					}
@@ -86,49 +85,36 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 			case FirehoseStatus.READY: {
 				switch (action.type) {
 					case FirehoseAction.BACKGROUND: {
-						status = FirehoseStatus.BACKGROUNDED;
-						startPolling();
-
-						debug(`transition: READY -> BACKGROUNDED`);
-						break;
-					}
-					case FirehoseAction.UPDATE_POLL: {
-						startPolling();
+						if (!isBackgrounding) {
+							isBackgrounding = true;
+							startPolling(true);
+						}
 
 						break;
 					}
-					case FirehoseAction.ERROR: {
-						status = FirehoseStatus.ERROR;
-						stopPolling();
-
-						emitter.emit('error', action.data);
-						debug(`transition: READY -> ERROR`);
-						break;
-					}
-				}
-
-				break;
-			}
-			case FirehoseStatus.BACKGROUNDED: {
-				switch (action.type) {
 					case FirehoseAction.RESUME: {
-						status = FirehoseStatus.READY;
-						startPolling();
+						if (isBackgrounding) {
+							isBackgrounding = false;
+							startPolling();
+						}
 
-						debug(`transition: BACKGROUNDED -> READY`);
 						break;
 					}
 					case FirehoseAction.UPDATE_POLL: {
 						startPolling();
-
+						break;
+					}
+					case FirehoseAction.POLL_NOW: {
+						poll();
 						break;
 					}
 					case FirehoseAction.ERROR: {
-						status = FirehoseStatus.ERROR;
+						setStatus(FirehoseStatus.ERROR);
+						setError(action.data);
+
 						stopPolling();
 
-						emitter.emit('error', action.data);
-						debug(`transition: BACKGROUNDED -> ERROR`);
+						debug(`transition: READY -> ERROR`);
 						break;
 					}
 				}
@@ -138,8 +124,10 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 			case FirehoseStatus.ERROR: {
 				switch (action.type) {
 					case FirehoseAction.RESUME: {
-						status = FirehoseStatus.INITIALIZING;
-						latestRev = action.rev;
+						isBackgrounding = false;
+
+						setStatus(FirehoseStatus.INITIALIZING);
+						setError(undefined);
 
 						init();
 						debug(`transition: ERROR -> INITIALIZING`);
@@ -159,6 +147,7 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 			});
 
 			const convos = response.data.convos;
+			latestRev = undefined;
 
 			for (const convo of convos) {
 				const rev = convo.rev;
@@ -168,14 +157,13 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 				}
 			}
 
-			dispatch({ type: FirehoseAction.READY });
+			dispatch({ type: FirehoseAction.CONNECTED });
 		} catch (err) {
 			dispatch({
 				type: FirehoseAction.ERROR,
 				data: {
 					kind: 'init_failure',
 					exception: err,
-					retry: () => dispatch({ type: FirehoseAction.RESUME }),
 				},
 			});
 		}
@@ -193,37 +181,31 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 	const startPolling = (init = false): void => {
 		stopPolling();
 
-		let pollInterval = 30_000;
-
-		if (status !== FirehoseStatus.READY && status !== FirehoseStatus.BACKGROUNDED) {
+		if (untrack(status) !== FirehoseStatus.READY) {
 			return;
 		}
 
-		if (status === FirehoseStatus.READY) {
+		let pollInterval = 30_000;
+
+		if (!isBackgrounding) {
 			pollInterval = Math.min(pollInterval, ...requestedPollIntervals.values());
+		}
 
-			// Ratelimit immediate polling
-			if (pollImmediately && !isPolling) {
-				pollImmediately = false;
+		// Ratelimit immediate polling
+		if (pollImmediately && !isPolling) {
+			pollImmediately = false;
 
-				// Don't actually poll if we just initialized
-				if (!init) {
-					poll();
-				}
-
-				setTimeout(() => (pollImmediately = true), 10_000);
+			// Don't actually poll if we just initialized
+			if (!init) {
+				poll();
 			}
+
+			setTimeout(() => (pollImmediately = true), 10_000);
 		}
 
 		debug(`setting up polling for ${pollInterval} ms`);
 
-		pollId = setInterval(() => {
-			if (isPolling) {
-				return;
-			}
-
-			poll();
-		}, pollInterval);
+		pollId = setInterval(poll, pollInterval);
 	};
 
 	const poll = async (): Promise<void> => {
@@ -261,7 +243,6 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 				data: {
 					kind: 'poll_failure',
 					exception: e,
-					retry: () => dispatch({ type: FirehoseAction.RESUME, rev: cursor }),
 				},
 			});
 		} finally {
@@ -270,22 +251,21 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 	};
 
 	return {
+		status,
+		error,
 		emitter,
+
 		init(): void {
-			dispatch({ type: FirehoseAction.INITIALIZE });
+			dispatch({ type: FirehoseAction.CONNECT });
 		},
 		background(): void {
-			isBackgrounding = true;
 			dispatch({ type: FirehoseAction.BACKGROUND });
 		},
 		resume(): void {
-			isBackgrounding = false;
 			dispatch({ type: FirehoseAction.RESUME });
 		},
 		poll(): void {
-			if (status === FirehoseStatus.READY || status === FirehoseStatus.BACKGROUNDED) {
-				poll();
-			}
+			dispatch({ type: FirehoseAction.POLL_NOW });
 		},
 		requestPollInterval(interval: number): () => void {
 			const id = nanoid();
@@ -299,7 +279,7 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 			};
 		},
 		destroy() {
-			status = FirehoseStatus.DESTROYED;
+			setStatus(FirehoseStatus.DESTROYED);
 			stopPolling();
 
 			debug(`destroyed`);
@@ -307,28 +287,29 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 	};
 };
 
-const enum FirehoseStatus {
-	UNINITIALIZED,
+export const enum FirehoseStatus {
+	IDLE,
 	INITIALIZING,
 	READY,
 	ERROR,
-	BACKGROUNDED,
 	DESTROYED,
 }
 
 const enum FirehoseAction {
-	INITIALIZE,
-	READY,
+	CONNECT,
+	CONNECTED,
 	ERROR,
 	BACKGROUND,
 	RESUME,
 	UPDATE_POLL,
+	POLL_NOW,
 }
 
 type BusDispatch =
-	| { type: FirehoseAction.INITIALIZE }
-	| { type: FirehoseAction.READY }
+	| { type: FirehoseAction.CONNECT }
+	| { type: FirehoseAction.CONNECTED }
 	| { type: FirehoseAction.BACKGROUND }
 	| { type: FirehoseAction.RESUME; rev?: string }
 	| { type: FirehoseAction.ERROR; data: FirehoseError }
-	| { type: FirehoseAction.UPDATE_POLL };
+	| { type: FirehoseAction.UPDATE_POLL }
+	| { type: FirehoseAction.POLL_NOW };
