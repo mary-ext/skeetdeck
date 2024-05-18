@@ -1,5 +1,7 @@
 import { createEffect, createSignal, For, Match, Switch, untrack } from 'solid-js';
 
+import type { ChatBskyConvoDefs } from '~/api/atp-schema';
+
 import { scrollObserver } from '~/utils/intersection-observer';
 import { ifIntersect } from '~/utils/refs';
 
@@ -11,7 +13,6 @@ import { useChannel } from '../contexts/channel';
 import { useChatPane } from '../contexts/chat';
 import MessageDivider from './MessageDivider';
 import MessageItem from './MessageItem';
-import type { ChatBskyConvoDefs } from '@mary/bluesky-client/lexicons';
 
 function debug(msg: string) {
 	if (import.meta.env.DEV) {
