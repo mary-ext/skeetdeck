@@ -1,3 +1,4 @@
+import { makeEventListener } from '@solid-primitives/event-listener';
 import { For, Show, createEffect, createMemo, createResource, createSignal, onCleanup } from 'solid-js';
 
 import { withProxy } from '@mary/bluesky-client/xrpc';
@@ -120,6 +121,9 @@ const MessagesPane = (props: MessagesPaneProps) => {
 						close: props.onClose,
 						changeAccount: setUid,
 					};
+
+					makeEventListener(document, 'focus', context.firehose.resume);
+					makeEventListener(document, 'blur', context.firehose.background);
 
 					onCleanup(() => {
 						context.firehose.destroy();

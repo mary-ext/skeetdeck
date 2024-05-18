@@ -11,6 +11,7 @@ import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 import { createChannelListing, FetchState } from '~/desktop/lib/messages/channel-listing';
 
 import ChannelItem from '../components/ChannelItem';
+import FirehoseIndicator from '../components/FirehoseStatus';
 
 import { useChatPane } from '../contexts/chat';
 import { ViewKind, type ViewParams } from '../contexts/router';
@@ -48,6 +49,8 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 					</button>
 				</div>
 			</div>
+
+			<FirehoseIndicator />
 
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<List

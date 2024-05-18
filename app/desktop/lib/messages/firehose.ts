@@ -73,8 +73,10 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 						break;
 					}
 					case FirehoseAction.ERROR: {
-						setStatus(FirehoseStatus.ERROR);
-						setError(action.data);
+						batch(() => {
+							setStatus(FirehoseStatus.ERROR);
+							setError(action.data);
+						});
 
 						debug(`transition: INITIALIZING -> ERROR`);
 						break;
@@ -114,8 +116,10 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 						break;
 					}
 					case FirehoseAction.ERROR: {
-						setStatus(FirehoseStatus.ERROR);
-						setError(action.data);
+						batch(() => {
+							setStatus(FirehoseStatus.ERROR);
+							setError(action.data);
+						});
 
 						stopPolling();
 
@@ -131,8 +135,10 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 					case FirehoseAction.RESUME: {
 						isBackgrounding = false;
 
-						setStatus(FirehoseStatus.INITIALIZING);
-						setError(undefined);
+						batch(() => {
+							setStatus(FirehoseStatus.INITIALIZING);
+							setError(undefined);
+						});
 
 						init();
 						debug(`transition: ERROR -> INITIALIZING`);
@@ -299,6 +305,7 @@ export const createChatFirehose = (rpc: BskyXRPC) => {
 
 export const enum FirehoseStatus {
 	IDLE,
+	RECONNECT,
 	INITIALIZING,
 	READY,
 	ERROR,

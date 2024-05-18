@@ -5,6 +5,7 @@ import { getCachedConvo, mergeConvo, SignalizedConvo } from '~/api/stores/convo'
 import ChannelHeader from '../components/ChannelHeader';
 import ChannelMessages from '../components/ChannelMessages';
 import Composition from '../components/Composition';
+import FirehoseIndicator from '../components/FirehoseStatus';
 
 import { useChatPane } from '../contexts/chat';
 import type { ViewKind, ViewParams } from '../contexts/router';
@@ -32,6 +33,7 @@ const ChannelView = ({ id }: ViewParams<ViewKind.CHANNEL>) => {
 				return (
 					<>
 						<ChannelHeader convo={convo} />
+						<FirehoseIndicator />
 						<div class="flex min-h-0 shrink grow flex-col-reverse">
 							<Composition convo={convo} channel={channel} />
 							<ChannelMessages convo={convo} channel={channel} />
