@@ -49,10 +49,12 @@ const ChannelMessages = () => {
 		});
 	};
 
-	createEffect((o: { oldest?: string; height?: number } = {}) => {
+	createEffect(() => {
 		const latest = channel.messages().at(-1)?.id;
 
-		if (latest !== latestId) {
+		if (latest === undefined) {
+			// Do nothing.
+		} else if (latestId === undefined || latest > latestId) {
 			// New message!
 			latestId = latest;
 
@@ -76,8 +78,6 @@ const ChannelMessages = () => {
 				// @todo: make sure it's anchored to the unread divider somehow
 			}
 		}
-
-		return o;
 	});
 
 	return (
