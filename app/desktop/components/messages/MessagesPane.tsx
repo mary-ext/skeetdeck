@@ -31,7 +31,7 @@ const MessagesPane = (props: MessagesPaneProps) => {
 
 	const current = createMemo(() => views().at(-1)!);
 
-	const abortable = makeAbortable();
+	const [abortable] = makeAbortable();
 	const [partial] = createResource(uid, async (did) => {
 		const signal = abortable();
 		const { rpc } = await multiagent.connect(did);

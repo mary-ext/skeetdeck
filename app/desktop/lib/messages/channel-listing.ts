@@ -23,7 +23,7 @@ export const createChannelListing = ({ did, rpc, firehose, fetchLimit = 20 }: Ch
 		let init = false;
 
 		const owner = getOwner();
-		const abortable = makeAbortable();
+		const [abortable] = makeAbortable();
 
 		/** Loaded channels */
 		const [channels, setChannels] = createSignal<SignalizedConvo[]>([]);

@@ -47,7 +47,7 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 		let init = false;
 
 		const owner = getOwner();
-		const abortable = makeAbortable();
+		const [abortable] = makeAbortable();
 
 		/** Loaded messages */
 		const [messages, setMessages] = createSignal<MessageView[]>([]);
