@@ -29,18 +29,22 @@ export class SignalizedConvo {
 	muted: Signal<boolean>;
 	unread: Signal<boolean>;
 	lastMessage: Signal<Convo['lastMessage']>;
+	disabled: Signal<boolean>;
 
 	constructor(uid: At.DID, convo: Convo, key?: number) {
+		const self = convo.members.find((m) => m.did === uid) as ConvoProfile;
+
 		this.uid = uid;
 		this._key = key;
 
 		this.id = convo.id;
 		this.rev = convo.rev;
-		this.self = mergeProfile(uid, convo.members.find((m) => m.did === uid) as ConvoProfile, key);
+		this.self = mergeProfile(uid, self, key);
 		this.recipients = signal(mapMembers(uid, convo.members, key), EQUALS_DEQUAL);
 		this.muted = signal(convo.muted);
 		this.unread = signal(convo.unreadCount > 0);
 		this.lastMessage = signal(convo.lastMessage);
+		this.disabled = signal(!!self.chatDisabled);
 	}
 }
 
@@ -67,14 +71,17 @@ export const mergeConvo = (uid: At.DID, convo: Convo, key?: number) => {
 
 		gc.register(val, id);
 	} else if (!key || val._key !== key) {
+		const self = convo.members.find((m) => m.did === uid) as ConvoProfile;
+
 		val._key = key;
-		mergeProfile(uid, convo.members.find((m) => m.did === uid) as ConvoProfile, key);
+		mergeProfile(uid, self, key);
 
 		val.rev = convo.rev;
 		val.recipients.value = mapMembers(uid, convo.members, key);
 		val.muted.value = convo.muted;
 		val.unread.value = convo.unreadCount > 0;
 		val.lastMessage.value = convo.lastMessage;
+		val.disabled.value = !!self.chatDisabled;
 	}
 
 	return val;

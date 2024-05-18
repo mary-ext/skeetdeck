@@ -1,10 +1,11 @@
-import { createResource, onCleanup, Show, type ResourceOptions } from 'solid-js';
+import { createResource, Match, onCleanup, Show, Switch, type ResourceOptions } from 'solid-js';
 
 import { getCachedConvo, mergeConvo, SignalizedConvo } from '~/api/stores/convo';
 
 import ChannelHeader from '../components/ChannelHeader';
 import ChannelMessages from '../components/ChannelMessages';
 import Composition from '../components/Composition';
+import CompositionDisabled from '../components/CompositionDisabled';
 import FirehoseIndicator from '../components/FirehoseStatus';
 
 import { ChannelContext } from '../contexts/channel';
@@ -45,7 +46,12 @@ const ChannelView = ({ id }: ViewParams<ViewKind.CHANNEL>) => {
 						<ChannelHeader />
 						<FirehoseIndicator />
 						<div class="flex min-h-0 shrink grow flex-col-reverse">
-							<Composition />
+							<Switch fallback={<Composition />}>
+								<Match when={convo.disabled.value}>
+									<CompositionDisabled />
+								</Match>
+							</Switch>
+
 							<ChannelMessages />
 						</div>
 					</ChannelContext.Provider>
