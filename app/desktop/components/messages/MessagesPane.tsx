@@ -10,6 +10,7 @@ import { createChannel, type Channel } from '~/desktop/lib/messages/channel';
 import { createChatFirehose } from '~/desktop/lib/messages/firehose';
 import { createLRU } from '~/desktop/lib/messages/lru';
 
+import { NoopLinkingProvider } from './components/NoopLinkingProvider';
 import { ChatPaneContext, type ChatPaneState, type ChatRouterState } from './contexts/chat';
 import { ViewKind, type View } from './contexts/router';
 import { ChatRouterView } from './contexts/router-view';
@@ -126,15 +127,17 @@ const MessagesPane = (props: MessagesPaneProps) => {
 					});
 
 					return (
-						<ChatPaneContext.Provider value={context}>
-							<For each={views()}>
-								{(view) => (
-									<div class="contents" hidden={current() !== view}>
-										<ChatRouterView view={view} />
-									</div>
-								)}
-							</For>
-						</ChatPaneContext.Provider>
+						<NoopLinkingProvider>
+							<ChatPaneContext.Provider value={context}>
+								<For each={views()}>
+									{(view) => (
+										<div class="contents" hidden={current() !== view}>
+											<ChatRouterView view={view} />
+										</div>
+									)}
+								</For>
+							</ChatPaneContext.Provider>
+						</NoopLinkingProvider>
 					);
 				}}
 			</Show>

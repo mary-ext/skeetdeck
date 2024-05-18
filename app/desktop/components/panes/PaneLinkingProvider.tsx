@@ -170,7 +170,7 @@ interface ExternalAnchorElement extends HTMLAnchorElement {
 	_valid?: boolean;
 }
 
-const handleLinkClick: JSX.EventHandler<HTMLAnchorElement, MouseEvent> = (ev) => {
+export const handleLinkClick: JSX.EventHandler<HTMLAnchorElement, MouseEvent> = (ev) => {
 	const target = ev.currentTarget as ExternalAnchorElement;
 
 	if (target._ignored || (ev.type === 'auxclick' && (ev as MouseEvent).button !== 1)) {

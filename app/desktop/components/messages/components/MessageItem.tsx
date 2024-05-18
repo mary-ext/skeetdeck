@@ -1,6 +1,7 @@
 import type { ChatBskyConvoDefs } from '~/api/atp-schema';
 import type { SignalizedConvo } from '~/api/stores/convo';
 
+import RichTextRenderer from '~/com/components/RichTextRenderer';
 import TimeAgo from '~/com/components/TimeAgo';
 import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 import { IconButton } from '~/com/primitives/icon-button';
@@ -17,7 +18,6 @@ export interface MessageItemProps {
 }
 
 const MessageItem = ({ convo, item, tail }: MessageItemProps) => {
-	const text = item.text;
 	const isSender = convo.self.did == item.sender.did;
 	const isDraft = isSender && item.rev === '';
 
@@ -39,7 +39,9 @@ const MessageItem = ({ convo, item, tail }: MessageItemProps) => {
 						(isDraft ? ` opacity-60` : ``)
 					}
 				>
-					<div class="whitespace-pre-wrap break-words text-sm">{text}</div>
+					<div class="whitespace-pre-wrap break-words text-sm">
+						<RichTextRenderer item={item} get={(item) => ({ t: item.text, f: item.facets })} />
+					</div>
 				</div>
 
 				{!isSender && (
