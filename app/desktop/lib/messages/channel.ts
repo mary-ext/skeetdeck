@@ -109,7 +109,7 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 			if (addition && messages.length > MAX_MESSAGE_HISTORY) {
 				if (atBottoms.length === 0 || untrack(() => atBottoms.every((fn) => fn()))) {
 					messages = messages.slice(-fetchLimit);
-					setOldestRev(messages.at(0)?.rev ?? null);
+					setOldestRev(messages[0].rev!);
 				}
 			}
 
