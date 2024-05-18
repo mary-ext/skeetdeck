@@ -1,18 +1,23 @@
 import type { At } from '~/api/atp-schema';
 import type { SignalizedConvo } from '~/api/stores/convo';
 
+import { isElementClicked } from '~/utils/interaction';
+
 import TimeAgo from '~/com/components/TimeAgo';
 import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
+import { IconButton } from '~/com/primitives/icon-button';
 import { Interactive } from '~/com/primitives/interactive';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
+
+import ChannelOverflowAction from './ChannelOverflowAction';
 
 export interface ChannelItemProps {
 	/** Expected to be static */
 	uid: At.DID;
 	/** Expected to be static */
 	item: SignalizedConvo;
-	onClick: () => void;
+	onClick?: () => void;
 }
 
 const itemClass = Interactive({
@@ -21,9 +26,18 @@ const itemClass = Interactive({
 
 const ChannelItem = (props: ChannelItemProps) => {
 	const item = props.item;
+	const onClick = props.onClick;
+
+	const handleClick = (ev: MouseEvent) => {
+		if (!isElementClicked(ev)) {
+			return;
+		}
+
+		onClick!();
+	};
 
 	return (
-		<button class={itemClass} onClick={props.onClick}>
+		<button class={itemClass} onClick={onClick && handleClick}>
 			{(() => {
 				// @todo: just pretend we only have 1:1 DMs for now
 				const recipient = item.recipients.value[0];
@@ -73,9 +87,11 @@ const ChannelItem = (props: ChannelItemProps) => {
 									></div>
 								)}
 
-								<button class="-m-1.5 -mx-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base text-muted-fg hover:bg-secondary/40">
-									<MoreHorizIcon />
-								</button>
+								<ChannelOverflowAction convo={item}>
+									<button class={/* @once */ IconButton({ class: '-m-1.5 -mx-2', color: 'muted' })}>
+										<MoreHorizIcon />
+									</button>
+								</ChannelOverflowAction>
 							</div>
 
 							<div
