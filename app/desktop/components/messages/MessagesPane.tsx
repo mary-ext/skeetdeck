@@ -1,13 +1,4 @@
-import {
-	For,
-	Show,
-	Suspense,
-	createEffect,
-	createMemo,
-	createResource,
-	createSignal,
-	onCleanup,
-} from 'solid-js';
+import { For, Show, createEffect, createMemo, createResource, createSignal, onCleanup } from 'solid-js';
 
 import { withProxy } from '@mary/bluesky-client/xrpc';
 
@@ -18,8 +9,6 @@ import { createDerivedSignal, makeAbortable } from '~/utils/hooks';
 import { createChannel, type Channel } from '~/desktop/lib/messages/channel';
 import { createChatFirehose } from '~/desktop/lib/messages/firehose';
 import { createLRU } from '~/desktop/lib/messages/lru';
-
-import CircularProgress from '~/com/components/CircularProgress';
 
 import { ChatPaneContext, type ChatPaneState, type ChatRouterState } from './contexts/chat';
 import { ViewKind, type View } from './contexts/router';
@@ -120,41 +109,33 @@ const MessagesPane = (props: MessagesPaneProps) => {
 
 	return (
 		<div class="flex w-96 shrink-0 flex-col border-r border-divider">
-			<Suspense
-				fallback={
-					<div class="grid grow place-items-center">
-						<CircularProgress />
-					</div>
-				}
-			>
-				<Show when={partial()} keyed>
-					{(partialState) => {
-						const context: ChatPaneState = {
-							...partialState,
-							router: router,
-							close: props.onClose,
-							changeAccount: setUid,
-						};
+			<Show when={partial()} keyed>
+				{(partialState) => {
+					const context: ChatPaneState = {
+						...partialState,
+						router: router,
+						close: props.onClose,
+						changeAccount: setUid,
+					};
 
-						onCleanup(() => {
-							context.firehose.destroy();
-							context.channels.clear();
-						});
+					onCleanup(() => {
+						context.firehose.destroy();
+						context.channels.clear();
+					});
 
-						return (
-							<ChatPaneContext.Provider value={context}>
-								<For each={views()}>
-									{(view) => (
-										<div class="contents" hidden={current() !== view}>
-											<ChatRouterView view={view} />
-										</div>
-									)}
-								</For>
-							</ChatPaneContext.Provider>
-						);
-					}}
-				</Show>
-			</Suspense>
+					return (
+						<ChatPaneContext.Provider value={context}>
+							<For each={views()}>
+								{(view) => (
+									<div class="contents" hidden={current() !== view}>
+										<ChatRouterView view={view} />
+									</div>
+								)}
+							</For>
+						</ChatPaneContext.Provider>
+					);
+				}}
+			</Show>
 		</div>
 	);
 };
