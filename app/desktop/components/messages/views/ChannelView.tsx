@@ -12,7 +12,7 @@ import { useChatPane } from '../contexts/chat';
 import type { ViewKind, ViewParams } from '../contexts/router';
 
 const ChannelView = ({ id }: ViewParams<ViewKind.CHANNEL>) => {
-	const { did, firehose, channels, rpc } = useChatPane();
+	const { did, firehose, channels, rpc, router } = useChatPane();
 
 	const getInitialConvo = (): ResourceOptions<SignalizedConvo> => {
 		const convo = getCachedConvo(did, id);
@@ -29,6 +29,16 @@ const ChannelView = ({ id }: ViewParams<ViewKind.CHANNEL>) => {
 			{(convo) => {
 				const channel = channels.get(convo.id);
 				onCleanup(firehose.requestPollInterval(3_000));
+
+				onCleanup(
+					firehose.emitter.on('event', (event) => {
+						if (event.$type === 'chat.bsky.convo.defs#logLeaveConvo') {
+							if (event.convoId === convo.id) {
+								router.back();
+							}
+						}
+					}),
+				);
 
 				return (
 					<ChannelContext.Provider value={{ convo, channel }}>

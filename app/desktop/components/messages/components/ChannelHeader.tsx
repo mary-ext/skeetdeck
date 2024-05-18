@@ -1,10 +1,13 @@
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
+import VolumeOffOutlinedIcon from '~/com/icons/outline-volume-off';
 import { IconButton } from '~/com/primitives/icon-button';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
-import { useChatPane } from '../contexts/chat';
 import { useChannel } from '../contexts/channel';
+import { useChatPane } from '../contexts/chat';
+import ChannelOverflowAction from './ChannelOverflowAction';
 
 const ChannelHeader = () => {
 	const { router } = useChatPane();
@@ -25,18 +28,32 @@ const ChannelHeader = () => {
 				const recipient = convo.recipients.value[0];
 
 				return (
-					<>
+					<div class="flex min-w-0 grow items-center">
 						<img
 							src={recipient.avatar.value || DefaultUserAvatar}
-							class="-ml-2 h-6 w-6 shrink-0 rounded-full"
+							class="-ml-2 mr-3 h-6 w-6 shrink-0 rounded-full"
 						/>
 
-						<p class="grow overflow-hidden text-ellipsis whitespace-nowrap text-base font-bold leading-5">
+						<p class="overflow-hidden text-ellipsis whitespace-nowrap text-base font-bold leading-5">
 							{recipient.displayName.value || recipient.handle.value}
 						</p>
-					</>
+
+						{(() => {
+							if (convo.muted.value) {
+								return <VolumeOffOutlinedIcon class="ml-1 shrink-0 text-sm text-muted-fg" />;
+							}
+						})()}
+					</div>
 				);
 			})()}
+
+			<div class="flex min-w-0 shrink-0 gap-1 empty:hidden">
+				<ChannelOverflowAction convo={convo} onDeleteConfirm={router.back}>
+					<button title="Actions" class={/* @once */ IconButton({ edge: 'right' })}>
+						<MoreHorizIcon />
+					</button>
+				</ChannelOverflowAction>
+			</div>
 		</div>
 	);
 };
