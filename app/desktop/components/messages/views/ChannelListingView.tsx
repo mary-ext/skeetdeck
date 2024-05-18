@@ -11,6 +11,7 @@ import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 import { createChannelListing, FetchState } from '~/desktop/lib/messages/channel-listing';
 
 import ChannelItem from '../components/ChannelItem';
+import ChatAccountAction from '../components/ChatAccountAction';
 import FirehoseIndicator from '../components/FirehoseStatus';
 
 import { useChatPane } from '../contexts/chat';
@@ -44,9 +45,11 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 				</p>
 
 				<div class="flex min-w-0 shrink-0 gap-1 empty:hidden">
-					<button title="Manage accounts" class="hover:opacity-80">
-						<img src={profile()?.avatar || DefaultUserAvatar} class="h-6 w-6 rounded-full" />
-					</button>
+					<ChatAccountAction>
+						<button title="Manage accounts" class="hover:opacity-80">
+							<img src={profile()?.avatar || DefaultUserAvatar} class="h-6 w-6 rounded-full" />
+						</button>
+					</ChatAccountAction>
 				</div>
 			</div>
 
