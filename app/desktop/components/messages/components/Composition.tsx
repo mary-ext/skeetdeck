@@ -6,7 +6,7 @@ import type { SignalizedConvo } from '~/api/stores/convo';
 
 import type { Channel } from '~/desktop/lib/messages/channel';
 
-import { autofocusIf } from '~/utils/input';
+import { autofocusIf, refs } from '~/utils/input';
 
 import SendOutlinedIcon from '~/com/icons/outline-send';
 import { IconButton } from '~/com/primitives/icon-button';
@@ -24,6 +24,8 @@ const MAX_MESSAGE_LIMIT = 1000;
 const SHOW_LIMIT_COUNTER = MAX_MESSAGE_LIMIT - 200;
 
 const Composition = (props: CompositionProps) => {
+	let ref: HTMLTextAreaElement;
+
 	const { isOpen } = useChatPane();
 
 	// const [focused, setFocused] = createSignal(false);
@@ -35,6 +37,15 @@ const Composition = (props: CompositionProps) => {
 
 	const rt = createMemo(() => parseRt(text()));
 	const length = createMemo(() => getRtLength(rt()));
+
+	const sendMessage = () => {
+		if (length() !== 0) {
+			channel.sendMessage({ richtext: rt() });
+			setText('');
+		}
+
+		ref.focus();
+	};
 
 	return (
 		<div class="px-3 pb-4">
@@ -78,7 +89,7 @@ const Composition = (props: CompositionProps) => {
 				)} */}
 
 				<TextareaAutosize
-					ref={autofocusIf(isOpen)}
+					ref={refs<HTMLTextAreaElement>((node) => (ref = node), autofocusIf(isOpen))}
 					value={text()}
 					onInput={(ev) => {
 						// setFocused(true);
@@ -87,11 +98,7 @@ const Composition = (props: CompositionProps) => {
 					onKeyDown={(ev) => {
 						if (ev.key === 'Enter' && !ev.shiftKey) {
 							ev.preventDefault();
-
-							if (length() !== 0) {
-								channel.sendMessage({ richtext: rt() });
-								setText('');
-							}
+							sendMessage();
 						}
 					}}
 					placeholder="Start a new message"
@@ -107,6 +114,7 @@ const Composition = (props: CompositionProps) => {
 							const $length = length();
 							return $length === 0 || $length > MAX_MESSAGE_LIMIT;
 						})()}
+						onClick={sendMessage}
 						class={/* @once */ IconButton({ color: 'muted' })}
 					>
 						<SendOutlinedIcon />
