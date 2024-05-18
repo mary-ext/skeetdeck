@@ -39,9 +39,19 @@ export const createLRU = <K, V>({ maxSize, create, destroy }: LRUOptions<K, V>) 
 
 			return value;
 		},
-		clear(): void {
-			last = undefined;
+		delete(key: K): void {
+			if (map.has(key)) {
+				const value = map.get(key)!;
 
+				destroy?.(value, key);
+				map.delete(key);
+
+				if (last === value) {
+					last = undefined;
+				}
+			}
+		},
+		clear(): void {
 			if (destroy) {
 				for (const [key, value] of map) {
 					destroy(value, key);
