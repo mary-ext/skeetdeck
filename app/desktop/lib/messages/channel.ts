@@ -289,6 +289,17 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 			}
 		};
 
+		const deleteMessage = async (messageId: string) => {
+			await rpc.call('chat.bsky.convo.deleteMessageForSelf', {
+				data: {
+					convoId: channelId,
+					messageId: messageId,
+				},
+			});
+
+			firehose.poll();
+		};
+
 		return {
 			messages,
 			drafts,
@@ -299,6 +310,7 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 
 			doLoadUpwards,
 			sendMessage,
+			deleteMessage,
 
 			destroy,
 			mount({ unread, atBottom }: { unread: Accessor<string | undefined>; atBottom: Accessor<boolean> }) {

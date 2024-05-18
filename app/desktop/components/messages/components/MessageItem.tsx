@@ -7,6 +7,7 @@ import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 import { IconButton } from '~/com/primitives/icon-button';
 
 import { formatChatReltime } from '../utils/intl';
+import MessageOverflowAction from './MessageOverflowAction';
 
 type Message = ChatBskyConvoDefs.MessageView;
 
@@ -27,7 +28,7 @@ const MessageItem = ({ convo, item, tail }: MessageItemProps) => {
 				{isSender && (
 					<>
 						<div class="grow"></div>
-						<MessageAction />
+						<MessageAccessory item={item} />
 					</>
 				)}
 
@@ -46,7 +47,7 @@ const MessageItem = ({ convo, item, tail }: MessageItemProps) => {
 
 				{!isSender && (
 					<>
-						<MessageAction />
+						<MessageAccessory item={item} />
 						<div class="grow"></div>
 					</>
 				)}
@@ -67,16 +68,19 @@ const MessageItem = ({ convo, item, tail }: MessageItemProps) => {
 
 export default MessageItem;
 
-interface MessageActionProps {
-	end?: boolean;
+export interface MessageAccessoryProps {
+	/** Expected to be static */
+	item: Message;
 }
 
-const MessageAction = ({}: MessageActionProps) => {
+const MessageAccessory = ({ item }: MessageAccessoryProps) => {
 	return (
 		<div class="flex shrink-0 px-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100">
-			<button class={/* @once */ IconButton({ color: 'muted' })}>
-				<MoreHorizIcon />
-			</button>
+			<MessageOverflowAction item={item}>
+				<button class={/* @once */ IconButton({ color: 'muted' })}>
+					<MoreHorizIcon />
+				</button>
+			</MessageOverflowAction>
 		</div>
 	);
 };
