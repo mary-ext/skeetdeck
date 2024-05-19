@@ -28,7 +28,7 @@ const MessageItem = ({ convo, item, tail }: MessageItemProps) => {
 				{isSender && (
 					<>
 						<div class="grow"></div>
-						<MessageAccessory item={item} />
+						<MessageAccessory item={item} draft={isDraft} />
 					</>
 				)}
 
@@ -71,11 +71,18 @@ export default MessageItem;
 export interface MessageAccessoryProps {
 	/** Expected to be static */
 	item: Message;
+	/** Expected to be static */
+	draft?: boolean;
 }
 
-const MessageAccessory = ({ item }: MessageAccessoryProps) => {
+const MessageAccessory = ({ item, draft }: MessageAccessoryProps) => {
 	return (
-		<div class="flex shrink-0 px-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100">
+		<div
+			class={
+				`flex shrink-0 px-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100` +
+				(draft ? ` invisible` : ``)
+			}
+		>
 			<MessageOverflowAction item={item}>
 				<button title="Actions" class={/* @once */ IconButton({ color: 'muted' })}>
 					<MoreHorizIcon />
