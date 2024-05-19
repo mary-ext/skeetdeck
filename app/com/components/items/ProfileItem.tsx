@@ -32,7 +32,7 @@ export interface ProfileItemProps {
 
 const profileItem = Interactive({
 	variant: 'muted',
-	class: `flex w-full gap-3 px-4 py-3 text-left`,
+	class: `flex w-full gap-3 px-4 py-3 text-left disabled:opacity-50`,
 	userSelect: true,
 });
 
