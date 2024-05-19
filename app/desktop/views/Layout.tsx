@@ -64,7 +64,7 @@ const updateButton = Interactive({
 
 const enum ShowState {
 	COMPOSER,
-	DIRECT_MESSAGES,
+	CHAT,
 }
 
 const DashboardLayout = (props: RouteComponentProps) => {
@@ -77,7 +77,7 @@ const DashboardLayout = (props: RouteComponentProps) => {
 	const [show, setShow] = createSignal<ShowState>();
 
 	composer._onDisplay((next) => setShow(next ? ShowState.COMPOSER : undefined));
-	messages.onShow(() => setShow(ShowState.DIRECT_MESSAGES));
+	messages.onShow(() => setShow(ShowState.CHAT));
 
 	return (
 		<div class="flex h-screen w-screen overflow-hidden">
@@ -99,16 +99,16 @@ const DashboardLayout = (props: RouteComponentProps) => {
 							</button>
 
 							<button
-								disabled={show() === ShowState.DIRECT_MESSAGES}
-								title="Direct Messages"
+								disabled={show() === ShowState.CHAT}
+								title="Chat"
 								onClick={() => {
-									setShow(ShowState.DIRECT_MESSAGES);
+									setShow(ShowState.CHAT);
 								}}
 								class={menuIconButton}
 							>
 								<MailOutlinedIcon />
 
-								{show() !== ShowState.DIRECT_MESSAGES && messages.unreadCount() > 0 && (
+								{show() !== ShowState.CHAT && messages.unreadCount() > 0 && (
 									<div class="absolute right-3.5 top-3 h-2 w-2 rounded-full bg-red-600"></div>
 								)}
 							</button>
@@ -282,7 +282,7 @@ const DashboardLayout = (props: RouteComponentProps) => {
 						</Keyed>
 					</Suspense>
 				</ShowFreeze>
-				<ShowFreeze when={show() === ShowState.DIRECT_MESSAGES}>
+				<ShowFreeze when={show() === ShowState.CHAT}>
 					<Suspense
 						fallback={
 							<div class="grid w-96 shrink-0 place-items-center border-r border-divider">
@@ -290,10 +290,7 @@ const DashboardLayout = (props: RouteComponentProps) => {
 							</div>
 						}
 					>
-						<MessagesPane
-							isOpen={() => show() === ShowState.DIRECT_MESSAGES}
-							onClose={() => setShow(undefined)}
-						/>
+						<MessagesPane isOpen={() => show() === ShowState.CHAT} onClose={() => setShow(undefined)} />
 					</Suspense>
 				</ShowFreeze>
 			</Show>

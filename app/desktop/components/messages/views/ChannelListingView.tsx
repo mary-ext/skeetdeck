@@ -43,17 +43,11 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 	return (
 		<>
 			<div class="flex h-13 shrink-0 items-center gap-2 border-b border-divider px-4">
-				<button
-					title={`Close direct messages`}
-					onClick={close}
-					class={/* @once */ IconButton({ edge: 'left' })}
-				>
+				<button title={`Close chat`} onClick={close} class={/* @once */ IconButton({ edge: 'left' })}>
 					<ArrowLeftIcon />
 				</button>
 
-				<p class="grow overflow-hidden text-ellipsis whitespace-nowrap text-base font-bold leading-5">
-					Direct Messages
-				</p>
+				<p class="grow overflow-hidden text-ellipsis whitespace-nowrap text-base font-bold leading-5">Chat</p>
 
 				<div class="flex min-w-0 shrink-0 gap-1 empty:hidden">
 					<ChatAccountAction>
