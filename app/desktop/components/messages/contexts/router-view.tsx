@@ -8,8 +8,9 @@ export interface ChatRouterViewProps {
 const views: Record<ViewKind, Component<any> | undefined> = {
 	[ViewKind.CHANNEL_LISTING]: lazy(() => import('../views/ChannelListingView')),
 	[ViewKind.CHANNEL]: lazy(() => import('../views/ChannelView')),
-	[ViewKind.SETTINGS]: lazy(() => import('../views/SettingsView')),
+	[ViewKind.NEW_CHANNEL]: lazy(() => import('../views/NewChannelView')),
 	[ViewKind.RESOLVE_CHANNEL]: lazy(() => import('../views/ResolveChannelView')),
+	[ViewKind.SETTINGS]: lazy(() => import('../views/SettingsView')),
 };
 
 export const ChatRouterView = ({ view }: ChatRouterViewProps) => {

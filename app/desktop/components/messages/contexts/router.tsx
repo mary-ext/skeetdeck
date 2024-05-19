@@ -2,14 +2,16 @@ import type { At } from '~/api/atp-schema';
 
 export const enum ViewKind {
 	CHANNEL_LISTING,
-	SETTINGS,
 	CHANNEL,
+	NEW_CHANNEL,
 	RESOLVE_CHANNEL,
+	SETTINGS,
 }
 
 export type View =
 	| { kind: ViewKind.CHANNEL_LISTING }
 	| { kind: ViewKind.CHANNEL; id: string }
+	| { kind: ViewKind.NEW_CHANNEL }
 	| { kind: ViewKind.RESOLVE_CHANNEL; members: At.DID[] }
 	| { kind: ViewKind.SETTINGS };
 

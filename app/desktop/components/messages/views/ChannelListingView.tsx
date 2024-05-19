@@ -6,6 +6,7 @@ import { createChannelListing, FetchState } from '~/desktop/lib/messages/channel
 
 import List from '~/com/components/List';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+import MailAddOutlinedIcon from '~/com/icons/outline-mail-add';
 import { IconButton } from '~/com/primitives/icon-button';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
@@ -50,6 +51,14 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 				<p class="grow overflow-hidden text-ellipsis whitespace-nowrap text-base font-bold leading-5">Chat</p>
 
 				<div class="flex min-w-0 shrink-0 gap-1 empty:hidden">
+					<button
+						title="Start a new conversation"
+						onClick={() => router.to({ kind: ViewKind.NEW_CHANNEL })}
+						class={/* @once */ IconButton()}
+					>
+						<MailAddOutlinedIcon />
+					</button>
+
 					<ChatAccountAction>
 						<button
 							title="Manage accounts"
