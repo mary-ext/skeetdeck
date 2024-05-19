@@ -84,12 +84,12 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 
 					if (message.$type === 'chat.bsky.convo.defs#messageView') {
 						// Check if this is a message we sent from here.
-						const placebo = sentMessages.get(message.id);
+						const placebo = message.sender.did === did ? sentMessages.get(message.id) : undefined;
 
 						addition = true;
 
 						if (placebo !== undefined) {
-							// If so, replace the placeholder with this message.
+							// If so, replace the fake message with this real one.
 							messages = messages.toSpliced(messages.lastIndexOf(placebo), 1, message);
 						} else {
 							messages = messages.concat(message);
