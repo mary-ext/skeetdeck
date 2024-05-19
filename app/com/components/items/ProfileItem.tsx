@@ -24,13 +24,14 @@ export interface ProfileItemProps {
 	profile: SignalizedProfile;
 	aside?: ProfileItemAccessory;
 	footer?: ProfileItemAccessory;
+	disabled?: boolean;
 	/** Expected to be static */
 	onClick?: (profile: SignalizedProfile, alt: boolean, ev: Event) => void;
 }
 
 const profileItem = Interactive({
 	variant: 'muted',
-	class: `flex gap-3 px-4 py-3`,
+	class: `flex w-full gap-3 px-4 py-3 text-left`,
 	userSelect: true,
 });
 
@@ -56,14 +57,7 @@ export const ProfileItem = (props: ProfileItemProps) => {
 	};
 
 	return (
-		<div
-			role="button"
-			onClick={onClick && handleClick}
-			onAuxClick={onClick && handleClick}
-			onKeyDown={onClick && handleClick}
-			tabindex={0}
-			class={profileItem}
-		>
+		<button disabled={props.disabled} onClick={onClick && handleClick} class={profileItem}>
 			<div class="relative shrink-0">
 				<div class="h-10 w-10 overflow-hidden rounded-full">
 					<img
@@ -97,7 +91,7 @@ export const ProfileItem = (props: ProfileItemProps) => {
 
 				{footer?.render(profile())}
 			</div>
-		</div>
+		</button>
 	);
 };
 
