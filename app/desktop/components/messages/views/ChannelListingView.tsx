@@ -51,7 +51,10 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 
 				<div class="flex min-w-0 shrink-0 gap-1 empty:hidden">
 					<ChatAccountAction>
-						<button title="Manage accounts" class="hover:opacity-80">
+						<button
+							title="Manage accounts"
+							class="class='h-8 -mr-1 grid w-8 place-items-center hover:opacity-80"
+						>
 							<img src={profile()?.avatar || DefaultUserAvatar} class="h-6 w-6 rounded-full" />
 						</button>
 					</ChatAccountAction>
