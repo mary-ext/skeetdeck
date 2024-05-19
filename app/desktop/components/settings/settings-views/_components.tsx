@@ -11,6 +11,7 @@ export type { SelectOption } from '../../flyouts/SelectAction';
 export interface DropdownItemProps<T> extends Omit<SelectActionProps<T>, 'children'> {
 	title: string;
 	description?: string;
+	disabled?: boolean;
 }
 
 export const SelectionItem = <T,>(props: DropdownItemProps<T>) => {
@@ -23,7 +24,7 @@ export const SelectionItem = <T,>(props: DropdownItemProps<T>) => {
 
 	return (
 		<SelectAction value={props.value} options={props.options} onChange={props.onChange}>
-			<button type="button" class={ListBoxItemInteractive}>
+			<button type="button" disabled={props.disabled} class={ListBoxItemInteractive}>
 				<div class="flex min-w-0 grow flex-col text-sm">
 					<div class="flex justify-between gap-3">
 						<span class="overflow-hidden text-ellipsis whitespace-nowrap font-medium">{props.title}</span>
