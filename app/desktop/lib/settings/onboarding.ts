@@ -3,7 +3,6 @@ import * as TID from '@mary/atproto-tid';
 import type { At } from '~/api/atp-schema';
 import { getAccountData } from '~/api/globals/agent';
 
-import { FILTER_ALL } from '~/api/queries/get-notifications';
 import {
 	PANE_TYPE_HOME,
 	PANE_TYPE_NOTIFICATIONS,
