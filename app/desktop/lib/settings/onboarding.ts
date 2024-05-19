@@ -46,7 +46,7 @@ export const createStarterDeck = (uid: At.DID): DeckConfig => {
 				uid: uid,
 				size: SpecificPaneSize.INHERIT,
 				title: null,
-				mask: FILTER_ALL,
+				mask: 0,
 			},
 			{
 				type: PANE_TYPE_PROFILE,
