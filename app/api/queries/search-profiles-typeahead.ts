@@ -2,9 +2,8 @@ import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
-
-// @todo: should this be committed to global store?
-// perhaps it would be better off not to.
+import { moderateProfileList } from '../moderation/utils';
+import { mergeProfile } from '../stores/profiles';
 
 export const searchProfilesTypeaheadKey = (uid: At.DID, query: string, limit = 30) => {
 	return ['searchProfilesTypeahead', uid, query, limit] as const;
@@ -28,5 +27,8 @@ export const searchProfilesTypeahead = async (ctx: QC<ReturnType<typeof searchPr
 
 	const data = response.data;
 
-	return data.actors;
+	return moderateProfileList(
+		data.actors.map((actor) => mergeProfile(uid, actor)),
+		ctx.meta?.moderation,
+	);
 };

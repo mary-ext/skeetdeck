@@ -2,8 +2,9 @@ import { For, createMemo, createSignal, type JSX } from 'solid-js';
 
 import { createQuery } from '@mary/solid-query';
 
-import type { AppBskyActorDefs, At } from '~/api/atp-schema';
+import type { At } from '~/api/atp-schema';
 import { searchProfilesTypeahead, searchProfilesTypeaheadKey } from '~/api/queries/search-profiles-typeahead';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 
 import { createDebouncedValue, createDerivedSignal } from '~/utils/hooks';
 import { model } from '~/utils/input';
@@ -22,7 +23,7 @@ export interface SearchPostsSuggestionItem {
 export interface ProfileSuggestionItem {
 	type: 'profile';
 	id: At.DID;
-	profile: AppBskyActorDefs.ProfileViewBasic;
+	profile: SignalizedProfile;
 }
 
 export type SuggestionItem = SearchPostsSuggestionItem | ProfileSuggestionItem;
@@ -141,15 +142,15 @@ const SearchFlyout = (props: SearchFlyoutProps) => {
 						node = (
 							<div class="flex items-center gap-4 px-4 py-2">
 								<div class="h-9 w-9 shrink-0 overflow-hidden rounded-full bg-muted-fg">
-									<img src={/* @once */ profile.avatar || DefaultUserAvatar} class="h-full w-full" />
+									<img src={profile.avatar.value || DefaultUserAvatar} class="h-full w-full" />
 								</div>
 
 								<div class="flex min-w-0 grow flex-col text-sm">
 									<p class="overflow-hidden text-ellipsis whitespace-nowrap font-bold empty:hidden">
-										{/* @once */ profile.displayName}
+										{profile.displayName.value}
 									</p>
 									<p class="overflow-hidden text-ellipsis whitespace-nowrap text-muted-fg">
-										{/* @once */ '@' + profile.handle}
+										{'@' + profile.handle.value}
 									</p>
 								</div>
 							</div>

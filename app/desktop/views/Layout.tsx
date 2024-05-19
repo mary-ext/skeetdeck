@@ -156,7 +156,7 @@ const DashboardLayout = (props: RouteComponentProps) => {
 														type: PANE_TYPE_PROFILE,
 														profile: {
 															did: item.profile.did,
-															handle: item.profile.handle,
+															handle: item.profile.handle.peek(),
 														},
 														tab: ProfilePaneTab.POSTS,
 														tabVisible: true,
