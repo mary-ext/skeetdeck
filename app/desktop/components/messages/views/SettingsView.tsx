@@ -86,7 +86,7 @@ const SettingsView = ({}: ViewParams<ViewKind.SETTINGS>) => {
 							title="Allow messages from"
 							description="This will not affect existing conversations"
 							value={profile.data?.associated.value.chat.allowIncoming}
-							disabled={profile.isRefetching || mutation.isPending}
+							disabled={profile.isLoading || profile.isRefetching || mutation.isPending}
 							onChange={(next) => mutation.mutate({ allow: next })}
 							options={[
 								{
