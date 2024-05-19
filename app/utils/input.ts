@@ -78,7 +78,7 @@ export const autofocus = (node: HTMLInputElement | HTMLTextAreaElement | HTMLBut
 };
 
 export const autofocusIf = (enabled: () => boolean) => {
-	return (node: HTMLInputElement | HTMLTextAreaElement | HTMLButtonElement) => {
+	return (node: HTMLInputElement | HTMLTextAreaElement | HTMLButtonElement | HTMLSelectElement) => {
 		createRenderEffect(() => {
 			if (enabled()) {
 				setTimeout(() => node.focus(), 0);
