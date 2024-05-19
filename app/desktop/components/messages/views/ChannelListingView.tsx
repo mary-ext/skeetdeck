@@ -2,13 +2,13 @@ import { createEffect, createMemo, onCleanup, onMount } from 'solid-js';
 
 import { getAccountData } from '~/api/globals/agent';
 
+import { createChannelListing, FetchState } from '~/desktop/lib/messages/channel-listing';
+
 import List from '~/com/components/List';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import { IconButton } from '~/com/primitives/icon-button';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
-
-import { createChannelListing, FetchState } from '~/desktop/lib/messages/channel-listing';
 
 import ChannelItem from '../components/ChannelItem';
 import ChatAccountAction from '../components/ChatAccountAction';
