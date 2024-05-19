@@ -17,7 +17,7 @@ import type { BskyXRPC } from '@mary/bluesky-client';
 import type { At, ChatBskyConvoDefs } from '~/api/atp-schema';
 import { finalizeRt, getRtText, type PreliminaryRichText } from '~/api/richtext/composer';
 
-import { EQUALS_FALSE, makeAbortable } from '~/utils/hooks';
+import { makeAbortable } from '~/utils/hooks';
 import { assert, mapDefined } from '~/utils/misc';
 
 import type { ChatFirehose, ConvoEvent } from './firehose';
@@ -53,12 +53,10 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 		const owner = getOwner();
 		const [abortable] = makeAbortable();
 
+		const sentMessages = new Map<string, MessageView>();
+
 		/** Loaded messages */
 		const [messages, setMessages] = createSignal<MessageView[]>([]);
-
-		/** Pending messages, along with invalidation mechanism for the items */
-		const [track, trigger] = createSignal(undefined, EQUALS_FALSE);
-		const drafts = new Map<string, MessageView>();
 
 		/** Oldest revision currently stored, `null` if we've reached the end */
 		const [oldestRev, setOldestRev] = createSignal<string | null>();
@@ -85,8 +83,15 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 					const message = event.message;
 
 					if (message.$type === 'chat.bsky.convo.defs#messageView') {
-						messages = messages.concat(message);
+						const placebo = sentMessages.get(message.id);
+
 						addition = true;
+
+						if (placebo !== undefined) {
+							messages = messages.toSpliced(messages.lastIndexOf(placebo), 1, message);
+						} else {
+							messages = messages.concat(message);
+						}
 					}
 				} else if (type === 'chat.bsky.convo.defs#logDeleteMessage') {
 					// Can be expensive, but it's also somewhat rare, message can't be
@@ -257,6 +262,7 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 		const sendMessage = async (raw: RawMessage) => {
 			const id = TID.now();
 
+			// Insert a fake message to the array
 			const placebo: MessageView = {
 				id: id,
 				rev: '',
@@ -265,13 +271,12 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 				text: getRtText(raw.richtext),
 			};
 
-			drafts.set(id, placebo);
-			trigger();
+			setMessages(($messages) => $messages.concat(placebo));
 
 			try {
 				const rt = await finalizeRt(did, raw.richtext);
 
-				await rpc.call('chat.bsky.convo.sendMessage', {
+				const { data } = await rpc.call('chat.bsky.convo.sendMessage', {
 					data: {
 						convoId: channelId,
 						message: {
@@ -282,7 +287,10 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 					},
 				});
 
-				drafts.delete(id);
+				// Assign the fake message to the actual message ID so it'd be swapped
+				sentMessages.set(data.id, placebo);
+
+				// Request a poll immediately
 				firehose.poll();
 			} catch (err) {
 				console.error('err', err);
@@ -302,7 +310,6 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 
 		return {
 			messages,
-			drafts,
 
 			oldestRev,
 			fetching,
@@ -344,15 +351,12 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 
 				let entryCache = new Map<string, Entry>();
 				const entries = createMemo<Entry[]>(() => {
-					track();
-
 					const entrants: Entry[] = [];
 					const newEntryCache = new Map<string, Entry>();
 
-					const $messages = messages();
 					const $unread = unread();
 
-					const arr = drafts.size === 0 ? $messages : [...$messages, ...drafts.values()];
+					const arr = messages();
 					let group: MessageView[] | undefined;
 					let insertedUnread = $unread === undefined;
 
@@ -397,7 +401,7 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 							pushDivider(item.sentAt);
 						}
 
-						if (!insertedUnread && item.rev >= $unread!) {
+						if (!insertedUnread && item.rev !== '' && item.rev >= $unread!) {
 							insertedUnread = true;
 
 							if (group) {

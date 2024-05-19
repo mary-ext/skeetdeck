@@ -59,6 +59,8 @@ const ChannelMessages = () => {
 
 		if (last === undefined) {
 			return undefined;
+		} else if (last.rev === '') {
+			return prev;
 		}
 
 		if (prev === undefined || last.rev > prev.rev) {
