@@ -25,6 +25,7 @@ export interface ProfileItemProps {
 	aside?: ProfileItemAccessory;
 	footer?: ProfileItemAccessory;
 	disabled?: boolean;
+	small?: boolean;
 	/** Expected to be static */
 	onClick?: (profile: SignalizedProfile, alt: boolean, ev: Event) => void;
 }
@@ -85,6 +86,10 @@ export const ProfileItem = (props: ProfileItemProps) => {
 				</div>
 
 				{(() => {
+					if (props.small) {
+						return;
+					}
+
 					const description = profile().description.value;
 					return <div class="line-clamp-3 break-words text-sm empty:hidden">{description}</div>;
 				})()}
