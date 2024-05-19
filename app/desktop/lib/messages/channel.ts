@@ -83,11 +83,13 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 					const message = event.message;
 
 					if (message.$type === 'chat.bsky.convo.defs#messageView') {
+						// Check if this is a message we sent from here.
 						const placebo = sentMessages.get(message.id);
 
 						addition = true;
 
 						if (placebo !== undefined) {
+							// If so, replace the placeholder with this message.
 							messages = messages.toSpliced(messages.lastIndexOf(placebo), 1, message);
 						} else {
 							messages = messages.concat(message);
@@ -260,11 +262,10 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 		};
 
 		const sendMessage = async (raw: RawMessage) => {
-			const id = TID.now();
-
-			// Insert a fake message to the array
+			// Create a fake message to put on the array
+			// We can check that it's fake by making `rev` be an empty string
 			const placebo: MessageView = {
-				id: id,
+				id: TID.now(),
 				rev: '',
 				sender: { did },
 				sentAt: new Date().toISOString(),
@@ -274,13 +275,13 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 			setMessages(($messages) => $messages.concat(placebo));
 
 			try {
+				// Resolve the richtext, and send the message
 				const rt = await finalizeRt(did, raw.richtext);
 
 				const { data } = await rpc.call('chat.bsky.convo.sendMessage', {
 					data: {
 						convoId: channelId,
 						message: {
-							id: id,
 							text: rt.text,
 							facets: rt.facets,
 						},
