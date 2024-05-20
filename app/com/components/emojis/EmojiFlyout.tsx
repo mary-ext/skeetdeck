@@ -1,9 +1,9 @@
 import { Suspense, lazy, type JSX } from 'solid-js';
 
-import { autoPlacement, shift } from '@floating-ui/dom';
+import { type Placement } from '@floating-ui/dom';
 
 import CircularProgress from '../CircularProgress';
-import { Flyout } from '../Flyout';
+import { Flyout, offsetlessMiddlewares } from '../Flyout';
 
 import type { PickedEmoji } from './utils/database';
 
@@ -12,6 +12,7 @@ const EmojiPicker = lazy(() => import('./EmojiPicker'));
 export interface EmojiFlyoutProps {
 	children: JSX.Element;
 	multiple?: boolean;
+	placement?: Placement;
 	onPick: (emoji: PickedEmoji, shift: boolean) => void;
 }
 
@@ -19,8 +20,8 @@ const EmojiFlyout = (props: EmojiFlyoutProps) => {
 	return (
 		<Flyout
 			button={props.children}
-			middleware={[autoPlacement(), shift({ padding: 16 })]}
-			placement="bottom-start"
+			middleware={offsetlessMiddlewares}
+			placement={props.placement ?? 'bottom-start'}
 		>
 			{({ close, menuProps }) => (
 				<div {...menuProps} class="overflow-hidden rounded-lg bg-background shadow-menu">
