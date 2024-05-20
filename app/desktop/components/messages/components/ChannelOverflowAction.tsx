@@ -1,10 +1,11 @@
-import { lazy, type JSX } from 'solid-js';
+import { lazy, Show, type JSX } from 'solid-js';
 
 import type { SignalizedConvo } from '~/api/stores/convo';
 
 import { openModal } from '~/com/globals/modals';
 
 import { Flyout } from '~/com/components/Flyout';
+import BlockIcon from '~/com/icons/baseline-block';
 import DoorOpenOutlinedIcon from '~/com/icons/outline-door-open';
 import VolumeOffOutlinedIcon from '~/com/icons/outline-volume-off';
 import VolumeUpOutlinedIcon from '~/com/icons/outline-volume-up';
@@ -12,6 +13,7 @@ import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 
 import { useChatPane } from '../contexts/chat';
 
+const BlockConfirmDialog = lazy(() => import('~/com/components/dialogs/BlockConfirmDialog'));
 const ConfirmDialog = lazy(() => import('~/com/components/dialogs/ConfirmDialog'));
 
 export interface ChannelOverflowAction {
@@ -22,7 +24,7 @@ export interface ChannelOverflowAction {
 }
 
 const ChannelOverflowAction = (props: ChannelOverflowAction) => {
-	const { firehose, rpc, channels } = useChatPane();
+	const { did, firehose, rpc, channels } = useChatPane();
 
 	const convo = props.convo;
 	const onDeleteConfirm = props.onDeleteConfirm;
@@ -65,6 +67,34 @@ const ChannelOverflowAction = (props: ChannelOverflowAction) => {
 					</button>
 
 					<hr class="mx-2 my-1 border-divider" />
+
+					<Show
+						when={(() => {
+							const recipients = convo.recipients.value;
+							return recipients.length === 1 && recipients[0];
+						})()}
+					>
+						{(recipient) => {
+							const isBlocked = () => recipient().viewer.blocking.value;
+
+							return (
+								<button
+									onClick={() => {
+										const $recipient = recipient().did;
+
+										close();
+										openModal(() => <BlockConfirmDialog uid={did} did={$recipient} />);
+									}}
+									class={/* @once */ MenuItem()}
+								>
+									<BlockIcon class={/* @once */ MenuItemIcon()} />
+									<span class="overflow-hidden text-ellipsis whitespace-nowrap">
+										{isBlocked() ? `Unblock user` : `Block user`}
+									</span>
+								</button>
+							);
+						}}
+					</Show>
 
 					<button
 						onClick={() => {
