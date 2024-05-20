@@ -1,4 +1,3 @@
-import type { ChatBskyConvoDefs } from '~/api/atp-schema';
 import type { SignalizedConvo } from '~/api/stores/convo';
 
 import RichTextRenderer from '~/com/components/RichTextRenderer';
@@ -6,21 +5,23 @@ import TimeAgo from '~/com/components/TimeAgo';
 import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 import { IconButton } from '~/com/primitives/icon-button';
 
+import type { ChannelMessage } from '~/desktop/lib/messages/channel';
+
 import { formatChatReltime } from '../utils/intl';
 import MessageOverflowAction from './MessageOverflowAction';
-
-type Message = ChatBskyConvoDefs.MessageView;
 
 /** All props are expected to be static */
 export interface MessageItemProps {
 	convo: SignalizedConvo;
-	item: Message;
+	item: ChannelMessage;
 	tail?: boolean;
 }
 
 const MessageItem = ({ convo, item, tail }: MessageItemProps) => {
 	const isSender = convo.self.did == item.sender.did;
+
 	const isDraft = isSender && item.rev === '';
+	const failure = isDraft && item.$failure;
 
 	return (
 		<div class={`px-3` + (tail ? ` mb-1.5` : ` mb-6`)}>
@@ -53,7 +54,19 @@ const MessageItem = ({ convo, item, tail }: MessageItemProps) => {
 				)}
 			</div>
 
-			{!tail && (
+			{failure ? (
+				<div class="mt-1.5 text-right text-xs text-muted-fg">
+					<span class="text-red-500">Failed to send</span>
+					<span class="px-1">·</span>
+					<button onClick={failure.retry} class="text-accent hover:underline">
+						Retry
+					</button>
+					<span class="px-1">·</span>
+					<button onClick={failure.remove} class="text-accent hover:underline">
+						Delete message
+					</button>
+				</div>
+			) : !tail ? (
 				<TimeAgo value={/* @once */ item.sentAt} relative={formatChatReltime}>
 					{(relative) => (
 						<div class={`mt-1.5 text-xs text-muted-fg` + (isSender ? ` text-right` : ` text-left`)}>
@@ -61,7 +74,7 @@ const MessageItem = ({ convo, item, tail }: MessageItemProps) => {
 						</div>
 					)}
 				</TimeAgo>
-			)}
+			) : null}
 		</div>
 	);
 };
@@ -70,24 +83,23 @@ export default MessageItem;
 
 export interface MessageAccessoryProps {
 	/** Expected to be static */
-	item: Message;
+	item: ChannelMessage;
 	/** Expected to be static */
 	draft?: boolean;
 }
 
 const MessageAccessory = ({ item, draft }: MessageAccessoryProps) => {
 	return (
-		<div
-			class={
-				`flex shrink-0 px-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100` +
-				(draft ? ` invisible` : ``)
-			}
-		>
-			<MessageOverflowAction item={item}>
-				<button title="Actions" class={/* @once */ IconButton({ color: 'muted' })}>
-					<MoreHorizIcon />
-				</button>
-			</MessageOverflowAction>
+		<div class="flex shrink-0 gap-1 px-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100">
+			{!draft ? (
+				<MessageOverflowAction item={item}>
+					<button title="Actions" class={/* @once */ IconButton({ color: 'muted' })}>
+						<MoreHorizIcon />
+					</button>
+				</MessageOverflowAction>
+			) : (
+				<div class="w-8"></div>
+			)}
 		</div>
 	);
 };

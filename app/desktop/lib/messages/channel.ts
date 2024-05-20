@@ -24,6 +24,13 @@ import type { ChatFirehose, ConvoEvent } from './firehose';
 
 type MessageView = ChatBskyConvoDefs.MessageView;
 
+export interface ChannelMessage extends ChatBskyConvoDefs.MessageView {
+	$failure?: {
+		retry(): void;
+		remove(): void;
+	};
+}
+
 export interface ChannelOptions {
 	channelId: string;
 	did: At.DID;
@@ -53,10 +60,10 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 		const owner = getOwner();
 		const [abortable] = makeAbortable();
 
-		const sentMessages = new Map<string, MessageView>();
+		const sentMessages = new Map<string, ChannelMessage>();
 
 		/** Loaded messages */
-		const [messages, setMessages] = createSignal<MessageView[]>([]);
+		const [messages, setMessages] = createSignal<ChannelMessage[]>([]);
 
 		/** Oldest revision currently stored, `null` if we've reached the end */
 		const [oldestRev, setOldestRev] = createSignal<string | null>();
@@ -264,7 +271,7 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 		const sendMessage = async (raw: RawMessage) => {
 			// Create a fake message to put on the array
 			// We can check that it's fake by making `rev` be an empty string
-			const placebo: MessageView = {
+			const placebo: ChannelMessage = {
 				id: TID.now(),
 				rev: '',
 				sender: { did },
@@ -294,7 +301,24 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 				// Request a poll immediately
 				firehose.poll();
 			} catch (err) {
-				console.error('err', err);
+				// If it fails, replace with another fake message that has a retry method
+				const replaced: ChannelMessage = {
+					...placebo,
+					id: TID.now(),
+					$failure: {
+						remove() {
+							setMessages(($messages) => $messages.toSpliced($messages.lastIndexOf(replaced), 1));
+						},
+						retry() {
+							batch(() => {
+								replaced.$failure!.remove();
+								sendMessage(raw);
+							});
+						},
+					},
+				};
+
+				setMessages(($messages) => $messages.toSpliced($messages.lastIndexOf(placebo), 1, replaced));
 			}
 		};
 
@@ -410,6 +434,16 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 							}
 
 							pushDivider(item.sentAt, true);
+						}
+
+						if (item.$failure !== undefined) {
+							if (group) {
+								flushGroup();
+							}
+
+							group = [item];
+							flushGroup();
+							continue;
 						}
 
 						// First message in group
