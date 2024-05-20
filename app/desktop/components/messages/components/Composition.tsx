@@ -1,4 +1,4 @@
-import { createMemo, createSignal } from 'solid-js';
+import { createEffect, createMemo, createSignal } from 'solid-js';
 import TextareaAutosize from 'solid-textarea-autosize';
 
 import { getRtLength, parseRt } from '~/api/richtext/composer';
@@ -16,7 +16,11 @@ import { useChatPane } from '../contexts/chat';
 const MAX_MESSAGE_LIMIT = 1000;
 const SHOW_LIMIT_COUNTER = MAX_MESSAGE_LIMIT - 200;
 
-const Composition = () => {
+export interface CompositionProps {
+	ref?: (node: HTMLTextAreaElement) => void;
+}
+
+const Composition = (props: CompositionProps) => {
 	let ref: HTMLTextAreaElement;
 
 	const { isOpen } = useChatPane();
@@ -38,6 +42,10 @@ const Composition = () => {
 
 		ref.focus();
 	};
+
+	createEffect(() => {
+		props.ref?.(ref);
+	});
 
 	return (
 		<div class="px-3 pb-4">

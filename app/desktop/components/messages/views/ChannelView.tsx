@@ -3,7 +3,7 @@ import { createResource, Match, onCleanup, Show, Switch, type ResourceOptions } 
 import { getCachedConvo, mergeConvo, SignalizedConvo } from '~/api/stores/convo';
 
 import ChannelHeader from '../components/ChannelHeader';
-import ChannelMessages from '../components/ChannelMessages';
+import ChannelMessages, { type ChannelMessagesRef } from '../components/ChannelMessages';
 import Composition from '../components/Composition';
 import CompositionBlocked from '../components/CompositionBlocked';
 import CompositionDisabled from '../components/CompositionDisabled';
@@ -29,6 +29,9 @@ const ChannelView = ({ id }: ViewParams<ViewKind.CHANNEL>) => {
 	return (
 		<Show when={convo.latest} keyed>
 			{(convo) => {
+				let inputRef: HTMLTextAreaElement | undefined;
+				let messagesRef: ChannelMessagesRef | undefined;
+
 				const channel = channels.get(convo.id);
 				onCleanup(firehose.requestPollInterval(3_000));
 
@@ -49,23 +52,42 @@ const ChannelView = ({ id }: ViewParams<ViewKind.CHANNEL>) => {
 					});
 				};
 
-				return (
-					<ChannelContext.Provider value={{ convo, channel }}>
-						<ChannelHeader />
-						<FirehoseIndicator />
-						<div class="flex min-h-0 shrink grow flex-col-reverse">
-							<Switch fallback={<Composition />}>
-								<Match when={convo.disabled.value}>
-									<CompositionDisabled />
-								</Match>
-								<Match when={isBlocking()}>
-									<CompositionBlocked />
-								</Match>
-							</Switch>
+				const handleKeyDown = (ev: KeyboardEvent) => {
+					if (!ev.defaultPrevented) {
+						if (ev.key === 'Escape') {
+							ev.preventDefault();
+							inputRef!.focus();
+							messagesRef!.jumpToBottom();
+						} else if (ev.key === 'PageUp') {
+							ev.preventDefault();
+							messagesRef!.scrollUp();
+						} else if (ev.key === 'PageDown') {
+							ev.preventDefault();
+							messagesRef!.scrollDown();
+						}
+					}
+				};
 
-							<ChannelMessages />
-						</div>
-					</ChannelContext.Provider>
+				return (
+					<div onKeyDown={handleKeyDown} class="contents">
+						<ChannelContext.Provider value={{ convo, channel }}>
+							<ChannelHeader />
+							<FirehoseIndicator />
+
+							<div class="flex min-h-0 shrink grow flex-col-reverse">
+								<Switch fallback={<Composition ref={(ref) => (inputRef = ref)} />}>
+									<Match when={convo.disabled.value}>
+										<CompositionDisabled />
+									</Match>
+									<Match when={isBlocking()}>
+										<CompositionBlocked />
+									</Match>
+								</Switch>
+
+								<ChannelMessages ref={(ref) => (messagesRef = ref)} />
+							</div>
+						</ChannelContext.Provider>
+					</div>
 				);
 			}}
 		</Show>

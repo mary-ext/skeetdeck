@@ -20,7 +20,17 @@ function debug(msg: string) {
 	}
 }
 
-const ChannelMessages = () => {
+export interface ChannelMessagesRef {
+	jumpToBottom(): void;
+	scrollUp(): void;
+	scrollDown(): void;
+}
+
+export interface ChannelMessagesProps {
+	ref?: (ref: ChannelMessagesRef) => void;
+}
+
+const ChannelMessages = (props: ChannelMessagesProps) => {
 	let ref: HTMLElement;
 
 	const { did, firehose, rpc, isOpen } = useChatPane();
@@ -58,6 +68,23 @@ const ChannelMessages = () => {
 	const onScroll = () => {
 		scrollY = ref!.scrollTop;
 	};
+
+	createEffect(() => {
+		props.ref?.({
+			jumpToBottom() {
+				ref!.scrollTop = 0;
+				markRead();
+			},
+			scrollUp() {
+				const next = ref!.scrollTop - 0.9 * ref!.offsetHeight;
+				ref!.scrollTo({ top: next, behavior: 'auto' });
+			},
+			scrollDown() {
+				const next = ref!.scrollTop + 0.9 * ref!.offsetHeight;
+				ref!.scrollTo({ top: next, behavior: 'auto' });
+			},
+		});
+	});
 
 	createEffect((prev: ChatBskyConvoDefs.MessageView | undefined) => {
 		const messages = channel.messages();
