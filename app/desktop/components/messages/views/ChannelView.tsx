@@ -5,6 +5,7 @@ import { getCachedConvo, mergeConvo, SignalizedConvo } from '~/api/stores/convo'
 import ChannelHeader from '../components/ChannelHeader';
 import ChannelMessages from '../components/ChannelMessages';
 import Composition from '../components/Composition';
+import CompositionBlocked from '../components/CompositionBlocked';
 import CompositionDisabled from '../components/CompositionDisabled';
 import FirehoseIndicator from '../components/FirehoseStatus';
 
@@ -41,6 +42,13 @@ const ChannelView = ({ id }: ViewParams<ViewKind.CHANNEL>) => {
 					}),
 				);
 
+				const isBlocking = () => {
+					return convo.recipients.value.every((recipient) => {
+						const viewer = recipient.viewer;
+						return viewer.blocking.value !== undefined || viewer.blockingByList.value !== undefined;
+					});
+				};
+
 				return (
 					<ChannelContext.Provider value={{ convo, channel }}>
 						<ChannelHeader />
@@ -49,6 +57,9 @@ const ChannelView = ({ id }: ViewParams<ViewKind.CHANNEL>) => {
 							<Switch fallback={<Composition />}>
 								<Match when={convo.disabled.value}>
 									<CompositionDisabled />
+								</Match>
+								<Match when={isBlocking()}>
+									<CompositionBlocked />
 								</Match>
 							</Switch>
 
