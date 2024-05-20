@@ -5,6 +5,8 @@ import { getRtLength, parseRt } from '~/api/richtext/composer';
 
 import { autofocusIf, refs } from '~/utils/input';
 
+import EmojiFlyout from '~/com/components/emojis/EmojiFlyout';
+import EmojiEmotionsOutlinedIcon from '~/com/icons/outline-emoji-emotions';
 import SendOutlinedIcon from '~/com/icons/outline-send';
 import { IconButton } from '~/com/primitives/icon-button';
 
@@ -39,7 +41,7 @@ const Composition = () => {
 
 	return (
 		<div class="px-3 pb-4">
-			<div class="relative flex items-start gap-2 rounded-md bg-secondary/30 pl-3 pr-1">
+			<div class="relative flex items-start gap-2 rounded-md bg-secondary/30 px-1">
 				{/* {!focused() || text().length === 0 ? (
 					<div class="flex">
 						<button
@@ -77,6 +79,29 @@ const Composition = () => {
 						</button>
 					</div>
 				)} */}
+
+				<div class="flex h-10 items-center">
+					<EmojiFlyout
+						multiple
+						placement="top"
+						onPick={(emoji, single) => {
+							if (single) {
+								setTimeout(() => {
+									ref!.focus();
+									document.execCommand('insertText', false, emoji.picked);
+								}, 0);
+							} else {
+								// We can't use insertText here, this breaks undo/redo history
+								ref!.setRangeText(emoji.picked);
+								ref!.dispatchEvent(new Event('input', { bubbles: true, cancelable: false }));
+							}
+						}}
+					>
+						<button class={IconButton({ color: 'muted' })}>
+							<EmojiEmotionsOutlinedIcon />
+						</button>
+					</EmojiFlyout>
+				</div>
 
 				<TextareaAutosize
 					ref={refs<HTMLTextAreaElement>((node) => (ref = node), autofocusIf(isOpen))}
