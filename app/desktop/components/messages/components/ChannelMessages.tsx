@@ -30,6 +30,8 @@ const ChannelMessages = () => {
 	let latestId: string | undefined;
 	let ackedId: string | undefined;
 
+	let scrollY: number | undefined;
+
 	const [atBottom, setAtBottom] = createSignal(true);
 	const [unread, setUnread] = createSignal<string>();
 	const { entries } = channel.mount({ unread, atBottom });
@@ -51,6 +53,10 @@ const ChannelMessages = () => {
 				messageId: latestId,
 			},
 		});
+	};
+
+	const onScroll = () => {
+		scrollY = ref!.scrollTop;
 	};
 
 	createEffect((prev: ChatBskyConvoDefs.MessageView | undefined) => {
@@ -100,8 +106,33 @@ const ChannelMessages = () => {
 		return last;
 	});
 
+	createEffect((prev: ChatBskyConvoDefs.MessageView | undefined) => {
+		const messages = channel.messages();
+		const first = messages[0];
+
+		if (first === undefined) {
+			return undefined;
+		} else if (first.rev === '') {
+			return prev;
+		}
+
+		if (prev !== undefined && first.rev < prev.rev) {
+			// Old message loaded, set our last known scroll position in case
+			// the browser lost track of it.
+			if (scrollY !== undefined) {
+				ref!.scrollTop = scrollY;
+			}
+		}
+
+		return first;
+	});
+
 	return (
-		<div ref={(node) => (ref = node)} class="relative flex min-h-0 grow flex-col-reverse overflow-y-auto">
+		<div
+			ref={(node) => (ref = node)}
+			onScroll={onScroll}
+			class="relative flex min-h-0 grow flex-col-reverse overflow-y-auto"
+		>
 			<div>
 				<Switch>
 					<Match when={channel.oldestRev() === null}>
