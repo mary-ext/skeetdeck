@@ -66,8 +66,8 @@ importers:
         specifier: npm:@jsr/mary__base32@^0.1.0
         version: '@jsr/mary__base32@0.1.0'
       '@mary/bluesky-client':
-        specifier: npm:@jsr/mary__bluesky-client@^0.5.15
-        version: '@jsr/mary__bluesky-client@0.5.15'
+        specifier: npm:@jsr/mary__bluesky-client@^0.5.16
+        version: '@jsr/mary__bluesky-client@0.5.16'
       '@mary/emoji-db':
         specifier: workspace:@externdefs/emoji-db@^
         version: link:../packages/emoji-db
@@ -1162,8 +1162,8 @@ packages:
   '@jsr/mary__base32@0.1.0':
     resolution: {integrity: sha512-DCSSLoazbiumZdEAyBlNS6T/NtOPPJPwZH3hzyLnHZ/HKI5HT1ajZBAPLXVNzsIsFC3AgYpX/IXGGR2bS8AB6w==, tarball: https://npm.jsr.io/~/11/@jsr/mary__base32/0.1.0.tgz}
 
-  '@jsr/mary__bluesky-client@0.5.15':
-    resolution: {integrity: sha512-NkWR47BCEQM9NFrO7EohiC1ejhhyjBDSP4jAQusRMz7HZRzR262a9PbgfJYymHSaceD9lxT0nGCQxSrsUw0WhA==, tarball: https://npm.jsr.io/~/11/@jsr/mary__bluesky-client/0.5.15.tgz}
+  '@jsr/mary__bluesky-client@0.5.16':
+    resolution: {integrity: sha512-4NPAGi7adFOhmHIkZSdYtufQpAGGlNJlViKOIBs6w43Oqs0XVtRx8Jm7ARLk/YRIejBmMcQGjHSHEMTYco6isA==, tarball: https://npm.jsr.io/~/11/@jsr/mary__bluesky-client/0.5.16.tgz}
 
   '@jsr/mary__exif-rm@0.2.1':
     resolution: {integrity: sha512-hw7UqNH2puQooIRvZk4IPP4Xyo1IjbynjW9idqmqJepwR7DDeBs61riHZdiax3lUoW7Gzz+tuPQmdkWH/v2i5Q==, tarball: https://npm.jsr.io/~/11/@jsr/mary__exif-rm/0.2.1.tgz}
@@ -1444,8 +1444,8 @@ packages:
     peerDependencies:
       postcss: ^8.1.0
 
-  babel-plugin-jsx-dom-expressions@0.37.20:
-    resolution: {integrity: sha512-0L3aC5EFyvCgIlEYIqJb4Ym29s1IDI/U5SntZ1ZK054xe0MqBmBi2GLK3f9AOklhdY7kCC3GsHD0bILh6u0Qsg==}
+  babel-plugin-jsx-dom-expressions@0.37.21:
+    resolution: {integrity: sha512-WbQo1NQ241oki8bYasVzkMXOTSIri5GO/K47rYJb2ZBh8GaPUEWiWbMV3KwXz+96eU2i54N6ThzjQG/f5n8Azw==}
     peerDependencies:
       '@babel/core': ^7.20.12
 
@@ -1615,8 +1615,8 @@ packages:
     engines: {node: '>=0.10.0'}
     hasBin: true
 
-  electron-to-chromium@1.4.774:
-    resolution: {integrity: sha512-132O1XCd7zcTkzS3FgkAzKmnBuNJjK8WjcTtNuoylj7MYbqw5eXehjQ5OK91g0zm7OTKIPeaAG4CPoRfD9M1Mg==}
+  electron-to-chromium@1.4.775:
+    resolution: {integrity: sha512-JpOfl1aNAiZ88wFzjPczTLwYIoPIsij8S9/XQH9lqMpiJOf23kxea68B8wje4f68t4rOIq4Bh+vP4I65njiJBw==}
 
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -3553,7 +3553,7 @@ snapshots:
 
   '@jsr/mary__base32@0.1.0': {}
 
-  '@jsr/mary__bluesky-client@0.5.15': {}
+  '@jsr/mary__bluesky-client@0.5.16': {}
 
   '@jsr/mary__exif-rm@0.2.1': {}
 
@@ -3794,7 +3794,7 @@ snapshots:
       postcss: 8.4.38
       postcss-value-parser: 4.2.0
 
-  babel-plugin-jsx-dom-expressions@0.37.20(@babel/core@7.24.5):
+  babel-plugin-jsx-dom-expressions@0.37.21(@babel/core@7.24.5):
     dependencies:
       '@babel/core': 7.24.5
       '@babel/helper-module-imports': 7.18.6
@@ -3836,7 +3836,7 @@ snapshots:
   babel-preset-solid@1.8.17(@babel/core@7.24.5):
     dependencies:
       '@babel/core': 7.24.5
-      babel-plugin-jsx-dom-expressions: 0.37.20(@babel/core@7.24.5)
+      babel-plugin-jsx-dom-expressions: 0.37.21(@babel/core@7.24.5)
 
   balanced-match@1.0.2: {}
 
@@ -3860,7 +3860,7 @@ snapshots:
   browserslist@4.23.0:
     dependencies:
       caniuse-lite: 1.0.30001620
-      electron-to-chromium: 1.4.774
+      electron-to-chromium: 1.4.775
       node-releases: 2.0.14
       update-browserslist-db: 1.0.16(browserslist@4.23.0)
 
@@ -3962,7 +3962,7 @@ snapshots:
     dependencies:
       jake: 10.9.1
 
-  electron-to-chromium@1.4.774: {}
+  electron-to-chromium@1.4.775: {}
 
   emoji-regex@8.0.0: {}
 
