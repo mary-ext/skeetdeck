@@ -76,7 +76,7 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 			<div class="flex min-h-0 grow flex-col overflow-y-auto">
 				<List
 					data={listing.channels()}
-					// error={listing.error}
+					error={listing.failed()?.error}
 					render={(convo) => (
 						<ChannelItem
 							item={convo}

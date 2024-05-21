@@ -171,17 +171,18 @@ export const createChannelListing = ({ did, rpc, firehose, fetchLimit = 20 }: Ch
 					return;
 				}
 
-				// @todo: do something with `err`
-				setFetching();
-				setFailed(FailureState.INITIAL);
+				batch(() => {
+					setFetching();
+					setFailed({ cause: FailureCause.INITIAL, error: err });
 
-				// Process deferred events
-				if (pendingEvents !== undefined) {
-					const events = pendingEvents;
-					pendingEvents = undefined;
+					// Process deferred events
+					if (pendingEvents !== undefined) {
+						const events = pendingEvents;
+						pendingEvents = undefined;
 
-					setChannels((existing) => processFirehoseEvents(existing, events));
-				}
+						setChannels((existing) => processFirehoseEvents(existing, events));
+					}
+				});
 			}
 		};
 
@@ -238,17 +239,18 @@ export const createChannelListing = ({ did, rpc, firehose, fetchLimit = 20 }: Ch
 					return;
 				}
 
-				// @todo: do something with `err`
-				setFetching();
-				setFailed(FailureState.DOWNWARDS);
+				batch(() => {
+					setFetching();
+					setFailed({ cause: FailureCause.DOWNWARDS, error: err });
 
-				// Process deferred events
-				if (pendingEvents !== undefined) {
-					const events = pendingEvents;
-					pendingEvents = undefined;
+					// Process deferred events
+					if (pendingEvents !== undefined) {
+						const events = pendingEvents;
+						pendingEvents = undefined;
 
-					setChannels((existing) => processFirehoseEvents(existing, events));
-				}
+						setChannels((existing) => processFirehoseEvents(existing, events));
+					}
+				});
 			}
 		};
 
@@ -323,11 +325,16 @@ export const enum FetchState {
 	REFRESH,
 }
 
-export const enum FailureState {
+export const enum FailureCause {
 	/** Failure came from fetching the initial channel listing */
 	INITIAL,
 	/** Failure came from fetching subsequent channel listing */
 	DOWNWARDS,
 	/** Failure came from refreshing the channel listing (initial load) */
 	REFRESH,
+}
+
+export interface FailureState {
+	cause: FailureCause;
+	error: unknown;
 }
