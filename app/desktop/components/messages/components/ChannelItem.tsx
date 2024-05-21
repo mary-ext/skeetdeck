@@ -1,3 +1,5 @@
+import { createMemo } from 'solid-js';
+
 import type { SignalizedConvo } from '~/api/stores/convo';
 
 import { isElementClicked } from '~/utils/interaction';
@@ -10,6 +12,7 @@ import { Interactive } from '~/com/primitives/interactive';
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 import { useChatPane } from '../contexts/chat';
+import { isChatDeletedAccount } from '../utils/chat';
 
 import ChannelOverflowAction from './ChannelOverflowAction';
 
@@ -37,6 +40,10 @@ const ChannelItem = (props: ChannelItemProps) => {
 		onClick!();
 	};
 
+	const isDeleted = createMemo(() => {
+		return isChatDeletedAccount(item);
+	});
+
 	return (
 		<button class={itemClass} onClick={onClick && handleClick}>
 			{(() => {
@@ -53,17 +60,29 @@ const ChannelItem = (props: ChannelItemProps) => {
 						<div class="min-w-0 grow">
 							<div class="mb-0.5 flex items-center justify-between gap-3">
 								<div class="flex grow items-center overflow-hidden text-sm text-muted-fg">
-									<span class="flex max-w-full gap-1 overflow-hidden text-ellipsis whitespace-nowrap text-left">
-										{recipient.displayName.value && (
-											<bdi class="overflow-hidden text-ellipsis">
-												<span class="font-bold text-primary">{recipient.displayName.value}</span>
-											</bdi>
-										)}
+									{(() => {
+										if (isDeleted()) {
+											return (
+												<span class="overflow-hidden text-ellipsis whitespace-nowrap font-bold text-primary">
+													Deleted account
+												</span>
+											);
+										}
 
-										<span class="block overflow-hidden text-ellipsis whitespace-nowrap">
-											@{recipient.handle.value}
-										</span>
-									</span>
+										return (
+											<span class="flex max-w-full gap-1 overflow-hidden text-ellipsis whitespace-nowrap text-left">
+												{recipient.displayName.value && (
+													<bdi class="overflow-hidden text-ellipsis">
+														<span class="font-bold text-primary">{recipient.displayName.value}</span>
+													</bdi>
+												)}
+
+												<span class="block overflow-hidden text-ellipsis whitespace-nowrap">
+													@{recipient.handle.value}
+												</span>
+											</span>
+										);
+									})()}
 
 									{item.lastMessage.value && (
 										<>
@@ -116,6 +135,10 @@ const ChannelItem = (props: ChannelItemProps) => {
 										} else if (message.$type === 'chat.bsky.convo.defs#deletedMessageView') {
 											return <i>Message deleted</i>;
 										}
+									}
+
+									if (isDeleted()) {
+										return <i>Conversation deleted</i>;
 									}
 
 									return <i>No messages yet</i>;

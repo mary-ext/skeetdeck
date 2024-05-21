@@ -17,6 +17,7 @@ import FirehoseIndicator from '../components/FirehoseStatus';
 
 import { useChatPane } from '../contexts/chat';
 import { ViewKind, type ViewParams } from '../contexts/router';
+import { isChatDeletedAccount } from '../utils/chat';
 
 import { useMessages } from '../MessagesContext';
 
@@ -77,7 +78,16 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 					data={listing.channels()}
 					// error={listing.error}
 					render={(convo) => (
-						<ChannelItem item={convo} onClick={() => router.to({ kind: ViewKind.CHANNEL, id: convo.id })} />
+						<ChannelItem
+							item={convo}
+							onClick={() => {
+								if (isChatDeletedAccount(convo)) {
+									return;
+								}
+
+								router.to({ kind: ViewKind.CHANNEL, id: convo.id });
+							}}
+						/>
 					)}
 					hasNextPage={listing.cursor() != null}
 					hasNewData={listing.hasNew()}
