@@ -27,7 +27,7 @@ const EmojiFlyout = (props: EmojiFlyoutProps) => {
 				<div {...menuProps} class="overflow-hidden rounded-lg bg-background shadow-menu">
 					<Suspense
 						fallback={
-							<div class="grid place-items-center" style="height: 348.8px;width: 324px">
+							<div class="grid place-items-center" style="height: 397.08px;width: 340px">
 								<CircularProgress />
 							</div>
 						}
