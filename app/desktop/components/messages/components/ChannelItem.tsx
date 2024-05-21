@@ -1,4 +1,3 @@
-import type { At } from '~/api/atp-schema';
 import type { SignalizedConvo } from '~/api/stores/convo';
 
 import { isElementClicked } from '~/utils/interaction';
@@ -10,11 +9,11 @@ import { Interactive } from '~/com/primitives/interactive';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
+import { useChatPane } from '../contexts/chat';
+
 import ChannelOverflowAction from './ChannelOverflowAction';
 
 export interface ChannelItemProps {
-	/** Expected to be static */
-	uid: At.DID;
 	/** Expected to be static */
 	item: SignalizedConvo;
 	onClick?: () => void;
@@ -25,6 +24,8 @@ const itemClass = Interactive({
 });
 
 const ChannelItem = (props: ChannelItemProps) => {
+	const { did } = useChatPane();
+
 	const item = props.item;
 	const onClick = props.onClick;
 
@@ -107,13 +108,17 @@ const ChannelItem = (props: ChannelItemProps) => {
 
 									if (message) {
 										if (message.$type === 'chat.bsky.convo.defs#messageView') {
+											if (message.sender.did === did) {
+												return `You: ${message.text}`;
+											}
+
 											return message.text;
 										} else if (message.$type === 'chat.bsky.convo.defs#deletedMessageView') {
 											return <i>Message deleted</i>;
 										}
 									}
 
-									return <i>It's empty here.</i>;
+									return <i>No messages yet</i>;
 								})()}
 							</div>
 						</div>

@@ -77,11 +77,7 @@ const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 					data={listing.channels()}
 					// error={listing.error}
 					render={(convo) => (
-						<ChannelItem
-							uid={did}
-							item={convo}
-							onClick={() => router.to({ kind: ViewKind.CHANNEL, id: convo.id })}
-						/>
+						<ChannelItem item={convo} onClick={() => router.to({ kind: ViewKind.CHANNEL, id: convo.id })} />
 					)}
 					hasNextPage={listing.cursor() != null}
 					hasNewData={listing.hasNew()}
