@@ -269,6 +269,8 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 		};
 
 		const sendMessage = async (raw: RawMessage) => {
+			const canPlaceholder = untrack(fetching) !== FetchState.INITIAL;
+
 			// Create a fake message to put on the array
 			// We can check that it's fake by making `rev` be an empty string
 			const placebo: ChannelMessage = {
@@ -279,7 +281,10 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 				text: getRtText(raw.richtext),
 			};
 
-			setMessages(($messages) => $messages.concat(placebo));
+			// Don't do placeholders if we're still retrieving the initial history
+			if (canPlaceholder) {
+				setMessages(($messages) => $messages.concat(placebo));
+			}
 
 			try {
 				// Resolve the richtext, and send the message
@@ -295,8 +300,10 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 					},
 				});
 
-				// Assign the fake message to the actual message ID so it'd be swapped
-				sentMessages.set(data.id, placebo);
+				if (canPlaceholder) {
+					// Assign the fake message to the actual message ID so it'd be swapped
+					sentMessages.set(data.id, placebo);
+				}
 
 				// Request a poll immediately
 				firehose.poll();
@@ -318,7 +325,12 @@ export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }
 					},
 				};
 
-				setMessages(($messages) => $messages.toSpliced($messages.lastIndexOf(placebo), 1, replaced));
+				if (canPlaceholder) {
+					setMessages(($messages) => $messages.toSpliced($messages.lastIndexOf(placebo), 1, replaced));
+				} else {
+					// Insert as the last message since we didn't insert a placeholder before
+					setMessages(($messages) => $messages.concat(replaced));
+				}
 			}
 		};
 
