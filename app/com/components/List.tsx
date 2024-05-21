@@ -50,6 +50,8 @@ const List = <T,>(props: ListProps<T>) => {
 			</For>
 
 			<Switch>
+				<Match when={props.isRefreshing}>{null}</Match>
+
 				<Match when={props.error}>
 					{(err) => (
 						<GenericErrorView
@@ -68,9 +70,7 @@ const List = <T,>(props: ListProps<T>) => {
 					)}
 				</Match>
 
-				<Match when={props.isRefreshing}>{null}</Match>
-
-				<Match when={props.manualScroll && props.hasNextPage && !props.isFetchingNextPage}>
+				<Match when={props.manualScroll && !props.isFetchingNextPage && props.hasNextPage}>
 					<button onClick={onEndReached} class={loadMoreBtn}>
 						{'Show more'}
 					</button>
@@ -78,7 +78,7 @@ const List = <T,>(props: ListProps<T>) => {
 
 				<Match when={props.isFetchingNextPage || props.hasNextPage}>
 					<div
-						ref={ifIntersect(() => props.hasNextPage && !props.isFetchingNextPage, onEndReached)}
+						ref={ifIntersect(() => !props.isFetchingNextPage && props.hasNextPage, onEndReached)}
 						class="grid h-13 shrink-0 place-items-center"
 					>
 						<CircularProgress />
