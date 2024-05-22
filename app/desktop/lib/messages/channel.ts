@@ -45,12 +45,6 @@ export interface RawMessage {
 	richtext: PreliminaryRichText;
 }
 
-export interface DraftMessage {
-	id: string;
-	message: ChatBskyConvoDefs.Message;
-	failed: boolean;
-}
-
 const MAX_MESSAGE_HISTORY = 150;
 
 export const createChannel = ({ channelId, did, firehose, rpc, fetchLimit = 50 }: ChannelOptions) => {
