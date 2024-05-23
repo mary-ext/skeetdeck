@@ -113,11 +113,11 @@ const renderUnsupported = (msg: string) => {
 const renderRecord = (record: AppBskyEmbedRecord.View['record'], large: Accessor<boolean | undefined>) => {
 	const type = record.$type;
 
-	if (getCollectionId(record.uri) === 'app.bsky.feed.post') {
-		if (type === 'app.bsky.embed.record#viewNotFound') {
-			return <EmbedRecordNotFound />;
-		}
+	if (type === 'app.bsky.embed.record#viewNotFound') {
+		return <EmbedRecordNotFound />;
+	}
 
+	if (getCollectionId(record.uri) === 'app.bsky.feed.post') {
 		if (type === 'app.bsky.embed.record#viewBlocked') {
 			return <EmbedRecordBlocked record={record} />;
 		}
