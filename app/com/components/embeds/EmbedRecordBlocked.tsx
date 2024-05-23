@@ -4,7 +4,7 @@ import type { AppBskyEmbedRecord, AppBskyFeedDefs, At } from '~/api/atp-schema';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import { LINK_POST, Link } from '../Link';
-import EmbedRecordNotFound from './EmbedRecordNotFound';
+import EmbedRecordNotFound, { getCollectionMapping } from './EmbedRecordNotFound';
 
 type EmbeddedBlockedRecord = AppBskyEmbedRecord.ViewBlocked | AppBskyFeedDefs.BlockedPost;
 
@@ -37,7 +37,7 @@ const EmbedRecordBlocked = (props: EmbedRecordBlockedProps) => {
 			);
 		}
 
-		return <EmbedRecordNotFound />;
+		return <EmbedRecordNotFound type={/* @once */ getCollectionMapping(record.uri)} />;
 	};
 
 	return render as unknown as JSX.Element;

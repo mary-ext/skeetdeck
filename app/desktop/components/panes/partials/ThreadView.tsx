@@ -49,7 +49,7 @@ const ThreadView = (props: ThreadViewProps) => {
 					if (err instanceof XRPCError && err.kind === 'NotFound') {
 						return (
 							<div class="p-3">
-								<EmbedRecordNotFound />
+								<EmbedRecordNotFound type="post" />
 							</div>
 						);
 					}
@@ -77,7 +77,7 @@ const ThreadView = (props: ThreadViewProps) => {
 
 						return (
 							<div class="p-3">
-								<EmbedRecordNotFound />
+								<EmbedRecordNotFound type="post" />
 							</div>
 						);
 					}
@@ -150,7 +150,7 @@ const ThreadView = (props: ThreadViewProps) => {
 									if (type === 'app.bsky.feed.defs#notFoundPost') {
 										return (
 											<div class="p-3">
-												<EmbedRecordNotFound />
+												<EmbedRecordNotFound type="post" />
 											</div>
 										);
 									}

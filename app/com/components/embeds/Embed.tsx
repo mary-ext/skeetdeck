@@ -11,7 +11,7 @@ import EmbedLink from './EmbedLink';
 import EmbedList from './EmbedList';
 import EmbedQuote from './EmbedQuote';
 import EmbedRecordBlocked from './EmbedRecordBlocked';
-import EmbedRecordNotFound from './EmbedRecordNotFound';
+import EmbedRecordNotFound, { getCollectionMapping } from './EmbedRecordNotFound';
 
 type EmbeddedRecord = AppBskyEmbedRecord.View['record'];
 
@@ -113,7 +113,7 @@ const renderRecord = (record: AppBskyEmbedRecord.View['record'], large: Accessor
 	const type = record.$type;
 
 	if (type === 'app.bsky.embed.record#viewNotFound') {
-		return <EmbedRecordNotFound />;
+		return <EmbedRecordNotFound type={/* @once */ getCollectionMapping(record.uri)} />;
 	}
 	if (type === 'app.bsky.embed.record#viewBlocked') {
 		return <EmbedRecordBlocked record={record} />;
