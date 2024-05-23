@@ -3,7 +3,6 @@ import { type Accessor } from 'solid-js';
 import type { AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedRecord } from '~/api/atp-schema';
 import { ContextContentMedia, getModerationUI, type ModerationCause } from '~/api/moderation';
 import type { SignalizedPost } from '~/api/stores/posts';
-import { getCollectionId } from '~/api/utils/misc';
 
 import ContentWarning from '../moderation/ContentWarning';
 import EmbedFeed from './EmbedFeed';
@@ -116,18 +115,17 @@ const renderRecord = (record: AppBskyEmbedRecord.View['record'], large: Accessor
 	if (type === 'app.bsky.embed.record#viewNotFound') {
 		return <EmbedRecordNotFound />;
 	}
+	if (type === 'app.bsky.embed.record#viewBlocked') {
+		return <EmbedRecordBlocked record={record} />;
+	}
 
-	if (getCollectionId(record.uri) === 'app.bsky.feed.post') {
-		if (type === 'app.bsky.embed.record#viewBlocked') {
-			return <EmbedRecordBlocked record={record} />;
-		}
-
-		if (type === 'app.bsky.embed.record#viewRecord') {
-			return <EmbedQuote record={record} large={large()} />;
-		}
-	} else if (type === 'app.bsky.feed.defs#generatorView') {
+	if (type === 'app.bsky.embed.record#viewRecord') {
+		return <EmbedQuote record={record} large={large()} />;
+	}
+	if (type === 'app.bsky.feed.defs#generatorView') {
 		return <EmbedFeed feed={record} />;
-	} else if (type === 'app.bsky.graph.defs#listView') {
+	}
+	if (type === 'app.bsky.graph.defs#listView') {
 		return <EmbedList list={record} />;
 	}
 
