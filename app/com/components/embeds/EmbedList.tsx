@@ -35,9 +35,9 @@ export const EmbedListContent = (props: EmbedListContentProps) => {
 					class="mt-0.5 h-9 w-9 rounded-md object-cover"
 				/>
 
-				<div>
-					<p class="font-bold">{/* @once */ list.name}</p>
-					<p class="text-muted-fg">{
+				<div class="min-w-0">
+					<p class="line-clamp-2 break-words font-bold">{/* @once */ list.name}</p>
+					<p class="line-clamp-2 break-words text-muted-fg">{
 						/* @once */ `${purpose}${'creator' in list ? ` by ${list.creator.handle}` : ``}`
 					}</p>
 				</div>
