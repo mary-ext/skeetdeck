@@ -1,6 +1,6 @@
-import { For, type JSX } from 'solid-js';
+import { createMemo, For, type JSX } from 'solid-js';
 
-import { multiagent } from '~/api/globals/agent';
+import { getPrivilegedAccounts, isAccountPrivileged, multiagent } from '~/api/globals/agent';
 
 import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
 import SettingsOutlinedIcon from '~/com/icons/outline-settings';
@@ -18,6 +18,8 @@ export interface ChatAccountActionProps {
 const ChatAccountAction = (props: ChatAccountActionProps) => {
 	const { did, router, changeAccount } = useChatPane();
 
+	const accounts = createMemo(getPrivilegedAccounts);
+
 	return (
 		<Flyout button={props.children} middleware={offsetlessMiddlewares} placement="bottom-end">
 			{({ close, menuProps }) => (
@@ -33,15 +35,10 @@ const ChatAccountAction = (props: ChatAccountActionProps) => {
 						<span>Chat settings</span>
 					</button>
 
-					{multiagent.accounts.length > 1 && (
+					{accounts().length > 1 && (
 						<>
 							<hr class="mx-2 my-1 border-divider" />
-							<For
-								each={(() => {
-									const accounts = multiagent.accounts;
-									return accounts.filter((acc) => acc.did !== did);
-								})()}
-							>
+							<For each={accounts().filter((acc) => acc.did !== did)}>
 								{(account) => (
 									<button
 										onClick={() => {

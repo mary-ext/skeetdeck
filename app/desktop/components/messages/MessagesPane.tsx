@@ -1,11 +1,23 @@
 import { makeEventListener } from '@solid-primitives/event-listener';
-import { For, Show, createEffect, createMemo, createResource, createSignal, onCleanup } from 'solid-js';
+import {
+	ErrorBoundary,
+	For,
+	Show,
+	createEffect,
+	createMemo,
+	createRenderEffect,
+	createResource,
+	createSignal,
+	onCleanup,
+	untrack,
+} from 'solid-js';
 
 import { withProxy } from '@mary/bluesky-client/xrpc';
 
-import { multiagent } from '~/api/globals/agent';
+import { getPrivilegedAccounts, multiagent } from '~/api/globals/agent';
 
-import { createDerivedSignal, makeAbortable } from '~/utils/hooks';
+import type { At } from '~/api/atp-schema';
+import { makeAbortable } from '~/utils/hooks';
 
 import { createChannel, type Channel } from '~/desktop/lib/messages/channel';
 import { createChatFirehose } from '~/desktop/lib/messages/firehose';
@@ -27,7 +39,7 @@ export interface MessagesPaneProps {
 const MessagesPane = (props: MessagesPaneProps) => {
 	const context = useMessages();
 
-	const [uid, setUid] = createDerivedSignal(() => multiagent.active);
+	const [uid, setUid] = createSignal<At.DID>();
 	const [views, setViews] = createSignal<View[]>([{ kind: ViewKind.CHANNEL_LISTING }]);
 
 	const current = createMemo(() => views().at(-1)!);
@@ -109,6 +121,15 @@ const MessagesPane = (props: MessagesPaneProps) => {
 
 		return initialState;
 	}, null);
+
+	createRenderEffect(() => {
+		const accounts = getPrivilegedAccounts().map((acc) => acc.did);
+		const current = untrack(uid);
+
+		if (current === undefined || !accounts.includes(current)) {
+			setUid(accounts.length > 0 ? accounts[0] : undefined);
+		}
+	});
 
 	return (
 		<div class="flex w-96 shrink-0 flex-col border-r border-divider">

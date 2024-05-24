@@ -1,4 +1,4 @@
-import { For, Show, Suspense, batch, createSignal, lazy } from 'solid-js';
+import { For, Show, Suspense, batch, createMemo, createSignal, lazy } from 'solid-js';
 
 import { offset } from '@floating-ui/dom';
 import { DragDropProvider, DragDropSensors, SortableProvider, createSortable } from '@thisbeyond/solid-dnd';
@@ -7,7 +7,7 @@ import * as TID from '@mary/atproto-tid';
 import { ShowFreeze } from '@mary/solid-freeze';
 import { location, navigate, type RouteComponentProps } from '@pkg/solid-page-router';
 
-import { multiagent } from '~/api/globals/agent';
+import { getPrivilegedAccounts, multiagent } from '~/api/globals/agent';
 
 import { openModal } from '~/com/globals/modals';
 import { Title } from '~/com/lib/meta';
@@ -75,6 +75,7 @@ const DashboardLayout = (props: RouteComponentProps) => {
 	const composer = useComposer();
 	const messages = useMessages();
 	const [show, setShow] = createSignal<ShowState>();
+	const hasPrivilegedAccounts = createMemo(() => getPrivilegedAccounts().length > 0);
 
 	composer._onDisplay((next) => setShow(next ? ShowState.COMPOSER : undefined));
 	messages.onShow(() => setShow(ShowState.CHAT));
@@ -98,20 +99,28 @@ const DashboardLayout = (props: RouteComponentProps) => {
 								<FeatherIcon />
 							</button>
 
-							<button
-								disabled={show() === ShowState.CHAT}
-								title="Chat"
-								onClick={() => {
-									setShow(ShowState.CHAT);
-								}}
-								class={menuIconButton}
-							>
-								<MailOutlinedIcon />
+							{(() => {
+								if (!hasPrivilegedAccounts()) {
+									return;
+								}
 
-								{show() !== ShowState.CHAT && messages.unreadCount() > 0 && (
-									<div class="absolute right-3.5 top-3 h-2 w-2 rounded-full bg-red-600"></div>
-								)}
-							</button>
+								return (
+									<button
+										disabled={show() === ShowState.CHAT}
+										title="Chat"
+										onClick={() => {
+											setShow(ShowState.CHAT);
+										}}
+										class={menuIconButton}
+									>
+										<MailOutlinedIcon />
+
+										{show() !== ShowState.CHAT && messages.unreadCount() > 0 && (
+											<div class="absolute right-3.5 top-3 h-2 w-2 rounded-full bg-red-600"></div>
+										)}
+									</button>
+								);
+							})()}
 
 							<Flyout
 								button={
@@ -282,7 +291,7 @@ const DashboardLayout = (props: RouteComponentProps) => {
 						</Keyed>
 					</Suspense>
 				</ShowFreeze>
-				<ShowFreeze when={show() === ShowState.CHAT}>
+				<ShowFreeze when={hasPrivilegedAccounts() && show() === ShowState.CHAT}>
 					<Suspense
 						fallback={
 							<div class="grid w-96 shrink-0 place-items-center border-r border-divider">

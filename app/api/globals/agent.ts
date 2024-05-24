@@ -32,3 +32,11 @@ export const getAccountHandle = (uid: At.DID): string | null => {
 
 	return null;
 };
+
+export const getPrivilegedAccounts = () => {
+	return multiagent.accounts.filter(isAccountPrivileged);
+};
+
+export const isAccountPrivileged = (account: MultiagentAccountData) => {
+	return account.scope === undefined || account.scope === 'privileged';
+};

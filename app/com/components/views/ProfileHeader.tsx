@@ -40,6 +40,7 @@ import ModerationAlerts from '../moderation/ModerationAlerts';
 
 import ProfileHandleAction from './profiles/ProfileHandleAction';
 import ProfileOverflowAction from './profiles/ProfileOverflowAction';
+import { getAccountData, isAccountPrivileged } from '~/api/globals/agent';
 
 const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog'));
 const MuteConfirmDialog = lazy(() => import('../dialogs/MuteConfirmDialog'));
@@ -69,6 +70,11 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 	});
 
 	const canMessage = createMemo(() => {
+		const account = getAccountData(profile.uid)!;
+		if (!isAccountPrivileged(account)) {
+			return false;
+		}
+
 		const allowed = associated.value.chat.allowIncoming;
 
 		if (allowed === 'all') {

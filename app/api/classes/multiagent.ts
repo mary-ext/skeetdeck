@@ -32,12 +32,12 @@ export interface MultiagentAccountData {
 	readonly did: At.DID;
 	service: string;
 	session: AtpSessionData;
-	isAppPassword?: boolean;
+	scope?: 'limited' | 'privileged';
 	profile?: MultiagentProfileData;
 }
 
 interface MultiagentStorage {
-	$version: 1;
+	$version: 2;
 	active: At.DID | undefined;
 	accounts: MultiagentAccountData[];
 }
@@ -68,11 +68,24 @@ export class Multiagent {
 	constructor(name: string) {
 		const store = createReactiveLocalStorage<MultiagentStorage>(name, (version, prev) => {
 			if (version === 0) {
-				return {
-					$version: 1,
+				const obj: MultiagentStorage = {
+					$version: 2,
 					active: undefined,
 					accounts: [],
 				};
+
+				return obj;
+			}
+
+			if (version < 2) {
+				const _next = prev as MultiagentStorage;
+
+				for (const account of _next.accounts) {
+					account.scope = (account as any).isAppPassword ? 'limited' : undefined;
+					delete (account as any).isAppPassword;
+				}
+
+				_next.$version = 2;
 			}
 
 			return prev;
@@ -131,7 +144,14 @@ export class Multiagent {
 			const did = session.did;
 
 			const sessionJwt = decodeJwt(session.accessJwt) as AtpAccessJwt;
-			const isAppPassword = sessionJwt.scope === 'com.atproto.appPass';
+			const scope = sessionJwt.scope;
+
+			let accountScope: MultiagentAccountData['scope'];
+			if (scope === 'com.atproto.appPass') {
+				accountScope = 'limited';
+			} else if (scope === 'com.atproto.appPassPrivileged') {
+				accountScope = 'privileged';
+			}
 
 			batch(() => {
 				const $accounts = this.accounts!;
@@ -140,13 +160,13 @@ export class Multiagent {
 				if (existing) {
 					existing.service = service;
 					existing.session = session;
-					existing.isAppPassword = isAppPassword;
+					existing.scope = accountScope;
 				} else {
 					$accounts.push({
 						did: did,
 						service: service,
 						session: session,
-						isAppPassword: isAppPassword,
+						scope: accountScope,
 					});
 				}
 			});
