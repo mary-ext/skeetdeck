@@ -1,4 +1,4 @@
-import { createEffect } from 'solid-js';
+import { createEffect, createMemo } from 'solid-js';
 
 import { createInfiniteQuery, createQuery, useQueryClient, type InfiniteData } from '@mary/solid-query';
 
@@ -36,6 +36,11 @@ const isTimelineStale = (
 
 const TimelineList = (props: TimelineListProps) => {
 	const queryClient = useQueryClient();
+
+	const timelineDid = createMemo(() => {
+		const params = props.params;
+		return params.type === 'profile' ? params.actor : undefined;
+	});
 
 	const timeline = createInfiniteQuery(() => ({
 		queryKey: getTimelineKey(props.uid, props.params),
@@ -104,6 +109,7 @@ const TimelineList = (props: TimelineListProps) => {
 							reason={/* @once */ item.reason}
 							prev={idx !== 0}
 							next={idx !== len - 1}
+							timelineDid={timelineDid()}
 						/>
 					</VirtualContainer>
 				));

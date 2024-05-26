@@ -1,5 +1,6 @@
 import { createEffect, createMemo, type Accessor } from 'solid-js';
 
+import type { At } from '~/api/atp-schema';
 import type { SignalizedTimelineItem } from '~/api/models/timeline';
 import type { SignalizedPost } from '~/api/stores/posts';
 import { getRecordId } from '~/api/utils/misc';
@@ -52,6 +53,8 @@ export interface PostProps {
 	next?: boolean;
 	interactive?: boolean;
 	highlight?: boolean;
+	/** Expected to be static */
+	timelineDid?: At.DID;
 }
 
 const isMobile = import.meta.env.VITE_MODE === 'mobile';
@@ -244,7 +247,12 @@ const Post = (props: PostProps) => {
 						/>
 					)}
 
-					<PostContent post={post} postPermalink={postPermalink} causes={causes} />
+					<PostContent
+						post={post}
+						postPermalink={postPermalink}
+						causes={causes}
+						ignoreMute={() => props.timelineDid === did}
+					/>
 
 					<div class="mt-3 flex flex-wrap items-center gap-1.5 text-de text-primary/85 empty:hidden">
 						{(() => {
@@ -352,9 +360,10 @@ interface PostContentProps {
 	post: SignalizedPost;
 	postPermalink: PostLinking;
 	causes: Accessor<ModerationCause[]>;
+	ignoreMute: Accessor<boolean>;
 }
 
-const PostContent = ({ post, postPermalink, causes }: PostContentProps) => {
+const PostContent = ({ post, postPermalink, causes, ignoreMute }: PostContentProps) => {
 	const embed = post.embed;
 
 	const ui = createMemo(() => getModerationUI(causes(), ContextContentList));
@@ -365,7 +374,7 @@ const PostContent = ({ post, postPermalink, causes }: PostContentProps) => {
 
 			<ContentWarning
 				ui={ui()}
-				ignoreMute
+				ignoreMute={ignoreMute()}
 				containerClass="mt-2"
 				innerClass="mt-3"
 				children={(() => {
