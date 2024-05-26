@@ -49,7 +49,7 @@ const renderItem = (x: ThreadItem) => {
 		const rkey = getRecordId(uri);
 
 		return (
-			<div class="flex h-5 items-center gap-2 text-sm text-muted-fg">
+			<div class="mb-2 mt-1 flex h-5 items-center gap-2 text-sm text-muted-fg">
 				<div class="grid h-5 w-5 place-items-center rounded-full border-2 border-divider">
 					<ArrowLeftIcon class="rotate-180" />
 				</div>
@@ -88,10 +88,6 @@ const renderLines = (depth: number /* , hasNextSibling: boolean */) => {
 		nodes.push(
 			<div class="relative pl-5">
 				<div class="absolute -top-4 bottom-0 left-2 border-l-2 border-muted"></div>
-
-				{i === depth - 1 && (
-					<div class="absolute right-0.5 top-[-8px] h-[26px] w-[10px] rounded-bl-[8px] border-b-2 border-l-2 border-muted"></div>
-				)}
 			</div>,
 		);
 	}
