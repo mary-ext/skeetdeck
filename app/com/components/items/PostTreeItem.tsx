@@ -1,12 +1,21 @@
-import { createEffect } from 'solid-js';
-
-import { getRecordId } from '~/api/utils/misc';
+import { createEffect, createMemo, type Accessor } from 'solid-js';
 
 import { updatePostLike } from '~/api/mutations/like-post';
 import type { SignalizedPost } from '~/api/stores/posts';
+import { getRecordId } from '~/api/utils/misc';
+
+import {
+	ContextContentList,
+	ContextProfileMedia,
+	getModerationUI,
+	type ModerationCause,
+} from '~/api/moderation';
+import { moderatePost } from '~/api/moderation/entities/post';
 
 import { formatCompact } from '~/utils/intl/number';
 import { clsx } from '~/utils/misc';
+
+import { getModerationOptions } from '~/com/globals/shared';
 
 import { LINK_POST, LINK_PROFILE, Link, type PostLinking, type ProfileLinking } from '../Link';
 import RichTextRenderer from '../RichTextRenderer';
@@ -21,6 +30,7 @@ import FavoriteOutlinedIcon from '../../icons/outline-favorite';
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 
 import Embed from '../embeds/Embed';
+import ContentWarning from '../moderation/ContentWarning';
 
 import PostOverflowAction from './posts/PostOverflowAction';
 import ReplyAction from './posts/ReplyAction';
@@ -52,6 +62,12 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 		rkey: getRecordId(post.uri),
 	};
 
+	const causes = createMemo(() => moderatePost(post, getModerationOptions()));
+	const shouldBlurAvatar = createMemo(() => {
+		const ui = getModerationUI(causes(), ContextProfileMedia);
+		return ui.b.length > 0;
+	});
+
 	return (
 		<div class="flex min-w-0 gap-2 py-2">
 			<div class="relative flex shrink-0 flex-col items-center">
@@ -60,7 +76,13 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 					to={authorPermalink}
 					class="h-5 w-5 overflow-hidden rounded-full bg-muted-fg hover:opacity-80"
 				>
-					<img src={author.avatar.value || DefaultAvatar} class="h-full w-full object-cover" />
+					<img
+						src={author.avatar.value || DefaultAvatar}
+						class={clsx([
+							'h-full w-full object-cover',
+							!!author.avatar.value && shouldBlurAvatar() && `blur`,
+						])}
+					/>
 				</Link>
 
 				{hasChildren && <div class="absolute -bottom-2 left-2 top-6 grow border-l-2 border-muted" />}
@@ -105,7 +127,7 @@ const PostTreeItem = (props: PostTreeItemProps) => {
 					</div>
 				</div>
 
-				<PostContent post={post} permalink={postPermalink} />
+				<PostContent post={post} permalink={postPermalink} causes={causes} />
 
 				<div class="-ml-1 mt-1.5 flex items-center gap-1 text-muted-fg">
 					<ReplyAction post={post}>
@@ -175,43 +197,59 @@ export default PostTreeItem;
 interface PostContentProps {
 	post: SignalizedPost;
 	permalink: PostLinking;
+	causes: Accessor<ModerationCause[]>;
 }
 
-const PostContent = ({ post, permalink }: PostContentProps) => {
-	let content: HTMLDivElement | undefined;
+const PostContent = ({ post, permalink, causes }: PostContentProps) => {
+	const embed = post.embed;
+
+	const ui = createMemo(() => getModerationUI(causes(), ContextContentList));
 
 	return (
 		<>
-			<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
-				<RichTextRenderer
-					item={post}
-					get={(item) => {
-						const record = item.record.value;
-						return { t: record.text, f: record.facets };
-					}}
-				/>
-			</div>
+			<ContentWarning
+				ui={ui()}
+				containerClass="mt-2"
+				innerClass="mt-3"
+				children={(() => {
+					let content: HTMLDivElement | undefined;
 
-			<Link
-				ref={(node) => {
-					node.style.display = post.$truncated !== false ? 'block' : 'none';
+					return (
+						<>
+							<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
+								<RichTextRenderer
+									item={post}
+									get={(item) => {
+										const record = item.record.value;
+										return { t: record.text, f: record.facets };
+									}}
+								/>
+							</div>
 
-					createEffect(() => {
-						const delta = content!.scrollHeight - content!.clientHeight;
+							<Link
+								ref={(node) => {
+									node.style.display = post.$truncated !== false ? 'block' : 'none';
 
-						const next = delta > 10 && !!post.record.value.text;
+									createEffect(() => {
+										const delta = content!.scrollHeight - content!.clientHeight;
 
-						post.$truncated = next;
-						node.style.display = next ? 'block' : 'none';
-					});
-				}}
-				to={permalink}
-				class="text-sm text-accent hover:underline"
-			>
-				Show more
-			</Link>
+										const next = delta > 10 && !!post.record.value.text;
 
-			{post.embed.value && <Embed post={post} />}
+										post.$truncated = next;
+										node.style.display = next ? 'block' : 'none';
+									});
+								}}
+								to={permalink}
+								class="text-sm text-accent hover:underline"
+							>
+								Show more
+							</Link>
+
+							{embed.value && <Embed post={post} />}
+						</>
+					);
+				})()}
+			/>
 		</>
 	);
 };
