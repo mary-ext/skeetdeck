@@ -29,7 +29,7 @@
 		"solid-floating-ui": "^0.2.1",
 		"solid-js": "^1.8.17",
 		"solid-textarea-autosize": "^0.0.5",
-		"tldts": "^6.1.21"
+		"tldts": "^6.1.22"
 	},
 	"devDependencies": {
 		"@types/dom-close-watcher": "^1.0.0",
