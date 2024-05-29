@@ -1,6 +1,6 @@
 import { QueryClient } from '@tanstack/query-core';
 
-import { createContext, onCleanup, useContext, type JSX } from 'solid-js';
+import { createContext, onCleanup, onMount, useContext, type JSX } from 'solid-js';
 
 export const QueryClientContext = createContext<QueryClient>();
 
@@ -26,8 +26,10 @@ export interface QueryClientProviderProps {
 export const QueryClientProvider = (props: QueryClientProviderProps): JSX.Element => {
 	const client = props.client;
 
-	client.mount();
-	onCleanup(() => client.unmount());
+	onMount(() => {
+		client.mount();
+		onCleanup(() => client.unmount());
+	});
 
 	return <QueryClientContext.Provider value={client}>{props.children}</QueryClientContext.Provider>;
 };
