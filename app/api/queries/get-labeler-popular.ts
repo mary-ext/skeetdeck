@@ -17,17 +17,17 @@ const dids: string[] = [
 	'did:plc:jcce2sa3fgue4wiocvf7e7xj', // labeler.flicknow.xyz
 	'did:plc:mjyeurqmqjeexbgigk3yytvb', // nogifsplease.bsky.social
 	'did:plc:5o2g6wwchb3tgwrhl2atauzu', // moderation.tripazeada.club
-	'did:plc:3ehw5dwwptcy3xuzugwq2u6t', // stopthebeans.haileyok.com
 	'did:plc:z3yk2cflhmn6vmzo3f5ixqh4', // yardcrow.com
+	'did:plc:3ehw5dwwptcy3xuzugwq2u6t', // stopthebeans.haileyok.com
 	'did:plc:vnzvtgtwden4hpeierfcfan2', // atproto-spoilers.bsky.social
 	'did:plc:5bs7ob2txc2fub2ikvkjgkaf', // labeller.iftas.org
 	'did:plc:36inn6r2ttwfrt6tpywsjcmt', // phobial.mastod.one
 	'did:plc:3eivfiql4memqxkryeu4tqnk', // mod.shawn.party
 	'did:plc:z2i5ah5elywxdcr64i7xai3z', // lavka.bsky.social
 	'did:plc:eeptyms6w2crpi6h73ok7qjt', // labeler.shreyanjain.net
+	'did:plc:skibpmllbhxvbvwgtjxl3uao', // anti-aging.bsky.social
 	'did:plc:fcikraffwejtuqffifeykcml', // ff14labeler.bsky.social
 	'did:plc:cnn3jrtucivembf66xe6fdfs', // moderation.moe
-	'did:plc:skibpmllbhxvbvwgtjxl3uao', // anti-aging.bsky.social
 	'did:plc:olmiw2wkm3qoxinal7w5fbnl', // blue-cosmos.bsky.social
 	'did:plc:oz5zavafp7szpd2yyko57ccz', // divylabeler.bsky.social
 	'did:plc:j2zujaxuq33c7nbcqyvgvyvk', // nexus-labeler.bsky.social
@@ -38,8 +38,8 @@ const dids: string[] = [
 	'did:plc:e2pq4mw6ivyle3lavxptuh56', // ohnozone.bsky.social
 	'did:plc:7fkqmr7dfu6vanyxvjtloos3', // hblabeler.bsky.social
 	'did:plc:bqcfe3frnfpte7udjaojhddt', // bka.li
-	'did:plc:j3axwmdgrvnd73yrlemynsne', // labeler.launchpadx.top
 	'did:plc:4ffrdzuhiq4coouadh5btkbf', // papercut.rodeo
+	'did:plc:j3axwmdgrvnd73yrlemynsne', // labeler.launchpadx.top
 	'did:plc:ar7c4by46qjdydhdevvrndac', // moderation.bsky.app
 	'did:plc:exlb5xx2t4pgtjqzdm6ntsgh', // exml.bsky.social
 	'did:plc:l2s5mv6h2j5gyoacsxdxdfom', // labeler.divy.zone
@@ -53,6 +53,8 @@ const dids: string[] = [
 	'did:plc:mcskx665cnmnkgqnunk6lkrk', // wyvern.blue
 	'did:plc:pozgajl56zcftf6nzps46z65', // abandoned293487398.bsky.social
 	'did:plc:d5dgzxlv5pbpwzkahhdexoce', // gifblock.flop.quest
+	'did:plc:cug2evrqa3nhdbvlfd2cvtky', // flatlander.social
+	'did:plc:d26oolevqznqar5vjjkkkcwa', // moderation.foxhole.lgbt
 	'did:plc:qjehb7vyu2hw7mtm4qjsh4h4', // peopleofnz.bsky.social
 	'did:plc:fckjqanjagumq5qw4ozwj7go', // matsui0000.bsky.social
 	'did:plc:lydl7umexooxibfhdtwcijn2', // moderation.veryun.cool
