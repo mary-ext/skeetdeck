@@ -1,6 +1,6 @@
 import { createMemo, For, type JSX } from 'solid-js';
 
-import { getPrivilegedAccounts, isAccountPrivileged, multiagent } from '~/api/globals/agent';
+import { getPrivilegedAccounts } from '~/api/globals/agent';
 
 import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
 import SettingsOutlinedIcon from '~/com/icons/outline-settings';

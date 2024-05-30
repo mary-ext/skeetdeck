@@ -185,7 +185,7 @@ export class Multiagent {
 				auth,
 			};
 
-			this.#agents[did]?.c();
+			this.#agents[did as At.DID]?.c();
 			this.#agents[did] = stored;
 			return did;
 		} catch (err) {

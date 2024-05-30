@@ -1,6 +1,5 @@
 import { makeEventListener } from '@solid-primitives/event-listener';
 import {
-	ErrorBoundary,
 	For,
 	Show,
 	createEffect,
