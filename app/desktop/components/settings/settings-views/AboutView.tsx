@@ -3,11 +3,11 @@ import { registration } from '~/utils/service-worker';
 import Banner from '~/com/assets/banner.jpg?url';
 
 const BRAND_NAME = import.meta.env.VITE_BRAND_NAME;
-const BRAND_VERSION = import.meta.env.VITE_BRAND_VERSION;
 
-const GIT_SOURCE = import.meta.env.VITE_GIT_SOURCE;
-const GIT_COMMIT = import.meta.env.VITE_GIT_COMMIT;
-const GIT_BRANCH = import.meta.env.VITE_GIT_BRANCH;
+const BRAND_VERSION = window.ENV.VERSION;
+const GIT_SOURCE = window.ENV.GIT_SOURCE;
+const GIT_COMMIT = window.ENV.GIT_COMMIT;
+const GIT_BRANCH = window.ENV.GIT_BRANCH;
 
 const AboutView = () => {
 	return (

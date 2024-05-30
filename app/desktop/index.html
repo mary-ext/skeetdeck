@@ -5,6 +5,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>%VITE_BRAND_NAME%</title>
 		<link rel="icon" href="/favicon.png" />
+		<script type="module">
+			window.ENV = {
+				VERSION: '%VITE_BRAND_VERSION%',
+				GIT_SOURCE: '%VITE_GIT_SOURCE%',
+				GIT_COMMIT: '%VITE_GIT_COMMIT%',
+				GIT_BRANCH: '%VITE_GIT_BRANCH%',
+			};
+		</script>
 		<script type="module" src="./main.tsx"></script>
 	</head>
 
