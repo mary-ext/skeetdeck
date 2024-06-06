@@ -29,12 +29,12 @@
 		"solid-floating-ui": "^0.2.1",
 		"solid-js": "^1.8.17",
 		"solid-textarea-autosize": "^0.0.5",
-		"tldts": "^6.1.22"
+		"tldts": "^6.1.24"
 	},
 	"devDependencies": {
 		"@types/dom-close-watcher": "^1.0.0",
 		"@types/dom-navigation": "^1.0.3",
-		"@types/node": "^20.12.12",
+		"@types/node": "^20.14.2",
 		"autoprefixer": "^10.4.19",
 		"babel-plugin-transform-typescript-const-enums": "^0.1.0",
 		"postcss": "^8.4.38",
@@ -42,6 +42,6 @@
 		"vite": "^5.2.11",
 		"vite-plugin-pwa": "0.17.4",
 		"vite-plugin-solid": "^2.10.2",
-		"wrangler": "^3.57.1"
+		"wrangler": "^3.59.0"
 	}
 }
