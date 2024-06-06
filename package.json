@@ -17,7 +17,7 @@
 			"vite-plugin-pwa@0.17.4": "patches/vite-plugin-pwa@0.17.4.patch",
 			"solid-js@1.8.17": "patches/solid-js@1.8.17.patch",
 			"workbox-precaching@7.1.0": "patches/workbox-precaching@7.1.0.patch",
-			"vite@5.2.11": "patches/vite@5.2.11.patch"
+			"vite@5.2.12": "patches/vite@5.2.12.patch"
 		},
 		"overrides": {
 			"hasown": "npm:@nolyfill/hasown@latest",

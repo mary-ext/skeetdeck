@@ -14,7 +14,7 @@
 		"@mary/atproto-cid": "npm:@jsr/mary__atproto-cid@^0.1.4",
 		"@mary/atproto-tid": "npm:@jsr/mary__atproto-tid@^0.1.1",
 		"@mary/base32": "npm:@jsr/mary__base32@^0.1.0",
-		"@mary/bluesky-client": "npm:@jsr/mary__bluesky-client@^0.5.17",
+		"@mary/bluesky-client": "npm:@jsr/mary__bluesky-client@^0.5.21",
 		"@mary/emoji-db": "workspace:@externdefs/emoji-db@^",
 		"@mary/exif-rm": "npm:@jsr/mary__exif-rm@^0.2.1",
 		"@mary/solid-freeze": "workspace:@externdefs/solid-freeze@^",
@@ -29,7 +29,7 @@
 		"solid-floating-ui": "^0.2.1",
 		"solid-js": "^1.8.17",
 		"solid-textarea-autosize": "^0.0.5",
-		"tldts": "^6.1.24"
+		"tldts": "^6.1.25"
 	},
 	"devDependencies": {
 		"@types/dom-close-watcher": "^1.0.0",
@@ -38,8 +38,8 @@
 		"autoprefixer": "^10.4.19",
 		"babel-plugin-transform-typescript-const-enums": "^0.1.0",
 		"postcss": "^8.4.38",
-		"terser": "^5.31.0",
-		"vite": "^5.2.11",
+		"terser": "^5.31.1",
+		"vite": "^5.2.12",
 		"vite-plugin-pwa": "0.17.4",
 		"vite-plugin-solid": "^2.10.2",
 		"wrangler": "^3.59.0"
