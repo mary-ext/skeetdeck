@@ -89,7 +89,7 @@ const ViewDraftsDialog = lazy(() => import('./dialogs/ViewDraftsDialog'));
 let cidPromise: Promise<typeof import('./utils/cid.ts')>;
 
 const GRAPHEME_LIMIT = 300;
-const MAX_THREAD_LIMIT = 9;
+const MAX_THREAD_LIMIT = 25;
 const MAX_IMAGE_LIMIT = 4;
 const MAX_EXTERNAL_TAGS_LIMIT = 8;
 
