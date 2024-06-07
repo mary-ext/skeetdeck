@@ -1,4 +1,10 @@
-import { QueryObserver, type DefaultError, type QueryClient, type QueryKey } from '@tanstack/query-core';
+import {
+	QueryObserver,
+	type DataTag,
+	type DefaultError,
+	type QueryClient,
+	type QueryKey,
+} from '@tanstack/query-core';
 
 import { createBaseQuery } from './createBaseQuery.ts';
 import type {
@@ -14,47 +20,39 @@ type UndefinedInitialDataOptions<
 	TError = DefaultError,
 	TData = TQueryFnData,
 	TQueryKey extends QueryKey = QueryKey,
-> = QueryAccessor<
-	SolidQueryOptions<TQueryFnData, TError, TData, TQueryKey> & {
-		initialData?: undefined;
-	}
->;
+> = SolidQueryOptions<TQueryFnData, TError, TData, TQueryKey> & {
+	initialData?: undefined;
+};
 
 type DefinedInitialDataOptions<
 	TQueryFnData = unknown,
 	TError = DefaultError,
 	TData = TQueryFnData,
 	TQueryKey extends QueryKey = QueryKey,
-> = QueryAccessor<
-	SolidQueryOptions<TQueryFnData, TError, TData, TQueryKey> & {
-		initialData: TQueryFnData | (() => TQueryFnData);
-	}
->;
+> = SolidQueryOptions<TQueryFnData, TError, TData, TQueryKey> & {
+	initialData: TQueryFnData | (() => TQueryFnData);
+};
 
 export function queryOptions<
 	TQueryFnData = unknown,
-	TError = unknown,
+	TError = DefaultError,
 	TData = TQueryFnData,
 	TQueryKey extends QueryKey = QueryKey,
-	TOptions extends UndefinedInitialDataOptions<
-		TQueryFnData,
-		TError,
-		TData,
-		TQueryKey
-	> = UndefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>,
->(options: TOptions): TOptions;
+>(
+	options: DefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>,
+): DefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey> & {
+	queryKey: DataTag<TQueryKey, TQueryFnData>;
+};
 export function queryOptions<
 	TQueryFnData = unknown,
-	TError = unknown,
+	TError = DefaultError,
 	TData = TQueryFnData,
 	TQueryKey extends QueryKey = QueryKey,
-	TOptions extends DefinedInitialDataOptions<
-		TQueryFnData,
-		TError,
-		TData,
-		TQueryKey
-	> = DefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>,
->(options: TOptions): TOptions;
+>(
+	options: UndefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>,
+): UndefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey> & {
+	queryKey: DataTag<TQueryKey, TQueryFnData>;
+};
 export function queryOptions(options: unknown) {
 	return options;
 }
@@ -65,7 +63,7 @@ export function createQuery<
 	TData = TQueryFnData,
 	TQueryKey extends QueryKey = QueryKey,
 >(
-	options: UndefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>,
+	options: QueryAccessor<UndefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>>,
 	queryClient?: QueryClient,
 ): CreateQueryResult<TData, TError>;
 
@@ -75,7 +73,7 @@ export function createQuery<
 	TData = TQueryFnData,
 	TQueryKey extends QueryKey = QueryKey,
 >(
-	options: DefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>,
+	options: QueryAccessor<DefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>>,
 	queryClient?: QueryClient,
 ): DefinedCreateQueryResult<TData, TError>;
 export function createQuery<
