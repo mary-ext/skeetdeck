@@ -292,7 +292,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 				class={
 					/* @once */ clsx([
 						`absolute inset-0 z-0 whitespace-pre-wrap break-words`,
-						type === 'post' && `pb-2 pr-4`,
+						type === 'post' && `pb-2 pr-4 pt-1`,
 						type === 'textarea' && `px-3 py-[0.45rem]`,
 						// type === 'dm' && `py-2.5`,
 					])
@@ -314,7 +314,7 @@ const RichtextComposer = (props: RichtextComposerProps) => {
 				class={
 					/* @once */ clsx([
 						`relative z-10 block w-full resize-none overflow-hidden bg-transparent text-transparent caret-primary outline-none placeholder:text-muted-fg`,
-						type === 'post' && `pb-2 pr-4`,
+						type === 'post' && `pb-2 pr-4 pt-1`,
 						type === 'textarea' && `px-3 py-[0.45rem]`,
 						// type === 'dm' && `py-2.5`,
 					])

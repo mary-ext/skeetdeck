@@ -75,7 +75,13 @@ import { useComposer } from './ComposerContext';
 import DummyPost from './DummyPost';
 import TagsInput from './TagInput';
 
-import { createComposerState, createPostState, getPostRt, isStateFilled } from './utils/state';
+import {
+	createComposerState,
+	createPostState,
+	getPostRt,
+	isStateFilled,
+	type PostState,
+} from './utils/state';
 
 import ContentWarningAction from './actions/ContentWarningAction';
 import PostLanguageAction from './actions/PostLanguageAction';
@@ -941,52 +947,7 @@ const ComposerPane = () => {
 									)}
 								</div>
 
-								<div class="min-w-0 grow">
-									{/* Post header */}
-									{(() => {
-										const $author = account();
-
-										if ($author) {
-											return (
-												<div class="mb-0.5 flex items-center gap-1 pr-4 text-sm text-muted-fg">
-													{$author.profile?.displayName && (
-														<bdi class="overflow-hidden text-ellipsis whitespace-nowrap">
-															<span class="font-bold text-primary">{$author.profile.displayName}</span>
-														</bdi>
-													)}
-
-													<span class="overflow-hidden text-ellipsis whitespace-nowrap">
-														{'@' + $author.session.handle}
-													</span>
-
-													<div class="grow"></div>
-
-													{index() !== 0 && length() === 0 && (
-														<button
-															title="Remove this post"
-															onClick={(ev) => {
-																{
-																	const target = ev.currentTarget;
-																	const parent = target.closest(`[data-targets~=${inputId}]`)!;
-
-																	const prev = parent.previousElementSibling!;
-																	prev.querySelector(`textarea`)?.focus();
-																}
-
-																posts.splice(index(), 1);
-															}}
-															class={
-																/* @once */ IconButton({ edge: 'right', color: 'muted', class: '-my-1.5' })
-															}
-														>
-															<CloseIcon />
-														</button>
-													)}
-												</div>
-											);
-										}
-									})()}
-
+								<div class="relative min-w-0 grow">
 									{/* Composer */}
 									<RichtextComposer
 										ref={(node) => {
@@ -1010,6 +971,35 @@ const ComposerPane = () => {
 										onImageDrop={addImages}
 										onSubmit={handleSubmitPrereq}
 									/>
+
+									{length() === 0 && hasBeforeOrAfter(posts, index()) && (
+										<button
+											title="Remove this post"
+											onClick={(ev) => {
+												{
+													const target = ev.currentTarget;
+													const parent = target.closest(`[data-targets~=${inputId}]`)!;
+
+													let node: HTMLElement;
+
+													if (index() === 0) {
+														node = parent.nextElementSibling! as HTMLElement;
+													} else {
+														node = parent.previousElementSibling! as HTMLElement;
+													}
+
+													node.querySelector(`textarea`)?.focus();
+												}
+
+												posts.splice(index(), 1);
+											}}
+											class={
+												/* @once */ IconButton({ color: 'muted', class: 'absolute -top-0.5 right-2 z-10' })
+											}
+										>
+											<CloseIcon />
+										</button>
+									)}
 
 									{/* Tags */}
 									<div class="mb-2 mr-4">
@@ -1294,6 +1284,10 @@ const ComposerPane = () => {
 			</fieldset>
 		</div>
 	);
+};
+
+const hasBeforeOrAfter = (posts: PostState[], index: number) => {
+	return index !== 0 || posts.length > 1;
 };
 
 export default ComposerPane;
