@@ -118,7 +118,13 @@ const NewChannelView = ({}: ViewParams<ViewKind.NEW_CHANNEL>) => {
 					data={query().data}
 					error={query().error}
 					render={(profile) => {
+						const viewer = profile.viewer;
+
 						const canMessage = createMemo(() => {
+							if (profile.did === did || viewer.blocking.value || viewer.blockedBy.value) {
+								return false;
+							}
+
 							const allowed = profile.associated.value.chat.allowIncoming;
 
 							if (allowed === 'all') {
@@ -138,7 +144,11 @@ const NewChannelView = ({}: ViewParams<ViewKind.NEW_CHANNEL>) => {
 									onClick={() => mutation.mutate({ actor: profile.did })}
 									small
 									footer={{
-										render: () => {
+										render() {
+											if (profile.did === did) {
+												return <p class="text-sm">You can't message yourself, silly.</p>;
+											}
+
 											if (!canMessage()) {
 												return <p class="text-sm">You can't message this user</p>;
 											}

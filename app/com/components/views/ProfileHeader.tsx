@@ -70,7 +70,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 	});
 
 	const canMessage = createMemo((): boolean => {
-		if (viewer.blocking.value || viewer.blockedBy.value) {
+		if (profile.did === profile.uid || viewer.blocking.value || viewer.blockedBy.value) {
 			return false;
 		}
 
