@@ -69,7 +69,11 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 		return ui.b.length > 0;
 	});
 
-	const canMessage = createMemo(() => {
+	const canMessage = createMemo((): boolean => {
+		if (viewer.blocking.value || viewer.blockedBy.value) {
+			return false;
+		}
+
 		const account = getAccountData(profile.uid)!;
 		if (!isAccountPrivileged(account)) {
 			return false;
