@@ -943,7 +943,7 @@ const ComposerPane = () => {
 									</SwitchAccountAction>
 
 									{posts.length !== 1 && (
-										<span class="mt-2 text-xs font-medium text-muted-fg">
+										<span class="mt-1 text-xs font-medium text-muted-fg">
 											{index() + 1}/{posts.length}
 										</span>
 									)}
