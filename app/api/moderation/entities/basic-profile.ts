@@ -1,5 +1,3 @@
-import { sequal } from '~/utils/dequal';
-
 import type { AppBskyActorDefs } from '../../atp-schema';
 
 import {
@@ -10,7 +8,6 @@ import {
 	type ModerationCause,
 	type ModerationOptions,
 } from '..';
-import { cache } from './_shared';
 
 type ProfileView =
 	| AppBskyActorDefs.ProfileView
@@ -18,17 +15,6 @@ type ProfileView =
 	| AppBskyActorDefs.ProfileViewDetailed;
 
 export const decideBasicProfile = (view: ProfileView, opts: ModerationOptions) => {
-	const key: unknown[] = [opts];
-
-	let res = cache.get(view);
-	if (!res || !sequal(res.c, key)) {
-		cache.set(view, (res = { r: decideBasicProfileUncached(view, opts), c: key }));
-	}
-
-	return res.r;
-};
-
-export const decideBasicProfileUncached = (view: ProfileView, opts: ModerationOptions) => {
 	const accu: ModerationCause[] = [];
 	const did = view.did;
 
