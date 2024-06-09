@@ -21,8 +21,6 @@ export interface EmbedLinkProps {
 	interactive?: boolean;
 }
 
-const snippets = new WeakMap<EmbedLinkData, Snippet>();
-
 const EmbedLink = (props: EmbedLinkProps) => {
 	return (() => {
 		const interactive = props.interactive;
@@ -30,11 +28,7 @@ const EmbedLink = (props: EmbedLinkProps) => {
 
 		const thumb = link.thumb;
 
-		let snippet = snippets.get(link);
-		if (snippet === undefined) {
-			snippets.set(link, (snippet = detectSnippet(link)));
-		}
-
+		const snippet = detectSnippet(link);
 		const t = snippet.t;
 
 		if (t === SnippetType.BLUESKY_GIF) {
