@@ -1,4 +1,4 @@
-import { For, Match, Switch, type JSX } from 'solid-js';
+import { For, Match, Switch, untrack, type JSX } from 'solid-js';
 
 import { getQueryErrorInfo } from '~/api/utils/query';
 
@@ -45,7 +45,16 @@ const List = <T,>(props: ListProps<T>) => {
 				</Match>
 			</Switch>
 
-			<For each={props.data} fallback={(() => props.data && props.fallback) as unknown as JSX.Element}>
+			<For
+				each={props.data}
+				fallback={
+					(() => {
+						if (props.data && (props.manualScroll || !props.hasNextPage)) {
+							return untrack(() => props.fallback);
+						}
+					}) as unknown as JSX.Element
+				}
+			>
 				{render}
 			</For>
 
