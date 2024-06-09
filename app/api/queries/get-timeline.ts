@@ -73,13 +73,8 @@ export type TimelineParams =
 	| ProfileTimelineParams
 	| SearchTimelineParams;
 
-export interface TimelinePageCursor {
-	key: string | null;
-	remaining: TimelineSlice[];
-}
-
 export interface TimelinePage {
-	cursor: TimelinePageCursor | undefined;
+	cursor: string | undefined;
 	cid: string | undefined;
 	slices: TimelineSlice[];
 }
@@ -91,40 +86,14 @@ export interface TimelineLatestResult {
 type PostRecord = AppBskyFeedPost.Record;
 
 //// Feed query
-// How many attempts it should try looking for more items before it gives up on empty pages.
-const MAX_EMPTY = 3;
-
-const MAX_POSTS = 30;
-
-const countPosts = (slices: TimelineSlice[], limit?: number) => {
-	let count = 0;
-
-	let idx = 0;
-	let len = slices.length;
-
-	for (; idx < len; idx++) {
-		const slice = slices[idx];
-		count += slice.items.length;
-
-		if (limit !== undefined && count >= limit) {
-			return idx;
-		}
-	}
-
-	if (limit !== undefined) {
-		return len;
-	}
-
-	return count;
-};
+const MAX_POSTS = 50;
 
 export const getTimelineKey = (uid: At.DID, params: TimelineParams, limit = MAX_POSTS) => {
 	return ['getTimeline', uid, params, limit] as const;
 };
 export const getTimeline = wrapInfiniteQuery(
-	async (ctx: QC<ReturnType<typeof getTimelineKey>, TimelinePageCursor | undefined>) => {
+	async (ctx: QC<ReturnType<typeof getTimelineKey>, string | undefined>) => {
 		const [, uid, params, limit] = ctx.queryKey;
-		const pageParam = ctx.pageParam;
 
 		const { language, moderation } = ctx.meta || {};
 
@@ -132,21 +101,11 @@ export const getTimeline = wrapInfiniteQuery(
 
 		const agent = await multiagent.connect(uid);
 
-		let empty = 0;
-		let cid: string | undefined;
-
-		let cursor: string | null | undefined;
+		let cursor = ctx.pageParam;
 		let items: TimelineSlice[] = [];
-		let count = 0;
 
 		let sliceFilter: SliceFilter | undefined | null;
 		let postFilter: PostFilter | undefined;
-
-		if (pageParam) {
-			cursor = pageParam.key;
-			items = pageParam.remaining;
-			count = countPosts(items);
-		}
 
 		if (type === 'home') {
 			sliceFilter = createHomeSliceFilter(uid, params.showReplies === 'follows');
@@ -191,38 +150,18 @@ export const getTimeline = wrapInfiniteQuery(
 			postFilter = createLabelPostFilter(moderation);
 		}
 
-		while (cursor !== null && count < limit) {
-			const timeline = await fetchPage(agent, params, limit, cursor, ctx);
+		const timeline = await fetchPage(agent, params, limit, cursor, ctx);
 
-			const feed = timeline.feed;
-			const result =
-				sliceFilter !== null
-					? createTimelineSlices(uid, feed, sliceFilter, postFilter)
-					: createUnjoinedSlices(uid, feed, postFilter);
-
-			cursor = timeline.cursor || null;
-			empty = result.length > 0 ? 0 : empty + 1;
-			items = items.concat(result);
-
-			count += countPosts(result);
-
-			cid ||= feed.length > 0 ? feed[0].post.cid : undefined;
-
-			if (empty >= MAX_EMPTY) {
-				break;
-			}
-		}
-
-		// we're still slicing by the amount of slices and not amount of posts
-		const spliced = countPosts(items, limit) + 1;
-
-		const slices = items.slice(0, spliced);
-		const remaining = items.slice(spliced);
+		const feed = timeline.feed;
+		const result =
+			sliceFilter !== null
+				? createTimelineSlices(uid, feed, sliceFilter, postFilter)
+				: createUnjoinedSlices(uid, feed, postFilter);
 
 		const page: TimelinePage = {
-			cursor: cursor || remaining.length > 0 ? { key: cursor || null, remaining: remaining } : undefined,
-			cid: cid,
-			slices: slices,
+			cursor: timeline.cursor,
+			cid: feed.length > 0 ? feed[0].post.cid : undefined,
+			slices: result,
 		};
 
 		return page;
