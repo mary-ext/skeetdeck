@@ -365,6 +365,7 @@ interface PostContentProps {
 
 const PostContent = ({ post, postPermalink, causes, ignoreMute }: PostContentProps) => {
 	const embed = post.embed;
+	const record = post.record;
 
 	const ui = createMemo(() => getModerationUI(causes(), ContextContentList));
 
@@ -383,13 +384,7 @@ const PostContent = ({ post, postPermalink, causes, ignoreMute }: PostContentPro
 					return (
 						<>
 							<div ref={content} class="line-clamp-[12] whitespace-pre-wrap break-words text-sm">
-								<RichTextRenderer
-									item={post}
-									get={(item) => {
-										const record = item.record.value;
-										return { t: record.text, f: record.facets };
-									}}
-								/>
+								<RichTextRenderer text={record.value.text} facets={record.value.facets} />
 							</div>
 
 							<Link

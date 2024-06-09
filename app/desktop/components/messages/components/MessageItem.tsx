@@ -42,7 +42,7 @@ const MessageItem = ({ convo, item, tail }: MessageItemProps) => {
 					}
 				>
 					<div class="whitespace-pre-wrap break-words text-sm">
-						<RichTextRenderer item={item} get={(item) => ({ t: item.text, f: item.facets })} />
+						<RichTextRenderer text={/* @once */ item.text} facets={/* @once */ item.facets} />
 					</div>
 				</div>
 

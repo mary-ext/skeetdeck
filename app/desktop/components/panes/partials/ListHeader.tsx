@@ -89,12 +89,7 @@ const ListHeader = (props: ListHeaderProps) => {
 					</div>
 
 					<p class="whitespace-pre-wrap break-words text-sm empty:hidden">
-						<RichTextRenderer
-							item={list}
-							get={(item) => {
-								return { t: item.description.value || '', f: item.descriptionFacets.value };
-							}}
-						/>
+						<RichTextRenderer text={list.description.value ?? ''} facets={list.descriptionFacets.value} />
 					</p>
 
 					<div class="flex gap-2 empty:hidden">

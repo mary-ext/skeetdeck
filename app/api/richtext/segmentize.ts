@@ -1,45 +1,23 @@
-import type { Facet, LinkFeature, MentionFeature, RichTextSegment, TagFeature } from './types';
+import type { Facet, FacetFeature } from './types';
 import { createUtfString, getUtf8Length, sliceUtf8 } from './unicode';
 
-export interface RichTextOptions {
+export interface RichtextSegment {
 	text: string;
-	facets?: Facet[];
-	cleanNewLines?: boolean;
+	feature: FacetFeature | undefined;
 }
 
-const createSegment = (text: string, facet?: Facet): RichTextSegment => {
-	let link: LinkFeature | undefined;
-	let mention: MentionFeature | undefined;
-	let tag: TagFeature | undefined;
-
-	if (facet) {
-		const features = facet.features;
-
-		for (let idx = 0, len = features.length; idx < len; idx++) {
-			const feature = features[idx];
-			const type = feature.$type;
-
-			if (type === 'app.bsky.richtext.facet#link') {
-				link = feature;
-			} else if (type === 'app.bsky.richtext.facet#mention') {
-				mention = feature;
-			} else if (type === 'app.bsky.richtext.facet#tag') {
-				tag = feature;
-			}
-		}
-	}
-
-	return { text, link, mention, tag };
+const createSegment = (text: string, feature: FacetFeature | undefined): RichtextSegment => {
+	return { text: text, feature: feature };
 };
 
-export const segmentRichText = (rtText: string, facets: Facet[] | undefined) => {
-	if (!facets || facets.length < 1) {
-		return [createSegment(rtText)];
+export const segmentRichText = (rtText: string, facets: Facet[] | undefined): RichtextSegment[] => {
+	if (facets === undefined || facets.length === 0) {
+		return [createSegment(rtText, undefined)];
 	}
 
 	const text = createUtfString(rtText);
 
-	const segments: RichTextSegment[] = [];
+	const segments: RichtextSegment[] = [];
 	const length = getUtf8Length(text);
 
 	const facetsLength = facets.length;
@@ -52,7 +30,7 @@ export const segmentRichText = (rtText: string, facets: Facet[] | undefined) => 
 		const { byteStart, byteEnd } = facet.index;
 
 		if (textCursor < byteStart) {
-			segments.push(createSegment(sliceUtf8(text, textCursor, byteStart)));
+			segments.push(createSegment(sliceUtf8(text, textCursor, byteStart), undefined));
 		} else if (textCursor > byteStart) {
 			facetCursor++;
 			continue;
@@ -60,12 +38,12 @@ export const segmentRichText = (rtText: string, facets: Facet[] | undefined) => 
 
 		if (byteStart < byteEnd) {
 			const subtext = sliceUtf8(text, byteStart, byteEnd);
+			const features = facet.features;
 
-			if (!subtext.trim()) {
-				// dont empty string entities
-				segments.push(createSegment(subtext));
+			if (features.length === 0 || subtext.trim().length === 0) {
+				segments.push(createSegment(subtext, undefined));
 			} else {
-				segments.push(createSegment(subtext, facet));
+				segments.push(createSegment(subtext, features[0]));
 			}
 		}
 
@@ -74,7 +52,7 @@ export const segmentRichText = (rtText: string, facets: Facet[] | undefined) => 
 	} while (facetCursor < facetsLength);
 
 	if (textCursor < length) {
-		segments.push(createSegment(sliceUtf8(text, textCursor, length)));
+		segments.push(createSegment(sliceUtf8(text, textCursor, length), undefined));
 	}
 
 	return segments;

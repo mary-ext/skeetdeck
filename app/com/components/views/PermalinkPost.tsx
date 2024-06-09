@@ -106,13 +106,7 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 
 			<ContentWarning ui={ui()} ignoreMute containerClass="mb-3" outerClass="mb-3" innerClass="mt-2">
 				<div class="overflow-hidden whitespace-pre-wrap break-words text-base empty:hidden">
-					<RichTextRenderer
-						item={post}
-						get={(item) => {
-							const record = item.record.value;
-							return { t: record.text, f: record.facets };
-						}}
-					/>
+					<RichTextRenderer text={record.value.text} facets={record.value.facets} />
 				</div>
 
 				{(() => {

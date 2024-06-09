@@ -84,12 +84,7 @@ const FeedHeader = (props: FeedHeaderProps) => {
 					</div>
 
 					<p class="whitespace-pre-wrap break-words text-sm empty:hidden">
-						<RichTextRenderer
-							item={feed}
-							get={(item) => {
-								return { t: item.description.value || '', f: item.descriptionFacets.value };
-							}}
-						/>
+						<RichTextRenderer text={feed.description.value ?? ''} facets={feed.descriptionFacets.value} />
 					</p>
 
 					<Link
