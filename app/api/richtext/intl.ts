@@ -22,7 +22,7 @@ export const asciiLen = (str: string) => {
 	return len;
 };
 
-if (Intl.Segmenter) {
+if (false && Intl.Segmenter) {
 	var segmenter = new Intl.Segmenter();
 
 	_graphemeLen = (text) => {
@@ -38,6 +38,6 @@ if (Intl.Segmenter) {
 } else {
 	console.log('Intl.Segmenter API not available, falling back to polyfill...');
 
-	var { countGraphemes } = await import('./graphemer.ts');
+	var { countGraphemes } = await import('./unicode-segmenter.ts');
 	_graphemeLen = countGraphemes;
 }
