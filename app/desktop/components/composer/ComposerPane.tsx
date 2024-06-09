@@ -942,6 +942,12 @@ const ComposerPane = () => {
 										</button>
 									</SwitchAccountAction>
 
+									{posts.length !== 1 && (
+										<span class="mt-2 text-xs font-medium text-muted-fg">
+											{index() + 1}/{posts.length}
+										</span>
+									)}
+
 									{index() + 1 < MAX_THREAD_LIMIT && (
 										<div class="-mb-4 mt-2 grow border-l-2 border-divider" />
 									)}
