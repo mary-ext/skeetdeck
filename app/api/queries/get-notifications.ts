@@ -1,11 +1,9 @@
 import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
-import type { AppBskyNotificationListNotifications, At } from '../atp-schema';
+import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 import { createNotificationSlices, type NotificationSlice } from '../models/notifications';
 import { wrapInfiniteQuery } from '../utils/query';
-
-type Notification = AppBskyNotificationListNotifications.Notification;
 
 export const FILTER_FOLLOWS = 1 << 0;
 export const FILTER_LIKES = 1 << 1;
@@ -25,69 +23,40 @@ export const REASONS: Record<string, number> = {
 	repost: FILTER_REPOSTS,
 };
 
-// export interface NotificationsPageCursor {
-// 	key: string | null | undefined;
-// 	remaining: NotificationSlice[];
-// }
-
 export interface NotificationsPage {
-	cursor: string | null | undefined;
+	cursor: string | undefined;
 	slices: NotificationSlice[];
 	date: string | undefined;
 	cid: string | undefined;
 }
 
-// 2 is the minimum, 1st attempt will always fail because it's empty.
-const MAX_ATTEMPTS = 3;
-
-export const getNotificationsKey = (uid: At.DID, limit: number = 25) => {
+export const getNotificationsKey = (uid: At.DID, limit: number = 30) => {
 	return ['getNotifications', uid, limit] as const;
 };
 export const getNotifications = wrapInfiniteQuery(
-	async (ctx: QC<ReturnType<typeof getNotificationsKey>, string | null | undefined>) => {
+	async (ctx: QC<ReturnType<typeof getNotificationsKey>, string | undefined>) => {
 		const [, uid, limit] = ctx.queryKey;
 
 		const agent = await multiagent.connect(uid);
 
-		let attempts = 0;
+		const response = await agent.rpc.get('app.bsky.notification.listNotifications', {
+			signal: ctx.signal,
+			params: {
+				cursor: ctx.pageParam,
+				limit: limit,
+			},
+		});
 
-		let cursor: string | null | undefined = ctx.pageParam;
-		let items: Notification[] = [];
+		const data = response.data;
+		const notifications = data.notifications;
 
-		let slices: NotificationSlice[];
-		let cid: string | undefined;
-		let date: string | undefined;
-
-		while (true) {
-			slices = createNotificationSlices(items);
-
-			// Give up after several attempts, or if we've reached the requested limit
-			if (++attempts >= MAX_ATTEMPTS || cursor === null || slices.length > limit) {
-				break;
-			}
-
-			const response = await agent.rpc.get('app.bsky.notification.listNotifications', {
-				signal: ctx.signal,
-				params: {
-					cursor: cursor,
-					limit: limit,
-				},
-			});
-
-			const data = response.data;
-			const notifications = data.notifications;
-
-			cursor = data.cursor || null;
-			items = items.concat(notifications);
-			cid ||= notifications.length > 0 ? notifications[0].cid : undefined;
-			date ||= notifications.length > 0 ? notifications[0].indexedAt : undefined;
-		}
+		const first = notifications.length > 0 ? notifications[0] : undefined;
 
 		const page: NotificationsPage = {
-			cursor: cursor,
-			slices: slices,
-			cid: cid,
-			date: date,
+			cursor: data.cursor,
+			slices: createNotificationSlices(notifications),
+			cid: first?.cid,
+			date: first?.indexedAt,
 		};
 
 		return page;
