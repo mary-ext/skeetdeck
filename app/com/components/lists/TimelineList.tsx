@@ -1,4 +1,4 @@
-import { createEffect, createMemo } from 'solid-js';
+import { createMemo, createRenderEffect, untrack } from 'solid-js';
 
 import { createInfiniteQuery, createQuery, useQueryClient, type InfiniteData } from '@mary/solid-query';
 
@@ -75,7 +75,7 @@ const TimelineList = (props: TimelineListProps) => {
 		};
 	});
 
-	createEffect((prev: typeof timeline.data | 0) => {
+	createRenderEffect((prev: typeof timeline.data | 0) => {
 		const next = timeline.data;
 
 		if (prev !== 0 && next) {
@@ -83,9 +83,11 @@ const TimelineList = (props: TimelineListProps) => {
 			const length = pages.length;
 
 			if (length === 1) {
-				queryClient.setQueryData(getTimelineLatestKey(props.uid, props.params), {
-					cid: pages[0].cid,
-				});
+				queryClient.setQueryData(
+					getTimelineLatestKey(props.uid, props.params),
+					{ cid: pages[0].cid },
+					{ updatedAt: untrack(() => timeline.dataUpdatedAt) },
+				);
 			}
 		}
 

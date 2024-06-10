@@ -1,4 +1,4 @@
-import { For, Match, Switch, createEffect } from 'solid-js';
+import { For, Match, Switch, createRenderEffect, untrack } from 'solid-js';
 
 import { createInfiniteQuery, createQuery, useQueryClient, type InfiniteData } from '@mary/solid-query';
 
@@ -71,7 +71,7 @@ const TimelineGalleryList = (props: TimelineGalleryListProps) => {
 		};
 	});
 
-	createEffect((prev: typeof timeline.data | 0) => {
+	createRenderEffect((prev: typeof timeline.data | 0) => {
 		const next = timeline.data;
 
 		if (prev !== 0 && next) {
@@ -79,9 +79,11 @@ const TimelineGalleryList = (props: TimelineGalleryListProps) => {
 			const length = pages.length;
 
 			if (length === 1) {
-				queryClient.setQueryData(getTimelineLatestKey(props.uid, props.params), {
-					cid: pages[0].cid,
-				});
+				queryClient.setQueryData(
+					getTimelineLatestKey(props.uid, props.params),
+					{ cid: pages[0].cid },
+					{ updatedAt: untrack(() => timeline.dataUpdatedAt) },
+				);
 			}
 		}
 
