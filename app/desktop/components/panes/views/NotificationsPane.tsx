@@ -1,4 +1,4 @@
-import { createEffect, createSignal, lazy, type JSX } from 'solid-js';
+import { createRenderEffect, createSignal, lazy, untrack, type JSX } from 'solid-js';
 
 import {
 	createInfiniteQuery,
@@ -121,7 +121,7 @@ const NotificationsPane = () => {
 		};
 	});
 
-	createEffect((prev: typeof notifications.data | 0) => {
+	createRenderEffect((prev: typeof notifications.data | 0) => {
 		const next = notifications.data;
 
 		if (prev !== 0 && next) {
@@ -129,12 +129,11 @@ const NotificationsPane = () => {
 			const length = pages.length;
 
 			if (length === 1) {
-				queryClient.setQueryData<NotificationsLatestResult>(getNotificationsLatestKey(pane.uid), (prev) => {
-					return {
-						...prev!,
-						cid: pages[0].cid,
-					};
-				});
+				queryClient.setQueryData<NotificationsLatestResult>(
+					getNotificationsLatestKey(pane.uid),
+					(prev) => ({ ...prev!, cid: pages[0].cid }),
+					{ updatedAt: untrack(() => notifications.dataUpdatedAt) },
+				);
 			}
 		}
 
