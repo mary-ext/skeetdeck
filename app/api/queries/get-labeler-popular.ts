@@ -14,9 +14,9 @@ const dids: string[] = [
 	'did:plc:e4elbtctnfqocyfcml6h2lf7', // labeler.mountainherder.xyz
 	'did:plc:vrjubqujt3v46z5poehh4qfg', // taurusshield.app
 	'did:plc:wp7hxfjl5l4zlptn7y6774lk', // baatl.mastod.one
+	'did:plc:z3yk2cflhmn6vmzo3f5ixqh4', // yardcrow.com
 	'did:plc:jcce2sa3fgue4wiocvf7e7xj', // labeler.flicknow.xyz
 	'did:plc:mjyeurqmqjeexbgigk3yytvb', // nogifsplease.bsky.social
-	'did:plc:z3yk2cflhmn6vmzo3f5ixqh4', // yardcrow.com
 	'did:plc:5o2g6wwchb3tgwrhl2atauzu', // moderation.tripazeada.club
 	'did:plc:3ehw5dwwptcy3xuzugwq2u6t', // stopthebeans.haileyok.com
 	'did:plc:36inn6r2ttwfrt6tpywsjcmt', // phobial.mastod.one
@@ -33,8 +33,8 @@ const dids: string[] = [
 	'did:plc:j2zujaxuq33c7nbcqyvgvyvk', // nexus-labeler.bsky.social
 	'did:plc:gcbmhqcuvuoz7jgmlanabiuv', // label.goeo.lol
 	'did:plc:4vf7tgwlg6edds2g2nixyjda', // labeler-test.bsky.day
-	'did:plc:z7wmj3d5t7ytjf4nrh5nq6zx', // lapor.bsky.social
 	'did:plc:nyfwpkztgsrbhrjewnw2p7yo', // labeler.dovgonosyk.xyz
+	'did:plc:z7wmj3d5t7ytjf4nrh5nq6zx', // lapor.bsky.social
 	'did:plc:e2pq4mw6ivyle3lavxptuh56', // ohnozone.bsky.social
 	'did:plc:4ffrdzuhiq4coouadh5btkbf', // papercut.rodeo
 	'did:plc:7fkqmr7dfu6vanyxvjtloos3', // hblabeler.bsky.social
@@ -58,6 +58,7 @@ const dids: string[] = [
 	'did:plc:z5b7do4yl7afp7mtida66nts', // labeler.hellthread.pro
 	'did:plc:qjehb7vyu2hw7mtm4qjsh4h4', // peopleofnz.bsky.social
 	'did:plc:fckjqanjagumq5qw4ozwj7go', // matsui0000.bsky.social
+	'did:plc:bv3lcacietc6fkdokxfqtdkj', // nunnybabbit.bsky.social
 	'did:plc:lydl7umexooxibfhdtwcijn2', // moderation.veryun.cool
 	'did:plc:coynarrmyjsm2s3zkbbr5iow', // yonatanlabel.bsky.social
 ];
