@@ -4,7 +4,7 @@ import type { At } from '~/api/atp-schema';
 import { produce } from '~/utils/immer';
 
 import type { TimelineSlice } from '~/api/models/timeline';
-import type { TimelinePage, TimelinePageCursor } from '~/api/queries/get-timeline';
+import type { TimelinePage } from '~/api/queries/get-timeline';
 
 export const produceTimelineFilter = (did: At.DID) => {
 	const isSliceMatching = (slice: TimelineSlice) => {
@@ -34,22 +34,6 @@ export const produceTimelineFilter = (did: At.DID) => {
 
 				if (isSliceMatching(slice)) {
 					slices.splice(j, 1);
-				}
-			}
-		}
-
-		for (let i = 0, il = params.length; i < il; i++) {
-			const param = params[i] as TimelinePageCursor | undefined;
-
-			if (param) {
-				const slices = param.remaining;
-
-				for (let j = slices.length - 1; j >= 0; j--) {
-					const slice = slices[j];
-
-					if (isSliceMatching(slice)) {
-						slices.splice(j, 1);
-					}
 				}
 			}
 		}
