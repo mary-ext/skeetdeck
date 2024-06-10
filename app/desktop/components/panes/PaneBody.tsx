@@ -6,6 +6,7 @@ import { Interactive } from '~/com/primitives/interactive';
 import { usePaneContext } from './PaneContext';
 
 export interface PaneBodyProps {
+	ref?: (node: HTMLElement) => void;
 	autoRefresh?: boolean;
 	isScrolled?: boolean;
 	onScrolled?: (isScrolled: boolean) => void;
@@ -56,7 +57,13 @@ const PaneBody = (props: PaneBodyProps) => {
 				}
 			})()}
 
-			<div ref={ref} class="relative flex h-full flex-col overflow-y-auto">
+			<div
+				ref={(node) => {
+					ref = node;
+					props.ref?.(node);
+				}}
+				class="relative flex h-full flex-col overflow-y-auto"
+			>
 				<div
 					ref={(sentinel) => {
 						const observer = new IntersectionObserver(

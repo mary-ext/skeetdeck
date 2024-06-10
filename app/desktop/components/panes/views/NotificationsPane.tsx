@@ -47,6 +47,7 @@ const NotificationsPane = () => {
 	const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);
 
 	const { pane } = usePaneContext<NotificationsPaneConfig>();
+	let bodyEl: HTMLElement;
 
 	const queryClient = useQueryClient();
 
@@ -89,7 +90,7 @@ const NotificationsPane = () => {
 	const read = createMutation(() => {
 		return {
 			mutationKey: ['updateNotificationsSeen', pane.uid],
-			mutationFn: async () => {
+			async mutationFn() {
 				const date = notifications.data?.pages[0].date;
 
 				if (!date) {
@@ -103,7 +104,10 @@ const NotificationsPane = () => {
 
 				await updateNotificationsSeen(pane.uid, seen);
 			},
-			onSuccess: () => {
+			onMutate() {
+				bodyEl.scrollTo({ top: 0, behavior: 'auto' });
+			},
+			onSuccess() {
 				queryClient.setQueryData<NotificationsLatestResult>(getNotificationsLatestKey(pane.uid), (data) => {
 					if (data) {
 						return { ...data, read: true };
@@ -166,7 +170,7 @@ const NotificationsPane = () => {
 				</>
 			}
 		>
-			<PaneBody>
+			<PaneBody ref={(node) => (bodyEl = node)}>
 				<List
 					data={(() => {
 						const mask = pane.mask;
