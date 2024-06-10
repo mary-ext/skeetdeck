@@ -61,19 +61,28 @@ export const isLinkValid = (uri: string, text: string) => {
 	);
 };
 
-export const safeUrlParse = (uri: string) => {
-	let url: URL;
-	let protocol: string;
-	try {
-		url = new URL(uri);
-		protocol = url.protocol;
+// Check for the existence of URL.parse and use that if available, removes the
+// performance hit from try..catch blocks.
+export const safeUrlParse =
+	'parse' in URL
+		? (text: string): URL | null => {
+				// @ts-expect-error
+				const url = URL.parse(text) as URL | null;
 
-		if (protocol !== 'https:' && protocol !== 'http:') {
-			return null;
-		}
-	} catch {
-		return null;
-	}
+				if (url !== null && (url.protocol === 'https:' || url.protocol === 'http:')) {
+					return url;
+				}
 
-	return url;
-};
+				return null;
+			}
+		: (text: string): URL | null => {
+				try {
+					const url = new URL(text);
+
+					if (url.protocol === 'https:' || url.protocol === 'http:') {
+						return url;
+					}
+				} catch {}
+
+				return null;
+			};
