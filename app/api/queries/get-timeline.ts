@@ -101,9 +101,6 @@ export const getTimeline = wrapInfiniteQuery(
 
 		const agent = await multiagent.connect(uid);
 
-		let cursor = ctx.pageParam;
-		let items: TimelineSlice[] = [];
-
 		let sliceFilter: SliceFilter | undefined | null;
 		let postFilter: PostFilter | undefined;
 
@@ -112,7 +109,7 @@ export const getTimeline = wrapInfiniteQuery(
 
 			postFilter = combine([
 				createHiddenRepostFilter(moderation),
-				createDuplicatePostFilter(items),
+				createDuplicatePostFilter(),
 
 				!params.showReplies && createHideRepliesFilter(),
 				!params.showQuotes && createHideQuotesFilter(),
@@ -126,7 +123,7 @@ export const getTimeline = wrapInfiniteQuery(
 			sliceFilter = createFeedSliceFilter();
 			postFilter = combine([
 				type === 'feed' && createHiddenRepostFilter(moderation),
-				createDuplicatePostFilter(items),
+				createDuplicatePostFilter(),
 
 				!params.showReplies && createHideRepliesFilter(),
 				!params.showQuotes && createHideQuotesFilter(),
@@ -150,7 +147,7 @@ export const getTimeline = wrapInfiniteQuery(
 			postFilter = createLabelPostFilter(moderation);
 		}
 
-		const timeline = await fetchPage(agent, params, limit, cursor, ctx);
+		const timeline = await fetchPage(agent, params, limit, ctx.pageParam, ctx);
 
 		const feed = timeline.feed;
 		const result =
@@ -318,20 +315,8 @@ const combine = <T>(filters: Array<undefined | false | FilterFn<T>>): FilterFn<T
 };
 
 //// Post filters
-const createDuplicatePostFilter = (slices: TimelineSlice[]): PostFilter => {
+const createDuplicatePostFilter = (): PostFilter => {
 	const map: Record<string, boolean> = {};
-
-	for (let i = 0, il = slices.length; i < il; i++) {
-		const slice = slices[i];
-		const items = slice.items;
-
-		for (let j = 0, jl = items.length; j < jl; j++) {
-			const item = items[j];
-			const uri = item.post.uri;
-
-			map[uri] = true;
-		}
-	}
 
 	return (item) => {
 		const uri = item.post.uri;
