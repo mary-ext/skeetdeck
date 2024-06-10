@@ -1,4 +1,4 @@
-import type { MutationFilters, QueryClient } from '@tanstack/query-core';
+import { notifyManager, type MutationFilters, type QueryClient } from '@tanstack/query-core';
 
 import { createSignal, onCleanup, untrack, type Accessor } from 'solid-js';
 
@@ -8,17 +8,20 @@ export function useIsMutating(
 	filters?: Accessor<MutationFilters>,
 	queryClient?: QueryClient,
 ): Accessor<number> {
-	const client = useQueryClient(queryClient);
-	const mutationCache = client.getMutationCache();
+	return untrack(() => {
+		const client = useQueryClient(queryClient);
+		const mutationCache = client.getMutationCache();
 
-	const initialFilters = untrack(() => filters?.());
-	const [mutations, setMutations] = createSignal(client.isMutating(initialFilters));
+		const [mutations, setMutations] = createSignal(client.isMutating(filters?.()));
 
-	const unsubscribe = mutationCache.subscribe((_result) => {
-		setMutations(client.isMutating(filters?.()));
+		onCleanup(
+			mutationCache.subscribe((_result) => {
+				notifyManager.schedule(() => {
+					setMutations(client.isMutating(filters?.()));
+				});
+			}),
+		);
+
+		return mutations;
 	});
-
-	onCleanup(unsubscribe);
-
-	return mutations;
 }

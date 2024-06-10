@@ -1,21 +1,24 @@
-import type { QueryClient, QueryFilters } from '@tanstack/query-core';
+import { notifyManager, type QueryClient, type QueryFilters } from '@tanstack/query-core';
 
 import { createSignal, onCleanup, untrack, type Accessor } from 'solid-js';
 
 import { useQueryClient } from './QueryClientProvider.tsx';
 
 export function useIsFetching(filters?: Accessor<QueryFilters>, queryClient?: QueryClient): Accessor<number> {
-	const client = useQueryClient(queryClient);
-	const queryCache = client.getQueryCache();
+	return untrack(() => {
+		const client = useQueryClient(queryClient);
+		const queryCache = client.getQueryCache();
 
-	const initialFilters = untrack(() => filters?.());
-	const [fetches, setFetches] = createSignal(client.isFetching(initialFilters));
+		const [mutations, setMutations] = createSignal(client.isFetching(filters?.()));
 
-	const unsubscribe = queryCache.subscribe(() => {
-		setFetches(client.isFetching(filters?.()));
+		onCleanup(
+			queryCache.subscribe((_result) => {
+				notifyManager.schedule(() => {
+					setMutations(client.isFetching(filters?.()));
+				});
+			}),
+		);
+
+		return mutations;
 	});
-
-	onCleanup(unsubscribe);
-
-	return fetches;
 }

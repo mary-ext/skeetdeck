@@ -1,4 +1,5 @@
 import {
+	notifyManager,
 	replaceEqualDeep,
 	type DefaultError,
 	type Mutation,
@@ -8,7 +9,7 @@ import {
 	type QueryClient,
 } from '@tanstack/query-core';
 
-import { createEffect, createSignal, onCleanup, untrack, type Accessor } from 'solid-js';
+import { createSignal, onCleanup, untrack, type Accessor } from 'solid-js';
 
 import { useQueryClient } from './QueryClientProvider.tsx';
 
@@ -35,23 +36,20 @@ export function useMutationState<TResult = MutationState>(
 	options: Accessor<MutationStateOptions<TResult>> = () => ({}),
 	queryClient?: QueryClient,
 ): Accessor<Array<TResult>> {
-	const client = useQueryClient(queryClient);
-	const mutationCache = client.getMutationCache();
+	return untrack(() => {
+		const client = useQueryClient(queryClient);
+		const mutationCache = client.getMutationCache();
 
-	const initialOptions = untrack(options);
-	const [result, setResult] = createSignal(getResult(mutationCache, initialOptions));
+		const [result, setResult] = createSignal(getResult(mutationCache, options()));
 
-	createEffect(() => {
-		const unsubscribe = mutationCache.subscribe(() => {
-			const nextResult = replaceEqualDeep(result(), getResult(mutationCache, options()));
+		onCleanup(
+			mutationCache.subscribe(() => {
+				notifyManager.schedule(() => {
+					setResult((result) => replaceEqualDeep(result, getResult(mutationCache, options())));
+				});
+			}),
+		);
 
-			if (result() !== nextResult) {
-				setResult(nextResult);
-			}
-		});
-
-		onCleanup(unsubscribe);
+		return result;
 	});
-
-	return result;
 }
