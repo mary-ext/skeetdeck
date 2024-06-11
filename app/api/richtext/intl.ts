@@ -22,7 +22,7 @@ export const asciiLen = (str: string) => {
 	return len;
 };
 
-if (false && Intl.Segmenter) {
+if (Intl.Segmenter) {
 	var segmenter = new Intl.Segmenter();
 
 	_graphemeLen = (text) => {
