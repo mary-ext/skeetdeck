@@ -23,7 +23,6 @@ export const produceTimelineFilter = (did: At.DID) => {
 
 	const updateTimeline = produce((draft: InfiniteData<TimelinePage>) => {
 		const pages = draft.pages;
-		const params = draft.pageParams;
 
 		for (let i = 0, il = pages.length; i < il; i++) {
 			const page = pages[i];
