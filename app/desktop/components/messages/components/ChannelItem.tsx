@@ -118,7 +118,8 @@ const ChannelItem = (props: ChannelItemProps) => {
 								class={
 									`line-clamp-1 whitespace-pre-wrap break-words text-sm empty:hidden` +
 									(item.unread.value
-										? ` font-bold` + (item.muted.value ? ` text-muted-fg` : ``)
+										? // prettier-ignore
+											` font-bold` + (item.muted.value ? ` text-muted-fg` : ``)
 										: ` text-muted-fg`)
 								}
 							>
