@@ -26,7 +26,7 @@ import { Input } from '~/com/primitives/input';
 
 const ChooseServiceDialog = lazy(() => import('./ChooseServiceDialog'));
 
-const APP_PASSWORD_LINK = 'https://atproto.com/community/projects#app-passwords';
+const APP_PASSWORD_LINK = 'https://bsky.app/settings/app-passwords';
 
 const enum Steps {
 	IDENTIFIER,
@@ -331,7 +331,7 @@ const AddAccountDialog = () => {
 											<p class="mt-2 text-de text-muted-fg">
 												Using an app password is recommended.{' '}
 												<a target="_blank" href={APP_PASSWORD_LINK} class="text-accent hover:underline">
-													Learn more
+													Get one here
 												</a>
 											</p>
 										)}
