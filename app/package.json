@@ -14,7 +14,7 @@
 		"@mary/atproto-cid": "npm:@jsr/mary__atproto-cid@^0.1.4",
 		"@mary/atproto-tid": "npm:@jsr/mary__atproto-tid@^0.1.1",
 		"@mary/base32": "npm:@jsr/mary__base32@^0.1.0",
-		"@mary/bluesky-client": "npm:@jsr/mary__bluesky-client@^0.5.21",
+		"@mary/bluesky-client": "npm:@jsr/mary__bluesky-client@^0.5.22",
 		"@mary/emoji-db": "workspace:@externdefs/emoji-db@^",
 		"@mary/exif-rm": "npm:@jsr/mary__exif-rm@^0.2.1",
 		"@mary/solid-freeze": "workspace:@externdefs/solid-freeze@^",
