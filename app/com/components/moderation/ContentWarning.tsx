@@ -1,7 +1,5 @@
 import { createSignal, lazy, type Component, type ComponentProps, type JSX } from 'solid-js';
 
-import type { At } from '~/api/atp-schema';
-
 import {
 	CauseLabel,
 	CauseMutedKeyword,
@@ -29,7 +27,6 @@ const LabelDetailsDialog = lazy(() => import('../dialogs/LabelDetailsDialog'));
 export interface ContentWarningProps {
 	ui: ModerationUI | undefined;
 	ignoreMute?: boolean;
-	ignoreDid?: At.DID;
 	children: JSX.Element;
 	containerClass?: string;
 	innerClass?: string;

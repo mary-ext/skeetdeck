@@ -27,12 +27,13 @@ type PostRecord = AppBskyFeedPost.Record;
 
 export interface EmbedQuoteProps {
 	record: EmbeddedPostRecord;
-	causes?: ModerationCause[];
 	/** Whether it should show a large UI for image embeds */
 	large?: boolean;
 }
 
-export interface EmbedQuoteContentProps extends EmbedQuoteProps {}
+export interface EmbedQuoteContentProps extends EmbedQuoteProps {
+	causes?: ModerationCause[];
+}
 
 const getPostImages = (post: EmbeddedPostRecord) => {
 	const embeds = post.embeds;
