@@ -19,6 +19,7 @@ import {
 	LINK_PROFILE_FEEDS,
 	LINK_PROFILE_FOLLOWERS,
 	LINK_PROFILE_FOLLOWS,
+	LINK_PROFILE_KNOWN_FOLLOWERS,
 	LINK_PROFILE_LISTS,
 	LINK_PROFILE_MESSAGE,
 	LINK_QUOTE,
@@ -51,6 +52,7 @@ const PaneDialogs = {
 	[LINK_PROFILE_FEEDS]: lazy(() => import('./dialogs/ProfileFeedsPaneDialog')),
 	[LINK_PROFILE_FOLLOWERS]: lazy(() => import('./dialogs/ProfileFollowersPaneDialog')),
 	[LINK_PROFILE_FOLLOWS]: lazy(() => import('./dialogs/ProfileFollowsPaneDialog')),
+	[LINK_PROFILE_KNOWN_FOLLOWERS]: lazy(() => import('./dialogs/ProfileKnownFollowersPaneDialog')),
 	[LINK_PROFILE_LISTS]: lazy(() => import('./dialogs/ProfileListsPaneDialog')),
 	[LINK_TAG]: lazy(() => import('./dialogs/HashtagPaneDialog')),
 };

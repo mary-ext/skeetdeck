@@ -1,6 +1,7 @@
 import { createMemo, lazy, type JSX } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
+import { getAccountData, isAccountPrivileged } from '~/api/globals/agent';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import type { SignalizedProfile } from '~/api/stores/profiles';
@@ -25,12 +26,13 @@ import MailOutlinedIcon from '../../icons/outline-mail';
 import { BoxedIconButton } from '../../primitives/boxed-icon-button';
 import { Button } from '../../primitives/button';
 import {
+	Link,
 	LINK_LIST,
 	LINK_PROFILE_EDIT,
 	LINK_PROFILE_FOLLOWERS,
 	LINK_PROFILE_FOLLOWS,
+	LINK_PROFILE_KNOWN_FOLLOWERS,
 	LINK_PROFILE_MESSAGE,
-	Link,
 } from '../Link';
 
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
@@ -40,7 +42,6 @@ import ModerationAlerts from '../moderation/ModerationAlerts';
 
 import ProfileHandleAction from './profiles/ProfileHandleAction';
 import ProfileOverflowAction from './profiles/ProfileOverflowAction';
-import { getAccountData, isAccountPrivileged } from '~/api/globals/agent';
 
 const ImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog'));
 const MuteConfirmDialog = lazy(() => import('../dialogs/MuteConfirmDialog'));
@@ -55,6 +56,8 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 	const profile = props.profile;
 	const associated = profile.associated;
 	const viewer = profile.viewer;
+
+	const knownFollowers = viewer.knownFollowers;
 
 	const causes = createMemo(() => {
 		return moderateProfile(profile, getModerationOptions());
@@ -228,6 +231,51 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 						<span class="text-muted-fg">Followers</span>
 					</Link>
 				</div>
+
+				{profile.did === profile.uid || knownFollowers.value === undefined ? null : knownFollowers.value ===
+				  null ? (
+					<div class="text-de text-muted-fg">Not followed by anyone you're following</div>
+				) : (
+					<div class="flex gap-3">
+						<div class="z-0 flex shrink-0">
+							{knownFollowers.value.followers.slice(0, 3).map((profile, index) => (
+								<div
+									class={
+										`-mx-0.5 h-5 w-5 overflow-hidden rounded-full border-2 border-background bg-muted-fg` +
+										(index !== 0 ? ` -ml-1.5` : ``)
+									}
+									style={{ 'z-index': 3 - index }}
+								>
+									<img src={/* @once */ profile.avatar || DefaultAvatar} class="h-full w-full object-cover" />
+								</div>
+							))}
+						</div>
+
+						<Link
+							to={{ type: LINK_PROFILE_KNOWN_FOLLOWERS, actor: profile.did }}
+							class="text-left text-de text-muted-fg hover:underline"
+						>
+							{(() => {
+								const known = knownFollowers.value;
+
+								const slice = known.followers.slice(0, 2);
+								const count = known.count - slice.length;
+
+								let array: string[] = [];
+
+								for (const profile of slice) {
+									array.push(profile.displayName || profile.handle);
+								}
+
+								if (count > 0) {
+									array.push(`${count} others you follow`);
+								}
+
+								return `Followed by ` + new Intl.ListFormat('en-US').format(array);
+							})()}
+						</Link>
+					</div>
+				)}
 
 				{(() => {
 					const isTemporarilyMuted = isProfileTempMuted(getModerationOptions(), profile.did);

@@ -6,8 +6,11 @@ import type { AppBskyActorDefs, At, Brand } from '../atp-schema';
 type Profile = AppBskyActorDefs.ProfileView;
 type ProfileBasic = AppBskyActorDefs.ProfileViewBasic;
 type ProfileDetailed = AppBskyActorDefs.ProfileViewDetailed;
+type ProfileViewer = AppBskyActorDefs.ViewerState;
 
-type ProfileAssociated = Required<Omit<AppBskyActorDefs.ProfileAssociated, typeof Brand.Type>>;
+type ProfileAssociated = Required<Brand.Omit<AppBskyActorDefs.ProfileAssociated>>;
+
+type KnownFollowers = AppBskyActorDefs.KnownFollowers;
 
 export const profiles: Record<string, WeakRef<SignalizedProfile>> = {};
 
@@ -36,15 +39,16 @@ export class SignalizedProfile {
 	readonly labels: Signal<NonNullable<ProfileDetailed['labels']>>;
 
 	readonly viewer: {
-		readonly muted: Signal<NonNullable<ProfileDetailed['viewer']>['muted']>;
+		readonly muted: Signal<ProfileViewer['muted']>;
 		// @todo: perhaps change this to reference SignalizedList?
-		readonly mutedByList: Signal<NonNullable<ProfileDetailed['viewer']>['mutedByList']>;
-		readonly blockedBy: Signal<NonNullable<ProfileDetailed['viewer']>['blockedBy']>;
-		readonly blocking: Signal<NonNullable<ProfileDetailed['viewer']>['blocking']>;
+		readonly mutedByList: Signal<ProfileViewer['mutedByList']>;
+		readonly blockedBy: Signal<ProfileViewer['blockedBy']>;
+		readonly blocking: Signal<ProfileViewer['blocking']>;
 		// @todo: perhaps change this to reference SignalizedList?
-		readonly blockingByList: Signal<NonNullable<ProfileDetailed['viewer']>['blockingByList']>;
-		readonly following: Signal<NonNullable<ProfileDetailed['viewer']>['following']>;
-		readonly followedBy: Signal<NonNullable<ProfileDetailed['viewer']>['followedBy']>;
+		readonly blockingByList: Signal<ProfileViewer['blockingByList']>;
+		readonly following: Signal<ProfileViewer['following']>;
+		readonly followedBy: Signal<ProfileViewer['followedBy']>;
+		readonly knownFollowers: Signal<KnownFollowers | null | undefined>;
 	};
 
 	constructor(uid: At.DID, profile: Profile | ProfileBasic | ProfileDetailed, key?: number) {
@@ -74,6 +78,10 @@ export class SignalizedProfile {
 			blockingByList: signal(profile.viewer?.blockingByList),
 			following: signal(profile.viewer?.following),
 			followedBy: signal(profile.viewer?.followedBy),
+			knownFollowers: signal<KnownFollowers | null | undefined>(
+				isDetailed ? profile.viewer?.knownFollowers || null : undefined,
+				EQUALS_DEQUAL,
+			),
 		};
 	}
 }
@@ -130,6 +138,7 @@ export const mergeProfile = (
 			val.followsCount.value = profile.followsCount ?? 0;
 			val.postsCount.value = profile.postsCount ?? 0;
 			val.associated.value = getAssociated(profile.associated);
+			val.viewer.knownFollowers.value = profile.viewer?.knownFollowers || null;
 		} else {
 			val.associated.value = mergeAssociatedBasic(val.associated.peek(), profile.associated);
 		}

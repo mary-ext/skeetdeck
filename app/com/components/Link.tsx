@@ -15,11 +15,12 @@ export const LINK_PROFILE_EDIT = 8;
 export const LINK_PROFILE_FEEDS = 9;
 export const LINK_PROFILE_FOLLOWERS = 10;
 export const LINK_PROFILE_FOLLOWS = 11;
-export const LINK_PROFILE_LISTS = 12;
-export const LINK_PROFILE_MESSAGE = 13;
-export const LINK_QUOTE = 14;
-export const LINK_REPLY = 15;
-export const LINK_TAG = 16;
+export const LINK_PROFILE_KNOWN_FOLLOWERS = 12;
+export const LINK_PROFILE_LISTS = 13;
+export const LINK_PROFILE_MESSAGE = 14;
+export const LINK_QUOTE = 15;
+export const LINK_REPLY = 16;
+export const LINK_TAG = 17;
 
 export interface ExternalLinking {
 	type: typeof LINK_EXTERNAL;
@@ -79,12 +80,17 @@ export interface ProfileFeedsLinking {
 }
 
 export interface ProfileFollowsLinking {
-	type: typeof LINK_PROFILE_FOLLOWERS;
+	type: typeof LINK_PROFILE_FOLLOWS;
 	actor: At.DID;
 }
 
 export interface ProfileFollowersLinking {
-	type: typeof LINK_PROFILE_FOLLOWS;
+	type: typeof LINK_PROFILE_FOLLOWERS;
+	actor: At.DID;
+}
+
+export interface ProfileKnownFollowersLinking {
+	type: typeof LINK_PROFILE_KNOWN_FOLLOWERS;
 	actor: At.DID;
 }
 
@@ -126,8 +132,9 @@ export type Linking =
 	| ProfileLinking
 	| ProfileEditLinking
 	| ProfileFeedsLinking
-	| ProfileFollowersLinking
 	| ProfileFollowsLinking
+	| ProfileFollowersLinking
+	| ProfileKnownFollowersLinking
 	| ProfileListsLinking
 	| ProfileMessageLinking
 	| QuoteLinking
