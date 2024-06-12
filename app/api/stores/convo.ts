@@ -6,7 +6,7 @@ import type { At, Brand, ChatBskyActorDefs, ChatBskyConvoDefs } from '../atp-sch
 import { mergeProfile, type SignalizedProfile } from './profiles';
 
 type Convo = ChatBskyConvoDefs.ConvoView;
-type ConvoProfile = Omit<ChatBskyActorDefs.ProfileViewBasic, typeof Brand.Type>;
+type ConvoProfile = Brand.Omit<ChatBskyActorDefs.ProfileViewBasic>;
 
 export const convos: Record<string, WeakRef<SignalizedConvo>> = {};
 
