@@ -5,8 +5,6 @@ import * as TID from '@mary/atproto-tid';
 import type { At } from '~/api/atp-schema';
 import { getAccountHandle, multiagent } from '~/api/globals/agent';
 
-import { FILTER_ALL } from '~/api/queries/get-notifications';
-
 import { createDerivedSignal } from '~/utils/hooks';
 
 import { closeModal } from '~/com/globals/modals';
@@ -181,9 +179,7 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 								</button>
 
 								<button
-									onClick={() =>
-										add<NotificationsPaneConfig>({ type: PANE_TYPE_NOTIFICATIONS, mask: FILTER_ALL })
-									}
+									onClick={() => add<NotificationsPaneConfig>({ type: PANE_TYPE_NOTIFICATIONS, mask: 0 })}
 									class={columnItem}
 								>
 									<NotificationsOutlinedIcon class="text-xl" />
