@@ -178,7 +178,7 @@ export const createThreadData = (
 							type: 'overflow',
 							parentUri: parent.uri,
 							depth: depth,
-							lines: lines,
+							lines: lines.concat(LineType.UP_RIGHT),
 						},
 					];
 				}
