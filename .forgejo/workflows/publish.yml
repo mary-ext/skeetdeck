@@ -6,7 +6,7 @@ jobs:
 
     runs-on: docker
     container:
-      image: node:16-bullseye
+      image: node:20-bookworm
     defaults:
       run:
         shell: bash -e {0}
