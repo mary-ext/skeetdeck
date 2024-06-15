@@ -3,7 +3,7 @@ import { For, type JSX } from 'solid-js';
 import type { At } from '~/api/atp-schema';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
-import type { ThreadData, ThreadItem } from '~/api/models/threads';
+import { LineType, type ThreadData, type ThreadItem } from '~/api/models/threads';
 
 import { LINK_POST, Link } from '../../Link';
 import { VirtualContainer } from '../../VirtualContainer';
@@ -23,7 +23,7 @@ const NestedThread = (props: NestedThreadProps) => {
 				{(x) => {
 					return (
 						<VirtualContainer estimateHeight={66} class="flex min-w-0">
-							{/* @once */ renderLines(x.depth /* , x.hasNextSibling */)}
+							{/* @once */ renderLines(x)}
 							<div class="min-w-0 grow">{/* @once */ renderItem(x)}</div>
 						</VirtualContainer>
 					);
@@ -81,25 +81,25 @@ const renderItem = (x: ThreadItem) => {
 	return null;
 };
 
-const renderLines = (depth: number /* , hasNextSibling: boolean */) => {
+const renderLines = (x: ThreadItem) => {
 	const nodes: JSX.Element = [];
+	const lines = x.lines;
 
-	for (let i = 0; i < depth /* - 1 */; i++) {
+	for (let idx = 0, len = lines.length; idx < len; idx++) {
+		const line = lines[idx];
+
+		const drawVertical = line === LineType.VERTICAL || line === LineType.VERTICAL_RIGHT;
+		const drawRight = line === LineType.UP_RIGHT || line === LineType.VERTICAL_RIGHT;
+
 		nodes.push(
-			<div class="relative pl-5">
-				<div class="absolute -top-4 bottom-0 left-2 border-l-2 border-muted"></div>
+			<div class="relative w-5 shrink-0">
+				{drawRight && (
+					<div class="absolute right-[3px] top-0 h-[18px] w-[9px] rounded-bl-[8px] border-b-2 border-l-2 border-muted"></div>
+				)}
+				{drawVertical && <div class="absolute bottom-0 left-[8px] top-0 border-l-2 border-muted"></div>}
 			</div>,
 		);
 	}
-
-	// if (depth > 0) {
-	// 	nodes.push(
-	// 		<div class="relative w-5 shrink-0">
-	// 			<div class="absolute right-0.5 top-[-16px] h-[26px] w-[9px] rounded-bl-[8px] border-b-2 border-l-2 border-divider"></div>
-	// 			{hasNextSibling && <div class="absolute bottom-0 top-0 left-[9px] border-l-2 border-divider"></div>}
-	// 		</div>,
-	// 	);
-	// }
 
 	return nodes;
 };

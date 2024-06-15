@@ -79,10 +79,21 @@ const filterReplies = (x: UnwrapArray<Thread['replies']>): x is Thread | Blocked
 	return x.$type === TypeThreadView || (x.$type === TypeBlocked && !!x.author.viewer!.blocking);
 };
 
+export const enum LineType {
+	// <empty>
+	NONE,
+	// │
+	VERTICAL,
+	// ├
+	VERTICAL_RIGHT,
+	// └
+	UP_RIGHT,
+}
+
 export interface BaseThreadItem {
 	parentUri: string;
 	depth: number;
-	// hasNextSibling: boolean;
+	lines: LineType[];
 }
 
 export interface PostThreadItem extends BaseThreadItem {
@@ -154,7 +165,12 @@ export const createThreadData = (
 
 	// Walk downwards to get the flattened descendants
 	{
-		const walk = (parent: Post, replies: Thread['replies'] | undefined, depth: number): ThreadItem[] => {
+		const walk = (
+			parent: Post,
+			replies: Thread['replies'] | undefined,
+			depth: number,
+			lines: LineType[],
+		): ThreadItem[] => {
 			if (depth >= maxDepth) {
 				if (parent.replyCount && parent.replyCount > 0) {
 					return [
@@ -162,7 +178,7 @@ export const createThreadData = (
 							type: 'overflow',
 							parentUri: parent.uri,
 							depth: depth,
-							// hasNextSibling: false,
+							lines: lines,
 						},
 					];
 				}
@@ -178,17 +194,24 @@ export const createThreadData = (
 					const reply = items[i];
 					const type = reply.$type;
 
+					const end = i === il - 1;
+
 					if (type === TypeThreadView) {
 						const post = reply.post;
-						const children = walk(post, reply.replies, depth + 1);
+						const children = walk(
+							post,
+							reply.replies,
+							depth + 1,
+							depth !== 0 ? lines.concat(end ? LineType.NONE : LineType.VERTICAL) : lines,
+						);
 
 						array.push({
 							type: 'post',
 							item: mergePost(uid, post),
 							parentUri: parent.uri,
 							depth: depth,
-							// hasNextSibling: i !== il - 1,
 							isEnd: children.length === 0,
+							lines: depth !== 0 ? lines.concat(end ? LineType.UP_RIGHT : LineType.VERTICAL_RIGHT) : lines,
 						});
 
 						push(array, children);
@@ -198,7 +221,7 @@ export const createThreadData = (
 							item: reply,
 							parentUri: parent.uri,
 							depth: depth,
-							// hasNextSibling: i !== il - 1,
+							lines: lines.concat(end ? LineType.UP_RIGHT : LineType.VERTICAL_RIGHT),
 						});
 					}
 				}
@@ -209,7 +232,7 @@ export const createThreadData = (
 			return [];
 		};
 
-		descendants = walk(data.post, data.replies, 0);
+		descendants = walk(data.post, data.replies, 0, []);
 	}
 
 	return {
