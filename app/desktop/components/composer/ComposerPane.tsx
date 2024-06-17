@@ -31,7 +31,6 @@ import {
 	type PreliminaryRichText,
 } from '~/api/richtext/composer';
 import type { SignalizedPost } from '~/api/stores/posts';
-import { produceThreadInsert } from '~/api/updaters/insert-post';
 import { extractAppLink } from '~/api/utils/links';
 import { formatQueryError, getCollectionId, isDid } from '~/api/utils/misc';
 
@@ -569,13 +568,11 @@ const ComposerPane = () => {
 				}
 
 				if (posts.length > 0) {
-					const updatePostThread = produceThreadInsert(posts, parentUri);
+					queryClient.invalidateQueries({
+						queryKey: ['getPostThread', uid],
+						predicate(query) {
+							const data = query.state.data as ThreadData | undefined;
 
-					queryClient.setQueriesData<ThreadData>(
-						{
-							queryKey: ['getPostThread', uid],
-						},
-						(data) => {
 							if (data) {
 								const post = data.post;
 
@@ -583,13 +580,13 @@ const ComposerPane = () => {
 								const reply = post.record.value.reply;
 
 								if (postUri === parentUri || postUri === rootUri || reply?.root.uri == rootUri) {
-									return updatePostThread(data);
+									return true;
 								}
 							}
 
-							return data;
+							return false;
 						},
-					);
+					});
 				}
 			}
 
