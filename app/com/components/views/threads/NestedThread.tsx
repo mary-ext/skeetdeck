@@ -94,7 +94,7 @@ const renderLines = (x: ThreadItem) => {
 		nodes.push(
 			<div class="relative w-5 shrink-0">
 				{drawRight && (
-					<div class="absolute right-[4px] top-0 h-[18px] w-[9px] rounded-bl-[8px] border-b-2 border-l-2 border-muted"></div>
+					<div class="absolute right-[3px] top-0 h-[18px] w-[9px] rounded-bl-[8px] border-b-2 border-l-2 border-muted"></div>
 				)}
 				{drawVertical && <div class="absolute bottom-0 left-[8px] top-0 border-l-2 border-muted"></div>}
 			</div>,
