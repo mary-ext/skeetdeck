@@ -2,10 +2,9 @@ import { nanoid } from 'nanoid/non-secure';
 import { batch, createSignal, untrack } from 'solid-js';
 
 import type { BskyXRPC } from '@mary/bluesky-client';
+import { EventEmitter } from '@mary/events';
 
 import type { ChatBskyConvoGetLog } from '~/api/atp-schema';
-
-import { EventEmitter } from '../events';
 
 function debug(msg: string) {
 	if (import.meta.env.DEV) {

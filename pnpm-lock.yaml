@@ -71,6 +71,9 @@ importers:
       '@mary/emoji-db':
         specifier: workspace:@externdefs/emoji-db@^
         version: link:../packages/emoji-db
+      '@mary/events':
+        specifier: npm:@jsr/mary__events@^0.1.0
+        version: '@jsr/mary__events@0.1.0'
       '@mary/exif-rm':
         specifier: npm:@jsr/mary__exif-rm@^0.2.1
         version: '@jsr/mary__exif-rm@0.2.1'
@@ -1164,6 +1167,9 @@ packages:
 
   '@jsr/mary__bluesky-client@0.5.23':
     resolution: {integrity: sha512-k1sZVbRvZ//kx3Fq/tEd6W5pAf3IrdE1cUSXl6lqem4cYGv67NrRHMdz51zVIud00BfwVLxHbb97cWeDHDm16Q==, tarball: https://npm.jsr.io/~/11/@jsr/mary__bluesky-client/0.5.23.tgz}
+
+  '@jsr/mary__events@0.1.0':
+    resolution: {integrity: sha512-oS6jVOaXTaNEa6avRncwrEtUYaBKrq/HEybPa9Z3aoeMs+RSly0vn0KcOj/fy2H6iTBkeh3wa8+/9nFjhKyKIg==, tarball: https://npm.jsr.io/~/11/@jsr/mary__events/0.1.0.tgz}
 
   '@jsr/mary__exif-rm@0.2.1':
     resolution: {integrity: sha512-hw7UqNH2puQooIRvZk4IPP4Xyo1IjbynjW9idqmqJepwR7DDeBs61riHZdiax3lUoW7Gzz+tuPQmdkWH/v2i5Q==, tarball: https://npm.jsr.io/~/11/@jsr/mary__exif-rm/0.2.1.tgz}
@@ -3634,6 +3640,8 @@ snapshots:
   '@jsr/mary__base32@0.1.0': {}
 
   '@jsr/mary__bluesky-client@0.5.23': {}
+
+  '@jsr/mary__events@0.1.0': {}
 
   '@jsr/mary__exif-rm@0.2.1': {}
 
