@@ -1,9 +1,10 @@
-import { type JSX } from 'solid-js';
+import { onCleanup, type JSX } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent';
 
 import { clsx } from '~/utils/misc';
 
+import { onFocusPane } from '../../globals/events';
 import { getPaneSizeWidth } from '../../globals/panes';
 import { resolvePaneSize } from '../../globals/settings';
 
@@ -35,7 +36,10 @@ const Pane = (props: PaneProps) => {
 
 	return (
 		<div
-			class="flex shrink-0 flex-col bg-background"
+			ref={(node) => {
+				onCleanup(onFocusPane(pane, node));
+			}}
+			class="flex shrink-0 scroll-m-3 flex-col bg-background"
 			style={{ width: getPaneSizeWidth(resolvePaneSize(pane.size)) + 'px' }}
 		>
 			<div

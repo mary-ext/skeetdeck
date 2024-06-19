@@ -1,7 +1,5 @@
 import { Match, Show, Switch, createSignal, type Component } from 'solid-js';
 
-import * as TID from '@mary/atproto-tid';
-
 import type { At } from '~/api/atp-schema';
 import { getAccountHandle, multiagent } from '~/api/globals/agent';
 
@@ -15,14 +13,13 @@ import {
 	PANE_TYPE_LIST,
 	PANE_TYPE_NOTIFICATIONS,
 	PANE_TYPE_PROFILE,
-	SpecificPaneSize,
 	labelizePaneType,
 	type DeckConfig,
 	type HomePaneConfig,
 	type NotificationsPaneConfig,
-	type PaneConfig,
 	type PaneType,
 } from '../../globals/panes';
+import { addPane } from '../../globals/settings';
 
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
 import SelectInput from '~/com/components/inputs/SelectInput';
@@ -67,15 +64,7 @@ const AddPaneDialog = (props: AddPaneDialogProps) => {
 
 		if ($user) {
 			// @ts-expect-error
-			const pane: PaneConfig = {
-				...partial,
-				id: TID.now(),
-				size: SpecificPaneSize.INHERIT,
-				title: null,
-				uid: $user,
-			};
-
-			deck.panes.push(pane);
+			addPane(deck, { ...partial, uid: $user });
 		}
 
 		closeModal();

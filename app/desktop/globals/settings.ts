@@ -7,6 +7,7 @@ import type { ModerationOptions } from '~/api/moderation';
 
 import { createReactiveLocalStorage } from '~/utils/storage';
 
+import { desktopEvents } from './events';
 import { PaneSize, SpecificPaneSize, type DeckConfig, type PaneConfig } from './panes';
 
 export interface ModerationPreferences extends Omit<ModerationOptions, '_filtersCache'> {
@@ -172,6 +173,8 @@ export const addPane = <T extends PaneConfig>(
 	} else {
 		deck.panes.push(pane);
 	}
+
+	desktopEvents.emit(`focuspane:${pane.id}`);
 };
 
 export const resolvePaneSize = (size: SpecificPaneSize): PaneSize => {

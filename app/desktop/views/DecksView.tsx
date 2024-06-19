@@ -35,7 +35,7 @@ const DecksView = (props: RouteComponentProps) => {
 	return (
 		<Show when={deck()} keyed fallback={<Navigate to="/" />}>
 			{(deck) => (
-				<div class="flex grow gap-1 overflow-x-auto bg-background-dark px-1">
+				<div class="relative flex grow gap-1 overflow-x-auto bg-background-dark px-1">
 					<Title render={() => `Skeetdeck - ${deck.name}`} />
 					<DragDropProvider
 						onDragEnd={({ draggable, droppable }) => {

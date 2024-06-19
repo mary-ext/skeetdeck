@@ -1,5 +1,8 @@
+import { onCleanup } from 'solid-js';
+
 import CircularProgress from '~/com/components/CircularProgress';
 
+import { onFocusPane } from '../../globals/events';
 import { getPaneSizeWidth } from '../../globals/panes';
 import { resolvePaneSize } from '../../globals/settings';
 
@@ -10,6 +13,9 @@ const PaneFallback = () => {
 
 	return (
 		<div
+			ref={(node) => {
+				onCleanup(onFocusPane(pane, node));
+			}}
 			class="flex shrink-0 flex-col bg-background"
 			style={{ width: getPaneSizeWidth(resolvePaneSize(pane.size)) + 'px' }}
 		>
