@@ -2,6 +2,7 @@ import { createMemo, lazy, type JSX } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent.ts';
 import { isProfileTempMuted } from '~/api/moderation';
+import { isThreadMuted, updateThreadMute } from '~/api/mutations/mute-thread';
 import { serializeRichText } from '~/api/richtext/utils';
 import type { SignalizedPost } from '~/api/stores/posts';
 import { getRecordId } from '~/api/utils/misc';
@@ -45,8 +46,10 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 		const isSameAuthor = post.uid === authorDid;
 		const isOwnAccount = createMemo(() => multiagent.accounts.some((account) => account.did === authorDid));
 
-		const isTempMuted = () => isProfileTempMuted(getModerationOptions(), author.did);
-		const isMuted = () => author.viewer.muted.value;
+		const tempMuted = createMemo(() => isProfileTempMuted(getModerationOptions(), author.did));
+		const muted = () => author.viewer.muted.value;
+
+		const threadMuted = createMemo(() => isThreadMuted(post));
 
 		const getPostUrl = () => {
 			return `https://bsky.app/profile/${author.did}/post/${getRecordId(post.uri)}`;
@@ -113,10 +116,10 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 										class={/* @once */ MenuItem()}
 									>
 										{(() => {
-											const Icon = !isMuted() ? VisibilityOffOutlinedIcon : VisibilityOutlinedIcon;
+											const Icon = !tempMuted() ? VisibilityOffOutlinedIcon : VisibilityOutlinedIcon;
 											return <Icon class={/* @once */ MenuItemIcon()} />;
 										})()}
-										<span>{!isTempMuted() ? `Silence user` : `Unsilence user`}</span>
+										<span>{!tempMuted() ? `Silence user` : `Unsilence user`}</span>
 									</button>
 								);
 							}
@@ -133,12 +136,26 @@ const PostOverflowAction = (props: PostOverflowActionProps) => {
 								class={/* @once */ MenuItem()}
 							>
 								{(() => {
-									const Icon = !isMuted() ? VolumeOffOutlinedIcon : VolumeUpOutlinedIcon;
+									const Icon = !muted() ? VolumeOffOutlinedIcon : VolumeUpOutlinedIcon;
 									return <Icon class={/* @once */ MenuItemIcon()} />;
 								})()}
-								<span>{!isMuted() ? `Mute user` : `Unmute user`}</span>
+								<span>{!muted() ? `Mute user` : `Unmute user`}</span>
 							</button>
 						)}
+
+						<button
+							onClick={() => {
+								close();
+								updateThreadMute(post, !threadMuted());
+							}}
+							class={/* @once */ MenuItem()}
+						>
+							{(() => {
+								const Icon = !threadMuted() ? VolumeOffOutlinedIcon : VolumeUpOutlinedIcon;
+								return <Icon class={/* @once */ MenuItemIcon()} />;
+							})()}
+							<span>{!threadMuted() ? `Mute thread` : `Unmute thread`}</span>
+						</button>
 
 						{isSameAuthor ? (
 							<button

@@ -7,6 +7,7 @@ import { mergeProfile, type SignalizedProfile } from './profiles';
 
 type Post = AppBskyFeedDefs.PostView;
 type PostRecord = AppBskyFeedPost.Record;
+type PostViewer = AppBskyFeedDefs.ViewerState;
 
 export const posts: Record<string, WeakRef<SignalizedPost>> = {};
 
@@ -34,9 +35,10 @@ export class SignalizedPost {
 
 	readonly threadgate: Signal<Post['threadgate']>;
 	readonly viewer: {
-		readonly like: Signal<NonNullable<Post['viewer']>['like']>;
-		readonly repost: Signal<NonNullable<Post['viewer']>['repost']>;
-		readonly replyDisabled: Signal<NonNullable<Post['viewer']>['replyDisabled']>;
+		readonly like: Signal<PostViewer['like']>;
+		readonly repost: Signal<PostViewer['repost']>;
+		readonly replyDisabled: Signal<PostViewer['replyDisabled']>;
+		readonly threadMuted: Signal<PostViewer['threadMuted']>;
 	};
 
 	$truncated?: boolean;
@@ -60,6 +62,7 @@ export class SignalizedPost {
 			like: signal(post.viewer?.like),
 			repost: signal(post.viewer?.repost),
 			replyDisabled: signal(post.viewer?.replyDisabled),
+			threadMuted: signal(post.viewer?.threadMuted),
 		};
 	}
 }
@@ -115,6 +118,7 @@ export const mergePost = (uid: At.DID, post: Post, key?: number) => {
 		val.viewer.like.value = post.viewer?.like;
 		val.viewer.repost.value = post.viewer?.repost;
 		val.viewer.replyDisabled.value = post.viewer?.replyDisabled;
+		val.viewer.threadMuted.value = post.viewer?.threadMuted;
 	}
 
 	return val;
