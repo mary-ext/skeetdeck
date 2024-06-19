@@ -69,8 +69,7 @@ const AppearanceView = () => {
 						/>
 
 						<CheckItem
-							title="Show post replies in threaded form"
-							description="This is an experimental feature"
+							title="Show post replies in threaded view"
 							value={ui.threadedReplies}
 							onChange={(next) => (ui.threadedReplies = next)}
 						/>
