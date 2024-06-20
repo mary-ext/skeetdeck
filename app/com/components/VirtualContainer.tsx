@@ -1,6 +1,6 @@
-import { createSignal, onCleanup, type JSX } from 'solid-js';
+import { batch, createSignal, onCleanup, type JSX } from 'solid-js';
 
-import { resizeObserver, scrollObserver } from '~/utils/intersection-observer';
+import { scrollObserver } from '~/utils/intersection-observer';
 
 export interface VirtualContainerProps {
 	estimateHeight?: number;
@@ -10,15 +10,13 @@ export interface VirtualContainerProps {
 
 export const VirtualContainer = (props: VirtualContainerProps) => {
 	let _entry: IntersectionObserverEntry | undefined;
-	let _height: number | undefined;
+	let _height: number | undefined = props.estimateHeight;
 	let _intersecting = false;
 
-	const estimateHeight = props.estimateHeight;
-
 	const [intersecting, setIntersecting] = createSignal(_intersecting);
-	const [storedHeight, setStoredHeight] = createSignal(estimateHeight);
+	const [storedHeight, setStoredHeight] = createSignal(_height);
 
-	const shouldHide = () => !intersecting() && (estimateHeight ?? storedHeight()) !== undefined;
+	const shouldHide = () => !intersecting() && (_height ?? storedHeight()) !== undefined;
 
 	const handleIntersect = (nextEntry: IntersectionObserverEntry) => {
 		_entry = undefined;
@@ -43,22 +41,18 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 					return;
 				}
 
+				// reduce the precision
+				const height = ((_entry.boundingClientRect.height * 1000) | 0) / 1000;
 				_entry = undefined;
-				setIntersecting((_intersecting = next));
+
+				batch(() => {
+					if (height !== _height) {
+						setStoredHeight((_height = height));
+					}
+
+					setIntersecting((_intersecting = next));
+				});
 			});
-		}
-	};
-
-	const handleResize = (nextEntry: ResizeObserverEntry) => {
-		if (!_intersecting) {
-			return;
-		}
-
-		const contentRect = nextEntry.contentRect;
-		const nextHeight = ((contentRect.height * 1000) | 0) / 1000;
-
-		if (nextHeight !== _height) {
-			setStoredHeight((_height = nextHeight));
 		}
 	};
 
@@ -71,7 +65,6 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 				height: shouldHide() ? `${_height ?? storedHeight()}px` : undefined,
 			}}
 			prop:$onintersect={handleIntersect}
-			prop:$onresize={handleResize}
 		>
 			{(() => {
 				if (!shouldHide()) {
@@ -84,10 +77,8 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 
 const startMeasure = (node: HTMLElement) => {
 	scrollObserver.observe(node);
-	resizeObserver.observe(node);
 
 	onCleanup(() => {
 		scrollObserver.unobserve(node);
-		resizeObserver.unobserve(node);
 	});
 };
