@@ -1,4 +1,4 @@
-import { batch, createSignal, onCleanup, type JSX } from 'solid-js';
+import { createSignal, onCleanup, type JSX } from 'solid-js';
 
 import { scrollObserver } from '~/utils/intersection-observer';
 
@@ -11,12 +11,11 @@ export interface VirtualContainerProps {
 export const VirtualContainer = (props: VirtualContainerProps) => {
 	let _entry: IntersectionObserverEntry | undefined;
 	let _height: number | undefined = props.estimateHeight;
-	let _intersecting = false;
+	let _intersecting: boolean = false;
 
 	const [intersecting, setIntersecting] = createSignal(_intersecting);
-	const [storedHeight, setStoredHeight] = createSignal(_height);
 
-	const shouldHide = () => !intersecting() && (_height ?? storedHeight()) !== undefined;
+	const shouldHide = () => !intersecting() && _height !== undefined;
 
 	const handleIntersect = (nextEntry: IntersectionObserverEntry) => {
 		_entry = undefined;
@@ -42,16 +41,10 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 				}
 
 				// reduce the precision
-				const height = ((_entry.boundingClientRect.height * 1000) | 0) / 1000;
+				_height = ((_entry.boundingClientRect.height * 1000) | 0) / 1000;
 				_entry = undefined;
 
-				batch(() => {
-					if (height !== _height) {
-						setStoredHeight((_height = height));
-					}
-
-					setIntersecting((_intersecting = next));
-				});
+				setIntersecting((_intersecting = next));
 			});
 		}
 	};
@@ -62,7 +55,7 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 			class={props.class}
 			style={{
 				contain: 'content',
-				height: shouldHide() ? `${_height ?? storedHeight()}px` : undefined,
+				height: shouldHide() ? `${_height ?? 0}px` : undefined,
 			}}
 			prop:$onintersect={handleIntersect}
 		>
