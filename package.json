@@ -5,7 +5,7 @@
 	},
 	"devDependencies": {
 		"prettier": "^3.3.2",
-		"prettier-plugin-tailwindcss": "~0.6.3",
+		"prettier-plugin-tailwindcss": "~0.6.5",
 		"tailwindcss": "^3.4.4",
 		"typescript": "5.5.0-beta"
 	},
@@ -17,7 +17,7 @@
 			"vite-plugin-pwa@0.17.4": "patches/vite-plugin-pwa@0.17.4.patch",
 			"solid-js@1.8.17": "patches/solid-js@1.8.17.patch",
 			"workbox-precaching@7.1.0": "patches/workbox-precaching@7.1.0.patch",
-			"vite@5.2.12": "patches/vite@5.2.12.patch"
+			"vite@5.3.1": "patches/vite@5.3.1.patch"
 		},
 		"overrides": {
 			"hasown": "npm:@nolyfill/hasown@latest",

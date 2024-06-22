@@ -1,0 +1,13 @@
+diff --git a/dist/node/chunks/dep-BcXSligG.js b/dist/node/chunks/dep-BcXSligG.js
+index 5166790a1e06b8d7b574854d3d6e3f4de5de1215..e036761d6078890f74c3a67dabb00eee2e14f309 100644
+--- a/dist/node/chunks/dep-BcXSligG.js
++++ b/dist/node/chunks/dep-BcXSligG.js
+@@ -65443,7 +65443,7 @@ async function resolveBuildPlugins(config) {
+       ...config.isWorker ? [webWorkerPostPlugin()] : []
+     ],
+     post: [
+-      buildImportAnalysisPlugin(config),
++      ...(config.build.modulePreload !== false ? [buildImportAnalysisPlugin(config)] : []),
+       ...config.esbuild !== false ? [buildEsbuildPlugin(config)] : [],
+       ...options.minify ? [terserPlugin(config)] : [],
+       ...!config.isWorker ? [
