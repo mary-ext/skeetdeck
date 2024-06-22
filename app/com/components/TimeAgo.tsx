@@ -1,6 +1,7 @@
 import { createRenderEffect, createSignal, type Accessor, type JSX } from 'solid-js';
 
 import { formatAbsDateTime, formatReltime } from '~/utils/intl/time';
+import { requestIdle } from '~/utils/misc';
 
 export interface TimeAgoProps {
 	value: string | number;
@@ -15,7 +16,7 @@ const [watch, tick] = createSignal<void>(undefined, { equals: false });
 
 const tickForward = () => {
 	tick();
-	setTimeout(() => requestIdleCallback(tickForward), 60_000);
+	setTimeout(() => requestIdle(tickForward), 60_000);
 };
 
 const TimeAgo = (props: TimeAgoProps) => {

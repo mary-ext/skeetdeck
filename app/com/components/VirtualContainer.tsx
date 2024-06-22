@@ -1,6 +1,7 @@
 import { createSignal, onCleanup, type JSX } from 'solid-js';
 
 import { scrollObserver } from '~/utils/intersection-observer';
+import { requestIdle } from '~/utils/misc';
 
 export interface VirtualContainerProps {
 	estimateHeight?: number;
@@ -34,7 +35,7 @@ export const VirtualContainer = (props: VirtualContainerProps) => {
 
 			_entry = nextEntry;
 
-			requestIdleCallback(() => {
+			requestIdle(() => {
 				// bail out if it's no longer us.
 				if (_entry !== nextEntry) {
 					return;

@@ -1,7 +1,6 @@
 // https://github.com/nolanlawson/emoji-picker-element/blob/497681f21119c5cc675fd59a1684b1a0d392215e/src/picker/utils/emojiSupport.js#L6
 
-import { scheduleIdleTask } from '~/utils/idle';
-import { assert } from '~/utils/misc';
+import { assert, requestIdle } from '~/utils/misc';
 
 // This should match the fonts set in `tailwind-base.config.js`
 const FONT_FAMILY = '"Noto Color Emoji", "Twemoji Mozilla", sans-serif';
@@ -29,7 +28,7 @@ const emojiVersions: [emoji: string, version: number][] = [
 let promise: Promise<number>;
 export const detectEmojiSupportLevel = (): Promise<number> => {
 	return (promise ||= new Promise((resolve) => {
-		scheduleIdleTask(() => {
+		requestIdle(() => {
 			for (const [emoji, version] of emojiVersions) {
 				if (isEmojiSupportedUncached(emoji)) {
 					return resolve(version);
@@ -98,7 +97,7 @@ export const isEmojiSupportedUncached = (emoji: string) => {
 
 			ctx.fillStyle = '#000000';
 
-			scheduleIdleTask(() => {
+			requestIdle(() => {
 				ctx = undefined;
 			});
 		} catch {}

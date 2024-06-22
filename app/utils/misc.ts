@@ -48,3 +48,5 @@ export const chunked = <T>(arr: T[], size: number): T[][] => {
 
 	return chunks;
 };
+
+export const requestIdle = typeof requestIdleCallback === 'function' ? requestIdleCallback : setTimeout;
