@@ -1,33 +1,111 @@
-diff --git a/build/modern/utils.cjs b/build/modern/utils.cjs
-index 6ef9599fd446b7fa98a292f85160b46be88c0295..c9e3957446a81f4fee1da9ac9da779d5f0e90a5d 100644
---- a/build/modern/utils.cjs
-+++ b/build/modern/utils.cjs
-@@ -182,21 +182,12 @@ function isPlainArray(value) {
-   return Array.isArray(value) && value.length === Object.keys(value).length;
- }
- function isPlainObject(o) {
--  if (!hasObjectPrototype(o)) {
-+  if (typeof o !== "object" || o === null) {
-     return false;
-   }
--  const ctor = o.constructor;
--  if (typeof ctor === "undefined") {
--    return true;
--  }
--  const prot = ctor.prototype;
--  if (!hasObjectPrototype(prot)) {
--    return false;
--  }
--  if (!prot.hasOwnProperty("isPrototypeOf")) {
--    return false;
--  }
--  return true;
+diff --git a/build/modern/_notifyManager.js b/build/modern/_notifyManager.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..a8dec3a4b959a30571de9f690a1ffeda8815a191
+--- /dev/null
++++ b/build/modern/_notifyManager.js
+@@ -0,0 +1,15 @@
++export var batch = (callback) => callback();
 +
-+  const proto = Object.getPrototypeOf(o);
-+  return (proto === Object.prototype || proto === null) && Object.isExtensible(o);
++export var batchCalls = (callback) => {
++  return (...args) => batch(() => callback(...args));
++};
++
++export var schedule = (callback) => callback();
++
++export var setNotifyFunction = () => {};
++
++export var setBatchNotifyFunction = (fn) => {
++  batch = fn;
++};
++
++export var setScheduler = () => {};
+diff --git a/build/modern/notifyManager.js b/build/modern/notifyManager.js
+index bb5d0317ae0f1aacc7d5229457ce22adfef71655..9c113b5826ba5fe927acd3e8dafe19900794a8ef 100644
+--- a/build/modern/notifyManager.js
++++ b/build/modern/notifyManager.js
+@@ -1,77 +1,9 @@
+ // src/notifyManager.ts
++import * as notifyManager from "./_notifyManager.js";
++
+ function createNotifyManager() {
+-  let queue = [];
+-  let transactions = 0;
+-  let notifyFn = (callback) => {
+-    callback();
+-  };
+-  let batchNotifyFn = (callback) => {
+-    callback();
+-  };
+-  let scheduleFn = (cb) => setTimeout(cb, 0);
+-  const setScheduler = (fn) => {
+-    scheduleFn = fn;
+-  };
+-  const batch = (callback) => {
+-    let result;
+-    transactions++;
+-    try {
+-      result = callback();
+-    } finally {
+-      transactions--;
+-      if (!transactions) {
+-        flush();
+-      }
+-    }
+-    return result;
+-  };
+-  const schedule = (callback) => {
+-    if (transactions) {
+-      queue.push(callback);
+-    } else {
+-      scheduleFn(() => {
+-        notifyFn(callback);
+-      });
+-    }
+-  };
+-  const batchCalls = (callback) => {
+-    return (...args) => {
+-      schedule(() => {
+-        callback(...args);
+-      });
+-    };
+-  };
+-  const flush = () => {
+-    const originalQueue = queue;
+-    queue = [];
+-    if (originalQueue.length) {
+-      scheduleFn(() => {
+-        batchNotifyFn(() => {
+-          originalQueue.forEach((callback) => {
+-            notifyFn(callback);
+-          });
+-        });
+-      });
+-    }
+-  };
+-  const setNotifyFunction = (fn) => {
+-    notifyFn = fn;
+-  };
+-  const setBatchNotifyFunction = (fn) => {
+-    batchNotifyFn = fn;
+-  };
+-  return {
+-    batch,
+-    batchCalls,
+-    schedule,
+-    setNotifyFunction,
+-    setBatchNotifyFunction,
+-    setScheduler
+-  };
++  return notifyManager;
  }
- function hasObjectPrototype(o) {
-   return Object.prototype.toString.call(o) === "[object Object]";
+-var notifyManager = createNotifyManager();
+-export {
+-  createNotifyManager,
+-  notifyManager
+-};
++
++export { createNotifyManager, notifyManager };
+ //# sourceMappingURL=notifyManager.js.map
 diff --git a/build/modern/utils.js b/build/modern/utils.js
 index 0e93a35b45cfc2d53fc17120c741a91ec8a8c533..82b51475e4e12860552f4a0f5f3af23f416740fa 100644
 --- a/build/modern/utils.js
