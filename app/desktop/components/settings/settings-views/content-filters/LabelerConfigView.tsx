@@ -77,8 +77,8 @@ const LabelerConfigView = () => {
 					<ArrowLeftIcon />
 				</button>
 
-				<div class="grow">
-					<h2 class="text-base font-bold leading-5">
+				<div class="min-w-0 grow">
+					<h2 class="overflow-hidden text-ellipsis whitespace-nowrap text-base font-bold leading-5">
 						{(() => {
 							const $profile = data()?.profile;
 							return $profile ? $profile.displayName || $profile.handle : `Label provider`;
