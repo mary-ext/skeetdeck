@@ -12,6 +12,7 @@ import EmbedList from './EmbedList';
 import EmbedQuote from './EmbedQuote';
 import EmbedRecordBlocked from './EmbedRecordBlocked';
 import EmbedRecordNotFound, { getCollectionMapping } from './EmbedRecordNotFound';
+import EmbedVideo from './EmbedVideo';
 
 type EmbeddedRecord = AppBskyEmbedRecord.View['record'];
 
@@ -38,6 +39,7 @@ const Embed = (props: EmbedProps) => {
 				let link: EmbeddedLink | undefined;
 				let record: EmbeddedRecord | undefined;
 				let unsupported = false;
+				let video: any;
 
 				if (embed) {
 					const type = embed.$type;
@@ -60,9 +62,13 @@ const Embed = (props: EmbedProps) => {
 							link = media.external;
 						} else if (mediatype === 'app.bsky.embed.images#view') {
 							images = media.images;
+						} else if (mediatype === 'app.bsky.embed.video#view') {
+							video = media;
 						} else {
 							unsupported = true;
 						}
+					} else if (type === 'app.bsky.embed.video#view') {
+						video = embed;
 					} else {
 						unsupported = true;
 					}
@@ -73,7 +79,7 @@ const Embed = (props: EmbedProps) => {
 				}
 
 				return [
-					(link || images) && (
+					(link || images || video) && (
 						<ContentWarning
 							ui={(() => {
 								const causes = props.causes;
@@ -85,6 +91,7 @@ const Embed = (props: EmbedProps) => {
 								return [
 									link && <EmbedLink link={link} interactive />,
 									images && <EmbedImage images={images} interactive />,
+									video && <EmbedVideo video={video} />,
 								];
 							})()}
 							outerClass="contents"
@@ -128,6 +135,8 @@ const renderRecord = (record: AppBskyEmbedRecord.View['record'], large: Accessor
 	if (type === 'app.bsky.graph.defs#listView') {
 		return <EmbedList list={record} />;
 	}
+
+	console.log(`Unsupported record`, record);
 
 	return renderUnsupported(`Unsupported record`);
 };

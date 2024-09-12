@@ -95,6 +95,9 @@ importers:
       cborg:
         specifier: 4.0.7
         version: 4.0.7(patch_hash=dz6b6r6dc4jadjfng7vtgi53hy)
+      hls.js:
+        specifier: ^1.5.15
+        version: 1.5.15
       idb:
         specifier: ^8.0.0
         version: 8.0.0
@@ -1759,6 +1762,9 @@ packages:
   has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
+
+  hls.js@1.5.15:
+    resolution: {integrity: sha512-6cD7xN6bycBHaXz2WyPIaHn/iXFizE5au2yvY5q9aC4wfihxAr16C9fUy4nxh2a3wOw0fEgLRa9dN6wsYjlpNg==}
 
   html-entities@2.3.3:
     resolution: {integrity: sha512-DV5Ln36z34NNTDgnz0EWGBLZENelNAtkiFA4kyNOG2tDI6Mz1uSWiq1wAKdyjnJwyDiDO7Fa2SO1CTxPXL8VxA==}
@@ -4222,6 +4228,8 @@ snapshots:
   has-flag@3.0.0: {}
 
   has-flag@4.0.0: {}
+
+  hls.js@1.5.15: {}
 
   html-entities@2.3.3: {}
 

@@ -24,6 +24,7 @@
 		"@solid-primitives/event-listener": "^2.3.3",
 		"@thisbeyond/solid-dnd": "^0.7.5",
 		"cborg": "4.0.7",
+		"hls.js": "^1.5.15",
 		"idb": "^8.0.0",
 		"immer": "^10.1.1",
 		"nanoid": "^5.0.7",
