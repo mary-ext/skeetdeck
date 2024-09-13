@@ -2,7 +2,7 @@ import * as fs from 'node:fs';
 
 import { XRPC, simpleFetchHandler } from '@atcute/client';
 
-const DID_LIST_URL = 'https://raw.githubusercontent.com/mary-ext/bluesky-labelers/trunk/did.min.json';
+const DID_LIST_URL = 'https://raw.githubusercontent.com/mary-ext/bluesky-labelers/trunk/README.md';
 const SOURCE_PATH = 'api/queries/get-labeler-popular.ts';
 
 let creators;
@@ -15,11 +15,15 @@ let creators;
 		throw new Error(`got ${response.status}`);
 	}
 
-	const json = await response.json();
+	const text = await response.text();
+	const dids = Array.from(
+		text.matchAll(/(?<=\/)did:[a-z]+:[a-zA-Z0-9._:%-]*[a-zA-Z0-9._-](?=>)/g),
+		(m) => m[0],
+	);
 
 	const rpc = new XRPC({ handler: simpleFetchHandler({ service: 'https://api.bsky.app' }) });
 	const chunks = await Promise.all(
-		chunked(json, 25).map((dids) => {
+		chunked(dids, 25).map((dids) => {
 			return rpc
 				.get('app.bsky.labeler.getServices', { params: { dids: dids } })
 				.then((response) => response.data);
