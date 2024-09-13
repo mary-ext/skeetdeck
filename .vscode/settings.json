@@ -1,5 +1,6 @@
 {
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"typescript.tsdk": "node_modules/typescript/lib",
+	"tailwindCSS.experimental.configFile": "app/tailwind-desktop.config.js",
 	"tailwindCSS.experimental.classRegex": ["tw`([^`]*)"]
 }
