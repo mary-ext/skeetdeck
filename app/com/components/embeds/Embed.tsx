@@ -1,6 +1,11 @@
 import { type Accessor } from 'solid-js';
 
-import type { AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedRecord } from '@atcute/client/lexicons';
+import type {
+	AppBskyEmbedExternal,
+	AppBskyEmbedImages,
+	AppBskyEmbedRecord,
+	AppBskyEmbedVideo,
+} from '@atcute/client/lexicons';
 
 import { ContextContentMedia, type ModerationCause, getModerationUI } from '~/api/moderation';
 import type { SignalizedPost } from '~/api/stores/posts';
@@ -20,6 +25,7 @@ type EmbeddedRecord = AppBskyEmbedRecord.View['record'];
 
 type EmbeddedImage = AppBskyEmbedImages.ViewImage;
 type EmbeddedLink = AppBskyEmbedExternal.ViewExternal;
+type EmbeddedVideo = AppBskyEmbedVideo.View;
 
 export interface EmbedProps {
 	causes?: ModerationCause[];
@@ -40,8 +46,8 @@ const Embed = (props: EmbedProps) => {
 				let images: EmbeddedImage[] | undefined;
 				let link: EmbeddedLink | undefined;
 				let record: EmbeddedRecord | undefined;
+				let video: EmbeddedVideo | undefined;
 				let unsupported = false;
-				let video: any;
 
 				if (embed) {
 					const type = embed.$type;
@@ -93,7 +99,7 @@ const Embed = (props: EmbedProps) => {
 								return [
 									link && <EmbedLink link={link} interactive />,
 									images && <EmbedImage images={images} interactive />,
-									video && <EmbedVideo video={video} />,
+									video && <EmbedVideo embed={video} interactive standalone />,
 								];
 							})()}
 							outerClass="contents"
