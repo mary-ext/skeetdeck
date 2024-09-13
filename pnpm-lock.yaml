@@ -55,7 +55,7 @@ importers:
         version: 1.0.0
       '@atcute/bluesky':
         specifier: ^1.0.6
-        version: 1.0.6(@atcute/client@2.0.0)
+        version: 1.0.6(@atcute/client@2.0.1)
       '@atcute/cbor':
         specifier: ^1.0.1
         version: 1.0.1
@@ -63,8 +63,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       '@atcute/client':
-        specifier: ^2.0.0
-        version: 2.0.0
+        specifier: ^2.0.1
+        version: 2.0.1
       '@atcute/tid':
         specifier: ^1.0.0
         version: 1.0.0
@@ -231,8 +231,8 @@ packages:
   '@atcute/cid@1.0.0':
     resolution: {integrity: sha512-JnWv3sg48zDBP318ErPYPI482Vw1Nm7e7WG+VYGSLRLp56b9LgcIh28p28gEmPtmsnM9hTAkKvJdi+CAkNDQUA==}
 
-  '@atcute/client@2.0.0':
-    resolution: {integrity: sha512-ifbYegz/4mUCqByz1G9msDcOJaIxnh0z6z8GPwlqNM9VUhQc/tEsJl7R6eeDp1DKonzhL+fQ//6OMY7w/tzTYw==}
+  '@atcute/client@2.0.1':
+    resolution: {integrity: sha512-M4q0QchcjcPTypgXTKc4MO06eJMno5op14qHAMWhKbxROOnxnhLfjG9rbcNr7nOycQb5THmUIEAwvvabrv1AjA==}
 
   '@atcute/tid@1.0.0':
     resolution: {integrity: sha512-hwvo19zlhSskYRmIzTQqj1Kxd9IX+x8B593flXTaR5jO+/3krUwlRnXd/pnZp5wZqAI/j2OlcPGadX93rsoozg==}
@@ -2738,9 +2738,9 @@ snapshots:
 
   '@atcute/base32@1.0.0': {}
 
-  '@atcute/bluesky@1.0.6(@atcute/client@2.0.0)':
+  '@atcute/bluesky@1.0.6(@atcute/client@2.0.1)':
     dependencies:
-      '@atcute/client': 2.0.0
+      '@atcute/client': 2.0.1
 
   '@atcute/cbor@1.0.1':
     dependencies:
@@ -2753,7 +2753,7 @@ snapshots:
       '@atcute/base32': 1.0.0
       '@atcute/varint': 1.0.0
 
-  '@atcute/client@2.0.0': {}
+  '@atcute/client@2.0.1': {}
 
   '@atcute/tid@1.0.0': {}
 

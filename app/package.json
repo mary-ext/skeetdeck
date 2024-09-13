@@ -13,7 +13,7 @@
 		"@atcute/bluesky": "^1.0.6",
 		"@atcute/cbor": "^1.0.1",
 		"@atcute/cid": "^1.0.0",
-		"@atcute/client": "^2.0.0",
+		"@atcute/client": "^2.0.1",
 		"@atcute/tid": "^1.0.0",
 		"@floating-ui/dom": "^1.6.5",
 		"@floating-ui/utils": "^0.2.2",
