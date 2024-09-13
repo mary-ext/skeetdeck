@@ -20,7 +20,7 @@ index 0000000000000000000000000000000000000000..a8dec3a4b959a30571de9f690a1ffeda
 +
 +export var setScheduler = () => {};
 diff --git a/build/modern/notifyManager.js b/build/modern/notifyManager.js
-index bb5d0317ae0f1aacc7d5229457ce22adfef71655..9c113b5826ba5fe927acd3e8dafe19900794a8ef 100644
+index bb5d0317ae0f1aacc7d5229457ce22adfef71655..387f53a8d255a0d46274f498f45dfc5b157ec174 100644
 --- a/build/modern/notifyManager.js
 +++ b/build/modern/notifyManager.js
 @@ -1,77 +1,9 @@
@@ -106,13 +106,16 @@ index bb5d0317ae0f1aacc7d5229457ce22adfef71655..9c113b5826ba5fe927acd3e8dafe1990
 +
 +export { createNotifyManager, notifyManager };
  //# sourceMappingURL=notifyManager.js.map
+\ No newline at end of file
 diff --git a/build/modern/utils.js b/build/modern/utils.js
-index 0e93a35b45cfc2d53fc17120c741a91ec8a8c533..82b51475e4e12860552f4a0f5f3af23f416740fa 100644
+index 0e93a35b45cfc2d53fc17120c741a91ec8a8c533..9fe13412dfc808dcc1d83c88d294d7291487e3aa 100644
 --- a/build/modern/utils.js
 +++ b/build/modern/utils.js
-@@ -140,21 +140,12 @@ function isPlainArray(value) {
+@@ -139,22 +139,14 @@ function shallowEqualObjects(a, b) {
+ function isPlainArray(value) {
    return Array.isArray(value) && value.length === Object.keys(value).length;
  }
++const Object_prototype = Object.prototype;
  function isPlainObject(o) {
 -  if (!hasObjectPrototype(o)) {
 +  if (typeof o !== "object" || o === null) {
@@ -132,7 +135,7 @@ index 0e93a35b45cfc2d53fc17120c741a91ec8a8c533..82b51475e4e12860552f4a0f5f3af23f
 -  return true;
 +
 +  const proto = Object.getPrototypeOf(o);
-+  return (proto === null || proto === Object) && Object.isExtensible(o);
++  return (proto === null || proto === Object_prototype) && Object.isExtensible(o);
  }
  function hasObjectPrototype(o) {
    return Object.prototype.toString.call(o) === "[object Object]";
