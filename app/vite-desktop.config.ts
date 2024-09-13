@@ -38,6 +38,9 @@ export default defineConfig({
 			},
 		}),
 	],
+	server: {
+		port: 35919,
+	},
 	build: {
 		minify: 'terser',
 		sourcemap: true,
