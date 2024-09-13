@@ -2,7 +2,7 @@ import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import type { AppBskyFeedDefs, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
-import { getCachedPost, mergePost, type SignalizedPost } from '../stores/posts';
+import { type SignalizedPost, getCachedPost, mergePost } from '../stores/posts';
 import { createBatchedFetch } from '../utils/batch-fetch';
 
 type Post = AppBskyFeedDefs.PostView;

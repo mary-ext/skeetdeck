@@ -5,6 +5,7 @@ import type { SignalizedPost } from '~/api/stores/posts';
 import { getRecordId } from '~/api/utils/misc';
 
 import FormatQuoteIcon from '~/com/icons/baseline-format-quote';
+
 import RepeatIcon from '../../../icons/baseline-repeat';
 import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
 import { Flyout } from '../../Flyout';

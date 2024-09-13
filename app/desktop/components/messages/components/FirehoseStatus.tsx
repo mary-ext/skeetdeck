@@ -2,8 +2,9 @@ import { type JSX } from 'solid-js';
 
 import { FirehoseStatus } from '~/desktop/lib/messages/firehose';
 
-import { useChatPane } from '../contexts/chat';
 import CellTowerIcon from '~/com/icons/baseline-cell-tower';
+
+import { useChatPane } from '../contexts/chat';
 
 const FirehoseIndicator = () => {
 	const { firehose } = useChatPane();

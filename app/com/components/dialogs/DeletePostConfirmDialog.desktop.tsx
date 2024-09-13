@@ -1,35 +1,32 @@
 import { createEffect, createSignal } from 'solid-js';
 
-import { createMutation, type InfiniteData } from '@mary/solid-query';
+import { type InfiniteData, createMutation } from '@mary/solid-query';
 
 import type { AppBskyEmbedImages, AppBskyFeedThreadgate, Brand } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
-import { getRecordId } from '~/api/utils/misc';
-
 import type { ThreadData } from '~/api/models/threads';
 import { getPost, getPostKey } from '~/api/queries/get-post';
 import type { getPostThreadKey } from '~/api/queries/get-post-thread';
 import type { TimelinePage } from '~/api/queries/get-timeline';
-import { removeCachedPost, type SignalizedPost } from '~/api/stores/posts';
-import { producePostDelete } from '~/api/updaters/delete-post';
-
 import { serializeRichText } from '~/api/richtext/utils';
+import { type SignalizedPost, removeCachedPost } from '~/api/stores/posts';
+import { producePostDelete } from '~/api/updaters/delete-post';
+import { getRecordId } from '~/api/utils/misc';
 
-import { getImageFromBlob, type ComposedImage } from '~/utils/image';
+import { type ComposedImage, getImageFromBlob } from '~/utils/image';
 import { modelChecked } from '~/utils/input';
 import { mapDefined } from '~/utils/misc';
 import { signal } from '~/utils/signals';
 
-import { closeModal, useModalState } from '../../globals/modals';
-
-import Checkbox from '../inputs/Checkbox';
-import DialogOverlay from './DialogOverlay';
-
-import { Button } from '../../primitives/button';
-import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
-
 import { useComposer } from '~/desktop/components/composer/ComposerContext';
 import type { GateState } from '~/desktop/components/composer/utils/state';
+
+import { closeModal, useModalState } from '../../globals/modals';
+import { Button } from '../../primitives/button';
+import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
+import Checkbox from '../inputs/Checkbox';
+
+import DialogOverlay from './DialogOverlay';
 
 export interface DeletePostConfirmDialogProps {
 	/** Expected to be static */

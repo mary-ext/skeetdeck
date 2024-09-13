@@ -1,22 +1,19 @@
 import { createQuery } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
-
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
 import { dequal } from '~/utils/dequal';
 import { formatAbsDateTime } from '~/utils/intl/time';
 
 import { closeModal } from '../../globals/modals';
-
+import CloseIcon from '../../icons/baseline-close';
 import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
 import { IconButton } from '../../primitives/icon-button';
-
 import CircularProgress from '../CircularProgress';
 import GenericErrorView from '../views/GenericErrorView';
-import DialogOverlay from './DialogOverlay';
 
-import CloseIcon from '../../icons/baseline-close';
+import DialogOverlay from './DialogOverlay';
 
 export interface HandleHistoryDialogProps {
 	/** Expected to be static */

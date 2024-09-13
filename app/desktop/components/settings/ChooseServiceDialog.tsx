@@ -6,17 +6,19 @@ import { createMutation } from '@mary/solid-query';
 import { DEFAULT_DATA_SERVERS, type DataServer } from '~/api/globals/defaults';
 import { formatQueryError } from '~/api/utils/misc';
 
+import { closeModal } from '~/com/globals/modals';
+
 import { createRadioModel, model, mutationAutofocus, refs } from '~/utils/input';
 import { getUniqueId } from '~/utils/misc';
 
-import { closeModal } from '~/com/globals/modals';
-
-import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
-import Radio from '~/com/components/inputs/Radio';
-import GlobeIcon from '~/com/icons/baseline-globe';
 import { Button } from '~/com/primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
 import { Input } from '~/com/primitives/input';
+
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
+import Radio from '~/com/components/inputs/Radio';
+
+import GlobeIcon from '~/com/icons/baseline-globe';
 
 export interface ChooseServiceDialogProps {
 	serviceUri?: string;

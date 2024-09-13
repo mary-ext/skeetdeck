@@ -3,7 +3,7 @@ import { type JSX } from 'solid-js';
 import { segmentRichText } from '~/api/richtext/segmentize';
 import type { Facet } from '~/api/richtext/types';
 
-import { LINK_EXTERNAL, LINK_PROFILE, LINK_TAG, useLinking, type Linking } from './Link';
+import { LINK_EXTERNAL, LINK_PROFILE, LINK_TAG, type Linking, useLinking } from './Link';
 
 export interface RichTextRendererProps {
 	text: string;

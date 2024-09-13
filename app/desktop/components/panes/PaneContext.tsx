@@ -1,6 +1,5 @@
-import { createContext, useContext, type Accessor, type JSX } from 'solid-js';
-
 import { createSortable } from '@thisbeyond/solid-dnd';
+import { type Accessor, type JSX, createContext, useContext } from 'solid-js';
 
 import { type Signal } from '~/utils/signals';
 

@@ -1,14 +1,13 @@
-import type { SignalizedProfile } from '../../stores/profiles';
-
 import {
+	type ModerationCause,
+	type ModerationOptions,
 	TargetAccount,
 	TargetProfile,
 	decideLabelModeration,
 	decideMutedPermanentModeration,
 	decideMutedTemporaryModeration,
-	type ModerationCause,
-	type ModerationOptions,
 } from '..';
+import type { SignalizedProfile } from '../../stores/profiles';
 
 export const moderateProfile = (profile: SignalizedProfile, opts: ModerationOptions) => {
 	const viewer = profile.viewer;

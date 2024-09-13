@@ -1,28 +1,26 @@
 import { createEffect, createSignal } from 'solid-js';
 
-import { createQuery, useQueryClient, type InfiniteData } from '@mary/solid-query';
+import { type InfiniteData, createQuery, useQueryClient } from '@mary/solid-query';
 
 import type { AppBskyGraphDefs } from '~/api/atp-schema';
 import { getAccountHandle, multiagent } from '~/api/globals/agent';
-import { formatQueryError } from '~/api/utils/misc';
-
 import { updateProfileBlock } from '~/api/mutations/block-profile';
 import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';
 import type { TimelinePage, getTimelineKey } from '~/api/queries/get-timeline';
 import type { SignalizedProfile } from '~/api/stores/profiles';
 import { produceTimelineFilter } from '~/api/updaters/timeline-filter';
+import { formatQueryError } from '~/api/utils/misc';
+
+import SwitchAccountAction from '~/desktop/components/flyouts/SwitchAccountAction';
 
 import { closeModal } from '../../globals/modals';
-
 import { Button } from '../../primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
 import CircularProgress from '../CircularProgress';
 import { EmbedListContent } from '../embeds/EmbedList';
-import DialogOverlay from './DialogOverlay';
-
-import SwitchAccountAction from '~/desktop/components/flyouts/SwitchAccountAction';
 
 import type { BlockConfirmDialogProps } from './BlockConfirmDialog';
+import DialogOverlay from './DialogOverlay';
 
 type ListViewBasic = AppBskyGraphDefs.ListViewBasic;
 

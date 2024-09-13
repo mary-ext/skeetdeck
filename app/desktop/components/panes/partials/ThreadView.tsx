@@ -9,7 +9,7 @@ import { BlockedThreadError } from '~/api/queries/get-post-thread';
 import { SignalizedPost } from '~/api/stores/posts';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
-import { preferences } from '../../../globals/settings';
+import { Button } from '~/com/primitives/button';
 
 import CircularProgress from '~/com/components/CircularProgress';
 import Keyed from '~/com/components/Keyed';
@@ -20,7 +20,8 @@ import EmbedRecordNotFound from '~/com/components/embeds/EmbedRecordNotFound';
 import Post from '~/com/components/items/Post';
 import GenericErrorView from '~/com/components/views/GenericErrorView';
 import PermalinkPost from '~/com/components/views/PermalinkPost';
-import { Button } from '~/com/primitives/button';
+
+import { preferences } from '../../../globals/settings';
 
 const FlattenedThread = lazy(() => import('~/com/components/views/threads/FlattenedThread'));
 const NestedThread = lazy(() => import('~/com/components/views/threads/NestedThread'));

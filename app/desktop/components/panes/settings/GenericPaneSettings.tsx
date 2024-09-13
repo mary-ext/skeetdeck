@@ -2,22 +2,23 @@ import { batch } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent';
 
-import { getUniqueId } from '~/utils/misc';
-
 import { openModal } from '~/com/globals/modals';
 
-import { SpecificPaneSize, type PaneConfig } from '../../../globals/panes';
-import { preferences } from '../../../globals/settings';
+import { getUniqueId } from '~/utils/misc';
+
+import { Input } from '~/com/primitives/input';
+import { Interactive } from '~/com/primitives/interactive';
 
 import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
 import Checkbox from '~/com/components/inputs/Checkbox';
 import Radio from '~/com/components/inputs/Radio';
+
 import AccountSwitchIcon from '~/com/icons/baseline-account-switch';
 import DeleteIcon from '~/com/icons/baseline-delete';
 import SwapVertIcon from '~/com/icons/baseline-swap-vert';
-import { Input } from '~/com/primitives/input';
-import { Interactive } from '~/com/primitives/interactive';
 
+import { type PaneConfig, SpecificPaneSize } from '../../../globals/panes';
+import { preferences } from '../../../globals/settings';
 import SwitchAccountAction from '../../flyouts/SwitchAccountAction';
 import SwitchDeckAction from '../../flyouts/SwitchDeckAction';
 import { usePaneContext } from '../PaneContext';

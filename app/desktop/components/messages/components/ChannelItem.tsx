@@ -4,10 +4,12 @@ import type { SignalizedConvo } from '~/api/stores/convo';
 
 import { isElementClicked } from '~/utils/interaction';
 
-import TimeAgo from '~/com/components/TimeAgo';
-import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 import { IconButton } from '~/com/primitives/icon-button';
 import { Interactive } from '~/com/primitives/interactive';
+
+import TimeAgo from '~/com/components/TimeAgo';
+
+import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 

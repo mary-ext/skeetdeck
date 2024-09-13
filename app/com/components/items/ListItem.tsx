@@ -1,15 +1,12 @@
 import type { JSX } from 'solid-js';
 
 import { renderListPurpose } from '~/api/display';
+import type { SignalizedList } from '~/api/stores/lists';
 import { getRecordId } from '~/api/utils/misc';
 
-import type { SignalizedList } from '~/api/stores/lists';
-
-import { Interactive } from '../../primitives/interactive';
-
-import { LINK_LIST, Link } from '../Link';
-
 import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';
+import { Interactive } from '../../primitives/interactive';
+import { LINK_LIST, Link } from '../Link';
 
 export interface ListItemProps {
 	list: SignalizedList;

@@ -1,32 +1,27 @@
-import { createInfiniteQuery, useQueryClient, type InfiniteData } from '@mary/solid-query';
+import { type InfiniteData, createInfiniteQuery, useQueryClient } from '@mary/solid-query';
 
 import { multiagent } from '~/api/globals/agent';
-import { getRecordId } from '~/api/utils/misc';
-
-import { getListMembers, getListMembersKey, type ListMembersPage } from '~/api/queries/get-list-members';
+import { type ListMembersPage, getListMembers, getListMembersKey } from '~/api/queries/get-list-members';
 import {
+	type ListMembership,
 	findMembership,
 	getListMembershipsKey,
-	type ListMembership,
 } from '~/api/queries/get-list-memberships';
 import type { SignalizedList } from '~/api/stores/lists';
+import { getRecordId } from '~/api/utils/misc';
 
 import { produce } from '~/utils/immer';
 
 import { openModal } from '../../globals/modals';
-
-import { IconButton } from '../../primitives/icon-button';
-import { MenuItem, MenuItemIcon, MenuRoot } from '../../primitives/menu';
-
-import ConfirmDialog from '../dialogs/ConfirmDialog';
-import { Flyout } from '../Flyout';
-import { VirtualContainer } from '../VirtualContainer';
-
 import DeleteIcon from '../../icons/baseline-delete';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
-
-import ProfileItem, { type ProfileItemAccessory, type ProfileItemProps } from '../items/ProfileItem';
+import { IconButton } from '../../primitives/icon-button';
+import { MenuItem, MenuItemIcon, MenuRoot } from '../../primitives/menu';
+import { Flyout } from '../Flyout';
 import List from '../List';
+import { VirtualContainer } from '../VirtualContainer';
+import ConfirmDialog from '../dialogs/ConfirmDialog';
+import ProfileItem, { type ProfileItemAccessory, type ProfileItemProps } from '../items/ProfileItem';
 
 export interface ListMembersListProps {
 	/** Expected to be static */

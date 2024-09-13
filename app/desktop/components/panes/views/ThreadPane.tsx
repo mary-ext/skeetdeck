@@ -1,20 +1,19 @@
-import { createMemo, createSignal, lazy, type JSX } from 'solid-js';
+import { type JSX, createMemo, createSignal, lazy } from 'solid-js';
 
 import { createQuery } from '@mary/solid-query';
 
 import { getInitialPostThread, getPostThread, getPostThreadKey } from '~/api/queries/get-post-thread';
 
-import { SpecificPaneSize, type ThreadPaneConfig } from '../../../globals/panes';
-import { preferences } from '../../../globals/settings';
-
-import SettingsOutlinedIcon from '~/com/icons/outline-settings';
 import { IconButton } from '~/com/primitives/icon-button';
 
+import SettingsOutlinedIcon from '~/com/icons/outline-settings';
+
+import { SpecificPaneSize, type ThreadPaneConfig } from '../../../globals/panes';
+import { preferences } from '../../../globals/settings';
 import Pane from '../Pane';
 import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
 import { usePaneContext } from '../PaneContext';
-
 import ThreadView from '../partials/ThreadView';
 
 const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));

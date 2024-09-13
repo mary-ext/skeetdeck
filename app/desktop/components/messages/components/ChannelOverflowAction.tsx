@@ -1,15 +1,17 @@
-import { lazy, Show, type JSX } from 'solid-js';
+import { type JSX, Show, lazy } from 'solid-js';
 
 import type { SignalizedConvo } from '~/api/stores/convo';
 
 import { openModal } from '~/com/globals/modals';
 
+import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
+
 import { Flyout } from '~/com/components/Flyout';
+
 import BlockIcon from '~/com/icons/baseline-block';
 import DoorOpenOutlinedIcon from '~/com/icons/outline-door-open';
 import VolumeOffOutlinedIcon from '~/com/icons/outline-volume-off';
 import VolumeUpOutlinedIcon from '~/com/icons/outline-volume-up';
-import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 
 import { useChatPane } from '../contexts/chat';
 

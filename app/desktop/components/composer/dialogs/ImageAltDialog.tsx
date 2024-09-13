@@ -1,22 +1,23 @@
 import { createMemo, createSignal } from 'solid-js';
-
 import TextareaAutosize from 'solid-textarea-autosize';
 
 import { EOF_WS_RE } from '~/api/richtext/composer';
 import { graphemeLen } from '~/api/richtext/intl';
 
+import { closeModal } from '~/com/globals/modals';
+
 import type { ComposedImage } from '~/utils/image';
 import { formatLong } from '~/utils/intl/number';
 
-import { closeModal } from '~/com/globals/modals';
-
-import { getBlobSrc } from '~/com/components/BlobImage';
-import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
-import CloseIcon from '~/com/icons/baseline-close';
 import { Button } from '~/com/primitives/button';
 import { DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
 import { IconButton } from '~/com/primitives/icon-button';
 import { Textarea } from '~/com/primitives/textarea';
+
+import { getBlobSrc } from '~/com/components/BlobImage';
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
+
+import CloseIcon from '~/com/icons/baseline-close';
 
 export interface ImageAltDialogProps {
 	/** Expected to be static */

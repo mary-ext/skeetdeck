@@ -1,10 +1,3 @@
-import { extractTokens } from './utils/extractTokens.js';
-import { findCommonMembers } from './utils/findCommonMembers.js';
-import { normalizeTokens } from './utils/normalizeTokens.js';
-import { transformEmojiData } from './utils/transformEmojiData.js';
-
-import { transact } from './idb-lifecycle.js';
-import { commit, getAllIDB, getIDB } from './idb-util.js';
 import {
 	INDEX_GROUP_AND_ORDER,
 	INDEX_SKIN_UNICODE,
@@ -16,6 +9,12 @@ import {
 	STORE_EMOJI,
 	STORE_KEYVALUE,
 } from './constants.js';
+import { transact } from './idb-lifecycle.js';
+import { commit, getAllIDB, getIDB } from './idb-util.js';
+import { extractTokens } from './utils/extractTokens.js';
+import { findCommonMembers } from './utils/findCommonMembers.js';
+import { normalizeTokens } from './utils/normalizeTokens.js';
+import { transformEmojiData } from './utils/transformEmojiData.js';
 
 export const isEmpty = async (db) => {
 	return !(await get(db, STORE_KEYVALUE, KEY_URL));

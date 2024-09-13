@@ -1,6 +1,6 @@
 import {
-	QueriesObserver,
 	type DefaultError,
+	QueriesObserver,
 	type QueriesObserverOptions,
 	type QueriesPlaceholderDataFunction,
 	type QueryClient,
@@ -8,11 +8,9 @@ import {
 	type QueryKey,
 	type ThrowOnError,
 } from '@tanstack/query-core';
-
-import { createEffect, createMemo, createSignal, on, onCleanup, untrack, type Accessor } from 'solid-js';
+import { type Accessor, createEffect, createMemo, createSignal, on, onCleanup, untrack } from 'solid-js';
 
 import { useQueryClient } from './QueryClientProvider.tsx';
-
 import type { CreateQueryResult, QueryAccessor, SolidQueryOptions } from './types.ts';
 
 // This defines the `UseQueryOptions` that are accepted in `QueriesOptions` & `GetOptions`.

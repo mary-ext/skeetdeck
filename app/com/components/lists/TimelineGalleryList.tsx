@@ -1,28 +1,24 @@
 import { For, Match, Switch, createRenderEffect, untrack } from 'solid-js';
 
-import { createInfiniteQuery, createQuery, useQueryClient, type InfiniteData } from '@mary/solid-query';
+import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
-import { getQueryErrorInfo, resetInfiniteData } from '~/api/utils/query';
-
 import {
+	type TimelineLatestResult,
+	type TimelinePage,
+	type TimelineParams,
 	getTimeline,
 	getTimelineKey,
 	getTimelineLatest,
 	getTimelineLatestKey,
-	type TimelineLatestResult,
-	type TimelinePage,
-	type TimelineParams,
 } from '~/api/queries/get-timeline';
+import { getQueryErrorInfo, resetInfiniteData } from '~/api/utils/query';
 
 import { getTimelineQueryMeta } from '../../globals/shared';
-
-import CircularProgress from '../CircularProgress';
-import GenericErrorView from '../views/GenericErrorView';
-
 import { loadMoreBtn, loadNewBtn } from '../../primitives/interactive';
-
+import CircularProgress from '../CircularProgress';
 import GalleryItem from '../items/GalleryItem';
+import GenericErrorView from '../views/GenericErrorView';
 
 export interface TimelineGalleryListProps {
 	uid: At.DID;

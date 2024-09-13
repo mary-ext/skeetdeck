@@ -1,25 +1,22 @@
 import { createMemo, createRenderEffect, untrack } from 'solid-js';
 
-import { createInfiniteQuery, createQuery, useQueryClient, type InfiniteData } from '@mary/solid-query';
+import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
-import { resetInfiniteData } from '~/api/utils/query';
-
 import {
+	type TimelineLatestResult,
+	type TimelinePage,
+	type TimelineParams,
 	getTimeline,
 	getTimelineKey,
 	getTimelineLatest,
 	getTimelineLatestKey,
-	type TimelineLatestResult,
-	type TimelinePage,
-	type TimelineParams,
 } from '~/api/queries/get-timeline';
+import { resetInfiniteData } from '~/api/utils/query';
 
 import { getTimelineQueryMeta } from '../../globals/shared';
-
 import List from '../List';
 import { VirtualContainer } from '../VirtualContainer';
-
 import Post from '../items/Post';
 
 export interface TimelineListProps {

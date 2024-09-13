@@ -1,7 +1,6 @@
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
 import { closeModal } from '../../../globals/modals';
-
 import { Button } from '../../../primitives/button';
 import { DialogActions, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog';
 import DialogOverlay from '../DialogOverlay';

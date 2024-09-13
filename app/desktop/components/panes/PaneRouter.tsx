@@ -1,4 +1,4 @@
-import { lazy, type Component } from 'solid-js';
+import { type Component, lazy } from 'solid-js';
 
 import {
 	PANE_TYPE_FEED,

@@ -1,4 +1,4 @@
-import { Match, Switch, createSignal, type Accessor, type JSX } from 'solid-js';
+import { type Accessor, type JSX, Match, Switch, createSignal } from 'solid-js';
 
 import { createQuery } from '@mary/solid-query';
 
@@ -18,20 +18,18 @@ import { clsx } from '~/utils/misc';
 
 import { Interactive } from '~/com/primitives/interactive';
 
-import CircularProgress from '../CircularProgress';
-import { LINK_PROFILE, Link } from '../Link';
-import { VirtualContainer } from '../VirtualContainer';
-
+import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 import ChevronRightIcon from '../../icons/baseline-chevron-right';
 import FavoriteIcon from '../../icons/baseline-favorite';
 import PersonIcon from '../../icons/baseline-person';
 import RepeatIcon from '../../icons/baseline-repeat';
-
+import CircularProgress from '../CircularProgress';
+import { LINK_PROFILE, Link } from '../Link';
+import { VirtualContainer } from '../VirtualContainer';
 import EmbedQuote from '../embeds/EmbedQuote';
 import GenericErrorView from '../views/GenericErrorView';
-import Post from './Post';
 
-import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
+import Post from './Post';
 
 export interface NotificationProps {
 	uid: At.DID;

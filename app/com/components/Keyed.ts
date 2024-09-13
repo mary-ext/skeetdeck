@@ -1,4 +1,4 @@
-import { createMemo, untrack, type JSX } from 'solid-js';
+import { type JSX, createMemo, untrack } from 'solid-js';
 
 export interface KeyedProps {
 	key: unknown;

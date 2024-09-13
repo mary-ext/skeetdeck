@@ -1,4 +1,4 @@
-import { createMemo, type JSX } from 'solid-js';
+import { type JSX, createMemo } from 'solid-js';
 
 import { clsx } from '~/utils/misc';
 

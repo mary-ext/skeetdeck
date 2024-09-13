@@ -1,14 +1,15 @@
-import { createSignal, lazy, type JSX } from 'solid-js';
+import { type JSX, createSignal, lazy } from 'solid-js';
 
-import { ProfilePaneTab, type ProfilePaneConfig } from '../../../globals/panes';
-import { preferences } from '../../../globals/settings';
+import { IconButton } from '~/com/primitives/icon-button';
 
 import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel';
 import TimelineGalleryList from '~/com/components/lists/TimelineGalleryList';
 import TimelineList from '~/com/components/lists/TimelineList';
-import SettingsOutlinedIcon from '~/com/icons/outline-settings';
-import { IconButton } from '~/com/primitives/icon-button';
 
+import SettingsOutlinedIcon from '~/com/icons/outline-settings';
+
+import { type ProfilePaneConfig, ProfilePaneTab } from '../../../globals/panes';
+import { preferences } from '../../../globals/settings';
 import Pane from '../Pane';
 import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';

@@ -1,15 +1,16 @@
-import { onCleanup, type JSX } from 'solid-js';
+import { type JSX, onCleanup } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent';
 
 import { clsx } from '~/utils/misc';
 
+import { IconButton } from '~/com/primitives/icon-button';
+
+import DragIndicatorIcon from '~/com/icons/baseline-drag-indicator';
+
 import { onFocusPane } from '../../globals/events';
 import { getPaneSizeWidth } from '../../globals/panes';
 import { resolvePaneSize } from '../../globals/settings';
-
-import DragIndicatorIcon from '~/com/icons/baseline-drag-indicator';
-import { IconButton } from '~/com/primitives/icon-button';
 
 import { usePaneContext } from './PaneContext';
 

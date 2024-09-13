@@ -1,6 +1,5 @@
+import { DB_VERSION_CURRENT, DB_VERSION_INITIAL } from './constants.js';
 import { initialMigration } from './migrations.js';
-
-import { DB_VERSION_INITIAL, DB_VERSION_CURRENT } from './constants.js';
 
 /** @type {Record<string, IDBOpenDBRequest>} */
 const requests = {};

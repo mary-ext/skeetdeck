@@ -7,6 +7,8 @@ import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-
 
 import { formatCompact } from '~/utils/intl/number';
 
+import { IconButton } from '~/com/primitives/icon-button';
+
 import CircularProgress from '~/com/components/CircularProgress';
 import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel';
 import { VirtualContainer } from '~/com/components/VirtualContainer';
@@ -14,13 +16,12 @@ import TimelineGalleryList from '~/com/components/lists/TimelineGalleryList';
 import TimelineList from '~/com/components/lists/TimelineList';
 import GenericErrorView from '~/com/components/views/GenericErrorView';
 import ProfileHeader from '~/com/components/views/ProfileHeader';
+
 import SearchIcon from '~/com/icons/baseline-search';
 import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
-import { IconButton } from '~/com/primitives/icon-button';
 
-import { PANE_TYPE_PROFILE, ProfilePaneTab, type ProfilePaneConfig } from '../../../globals/panes';
+import { PANE_TYPE_PROFILE, type ProfilePaneConfig, ProfilePaneTab } from '../../../globals/panes';
 import { addPane, preferences } from '../../../globals/settings';
-
 import { usePaneContext, usePaneModalState } from '../PaneContext';
 import PaneDialog from '../PaneDialog';
 import PaneDialogHeader from '../PaneDialogHeader';

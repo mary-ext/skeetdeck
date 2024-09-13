@@ -1,15 +1,12 @@
 import { For, type JSX } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
+import { LineType, type ThreadData, type ThreadItem } from '~/api/models/threads';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
-import { LineType, type ThreadData, type ThreadItem } from '~/api/models/threads';
-
+import ArrowLeftIcon from '../../../icons/baseline-arrow-left';
 import { LINK_POST, Link } from '../../Link';
 import { VirtualContainer } from '../../VirtualContainer';
-
-import ArrowLeftIcon from '../../../icons/baseline-arrow-left';
-
 import PostTreeItem from '../../items/PostTreeItem';
 
 export interface NestedThreadProps {

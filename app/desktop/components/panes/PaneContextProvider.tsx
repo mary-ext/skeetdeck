@@ -1,6 +1,5 @@
-import { For, Suspense, createSignal, type Accessor, type JSX } from 'solid-js';
-
 import { createSortable, transformStyle } from '@thisbeyond/solid-dnd';
+import { type Accessor, For, type JSX, Suspense, createSignal } from 'solid-js';
 
 import { clsx } from '~/utils/misc';
 import { signal } from '~/utils/signals';
@@ -11,8 +10,8 @@ import type { BasePaneConfig, DeckConfig } from '../../globals/panes';
 
 import {
 	PaneContext,
-	PaneModalContext,
 	type PaneContextObject,
+	PaneModalContext,
 	type PaneModalContextObject,
 	type PaneModalState,
 } from './PaneContext';

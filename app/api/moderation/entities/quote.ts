@@ -1,14 +1,13 @@
-import type { AppBskyEmbedRecord, AppBskyFeedPost } from '../../atp-schema';
-import { unwrapPostEmbedText } from '../../utils/post';
-
 import {
+	type ModerationCause,
+	type ModerationOptions,
 	PreferenceWarn,
 	TargetContent,
 	decideLabelModeration,
 	decideMutedKeywordModeration,
-	type ModerationCause,
-	type ModerationOptions,
 } from '..';
+import type { AppBskyEmbedRecord, AppBskyFeedPost } from '../../atp-schema';
+import { unwrapPostEmbedText } from '../../utils/post';
 
 import { decideBasicProfile } from './basic-profile';
 

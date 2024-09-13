@@ -2,8 +2,8 @@ import { updateProfileFollow } from '~/api/mutations/follow-profile';
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
 import { openModal } from '../globals/modals';
-
 import { Button } from '../primitives/button';
+
 import ConfirmDialog from './dialogs/ConfirmDialog';
 
 export interface ProfileFollowButtonProps {

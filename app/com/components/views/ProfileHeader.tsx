@@ -1,11 +1,7 @@
-import { createMemo, lazy, type JSX } from 'solid-js';
+import { type JSX, createMemo, lazy } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
 import { getAccountData, isAccountPrivileged } from '~/api/globals/agent';
-import { getRecordId, getRepoId } from '~/api/utils/misc';
-
-import type { SignalizedProfile } from '~/api/stores/profiles';
-
 import {
 	ContextProfileMedia,
 	ContextProfileView,
@@ -13,30 +9,29 @@ import {
 	isProfileTempMuted,
 } from '~/api/moderation';
 import { moderateProfile } from '~/api/moderation/entities/profile';
+import type { SignalizedProfile } from '~/api/stores/profiles';
+import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import { formatCompact } from '~/utils/intl/number';
 import { formatAbsDateTime } from '~/utils/intl/time';
 import { clsx } from '~/utils/misc';
 
+import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 import { openModal } from '../../globals/modals';
 import { getModerationOptions } from '../../globals/shared';
-
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
 import MailOutlinedIcon from '../../icons/outline-mail';
 import { BoxedIconButton } from '../../primitives/boxed-icon-button';
 import { Button } from '../../primitives/button';
 import {
-	Link,
 	LINK_LIST,
 	LINK_PROFILE_EDIT,
 	LINK_PROFILE_FOLLOWERS,
 	LINK_PROFILE_FOLLOWS,
 	LINK_PROFILE_KNOWN_FOLLOWERS,
 	LINK_PROFILE_MESSAGE,
+	Link,
 } from '../Link';
-
-import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
-
 import ProfileFollowButton from '../ProfileFollowButton';
 import ModerationAlerts from '../moderation/ModerationAlerts';
 

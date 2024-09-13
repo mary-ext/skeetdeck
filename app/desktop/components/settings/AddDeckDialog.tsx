@@ -1,19 +1,22 @@
+import { navigate } from '@pkg/solid-page-router';
 import { createSignal } from 'solid-js';
 
 import * as TID from '@mary/atproto-tid';
-import { navigate } from '@pkg/solid-page-router';
 
-import { preferences } from '../../globals/settings';
-
-import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
-import EmojiFlyout from '~/com/components/emojis/EmojiFlyout';
 import { closeModal } from '~/com/globals/modals';
+
+import { model } from '~/utils/input';
+
 import { Button } from '~/com/primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
 import { Input } from '~/com/primitives/input';
-import { model } from '~/utils/input';
+
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
+import EmojiFlyout from '~/com/components/emojis/EmojiFlyout';
 
 import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
+
+import { preferences } from '../../globals/settings';
 
 const AddDeckDialog = () => {
 	const [name, setName] = createSignal('');

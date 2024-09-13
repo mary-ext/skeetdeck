@@ -5,10 +5,9 @@ import { getRecordId } from '~/api/utils/misc';
 
 import { clsx } from '~/utils/misc';
 
+import DefaultFeedAvatar from '../../assets/default-feed-avatar.svg?url';
 import { Interactive } from '../../primitives/interactive';
 import { LINK_FEED, Link } from '../Link';
-
-import DefaultFeedAvatar from '../../assets/default-feed-avatar.svg?url';
 
 export interface FeedItemProps {
 	feed: SignalizedFeed;

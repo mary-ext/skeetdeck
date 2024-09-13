@@ -16,14 +16,16 @@ import { getModerationOptions } from '~/com/globals/shared';
 import { createDebouncedValue } from '~/utils/hooks';
 import { autofocusIf, model, refs } from '~/utils/input';
 
+import { IconButton } from '~/com/primitives/icon-button';
+
+import CircularProgress from '~/com/components/CircularProgress';
 import List from '~/com/components/List';
 import { VirtualContainer } from '~/com/components/VirtualContainer';
 import SearchInput from '~/com/components/inputs/SearchInput';
 import ProfileItem from '~/com/components/items/ProfileItem';
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
-import { IconButton } from '~/com/primitives/icon-button';
 
-import CircularProgress from '~/com/components/CircularProgress';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+
 import { useChatPane } from '../contexts/chat';
 import { ViewKind, type ViewParams } from '../contexts/router';
 

@@ -1,14 +1,13 @@
-import { type JSX, createMemo } from 'solid-js';
-
 import type { Middleware } from '@floating-ui/dom';
 import { getSide } from '@floating-ui/utils';
+import { type JSX, createMemo } from 'solid-js';
 
 import {
-	type LabelDefinition,
-	type LabelPreference,
 	BlurContent,
 	BlurMedia,
 	BlurNone,
+	type LabelDefinition,
+	type LabelPreference,
 	PreferenceHide,
 	PreferenceIgnore,
 	PreferenceWarn,
@@ -20,14 +19,13 @@ import {
 
 import { clsx } from '~/utils/misc';
 
-import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
-
 import { ListBoxItemReadonly } from '~/com/primitives/list-box';
 import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 
+import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
+
 import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down';
 import CheckIcon from '~/com/icons/baseline-check';
-
 import InfoOutlinedIcon from '~/com/icons/outline-info';
 
 export interface LabelItemProps {

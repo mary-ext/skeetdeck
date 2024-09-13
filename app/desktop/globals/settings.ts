@@ -1,14 +1,13 @@
 import * as TID from '@mary/atproto-tid';
 
 import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults';
-import type { LanguagePreferences, TranslationPreferences } from '~/api/types';
-
 import type { ModerationOptions } from '~/api/moderation';
+import type { LanguagePreferences, TranslationPreferences } from '~/api/types';
 
 import { createReactiveLocalStorage } from '~/utils/storage';
 
 import { desktopEvents } from './events';
-import { PaneSize, SpecificPaneSize, type DeckConfig, type PaneConfig } from './panes';
+import { type DeckConfig, type PaneConfig, PaneSize, SpecificPaneSize } from './panes';
 
 export interface ModerationPreferences extends Omit<ModerationOptions, '_filtersCache'> {
 	updatedAt: number;

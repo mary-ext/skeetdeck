@@ -2,7 +2,7 @@ import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
-import { mergeProfile, type SignalizedProfile } from '../stores/profiles';
+import { type SignalizedProfile, mergeProfile } from '../stores/profiles';
 
 export interface ListMember {
 	uri: string;

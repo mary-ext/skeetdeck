@@ -4,10 +4,9 @@ import type { AppBskyGraphDefs } from '~/api/atp-schema';
 import { renderListPurpose } from '~/api/display';
 import { getRecordId } from '~/api/utils/misc';
 
+import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';
 import { Interactive } from '../../primitives/interactive';
 import { LINK_LIST, Link } from '../Link';
-
-import DefaultListAvatar from '../../assets/default-list-avatar.svg?url';
 
 type ListView = AppBskyGraphDefs.ListView;
 type ListViewBasic = AppBskyGraphDefs.ListViewBasic;

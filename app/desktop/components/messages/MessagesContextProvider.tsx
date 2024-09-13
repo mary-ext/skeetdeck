@@ -1,4 +1,4 @@
-import { batch, createSignal, type JSX } from 'solid-js';
+import { type JSX, batch, createSignal } from 'solid-js';
 
 import { EQUALS_FALSE } from '~/utils/hooks';
 

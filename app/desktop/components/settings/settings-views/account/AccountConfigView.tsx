@@ -3,18 +3,11 @@ import { Show, createMemo } from 'solid-js';
 import { createMutation, createQuery } from '@mary/solid-query';
 
 import { multiagent } from '~/api/globals/agent';
-
 import { upsertProfile } from '~/api/mutations/upsert-profile';
 import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';
 
 import { clsx } from '~/utils/misc';
 
-import Checkbox from '~/com/components/inputs/Checkbox';
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
-import BlockIcon from '~/com/icons/baseline-block';
-import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
-import PeopleOutlinedIcon from '~/com/icons/outline-people';
-import VolumeOffOutlinedIcon from '~/com/icons/outline-volume-off';
 import { IconButton } from '~/com/primitives/icon-button';
 import {
 	ListBox,
@@ -26,7 +19,15 @@ import {
 	ListGroupHeader,
 } from '~/com/primitives/list-box';
 
-import { VIEW_ACCOUNT_CONFIG, useViewRouter, type ViewParams } from '../_router';
+import Checkbox from '~/com/components/inputs/Checkbox';
+
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+import BlockIcon from '~/com/icons/baseline-block';
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
+import PeopleOutlinedIcon from '~/com/icons/outline-people';
+import VolumeOffOutlinedIcon from '~/com/icons/outline-volume-off';
+
+import { VIEW_ACCOUNT_CONFIG, type ViewParams, useViewRouter } from '../_router';
 
 const NO_UNAUTHENTICATED_LABEL = '!no-unauthenticated';
 

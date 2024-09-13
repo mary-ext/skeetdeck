@@ -3,31 +3,30 @@ import type { QueryFunctionContext as QC } from '@mary/solid-query';
 import { assert } from '~/utils/misc';
 
 import type { AppBskyFeedGetTimeline, AppBskyFeedPost, At } from '../atp-schema';
+import type { AgentInstance } from '../classes/multiagent';
 import { multiagent } from '../globals/agent';
 import { systemLanguages } from '../globals/platform';
 import {
-	createTimelineSlices,
-	createUnjoinedSlices,
 	type PostFilter,
 	type SignalizedTimelineItem,
 	type SliceFilter,
 	type TimelineSlice,
+	createTimelineSlices,
+	createUnjoinedSlices,
 } from '../models/timeline';
 import {
 	ContextContentList,
+	type ModerationCause,
+	type ModerationOptions,
 	PreferenceHide,
 	TargetContent,
 	decideLabelModeration,
 	decideMutedKeywordModeration,
 	getModerationUI,
-	type ModerationCause,
-	type ModerationOptions,
 } from '../moderation';
+import type { LanguagePreferences } from '../types';
 import { unwrapPostEmbedText } from '../utils/post';
 import { wrapInfiniteQuery } from '../utils/query';
-
-import type { AgentInstance } from '../classes/multiagent';
-import type { LanguagePreferences } from '../types';
 
 import _getDid from './_did';
 

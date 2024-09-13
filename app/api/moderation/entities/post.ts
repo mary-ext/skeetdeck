@@ -1,15 +1,13 @@
-import { unwrapPostEmbedText } from '../../utils/post';
-
-import type { SignalizedPost } from '../../stores/posts';
-
 import {
+	type ModerationCause,
+	type ModerationOptions,
 	PreferenceWarn,
 	TargetContent,
 	decideLabelModeration,
 	decideMutedKeywordModeration,
-	type ModerationCause,
-	type ModerationOptions,
 } from '..';
+import type { SignalizedPost } from '../../stores/posts';
+import { unwrapPostEmbedText } from '../../utils/post';
 
 import { moderateProfile } from './profile';
 

@@ -5,18 +5,19 @@ import { createInfiniteQuery } from '@mary/solid-query';
 import type { AppBskyUnspeccedGetPopularFeedGenerators, At } from '~/api/atp-schema';
 import { multiagent, renderAccountName } from '~/api/globals/agent';
 
-import { PANE_TYPE_FEED, type CustomFeedPaneConfig } from '../../../globals/panes';
+import { DialogBody } from '~/com/primitives/dialog';
+import { Interactive } from '~/com/primitives/interactive';
 
 import CircularProgress from '~/com/components/CircularProgress';
 import { VirtualContainer } from '~/com/components/VirtualContainer';
 import FilterBar from '~/com/components/inputs/FilterBar';
 import SearchInput from '~/com/components/inputs/SearchInput';
-import { DialogBody } from '~/com/primitives/dialog';
-import { Interactive } from '~/com/primitives/interactive';
-
-import type { PaneCreatorProps } from './types';
 
 import DefaultFeedAvatar from '~/com/assets/default-feed-avatar.svg?url';
+
+import { type CustomFeedPaneConfig, PANE_TYPE_FEED } from '../../../globals/panes';
+
+import type { PaneCreatorProps } from './types';
 
 const feedItem = Interactive({
 	variant: 'muted',

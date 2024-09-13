@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, Match, Switch, untrack } from 'solid-js';
+import { For, Match, Switch, createEffect, createSignal, untrack } from 'solid-js';
 
 import type { ChatBskyConvoDefs } from '~/api/atp-schema';
 
@@ -11,6 +11,7 @@ import CircularProgress from '~/com/components/CircularProgress';
 
 import { useChannel } from '../contexts/channel';
 import { useChatPane } from '../contexts/chat';
+
 import MessageDivider from './MessageDivider';
 import MessageItem from './MessageItem';
 

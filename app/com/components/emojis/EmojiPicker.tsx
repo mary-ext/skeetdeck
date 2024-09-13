@@ -15,7 +15,7 @@ import { Interactive } from '../../primitives/interactive';
 import { Flyout, offset } from '../Flyout';
 import SearchInput from '../inputs/SearchInput';
 
-import { getEmojiDb, summarizeEmojis, type PickedEmoji, type SummarizedEmoji } from './utils/database';
+import { type PickedEmoji, type SummarizedEmoji, getEmojiDb, summarizeEmojis } from './utils/database';
 import { detectEmojiSupportLevel } from './utils/support';
 
 const EMOJI_GROUPS: [group: number, emoji: string, name: string][] = [

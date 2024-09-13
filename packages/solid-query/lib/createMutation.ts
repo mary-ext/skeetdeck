@@ -1,9 +1,7 @@
-import { MutationObserver, notifyManager, type DefaultError, type QueryClient } from '@tanstack/query-core';
-
+import { type DefaultError, MutationObserver, type QueryClient, notifyManager } from '@tanstack/query-core';
 import { createEffect, createMemo, on, onCleanup, untrack } from 'solid-js';
 
 import { useQueryClient } from './QueryClientProvider.tsx';
-
 import type { CreateMutateFunction, CreateMutationOptions, CreateMutationResult } from './types.ts';
 import { createStateObject } from './utils.ts';
 

@@ -1,12 +1,12 @@
-import { lazy, type JSX } from 'solid-js';
+import { type JSX, lazy } from 'solid-js';
 
 import {
 	CauseLabel,
-	SeverityAlert,
-	getLocalizedLabel,
 	type LabelModerationCause,
 	type ModerationCause,
 	type ModerationUI,
+	SeverityAlert,
+	getLocalizedLabel,
 } from '~/api/moderation';
 
 import { openModal } from '~/com/globals/modals';

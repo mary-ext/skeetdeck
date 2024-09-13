@@ -1,5 +1,6 @@
-import { lazy, type Component } from 'solid-js';
-import { ViewKind, type View } from './router';
+import { type Component, lazy } from 'solid-js';
+
+import { type View, ViewKind } from './router';
 
 export interface ChatRouterViewProps {
 	view: View;

@@ -1,19 +1,11 @@
-import { createMemo, lazy, type JSX } from 'solid-js';
+import { type JSX, createMemo, lazy } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent';
-
-import type { SignalizedProfile } from '~/api/stores/profiles';
-
 import { isProfileTempMuted } from '~/api/moderation';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 
 import { openModal } from '../../../globals/modals';
 import { getModerationOptions } from '../../../globals/shared';
-
-import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
-
-import { Flyout } from '../../Flyout';
-import { LINK_PROFILE_FEEDS, LINK_PROFILE_LISTS, useLinking } from '../../Link';
-
 import BlockIcon from '../../../icons/baseline-block';
 import LaunchIcon from '../../../icons/baseline-launch';
 import PlaylistAddIcon from '../../../icons/baseline-playlist-add';
@@ -26,6 +18,9 @@ import VisibilityOutlinedIcon from '../../../icons/outline-visibility';
 import VisibilityOffOutlinedIcon from '../../../icons/outline-visibility-off';
 import VolumeOffOutlinedIcon from '../../../icons/outline-volume-off';
 import VolumeUpOutlinedIcon from '../../../icons/outline-volume-up';
+import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
+import { Flyout } from '../../Flyout';
+import { LINK_PROFILE_FEEDS, LINK_PROFILE_LISTS, useLinking } from '../../Link';
 
 const AddProfileInListDialog = lazy(() => import('../../dialogs/lists/AddProfileInListDialog'));
 const BlockConfirmDialog = lazy(() => import('../../dialogs/BlockConfirmDialog'));

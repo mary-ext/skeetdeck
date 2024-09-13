@@ -1,28 +1,27 @@
-import { createSignal, lazy, type JSX } from 'solid-js';
+import { type JSX, createSignal, lazy } from 'solid-js';
 
 import { createQuery } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
-
 import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info';
 
-import type { CustomFeedPaneConfig } from '../../../globals/panes';
+import { IconButton } from '~/com/primitives/icon-button';
 
 import { VirtualContainer } from '~/com/components/VirtualContainer';
 import TimelineList from '~/com/components/lists/TimelineList';
+
 import InfoOutlinedIcon from '~/com/icons/outline-info';
 import SettingsOutlinedIcon from '~/com/icons/outline-settings';
-import { IconButton } from '~/com/primitives/icon-button';
 
+import type { CustomFeedPaneConfig } from '../../../globals/panes';
 import Pane from '../Pane';
 import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
 import { usePaneContext } from '../PaneContext';
+import FeedHeader from '../partials/FeedHeader';
 
 const CustomFeedPaneSettings = lazy(() => import('../settings/CustomFeedPaneSettings'));
 const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));
-
-import FeedHeader from '../partials/FeedHeader';
 
 const CustomFeedPane = () => {
 	const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);

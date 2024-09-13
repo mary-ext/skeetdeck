@@ -1,23 +1,22 @@
-import { For, Show, Suspense, batch, lazy } from 'solid-js';
-
 import { Navigate, type RouteComponentProps } from '@pkg/solid-page-router';
 import { DragDropProvider, DragDropSensors, SortableProvider } from '@thisbeyond/solid-dnd';
+import { For, Show, Suspense, batch, lazy } from 'solid-js';
 
 import { openModal } from '~/com/globals/modals';
+
 import { Title } from '~/com/lib/meta';
 
-import { preferences } from '../globals/settings';
-import { ConstrainYDragAxis } from '../utils/dnd';
-
-import { PaneContextProvider } from '../components/panes/PaneContextProvider';
-import PaneFallback from '../components/panes/PaneFallback';
-import PaneRouter from '../components/panes/PaneRouter';
+import { Button } from '~/com/primitives/button';
+import { IconButton } from '~/com/primitives/icon-button';
 
 import AddIcon from '~/com/icons/baseline-add';
 import EditIcon from '~/com/icons/baseline-edit';
 
-import { Button } from '~/com/primitives/button';
-import { IconButton } from '~/com/primitives/icon-button';
+import { PaneContextProvider } from '../components/panes/PaneContextProvider';
+import PaneFallback from '../components/panes/PaneFallback';
+import PaneRouter from '../components/panes/PaneRouter';
+import { preferences } from '../globals/settings';
+import { ConstrainYDragAxis } from '../utils/dnd';
 
 const EditDeckDialog = lazy(() => import('../components/settings/EditDeckDialog'));
 const AddPaneDialog = lazy(() => import('../components/settings/AddPaneDialog'));

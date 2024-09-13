@@ -1,14 +1,16 @@
-import { lazy, type JSX } from 'solid-js';
+import { type JSX, lazy } from 'solid-js';
 
 import type { ChatBskyConvoDefs } from '~/api/atp-schema';
 import { serializeRichText } from '~/api/richtext/utils';
 
 import { openModal } from '~/com/globals/modals';
 
+import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
+
 import { Flyout } from '~/com/components/Flyout';
+
 import ContentCopyIcon from '~/com/icons/baseline-content-copy';
 import DeleteIcon from '~/com/icons/baseline-delete';
-import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 
 import { useChannel } from '../contexts/channel';
 

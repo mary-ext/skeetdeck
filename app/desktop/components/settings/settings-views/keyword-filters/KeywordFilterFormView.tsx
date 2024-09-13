@@ -1,26 +1,19 @@
-import { For, batch, createSignal, onMount, type Signal } from 'solid-js';
+import { For, type Signal, batch, createSignal, onMount } from 'solid-js';
 
 import {
+	type KeywordFilterMatcher,
+	type KeywordPreference,
 	PreferenceHide,
 	PreferenceIgnore,
 	PreferenceWarn,
-	type KeywordFilterMatcher,
-	type KeywordPreference,
 } from '~/api/moderation';
-
-import { model, refs } from '~/utils/input';
-import { formatAbsDateTime } from '~/utils/intl/time';
 
 import { openModal } from '~/com/globals/modals';
 import { bustModeration } from '~/com/globals/shared';
 
-import { preferences } from '../../../../globals/settings';
+import { model, refs } from '~/utils/input';
+import { formatAbsDateTime } from '~/utils/intl/time';
 
-import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
-import AddIcon from '~/com/icons/baseline-add';
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
-import CloseIcon from '~/com/icons/baseline-close';
-import FormatLetterMatchesIcon from '~/com/icons/baseline-format-letter-matches';
 import { Button } from '~/com/primitives/button';
 import { IconButton } from '~/com/primitives/icon-button';
 import { Input } from '~/com/primitives/input';
@@ -32,11 +25,18 @@ import {
 	ListGroupHeader,
 } from '~/com/primitives/list-box';
 
+import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
+
 import DateTimeDialog from '~/desktop/components/dialogs/DateTimeDialog';
 
-import { VIEW_KEYWORD_FILTER_FORM, useViewRouter, type ViewParams } from '../_router';
+import AddIcon from '~/com/icons/baseline-add';
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+import CloseIcon from '~/com/icons/baseline-close';
+import FormatLetterMatchesIcon from '~/com/icons/baseline-format-letter-matches';
 
+import { preferences } from '../../../../globals/settings';
 import { SelectionItem } from '../_components';
+import { VIEW_KEYWORD_FILTER_FORM, type ViewParams, useViewRouter } from '../_router';
 
 type KeywordState = [keyword: Signal<string>, whole: Signal<boolean>];
 

@@ -1,7 +1,8 @@
-import { createEffect, createSignal, type JSX } from 'solid-js';
+import { type JSX, createEffect, createSignal } from 'solid-js';
+
+import { Interactive } from '~/com/primitives/interactive';
 
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
-import { Interactive } from '~/com/primitives/interactive';
 
 import { usePaneContext } from './PaneContext';
 

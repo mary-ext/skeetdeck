@@ -1,4 +1,5 @@
 import { formatQueryError } from '~/api/utils/misc';
+
 import { Button } from '../../primitives/button';
 
 export interface GenericErrorViewProps {

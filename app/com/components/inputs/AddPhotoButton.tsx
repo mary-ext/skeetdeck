@@ -1,16 +1,13 @@
-import { createSignal, type JSX } from 'solid-js';
-
 import { type Middleware } from '@floating-ui/dom';
 import { getSide } from '@floating-ui/utils';
+import { type JSX, createSignal } from 'solid-js';
 
 import { compressProfileImage } from '~/utils/image';
 
+import AddPhotoAlternateOutlinedIcon from '../../icons/outline-add-photo-alternate';
 import { MenuItem, MenuRoot } from '../../primitives/menu';
-
 import CircularProgress from '../CircularProgress';
 import { Flyout, offsetlessMiddlewares } from '../Flyout';
-
-import AddPhotoAlternateOutlinedIcon from '../../icons/outline-add-photo-alternate';
 
 export interface AddPhotoButtonProps {
 	exists: boolean;

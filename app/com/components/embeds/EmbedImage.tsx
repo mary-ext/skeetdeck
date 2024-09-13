@@ -2,9 +2,9 @@ import { lazy } from 'solid-js';
 
 import type { AppBskyEmbedImages } from '~/api/atp-schema';
 
-import { clsx } from '~/utils/misc';
-
 import { openModal } from '~/com/globals/modals';
+
+import { clsx } from '~/utils/misc';
 
 import ImageAltAction from './images/ImageAltAction';
 

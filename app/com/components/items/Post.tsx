@@ -1,48 +1,41 @@
-import { createEffect, createMemo, type Accessor } from 'solid-js';
+import { type Accessor, createEffect, createMemo } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
 import type { SignalizedTimelineItem } from '~/api/models/timeline';
-import type { SignalizedPost } from '~/api/stores/posts';
-import { getRecordId } from '~/api/utils/misc';
-
-import { updatePostLike } from '~/api/mutations/like-post';
-
 import {
 	ContextContentList,
 	ContextProfileMedia,
-	getModerationUI,
 	type ModerationCause,
+	getModerationUI,
 } from '~/api/moderation';
 import { moderatePost } from '~/api/moderation/entities/post';
+import { updatePostLike } from '~/api/mutations/like-post';
+import type { SignalizedPost } from '~/api/stores/posts';
+import { getRecordId } from '~/api/utils/misc';
 
 import { isElementClicked } from '~/utils/interaction';
 import { formatCompact } from '~/utils/intl/number';
 import { clsx } from '~/utils/misc';
 
+import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 import { getModerationOptions } from '../../globals/shared';
-
-import { LINK_POST, LINK_PROFILE, Link, useLinking, type PostLinking, type ProfileLinking } from '../Link';
-import RichTextRenderer from '../RichTextRenderer';
-import TimeAgo from '../TimeAgo';
-
 import FavoriteIcon from '../../icons/baseline-favorite';
 import MoreHorizIcon from '../../icons/baseline-more-horiz';
 import RepeatIcon from '../../icons/baseline-repeat';
 import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite';
-
-import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
-
+import { LINK_POST, LINK_PROFILE, Link, type PostLinking, type ProfileLinking, useLinking } from '../Link';
+import RichTextRenderer from '../RichTextRenderer';
+import TimeAgo from '../TimeAgo';
 import Embed from '../embeds/Embed';
 import ContentWarning from '../moderation/ContentWarning';
-import PostOverflowAction from './posts/PostOverflowAction';
+import LabelsOnMe from '../moderation/LabelsOnMe';
+import ModerationAlerts from '../moderation/ModerationAlerts';
 
+import PostOverflowAction from './posts/PostOverflowAction';
 import PostTag from './posts/PostTag';
 import ReplyAction from './posts/ReplyAction';
 import RepostAction from './posts/RepostAction';
-
-import LabelsOnMe from '../moderation/LabelsOnMe';
-import ModerationAlerts from '../moderation/ModerationAlerts';
 
 export interface PostProps {
 	/** Expected to be static */

@@ -4,7 +4,6 @@ import type { SignalizedProfile } from '~/api/stores/profiles';
 
 import List from '../List';
 import { VirtualContainer } from '../VirtualContainer';
-
 import { ProfileItem, type ProfileItemAccessory, type ProfileItemProps } from '../items/ProfileItem';
 
 export interface ProfileListProps {

@@ -1,4 +1,4 @@
-import { createSignal, type JSX } from 'solid-js';
+import { type JSX, createSignal } from 'solid-js';
 
 import { subscribeListBlock } from '~/api/mutations/subscribe-list-block';
 import { subscribeListMute } from '~/api/mutations/subscribe-list-mute';
@@ -8,7 +8,6 @@ import { createRadioModel } from '~/utils/input';
 import { getUniqueId } from '~/utils/misc';
 
 import { closeModal } from '../../../globals/modals';
-
 import { Button } from '../../../primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog';
 import Radio from '../../inputs/Radio';

@@ -1,12 +1,14 @@
+import { IconButton } from '~/com/primitives/icon-button';
+
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 import VolumeOffOutlinedIcon from '~/com/icons/outline-volume-off';
-import { IconButton } from '~/com/primitives/icon-button';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
 import { useChannel } from '../contexts/channel';
 import { useChatPane } from '../contexts/chat';
+
 import ChannelOverflowAction from './ChannelOverflowAction';
 
 const ChannelHeader = () => {

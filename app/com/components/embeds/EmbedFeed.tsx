@@ -3,10 +3,9 @@ import type { JSX } from 'solid-js';
 import type { AppBskyFeedDefs } from '~/api/atp-schema';
 import { getRecordId } from '~/api/utils/misc';
 
+import DefaultFeedAvatar from '../../assets/default-feed-avatar.svg?url';
 import { Interactive } from '../../primitives/interactive';
 import { LINK_FEED, Link } from '../Link';
-
-import DefaultFeedAvatar from '../../assets/default-feed-avatar.svg?url';
 
 type EmbeddedFeed = AppBskyFeedDefs.GeneratorView;
 

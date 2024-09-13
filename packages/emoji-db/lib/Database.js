@@ -1,18 +1,17 @@
-import { cleanEmoji } from './utils/cleanEmoji.js';
-import { uniqEmoji } from './utils/uniqEmoji.js';
-
-import { loadDataForFirstTime, checkForUpdates } from './data.js';
-import { closeDatabase, deleteDatabase, addOnCloseListener, openDatabase } from './idb-lifecycle.js';
+import { DEFAULT_LOCALE, DEFAULT_SOURCE_URL, KEY_PREFERRED_SKINTONE, STORE_KEYVALUE } from './constants.js';
+import { checkForUpdates, loadDataForFirstTime } from './data.js';
 import {
-	isEmpty,
+	get,
 	getEmojiByGroup,
 	getEmojiBySearchQuery,
 	getEmojiByShortcode,
 	getEmojiByUnicode,
-	get,
+	isEmpty,
 	set,
 } from './idb-interface.js';
-import { DEFAULT_SOURCE_URL, DEFAULT_LOCALE, KEY_PREFERRED_SKINTONE, STORE_KEYVALUE } from './constants.js';
+import { addOnCloseListener, closeDatabase, deleteDatabase, openDatabase } from './idb-lifecycle.js';
+import { cleanEmoji } from './utils/cleanEmoji.js';
+import { uniqEmoji } from './utils/uniqEmoji.js';
 
 export default class Database {
 	/** @type {string} */

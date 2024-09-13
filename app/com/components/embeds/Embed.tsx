@@ -1,10 +1,11 @@
 import { type Accessor } from 'solid-js';
 
 import type { AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedRecord } from '~/api/atp-schema';
-import { ContextContentMedia, getModerationUI, type ModerationCause } from '~/api/moderation';
+import { ContextContentMedia, type ModerationCause, getModerationUI } from '~/api/moderation';
 import type { SignalizedPost } from '~/api/stores/posts';
 
 import ContentWarning from '../moderation/ContentWarning';
+
 import EmbedFeed from './EmbedFeed';
 import EmbedImage from './EmbedImage';
 import EmbedLink from './EmbedLink';

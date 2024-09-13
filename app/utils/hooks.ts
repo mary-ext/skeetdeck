@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onCleanup, untrack, type Accessor, type Signal } from 'solid-js';
+import { type Accessor, type Signal, createEffect, createSignal, onCleanup, untrack } from 'solid-js';
 
 export const EQUALS_FALSE = { equals: false } as const;
 

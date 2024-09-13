@@ -33,7 +33,6 @@ import {
 	VIEW_TEMPORARY_MUTES,
 	useViewRouter,
 } from './_router';
-
 import LabelItem from './content-filters/components/LabelItem';
 
 const ModerationView = () => {

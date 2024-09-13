@@ -2,24 +2,24 @@ import { createEffect, createMemo, onCleanup, onMount } from 'solid-js';
 
 import { getAccountData } from '~/api/globals/agent';
 
-import { createChannelListing, FetchState } from '~/desktop/lib/messages/channel-listing';
+import { FetchState, createChannelListing } from '~/desktop/lib/messages/channel-listing';
+
+import { IconButton } from '~/com/primitives/icon-button';
 
 import List from '~/com/components/List';
+
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import MailAddOutlinedIcon from '~/com/icons/outline-mail-add';
-import { IconButton } from '~/com/primitives/icon-button';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
+import { useMessages } from '../MessagesContext';
 import ChannelItem from '../components/ChannelItem';
 import ChatAccountAction from '../components/ChatAccountAction';
 import FirehoseIndicator from '../components/FirehoseStatus';
-
 import { useChatPane } from '../contexts/chat';
 import { ViewKind, type ViewParams } from '../contexts/router';
 import { isChatDeletedAccount } from '../utils/chat';
-
-import { useMessages } from '../MessagesContext';
 
 const ChannelListingView = ({}: ViewParams<ViewKind.CHANNEL_LISTING>) => {
 	const { setUnreadCount } = useMessages();

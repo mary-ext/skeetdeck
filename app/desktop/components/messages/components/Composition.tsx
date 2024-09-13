@@ -5,10 +5,12 @@ import { getRtLength, parseRt } from '~/api/richtext/composer';
 
 import { autofocusIf, refs } from '~/utils/input';
 
+import { IconButton } from '~/com/primitives/icon-button';
+
 import EmojiFlyout from '~/com/components/emojis/EmojiFlyout';
+
 import EmojiEmotionsOutlinedIcon from '~/com/icons/outline-emoji-emotions';
 import SendOutlinedIcon from '~/com/icons/outline-send';
-import { IconButton } from '~/com/primitives/icon-button';
 
 import { useChannel } from '../contexts/channel';
 import { useChatPane } from '../contexts/chat';

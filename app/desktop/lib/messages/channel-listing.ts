@@ -3,7 +3,7 @@ import { batch, createRoot, createSignal, getOwner, onCleanup, runWithOwner } fr
 import type { BskyXRPC } from '@mary/bluesky-client';
 
 import type { At } from '~/api/atp-schema';
-import { mergeConvo, SignalizedConvo } from '~/api/stores/convo';
+import { SignalizedConvo, mergeConvo } from '~/api/stores/convo';
 
 import { makeAbortable } from '~/utils/hooks';
 

@@ -1,6 +1,6 @@
 import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
 
-import { getDraftDb, type ComposerDraft } from '../../utils/draft-db';
+import { type ComposerDraft, getDraftDb } from '../../utils/draft-db';
 
 export interface DeleteDraftDialogProps {
 	draft: ComposerDraft;

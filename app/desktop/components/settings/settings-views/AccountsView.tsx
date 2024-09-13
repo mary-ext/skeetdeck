@@ -7,20 +7,22 @@ import { multiagent } from '~/api/globals/agent';
 
 import { openModal } from '~/com/globals/modals';
 
-import { Flyout } from '~/com/components/Flyout';
-import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
-import AddIcon from '~/com/icons/baseline-add';
-import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
-import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 import { IconButton } from '~/com/primitives/icon-button';
 import { ListBox, ListBoxItemChevron, ListBoxItemInteractive } from '~/com/primitives/list-box';
 import { MenuItem, MenuRoot } from '~/com/primitives/menu';
 
+import { Flyout } from '~/com/components/Flyout';
+import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
+
+import AddIcon from '~/com/icons/baseline-add';
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
+import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
+
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
-import { VIEW_ACCOUNT_CONFIG, useViewRouter } from './_router';
-
 import AddAccountDialog from '../AddAccountDialog';
+
+import { VIEW_ACCOUNT_CONFIG, useViewRouter } from './_router';
 
 const AccountsView = () => {
 	const router = useViewRouter();

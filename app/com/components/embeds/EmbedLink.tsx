@@ -1,13 +1,13 @@
-import { createEffect, createSignal, type JSX } from 'solid-js';
+import { type JSX, createEffect, createSignal } from 'solid-js';
 
 import type { AppBskyEmbedExternal } from '~/api/atp-schema';
+
+import { type Snippet, SnippetType, detectSnippet } from '~/com/lib/snippet';
 
 import PlayIcon from '../../icons/baseline-play';
 import { Interactive } from '../../primitives/interactive';
 import BlobImage from '../BlobImage';
 import CircularProgress from '../CircularProgress';
-
-import { SnippetType, detectSnippet, type Snippet } from '~/com/lib/snippet';
 
 type EmbeddedLink = AppBskyEmbedExternal.ViewExternal;
 

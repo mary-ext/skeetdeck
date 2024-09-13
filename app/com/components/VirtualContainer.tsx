@@ -1,4 +1,4 @@
-import { createSignal, onCleanup, type JSX } from 'solid-js';
+import { type JSX, createSignal, onCleanup } from 'solid-js';
 
 import { scrollObserver } from '~/utils/intersection-observer';
 import { requestIdle } from '~/utils/misc';

@@ -1,10 +1,12 @@
-import { onMount, untrack, type JSX } from 'solid-js';
+import { type JSX, onMount, untrack } from 'solid-js';
 
 import { clsx } from '~/utils/misc';
 
-import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
-import CheckIcon from '~/com/icons/baseline-check';
 import { MenuItem, MenuRoot } from '~/com/primitives/menu';
+
+import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
+
+import CheckIcon from '~/com/icons/baseline-check';
 
 export interface SelectOption<T> {
 	value: T;

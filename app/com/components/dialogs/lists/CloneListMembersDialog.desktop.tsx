@@ -6,15 +6,14 @@ import { createInfiniteQuery, useQueryClient } from '@mary/solid-query';
 import type { AppBskyGraphListitem, At, Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { renderListPurpose } from '~/api/display';
 import { multiagent, renderAccountName } from '~/api/globals/agent';
-import { getCurrentDate, waitForRatelimit } from '~/api/utils/misc';
-
 import { getProfileLists, getProfileListsKey } from '~/api/queries/get-profile-lists';
 import type { SignalizedList } from '~/api/stores/lists';
+import { getCurrentDate, waitForRatelimit } from '~/api/utils/misc';
 
 import { chunked, clsx, mapDefined } from '~/utils/misc';
 
+import DefaultListAvatar from '../../../assets/default-list-avatar.svg?url';
 import { closeModal, openModal, useModalState } from '../../../globals/modals';
-
 import AddIcon from '../../../icons/baseline-add';
 import CheckIcon from '../../../icons/baseline-check';
 import CloseIcon from '../../../icons/baseline-close';
@@ -26,8 +25,6 @@ import List from '../../List';
 import Modal from '../../Modal';
 import FilterBar from '../../inputs/FilterBar';
 import DialogOverlay from '../DialogOverlay';
-
-import DefaultListAvatar from '../../../assets/default-list-avatar.svg?url';
 
 import type { CloneListMembersDialogProps } from './CloneListMembersDialog';
 

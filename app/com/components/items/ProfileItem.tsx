@@ -1,20 +1,16 @@
-import { createMemo, type JSX } from 'solid-js';
-
-import type { SignalizedProfile } from '~/api/stores/profiles';
+import { type JSX, createMemo } from 'solid-js';
 
 import { ContextProfileMedia, getModerationUI } from '~/api/moderation';
 import { moderateProfile } from '~/api/moderation/entities/profile';
+import type { SignalizedProfile } from '~/api/stores/profiles';
 
 import { INTERACTION_TAGS, isElementAltClicked, isElementClicked } from '~/utils/interaction';
 import { clsx } from '~/utils/misc';
 
-import { getModerationOptions } from '../../globals/shared';
-
-import { Interactive } from '../../primitives/interactive';
-
-import ProfileFollowButton from '../ProfileFollowButton';
-
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
+import { getModerationOptions } from '../../globals/shared';
+import { Interactive } from '../../primitives/interactive';
+import ProfileFollowButton from '../ProfileFollowButton';
 
 export interface ProfileItemAccessory {
 	render: (item: SignalizedProfile) => JSX.Element;

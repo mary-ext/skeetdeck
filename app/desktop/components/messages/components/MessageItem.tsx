@@ -1,13 +1,16 @@
 import type { SignalizedConvo } from '~/api/stores/convo';
 
-import RichTextRenderer from '~/com/components/RichTextRenderer';
-import TimeAgo from '~/com/components/TimeAgo';
-import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
-import { IconButton } from '~/com/primitives/icon-button';
-
 import type { ChannelMessage } from '~/desktop/lib/messages/channel';
 
+import { IconButton } from '~/com/primitives/icon-button';
+
+import RichTextRenderer from '~/com/components/RichTextRenderer';
+import TimeAgo from '~/com/components/TimeAgo';
+
+import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
+
 import { formatChatReltime } from '../utils/intl';
+
 import MessageOverflowAction from './MessageOverflowAction';
 
 /** All props are expected to be static */

@@ -1,14 +1,13 @@
-import { createMutation, useQueryClient, type InfiniteData } from '@mary/solid-query';
+import { type InfiniteData, createMutation, useQueryClient } from '@mary/solid-query';
 
 import { multiagent } from '~/api/globals/agent';
-import { getRecordId } from '~/api/utils/misc';
-
 import type { ThreadData } from '~/api/models/threads';
 import { getPost, getPostKey } from '~/api/queries/get-post';
 import type { getPostThreadKey } from '~/api/queries/get-post-thread';
 import type { TimelinePage } from '~/api/queries/get-timeline';
-import { removeCachedPost, type SignalizedPost } from '~/api/stores/posts';
+import { type SignalizedPost, removeCachedPost } from '~/api/stores/posts';
 import { producePostDelete } from '~/api/updaters/delete-post';
+import { getRecordId } from '~/api/utils/misc';
 
 import { closeModal } from '~/com/globals/modals';
 

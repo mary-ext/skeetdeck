@@ -1,4 +1,4 @@
-import { For, createMemo, createSignal, type JSX } from 'solid-js';
+import { For, type JSX, createMemo, createSignal } from 'solid-js';
 
 import { createQuery } from '@mary/solid-query';
 

@@ -1,16 +1,13 @@
-import { lazy, type JSX } from 'solid-js';
+import { type JSX, lazy } from 'solid-js';
 
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
 import { openModal } from '../../../globals/modals';
-
-import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
-
-import { Flyout, offsetlessMiddlewares } from '../../Flyout';
-
 import ContentCopyIcon from '../../../icons/baseline-content-copy';
 import HistoryIcon from '../../../icons/baseline-history';
 import LaunchIcon from '../../../icons/baseline-launch';
+import { MenuItem, MenuItemIcon, MenuRoot } from '../../../primitives/menu';
+import { Flyout, offsetlessMiddlewares } from '../../Flyout';
 
 const HandleHistoryDialog = lazy(() => import('../../dialogs/HandleHistoryDialog'));
 

@@ -1,4 +1,5 @@
 import {
+	type JSX,
 	Show,
 	createComponent,
 	createMemo,
@@ -9,16 +10,15 @@ import {
 	resetErrorBoundaries,
 	runWithOwner,
 	untrack,
-	type JSX,
 } from 'solid-js';
 import { delegateEvents } from 'solid-js/web';
 
 import {
-	createBranches,
-	getRouteMatches,
 	type Branch,
 	type Params,
 	type RouteDefinition,
+	createBranches,
+	getRouteMatches,
 } from './routing.ts';
 
 export { type RouteComponentProps, type RouteDefinition } from './routing.ts';

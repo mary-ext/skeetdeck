@@ -10,16 +10,16 @@ import {
 	BlurNone,
 	FlagsAdultOnly,
 	FlagsNone,
-	PreferenceIgnore,
-	PreferenceWarn,
-	SeverityAlert,
-	SeverityInform,
-	SeverityNone,
 	type LabelBlur,
 	type LabelDefinitionMapping,
 	type LabelPreference,
 	type LabelSeverity,
 	type ModerationService,
+	PreferenceIgnore,
+	PreferenceWarn,
+	SeverityAlert,
+	SeverityInform,
+	SeverityNone,
 } from '.';
 
 export const interpretServiceDefinition = (

@@ -1,10 +1,10 @@
-import { lazy, type JSX } from 'solid-js';
+import { type JSX, lazy } from 'solid-js';
 
 import { isLinkValid } from '~/api/richtext/renderer';
 
-import { isCtrlKeyPressed, isElementAltClicked } from '~/utils/interaction';
-
 import { openModal } from '~/com/globals/modals';
+
+import { isCtrlKeyPressed, isElementAltClicked } from '~/utils/interaction';
 
 import {
 	LINK_EXTERNAL,

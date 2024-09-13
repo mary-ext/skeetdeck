@@ -4,23 +4,22 @@ import type { AppBskyEmbedRecord, AppBskyFeedPost } from '~/api/atp-schema';
 import {
 	ContextContentList,
 	ContextContentMedia,
-	getModerationUI,
 	type ModerationCause,
+	getModerationUI,
 } from '~/api/moderation';
 import { decideQuote } from '~/api/moderation/entities/quote';
 import { getRecordId } from '~/api/utils/misc';
 
 import { clsx } from '~/utils/misc';
 
+import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 import { getModerationOptions } from '../../globals/shared';
-
 import { Interactive } from '../../primitives/interactive';
 import { LINK_POST, Link } from '../Link';
 import TimeAgo from '../TimeAgo';
 import ContentWarning from '../moderation/ContentWarning';
-import EmbedImage from './EmbedImage';
 
-import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
+import EmbedImage from './EmbedImage';
 
 type EmbeddedPostRecord = AppBskyEmbedRecord.ViewRecord;
 type PostRecord = AppBskyFeedPost.Record;

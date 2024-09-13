@@ -3,17 +3,14 @@ import { createMemo, createSignal } from 'solid-js';
 import { createQuery } from '@mary/solid-query';
 
 import { systemLanguages } from '~/api/globals/platform';
-import type { TranslationPreferences } from '~/api/types';
-
 import { getTranslation, getTranslationKey } from '~/api/queries/get-translation';
 import type { SignalizedPost } from '~/api/stores/posts';
+import type { TranslationPreferences } from '~/api/types';
 
 import { languageNames } from '~/utils/intl/display-names';
 
 import { getTranslationPreferences } from '../../../globals/shared';
-
 import { Button } from '../../../primitives/button';
-
 import CircularProgress from '../../CircularProgress';
 
 export interface PostTranslationProps {

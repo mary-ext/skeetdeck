@@ -1,10 +1,9 @@
 import { getUniqueId } from '~/utils/misc';
 
-import { ProfilePaneTab, type ProfilePaneConfig } from '../../../globals/panes';
-
 import Checkbox from '~/com/components/inputs/Checkbox';
 import Radio from '~/com/components/inputs/Radio';
 
+import { type ProfilePaneConfig, ProfilePaneTab } from '../../../globals/panes';
 import { usePaneContext } from '../PaneContext';
 
 const ProfilePaneTabSettings = () => {

@@ -1,8 +1,10 @@
 import { createMemo } from 'solid-js';
 
-import Checkbox from '~/com/components/inputs/Checkbox';
-import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down';
 import { ListBoxItem, ListBoxItemInteractive, ListBoxItemReadonly } from '~/com/primitives/list-box';
+
+import Checkbox from '~/com/components/inputs/Checkbox';
+
+import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down';
 
 import SelectAction, { type SelectActionProps } from '../../flyouts/SelectAction';
 

@@ -1,4 +1,5 @@
 import {
+	type Accessor,
 	batch,
 	createMemo,
 	createRoot,
@@ -8,14 +9,13 @@ import {
 	onMount,
 	runWithOwner,
 	untrack,
-	type Accessor,
 } from 'solid-js';
 
 import * as TID from '@mary/atproto-tid';
 import type { BskyXRPC } from '@mary/bluesky-client';
 
 import type { At, ChatBskyConvoDefs } from '~/api/atp-schema';
-import { finalizeRt, getRtText, type PreliminaryRichText } from '~/api/richtext/composer';
+import { type PreliminaryRichText, finalizeRt, getRtText } from '~/api/richtext/composer';
 
 import { makeAbortable } from '~/utils/hooks';
 import { assert, mapDefined } from '~/utils/misc';

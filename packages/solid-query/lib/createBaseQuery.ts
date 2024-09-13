@@ -1,15 +1,13 @@
 import {
-	notifyManager,
 	type QueryClient,
 	type QueryKey,
 	type QueryObserver,
 	type QueryObserverResult,
+	notifyManager,
 } from '@tanstack/query-core';
-
 import { createEffect, createMemo, on, onCleanup, untrack } from 'solid-js';
 
 import { useQueryClient } from './QueryClientProvider.tsx';
-
 import type { CreateBaseQueryOptions, QueryAccessor } from './types.ts';
 import { createStateObject } from './utils.ts';
 

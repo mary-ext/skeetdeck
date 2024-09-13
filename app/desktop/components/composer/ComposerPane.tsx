@@ -1,7 +1,6 @@
-import { For, Show, batch, createEffect, createMemo, createSignal, lazy, untrack, type JSX } from 'solid-js';
-import { unwrap } from 'solid-js/store';
-
 import { makeEventListener } from '@solid-primitives/event-listener';
+import { For, type JSX, Show, batch, createEffect, createMemo, createSignal, lazy, untrack } from 'solid-js';
+import { unwrap } from 'solid-js/store';
 
 import * as TID from '@mary/atproto-tid';
 import { createQuery, useQueryClient } from '@mary/solid-query';
@@ -19,16 +18,16 @@ import { multiagent } from '~/api/globals/agent';
 import type { ThreadData } from '~/api/models/threads';
 import { getUploadedBlob, uploadBlob } from '~/api/mutations/upload-blob';
 import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info';
-import { getLinkMeta, getLinkMetaKey, type LinkMeta } from '~/api/queries/get-link-meta';
+import { type LinkMeta, getLinkMeta, getLinkMetaKey } from '~/api/queries/get-link-meta';
 import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/get-list-info';
 import { getInitialPost, getPost, getPostKey } from '~/api/queries/get-post';
 import { getResolvedHandle, getResolvedHandleKey } from '~/api/queries/get-resolved-handle';
 import type { getTimelineLatestKey } from '~/api/queries/get-timeline';
 import {
 	InvalidHandleError,
+	type PreliminaryRichText,
 	finalizeRt,
 	getRtLength,
-	type PreliminaryRichText,
 } from '~/api/richtext/composer';
 import type { SignalizedPost } from '~/api/stores/posts';
 import { extractAppLink } from '~/api/utils/links';
@@ -38,11 +37,15 @@ import { openModal } from '~/com/globals/modals';
 
 import { preferences } from '~/desktop/globals/settings';
 
-import { compressPostImage, type CompressResult } from '~/utils/image';
+import { type CompressResult, compressPostImage } from '~/utils/image';
 import { isMac } from '~/utils/interaction';
 import { languageNames } from '~/utils/intl/display-names';
 import { clsx, getUniqueId } from '~/utils/misc';
 import { Signal, signal } from '~/utils/signals';
+
+import { Button } from '~/com/primitives/button';
+import { IconButton } from '~/com/primitives/icon-button';
+import { Interactive } from '~/com/primitives/interactive';
 
 import BlobImage from '~/com/components/BlobImage';
 import CircularProgress from '~/com/components/CircularProgress';
@@ -52,6 +55,7 @@ import { EmbedListContent } from '~/com/components/embeds/EmbedList';
 import { EmbedQuoteContent } from '~/com/components/embeds/EmbedQuote';
 import EmojiFlyout from '~/com/components/emojis/EmojiFlyout';
 import RichtextComposer from '~/com/components/richtext/RichtextComposer';
+
 import AddIcon from '~/com/icons/baseline-add';
 import ArrowDropDownIcon from '~/com/icons/baseline-arrow-drop-down';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
@@ -62,9 +66,6 @@ import LinkIcon from '~/com/icons/baseline-link';
 import EmojiEmotionsOutlinedIcon from '~/com/icons/outline-emoji-emotions.tsx';
 import ImageOutlinedIcon from '~/com/icons/outline-image.tsx';
 import ShieldOutlinedIcon from '~/com/icons/outline-shield';
-import { Button } from '~/com/primitives/button';
-import { IconButton } from '~/com/primitives/icon-button';
-import { Interactive } from '~/com/primitives/interactive';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 
@@ -73,21 +74,18 @@ import SwitchAccountAction from '../flyouts/SwitchAccountAction';
 import { useComposer } from './ComposerContext';
 import DummyPost from './DummyPost';
 import TagsInput from './TagInput';
-
+import ContentWarningAction from './actions/ContentWarningAction';
+import PostLanguageAction from './actions/PostLanguageAction';
+import ThreadgateAction, { buildGateRules, renderGateAlt, renderGateIcon } from './actions/ThreadgateAction';
+import ImageAltDialog from './dialogs/ImageAltDialog';
+import ImageAltReminderDialog from './dialogs/ImageAltReminderDialog';
 import {
+	type PostState,
 	createComposerState,
 	createPostState,
 	getPostRt,
 	isStateFilled,
-	type PostState,
 } from './utils/state';
-
-import ContentWarningAction from './actions/ContentWarningAction';
-import PostLanguageAction from './actions/PostLanguageAction';
-import ThreadgateAction, { buildGateRules, renderGateAlt, renderGateIcon } from './actions/ThreadgateAction';
-
-import ImageAltDialog from './dialogs/ImageAltDialog';
-import ImageAltReminderDialog from './dialogs/ImageAltReminderDialog';
 
 const ViewDraftsDialog = lazy(() => import('./dialogs/ViewDraftsDialog'));
 

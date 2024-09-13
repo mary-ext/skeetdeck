@@ -13,17 +13,19 @@ import { preferences } from '~/desktop/globals/settings';
 
 import { formatAbsDateTime } from '~/utils/intl/time';
 
+import { IconButton } from '~/com/primitives/icon-button';
+import { ListBox, ListGroup, ListGroupBlurb, ListGroupHeader } from '~/com/primitives/list-box';
+
 import CircularProgress from '~/com/components/CircularProgress';
+
 import AddIcon from '~/com/icons/baseline-add';
 import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import DeleteIcon from '~/com/icons/baseline-delete';
-import { IconButton } from '~/com/primitives/icon-button';
-import { ListBox, ListGroup, ListGroupBlurb, ListGroupHeader } from '~/com/primitives/list-box';
 
 import DefaultLabelerAvatar from '~/com/assets/default-labeler-avatar.svg?url';
 
 import { CheckItem } from '../_components';
-import { VIEW_LABELER_CONFIG, useViewRouter, type ViewParams } from '../_router';
+import { VIEW_LABELER_CONFIG, type ViewParams, useViewRouter } from '../_router';
 
 import LabelItem from './components/LabelItem';
 

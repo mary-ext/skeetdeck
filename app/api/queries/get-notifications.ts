@@ -2,7 +2,7 @@ import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
-import { createNotificationSlices, type NotificationSlice } from '../models/notifications';
+import { type NotificationSlice, createNotificationSlices } from '../models/notifications';
 import { wrapInfiniteQuery } from '../utils/query';
 
 export const FILTER_FOLLOWS = 1 << 0;

@@ -1,7 +1,7 @@
 import {
-	InfiniteQueryObserver,
 	type DefaultError,
 	type InfiniteData,
+	InfiniteQueryObserver,
 	type QueryClient,
 	type QueryKey,
 	type QueryObserver,

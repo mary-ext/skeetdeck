@@ -1,42 +1,43 @@
-import { For, Show, Suspense, batch, createMemo, createSignal, lazy } from 'solid-js';
-
 import { offset } from '@floating-ui/dom';
+import { type RouteComponentProps, location, navigate } from '@pkg/solid-page-router';
 import { DragDropProvider, DragDropSensors, SortableProvider, createSortable } from '@thisbeyond/solid-dnd';
+import { For, Show, Suspense, batch, createMemo, createSignal, lazy } from 'solid-js';
 
 import * as TID from '@mary/atproto-tid';
 import { ShowFreeze } from '@mary/solid-freeze';
-import { location, navigate, type RouteComponentProps } from '@pkg/solid-page-router';
 
 import { getPrivilegedAccounts, multiagent } from '~/api/globals/agent';
 
 import { openModal } from '~/com/globals/modals';
-import { Title } from '~/com/lib/meta';
-
-import {
-	PANE_TYPE_PROFILE,
-	PANE_TYPE_SEARCH,
-	ProfilePaneTab,
-	type ProfilePaneConfig,
-	type SearchPaneConfig,
-} from '../globals/panes';
-import { addPane, preferences } from '../globals/settings';
 
 import { clsx } from '~/utils/misc';
 import { updateSW, updateStatus } from '~/utils/service-worker';
 
+import { Title } from '~/com/lib/meta';
+
+import { Interactive } from '~/com/primitives/interactive';
+
 import CircularProgress from '~/com/components/CircularProgress';
 import { Flyout } from '~/com/components/Flyout';
 import Keyed from '~/com/components/Keyed';
+
 import FeatherIcon from '~/com/icons/baseline-feather';
 import SearchIcon from '~/com/icons/baseline-search';
 import SystemUpdateAltIcon from '~/com/icons/baseline-system-update-alt';
 import TableLargeAddIcon from '~/com/icons/baseline-table-large-add';
 import MailOutlinedIcon from '~/com/icons/outline-mail';
 import SettingsOutlinedIcon from '~/com/icons/outline-settings';
-import { Interactive } from '~/com/primitives/interactive';
 
 import { useComposer } from '../components/composer/ComposerContext';
 import { useMessages } from '../components/messages/MessagesContext';
+import {
+	PANE_TYPE_PROFILE,
+	PANE_TYPE_SEARCH,
+	type ProfilePaneConfig,
+	ProfilePaneTab,
+	type SearchPaneConfig,
+} from '../globals/panes';
+import { addPane, preferences } from '../globals/settings';
 import { ConstrainXDragAxis } from '../utils/dnd';
 
 const ComposerPane = lazy(() => import('../components/composer/ComposerPane'));

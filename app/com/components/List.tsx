@@ -1,4 +1,4 @@
-import { For, Match, Switch, untrack, type JSX } from 'solid-js';
+import { For, type JSX, Match, Switch, untrack } from 'solid-js';
 
 import { getQueryErrorInfo } from '~/api/utils/query';
 

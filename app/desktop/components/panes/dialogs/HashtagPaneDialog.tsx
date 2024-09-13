@@ -3,10 +3,12 @@ import { createSignal } from 'solid-js';
 import { PANE_TYPE_SEARCH, type SearchPaneConfig } from '~/desktop/globals/panes';
 import { addPane } from '~/desktop/globals/settings';
 
+import { IconButton } from '~/com/primitives/icon-button';
+
 import { TabbedPanel, TabbedPanelView } from '~/com/components/TabbedPanel';
 import TimelineList from '~/com/components/lists/TimelineList';
+
 import TableColumnRightAddIcon from '~/com/icons/baseline-table-column-right-add';
-import { IconButton } from '~/com/primitives/icon-button';
 
 import { usePaneContext, usePaneModalState } from '../PaneContext';
 import PaneDialog from '../PaneDialog';

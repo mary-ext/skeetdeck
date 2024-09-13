@@ -1,4 +1,5 @@
 import { createEffect } from 'solid-js';
+
 import { scrollObserver } from './intersection-observer';
 
 export const ifIntersect = (enabled: () => boolean | undefined, onIntersect: (() => void) | undefined) => {

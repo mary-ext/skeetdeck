@@ -1,6 +1,5 @@
+import { type Transformer, useDragDropContext } from '@thisbeyond/solid-dnd';
 import { createEffect } from 'solid-js';
-
-import { useDragDropContext, type Transformer } from '@thisbeyond/solid-dnd';
 
 export interface ConstrainDragAxisProps {
 	enabled: boolean;

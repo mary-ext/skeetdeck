@@ -1,9 +1,9 @@
 import {
-	QueryObserver,
 	type DataTag,
 	type DefaultError,
 	type QueryClient,
 	type QueryKey,
+	QueryObserver,
 } from '@tanstack/query-core';
 
 import { createBaseQuery } from './createBaseQuery.ts';

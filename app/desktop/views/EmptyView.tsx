@@ -1,13 +1,12 @@
-import { Match, Switch, lazy } from 'solid-js';
-
 import { Navigate } from '@pkg/solid-page-router';
+import { Match, Switch, lazy } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent';
 
+import { Button } from '~/com/primitives/button';
+
 import { preferences } from '../globals/settings';
 import { createStarterDeck } from '../lib/settings/onboarding';
-
-import { Button } from '~/com/primitives/button';
 
 const Onboarding = lazy(() => import('../components/views/Onboarding'));
 

@@ -1,26 +1,24 @@
-import { createSignal, lazy, type Component, type ComponentProps, type JSX } from 'solid-js';
+import { type Component, type ComponentProps, type JSX, createSignal, lazy } from 'solid-js';
 
 import {
 	CauseLabel,
 	CauseMutedKeyword,
 	CauseMutedPermanent,
 	CauseMutedTemporary,
-	SeverityAlert,
-	getLocalizedLabel,
 	type ModerationCause,
 	type ModerationCauseType,
 	type ModerationService,
 	type ModerationUI,
+	SeverityAlert,
+	getLocalizedLabel,
 } from '~/api/moderation';
 
 import { openModal } from '../../globals/modals';
-
-import { Interactive } from '../../primitives/interactive';
-
 import FilterAltOutlinedIcon from '../../icons/outline-filter-alt';
 import InfoOutlinedIcon from '../../icons/outline-info';
 import PersonOffOutlinedIcon from '../../icons/outline-person-off';
 import ReportProblemOutlinedIcon from '../../icons/outline-report-problem';
+import { Interactive } from '../../primitives/interactive';
 
 const LabelDetailsDialog = lazy(() => import('../dialogs/LabelDetailsDialog'));
 

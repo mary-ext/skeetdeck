@@ -2,12 +2,13 @@ import TextareaAutoresize from 'solid-textarea-autosize';
 
 import { getUniqueId } from '~/utils/misc';
 
-import type { SearchPaneConfig } from '../../../globals/panes';
-
-import Radio from '~/com/components/inputs/Radio';
-import SearchIcon from '~/com/icons/baseline-search';
 import { Textarea } from '~/com/primitives/textarea';
 
+import Radio from '~/com/components/inputs/Radio';
+
+import SearchIcon from '~/com/icons/baseline-search';
+
+import type { SearchPaneConfig } from '../../../globals/panes';
 import { usePaneContext } from '../PaneContext';
 
 const SearchPaneSettings = () => {

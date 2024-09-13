@@ -1,6 +1,5 @@
 import { QueryClient } from '@tanstack/query-core';
-
-import { createContext, onCleanup, onMount, useContext, type JSX } from 'solid-js';
+import { type JSX, createContext, onCleanup, onMount, useContext } from 'solid-js';
 
 export const QueryClientContext = createContext<QueryClient>();
 

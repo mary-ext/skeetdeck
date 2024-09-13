@@ -1,6 +1,5 @@
 import type { AppBskyFeedDefs, At, Brand } from '../atp-schema';
-
-import { mergePost, SignalizedPost } from '../stores/posts';
+import { SignalizedPost, mergePost } from '../stores/posts';
 
 type Post = AppBskyFeedDefs.PostView;
 type Thread = Brand.Union<AppBskyFeedDefs.ThreadViewPost>;

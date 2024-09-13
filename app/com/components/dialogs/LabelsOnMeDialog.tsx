@@ -1,5 +1,4 @@
 import { batch, createEffect, createMemo, createSignal } from 'solid-js';
-
 import TextareaAutosize from 'solid-textarea-autosize';
 
 import { withProxy } from '@mary/bluesky-client/xrpc';
@@ -13,27 +12,25 @@ import type {
 	ComAtprotoRepoStrongRef,
 } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
-
+import { GLOBAL_LABELS, getLocalizedLabel } from '~/api/moderation';
 import { EOF_WS_RE } from '~/api/richtext/composer';
 import { graphemeLen } from '~/api/richtext/intl';
-
-import { GLOBAL_LABELS, getLocalizedLabel } from '~/api/moderation';
 
 import { autofocus, model, refs } from '~/utils/input';
 import { clsx, getUniqueId } from '~/utils/misc';
 
+import { IconButton } from '~/com/primitives/icon-button';
+
+import DefaultLabelerAvatar from '../../assets/default-labeler-avatar.svg?url';
 import { closeModal, useModalState } from '../../globals/modals';
 import { getModerationOptions } from '../../globals/shared';
-
-import { IconButton } from '~/com/primitives/icon-button';
 import ArrowLeftIcon from '../../icons/baseline-arrow-left';
 import { Button } from '../../primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog';
 import { ListBox, ListBoxItem, ListGroup, ListGroupHeader } from '../../primitives/list-box';
 import { Textarea } from '../../primitives/textarea';
-import DialogOverlay from './DialogOverlay';
 
-import DefaultLabelerAvatar from '../../assets/default-labeler-avatar.svg?url';
+import DialogOverlay from './DialogOverlay';
 
 export type ReportTarget =
 	| { type: 'feed'; uri: At.Uri; cid: string }

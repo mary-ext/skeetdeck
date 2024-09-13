@@ -5,7 +5,6 @@ import type {
 	AppBskyGraphFollow,
 	AppBskyNotificationListNotifications,
 } from '../atp-schema';
-
 import { getCollectionId } from '../utils/misc';
 
 type Notification = AppBskyNotificationListNotifications.Notification;

@@ -1,10 +1,10 @@
 import { type InfiniteData } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
-import { produce } from '~/utils/immer';
-
 import type { TimelineSlice } from '~/api/models/timeline';
 import type { TimelinePage } from '~/api/queries/get-timeline';
+
+import { produce } from '~/utils/immer';
 
 export const produceTimelineFilter = (did: At.DID) => {
 	const isSliceMatching = (slice: TimelineSlice) => {

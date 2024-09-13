@@ -1,9 +1,9 @@
 import { EQUALS_DEQUAL } from '~/utils/dequal';
-import { signal, type Signal } from '~/utils/signals';
+import { type Signal, signal } from '~/utils/signals';
 
 import type { At, Brand, ChatBskyActorDefs, ChatBskyConvoDefs } from '../atp-schema';
 
-import { mergeProfile, type SignalizedProfile } from './profiles';
+import { type SignalizedProfile, mergeProfile } from './profiles';
 
 type Convo = ChatBskyConvoDefs.ConvoView;
 type ConvoProfile = Brand.Omit<ChatBskyActorDefs.ProfileViewBasic>;

@@ -1,4 +1,4 @@
-import { For, children, createMemo, type JSX } from 'solid-js';
+import { For, type JSX, children, createMemo } from 'solid-js';
 
 import { Freeze } from '@mary/solid-freeze';
 

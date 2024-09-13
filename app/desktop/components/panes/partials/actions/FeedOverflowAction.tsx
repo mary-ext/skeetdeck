@@ -1,14 +1,16 @@
-import { lazy, type JSX } from 'solid-js';
+import { type JSX, lazy } from 'solid-js';
 
 import type { SignalizedFeed } from '~/api/stores/feeds';
 import { getRecordId } from '~/api/utils/misc';
 
 import { openModal } from '~/com/globals/modals';
 
+import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
+
 import { Flyout } from '~/com/components/Flyout';
+
 import LaunchIcon from '~/com/icons/baseline-launch';
 import ReportProblemOutlinedIcon from '~/com/icons/outline-report-problem';
-import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 
 const ReportDialog = lazy(() => import('~/com/components/dialogs/ReportDialog'));
 

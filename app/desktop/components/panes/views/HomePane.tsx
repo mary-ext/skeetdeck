@@ -1,11 +1,12 @@
-import { createSignal, lazy, type JSX } from 'solid-js';
+import { type JSX, createSignal, lazy } from 'solid-js';
 
-import type { HomePaneConfig } from '../../../globals/panes';
-
-import TimelineList from '~/com/components/lists/TimelineList';
-import SettingsOutlinedIcon from '~/com/icons/outline-settings';
 import { IconButton } from '~/com/primitives/icon-button';
 
+import TimelineList from '~/com/components/lists/TimelineList';
+
+import SettingsOutlinedIcon from '~/com/icons/outline-settings';
+
+import type { HomePaneConfig } from '../../../globals/panes';
 import Pane from '../Pane';
 import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';

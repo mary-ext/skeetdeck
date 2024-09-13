@@ -1,6 +1,6 @@
-import { createResource, Match, onCleanup, Show, Switch, type ResourceOptions } from 'solid-js';
+import { Match, type ResourceOptions, Show, Switch, createResource, onCleanup } from 'solid-js';
 
-import { getCachedConvo, mergeConvo, SignalizedConvo } from '~/api/stores/convo';
+import { SignalizedConvo, getCachedConvo, mergeConvo } from '~/api/stores/convo';
 
 import ChannelHeader from '../components/ChannelHeader';
 import ChannelMessages, { type ChannelMessagesRef } from '../components/ChannelMessages';
@@ -8,7 +8,6 @@ import Composition from '../components/Composition';
 import CompositionBlocked from '../components/CompositionBlocked';
 import CompositionDisabled from '../components/CompositionDisabled';
 import FirehoseIndicator from '../components/FirehoseStatus';
-
 import { ChannelContext } from '../contexts/channel';
 import { useChatPane } from '../contexts/chat';
 import type { ViewKind, ViewParams } from '../contexts/router';

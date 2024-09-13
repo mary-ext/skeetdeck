@@ -1,4 +1,4 @@
-import { createMemo, lazy, type JSX } from 'solid-js';
+import { type JSX, createMemo, lazy } from 'solid-js';
 
 import { multiagent } from '~/api/globals/agent.ts';
 import { isProfileTempMuted } from '~/api/moderation';
@@ -9,7 +9,6 @@ import { getRecordId } from '~/api/utils/misc';
 
 import { openModal } from '../../../globals/modals';
 import { getModerationOptions } from '../../../globals/shared';
-
 import ContentCopyIcon from '../../../icons/baseline-content-copy';
 import LaunchIcon from '../../../icons/baseline-launch';
 import LinkIcon from '../../../icons/baseline-link';

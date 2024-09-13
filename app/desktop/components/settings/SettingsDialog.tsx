@@ -1,36 +1,38 @@
-import { createMemo, createSignal, For, Suspense, type ComponentProps, type JSX } from 'solid-js';
+import { type ComponentProps, For, type JSX, Suspense, createMemo, createSignal } from 'solid-js';
 
 import { Freeze } from '@mary/solid-freeze';
 
+import { closeModal } from '~/com/globals/modals';
+
 import { clsx } from '~/utils/misc';
 
-import { closeModal } from '~/com/globals/modals';
+import { DialogRoot } from '~/com/primitives/dialog';
+import { IconButton } from '~/com/primitives/icon-button';
+import { Interactive } from '~/com/primitives/interactive';
 
 import CircularProgress from '~/com/components/CircularProgress';
 import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
+
 import BackHandIcon from '~/com/icons/baseline-back-hand';
 import CloseIcon from '~/com/icons/baseline-close';
 import ColorLensIcon from '~/com/icons/baseline-color-lens';
 import InfoIcon from '~/com/icons/baseline-info';
 import LanguageIcon from '~/com/icons/baseline-language';
 import PeopleIcon from '~/com/icons/baseline-people';
-import { DialogRoot } from '~/com/primitives/dialog';
-import { IconButton } from '~/com/primitives/icon-button';
-import { Interactive } from '~/com/primitives/interactive';
 
+import SettingsRouterView from './settings-views/SettingsRouterView';
 import {
 	RouterContext,
-	useViewRouter,
+	type RouterState,
 	VIEW_ABOUT,
 	VIEW_ACCOUNTS,
 	VIEW_CONTENT,
 	VIEW_INTERFACE,
 	VIEW_MODERATION,
-	type RouterState,
 	type View,
 	type ViewType,
+	useViewRouter,
 } from './settings-views/_router';
-import SettingsRouterView from './settings-views/SettingsRouterView';
 
 const SettingsDialog = () => {
 	const [views, setViews] = createSignal<View[]>([{ type: VIEW_ACCOUNTS }]);

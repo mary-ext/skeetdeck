@@ -1,27 +1,27 @@
-import { createSignal, lazy, type JSX } from 'solid-js';
+import { type JSX, createSignal, lazy } from 'solid-js';
 
 import { createQuery } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
 import { getInitialListInfo, getListInfo, getListInfoKey } from '~/api/queries/get-list-info';
 
-import type { CustomListPaneConfig } from '../../../globals/panes';
+import { IconButton } from '~/com/primitives/icon-button';
 
 import { VirtualContainer } from '~/com/components/VirtualContainer';
 import TimelineList from '~/com/components/lists/TimelineList';
+
 import InfoOutlinedIcon from '~/com/icons/outline-info';
 import SettingsOutlinedIcon from '~/com/icons/outline-settings';
-import { IconButton } from '~/com/primitives/icon-button';
 
+import type { CustomListPaneConfig } from '../../../globals/panes';
 import Pane from '../Pane';
 import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';
 import { usePaneContext } from '../PaneContext';
+import ListHeader from '../partials/ListHeader';
 
 const CustomListPaneSettings = lazy(() => import('../settings/CustomListPaneSettings'));
 const GenericPaneSettings = lazy(() => import('../settings/GenericPaneSettings'));
-
-import ListHeader from '../partials/ListHeader';
 
 const CustomListPane = () => {
 	const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);

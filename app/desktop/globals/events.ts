@@ -1,6 +1,6 @@
 import { EventEmitter } from '@mary/events';
 
-import { getPaneSizeWidth, type BasePaneConfig } from './panes';
+import { type BasePaneConfig, getPaneSizeWidth } from './panes';
 import { resolvePaneSize } from './settings';
 
 export const desktopEvents = new EventEmitter<{

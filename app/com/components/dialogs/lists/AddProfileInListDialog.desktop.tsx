@@ -2,37 +2,37 @@ import { createEffect, createMemo, createSignal, lazy } from 'solid-js';
 
 import * as TID from '@mary/atproto-tid';
 import {
+	type InfiniteData,
 	createInfiniteQuery,
 	createMutation,
 	createQuery,
 	useQueryClient,
-	type InfiniteData,
 } from '@mary/solid-query';
 
 import type { AppBskyGraphListitem, Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { renderListPurpose } from '~/api/display';
 import { multiagent, renderAccountName } from '~/api/globals/agent';
-import { getCurrentDate, getRecordId } from '~/api/utils/misc';
-
 import type { ListMembersPage } from '~/api/queries/get-list-members';
 import {
+	type ListMembership,
 	getListMemberships,
 	getListMembershipsKey,
 	listMembershipsOptions,
-	type ListMembership,
 } from '~/api/queries/get-list-memberships';
 import { getProfileKey } from '~/api/queries/get-profile';
 import { getProfileLists, getProfileListsKey } from '~/api/queries/get-profile-lists';
+import { getCurrentDate, getRecordId } from '~/api/utils/misc';
 
 import { createDerivedSignal } from '~/utils/hooks';
 import { produce } from '~/utils/immer';
 import { chunked, clsx, mapDefined } from '~/utils/misc';
 import { difference } from '~/utils/sets';
 
-import { closeModal, openModal, useModalState } from '../../../globals/modals';
-
 import { Button } from '~/com/primitives/button';
 import { Interactive } from '~/com/primitives/interactive';
+
+import DefaultListAvatar from '../../../assets/default-list-avatar.svg?url';
+import { closeModal, openModal, useModalState } from '../../../globals/modals';
 import AddIcon from '../../../icons/baseline-add';
 import CheckIcon from '../../../icons/baseline-check';
 import CloseIcon from '../../../icons/baseline-close';
@@ -41,8 +41,6 @@ import { IconButton } from '../../../primitives/icon-button';
 import List from '../../List';
 import FilterBar from '../../inputs/FilterBar';
 import DialogOverlay from '../DialogOverlay';
-
-import DefaultListAvatar from '../../../assets/default-list-avatar.svg?url';
 
 import type { AddProfileInListDialogProps } from './AddProfileInListDialog';
 

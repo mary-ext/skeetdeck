@@ -1,23 +1,21 @@
+import { Router, configureRouter } from '@pkg/solid-page-router';
 import { createEffect, lazy } from 'solid-js';
 import { render } from 'solid-js/web';
 
 import { QueryClientProvider } from '@mary/solid-query';
-import { Router, configureRouter } from '@pkg/solid-page-router';
 
 import { multiagent } from '~/api/globals/agent';
-
 import type { ModerationOptions } from '~/api/moderation';
-
-import { useMediaQuery } from '~/utils/media-query';
 
 import { ModalProvider } from '~/com/globals/modals';
 import * as shared from '~/com/globals/shared';
+
+import { useMediaQuery } from '~/utils/media-query';
 
 import { MetaProvider } from '~/com/lib/meta';
 
 import ComposerContextProvider from './components/composer/ComposerContextProvider';
 import MessagesContextProvider from './components/messages/MessagesContextProvider';
-
 import { queryClient } from './globals/query';
 import { preferences } from './globals/settings';
 

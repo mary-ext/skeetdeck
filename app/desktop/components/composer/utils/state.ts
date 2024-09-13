@@ -2,11 +2,11 @@ import { unwrap } from 'solid-js/store';
 
 import type { At } from '~/api/atp-schema';
 import { systemLanguages } from '~/api/globals/platform';
-import { getRtLength, parseRt, type PreliminaryRichText } from '~/api/richtext/composer';
-
-import type { ComposedImage } from '~/utils/image';
+import { type PreliminaryRichText, getRtLength, parseRt } from '~/api/richtext/composer';
 
 import type { PreferencesSchema } from '~/desktop/globals/settings';
+
+import type { ComposedImage } from '~/utils/image';
 
 export interface GateStateEveryone {
 	type: 'e';

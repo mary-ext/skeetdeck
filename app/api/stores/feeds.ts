@@ -1,7 +1,8 @@
-import { signal, type Signal } from '~/utils/signals';
+import { type Signal, signal } from '~/utils/signals';
 
 import type { AppBskyFeedDefs, At } from '../atp-schema';
-import { mergeProfile, type SignalizedProfile } from './profiles';
+
+import { type SignalizedProfile, mergeProfile } from './profiles';
 
 type Feed = AppBskyFeedDefs.GeneratorView;
 

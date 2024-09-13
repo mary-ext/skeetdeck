@@ -1,12 +1,10 @@
-import { createMemo, lazy, type JSX } from 'solid-js';
+import { type JSX, createMemo, lazy } from 'solid-js';
 
 import type { AppBskyEmbedImages } from '~/api/atp-schema';
-import { getRecordId } from '~/api/utils/misc';
-
-import type { SignalizedPost } from '~/api/stores/posts';
-
 import { ContextContentMedia, getModerationUI } from '~/api/moderation';
 import { moderatePost } from '~/api/moderation/entities/post';
+import type { SignalizedPost } from '~/api/stores/posts';
+import { getRecordId } from '~/api/utils/misc';
 
 import { isElementAltClicked, isElementClicked } from '~/utils/interaction';
 import { formatCompact } from '~/utils/intl/number';
@@ -14,13 +12,11 @@ import { clsx } from '~/utils/misc';
 
 import { openModal } from '../../globals/modals';
 import { getModerationOptions } from '../../globals/shared';
-
-import { LINK_POST, useLinking } from '../Link';
-
 import ChatBubbleIcon from '../../icons/baseline-chat-bubble';
 import CheckboxMultipleBlankIcon from '../../icons/baseline-checkbox-multiple-blank';
 import FavoriteIcon from '../../icons/baseline-favorite';
 import VisibilityIcon from '../../icons/baseline-visibility';
+import { LINK_POST, useLinking } from '../Link';
 
 const ImageViewerDialog = /*#__PURE__*/ lazy(() => import('../dialogs/ImageViewerDialog'));
 

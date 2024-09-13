@@ -1,33 +1,34 @@
-import { createRenderEffect, createSignal, lazy, untrack, type JSX } from 'solid-js';
+import { type JSX, createRenderEffect, createSignal, lazy, untrack } from 'solid-js';
 
 import {
+	type InfiniteData,
 	createInfiniteQuery,
 	createMutation,
 	createQuery,
 	useQueryClient,
-	type InfiniteData,
 } from '@mary/solid-query';
 
 import { updateNotificationsSeen } from '~/api/mutations/update-notifications-seen';
 import {
+	type NotificationsLatestResult,
+	type NotificationsPage,
 	REASONS,
 	getNotifications,
 	getNotificationsKey,
 	getNotificationsLatest,
 	getNotificationsLatestKey,
-	type NotificationsLatestResult,
-	type NotificationsPage,
 } from '~/api/queries/get-notifications';
 import { resetInfiniteData } from '~/api/utils/query';
 
-import type { NotificationsPaneConfig } from '../../../globals/panes';
+import { IconButton } from '~/com/primitives/icon-button';
 
 import List from '~/com/components/List';
 import Notification from '~/com/components/items/Notification';
+
 import CheckAllIcon from '~/com/icons/baseline-check-all';
 import SettingsOutlinedIcon from '~/com/icons/outline-settings';
-import { IconButton } from '~/com/primitives/icon-button';
 
+import type { NotificationsPaneConfig } from '../../../globals/panes';
 import Pane from '../Pane';
 import PaneAside from '../PaneAside';
 import PaneBody from '../PaneBody';

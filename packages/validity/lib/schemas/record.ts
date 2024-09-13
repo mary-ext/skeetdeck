@@ -1,7 +1,7 @@
-import { string } from './string.ts';
-
 import type { Input, Output, ValidationIssue, Validator } from '../types.ts';
 import { pushPath } from '../utils.ts';
+
+import { string } from './string.ts';
 
 export type RecordKey = Validator<string | symbol>;
 

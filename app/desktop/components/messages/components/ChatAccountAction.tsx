@@ -1,10 +1,12 @@
-import { createMemo, For, type JSX } from 'solid-js';
+import { For, type JSX, createMemo } from 'solid-js';
 
 import { getPrivilegedAccounts } from '~/api/globals/agent';
 
-import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
-import SettingsOutlinedIcon from '~/com/icons/outline-settings';
 import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
+
+import { Flyout, offsetlessMiddlewares } from '~/com/components/Flyout';
+
+import SettingsOutlinedIcon from '~/com/icons/outline-settings';
 
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';
 

@@ -4,12 +4,12 @@ import type { At } from '~/api/atp-schema';
 import { getAccountData } from '~/api/globals/agent';
 
 import {
+	type DeckConfig,
 	PANE_TYPE_HOME,
 	PANE_TYPE_NOTIFICATIONS,
 	PANE_TYPE_PROFILE,
 	ProfilePaneTab,
 	SpecificPaneSize,
-	type DeckConfig,
 } from '../../globals/panes';
 
 export const createEmptyDeck = (): DeckConfig => {

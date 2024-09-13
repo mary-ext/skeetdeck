@@ -1,10 +1,8 @@
 // Holds "common" preferences for components and utilities under ~/com folder.
 // This should be set up in the main entrypoints.
 // It's rather ugly, but alas.
-
 // Previously this was a context, but after a while it didn't seem to be
 // necessary, so now it's been turned into a singleton.
-
 import { createSignal } from 'solid-js';
 
 import type { ModerationOptions } from '~/api/moderation';

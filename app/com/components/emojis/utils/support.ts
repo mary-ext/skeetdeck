@@ -1,5 +1,4 @@
 // https://github.com/nolanlawson/emoji-picker-element/blob/497681f21119c5cc675fd59a1684b1a0d392215e/src/picker/utils/emojiSupport.js#L6
-
 import { assert, requestIdle } from '~/utils/misc';
 
 // This should match the fonts set in `tailwind-base.config.js`

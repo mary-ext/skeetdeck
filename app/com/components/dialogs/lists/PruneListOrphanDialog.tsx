@@ -4,22 +4,20 @@ import { createInfiniteQuery, createMutation, createQuery } from '@mary/solid-qu
 
 import type { Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
-import { getRecordId } from '~/api/utils/misc';
-
 import { getListMembers, getListMembersKey } from '~/api/queries/get-list-members';
 import {
+	type ListMembership,
 	getListMemberships,
 	getListMembershipsKey,
 	listMembershipsOptions,
-	type ListMembership,
 } from '~/api/queries/get-list-memberships';
 import type { SignalizedList } from '~/api/stores/lists';
+import { getRecordId } from '~/api/utils/misc';
 
 import { chunked, mapDefined } from '~/utils/misc';
 import { difference } from '~/utils/sets';
 
 import { closeModal, useModalState } from '../../../globals/modals';
-
 import { Button } from '../../../primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../../primitives/dialog';
 import DialogOverlay from '../DialogOverlay';

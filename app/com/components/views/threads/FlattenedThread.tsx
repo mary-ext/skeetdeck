@@ -1,13 +1,11 @@
 import { For } from 'solid-js';
 
 import type { At } from '~/api/atp-schema';
+import type { ThreadData } from '~/api/models/threads';
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
-import type { ThreadData } from '~/api/models/threads';
-
-import { Link, LINK_POST } from '../../Link';
+import { LINK_POST, Link } from '../../Link';
 import { VirtualContainer } from '../../VirtualContainer';
-
 import EmbedRecordBlocked from '../../embeds/EmbedRecordBlocked';
 import Post from '../../items/Post';
 

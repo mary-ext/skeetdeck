@@ -1,30 +1,27 @@
 import { createMemo, createSignal as signal } from 'solid-js';
+import TextareaAutosize from 'solid-textarea-autosize';
 
 import { XRPCError } from '@mary/bluesky-client/xrpc';
 import { createMutation, useQueryClient } from '@mary/solid-query';
 
-import TextareaAutosize from 'solid-textarea-autosize';
-
 import type { AppBskyActorProfile } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
-import { formatQueryError } from '~/api/utils/misc';
-
 import { uploadBlob } from '~/api/mutations/upload-blob';
 import { getProfileKey } from '~/api/queries/get-profile';
-import type { SignalizedProfile } from '~/api/stores/profiles';
-
 import { EOF_WS_RE } from '~/api/richtext/composer';
 import { graphemeLen } from '~/api/richtext/intl';
+import type { SignalizedProfile } from '~/api/stores/profiles';
+import { formatQueryError } from '~/api/utils/misc';
 
-import { formatLong } from '~/utils/intl/number';
 import { model } from '~/utils/input';
+import { formatLong } from '~/utils/intl/number';
 
 import { Button } from '~/com/primitives/button';
 import { Input } from '~/com/primitives/input';
 import { Textarea } from '~/com/primitives/textarea';
 
-import AddPhotoButton from '~/com/components/inputs/AddPhotoButton';
 import BlobImage from '~/com/components/BlobImage';
+import AddPhotoButton from '~/com/components/inputs/AddPhotoButton';
 
 import { usePaneModalState } from '../PaneContext';
 import PaneDialog from '../PaneDialog';

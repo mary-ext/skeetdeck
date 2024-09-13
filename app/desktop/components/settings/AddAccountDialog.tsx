@@ -2,7 +2,6 @@ import { batch, createEffect, createSignal, lazy } from 'solid-js';
 
 import { getPdsEndpoint } from '@mary/bluesky-client';
 import { XRPCError } from '@mary/bluesky-client/xrpc';
-
 import { createMutation } from '@mary/solid-query';
 
 import type { At } from '~/api/atp-schema';
@@ -13,16 +12,18 @@ import { DEFAULT_DATA_SERVERS } from '~/api/globals/defaults';
 import { getProfile, getProfileKey } from '~/api/queries/get-profile';
 import { formatQueryError } from '~/api/utils/misc';
 
-import { model, mutationAutofocus, refs } from '~/utils/input';
-
 import { closeModal, openModal, useModalState } from '~/com/globals/modals';
 
-import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
-import EditIcon from '~/com/icons/baseline-edit';
-import GlobeIcon from '~/com/icons/baseline-globe';
+import { model, mutationAutofocus, refs } from '~/utils/input';
+
 import { Button } from '~/com/primitives/button';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '~/com/primitives/dialog';
 import { Input } from '~/com/primitives/input';
+
+import DialogOverlay from '~/com/components/dialogs/DialogOverlay';
+
+import EditIcon from '~/com/icons/baseline-edit';
+import GlobeIcon from '~/com/icons/baseline-globe';
 
 const ChooseServiceDialog = lazy(() => import('./ChooseServiceDialog'));
 

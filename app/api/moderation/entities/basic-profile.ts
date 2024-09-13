@@ -1,13 +1,12 @@
-import type { AppBskyActorDefs } from '../../atp-schema';
-
 import {
+	type ModerationCause,
+	type ModerationOptions,
 	TargetProfile,
 	decideLabelModeration,
 	decideMutedPermanentModeration,
 	decideMutedTemporaryModeration,
-	type ModerationCause,
-	type ModerationOptions,
 } from '..';
+import type { AppBskyActorDefs } from '../../atp-schema';
 
 type ProfileView =
 	| AppBskyActorDefs.ProfileView

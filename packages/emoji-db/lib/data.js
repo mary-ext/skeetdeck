@@ -1,7 +1,6 @@
+import { hasData, loadData } from './idb-interface.js';
 import { getEtag, getEtagAndData } from './utils/ajax.js';
 import { jsonChecksum } from './utils/jsonChecksum.js';
-
-import { hasData, loadData } from './idb-interface.js';
 
 export const checkForUpdates = async (db, dataSource) => {
 	// just do a simple HEAD request first to see if the eTags match

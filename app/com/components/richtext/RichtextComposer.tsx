@@ -1,32 +1,29 @@
+import { autoUpdate, flip, offset, shift } from '@floating-ui/dom';
+import { makeEventListener } from '@solid-primitives/event-listener';
+import { useFloating } from 'solid-floating-ui';
 import {
 	For,
+	type JSX,
 	Match,
 	Switch,
 	createEffect,
 	createMemo,
 	createResource,
 	createSignal,
-	type JSX,
 } from 'solid-js';
-
-import { autoUpdate, flip, offset, shift } from '@floating-ui/dom';
-import { makeEventListener } from '@solid-primitives/event-listener';
-import { useFloating } from 'solid-floating-ui';
 import TextareaAutosize from 'solid-textarea-autosize';
 
 import type { AppBskyActorDefs, At } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
-
 import type { PreliminaryRichText } from '~/api/richtext/composer';
-// import { graphemeLen } from '~/api/richtext/intl';
 
+// import { graphemeLen } from '~/api/richtext/intl';
 import { createDebouncedValue } from '~/utils/hooks';
 import { isCtrlKeyPressed } from '~/utils/interaction';
 import { assert, clsx } from '~/utils/misc';
 
-import CircularProgress from '../CircularProgress';
-
 import DefaultUserAvatar from '../../assets/default-user-avatar.svg?url';
+import CircularProgress from '../CircularProgress';
 
 export interface RichtextComposerProps {
 	ref?: HTMLTextAreaElement | ((el: HTMLTextAreaElement) => void);

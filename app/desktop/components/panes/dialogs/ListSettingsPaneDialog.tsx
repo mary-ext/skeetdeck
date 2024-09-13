@@ -1,39 +1,40 @@
 import { createEffect, createMemo, lazy, createSignal as signal } from 'solid-js';
 
-import { createMutation, useQueryClient, type InfiniteData } from '@mary/solid-query';
+import { type InfiniteData, createMutation, useQueryClient } from '@mary/solid-query';
 
 import type { AppBskyGraphList, Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { uploadBlob } from '~/api/mutations/upload-blob';
 import { getListInfoKey } from '~/api/queries/get-list-info';
 import {
+	type ListMembership,
 	getListMemberships,
 	getListMembershipsKey,
 	listMembershipsOptions,
-	type ListMembership,
 } from '~/api/queries/get-list-memberships';
 import { finalizeRt, getRtLength, parseRt } from '~/api/richtext/composer';
 import { serializeRichText } from '~/api/richtext/utils';
-import { removeCachedList, type SignalizedList } from '~/api/stores/lists';
+import { type SignalizedList, removeCachedList } from '~/api/stores/lists';
 import { formatQueryError, getRecordId } from '~/api/utils/misc';
+
+import { openModal } from '~/com/globals/modals';
 
 import { model } from '~/utils/input';
 import { chunked, clsx, mapDefined } from '~/utils/misc';
 
-import { openModal } from '~/com/globals/modals';
-
-import { PANE_TYPE_LIST } from '../../../globals/panes';
-import { preferences } from '../../../globals/settings';
+import { Button } from '~/com/primitives/button';
+import { Input } from '~/com/primitives/input';
+import { Interactive } from '~/com/primitives/interactive';
 
 import BlobImage from '~/com/components/BlobImage';
 import ConfirmDialog from '~/com/components/dialogs/ConfirmDialog';
 import AddPhotoButton from '~/com/components/inputs/AddPhotoButton';
 import RichtextComposer from '~/com/components/richtext/RichtextComposer';
-import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
-import { Button } from '~/com/primitives/button';
-import { Input } from '~/com/primitives/input';
-import { Interactive } from '~/com/primitives/interactive';
 
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
+
+import { PANE_TYPE_LIST } from '../../../globals/panes';
+import { preferences } from '../../../globals/settings';
 import { usePaneContext, usePaneModalState } from '../PaneContext';
 import PaneDialog from '../PaneDialog';
 import PaneDialogHeader from '../PaneDialogHeader';

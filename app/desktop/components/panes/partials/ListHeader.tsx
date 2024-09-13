@@ -1,16 +1,18 @@
-import { lazy, type JSX } from 'solid-js';
+import { type JSX, lazy } from 'solid-js';
 
 import type { SignalizedList } from '~/api/stores/lists';
 
 import { openModal } from '~/com/globals/modals';
 
+import { BoxedIconButton } from '~/com/primitives/boxed-icon-button';
+import { Button } from '~/com/primitives/button';
+
 import { LINK_PROFILE, Link } from '~/com/components/Link';
 import RichTextRenderer from '~/com/components/RichTextRenderer';
 import { VirtualContainer } from '~/com/components/VirtualContainer';
+
 import MoreHorizIcon from '~/com/icons/baseline-more-horiz';
 import EditOutlinedIcon from '~/com/icons/outline-edit';
-import { BoxedIconButton } from '~/com/primitives/boxed-icon-button';
-import { Button } from '~/com/primitives/button';
 
 import DefaultListAvatar from '~/com/assets/default-list-avatar.svg?url';
 import DefaultUserAvatar from '~/com/assets/default-user-avatar.svg?url';

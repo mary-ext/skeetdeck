@@ -1,4 +1,5 @@
 import {
+	type JSX,
 	createContext,
 	createEffect,
 	createMemo,
@@ -6,7 +7,6 @@ import {
 	onCleanup,
 	onMount,
 	useContext,
-	type JSX,
 } from 'solid-js';
 
 type TitleNode = Comment & { _render: () => string };

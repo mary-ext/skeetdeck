@@ -1,6 +1,5 @@
-import { untrack, type JSX } from 'solid-js';
-
 import { makeEventListener } from '@solid-primitives/event-listener';
+import { type JSX, untrack } from 'solid-js';
 
 import type { SignalizedPost } from '~/api/stores/posts';
 import { getRecordId } from '~/api/utils/misc';

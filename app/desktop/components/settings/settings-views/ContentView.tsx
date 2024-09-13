@@ -1,12 +1,11 @@
 import { systemLanguages } from '~/api/globals/platform';
 
+import { preferences } from '~/desktop/globals/settings';
+
 import { getNativeLanguageName, languageNames, languageNamesStrict } from '~/utils/intl/display-names';
 import { CODE2S } from '~/utils/intl/languages';
 import { mapDefined } from '~/utils/misc';
 
-import { preferences } from '~/desktop/globals/settings';
-
-import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 import {
 	ListBox,
 	ListBoxItemChevron,
@@ -16,9 +15,10 @@ import {
 	ListGroupHeader,
 } from '~/com/primitives/list-box';
 
-import { VIEW_ADDITIONAL_LANGUAGE, VIEW_EXCLUDED_TRANSLATION, useViewRouter } from './_router';
+import ChevronRightIcon from '~/com/icons/baseline-chevron-right';
 
-import { CheckItem, SelectionItem, type SelectOption } from './_components';
+import { CheckItem, type SelectOption, SelectionItem } from './_components';
+import { VIEW_ADDITIONAL_LANGUAGE, VIEW_EXCLUDED_TRANSLATION, useViewRouter } from './_router';
 
 const LanguageView = () => {
 	const router = useViewRouter();

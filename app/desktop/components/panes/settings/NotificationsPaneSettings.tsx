@@ -9,11 +9,11 @@ import {
 	FILTER_REPOSTS,
 } from '~/api/queries/get-notifications';
 
+import type { NotificationsPaneConfig } from '~/desktop/globals/panes';
+
 import { getUniqueId } from '~/utils/misc';
 
 import Checkbox from '~/com/components/inputs/Checkbox';
-
-import type { NotificationsPaneConfig } from '~/desktop/globals/panes';
 
 import { usePaneContext } from '../PaneContext';
 

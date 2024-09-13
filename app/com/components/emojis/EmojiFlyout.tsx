@@ -1,6 +1,5 @@
-import { Suspense, lazy, type JSX } from 'solid-js';
-
 import { type Placement } from '@floating-ui/dom';
+import { type JSX, Suspense, lazy } from 'solid-js';
 
 import CircularProgress from '../CircularProgress';
 import { Flyout, offsetlessMiddlewares } from '../Flyout';

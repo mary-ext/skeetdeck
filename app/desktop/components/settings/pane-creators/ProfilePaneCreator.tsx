@@ -5,12 +5,13 @@ import { createInfiniteQuery } from '@mary/solid-query';
 import { getSuggestedFollows, getSuggestedFollowsKey } from '~/api/queries/get-suggested-follows';
 import { searchProfiles, searchProfilesKey } from '~/api/queries/search-profiles';
 
-import { PANE_TYPE_PROFILE, ProfilePaneTab, type ProfilePaneConfig } from '~/desktop/globals/panes';
+import { PANE_TYPE_PROFILE, type ProfilePaneConfig, ProfilePaneTab } from '~/desktop/globals/panes';
+
+import { DialogBody } from '~/com/primitives/dialog';
 
 import SearchInput from '~/com/components/inputs/SearchInput';
 import type { ProfileItemProps } from '~/com/components/items/ProfileItem';
 import ProfileList from '~/com/components/lists/ProfileList';
-import { DialogBody } from '~/com/primitives/dialog';
 
 import type { PaneCreatorProps } from './types';
 

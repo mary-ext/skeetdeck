@@ -13,22 +13,21 @@ import {
 
 import { withProxy } from '@mary/bluesky-client/xrpc';
 
+import type { At } from '~/api/atp-schema';
 import { getPrivilegedAccounts, multiagent } from '~/api/globals/agent';
 
-import type { At } from '~/api/atp-schema';
 import { makeAbortable } from '~/utils/hooks';
 
-import { createChannel, type Channel } from '~/desktop/lib/messages/channel';
+import { type Channel, createChannel } from '~/desktop/lib/messages/channel';
 import { createChatFirehose } from '~/desktop/lib/messages/firehose';
 import { createLRU } from '~/desktop/lib/messages/lru';
 
+import { type MessagesInitialState, useMessages } from './MessagesContext';
 import { NoopLinkingProvider } from './components/NoopLinkingProvider';
-import { ChatPaneContext, type ChatPaneState, type ChatRouterState } from './contexts/chat';
-import { ViewKind, type View } from './contexts/router';
-import { ChatRouterView } from './contexts/router-view';
-
-import { useMessages, type MessagesInitialState } from './MessagesContext';
 import { DM_SERVICE_PROXY } from './const';
+import { ChatPaneContext, type ChatPaneState, type ChatRouterState } from './contexts/chat';
+import { type View, ViewKind } from './contexts/router';
+import { ChatRouterView } from './contexts/router-view';
 
 export interface MessagesPaneProps {
 	isOpen: () => boolean;

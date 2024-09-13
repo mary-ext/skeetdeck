@@ -4,13 +4,13 @@ import type { ChatBskyActorDeclaration } from '~/api/atp-schema';
 import { getAccountHandle } from '~/api/globals/agent';
 import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';
 
-import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
 import { IconButton } from '~/com/primitives/icon-button';
 import { ListBox, ListGroup, ListGroupHeader } from '~/com/primitives/list-box';
 
+import ArrowLeftIcon from '~/com/icons/baseline-arrow-left';
+
 // @todo: move these components outside of settings
 import { SelectionItem } from '../../settings/settings-views/_components';
-
 import { useChatPane } from '../contexts/chat';
 import type { ViewKind, ViewParams } from '../contexts/router';
 

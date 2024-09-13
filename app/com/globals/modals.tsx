@@ -1,6 +1,6 @@
-import { For, Suspense, createContext, createSignal, useContext, type JSX } from 'solid-js';
+import { For, type JSX, Suspense, createContext, createSignal, useContext } from 'solid-js';
 
-import { signal, type Signal } from '~/utils/signals';
+import { type Signal, signal } from '~/utils/signals';
 
 import CircularProgress from '../components/CircularProgress';
 import Modal from '../components/Modal';

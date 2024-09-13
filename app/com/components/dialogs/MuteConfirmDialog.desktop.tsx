@@ -1,27 +1,25 @@
 import { createEffect, createSignal } from 'solid-js';
 
-import { createQuery, useQueryClient, type InfiniteData } from '@mary/solid-query';
+import { type InfiniteData, createQuery, useQueryClient } from '@mary/solid-query';
 
 import type { AppBskyGraphDefs } from '~/api/atp-schema.ts';
 import { getAccountHandle, multiagent } from '~/api/globals/agent.ts';
-import { formatQueryError } from '~/api/utils/misc.ts';
-
 import { updateProfileMute } from '~/api/mutations/mute-profile.ts';
 import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile.ts';
 import type { TimelinePage, getTimelineKey } from '~/api/queries/get-timeline.ts';
 import type { SignalizedProfile } from '~/api/stores/profiles.ts';
 import { produceTimelineFilter } from '~/api/updaters/timeline-filter.ts';
+import { formatQueryError } from '~/api/utils/misc.ts';
+
+import SwitchAccountAction from '~/desktop/components/flyouts/SwitchAccountAction.tsx';
 
 import { closeModal } from '../../globals/modals.tsx';
-
 import { Button } from '../../primitives/button.ts';
 import { DialogActions, DialogBody, DialogHeader, DialogRoot, DialogTitle } from '../../primitives/dialog.ts';
 import CircularProgress from '../CircularProgress.tsx';
 import { EmbedListContent } from '../embeds/EmbedList.tsx';
+
 import DialogOverlay from './DialogOverlay.tsx';
-
-import SwitchAccountAction from '~/desktop/components/flyouts/SwitchAccountAction.tsx';
-
 import type { MuteConfirmDialogProps } from './MuteConfirmDialog.tsx';
 
 type ListViewBasic = AppBskyGraphDefs.ListViewBasic;
