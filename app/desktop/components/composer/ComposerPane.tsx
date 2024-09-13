@@ -11,7 +11,7 @@ import type {
 	ComAtprotoRepoApplyWrites,
 	ComAtprotoRepoStrongRef,
 } from '@atcute/client/lexicons';
-import * as TID from '@mary/atproto-tid';
+import * as TID from '@atcute/tid';
 import { createQuery, useQueryClient } from '@mary/solid-query';
 
 import { multiagent } from '~/api/globals/agent';

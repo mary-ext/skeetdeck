@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js';
 
-import * as TID from '@mary/atproto-tid';
+import * as TID from '@atcute/tid';
 
 import { closeModal } from '~/com/globals/modals';
 

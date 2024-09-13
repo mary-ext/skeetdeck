@@ -13,7 +13,7 @@ import {
 
 import type { XRPC } from '@atcute/client';
 import type { At, ChatBskyConvoDefs } from '@atcute/client/lexicons';
-import * as TID from '@mary/atproto-tid';
+import * as TID from '@atcute/tid';
 
 import { type PreliminaryRichText, finalizeRt, getRtText } from '~/api/richtext/composer';
 

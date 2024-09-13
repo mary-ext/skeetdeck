@@ -1,7 +1,7 @@
 import { createEffect, createMemo, createSignal, lazy } from 'solid-js';
 
 import type { AppBskyGraphListitem, Brand, ComAtprotoRepoApplyWrites } from '@atcute/client/lexicons';
-import * as TID from '@mary/atproto-tid';
+import * as TID from '@atcute/tid';
 import {
 	type InfiniteData,
 	createInfiniteQuery,

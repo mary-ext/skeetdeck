@@ -12,9 +12,6 @@ patchedDependencies:
   '@tanstack/query-core@5.17.19':
     hash: lyk2jm4nvtib6lstvyqzhwwxbi
     path: patches/@tanstack__query-core@5.17.19.patch
-  cborg@4.0.7:
-    hash: dz6b6r6dc4jadjfng7vtgi53hy
-    path: patches/cborg@4.0.6.patch
   solid-js:
     hash: 5rodyfcb76rtbo26dwlsojy7jy
     path: patches/solid-js.patch
@@ -53,27 +50,30 @@ importers:
 
   app:
     dependencies:
+      '@atcute/base32':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@atcute/bluesky':
         specifier: ^1.0.6
         version: 1.0.6(@atcute/client@2.0.0)
+      '@atcute/cbor':
+        specifier: ^1.0.1
+        version: 1.0.1
+      '@atcute/cid':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@atcute/client':
         specifier: ^2.0.0
         version: 2.0.0
+      '@atcute/tid':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@floating-ui/dom':
         specifier: ^1.6.5
         version: 1.6.5
       '@floating-ui/utils':
         specifier: ^0.2.2
         version: 0.2.2
-      '@mary/atproto-cid':
-        specifier: npm:@jsr/mary__atproto-cid@^0.1.4
-        version: '@jsr/mary__atproto-cid@0.1.4'
-      '@mary/atproto-tid':
-        specifier: npm:@jsr/mary__atproto-tid@^0.1.1
-        version: '@jsr/mary__atproto-tid@0.1.1'
-      '@mary/base32':
-        specifier: npm:@jsr/mary__base32@^0.1.0
-        version: '@jsr/mary__base32@0.1.0'
       '@mary/emoji-db':
         specifier: workspace:@externdefs/emoji-db@^
         version: link:../packages/emoji-db
@@ -98,9 +98,6 @@ importers:
       '@thisbeyond/solid-dnd':
         specifier: ^0.7.5
         version: 0.7.5(solid-js@1.8.22(patch_hash=5rodyfcb76rtbo26dwlsojy7jy))
-      cborg:
-        specifier: 4.0.7
-        version: 4.0.7(patch_hash=dz6b6r6dc4jadjfng7vtgi53hy)
       hls.js:
         specifier: ^1.5.15
         version: 1.5.15
@@ -220,13 +217,28 @@ packages:
     peerDependencies:
       ajv: '>=8'
 
+  '@atcute/base32@1.0.0':
+    resolution: {integrity: sha512-Mbjsv6kd/ymvDMGjCoh9eqhlpFsoJ6zYguU6xtKxqh1wGhe5rvBOfMRXsEqcp7srn8Bfp8QhevqLgmwrWvzqrA==}
+
   '@atcute/bluesky@1.0.6':
     resolution: {integrity: sha512-RVhFwleInQYj5znVFRRL7Buun3PTTWuC1T0dWlEamkuDrMlmnXZ4LpzERMRyBnvMpFWDJGE2wJfKYrHNAWmY+g==}
     peerDependencies:
       '@atcute/client': ^1.0.0 || ^2.0.0
 
+  '@atcute/cbor@1.0.1':
+    resolution: {integrity: sha512-VOOIrNVSXG0uRl/HC7KbsdVoQAsFMmgf638SBZKMfGEQQa42KnVq8zXYefBTnrQhTQpOiNzbou0/AN/lwDVuOA==}
+
+  '@atcute/cid@1.0.0':
+    resolution: {integrity: sha512-JnWv3sg48zDBP318ErPYPI482Vw1Nm7e7WG+VYGSLRLp56b9LgcIh28p28gEmPtmsnM9hTAkKvJdi+CAkNDQUA==}
+
   '@atcute/client@2.0.0':
     resolution: {integrity: sha512-ifbYegz/4mUCqByz1G9msDcOJaIxnh0z6z8GPwlqNM9VUhQc/tEsJl7R6eeDp1DKonzhL+fQ//6OMY7w/tzTYw==}
+
+  '@atcute/tid@1.0.0':
+    resolution: {integrity: sha512-hwvo19zlhSskYRmIzTQqj1Kxd9IX+x8B593flXTaR5jO+/3krUwlRnXd/pnZp5wZqAI/j2OlcPGadX93rsoozg==}
+
+  '@atcute/varint@1.0.0':
+    resolution: {integrity: sha512-NEBOGkdaDY8cjlDg49kefIsRM7iv/4oReEnOr3bN4tF3IxBGdc6Io1NCJz1xNBNdUL+3VDG3CKHiRji91HXaTg==}
 
   '@babel/code-frame@7.24.7':
     resolution: {integrity: sha512-BcYH1CVJBO9tvyIZ2jVeXgSIMvGZ2FDRvDdOIVQyuklNKSsx+eppDEBq/g47Ayw+RqNFE+URvOShmf+f/qwAlA==}
@@ -1192,23 +1204,11 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
-  '@jsr/mary__atproto-cid@0.1.4':
-    resolution: {integrity: sha512-sq6bpcLTluVL2De73sAeAuf6HIKveEO8/sUd4/Y+ntQ1HIvmMv5HX5gLhiPIwT1nAA+Cmsk2aXMUuSLjgP0oyA==, tarball: https://npm.jsr.io/~/11/@jsr/mary__atproto-cid/0.1.4.tgz}
-
-  '@jsr/mary__atproto-tid@0.1.1':
-    resolution: {integrity: sha512-wQumCF4gT+D/AGjlBc0s6h2/9m9gv+W7uaE5ovy4IBEVNccddZgbLMIuA4w5iH0iFir1gICI+Bbaq+NnCBJRww==, tarball: https://npm.jsr.io/~/11/@jsr/mary__atproto-tid/0.1.1.tgz}
-
-  '@jsr/mary__base32@0.1.0':
-    resolution: {integrity: sha512-DCSSLoazbiumZdEAyBlNS6T/NtOPPJPwZH3hzyLnHZ/HKI5HT1ajZBAPLXVNzsIsFC3AgYpX/IXGGR2bS8AB6w==, tarball: https://npm.jsr.io/~/11/@jsr/mary__base32/0.1.0.tgz}
-
   '@jsr/mary__events@0.1.0':
     resolution: {integrity: sha512-oS6jVOaXTaNEa6avRncwrEtUYaBKrq/HEybPa9Z3aoeMs+RSly0vn0KcOj/fy2H6iTBkeh3wa8+/9nFjhKyKIg==, tarball: https://npm.jsr.io/~/11/@jsr/mary__events/0.1.0.tgz}
 
   '@jsr/mary__exif-rm@0.2.1':
     resolution: {integrity: sha512-hw7UqNH2puQooIRvZk4IPP4Xyo1IjbynjW9idqmqJepwR7DDeBs61riHZdiax3lUoW7Gzz+tuPQmdkWH/v2i5Q==, tarball: https://npm.jsr.io/~/11/@jsr/mary__exif-rm/0.2.1.tgz}
-
-  '@jsr/mary__varint@0.1.0':
-    resolution: {integrity: sha512-iT8XYsAyHnR5EfkWkBxqE2ecTHuvcuVEZQEts8sInADA3O3E/IepPY5qwFSwNCnUXfQ6+RIMi1RhJ9kahrTI5w==, tarball: https://npm.jsr.io/~/11/@jsr/mary__varint/0.1.0.tgz}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -1572,10 +1572,6 @@ packages:
   capnp-ts@0.7.0:
     resolution: {integrity: sha512-XKxXAC3HVPv7r674zP0VC3RTXz+/JKhfyw94ljvF80yynK6VkTnqE3jMuN8b3dUVmmc43TjyxjW4KTsmB3c86g==}
 
-  cborg@4.0.7:
-    resolution: {integrity: sha512-5h2n7973T4dkY2XLfHpwYR9IjeDSfolZibYtb8clW53BvvgTyq+X2EtwrjfhTAETrwaQOX4+lRua14/XjbZHaQ==}
-    hasBin: true
-
   chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
     engines: {node: '>=4'}
@@ -1764,6 +1760,9 @@ packages:
   foreground-child@3.3.0:
     resolution: {integrity: sha512-Ld2g8rrAyMYFXBhEqMz8ZAHBi4J4uS1i/CxGMDnjyFWddMXLVcDp051DZfu+t7+ab7Wv6SMqpWmyFIj5UbfFvg==}
     engines: {node: '>=14'}
+
+  fp16@0.3.0:
+    resolution: {integrity: sha512-Iw6hLaH345EETQGU56NiAcJ173IraDRdJrVy+0fBMPdkZhzKNN/k3eqXFyNmnyx2/jnIzF2nr0mHh5nHrQBMEQ==}
 
   fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
@@ -2737,11 +2736,28 @@ snapshots:
       jsonpointer: 5.0.1
       leven: 3.1.0
 
+  '@atcute/base32@1.0.0': {}
+
   '@atcute/bluesky@1.0.6(@atcute/client@2.0.0)':
     dependencies:
       '@atcute/client': 2.0.0
 
+  '@atcute/cbor@1.0.1':
+    dependencies:
+      '@atcute/base32': 1.0.0
+      '@atcute/cid': 1.0.0
+      fp16: 0.3.0
+
+  '@atcute/cid@1.0.0':
+    dependencies:
+      '@atcute/base32': 1.0.0
+      '@atcute/varint': 1.0.0
+
   '@atcute/client@2.0.0': {}
+
+  '@atcute/tid@1.0.0': {}
+
+  '@atcute/varint@1.0.0': {}
 
   '@babel/code-frame@7.24.7':
     dependencies:
@@ -3770,20 +3786,9 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@jsr/mary__atproto-cid@0.1.4':
-    dependencies:
-      '@jsr/mary__base32': 0.1.0
-      '@jsr/mary__varint': 0.1.0
-
-  '@jsr/mary__atproto-tid@0.1.1': {}
-
-  '@jsr/mary__base32@0.1.0': {}
-
   '@jsr/mary__events@0.1.0': {}
 
   '@jsr/mary__exif-rm@0.2.1': {}
-
-  '@jsr/mary__varint@0.1.0': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -4130,8 +4135,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  cborg@4.0.7(patch_hash=dz6b6r6dc4jadjfng7vtgi53hy): {}
-
   chalk@2.4.2:
     dependencies:
       ansi-styles: 3.2.1
@@ -4326,6 +4329,8 @@ snapshots:
     dependencies:
       cross-spawn: 7.0.3
       signal-exit: 4.1.0
+
+  fp16@0.3.0: {}
 
   fraction.js@4.3.7: {}
 

@@ -1,4 +1,4 @@
-import * as TID from '@mary/atproto-tid';
+import * as TID from '@atcute/tid';
 
 import { DEFAULT_MODERATION_LABELER } from '~/api/globals/defaults';
 import type { ModerationOptions } from '~/api/moderation';

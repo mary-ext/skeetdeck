@@ -3,7 +3,7 @@ import { type RouteComponentProps, location, navigate } from '@pkg/solid-page-ro
 import { DragDropProvider, DragDropSensors, SortableProvider, createSortable } from '@thisbeyond/solid-dnd';
 import { For, Show, Suspense, batch, createMemo, createSignal, lazy } from 'solid-js';
 
-import * as TID from '@mary/atproto-tid';
+import * as TID from '@atcute/tid';
 import { ShowFreeze } from '@mary/solid-freeze';
 
 import { getPrivilegedAccounts, multiagent } from '~/api/globals/agent';
