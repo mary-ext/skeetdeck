@@ -1,6 +1,6 @@
+import type { At } from '@atcute/client/lexicons';
 import * as TID from '@mary/atproto-tid';
 
-import type { At } from '~/api/atp-schema';
 import { getAccountData } from '~/api/globals/agent';
 
 import {

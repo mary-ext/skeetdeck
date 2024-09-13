@@ -1,4 +1,5 @@
-import type { AppBskyFeedDefs, At } from '../atp-schema';
+import type { AppBskyFeedDefs, At } from '@atcute/client/lexicons';
+
 import { type SignalizedPost, mergePost } from '../stores/posts';
 
 type Post = AppBskyFeedDefs.PostView;

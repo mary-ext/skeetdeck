@@ -53,6 +53,12 @@ importers:
 
   app:
     dependencies:
+      '@atcute/bluesky':
+        specifier: ^1.0.6
+        version: 1.0.6(@atcute/client@2.0.0)
+      '@atcute/client':
+        specifier: ^2.0.0
+        version: 2.0.0
       '@floating-ui/dom':
         specifier: ^1.6.5
         version: 1.6.5
@@ -68,9 +74,6 @@ importers:
       '@mary/base32':
         specifier: npm:@jsr/mary__base32@^0.1.0
         version: '@jsr/mary__base32@0.1.0'
-      '@mary/bluesky-client':
-        specifier: npm:@jsr/mary__bluesky-client@^0.5.23
-        version: '@jsr/mary__bluesky-client@0.5.23'
       '@mary/emoji-db':
         specifier: workspace:@externdefs/emoji-db@^
         version: link:../packages/emoji-db
@@ -216,6 +219,14 @@ packages:
     engines: {node: '>=10'}
     peerDependencies:
       ajv: '>=8'
+
+  '@atcute/bluesky@1.0.6':
+    resolution: {integrity: sha512-RVhFwleInQYj5znVFRRL7Buun3PTTWuC1T0dWlEamkuDrMlmnXZ4LpzERMRyBnvMpFWDJGE2wJfKYrHNAWmY+g==}
+    peerDependencies:
+      '@atcute/client': ^1.0.0 || ^2.0.0
+
+  '@atcute/client@2.0.0':
+    resolution: {integrity: sha512-ifbYegz/4mUCqByz1G9msDcOJaIxnh0z6z8GPwlqNM9VUhQc/tEsJl7R6eeDp1DKonzhL+fQ//6OMY7w/tzTYw==}
 
   '@babel/code-frame@7.24.7':
     resolution: {integrity: sha512-BcYH1CVJBO9tvyIZ2jVeXgSIMvGZ2FDRvDdOIVQyuklNKSsx+eppDEBq/g47Ayw+RqNFE+URvOShmf+f/qwAlA==}
@@ -1189,9 +1200,6 @@ packages:
 
   '@jsr/mary__base32@0.1.0':
     resolution: {integrity: sha512-DCSSLoazbiumZdEAyBlNS6T/NtOPPJPwZH3hzyLnHZ/HKI5HT1ajZBAPLXVNzsIsFC3AgYpX/IXGGR2bS8AB6w==, tarball: https://npm.jsr.io/~/11/@jsr/mary__base32/0.1.0.tgz}
-
-  '@jsr/mary__bluesky-client@0.5.23':
-    resolution: {integrity: sha512-k1sZVbRvZ//kx3Fq/tEd6W5pAf3IrdE1cUSXl6lqem4cYGv67NrRHMdz51zVIud00BfwVLxHbb97cWeDHDm16Q==, tarball: https://npm.jsr.io/~/11/@jsr/mary__bluesky-client/0.5.23.tgz}
 
   '@jsr/mary__events@0.1.0':
     resolution: {integrity: sha512-oS6jVOaXTaNEa6avRncwrEtUYaBKrq/HEybPa9Z3aoeMs+RSly0vn0KcOj/fy2H6iTBkeh3wa8+/9nFjhKyKIg==, tarball: https://npm.jsr.io/~/11/@jsr/mary__events/0.1.0.tgz}
@@ -2729,6 +2737,12 @@ snapshots:
       jsonpointer: 5.0.1
       leven: 3.1.0
 
+  '@atcute/bluesky@1.0.6(@atcute/client@2.0.0)':
+    dependencies:
+      '@atcute/client': 2.0.0
+
+  '@atcute/client@2.0.0': {}
+
   '@babel/code-frame@7.24.7':
     dependencies:
       '@babel/highlight': 7.24.7
@@ -3764,8 +3778,6 @@ snapshots:
   '@jsr/mary__atproto-tid@0.1.1': {}
 
   '@jsr/mary__base32@0.1.0': {}
-
-  '@jsr/mary__bluesky-client@0.5.23': {}
 
   '@jsr/mary__events@0.1.0': {}
 

@@ -1,6 +1,6 @@
 import { type JSX, createEffect, createSignal } from 'solid-js';
 
-import type { AppBskyEmbedExternal } from '~/api/atp-schema';
+import type { AppBskyEmbedExternal } from '@atcute/client/lexicons';
 
 import { type Snippet, SnippetType, detectSnippet } from '~/com/lib/snippet';
 

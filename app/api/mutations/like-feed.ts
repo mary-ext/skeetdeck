@@ -1,4 +1,5 @@
-import type { AppBskyFeedLike } from '../atp-schema';
+import type { AppBskyFeedLike } from '@atcute/client/lexicons';
+
 import { multiagent } from '../globals/agent';
 import type { SignalizedFeed } from '../stores/feeds';
 import { getCurrentDate, getRecordId } from '../utils/misc';
@@ -15,6 +16,7 @@ const createFeedLikeMutation = (feed: SignalizedFeed) => {
 
 			if (shouldFollow) {
 				const record: AppBskyFeedLike.Record = {
+					$type: 'app.bsky.feed.like',
 					createdAt: getCurrentDate(),
 					subject: {
 						uri: feed.uri,

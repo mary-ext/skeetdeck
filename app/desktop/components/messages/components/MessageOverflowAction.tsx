@@ -1,6 +1,7 @@
 import { type JSX, lazy } from 'solid-js';
 
-import type { ChatBskyConvoDefs } from '~/api/atp-schema';
+import type { ChatBskyConvoDefs } from '@atcute/client/lexicons';
+
 import { serializeRichText } from '~/api/richtext/utils';
 
 import { openModal } from '~/com/globals/modals';

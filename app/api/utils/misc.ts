@@ -1,6 +1,6 @@
-import { type Headers, XRPCError } from '@mary/bluesky-client/xrpc';
+import { type HeadersObject, XRPCError } from '@atcute/client';
+import type { At } from '@atcute/client/lexicons';
 
-import type { At } from '../atp-schema';
 import { MultiagentError } from '../classes/multiagent';
 
 export const isDid = (value: string): value is At.DID => {
@@ -85,7 +85,7 @@ export const formatQueryError = (err: unknown): string => {
 	return '' + err;
 };
 
-export const waitForRatelimit = async (headers: Headers, expected: number) => {
+export const waitForRatelimit = async (headers: HeadersObject, expected: number) => {
 	if ('ratelimit-remaining' in headers) {
 		const remaining = +headers['ratelimit-remaining'];
 		const reset = +headers['ratelimit-reset'] * 1_000;

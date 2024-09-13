@@ -1,8 +1,8 @@
 import { batch, createRoot, createSignal, getOwner, onCleanup, runWithOwner } from 'solid-js';
 
-import type { BskyXRPC } from '@mary/bluesky-client';
+import type { XRPC } from '@atcute/client';
+import type { At } from '@atcute/client/lexicons';
 
-import type { At } from '~/api/atp-schema';
 import { SignalizedConvo, mergeConvo } from '~/api/stores/convo';
 
 import { makeAbortable } from '~/utils/hooks';
@@ -13,7 +13,7 @@ type ChannelEvent = ConvoEvent | MarkReadEvent;
 
 export interface ChannelListingOptions {
 	did: At.DID;
-	rpc: BskyXRPC;
+	rpc: XRPC;
 	firehose: ChatFirehose;
 	fetchLimit?: number;
 }

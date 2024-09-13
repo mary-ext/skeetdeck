@@ -90,6 +90,7 @@ const AccountModerationView = () => {
 									}
 
 									return {
+										$type: 'app.bsky.actor.profile',
 										...record,
 										labels:
 											labels.length !== 0

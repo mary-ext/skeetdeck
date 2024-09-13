@@ -1,6 +1,7 @@
 import type { JSX } from 'solid-js';
 
-import type { AppBskyGraphDefs } from '~/api/atp-schema';
+import type { AppBskyGraphDefs } from '@atcute/client/lexicons';
+
 import { renderListPurpose } from '~/api/display';
 import { getRecordId } from '~/api/utils/misc';
 

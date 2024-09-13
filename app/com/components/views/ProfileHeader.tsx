@@ -1,6 +1,7 @@
 import { type JSX, createMemo, lazy } from 'solid-js';
 
-import type { At } from '~/api/atp-schema';
+import type { At } from '@atcute/client/lexicons';
+
 import { getAccountData, isAccountPrivileged } from '~/api/globals/agent';
 import {
 	ContextProfileMedia,

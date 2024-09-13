@@ -1,6 +1,6 @@
+import type { At } from '@atcute/client/lexicons';
 import { createInfiniteQuery } from '@mary/solid-query';
 
-import type { At } from '~/api/atp-schema';
 import { getLikes, getLikesKey } from '~/api/queries/get-likes';
 
 import { getModerationOptions } from '~/com/globals/shared';

@@ -1,6 +1,6 @@
 import { lazy } from 'solid-js';
 
-import type { AppBskyEmbedImages } from '~/api/atp-schema';
+import type { AppBskyEmbedImages } from '@atcute/client/lexicons';
 
 import { openModal } from '~/com/globals/modals';
 

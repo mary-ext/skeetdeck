@@ -1,8 +1,8 @@
 import { createMemo } from 'solid-js';
 
+import type { At } from '@atcute/client/lexicons';
 import { createQuery } from '@mary/solid-query';
 
-import type { At } from '~/api/atp-schema';
 import { getInitialPostThread, getPostThread, getPostThreadKey } from '~/api/queries/get-post-thread';
 
 import { IconButton } from '~/com/primitives/icon-button';

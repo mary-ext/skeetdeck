@@ -1,6 +1,7 @@
 import { type JSX, createMemo, createSignal } from 'solid-js';
 
-import type { AppBskyFeedDefs, AppBskyFeedThreadgate, At } from '~/api/atp-schema';
+import type { AppBskyFeedDefs, AppBskyFeedThreadgate, At } from '@atcute/client/lexicons';
+
 import { ContextContentView, ContextProfileMedia, getModerationUI } from '~/api/moderation';
 import { moderatePost } from '~/api/moderation/entities/post';
 import { updatePostLike } from '~/api/mutations/like-post';

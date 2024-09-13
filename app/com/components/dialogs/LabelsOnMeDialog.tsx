@@ -1,16 +1,16 @@
 import { batch, createEffect, createMemo, createSignal } from 'solid-js';
 import TextareaAutosize from 'solid-textarea-autosize';
 
-import { withProxy } from '@mary/bluesky-client/xrpc';
-import { createMutation } from '@mary/solid-query';
-
+import { withProxy } from '@atcute/client';
 import type {
 	At,
 	Brand,
 	ComAtprotoAdminDefs,
 	ComAtprotoLabelDefs,
 	ComAtprotoRepoStrongRef,
-} from '~/api/atp-schema';
+} from '@atcute/client/lexicons';
+import { createMutation } from '@mary/solid-query';
+
 import { multiagent } from '~/api/globals/agent';
 import { GLOBAL_LABELS, getLocalizedLabel } from '~/api/moderation';
 import { EOF_WS_RE } from '~/api/richtext/composer';

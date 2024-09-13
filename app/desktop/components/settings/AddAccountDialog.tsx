@@ -1,10 +1,10 @@
 import { batch, createEffect, createSignal, lazy } from 'solid-js';
 
-import { getPdsEndpoint } from '@mary/bluesky-client';
-import { XRPCError } from '@mary/bluesky-client/xrpc';
+import { XRPCError } from '@atcute/client';
+import type { At } from '@atcute/client/lexicons';
+import { getPdsEndpoint } from '@atcute/client/utils/did';
 import { createMutation } from '@mary/solid-query';
 
-import type { At } from '~/api/atp-schema';
 import { MultiagentError } from '~/api/classes/multiagent';
 import { getDidInfo } from '~/api/did';
 import { multiagent } from '~/api/globals/agent';

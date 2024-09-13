@@ -3,7 +3,7 @@ import type {
 	AppBskyEmbedImages,
 	AppBskyFeedDefs,
 	AppBskyFeedPost,
-} from '../atp-schema';
+} from '@atcute/client/lexicons';
 
 type RecordEmbed = AppBskyFeedPost.Record['embed'];
 type ViewEmbed = AppBskyFeedDefs.PostView['embed'];

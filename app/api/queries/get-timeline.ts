@@ -1,8 +1,8 @@
+import type { AppBskyFeedGetTimeline, AppBskyFeedPost, At } from '@atcute/client/lexicons';
 import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
 import { assert } from '~/utils/misc';
 
-import type { AppBskyFeedGetTimeline, AppBskyFeedPost, At } from '../atp-schema';
 import type { AgentInstance } from '../classes/multiagent';
 import { multiagent } from '../globals/agent';
 import { systemLanguages } from '../globals/platform';

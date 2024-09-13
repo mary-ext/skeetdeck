@@ -1,7 +1,7 @@
+import type { At, Brand, ChatBskyActorDefs, ChatBskyConvoDefs } from '@atcute/client/lexicons';
+
 import { EQUALS_DEQUAL } from '~/utils/dequal';
 import { type Signal, signal } from '~/utils/signals';
-
-import type { At, Brand, ChatBskyActorDefs, ChatBskyConvoDefs } from '../atp-schema';
 
 import { type SignalizedProfile, mergeProfile } from './profiles';
 

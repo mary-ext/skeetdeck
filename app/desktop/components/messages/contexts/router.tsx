@@ -1,4 +1,4 @@
-import type { At } from '~/api/atp-schema';
+import type { At } from '@atcute/client/lexicons';
 
 export const enum ViewKind {
 	CHANNEL_LISTING,

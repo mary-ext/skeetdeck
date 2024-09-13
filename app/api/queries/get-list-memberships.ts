@@ -1,6 +1,6 @@
+import type { AppBskyGraphListitem, At } from '@atcute/client/lexicons';
 import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
-import type { AppBskyGraphListitem, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 const PAGE_LIMIT = 1_000;

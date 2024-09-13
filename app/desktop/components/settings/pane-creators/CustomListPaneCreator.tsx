@@ -1,8 +1,8 @@
 import { For, Match, Switch, createSignal, lazy } from 'solid-js';
 
+import type { AppBskyGraphDefs, At } from '@atcute/client/lexicons';
 import { createInfiniteQuery, useQueryClient } from '@mary/solid-query';
 
-import type { AppBskyGraphDefs, At } from '~/api/atp-schema';
 import { multiagent, renderAccountName } from '~/api/globals/agent';
 
 import { openModal } from '~/com/globals/modals';

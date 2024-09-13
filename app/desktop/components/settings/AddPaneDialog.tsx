@@ -1,6 +1,7 @@
 import { type Component, Match, Show, Switch, createSignal } from 'solid-js';
 
-import type { At } from '~/api/atp-schema';
+import type { At } from '@atcute/client/lexicons';
+
 import { getAccountHandle, multiagent } from '~/api/globals/agent';
 
 import { closeModal } from '~/com/globals/modals';

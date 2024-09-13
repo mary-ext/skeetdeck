@@ -1,4 +1,5 @@
-import type { At } from '../atp-schema';
+import type { At } from '@atcute/client/lexicons';
+
 import { multiagent } from '../globals/agent';
 
 interface BlobMetadata {
@@ -14,10 +15,7 @@ export const uploadBlob = async <T extends string = string>(uid: At.DID, blob: B
 	if (!meta || meta.u !== uid) {
 		const agent = await multiagent.connect(uid);
 
-		const response = await agent.rpc.call('com.atproto.repo.uploadBlob', {
-			data: blob,
-			encoding: blob.type,
-		});
+		const response = await agent.rpc.call('com.atproto.repo.uploadBlob', { data: blob });
 
 		cache.set(blob, (meta = { u: uid, b: response.data.blob }));
 	}

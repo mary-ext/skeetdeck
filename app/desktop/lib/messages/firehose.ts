@@ -1,10 +1,9 @@
 import { nanoid } from 'nanoid/non-secure';
 import { batch, createSignal, untrack } from 'solid-js';
 
-import type { BskyXRPC } from '@mary/bluesky-client';
+import type { XRPC } from '@atcute/client';
+import type { ChatBskyConvoGetLog } from '@atcute/client/lexicons';
 import { EventEmitter } from '@mary/events';
-
-import type { ChatBskyConvoGetLog } from '~/api/atp-schema';
 
 function debug(msg: string) {
 	if (import.meta.env.DEV) {
@@ -30,7 +29,7 @@ export type ChatFirehoseEvents = {
 
 export type ChatFirehose = ReturnType<typeof createChatFirehose>;
 
-export const createChatFirehose = (rpc: BskyXRPC) => {
+export const createChatFirehose = (rpc: XRPC) => {
 	const [status, setStatus] = createSignal(FirehoseStatus.IDLE);
 	const [error, setError] = createSignal<FirehoseError>();
 

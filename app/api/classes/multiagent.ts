@@ -5,17 +5,18 @@ import {
 	type AtpAccessJwt,
 	type AtpSessionData,
 	type AuthLoginOptions,
-	BskyAuth,
-	BskyMod,
-	BskyXRPC,
-	type ModerationService,
-} from '@mary/bluesky-client';
-import { decodeJwt } from '@mary/bluesky-client/utils/jwt';
+	CredentialManager,
+	type FetchHandler,
+	type FetchHandlerObject,
+	XRPC,
+	buildFetchHandler,
+} from '@atcute/client';
+import type { At } from '@atcute/client/lexicons';
+import { mergeHeaders } from '@atcute/client/utils/http';
+import { decodeJwt } from '@atcute/client/utils/jwt';
 
 import { signal } from '~/utils/signals';
 import { createReactiveLocalStorage } from '~/utils/storage';
-
-import type { At } from '../atp-schema';
 
 export interface MultiagentLoginOptions extends AuthLoginOptions {
 	service: string;
@@ -43,8 +44,8 @@ interface MultiagentStorage {
 }
 
 export interface AgentInstance {
-	rpc: BskyXRPC;
-	auth: BskyAuth;
+	rpc: XRPC;
+	auth: CredentialManager;
 }
 
 interface StoredAgent extends AgentInstance {
@@ -61,7 +62,7 @@ export class MultiagentError extends Error {
 
 export class Multiagent {
 	store: MultiagentStorage;
-	services = signal<ModerationService[]>([]);
+	services = signal<Labeler[]>([]);
 
 	#agents: Record<At.DID, StoredAgent> = {};
 
@@ -257,9 +258,8 @@ export class Multiagent {
 
 		const $accounts = this.store.accounts!;
 
-		const rpc = new BskyXRPC({ service: serviceUri });
-		const mod = new BskyMod(rpc);
-		const auth = new BskyAuth(rpc, {
+		const auth = new CredentialManager({
+			service: serviceUri,
 			onRefresh(session) {
 				const did = session!.did;
 				const existing = $accounts.find((acc) => acc.did === did);
@@ -272,10 +272,15 @@ export class Multiagent {
 			},
 		});
 
+		const rpc = new XRPC({ handler: auth });
+
 		return {
 			rpc: rpc,
 			auth: auth,
 			c: createRoot((dispose) => {
+				// A bit of a hack, but works right now.
+				rpc.handle = attachLabelerHeaders(rpc.handle, () => this.services.value);
+
 				createEffect(() => {
 					const actual = auth.session;
 
@@ -292,12 +297,31 @@ export class Multiagent {
 					}
 				});
 
-				createEffect(() => {
-					mod.labelers = this.services.value;
-				});
-
 				return dispose;
 			}),
 		};
 	}
 }
+
+interface Labeler {
+	did: At.DID;
+	redact?: boolean;
+}
+
+const attachLabelerHeaders = (
+	handler: FetchHandler | FetchHandlerObject,
+	labelers: () => Labeler[],
+): FetchHandler => {
+	const next = buildFetchHandler(handler);
+
+	return (pathname, init) => {
+		return next(pathname, {
+			...init,
+			headers: mergeHeaders(init.headers, {
+				'atproto-accept-labelers': labelers()
+					.map((labeler) => labeler.did + (labeler.redact ? `;redact` : ``))
+					.join(', '),
+			}),
+		});
+	};
+};

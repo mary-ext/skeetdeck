@@ -1,6 +1,6 @@
+import type { At } from '@atcute/client/lexicons';
 import { createInfiniteQuery, createQuery } from '@mary/solid-query';
 
-import type { At } from '~/api/atp-schema';
 import { getFeedInfo, getFeedInfoKey, getInitialFeedInfo } from '~/api/queries/get-feed-info';
 import { getLikes, getLikesKey } from '~/api/queries/get-likes';
 

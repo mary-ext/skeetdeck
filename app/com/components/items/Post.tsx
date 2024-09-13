@@ -1,6 +1,7 @@
 import { type Accessor, createEffect, createMemo } from 'solid-js';
 
-import type { At } from '~/api/atp-schema';
+import type { At } from '@atcute/client/lexicons';
+
 import type { SignalizedTimelineItem } from '~/api/models/timeline';
 import {
 	ContextContentList,

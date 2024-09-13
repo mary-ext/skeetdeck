@@ -1,6 +1,6 @@
 import { type DBSchema, type IDBPDatabase, openDB } from 'idb';
 
-import type { At } from '~/api/atp-schema';
+import type { At } from '@atcute/client/lexicons';
 
 import type { GateState } from './state';
 

@@ -1,6 +1,6 @@
-import { type DidDocument } from '@mary/bluesky-client';
+import type { At } from '@atcute/client/lexicons';
+import { type DidDocument } from '@atcute/client/utils/did';
 
-import type { At } from './atp-schema';
 import { publicAppView } from './globals/agent';
 import { isDid } from './utils/misc';
 

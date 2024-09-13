@@ -1,4 +1,4 @@
-import type { At } from '~/api/atp-schema';
+import type { At } from '@atcute/client/lexicons';
 
 import { closeModal } from '../../globals/modals';
 import { Button } from '../../primitives/button';

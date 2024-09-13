@@ -1,6 +1,7 @@
 import { type JSX } from 'solid-js';
 
-import type { AppBskyEmbedRecord, AppBskyFeedDefs, At } from '~/api/atp-schema';
+import type { AppBskyEmbedRecord, AppBskyFeedDefs, At } from '@atcute/client/lexicons';
+
 import { getRecordId, getRepoId } from '~/api/utils/misc';
 
 import { LINK_POST, Link } from '../Link';

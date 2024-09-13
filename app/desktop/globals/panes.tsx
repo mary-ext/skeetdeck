@@ -1,4 +1,4 @@
-import type { At } from '~/api/atp-schema';
+import type { At } from '@atcute/client/lexicons';
 
 export const PANE_TYPE_HOME = 'home';
 export const PANE_TYPE_NOTIFICATIONS = 'notifications';

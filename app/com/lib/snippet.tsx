@@ -1,4 +1,4 @@
-import type { AppBskyEmbedExternal } from '@mary/bluesky-client/lexicons';
+import type { AppBskyEmbedExternal } from '@atcute/client/lexicons';
 
 export const enum SnippetType {
 	LINK,

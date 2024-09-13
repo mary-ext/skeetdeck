@@ -1,6 +1,6 @@
+import type { At } from '@atcute/client/lexicons';
 import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
-import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 import { moderateProfileList } from '../moderation/utils';
 import { mergeProfile } from '../stores/profiles';

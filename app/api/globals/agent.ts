@@ -1,11 +1,11 @@
-import { BskyXRPC } from '@mary/bluesky-client';
+import { XRPC, simpleFetchHandler } from '@atcute/client';
+import type { At } from '@atcute/client/lexicons';
 
-import type { At } from '../atp-schema';
 import { Multiagent, type MultiagentAccountData } from '../classes/multiagent';
 
 export const multiagent = new Multiagent('accs');
 
-export const publicAppView = new BskyXRPC({ service: 'https://api.bsky.app' });
+export const publicAppView = new XRPC({ handler: simpleFetchHandler({ service: 'https://api.bsky.app' }) });
 
 export const getAccountData = (uid: At.DID | undefined): MultiagentAccountData | undefined => {
 	return uid !== undefined ? multiagent.accounts.find((acc) => acc.did === uid) : undefined;

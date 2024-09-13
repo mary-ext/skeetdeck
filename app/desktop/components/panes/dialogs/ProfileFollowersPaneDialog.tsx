@@ -1,8 +1,8 @@
 import { createMemo } from 'solid-js';
 
+import type { At } from '@atcute/client/lexicons';
 import { createInfiniteQuery } from '@mary/solid-query';
 
-import type { At } from '~/api/atp-schema';
 import {
 	getInitialProfileFollowers,
 	getProfileFollowers,

@@ -1,4 +1,5 @@
-import type { AppBskyGraphFollow } from '../atp-schema';
+import type { AppBskyGraphFollow } from '@atcute/client/lexicons';
+
 import { multiagent } from '../globals/agent';
 import type { SignalizedProfile } from '../stores/profiles';
 import { getCurrentDate, getRecordId } from '../utils/misc';
@@ -15,6 +16,7 @@ const createProfileFollowMutation = (profile: SignalizedProfile) => {
 
 			if (shouldFollow) {
 				const record: AppBskyGraphFollow.Record = {
+					$type: 'app.bsky.graph.follow',
 					createdAt: getCurrentDate(),
 					subject: profile.did,
 				};

@@ -1,6 +1,6 @@
+import type { AppBskyActorDefs, At } from '@atcute/client/lexicons';
 import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
-import type { AppBskyActorDefs, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 import { type SignalizedProfile, getCachedProfile, mergeProfile } from '../stores/profiles';
 import { createBatchedFetch } from '../utils/batch-fetch';

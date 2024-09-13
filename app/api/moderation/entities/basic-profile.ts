@@ -1,3 +1,5 @@
+import type { AppBskyActorDefs } from '@atcute/client/lexicons';
+
 import {
 	type ModerationCause,
 	type ModerationOptions,
@@ -6,7 +8,6 @@ import {
 	decideMutedPermanentModeration,
 	decideMutedTemporaryModeration,
 } from '..';
-import type { AppBskyActorDefs } from '../../atp-schema';
 
 type ProfileView =
 	| AppBskyActorDefs.ProfileView

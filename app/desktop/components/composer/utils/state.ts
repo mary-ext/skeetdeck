@@ -1,6 +1,7 @@
 import { unwrap } from 'solid-js/store';
 
-import type { At } from '~/api/atp-schema';
+import type { At } from '@atcute/client/lexicons';
+
 import { systemLanguages } from '~/api/globals/platform';
 import { type PreliminaryRichText, getRtLength, parseRt } from '~/api/richtext/composer';
 

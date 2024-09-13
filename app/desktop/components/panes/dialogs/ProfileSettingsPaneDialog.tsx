@@ -1,10 +1,10 @@
 import { createMemo, createSignal as signal } from 'solid-js';
 import TextareaAutosize from 'solid-textarea-autosize';
 
-import { XRPCError } from '@mary/bluesky-client/xrpc';
+import { XRPCError } from '@atcute/client';
+import type { AppBskyActorProfile } from '@atcute/client/lexicons';
 import { createMutation, useQueryClient } from '@mary/solid-query';
 
-import type { AppBskyActorProfile } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { uploadBlob } from '~/api/mutations/upload-blob';
 import { getProfileKey } from '~/api/queries/get-profile';
@@ -115,6 +115,7 @@ const ProfileSettingsPaneDialog = (props: ProfileSettingsPaneDialogProps) => {
 					record.labels = record.labels;
 				} else {
 					record = {
+						$type: 'app.bsky.actor.profile',
 						avatar: nextAvatar,
 						banner: nextBanner,
 						displayName: $name,

@@ -1,6 +1,6 @@
+import type { At } from '@atcute/client/lexicons';
 import { createQuery } from '@mary/solid-query';
 
-import type { At } from '~/api/atp-schema';
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
 import { dequal } from '~/utils/dequal';

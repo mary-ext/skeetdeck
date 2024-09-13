@@ -1,6 +1,7 @@
 import { type JSX } from 'solid-js';
 
-import type { AppBskyEmbedRecord, AppBskyFeedPost } from '~/api/atp-schema';
+import type { AppBskyEmbedRecord, AppBskyFeedPost } from '@atcute/client/lexicons';
+
 import {
 	ContextContentList,
 	ContextContentMedia,

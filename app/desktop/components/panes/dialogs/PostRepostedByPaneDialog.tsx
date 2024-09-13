@@ -1,6 +1,6 @@
+import type { At } from '@atcute/client/lexicons';
 import { createInfiniteQuery } from '@mary/solid-query';
 
-import type { At } from '~/api/atp-schema';
 import { getPostReposts, getPostRepostsKey } from '~/api/queries/get-post-reposts';
 
 import { getModerationOptions } from '~/com/globals/shared';

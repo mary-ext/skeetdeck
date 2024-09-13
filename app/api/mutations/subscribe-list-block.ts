@@ -1,4 +1,5 @@
-import type { AppBskyGraphListblock } from '../atp-schema';
+import type { AppBskyGraphListblock } from '@atcute/client/lexicons';
+
 import { multiagent } from '../globals/agent';
 import type { SignalizedList } from '../stores/lists';
 import { getCurrentDate, getRecordId } from '../utils/misc';
@@ -15,6 +16,7 @@ const createListBlockMutation = (list: SignalizedList) => {
 
 			if (shouldBlock) {
 				const record: AppBskyGraphListblock.Record = {
+					$type: 'app.bsky.graph.listblock',
 					createdAt: getCurrentDate(),
 					subject: list.uri,
 				};

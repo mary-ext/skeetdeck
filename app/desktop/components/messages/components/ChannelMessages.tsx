@@ -1,6 +1,6 @@
 import { For, Match, Switch, createEffect, createSignal, untrack } from 'solid-js';
 
-import type { ChatBskyConvoDefs } from '~/api/atp-schema';
+import type { ChatBskyConvoDefs } from '@atcute/client/lexicons';
 
 import { scrollObserver } from '~/utils/intersection-observer';
 import { ifIntersect } from '~/utils/refs';

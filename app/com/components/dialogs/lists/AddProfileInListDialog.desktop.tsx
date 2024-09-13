@@ -1,5 +1,6 @@
 import { createEffect, createMemo, createSignal, lazy } from 'solid-js';
 
+import type { AppBskyGraphListitem, Brand, ComAtprotoRepoApplyWrites } from '@atcute/client/lexicons';
 import * as TID from '@mary/atproto-tid';
 import {
 	type InfiniteData,
@@ -9,7 +10,6 @@ import {
 	useQueryClient,
 } from '@mary/solid-query';
 
-import type { AppBskyGraphListitem, Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { renderListPurpose } from '~/api/display';
 import { multiagent, renderAccountName } from '~/api/globals/agent';
 import type { ListMembersPage } from '~/api/queries/get-list-members';
@@ -124,6 +124,7 @@ const AddProfileInListDialog = (props: AddProfileInListDialogProps) => {
 
 			for (const listUri of additions) {
 				const record: AppBskyGraphListitem.Record = {
+					$type: 'app.bsky.graph.listitem',
 					list: listUri,
 					subject: did,
 					createdAt: date,

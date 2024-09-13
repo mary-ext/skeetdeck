@@ -1,8 +1,8 @@
 import { createEffect, createMemo, lazy, createSignal as signal } from 'solid-js';
 
+import type { AppBskyGraphList, Brand, ComAtprotoRepoApplyWrites } from '@atcute/client/lexicons';
 import { type InfiniteData, createMutation, useQueryClient } from '@mary/solid-query';
 
-import type { AppBskyGraphList, Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { uploadBlob } from '~/api/mutations/upload-blob';
 import { getListInfoKey } from '~/api/queries/get-list-info';

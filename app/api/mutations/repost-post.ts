@@ -1,4 +1,5 @@
-import type { AppBskyFeedRepost } from '../atp-schema';
+import type { AppBskyFeedRepost } from '@atcute/client/lexicons';
+
 import { multiagent } from '../globals/agent';
 import type { SignalizedPost } from '../stores/posts';
 import { getCurrentDate, getRecordId } from '../utils/misc';
@@ -15,6 +16,7 @@ const createPostRepostMutation = (post: SignalizedPost) => {
 
 			if (shouldFollow) {
 				const record: AppBskyFeedRepost.Record = {
+					$type: 'app.bsky.feed.repost',
 					createdAt: getCurrentDate(),
 					subject: {
 						uri: post.uri,

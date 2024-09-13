@@ -1,4 +1,4 @@
-import type { At, ComAtprotoLabelDefs } from '../atp-schema';
+import type { At, ComAtprotoLabelDefs } from '@atcute/client/lexicons';
 
 type Label = ComAtprotoLabelDefs.Label;
 

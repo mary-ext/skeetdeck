@@ -1,6 +1,6 @@
+import type { AppBskyFeedDefs, At } from '@atcute/client/lexicons';
 import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
-import type { AppBskyFeedDefs, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 import { type ThreadData, createThreadData } from '../models/threads';
 import { getCachedPost } from '../stores/posts';

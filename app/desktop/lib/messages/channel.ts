@@ -11,10 +11,10 @@ import {
 	untrack,
 } from 'solid-js';
 
+import type { XRPC } from '@atcute/client';
+import type { At, ChatBskyConvoDefs } from '@atcute/client/lexicons';
 import * as TID from '@mary/atproto-tid';
-import type { BskyXRPC } from '@mary/bluesky-client';
 
-import type { At, ChatBskyConvoDefs } from '~/api/atp-schema';
 import { type PreliminaryRichText, finalizeRt, getRtText } from '~/api/richtext/composer';
 
 import { makeAbortable } from '~/utils/hooks';
@@ -34,7 +34,7 @@ export interface ChannelMessage extends ChatBskyConvoDefs.MessageView {
 export interface ChannelOptions {
 	channelId: string;
 	did: At.DID;
-	rpc: BskyXRPC;
+	rpc: XRPC;
 	firehose: ChatFirehose;
 	fetchLimit?: number;
 }

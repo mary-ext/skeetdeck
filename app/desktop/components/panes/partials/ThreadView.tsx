@@ -1,9 +1,9 @@
 import { For, Match, Show, Suspense, Switch, lazy, onMount } from 'solid-js';
 
-import { XRPCError } from '@mary/bluesky-client/xrpc';
+import { XRPCError } from '@atcute/client';
+import type { At } from '@atcute/client/lexicons';
 import { type CreateQueryResult } from '@mary/solid-query';
 
-import type { At } from '~/api/atp-schema';
 import type { ThreadData } from '~/api/models/threads';
 import { BlockedThreadError } from '~/api/queries/get-post-thread';
 import { SignalizedPost } from '~/api/stores/posts';

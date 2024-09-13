@@ -1,6 +1,6 @@
+import type { At } from '@atcute/client/lexicons';
 import { createInfiniteQuery, createQuery } from '@mary/solid-query';
 
-import type { At } from '~/api/atp-schema';
 import { getProfile, getProfileKey } from '~/api/queries/get-profile';
 import { getProfileFeeds, getProfileFeedsKey } from '~/api/queries/get-profile-feeds';
 

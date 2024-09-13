@@ -1,8 +1,8 @@
 import { For, Match, Switch, createRenderEffect, untrack } from 'solid-js';
 
+import type { At } from '@atcute/client/lexicons';
 import { type InfiniteData, createInfiniteQuery, createQuery, useQueryClient } from '@mary/solid-query';
 
-import type { At } from '~/api/atp-schema';
 import {
 	type TimelineLatestResult,
 	type TimelinePage,

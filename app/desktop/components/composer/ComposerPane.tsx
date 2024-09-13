@@ -2,9 +2,6 @@ import { makeEventListener } from '@solid-primitives/event-listener';
 import { For, type JSX, Show, batch, createEffect, createMemo, createSignal, lazy, untrack } from 'solid-js';
 import { unwrap } from 'solid-js/store';
 
-import * as TID from '@mary/atproto-tid';
-import { createQuery, useQueryClient } from '@mary/solid-query';
-
 import type {
 	AppBskyEmbedExternal,
 	AppBskyFeedPost,
@@ -13,7 +10,10 @@ import type {
 	Brand,
 	ComAtprotoRepoApplyWrites,
 	ComAtprotoRepoStrongRef,
-} from '~/api/atp-schema';
+} from '@atcute/client/lexicons';
+import * as TID from '@mary/atproto-tid';
+import { createQuery, useQueryClient } from '@mary/solid-query';
+
 import { multiagent } from '~/api/globals/agent';
 import type { ThreadData } from '~/api/models/threads';
 import { getUploadedBlob, uploadBlob } from '~/api/mutations/upload-blob';
@@ -492,6 +492,7 @@ const ComposerPane = () => {
 						date.setMilliseconds(0);
 
 						const record: ThreadgateRecord = {
+							$type: 'app.bsky.feed.threadgate',
 							createdAt: date.toISOString(),
 							post: `at://${uid}/app.bsky.feed.post/${rkey}`,
 							allow: rules,

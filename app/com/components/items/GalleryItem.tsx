@@ -1,6 +1,7 @@
 import { type JSX, createMemo, lazy } from 'solid-js';
 
-import type { AppBskyEmbedImages } from '~/api/atp-schema';
+import type { AppBskyEmbedImages } from '@atcute/client/lexicons';
+
 import { ContextContentMedia, getModerationUI } from '~/api/moderation';
 import { moderatePost } from '~/api/moderation/entities/post';
 import type { SignalizedPost } from '~/api/stores/posts';

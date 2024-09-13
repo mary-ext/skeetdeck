@@ -1,7 +1,7 @@
+import type { AppBskyActorDefs, At, Brand } from '@atcute/client/lexicons';
+
 import { EQUALS_DEQUAL } from '~/utils/dequal';
 import { type Signal, signal } from '~/utils/signals';
-
-import type { AppBskyActorDefs, At, Brand } from '../atp-schema';
 
 type Profile = AppBskyActorDefs.ProfileView;
 type ProfileBasic = AppBskyActorDefs.ProfileViewBasic;
@@ -152,8 +152,15 @@ const DEFAULT_CHAT_ASSOCIATION: AppBskyActorDefs.ProfileAssociatedChat = {
 };
 
 const getAssociated = (o: AppBskyActorDefs.ProfileAssociated | undefined): ProfileAssociated => {
-	const { feedgens = 0, labeler = false, lists = 0, chat = DEFAULT_CHAT_ASSOCIATION } = o || {};
-	return { feedgens, labeler, lists, chat };
+	const {
+		feedgens = 0,
+		labeler = false,
+		lists = 0,
+		chat = DEFAULT_CHAT_ASSOCIATION,
+		starterPacks = 0,
+	} = o || {};
+
+	return { feedgens, labeler, lists, chat, starterPacks };
 };
 
 const mergeAssociatedBasic = (

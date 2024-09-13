@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 
-import { BskyXRPC } from '@mary/bluesky-client';
+import { XRPC, simpleFetchHandler } from '@atcute/client';
 
 const DID_LIST_URL = 'https://raw.githubusercontent.com/mary-ext/bluesky-labelers/trunk/did.min.json';
 const SOURCE_PATH = 'api/queries/get-labeler-popular.ts';
@@ -17,7 +17,7 @@ let creators;
 
 	const json = await response.json();
 
-	const rpc = new BskyXRPC({ service: 'https://api.bsky.app' });
+	const rpc = new XRPC({ handler: simpleFetchHandler({ service: 'https://api.bsky.app' }) });
 	const chunks = await Promise.all(
 		chunked(json, 25).map((dids) => {
 			return rpc

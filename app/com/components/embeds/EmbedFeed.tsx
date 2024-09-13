@@ -1,6 +1,7 @@
 import type { JSX } from 'solid-js';
 
-import type { AppBskyFeedDefs } from '~/api/atp-schema';
+import type { AppBskyFeedDefs } from '@atcute/client/lexicons';
+
 import { getRecordId } from '~/api/utils/misc';
 
 import DefaultFeedAvatar from '../../assets/default-feed-avatar.svg?url';

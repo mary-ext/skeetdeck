@@ -1,9 +1,9 @@
 import { For, Suspense, SuspenseList, createMemo, createSignal } from 'solid-js';
 
+import type { At } from '@atcute/client/lexicons';
 import { useSuspend } from '@mary/solid-freeze';
 import { createQuery } from '@mary/solid-query';
 
-import type { At } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';
 import { formatQueryError } from '~/api/utils/misc';

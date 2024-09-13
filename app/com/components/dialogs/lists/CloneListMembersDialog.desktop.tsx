@@ -1,9 +1,9 @@
 import { createEffect, createSignal, lazy } from 'solid-js';
 import { createMutable } from 'solid-js/store';
 
+import type { AppBskyGraphListitem, At, Brand, ComAtprotoRepoApplyWrites } from '@atcute/client/lexicons';
 import { createInfiniteQuery, useQueryClient } from '@mary/solid-query';
 
-import type { AppBskyGraphListitem, At, Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { renderListPurpose } from '~/api/display';
 import { multiagent, renderAccountName } from '~/api/globals/agent';
 import { getProfileLists, getProfileListsKey } from '~/api/queries/get-profile-lists';
@@ -163,6 +163,7 @@ const CloneListMembersDialog = (props: CloneListMembersDialogProps) => {
 		const date = getCurrentDate();
 		const writes: Brand.Union<ComAtprotoRepoApplyWrites.Create>[] = members.map((did) => {
 			const record: AppBskyGraphListitem.Record = {
+				$type: 'app.bsky.graph.listitem',
 				createdAt: date,
 				list: dst.uri,
 				subject: did,

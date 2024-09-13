@@ -1,3 +1,5 @@
+import type { AppBskyEmbedRecord, AppBskyFeedPost } from '@atcute/client/lexicons';
+
 import {
 	type ModerationCause,
 	type ModerationOptions,
@@ -6,7 +8,6 @@ import {
 	decideLabelModeration,
 	decideMutedKeywordModeration,
 } from '..';
-import type { AppBskyEmbedRecord, AppBskyFeedPost } from '../../atp-schema';
 import { unwrapPostEmbedText } from '../../utils/post';
 
 import { decideBasicProfile } from './basic-profile';

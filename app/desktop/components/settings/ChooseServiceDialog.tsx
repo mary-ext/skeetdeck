@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js';
 
-import { BskyXRPC } from '@mary/bluesky-client';
+import { XRPC, simpleFetchHandler } from '@atcute/client';
 import { createMutation } from '@mary/solid-query';
 
 import { DEFAULT_DATA_SERVERS, type DataServer } from '~/api/globals/defaults';
@@ -45,7 +45,7 @@ const ChooseServiceDialog = (props: ChooseServiceDialogProps) => {
 	const pdsMutation = createMutation(() => {
 		return {
 			mutationFn: async ({ uri }: { uri: string }) => {
-				const rpc = new BskyXRPC({ service: uri });
+				const rpc = new XRPC({ handler: simpleFetchHandler({ service: uri }) });
 				await rpc.get('com.atproto.server.describeServer', {});
 			},
 			onSuccess(_data: void, { uri }) {

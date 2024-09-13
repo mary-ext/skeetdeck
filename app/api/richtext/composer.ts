@@ -1,6 +1,6 @@
-import { XRPCError } from '@mary/bluesky-client/xrpc';
+import { XRPCError } from '@atcute/client';
+import type { At } from '@atcute/client/lexicons';
 
-import type { At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 import { asciiLen, graphemeLen } from './intl';

@@ -1,6 +1,6 @@
-import { type Signal, signal } from '~/utils/signals';
+import type { AppBskyFeedDefs, At } from '@atcute/client/lexicons';
 
-import type { AppBskyFeedDefs, At } from '../atp-schema';
+import { type Signal, signal } from '~/utils/signals';
 
 import { type SignalizedProfile, mergeProfile } from './profiles';
 

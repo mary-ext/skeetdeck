@@ -1,4 +1,5 @@
-import type { AppBskyGraphBlock } from '../atp-schema';
+import type { AppBskyGraphBlock } from '@atcute/client/lexicons';
+
 import { multiagent } from '../globals/agent';
 import type { SignalizedProfile } from '../stores/profiles';
 import { getCurrentDate, getRecordId } from '../utils/misc';
@@ -15,6 +16,7 @@ const createProfileBlockMutation = (profile: SignalizedProfile) => {
 
 			if (shouldBlock) {
 				const record: AppBskyGraphBlock.Record = {
+					$type: 'app.bsky.graph.block',
 					createdAt: getCurrentDate(),
 					subject: profile.did,
 				};

@@ -66,8 +66,7 @@ export const isLinkValid = (uri: string, text: string) => {
 export const safeUrlParse =
 	'parse' in URL
 		? (text: string): URL | null => {
-				// @ts-expect-error
-				const url = URL.parse(text) as URL | null;
+				const url = URL.parse(text);
 
 				if (url !== null && (url.protocol === 'https:' || url.protocol === 'http:')) {
 					return url;

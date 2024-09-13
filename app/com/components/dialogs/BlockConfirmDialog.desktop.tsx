@@ -1,8 +1,8 @@
 import { createEffect, createSignal } from 'solid-js';
 
+import type { AppBskyGraphDefs } from '@atcute/client/lexicons';
 import { type InfiniteData, createQuery, useQueryClient } from '@mary/solid-query';
 
-import type { AppBskyGraphDefs } from '~/api/atp-schema';
 import { getAccountHandle, multiagent } from '~/api/globals/agent';
 import { updateProfileBlock } from '~/api/mutations/block-profile';
 import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';

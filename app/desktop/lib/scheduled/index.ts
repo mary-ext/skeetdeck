@@ -1,6 +1,7 @@
 import { batch, createEffect, createRoot, onCleanup } from 'solid-js';
 
-import type { AppBskyLabelerDefs, At } from '~/api/atp-schema';
+import type { AppBskyLabelerDefs, At } from '@atcute/client/lexicons';
+
 import { publicAppView } from '~/api/globals/agent';
 import { interpretServiceDefinition, mergeServiceDefinition } from '~/api/moderation/service';
 

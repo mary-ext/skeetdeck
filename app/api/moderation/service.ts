@@ -1,8 +1,8 @@
 import { batch } from 'solid-js';
 
-import { mapDefined } from '~/utils/misc';
+import type { AppBskyLabelerDefs } from '@atcute/client/lexicons';
 
-import type { AppBskyLabelerDefs } from '../atp-schema';
+import { mapDefined } from '~/utils/misc';
 
 import {
 	BlurContent,

@@ -1,6 +1,7 @@
 import type { JSX } from 'solid-js';
 
-import type { At } from '~/api/atp-schema';
+import type { At } from '@atcute/client/lexicons';
+
 import { getAccountHandle, multiagent } from '~/api/globals/agent';
 
 export interface TakingActionNoticeProps {

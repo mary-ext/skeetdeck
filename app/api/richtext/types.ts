@@ -1,4 +1,4 @@
-import type { AppBskyRichtextFacet } from '../atp-schema';
+import type { AppBskyRichtextFacet } from '@atcute/client/lexicons';
 
 type UnwrapArray<T> = T extends (infer V)[] ? V : never;
 

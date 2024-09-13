@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'solid-js';
 
-import type { At } from '~/api/atp-schema';
+import type { At } from '@atcute/client/lexicons';
 
 // Root
 export const VIEW_ABOUT = 0;

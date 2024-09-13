@@ -11,9 +11,9 @@ import {
 	untrack,
 } from 'solid-js';
 
-import { withProxy } from '@mary/bluesky-client/xrpc';
+import { withProxy } from '@atcute/client';
+import type { At } from '@atcute/client/lexicons';
 
-import type { At } from '~/api/atp-schema';
 import { getPrivilegedAccounts, multiagent } from '~/api/globals/agent';
 
 import { makeAbortable } from '~/utils/hooks';

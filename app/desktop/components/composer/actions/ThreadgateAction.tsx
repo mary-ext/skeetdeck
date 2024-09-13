@@ -1,6 +1,6 @@
 import type { Component, ComponentProps, JSX } from 'solid-js';
 
-import type { AppBskyFeedThreadgate, Brand } from '~/api/atp-schema';
+import type { AppBskyFeedThreadgate, Brand } from '@atcute/client/lexicons';
 
 import { MenuItem, MenuItemIcon, MenuRoot } from '~/com/primitives/menu';
 

@@ -1,6 +1,6 @@
 import { type JSX, lazy } from 'solid-js';
 
-import type { At, ComAtprotoLabelDefs } from '~/api/atp-schema';
+import type { At, ComAtprotoLabelDefs } from '@atcute/client/lexicons';
 
 import { openModal } from '~/com/globals/modals';
 

@@ -1,8 +1,8 @@
 import { For, type JSX, createMemo, createSignal } from 'solid-js';
 
+import type { At } from '@atcute/client/lexicons';
 import { createQuery } from '@mary/solid-query';
 
-import type { At } from '~/api/atp-schema';
 import { searchProfilesTypeahead, searchProfilesTypeaheadKey } from '~/api/queries/search-profiles-typeahead';
 import type { SignalizedProfile } from '~/api/stores/profiles';
 

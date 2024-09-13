@@ -1,7 +1,7 @@
-import { XRPCError } from '@mary/bluesky-client/xrpc';
+import { XRPCError } from '@atcute/client';
+import type { AppBskyLabelerDefs, At } from '@atcute/client/lexicons';
 import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
-import type { AppBskyLabelerDefs, At } from '../atp-schema';
 import { publicAppView } from '../globals/agent';
 import { interpretServiceDefinition } from '../moderation/service';
 
@@ -22,7 +22,7 @@ export const getLabelerInfo = async (ctx: QC<ReturnType<typeof getLabelerInfoKey
 	const result = response.data.views[0] as AppBskyLabelerDefs.LabelerViewDetailed;
 
 	if (!result) {
-		throw new XRPCError(400, { kind: 'NotFound', message: `Service not found: ${did}` });
+		throw new XRPCError(400, { kind: 'NotFound', description: `Service not found: ${did}` });
 	}
 
 	return interpretServiceDefinition(result);

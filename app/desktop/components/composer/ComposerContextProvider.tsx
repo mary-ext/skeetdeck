@@ -1,7 +1,7 @@
 import { type JSX, batch, createSignal, untrack } from 'solid-js';
 import { createMutable } from 'solid-js/store';
 
-import type { At } from '~/api/atp-schema';
+import type { At } from '@atcute/client/lexicons';
 
 import { ComposerContext, type ComposerContextState } from './ComposerContext';
 import type { ComposerState } from './utils/state';

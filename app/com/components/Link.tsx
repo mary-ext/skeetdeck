@@ -1,6 +1,7 @@
 import { type JSX, createContext, useContext } from 'solid-js';
 
-import type { At } from '~/api/atp-schema';
+import type { At } from '@atcute/client/lexicons';
+
 import type { SignalizedProfile } from '~/api/stores/profiles';
 
 export const LINK_EXTERNAL = 0;

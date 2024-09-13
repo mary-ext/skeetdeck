@@ -1,4 +1,5 @@
-import type { At } from '../atp-schema';
+import type { At } from '@atcute/client/lexicons';
+
 import { multiagent } from '../globals/agent';
 
 export const updateNotificationsSeen = async (uid: At.DID, date = new Date()) => {

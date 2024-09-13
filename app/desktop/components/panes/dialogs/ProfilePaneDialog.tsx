@@ -1,8 +1,8 @@
 import { Match, Switch, createSignal, lazy } from 'solid-js';
 
+import type { At } from '@atcute/client/lexicons';
 import { createQuery } from '@mary/solid-query';
 
-import type { At } from '~/api/atp-schema';
 import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';
 
 import { formatCompact } from '~/utils/intl/number';

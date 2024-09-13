@@ -1,8 +1,7 @@
 import { createContext, useContext } from 'solid-js';
 
-import type { BskyXRPC } from '@mary/bluesky-client';
-
-import type { At } from '~/api/atp-schema';
+import type { XRPC } from '@atcute/client';
+import type { At } from '@atcute/client/lexicons';
 
 import { assert } from '~/utils/misc';
 
@@ -22,7 +21,7 @@ export interface ChatRouterState {
 
 export interface ChatPaneState {
 	did: At.DID;
-	rpc: BskyXRPC;
+	rpc: XRPC;
 	firehose: ChatFirehose;
 	channels: LRU<string, Channel>;
 

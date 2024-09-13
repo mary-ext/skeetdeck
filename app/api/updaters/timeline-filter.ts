@@ -1,6 +1,6 @@
+import type { At } from '@atcute/client/lexicons';
 import { type InfiniteData } from '@mary/solid-query';
 
-import type { At } from '~/api/atp-schema';
 import type { TimelineSlice } from '~/api/models/timeline';
 import type { TimelinePage } from '~/api/queries/get-timeline';
 

@@ -13,7 +13,8 @@ import {
 } from 'solid-js';
 import TextareaAutosize from 'solid-textarea-autosize';
 
-import type { AppBskyActorDefs, At } from '~/api/atp-schema';
+import type { AppBskyActorDefs, At } from '@atcute/client/lexicons';
+
 import { multiagent } from '~/api/globals/agent';
 import type { PreliminaryRichText } from '~/api/richtext/composer';
 

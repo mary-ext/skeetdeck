@@ -1,6 +1,6 @@
+import type { AppBskyLabelerDefs, At } from '@atcute/client/lexicons';
 import type { QueryFunctionContext as QC } from '@mary/solid-query';
 
-import type { AppBskyLabelerDefs, At } from '../atp-schema';
 import { publicAppView } from '../globals/agent';
 
 // Hardcoded list of DIDs for now.

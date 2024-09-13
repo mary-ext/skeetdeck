@@ -1,8 +1,8 @@
 import { For, Match, Switch, createSignal } from 'solid-js';
 
+import type { AppBskyUnspeccedGetPopularFeedGenerators, At } from '@atcute/client/lexicons';
 import { createInfiniteQuery } from '@mary/solid-query';
 
-import type { AppBskyUnspeccedGetPopularFeedGenerators, At } from '~/api/atp-schema';
 import { multiagent, renderAccountName } from '~/api/globals/agent';
 
 import { DialogBody } from '~/com/primitives/dialog';

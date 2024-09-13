@@ -1,6 +1,6 @@
-import { XRPCError } from '@mary/bluesky-client/xrpc';
+import { XRPCError } from '@atcute/client';
+import type { AppBskyActorProfile, At } from '@atcute/client/lexicons';
 
-import type { AppBskyActorProfile, At } from '../atp-schema';
 import { multiagent } from '../globals/agent';
 
 export const upsertProfile = async (

@@ -4,7 +4,8 @@ import type {
 	AppBskyFeedRepost,
 	AppBskyGraphFollow,
 	AppBskyNotificationListNotifications,
-} from '../atp-schema';
+} from '@atcute/client/lexicons';
+
 import { getCollectionId } from '../utils/misc';
 
 type Notification = AppBskyNotificationListNotifications.Notification;

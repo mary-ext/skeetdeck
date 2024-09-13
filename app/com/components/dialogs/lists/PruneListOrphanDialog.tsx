@@ -1,8 +1,8 @@
 import { createEffect, createMemo } from 'solid-js';
 
+import type { Brand, ComAtprotoRepoApplyWrites } from '@atcute/client/lexicons';
 import { createInfiniteQuery, createMutation, createQuery } from '@mary/solid-query';
 
-import type { Brand, ComAtprotoRepoApplyWrites } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import { getListMembers, getListMembersKey } from '~/api/queries/get-list-members';
 import {

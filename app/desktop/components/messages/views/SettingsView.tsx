@@ -1,6 +1,6 @@
+import type { ChatBskyActorDeclaration } from '@atcute/client/lexicons';
 import { createMutation, createQuery } from '@mary/solid-query';
 
-import type { ChatBskyActorDeclaration } from '~/api/atp-schema';
 import { getAccountHandle } from '~/api/globals/agent';
 import { getInitialProfile, getProfile, getProfileKey } from '~/api/queries/get-profile';
 
@@ -36,6 +36,7 @@ const SettingsView = ({}: ViewParams<ViewKind.SETTINGS>) => {
 		return {
 			async mutationFn({ allow }: { allow: AllowValue }) {
 				const record: DeclarationRecord = {
+					$type: 'chat.bsky.actor.declaration',
 					allowIncoming: allow,
 				};
 

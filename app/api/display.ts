@@ -1,4 +1,4 @@
-import type { AppBskyGraphDefs } from '~/api/atp-schema';
+import type { AppBskyGraphDefs } from '@atcute/client/lexicons';
 
 export const MAX_DISPLAYNAME_LENGTH = 64;
 export const MAX_BIO_LENGTH = 256;
@@ -6,6 +6,7 @@ export const MAX_BIO_LENGTH = 256;
 export const ListPurposeLabels: Record<AppBskyGraphDefs.ListPurpose, string> = {
 	'app.bsky.graph.defs#modlist': 'Moderation list',
 	'app.bsky.graph.defs#curatelist': 'Curation list',
+	'app.bsky.graph.defs#referencelist': 'Curation list',
 };
 
 export const renderListPurpose = (purpose: AppBskyGraphDefs.ListPurpose) => {

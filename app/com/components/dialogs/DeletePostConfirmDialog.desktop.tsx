@@ -1,8 +1,8 @@
 import { createEffect, createSignal } from 'solid-js';
 
+import type { AppBskyEmbedImages, AppBskyFeedThreadgate, Brand } from '@atcute/client/lexicons';
 import { type InfiniteData, createMutation } from '@mary/solid-query';
 
-import type { AppBskyEmbedImages, AppBskyFeedThreadgate, Brand } from '~/api/atp-schema';
 import { multiagent } from '~/api/globals/agent';
 import type { ThreadData } from '~/api/models/threads';
 import { getPost, getPostKey } from '~/api/queries/get-post';

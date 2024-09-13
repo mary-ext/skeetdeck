@@ -1,8 +1,8 @@
 import { createEffect, createMemo, createSignal } from 'solid-js';
 
+import type { AppBskyGraphDefs, AppBskyGraphList, At } from '@atcute/client/lexicons';
 import { createMutation } from '@mary/solid-query';
 
-import type { AppBskyGraphDefs, AppBskyGraphList, At } from '~/api/atp-schema';
 import { ListPurposeLabels } from '~/api/display';
 import { getAccountHandle, multiagent } from '~/api/globals/agent';
 import { uploadBlob } from '~/api/mutations/upload-blob';
@@ -37,6 +37,7 @@ const MAX_DESC_LENGTH = 300;
 const DIALOG_TITLES: Record<ListPurpose, string> = {
 	'app.bsky.graph.defs#curatelist': 'New user list',
 	'app.bsky.graph.defs#modlist': 'New moderation list',
+	'app.bsky.graph.defs#referencelist': 'New reference list',
 };
 
 const AddListDialog = (props: AddListDialogProps) => {
@@ -69,6 +70,7 @@ const AddListDialog = (props: AddListDialogProps) => {
 			const { text, facets } = await finalizeRt(uid, $richtext);
 
 			const record: AppBskyGraphList.Record = {
+				$type: 'app.bsky.graph.list',
 				createdAt: getCurrentDate(),
 				name: $name,
 				purpose: $purpose,

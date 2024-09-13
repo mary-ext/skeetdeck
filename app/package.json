@@ -9,12 +9,13 @@
 		"lint": "tsc"
 	},
 	"dependencies": {
+		"@atcute/bluesky": "^1.0.6",
+		"@atcute/client": "^2.0.0",
 		"@floating-ui/dom": "^1.6.5",
 		"@floating-ui/utils": "^0.2.2",
 		"@mary/atproto-cid": "npm:@jsr/mary__atproto-cid@^0.1.4",
 		"@mary/atproto-tid": "npm:@jsr/mary__atproto-tid@^0.1.1",
 		"@mary/base32": "npm:@jsr/mary__base32@^0.1.0",
-		"@mary/bluesky-client": "npm:@jsr/mary__bluesky-client@^0.5.23",
 		"@mary/emoji-db": "workspace:@externdefs/emoji-db@^",
 		"@mary/events": "npm:@jsr/mary__events@^0.1.0",
 		"@mary/exif-rm": "npm:@jsr/mary__exif-rm@^0.2.1",
