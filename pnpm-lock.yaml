@@ -9,9 +9,9 @@ overrides:
   string.prototype.matchall: npm:@nolyfill/string.prototype.matchall@latest
 
 patchedDependencies:
-  '@tanstack/query-core@5.17.19':
-    hash: lyk2jm4nvtib6lstvyqzhwwxbi
-    path: patches/@tanstack__query-core@5.17.19.patch
+  '@tanstack/query-core':
+    hash: 7svsqjxnqs5pmhd3ke4jgt24oe
+    path: patches/@tanstack__query-core.patch
   solid-js:
     hash: 5rodyfcb76rtbo26dwlsojy7jy
     path: patches/solid-js.patch
@@ -187,7 +187,7 @@ importers:
     dependencies:
       '@tanstack/query-core':
         specifier: 5.17.19
-        version: 5.17.19(patch_hash=lyk2jm4nvtib6lstvyqzhwwxbi)
+        version: 5.17.19(patch_hash=7svsqjxnqs5pmhd3ke4jgt24oe)
     devDependencies:
       solid-js:
         specifier: ^1.8.22
@@ -3928,7 +3928,7 @@ snapshots:
       magic-string: 0.25.9
       string.prototype.matchall: '@nolyfill/string.prototype.matchall@1.0.28'
 
-  '@tanstack/query-core@5.17.19(patch_hash=lyk2jm4nvtib6lstvyqzhwwxbi)': {}
+  '@tanstack/query-core@5.17.19(patch_hash=7svsqjxnqs5pmhd3ke4jgt24oe)': {}
 
   '@thisbeyond/solid-dnd@0.7.5(solid-js@1.8.22(patch_hash=5rodyfcb76rtbo26dwlsojy7jy))':
     dependencies:
