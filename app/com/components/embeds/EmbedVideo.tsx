@@ -1,17 +1,9 @@
 import Hls from 'hls.js';
 
-// TODO: Swap this out for the type from bsky-client
-type EmbeddedVideo = {
-	aspectRatio: {
-		width: number;
-		height: number;
-	};
-	playlist: string;
-	thumbnail: string;
-};
+import type { AppBskyEmbedVideo } from '@atcute/client/lexicons';
 
 export interface EmbedVideoProps {
-	video: EmbeddedVideo;
+	video: AppBskyEmbedVideo.View;
 }
 
 const EmbedVideo = (props: EmbedVideoProps) => {
@@ -22,7 +14,7 @@ const EmbedVideo = (props: EmbedVideoProps) => {
 	return (
 		<div
 			style={{
-				'aspect-ratio': `${props.video.aspectRatio.width}/${props.video.aspectRatio.height}`,
+				'aspect-ratio': `${props.video.aspectRatio?.width ?? 1}/${props.video.aspectRatio?.height ?? 1}`,
 			}}
 			class="overflow-hidden rounded-md border border-divider object-contain"
 		>
