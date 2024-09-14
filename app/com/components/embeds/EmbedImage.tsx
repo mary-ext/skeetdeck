@@ -4,18 +4,17 @@ import type { AppBskyEmbedImages } from '@atcute/client/lexicons';
 
 import { openModal } from '~/com/globals/modals';
 
-import { clsx } from '~/utils/misc';
+const ImageViewerDialog = lazy(() => import('~/com/components/dialogs/ImageViewerDialog'));
 
-import ImageAltAction from './images/ImageAltAction';
-
-const LazyImageViewerDialog = lazy(() => import('../dialogs/ImageViewerDialog'));
-
-type EmbeddedImage = AppBskyEmbedImages.ViewImage;
-
-export interface EmbedImageProps {
-	images: EmbeddedImage[];
-	borderless?: boolean;
+export interface ImageEmbedProps {
+	/** Expected to be static */
+	embed: AppBskyEmbedImages.View;
 	blur?: boolean;
+	/** Expected to be static */
+	borderless?: boolean;
+	/** Expected to be static */
+	standalone?: boolean;
+	/** Expected to be static */
 	interactive?: boolean;
 }
 
@@ -26,23 +25,16 @@ const enum RenderMode {
 	STANDALONE_RATIO,
 }
 
-const EmbedImage = (props: EmbedImageProps) => {
-	const images = () => props.images;
+const ImageEmbed = (props: ImageEmbedProps) => {
+	const { embed, borderless, standalone, interactive } = props;
 
-	const interactive = props.interactive;
-	const borderless = props.borderless;
-	const blur = () => props.blur;
+	const images = embed.images;
+	const length = images.length;
 
-	const hasStandaloneImage = (): boolean => {
-		const $images = images();
-		return interactive ? $images.length === 1 && !!$images[0].aspectRatio : false;
-	};
+	const hasStandaloneImage = standalone && length === 1 && images[0].aspectRatio !== undefined;
 
 	const render = (index: number, mode: RenderMode) => {
-		const image = images()[index];
-
-		const alt = image.alt;
-		const aspectRatio = image.aspectRatio;
+		const { alt, thumb, aspectRatio } = images[index];
 
 		// FIXME: with STANDALONE_RATIO, we are resizing the image to make it fit
 		// the container with our given constraints, but this doesn't work when the
@@ -72,33 +64,31 @@ const EmbedImage = (props: EmbedImageProps) => {
 		}
 
 		return (
-			<div class={`relative ` + cn} style={{ 'aspect-ratio': ratio }}>
+			<div class={`relative bg-background ` + cn} style={{ 'aspect-ratio': ratio }}>
 				<img
-					src={/* @once */ image.thumb}
-					alt={alt}
+					src={thumb}
+					title={alt}
+					class={
+						`h-full w-full object-contain text-[0px]` +
+						(interactive ? ` cursor-pointer` : ``) +
+						// prettier-ignore
+						(props.blur ? ` scale-125` + (!borderless ? ` blur` : ` blur-lg`) : ``)
+					}
 					onClick={() => {
 						if (interactive) {
-							openModal(() => <LazyImageViewerDialog images={images()} active={index} />);
+							openModal(() => <ImageViewerDialog active={index} images={images} />);
 						}
 					}}
-					class={clsx([
-						`h-full w-full object-cover text-[0px]`,
-						interactive && `cursor-pointer`,
-						blur() && `scale-110 ` + (!borderless ? `blur` : `blur-lg`),
-					])}
 				/>
 
-				{mode === RenderMode.STANDALONE_RATIO && <div class="h-screen w-screen"></div>}
+				{/* @once */ mode === RenderMode.STANDALONE_RATIO && <div class="h-screen w-screen"></div>}
 
 				{interactive && alt && (
-					<ImageAltAction alt={alt}>
-						<button
-							class="absolute bottom-0 left-0 m-2 h-5 rounded bg-black/70 px-1 text-xs font-medium text-white"
-							title="Show image description"
-						>
+					<div class="pointer-events-none absolute bottom-0 right-0 p-2">
+						<div class="flex h-4 items-center rounded bg-p-neutral-950/60 px-1 text-[9px] font-bold tracking-wider text-white">
 							ALT
-						</button>
-					</ImageAltAction>
+						</div>
+					</div>
 				)}
 			</div>
 		);
@@ -106,68 +96,47 @@ const EmbedImage = (props: EmbedImageProps) => {
 
 	return (
 		<div
-			class={clsx([
-				!borderless && `overflow-hidden rounded-md border border-divider`,
-				hasStandaloneImage() && `max-w-full self-start`,
-			])}
+			class={
+				`` +
+				(!borderless ? ` overflow-hidden rounded-md border border-divider` : ``) +
+				(hasStandaloneImage ? ` max-w-full self-start` : ``)
+			}
 		>
-			{(() => {
-				const images = props.images;
+			{length === 4 ? (
+				<div class="flex gap-0.5">
+					<div class="flex grow basis-0 flex-col gap-0.5">
+						{/* @once */ render(0, RenderMode.MULTIPLE_SQUARE)}
+						{/* @once */ render(2, RenderMode.MULTIPLE_SQUARE)}
+					</div>
 
-				if (images.length >= 4) {
-					return (
-						<div class="flex gap-0.5">
-							<div class="flex grow basis-0 flex-col gap-0.5">
-								{/* @once */ render(0, RenderMode.MULTIPLE_SQUARE)}
-								{/* @once */ render(2, RenderMode.MULTIPLE_SQUARE)}
-							</div>
+					<div class="flex grow basis-0 flex-col gap-0.5">
+						{/* @once */ render(1, RenderMode.MULTIPLE_SQUARE)}
+						{/* @once */ render(3, RenderMode.MULTIPLE_SQUARE)}
+					</div>
+				</div>
+			) : length === 3 ? (
+				<div class="flex gap-0.5">
+					<div class="flex aspect-square grow-2 basis-0 flex-col gap-0.5">
+						{/* @once */ render(0, RenderMode.MULTIPLE)}
+					</div>
 
-							<div class="flex grow basis-0 flex-col gap-0.5">
-								{/* @once */ render(1, RenderMode.MULTIPLE_SQUARE)}
-								{/* @once */ render(3, RenderMode.MULTIPLE_SQUARE)}
-							</div>
-						</div>
-					);
-				}
-
-				if (images.length >= 3) {
-					return (
-						<div class="flex gap-0.5">
-							<div class="flex aspect-square grow-2 basis-0 flex-col gap-0.5">
-								{/* @once */ render(0, RenderMode.MULTIPLE)}
-							</div>
-
-							<div class="flex grow basis-0 flex-col gap-0.5">
-								{/* @once */ render(1, RenderMode.MULTIPLE_SQUARE)}
-								{/* @once */ render(2, RenderMode.MULTIPLE_SQUARE)}
-							</div>
-						</div>
-					);
-				}
-
-				if (images.length >= 2) {
-					return (
-						<div class="flex aspect-video gap-0.5">
-							<div class="flex grow basis-0 flex-col gap-0.5">
-								{/* @once */ render(0, RenderMode.MULTIPLE)}
-							</div>
-							<div class="flex grow basis-0 flex-col gap-0.5">
-								{/* @once */ render(1, RenderMode.MULTIPLE)}
-							</div>
-						</div>
-					);
-				}
-
-				if (hasStandaloneImage()) {
-					return render(0, RenderMode.STANDALONE_RATIO);
-				}
-
-				if (images.length === 1) {
-					return render(0, RenderMode.STANDALONE);
-				}
-			})()}
+					<div class="flex grow basis-0 flex-col gap-0.5">
+						{/* @once */ render(1, RenderMode.MULTIPLE_SQUARE)}
+						{/* @once */ render(2, RenderMode.MULTIPLE_SQUARE)}
+					</div>
+				</div>
+			) : length === 2 ? (
+				<div class="flex aspect-video gap-0.5">
+					<div class="flex grow basis-0 flex-col gap-0.5">{/* @once */ render(0, RenderMode.MULTIPLE)}</div>
+					<div class="flex grow basis-0 flex-col gap-0.5">{/* @once */ render(1, RenderMode.MULTIPLE)}</div>
+				</div>
+			) : hasStandaloneImage ? (
+				<>{/* @once */ render(0, RenderMode.STANDALONE_RATIO)}</>
+			) : length === 1 ? (
+				<>{/* @once */ render(0, RenderMode.STANDALONE)}</>
+			) : null}
 		</div>
 	);
 };
 
-export default EmbedImage;
+export default ImageEmbed;

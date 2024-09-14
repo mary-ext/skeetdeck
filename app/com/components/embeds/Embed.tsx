@@ -21,12 +21,6 @@ import EmbedRecordBlocked from './EmbedRecordBlocked';
 import EmbedRecordNotFound, { getCollectionMapping } from './EmbedRecordNotFound';
 import EmbedVideo from './EmbedVideo';
 
-type EmbeddedRecord = AppBskyEmbedRecord.View['record'];
-
-type EmbeddedImage = AppBskyEmbedImages.ViewImage;
-type EmbeddedLink = AppBskyEmbedExternal.ViewExternal;
-type EmbeddedVideo = AppBskyEmbedVideo.View;
-
 export interface EmbedProps {
 	causes?: ModerationCause[];
 	/** Expected to be static */
@@ -43,10 +37,10 @@ const Embed = (props: EmbedProps) => {
 			{(() => {
 				const embed = post.embed.value;
 
-				let images: EmbeddedImage[] | undefined;
-				let link: EmbeddedLink | undefined;
-				let record: EmbeddedRecord | undefined;
-				let video: EmbeddedVideo | undefined;
+				let image: AppBskyEmbedImages.View | undefined;
+				let link: AppBskyEmbedExternal.ViewExternal | undefined;
+				let record: AppBskyEmbedRecord.View['record'] | undefined;
+				let video: AppBskyEmbedVideo.View | undefined;
 				let unsupported = false;
 
 				if (embed) {
@@ -55,7 +49,7 @@ const Embed = (props: EmbedProps) => {
 					if (type === 'app.bsky.embed.external#view') {
 						link = embed.external;
 					} else if (type === 'app.bsky.embed.images#view') {
-						images = embed.images;
+						image = embed;
 					} else if (type === 'app.bsky.embed.record#view') {
 						record = embed.record;
 					} else if (type === 'app.bsky.embed.recordWithMedia#view') {
@@ -69,7 +63,7 @@ const Embed = (props: EmbedProps) => {
 						if (mediatype === 'app.bsky.embed.external#view') {
 							link = media.external;
 						} else if (mediatype === 'app.bsky.embed.images#view') {
-							images = media.images;
+							image = media;
 						} else if (mediatype === 'app.bsky.embed.video#view') {
 							video = media;
 						} else {
@@ -82,12 +76,12 @@ const Embed = (props: EmbedProps) => {
 					}
 				}
 
-				if (images && images.length === 0) {
-					images = undefined;
+				if (image && image.images.length === 0) {
+					image = undefined;
 				}
 
 				return [
-					(link || images || video) && (
+					(link || image || video) && (
 						<ContentWarning
 							ui={(() => {
 								const causes = props.causes;
@@ -98,7 +92,7 @@ const Embed = (props: EmbedProps) => {
 							children={(() => {
 								return [
 									link && <EmbedLink link={link} interactive />,
-									images && <EmbedImage images={images} interactive />,
+									image && <EmbedImage embed={image} interactive />,
 									video && <EmbedVideo embed={video} interactive standalone />,
 								];
 							})()}

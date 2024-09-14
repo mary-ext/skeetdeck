@@ -1,6 +1,12 @@
 import { type JSX } from 'solid-js';
 
-import type { AppBskyEmbedRecord, AppBskyFeedPost } from '@atcute/client/lexicons';
+import type {
+	AppBskyEmbedImages,
+	AppBskyEmbedRecord,
+	AppBskyEmbedVideo,
+	AppBskyFeedDefs,
+	AppBskyFeedPost,
+} from '@atcute/client/lexicons';
 
 import {
 	ContextContentList,
@@ -21,6 +27,7 @@ import TimeAgo from '../TimeAgo';
 import ContentWarning from '../moderation/ContentWarning';
 
 import EmbedImage from './EmbedImage';
+import EmbedVideo from './EmbedVideo';
 
 type EmbeddedPostRecord = AppBskyEmbedRecord.ViewRecord;
 type PostRecord = AppBskyFeedPost.Record;
@@ -64,11 +71,12 @@ export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: b
 		const author = post.author;
 		const val = post.value as PostRecord;
 
-		const text = val.text;
-		const images = getPostImages(post);
+		const text = val.text.trim();
+		const embed = post.embeds?.[0];
+		const image = getPostImage(embed);
+		const video = getPostVideo(embed);
 
-		const showLargeImages = images && (large || !text);
-		const shouldBlurImage = images && causes && !!getModerationUI(causes, ContextContentMedia).b[0];
+		const shouldBlurMedia = (image || video) && causes && !!getModerationUI(causes, ContextContentMedia).b[0];
 
 		return (
 			<div
@@ -102,13 +110,19 @@ export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: b
 
 				{text ? (
 					<div class="flex items-start">
-						{images && !large && (
-							<div class="mb-3 ml-3 mt-2 grow basis-0">
-								<EmbedImage images={images} blur={shouldBlurImage} />
-							</div>
-						)}
+						{!large ? (
+							image ? (
+								<div class="mb-3 ml-3 mt-2 grow basis-0">
+									<EmbedImage embed={image} blur={shouldBlurMedia} />
+								</div>
+							) : video ? (
+								<div class="mb-3 ml-3 mt-2 grow basis-0">
+									<EmbedVideo embed={video} blur={shouldBlurMedia} />
+								</div>
+							) : null
+						) : null}
 
-						<div class="mx-3 mb-3 mt-1 line-clamp-6 min-w-0 grow-4 basis-0 whitespace-pre-wrap break-words text-sm empty:hidden">
+						<div class="mx-3 mb-3 mt-2 line-clamp-6 min-w-0 grow-4 basis-0 whitespace-pre-wrap break-words text-sm empty:hidden">
 							{text}
 						</div>
 					</div>
@@ -116,7 +130,13 @@ export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: b
 					<div class="mt-3"></div>
 				)}
 
-				{showLargeImages && <EmbedImage images={images} borderless blur={shouldBlurImage} />}
+				{large || !text ? (
+					image ? (
+						<EmbedImage embed={image} borderless blur={shouldBlurMedia} />
+					) : video ? (
+						<EmbedVideo embed={video} borderless blur={shouldBlurMedia} />
+					) : null
+				) : null}
 			</div>
 		);
 	}) as unknown as JSX.Element;
@@ -143,3 +163,27 @@ const EmbedQuote = (props: EmbedQuoteProps) => {
 };
 
 export default EmbedQuote;
+
+const getPostImage = (embed: AppBskyFeedDefs.PostView['embed']): AppBskyEmbedImages.View | undefined => {
+	if (embed) {
+		if (embed.$type === 'app.bsky.embed.images#view') {
+			return embed;
+		}
+
+		if (embed.$type === 'app.bsky.embed.recordWithMedia#view') {
+			return getPostImage(embed.media);
+		}
+	}
+};
+
+const getPostVideo = (embed: AppBskyFeedDefs.PostView['embed']): AppBskyEmbedVideo.View | undefined => {
+	if (embed) {
+		if (embed.$type === 'app.bsky.embed.video#view') {
+			return embed;
+		}
+
+		if (embed.$type === 'app.bsky.embed.recordWithMedia#view') {
+			return getPostVideo(embed.media);
+		}
+	}
+};
