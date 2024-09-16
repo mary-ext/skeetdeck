@@ -21,28 +21,21 @@ const VideoPlayer = ({ embed }: VideoPlayerProps) => {
 		capLevelToPlayerSize: true,
 		xhrSetup(xhr, urlString) {
 			const url = new URL(urlString);
-			const pathname = url.pathname;
 
-			if (url.host === 'video.bsky.app' && pathname.endsWith('.ts') && pathname.startsWith('/watch/')) {
-				// Redirect .ts files directly to the CDN, skipping the watch time/retention tracking
-
-				// Worth noting, I don't think `session_id` is tied to your account in any way, this is
-				// mostly an effort to get videos to load faster since this player is lazily-loaded
-
-				url.host = 'video.cdn.bsky.app';
-				url.pathname = '/hls/' + pathname.slice(7);
-				url.search = '';
-			} else {
-				// Just in case it fails, we'll remove `session_id` everywhere
-				url.searchParams.delete('session_id');
-			}
+			// Just in case it fails, we'll remove `session_id` everywhere
+			url.searchParams.delete('session_id');
 
 			xhr.open('get', url.toString());
 		},
 	});
 
 	onCleanup(() => hls.destroy());
-	hls.loadSource(embed.playlist);
+
+	// Redirect .{m3u8,ts} files directly to the CDN, skipping the watch time/retention tracking
+	//
+	// Worth noting, I don't think `session_id` is tied to your account in any way, this is
+	// mostly an effort to get videos to load faster since this player is lazily-loaded
+	hls.loadSource(embed.playlist.replace('https://video.bsky.app/watch/', 'https://video.cdn.bsky.app/hls/'));
 
 	return (
 		<div class="contents">
