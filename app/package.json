@@ -9,14 +9,14 @@
 		"lint": "tsc"
 	},
 	"dependencies": {
-		"@atcute/base32": "^1.0.0",
-		"@atcute/bluesky": "^1.0.6",
-		"@atcute/cbor": "^1.0.1",
-		"@atcute/cid": "^1.0.0",
-		"@atcute/client": "^2.0.1",
-		"@atcute/tid": "^1.0.0",
-		"@floating-ui/dom": "^1.6.5",
-		"@floating-ui/utils": "^0.2.2",
+		"@atcute/base32": "^1.0.1",
+		"@atcute/bluesky": "^1.0.8",
+		"@atcute/cbor": "^1.0.6",
+		"@atcute/cid": "^1.0.2",
+		"@atcute/client": "^2.0.4",
+		"@atcute/tid": "^1.0.1",
+		"@floating-ui/dom": "^1.6.12",
+		"@floating-ui/utils": "^0.2.8",
 		"@mary/emoji-db": "workspace:@externdefs/emoji-db@^",
 		"@mary/events": "npm:@jsr/mary__events@^0.1.0",
 		"@mary/exif-rm": "npm:@jsr/mary__exif-rm@^0.2.1",
@@ -25,26 +25,26 @@
 		"@pkg/solid-page-router": "workspace:^",
 		"@solid-primitives/event-listener": "^2.3.3",
 		"@thisbeyond/solid-dnd": "^0.7.5",
-		"hls.js": "^1.5.15",
+		"hls.js": "^1.5.17",
 		"idb": "^8.0.0",
 		"immer": "^10.1.1",
-		"nanoid": "^5.0.7",
+		"nanoid": "^5.0.8",
 		"solid-floating-ui": "^0.2.1",
-		"solid-js": "^1.8.22",
+		"solid-js": "^1.9.3",
 		"solid-textarea-autosize": "^0.0.5",
-		"tldts": "^6.1.44"
+		"tldts": "^6.1.61"
 	},
 	"devDependencies": {
 		"@types/dom-close-watcher": "^1.0.0",
 		"@types/dom-navigation": "^1.0.4",
-		"@types/node": "^22.5.4",
+		"@types/node": "^22.9.0",
 		"autoprefixer": "^10.4.20",
 		"babel-plugin-transform-typescript-const-enums": "^0.1.0",
-		"postcss": "^8.4.45",
-		"terser": "^5.32.0",
-		"vite": "^5.4.4",
+		"postcss": "^8.4.49",
+		"terser": "^5.36.0",
+		"vite": "^5.4.11",
 		"vite-plugin-pwa": "0.17.4",
 		"vite-plugin-solid": "^2.10.2",
-		"wrangler": "^3.77.0"
+		"wrangler": "^3.87.0"
 	}
 }

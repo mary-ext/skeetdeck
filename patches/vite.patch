@@ -1,8 +1,260 @@
-diff --git a/dist/node/chunks/dep-BEhTnQAI.js b/dist/node/chunks/dep-BEhTnQAI.js
-index fc5798dd21e54ed0c709bbbc6d5fb301d3af9cbd..a4cac6a8d3012e26bcf0a157297e0c121f37cc6f 100644
---- a/dist/node/chunks/dep-BEhTnQAI.js
-+++ b/dist/node/chunks/dep-BEhTnQAI.js
-@@ -65157,7 +65157,7 @@ async function resolveBuildPlugins(config) {
+diff --git a/dist/node/chunks/dep-CB_7IfJ-.js b/dist/node/chunks/dep-CB_7IfJ-.js
+index d4c6e0d5cd532d66136e3d4be52bed6d1f1e7b3c..d6fe61001235d188be582bb4c0ebb197c7ec52d9 100644
+--- a/dist/node/chunks/dep-CB_7IfJ-.js
++++ b/dist/node/chunks/dep-CB_7IfJ-.js
+@@ -723,7 +723,7 @@ var constants$6 = {
+ 	    output = `(?:^(?!${output}).*$)`;
+ 	  }
+ 	  return output;
+-	}; 
++	};
+ } (utils$k));
+ 
+ const utils$j = utils$k;
+@@ -2887,12 +2887,12 @@ var commondir = function (basedir, relfiles) {
+     else {
+         var files = basedir;
+     }
+-    
++
+     var res = files.slice(1).reduce(function (ps, file) {
+         if (!file.match(/^([A-Za-z]:)?\/|\\/)) {
+             throw new Error('relative path without a basedir');
+         }
+-        
++
+         var xs = file.split(/\/+|\\+/);
+         for (
+             var i = 0;
+@@ -2901,7 +2901,7 @@ var commondir = function (basedir, relfiles) {
+         );
+         return ps.slice(0, i);
+     }, files[0].split(/\/+|\\+/));
+-    
++
+     // Windows correctly handles paths with forward-slashes
+     return res.length > 1 ? res.join('/') : '/'
+ };
+@@ -3076,7 +3076,7 @@ function expand$3(str, isTop) {
+     ? expand$3(m.post, false)
+     : [''];
+ 
+-  if (/\$$/.test(m.pre)) {    
++  if (/\$$/.test(m.pre)) {
+     for (var k = 0; k < post.length; k++) {
+       var expansion = pre+ '{' + m.body + '}' + post[k];
+       expansions.push(expansion);
+@@ -3788,7 +3788,7 @@ class AST {
+                         const aps = addPatternStart;
+                         // check if we have a possibility of matching . or ..,
+                         // and prevent that.
+-                        const needNoTrav = 
++                        const needNoTrav =
+                         // dots are allowed, and the pattern starts with [ or .
+                         (dot && aps.has(src.charAt(0))) ||
+                             // the pattern starts with \., and then [ or .
+@@ -6201,11 +6201,11 @@ class LRUCache {
+             b.__abortController instanceof AC);
+     }
+     async fetch(k, fetchOptions = {}) {
+-        const { 
++        const {
+         // get options
+-        allowStale = this.allowStale, updateAgeOnGet = this.updateAgeOnGet, noDeleteOnStaleGet = this.noDeleteOnStaleGet, 
++        allowStale = this.allowStale, updateAgeOnGet = this.updateAgeOnGet, noDeleteOnStaleGet = this.noDeleteOnStaleGet,
+         // set options
+-        ttl = this.ttl, noDisposeOnSet = this.noDisposeOnSet, size = 0, sizeCalculation = this.sizeCalculation, noUpdateTTL = this.noUpdateTTL, 
++        ttl = this.ttl, noDisposeOnSet = this.noDisposeOnSet, size = 0, sizeCalculation = this.sizeCalculation, noUpdateTTL = this.noUpdateTTL,
+         // fetch exclusive options
+         noDeleteOnFetchRejection = this.noDeleteOnFetchRejection, allowStaleOnFetchRejection = this.allowStaleOnFetchRejection, ignoreFetchAbort = this.ignoreFetchAbort, allowStaleOnFetchAbort = this.allowStaleOnFetchAbort, context, forceRefresh = false, status, signal, } = fetchOptions;
+         if (!this.#hasFetchMethod) {
+@@ -11091,7 +11091,7 @@ class Chunk {
+ 			// '  test'.trim()
+ 			//     split   -> '  ' + 'test'
+ 			//   ✔️ edit    -> '' + 'test'
+-			//   ✖️ edit    -> 'test' + '' 
++			//   ✖️ edit    -> 'test' + ''
+ 			// TODO is this block necessary?...
+ 			newChunk.edit('', false);
+ 			this.content = '';
+@@ -16193,7 +16193,7 @@ function requireBrowser$1 () {
+ 			} catch (error) {
+ 				return '[UnexpectedJSONParseError]: ' + error.message;
+ 			}
+-		}; 
++		};
+ 	} (browser$3, browser$3.exports));
+ 	return browser$3.exports;
+ }
+@@ -16468,7 +16468,7 @@ function requireNode$1 () {
+ 		formatters.O = function (v) {
+ 			this.inspectOpts.colors = this.useColors;
+ 			return util.inspect(v, this.inspectOpts);
+-		}; 
++		};
+ 	} (node$1, node$1.exports));
+ 	return node$1.exports;
+ }
+@@ -20901,7 +20901,7 @@ var convertSourceMap$1 = {};
+ 	exports.generateMapFileComment = function (file, options) {
+ 	  var data = 'sourceMappingURL=' + file;
+ 	  return options && options.multiline ? '/*# ' + data + ' */' : '//# ' + data;
+-	}; 
++	};
+ } (convertSourceMap$1));
+ 
+ var convertSourceMap = /*@__PURE__*/getDefaultExportFromCjs(convertSourceMap$1);
+@@ -21484,7 +21484,7 @@ var utils$f = {};
+ 
+ 	  flat(args);
+ 	  return result;
+-	}; 
++	};
+ } (utils$f));
+ 
+ const utils$e = utils$f;
+@@ -23859,7 +23859,7 @@ var fs$g = {};
+ 	    }
+ 	    return Object.assign(Object.assign({}, exports.FILE_SYSTEM_ADAPTER), fsMethods);
+ 	}
+-	exports.createFileSystemAdapter = createFileSystemAdapter; 
++	exports.createFileSystemAdapter = createFileSystemAdapter;
+ } (fs$g));
+ 
+ Object.defineProperty(settings$3, "__esModule", { value: true });
+@@ -24212,7 +24212,7 @@ var fs$c = {};
+ 	    }
+ 	    return Object.assign(Object.assign({}, exports.FILE_SYSTEM_ADAPTER), fsMethods);
+ 	}
+-	exports.createFileSystemAdapter = createFileSystemAdapter; 
++	exports.createFileSystemAdapter = createFileSystemAdapter;
+ } (fs$c));
+ 
+ Object.defineProperty(settings$2, "__esModule", { value: true });
+@@ -25583,7 +25583,7 @@ var settings = {};
+ 	        return Object.assign(Object.assign({}, exports.DEFAULT_FILE_SYSTEM_ADAPTER), methods);
+ 	    }
+ 	}
+-	exports.default = Settings; 
++	exports.default = Settings;
+ } (settings));
+ 
+ const taskManager = tasks;
+@@ -29445,7 +29445,7 @@ class Document {
+             replacer = undefined;
+         }
+         const { aliasDuplicateObjects, anchorPrefix, flow, keepUndefined, onTagObj, tag } = options ?? {};
+-        const { onAnchor, setAnchors, sourceObjects } = createNodeAnchors(this, 
++        const { onAnchor, setAnchors, sourceObjects } = createNodeAnchors(this,
+         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+         anchorPrefix || 'a');
+         const ctx = {
+@@ -39454,7 +39454,7 @@ function requireDebug () {
+ 		function coerce(val) {
+ 		  if (val instanceof Error) return val.stack || val.message;
+ 		  return val;
+-		} 
++		}
+ 	} (debug$f, debug$f.exports));
+ 	return debug$f.exports;
+ }
+@@ -39649,7 +39649,7 @@ function requireBrowser () {
+ 		  try {
+ 		    return window.localStorage;
+ 		  } catch (e) {}
+-		} 
++		}
+ 	} (browser, browser.exports));
+ 	return browser.exports;
+ }
+@@ -39909,7 +39909,7 @@ function requireNode () {
+ 		 * Enable namespaces listed in `process.env.DEBUG` initially.
+ 		 */
+ 
+-		exports.enable(load()); 
++		exports.enable(load());
+ 	} (node, node.exports));
+ 	return node.exports;
+ }
+@@ -41119,7 +41119,7 @@ var utilsMerge = {exports: {}};
+ 	    }
+ 	  }
+ 	  return a;
+-	}; 
++	};
+ } (utilsMerge));
+ 
+ var utilsMergeExports = utilsMerge.exports;
+@@ -42657,7 +42657,7 @@ var constants$1 = {};
+ 	exports.isWindows = platform === 'win32';
+ 	exports.isMacos = platform === 'darwin';
+ 	exports.isLinux = platform === 'linux';
+-	exports.isIBMi = os.type() === 'OS400'; 
++	exports.isIBMi = os.type() === 'OS400';
+ } (constants$1));
+ 
+ const fs$7 = require$$0__default;
+@@ -43610,7 +43610,7 @@ _watchWithFsEvents(watchPath, realPath, transform, globFilter) {
+   if (this.fsw.closed || this.fsw._isIgnored(watchPath)) return;
+   const opts = this.fsw.options;
+   const watchCallback = async (fullPath, flags, info) => {
+-    // PATCH: bypass the callback for better perf when fullPath hit the ignored file list 
++    // PATCH: bypass the callback for better perf when fullPath hit the ignored file list
+     if (this.fsw.closed || this.fsw._isIgnored(fullPath)) return;
+     if (
+       opts.depth !== undefined &&
+@@ -45482,7 +45482,7 @@ function launchEditor (file, specifiedEditor, onErrorCallback) {
+         return `^"${str}^"`
+       } else if (str.includes(' ')) {
+         return `"${str}"`
+-      } 
++      }
+       return str
+     }
+     const launchCommand = [editor, ...args.map(escapeCmdArgs)]
+@@ -59768,7 +59768,7 @@ var eventemitter3 = {exports: {}};
+ 	//
+ 	{
+ 	  module.exports = EventEmitter;
+-	} 
++	}
+ } (eventemitter3));
+ 
+ var eventemitter3Exports = eventemitter3.exports;
+@@ -59863,7 +59863,7 @@ var requiresPort = function required(port, protocol) {
+ 	  if (options.auth) {
+ 	    outgoing.auth = options.auth;
+ 	  }
+-	  
++
+ 	  if (options.ca) {
+ 	      outgoing.ca = options.ca;
+ 	  }
+@@ -61443,7 +61443,7 @@ var wsIncoming = {
+ 	  if(i === false) throw new Error('No such pass');
+ 
+ 	  passes.splice(i++, 0, callback);
+-	}; 
++	};
+ } (httpProxy$3));
+ 
+ var httpProxyExports = httpProxy$3.exports;
+@@ -61517,12 +61517,12 @@ var httpProxy$2 = ProxyServer;
+ /*!
+  * Caron dimonio, con occhi di bragia
+  * loro accennando, tutte le raccoglie;
+- * batte col remo qualunque s’adagia 
++ * batte col remo qualunque s’adagia
+  *
+  * Charon the demon, with the eyes of glede,
+  * Beckoning to them, collects them all together,
+  * Beats with his oar whoever lags behind
+- *          
++ *
+  *          Dante - The Divine Comedy (Canto III)
+  */
+ 
+@@ -65221,7 +65221,7 @@ async function resolveBuildPlugins(config) {
        ...config.isWorker ? [webWorkerPostPlugin()] : []
      ],
      post: [
