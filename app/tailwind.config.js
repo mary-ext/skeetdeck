@@ -3,6 +3,7 @@ import plugin from 'tailwindcss/plugin';
 
 /** @type {import('tailwindcss').Config} */
 export default {
+	content: ['./{com,desktop}/**/*.{ts,tsx}'],
 	theme: {
 		extend: {
 			fontSize: {

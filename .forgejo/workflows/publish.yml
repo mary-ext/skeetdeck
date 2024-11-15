@@ -36,7 +36,7 @@ jobs:
           export VITE_GIT_COMMIT=${RAW_COMMIT:0:7}
 
           echo "branch: $VITE_GIT_BRANCH; commit: $VITE_GIT_COMMIT"
-          pnpm run build:desktop
+          pnpm run build
 
       - name: Publish to Cloudflare Pages
         working-directory: app

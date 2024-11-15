@@ -3,9 +3,9 @@
 	"type": "module",
 	"name": "app",
 	"scripts": {
-		"dev:desktop": "vite -c vite-desktop.config.ts",
-		"build:desktop": "vite build -c vite-desktop.config.ts",
-		"preview:desktop": "vite preview -c vite-desktop.config.ts",
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview",
 		"lint": "tsc"
 	},
 	"dependencies": {
