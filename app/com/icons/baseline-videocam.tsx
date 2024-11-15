@@ -5,4 +5,3 @@ const VideocamIcon = createIcon([
 ]);
 
 export default VideocamIcon;
-
