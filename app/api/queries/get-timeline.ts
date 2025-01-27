@@ -46,6 +46,11 @@ export interface FeedTimelineParams {
 	showQuotes: boolean;
 }
 
+export interface QuoteTimelineParams {
+	type: 'quote';
+	uri: string;
+}
+
 export interface ListTimelineParams {
 	type: 'list';
 	uri: string;
@@ -70,7 +75,8 @@ export type TimelineParams =
 	| HomeTimelineParams
 	| ListTimelineParams
 	| ProfileTimelineParams
-	| SearchTimelineParams;
+	| SearchTimelineParams
+	| QuoteTimelineParams;
 
 export interface TimelinePage {
 	cursor: string | undefined;
@@ -272,6 +278,19 @@ const fetchPage = async (
 			params: {
 				sort: params.sort,
 				q: params.query,
+				cursor: cursor,
+				limit: limit,
+			},
+		});
+
+		const data = response.data;
+
+		return { cursor: data.cursor, feed: data.posts.map((view) => ({ post: view })) };
+	} else if (type === 'quote') {
+		const response = await rpc.get('app.bsky.feed.getQuotes', {
+			signal: signal,
+			params: {
+				uri: params.uri,
 				cursor: cursor,
 				limit: limit,
 			},

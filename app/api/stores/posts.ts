@@ -30,6 +30,7 @@ export class SignalizedPost {
 	readonly embed: Signal<Post['embed']>;
 	readonly replyCount: Signal<NonNullable<Post['replyCount']>>;
 	readonly repostCount: Signal<NonNullable<Post['repostCount']>>;
+	readonly quoteCount: Signal<NonNullable<Post['quoteCount']>>;
 	readonly likeCount: Signal<NonNullable<Post['likeCount']>>;
 	readonly labels: Signal<Post['labels']>;
 
@@ -54,6 +55,7 @@ export class SignalizedPost {
 		this.embed = signal(post.embed, EQUALS_DEQUAL);
 		this.replyCount = signal(post.replyCount ?? 0);
 		this.repostCount = signal(post.repostCount ?? 0);
+		this.quoteCount = signal(post.quoteCount ?? 0);
 		this.likeCount = signal(post.likeCount ?? 0);
 		this.labels = signal(post.labels, EQUALS_DEQUAL);
 

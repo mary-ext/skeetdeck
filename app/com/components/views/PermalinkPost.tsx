@@ -20,7 +20,14 @@ import MoreHorizIcon from '../../icons/baseline-more-horiz';
 import RepeatIcon from '../../icons/baseline-repeat';
 import ChatBubbleOutlinedIcon from '../../icons/outline-chat-bubble';
 import FavoriteOutlinedIcon from '../../icons/outline-favorite';
-import { LINK_LIST, LINK_POST_LIKED_BY, LINK_POST_REPOSTED_BY, LINK_PROFILE, Link } from '../Link';
+import {
+	LINK_LIST,
+	LINK_POST_LIKED_BY,
+	LINK_POST_QUOTED_BY,
+	LINK_POST_REPOSTED_BY,
+	LINK_PROFILE,
+	Link,
+} from '../Link';
 import RichTextRenderer from '../RichTextRenderer';
 import Embed from '../embeds/Embed';
 import PostOverflowAction from '../items/posts/PostOverflowAction';
@@ -136,6 +143,11 @@ const PermalinkPost = (props: PermalinkPostProps) => {
 				<Link to={{ type: LINK_POST_REPOSTED_BY, actor: did, rkey: rkey() }} class="hover:underline">
 					<span class="font-bold">{formatCompact(post.repostCount.value)}</span>{' '}
 					<span class="text-muted-fg">Reposts</span>
+				</Link>
+
+				<Link to={{ type: LINK_POST_QUOTED_BY, actor: did, rkey: rkey() }} class="hover:underline">
+					<span class="font-bold">{formatCompact(post.quoteCount.value)}</span>{' '}
+					<span class="text-muted-fg">Quotes</span>
 				</Link>
 
 				<Link to={{ type: LINK_POST_LIKED_BY, actor: did, rkey: rkey() }} class="hover:underline">

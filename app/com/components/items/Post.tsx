@@ -306,7 +306,7 @@ const Post = (props: PostProps) => {
 												</div>
 
 												<span class="overflow-hidden text-ellipsis whitespace-nowrap pr-2 text-de">
-													{formatCompact(post.repostCount.value)}
+													{formatCompact(post.repostCount.value + post.quoteCount.value)}
 												</span>
 											</button>
 										</RepostAction>

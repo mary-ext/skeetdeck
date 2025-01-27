@@ -22,6 +22,7 @@ export const LINK_PROFILE_MESSAGE = 14;
 export const LINK_QUOTE = 15;
 export const LINK_REPLY = 16;
 export const LINK_TAG = 17;
+export const LINK_POST_QUOTED_BY = 18;
 
 export interface ExternalLinking {
 	type: typeof LINK_EXTERNAL;
@@ -61,6 +62,12 @@ export interface PostLikedByLinking {
 
 export interface PostRepostedByLinking {
 	type: typeof LINK_POST_REPOSTED_BY;
+	actor: At.DID;
+	rkey: string;
+}
+
+export interface PostQuotedByLinking {
+	type: typeof LINK_POST_QUOTED_BY;
 	actor: At.DID;
 	rkey: string;
 }
@@ -140,7 +147,8 @@ export type Linking =
 	| ProfileMessageLinking
 	| QuoteLinking
 	| ReplyLinking
-	| TagLinking;
+	| TagLinking
+	| PostQuotedByLinking;
 
 export interface LinkingProps {
 	to: Linking;
