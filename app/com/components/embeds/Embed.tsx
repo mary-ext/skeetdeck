@@ -5,10 +5,12 @@ import type {
 	AppBskyEmbedImages,
 	AppBskyEmbedRecord,
 	AppBskyEmbedVideo,
+	AppBskyGraphStarterpack,
 } from '@atcute/client/lexicons';
 
 import { ContextContentMedia, type ModerationCause, getModerationUI } from '~/api/moderation';
 import type { SignalizedPost } from '~/api/stores/posts';
+import { getRecordId } from '~/api/utils/misc';
 
 import ContentWarning from '../moderation/ContentWarning';
 
@@ -118,27 +120,41 @@ const renderUnsupported = (msg: string) => {
 	);
 };
 
-const renderRecord = (record: AppBskyEmbedRecord.View['record'], large: Accessor<boolean | undefined>) => {
-	const type = record.$type;
+const renderRecord = (view: AppBskyEmbedRecord.View['record'], large: Accessor<boolean | undefined>) => {
+	const type = view.$type;
 
 	if (type === 'app.bsky.embed.record#viewNotFound') {
-		return <EmbedRecordNotFound type={/* @once */ getCollectionMapping(record.uri)} />;
+		return <EmbedRecordNotFound type={/* @once */ getCollectionMapping(view.uri)} />;
 	}
 	if (type === 'app.bsky.embed.record#viewBlocked') {
-		return <EmbedRecordBlocked record={record} />;
+		return <EmbedRecordBlocked record={view} />;
 	}
 
 	if (type === 'app.bsky.embed.record#viewRecord') {
-		return <EmbedQuote record={record} large={large()} />;
+		return <EmbedQuote record={view} large={large()} />;
 	}
 	if (type === 'app.bsky.feed.defs#generatorView') {
-		return <EmbedFeed feed={record} />;
+		return <EmbedFeed feed={view} />;
 	}
 	if (type === 'app.bsky.graph.defs#listView') {
-		return <EmbedList list={record} />;
+		return <EmbedList list={view} />;
 	}
+	if (type === 'app.bsky.graph.defs#starterPackViewBasic') {
+		const starterPackId = getRecordId(view.uri);
+		const record = view.record as AppBskyGraphStarterpack.Record;
 
-	console.log(`Unsupported record`, record);
+		return (
+			<EmbedLink
+				link={{
+					title: record.name,
+					description: `Starter pack by @${view.creator.handle}`,
+					uri: `https://bsky.app/starter-pack/${view.creator.did}/${starterPackId}`,
+					thumb: `https://ogcard.cdn.bsky.app/start/${view.creator.did}/${starterPackId}`,
+				}}
+				interactive
+			/>
+		);
+	}
 
 	return renderUnsupported(`Unsupported record`);
 };
