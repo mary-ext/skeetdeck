@@ -8,7 +8,7 @@ export const serializeRecordCid = async (record: { $type: string }) => {
 	const bytes = encode(record);
 
 	const cid = await CID.create(0x71, bytes);
-	const serialized = CID.format(cid);
+	const serialized = CID.toString(cid);
 
 	return serialized;
 };
