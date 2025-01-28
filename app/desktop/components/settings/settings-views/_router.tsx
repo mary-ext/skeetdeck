@@ -8,6 +8,7 @@ export const VIEW_ACCOUNTS = 1;
 export const VIEW_INTERFACE = 2;
 export const VIEW_CONTENT = 3;
 export const VIEW_MODERATION = 4;
+export const VIEW_IMPORT_EXPORT_SETTINGS = 18;
 export const VIEW_KEYWORD_FILTERS = 5;
 
 // Account configuration
@@ -29,6 +30,9 @@ export const VIEW_TEMPORARY_MUTES = 15;
 export const VIEW_ADDITIONAL_LANGUAGE = 16;
 export const VIEW_EXCLUDED_TRANSLATION = 17;
 
+// Import/export
+export const VIEW_IMPORT_SETTINGS = 19;
+
 export type ViewType =
 	| typeof VIEW_ABOUT
 	// | typeof VIEW_ACCOUNT_BLOCKS
@@ -46,6 +50,8 @@ export type ViewType =
 	| typeof VIEW_LABELER_CONFIG
 	| typeof VIEW_LABELER_POPULAR
 	| typeof VIEW_MODERATION
+	| typeof VIEW_IMPORT_EXPORT_SETTINGS
+	| typeof VIEW_IMPORT_SETTINGS
 	| typeof VIEW_TEMPORARY_MUTES;
 
 export type View =
@@ -55,6 +61,8 @@ export type View =
 	| { type: typeof VIEW_INTERFACE }
 	| { type: typeof VIEW_CONTENT }
 	| { type: typeof VIEW_MODERATION }
+	| { type: typeof VIEW_IMPORT_EXPORT_SETTINGS }
+	| { type: typeof VIEW_IMPORT_SETTINGS }
 	| { type: typeof VIEW_KEYWORD_FILTERS }
 	// Account moderation
 	// | { type: typeof VIEW_ACCOUNT_BLOCKS; did: At.DID }

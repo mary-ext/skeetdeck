@@ -3,7 +3,7 @@ import { type StoreNode, createMutable, modifyMutable, reconcile } from 'solid-j
 
 type MigrateFn<T> = (version: number, prev: any) => T;
 
-const parse = <T>(raw: string | null, migrate: MigrateFn<T>): [data: T, migrated: boolean] => {
+export const parse = <T>(raw: string | null, migrate: MigrateFn<T>): [data: T, migrated: boolean] => {
 	if (raw !== null) {
 		try {
 			const persisted = JSON.parse(raw);

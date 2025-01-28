@@ -1,4 +1,5 @@
-import { For, batch, createSignal, lazy } from 'solid-js';
+import { For, Show, batch, createResource, createSignal, lazy } from 'solid-js';
+import { modifyMutable, reconcile } from 'solid-js/store';
 
 import { multiagent } from '~/api/globals/agent';
 
@@ -7,11 +8,14 @@ import { openModal } from '~/com/globals/modals';
 import { createRadioModel, modelChecked } from '~/utils/input';
 import { clsx, getUniqueId } from '~/utils/misc';
 
+import { backupSchema, fromBackup } from '~/desktop/lib/settings/backup';
+
 import { BoxedIconButton } from '~/com/primitives/boxed-icon-button';
 import { Button } from '~/com/primitives/button';
 import { Interactive } from '~/com/primitives/interactive';
 
 import Checkbox from '~/com/components/inputs/Checkbox';
+import FileInput from '~/com/components/inputs/FileInput';
 import Radio from '~/com/components/inputs/Radio';
 
 import AddIcon from '~/com/icons/baseline-add';
@@ -47,14 +51,32 @@ const Onboarding = () => {
 	const [startWith, setStartWith] = createSignal(StartWith.FRESH);
 
 	const [freshWithExample, setFreshWithExample] = createSignal(true);
+	const [backupFile, setBackupFile] = createSignal<File>();
 
-	const handleFinish = () => {
+	const [backup] = createResource(backupFile, async (file) => {
+		const json = JSON.parse(await file.text());
+		const parsed = backupSchema.parse(json, { mode: 'strict' });
+
+		return parsed;
+	});
+
+	const handleFinish = async () => {
 		const $startWith = startWith();
+		const $backup = !backup.error && backup.latest;
 
 		batch(() => {
 			if ($startWith === StartWith.FRESH) {
 				const deck = freshWithExample() ? createStarterDeck(multiagent.active!) : createEmptyDeck();
 				preferences.decks.push(deck);
+			}
+
+			if ($startWith === StartWith.LOCAL_BACKUP) {
+				if (!$backup) {
+					throw new Error(`missing backup`);
+				}
+
+				const merging = fromBackup($backup, true);
+				modifyMutable(preferences, reconcile(merging, { merge: true }));
 			}
 
 			preferences.onboarding = false;
@@ -149,20 +171,21 @@ const Onboarding = () => {
 
 									<label class="block px-4 py-3">
 										<div class="flex min-w-0 justify-between gap-4">
-											<span class="text-sm opacity-50">
-												Restore a local backup <b>(coming soon!)</b>
-											</span>
-											<Radio ref={model(StartWith.LOCAL_BACKUP)} name={id} disabled />
+											<span class="text-sm">Restore a local backup</span>
+											<Radio ref={model(StartWith.LOCAL_BACKUP)} name={id} />
 										</div>
-										<p class="mr-6 text-de text-muted-fg opacity-50">
-											Use a JSON file containing your saved settings.
-										</p>
+										<p class="mr-6 text-de text-muted-fg">Use a JSON file containing your saved settings.</p>
 									</label>
 									<div hidden={startWith() !== StartWith.LOCAL_BACKUP} class="ml-4 px-4 pb-3 pt-1">
-										<button class={/* @once */ Button({ variant: 'outline' })}>
-											<AddIcon class="-ml-1 mr-2 text-lg" />
-											<span>Select file</span>
-										</button>
+										<FileInput file={backupFile()} onChange={setBackupFile} />
+
+										<Show when={backup.error}>
+											{(err) => (
+												<p class="mt-3 text-de text-red-600 dark:text-red-400 whitespace-pre-wrap">
+													{'' + err()}
+												</p>
+											)}
+										</Show>
 									</div>
 								</div>
 							</div>
@@ -225,7 +248,8 @@ const Onboarding = () => {
 						const $step = step();
 						return (
 							($step === Steps.WELCOME && multiagent.accounts.length < 1) ||
-							($step === Steps.SYNC && startWith() !== StartWith.FRESH)
+							($step === Steps.SYNC && startWith() === StartWith.LOCAL_BACKUP && backup.state !== 'ready') ||
+							($step === Steps.SYNC && startWith() === StartWith.ACCOUNT_BACKUP)
 						);
 					})()}
 					onClick={() => {

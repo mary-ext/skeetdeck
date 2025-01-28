@@ -108,14 +108,12 @@ index bb5d0317ae0f1aacc7d5229457ce22adfef71655..387f53a8d255a0d46274f498f45dfc5b
  //# sourceMappingURL=notifyManager.js.map
 \ No newline at end of file
 diff --git a/build/modern/utils.js b/build/modern/utils.js
-index 0e93a35b45cfc2d53fc17120c741a91ec8a8c533..9fe13412dfc808dcc1d83c88d294d7291487e3aa 100644
+index 0e93a35b45cfc2d53fc17120c741a91ec8a8c533..b17d094e4261d9d32c6b2b141c86298553ff3b7a 100644
 --- a/build/modern/utils.js
 +++ b/build/modern/utils.js
-@@ -139,22 +139,14 @@ function shallowEqualObjects(a, b) {
- function isPlainArray(value) {
+@@ -140,21 +140,12 @@ function isPlainArray(value) {
    return Array.isArray(value) && value.length === Object.keys(value).length;
  }
-+const Object_prototype = Object.prototype;
  function isPlainObject(o) {
 -  if (!hasObjectPrototype(o)) {
 +  if (typeof o !== "object" || o === null) {
@@ -135,7 +133,7 @@ index 0e93a35b45cfc2d53fc17120c741a91ec8a8c533..9fe13412dfc808dcc1d83c88d294d729
 -  return true;
 +
 +  const proto = Object.getPrototypeOf(o);
-+  return (proto === null || proto === Object_prototype) && Object.isExtensible(o);
++  return (proto === null || proto === Object.prototype) && Object.isExtensible(o);
  }
  function hasObjectPrototype(o) {
    return Object.prototype.toString.call(o) === "[object Object]";

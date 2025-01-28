@@ -1,19 +1,17 @@
 diff --git a/PrecacheController.js b/PrecacheController.js
-index e00975e3762dc6382c39bebee04a89a651aae3d0..5d830222ffbd8e5ed841bbf3fe2560d354ca87ca 100644
+index e00975e3762dc6382c39bebee04a89a651aae3d0..3f2512555f2fc8e48b61c933555f44a925f8892e 100644
 --- a/PrecacheController.js
 +++ b/PrecacheController.js
-@@ -150,9 +150,7 @@ class PrecacheController {
-         return waitUntil(event, async () => {
-             const installReportPlugin = new PrecacheInstallReportPlugin();
+@@ -152,7 +152,7 @@ class PrecacheController {
              this.strategy.plugins.push(installReportPlugin);
--            // Cache entries one at a time.
--            // See https://github.com/GoogleChrome/workbox/issues/2528
+             // Cache entries one at a time.
+             // See https://github.com/GoogleChrome/workbox/issues/2528
 -            for (const [url, cacheKey] of this._urlsToCacheKeys) {
 +            await eachLimit(Array.from(this._urlsToCacheKeys), 6, async ([url, cacheKey]) => {
                  const integrity = this._cacheKeysToIntegrities.get(cacheKey);
                  const cacheMode = this._urlsToCacheModes.get(url);
                  const request = new Request(url, {
-@@ -165,7 +163,7 @@ class PrecacheController {
+@@ -165,7 +165,7 @@ class PrecacheController {
                      request,
                      event,
                  }));
@@ -22,7 +20,7 @@ index e00975e3762dc6382c39bebee04a89a651aae3d0..5d830222ffbd8e5ed841bbf3fe2560d3
              const { updatedURLs, notUpdatedURLs } = installReportPlugin;
              if (process.env.NODE_ENV !== 'production') {
                  printInstallDetails(updatedURLs, notUpdatedURLs);
-@@ -290,3 +288,64 @@ class PrecacheController {
+@@ -290,3 +290,64 @@ class PrecacheController {
      }
  }
  export { PrecacheController };

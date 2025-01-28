@@ -19,6 +19,7 @@ import ColorLensIcon from '~/com/icons/baseline-color-lens';
 import InfoIcon from '~/com/icons/baseline-info';
 import LanguageIcon from '~/com/icons/baseline-language';
 import PeopleIcon from '~/com/icons/baseline-people';
+import SwapVertIcon from '~/com/icons/baseline-swap-vert';
 
 import SettingsRouterView from './settings-views/SettingsRouterView';
 import {
@@ -27,6 +28,7 @@ import {
 	VIEW_ABOUT,
 	VIEW_ACCOUNTS,
 	VIEW_CONTENT,
+	VIEW_IMPORT_EXPORT_SETTINGS,
 	VIEW_INTERFACE,
 	VIEW_MODERATION,
 	type View,
@@ -87,6 +89,9 @@ const SettingsDialog = () => {
 								</SideItem>
 								<SideItem to={VIEW_MODERATION} icon={BackHandIcon}>
 									Moderation
+								</SideItem>
+								<SideItem to={VIEW_IMPORT_EXPORT_SETTINGS} icon={SwapVertIcon}>
+									Import/export settings
 								</SideItem>
 
 								<SideItem to={VIEW_ABOUT} icon={InfoIcon}>
