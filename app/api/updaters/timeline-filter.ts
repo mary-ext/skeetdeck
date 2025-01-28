@@ -13,7 +13,13 @@ export const produceTimelineFilter = (did: At.DID) => {
 		for (let k = items.length - 1; k >= 0; k--) {
 			const item = items[k];
 
-			if (item.reason?.by.did === did || item.post.author.did === did) {
+			if (item.reason?.$type == 'app.bsky.feed.defs#reasonRepost') {
+				if (item.reason.by.did === did) {
+					return true;
+				}
+			}
+
+			if (item.post.author.did === did) {
 				return true;
 			}
 		}

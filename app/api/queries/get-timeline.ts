@@ -453,7 +453,7 @@ const createTempMutePostFilter = (
 	return (item) => {
 		const reason = item.reason;
 
-		if (reason) {
+		if (reason?.$type === 'app.bsky.feed.defs#reasonRepost') {
 			const did = reason.by.did;
 
 			if (did !== uid && mutes![did]) {

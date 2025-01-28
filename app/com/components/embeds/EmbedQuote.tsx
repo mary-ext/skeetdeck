@@ -42,24 +42,6 @@ export interface EmbedQuoteContentProps extends EmbedQuoteProps {
 	causes?: ModerationCause[];
 }
 
-const getPostImages = (post: EmbeddedPostRecord) => {
-	const embeds = post.embeds;
-
-	if (embeds && embeds.length > 0) {
-		const val = embeds[0];
-
-		if (val.$type === 'app.bsky.embed.images#view') {
-			return val.images;
-		} else if (val.$type === 'app.bsky.embed.recordWithMedia#view') {
-			const media = val.media;
-
-			if (media.$type === 'app.bsky.embed.images#view') {
-				return media.images;
-			}
-		}
-	}
-};
-
 const embedQuoteInteractive = Interactive({ variant: 'muted', class: `w-full rounded-md`, userSelect: true });
 
 export const EmbedQuoteContent = (props: EmbedQuoteContentProps, interactive?: boolean) => {

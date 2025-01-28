@@ -102,7 +102,7 @@ const Post = (props: PostProps) => {
 				{(() => {
 					const reason = props.reason;
 
-					if (reason) {
+					if (reason?.$type === 'app.bsky.feed.defs#reasonRepost') {
 						return (
 							<div class="-mt-1 mb-1 flex items-center gap-3 text-de text-muted-fg">
 								<div class="flex w-9 shrink-0 justify-end">
