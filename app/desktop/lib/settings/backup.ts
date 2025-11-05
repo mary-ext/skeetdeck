@@ -261,6 +261,7 @@ export const backupSchema = v.object({
 		defaultPaneSize: v.union(v.literal('sm'), v.literal('md'), v.literal('lg')),
 		profileMediaGrid: v.boolean(),
 		threadedReplies: v.boolean(),
+		autoCloseComposer: v.boolean(),
 		defaultReplyGate: v.union(v.literal('everyone'), v.literal('mentioned'), v.literal('followed')),
 	}),
 	a11y: v.object({
@@ -866,6 +867,7 @@ export const fromBackup = (data: Backup, isOnboarding: boolean): PreferencesSche
 			profileMediaGrid: data.ui.profileMediaGrid,
 			theme: data.ui.theme,
 			threadedReplies: data.ui.threadedReplies,
+			autoCloseComposer: data.ui.autoCloseComposer,
 		},
 		a11y: {
 			warnNoMediaAlt: data.a11y.warnNoMediaAlt,
@@ -901,6 +903,7 @@ export const toBackup = (data: PreferencesSchema): Backup => {
 			profileMediaGrid: data.ui.profileMediaGrid,
 			theme: data.ui.theme,
 			threadedReplies: data.ui.threadedReplies,
+			autoCloseComposer: data.ui.autoCloseComposer,
 		},
 		a11y: {
 			warnNoMediaAlt: data.a11y.warnNoMediaAlt,

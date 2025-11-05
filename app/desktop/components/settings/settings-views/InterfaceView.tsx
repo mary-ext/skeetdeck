@@ -73,6 +73,11 @@ const AppearanceView = () => {
 							value={ui.threadedReplies}
 							onChange={(next) => (ui.threadedReplies = next)}
 						/>
+						<CheckItem
+							title="Close composer after posting"
+							value={ui.autoCloseComposer}
+							onChange={(next) => (ui.autoCloseComposer = next)}
+						/>
 					</div>
 				</div>
 
