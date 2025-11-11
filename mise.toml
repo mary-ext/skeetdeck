@@ -1,2 +1,3 @@
 [tools]
-pnpm = "9.2.0"
+node = "25"
+pnpm = "10"
