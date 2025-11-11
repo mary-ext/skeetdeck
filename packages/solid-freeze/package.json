@@ -28,8 +28,8 @@
 		"solid-js": "^1.8.5"
 	},
 	"devDependencies": {
-		"solid-js": "^1.9.4",
-		"vite": "^6.0.11",
-		"vite-plugin-solid": "^2.11.0"
+		"solid-js": "^1.9.10",
+		"vite": "^7.2.2",
+		"vite-plugin-solid": "^2.11.10"
 	}
 }

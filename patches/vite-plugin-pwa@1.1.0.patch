@@ -1,5 +1,5 @@
 diff --git a/dist/client/build/register.js b/dist/client/build/register.js
-index 0dc588160b1a58778ebc02757d9757e45cb212e3..aef9ecfc0eee73fd8406bfa3025e38ba2468064c 100644
+index f89bb9eaf7307099d7f019e0fbcdcd215077709a..ea1cb67ee9abaa9dc4cac17c72aab18e24f5e838 100644
 --- a/dist/client/build/register.js
 +++ b/dist/client/build/register.js
 @@ -7,6 +7,7 @@ function registerSW(options = {}) {
@@ -10,7 +10,7 @@ index 0dc588160b1a58778ebc02757d9757e45cb212e3..aef9ecfc0eee73fd8406bfa3025e38ba
      onOfflineReady,
      onRegistered,
      onRegisteredSW,
-@@ -71,6 +72,12 @@ function registerSW(options = {}) {
+@@ -73,6 +74,12 @@ function registerSW(options = {}) {
          }
        }
        wb.register({ immediate }).then((r) => {
@@ -24,7 +24,7 @@ index 0dc588160b1a58778ebc02757d9757e45cb212e3..aef9ecfc0eee73fd8406bfa3025e38ba
            onRegisteredSW("__SW__", r);
          else
 diff --git a/types/index.d.ts b/types/index.d.ts
-index c2553517a12c98f4f7d1b0ef10a2dd203842d45e..694f29ec1ca485c3d620d3cd47517abdef7e17c1 100644
+index fcb2a5639308f37d6f9a1ed9e16987ddf4a1dac2..d6b1c71d15ba53a8a1cc46cfda4489b44e52b24b 100644
 --- a/types/index.d.ts
 +++ b/types/index.d.ts
 @@ -1,6 +1,7 @@

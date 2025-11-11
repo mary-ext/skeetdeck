@@ -1,0 +1,20 @@
+diff --git a/dist/solid.js b/dist/solid.js
+index 656fd26e7e5c794aa22df19c2377ff5c0591fc29..497be741bba2fc90894c1ed836828b288b509ae6 100644
+--- a/dist/solid.js
++++ b/dist/solid.js
+@@ -1468,7 +1468,6 @@ function Show(props) {
+       const child = props.children;
+       const fn = typeof child === "function" && child.length > 0;
+       return fn ? untrack(() => child(keyed ? c : () => {
+-        if (!untrack(condition)) throw narrowedError("Show");
+         return conditionValue();
+       })) : child;
+     }
+@@ -1500,7 +1499,6 @@ function Switch(props) {
+     const child = mp.children;
+     const fn = typeof child === "function" && child.length > 0;
+     return fn ? untrack(() => child(mp.keyed ? conditionValue() : () => {
+-      if (untrack(switchFunc)()?.[0] !== index) throw narrowedError("Match");
+       return conditionValue();
+     })) : child;
+   }, undefined, undefined);
