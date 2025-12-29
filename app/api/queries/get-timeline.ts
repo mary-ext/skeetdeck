@@ -62,6 +62,7 @@ export interface ProfileTimelineParams {
 	type: 'profile';
 	actor: At.DID;
 	tab: 'posts' | 'replies' | 'likes' | 'media';
+	includePins?: boolean;
 }
 
 export interface SearchTimelineParams {
@@ -261,6 +262,7 @@ const fetchPage = async (
 					actor: params.actor,
 					cursor: cursor,
 					limit: limit,
+					includePins: params.includePins,
 					filter:
 						params.tab === 'media'
 							? 'posts_with_media'

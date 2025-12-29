@@ -166,7 +166,7 @@ const ProfilePaneDialog = (props: ProfilePaneDialogProps) => {
 											<TabbedPanelView label="Posts" value={ProfileTab.POSTS}>
 												<TimelineList
 													uid={pane.uid}
-													params={{ type: 'profile', actor: actor, tab: 'posts' }}
+													params={{ type: 'profile', actor: actor, tab: 'posts', includePins: true }}
 												/>
 											</TabbedPanelView>
 											<TabbedPanelView label="Replies" value={ProfileTab.POSTS_WITH_REPLIES}>
