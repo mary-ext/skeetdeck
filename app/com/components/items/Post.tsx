@@ -18,6 +18,8 @@ import { isElementClicked } from '~/utils/interaction';
 import { formatCompact } from '~/utils/intl/number';
 import { clsx } from '~/utils/misc';
 
+import PushPinIcon from '~/com/icons/baseline-push-pin';
+
 import DefaultAvatar from '../../assets/default-user-avatar.svg?url';
 import { getModerationOptions } from '../../globals/shared';
 import FavoriteIcon from '../../icons/baseline-favorite';
@@ -117,6 +119,15 @@ const Post = (props: PostProps) => {
 									</span>
 									<span class="shrink-0 whitespace-pre"> Reposted</span>
 								</Link>
+							</div>
+						);
+					} else if (reason?.$type === 'app.bsky.feed.defs#reasonPin') {
+						return (
+							<div class="-mt-1 mb-1 flex items-center gap-3 text-de text-muted-fg">
+								<div class="flex w-9 shrink-0 justify-end">
+									<PushPinIcon />
+								</div>
+								<span>Pinned</span>
 							</div>
 						);
 					}
