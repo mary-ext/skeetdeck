@@ -5,6 +5,8 @@ import { onCleanup } from 'solid-js';
 import type { AppBskyEmbedVideo } from '@atcute/client/lexicons';
 import { EventEmitter } from '@mary/events';
 
+import * as BandwidthEstimate from './bandwidth-estimate';
+
 const playerEvents = new EventEmitter<{
 	playing(id: string): void;
 }>();
@@ -17,6 +19,7 @@ export interface VideoPlayerProps {
 const VideoPlayer = ({ embed }: VideoPlayerProps) => {
 	const playerId = nanoid();
 
+	const latestEstimate = BandwidthEstimate.get();
 	const hls = new Hls({
 		capLevelToPlayerSize: true,
 		xhrSetup(xhr, urlString) {
@@ -27,6 +30,18 @@ const VideoPlayer = ({ embed }: VideoPlayerProps) => {
 
 			xhr.open('get', url.toString());
 		},
+
+		// the '-1' value makes a test request to estimate bandwidth and quality level
+		// before showing the first fragment
+		startLevel: latestEstimate === undefined ? -1 : Hls.DefaultConfig.startLevel,
+	});
+
+	if (latestEstimate !== undefined) {
+		hls.bandwidthEstimate = latestEstimate;
+	}
+
+	hls.on(Hls.Events.FRAG_LOADED, () => {
+		BandwidthEstimate.set(hls.bandwidthEstimate);
 	});
 
 	onCleanup(() => hls.destroy());
