@@ -29,6 +29,8 @@ export interface PreferencesSchema {
 		profileMediaGrid: boolean;
 		/** Show thread replies in a threaded view */
 		threadedReplies: boolean;
+		/** Close compser after posting */
+		autoCloseComposer: boolean;
 		/** Who can reply to your posts */
 		defaultReplyGate: 'e' | 'm' | 'f';
 	};
@@ -58,6 +60,7 @@ export const preferences = createReactiveLocalStorage<PreferencesSchema>(PREF_KE
 				defaultPaneSize: PaneSize.MEDIUM,
 				profileMediaGrid: true,
 				threadedReplies: false,
+				autoCloseComposer: false,
 				defaultReplyGate: 'e',
 			},
 			a11y: {

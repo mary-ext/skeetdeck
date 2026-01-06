@@ -527,6 +527,9 @@ const ComposerPane = () => {
 		// We're done here, let's reset this entire state.
 		{
 			composer._reset();
+			if (preferences.ui.autoCloseComposer) {
+				composer._hide();
+			}
 		}
 
 		// Anything afterwards is not necessary for the composer functionality,
