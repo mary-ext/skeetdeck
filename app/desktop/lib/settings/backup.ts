@@ -200,7 +200,7 @@ const modService = v.object({
 type ModService = v.Infer<typeof modService>;
 
 const wordFilter = v.object({
-	id: tidString,
+	id: v.string(),
 	name: v.string(),
 	pref: keywordFilterPref,
 
